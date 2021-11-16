@@ -1,0 +1,38 @@
+#!/bin/sh
+
+# script/setup: Set up the application for the first time after cloning, or set
+#               it back to the initial unused state.
+
+set -e
+
+cd "$(dirname "$0")/.."
+
+app_name=$(basename "$PWD")
+dev_db="$app_name-development"
+test_db="$app_name-test"
+
+echo "==> Dropping and recreating the database..."
+
+dropdb "$dev_db" > /dev/null 2>&1 || true
+dropdb "$test_db" > /dev/null 2>&1 || true
+
+createdb "$dev_db"
+createdb "$test_db"
+
+echo "==> Creating env files for dev and test..."
+
+echo "DATABASE_URL=postgres://postgres@localhost:5432/$dev_db" > .env.development
+echo "DATABASE_URL=postgres://postgres@localhost:5432/$test_db" > .env.test
+
+echo "==> Installing dependencies..."
+
+npm install
+
+echo "==> Running database migrations"
+
+npm run typeorm migration:run
+
+echo "==> Building assets..."
+
+npm run build:assets
+

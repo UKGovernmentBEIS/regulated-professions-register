@@ -9,6 +9,9 @@
     "prebuild": "rimraf dist",
     "build": "nest build",
     "build:assets": "encore dev",
+    "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js",
+    "typeorm:migration:generate": "npm run typeorm -- migration:generate -n",
+    "typeorm:migration:run": "npm run typeorm -- migration:run",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
@@ -23,17 +26,21 @@
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",
+    "@nestjs/config": "^1.1.0",
     "@nestjs/core": "^8.0.0",
     "@nestjs/platform-express": "^8.0.0",
+    "@nestjs/typeorm": "^8.0.2",
     "@symfony/webpack-encore": "^1.6.1",
     "file-loader": "^6.2.0",
     "govuk-frontend": "^3.14.0",
     "nunjucks": "^3.2.3",
+    "pg": "^8.7.1",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
-    "rxjs": "^7.2.0",
+    "rxjs": "^7.4.0",
     "sass": "^1.43.4",
-    "sass-loader": "^12.3.0"
+    "sass-loader": "^12.3.0",
+    "typeorm": "^0.2.40"
   },
   "devDependencies": {
     "@nestjs/cli": "^8.0.0",
