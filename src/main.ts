@@ -10,7 +10,10 @@ async function bootstrap() {
   const express = app.getHttpAdapter().getInstance();
 
   const assets = path.join(__dirname, '..', 'public');
-  const views = path.join(__dirname, '..', 'views');
+  const views = [
+    path.join(__dirname, '..', 'views'),
+    path.join(__dirname, '..', 'node_modules', 'govuk-frontend'),
+  ];
 
   nunjucks.configure(views, { express });
 
