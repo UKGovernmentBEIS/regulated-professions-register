@@ -34,6 +34,8 @@
     "@nestjs/platform-express": "^8.0.0",
     "@nestjs/typeorm": "^8.0.2",
     "@symfony/webpack-encore": "^1.6.1",
+    "class-transformer": "^0.4.0",
+    "class-validator": "^0.13.1",
     "file-loader": "^6.2.0",
     "govuk-frontend": "^3.14.0",
     "nunjucks": "^3.2.3",
@@ -46,6 +48,7 @@
     "typeorm": "^0.2.40"
   },
   "devDependencies": {
+    "@golevelup/ts-jest": "^0.3.2",
     "@nestjs/cli": "^8.0.0",
     "@nestjs/schematics": "^8.0.0",
     "@nestjs/testing": "^8.0.0",

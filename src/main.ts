@@ -2,11 +2,15 @@
 
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import { ValidationPipe } from '@nestjs/common';
+import { ValidationError } from 'class-validator';
+
 import * as nunjucks from 'nunjucks';
 import * as path from 'path';
 
 import { AppModule } from './app.module';
 import { AssetsHelper } from './helpers/assets.helper';
+import { ValidationFailedError } from './validation/validation-failed.error';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -37,6 +41,14 @@ async function bootstrap() {
   app.useStaticAssets(assets);
   app.setBaseViewsDir(views);
   app.setViewEngine('njk');
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      exceptionFactory: (validationErrors: ValidationError[] = []) => {
+        return new ValidationFailedError(validationErrors);
+      },
+    }),
+  );
 
   await app.listen(3000);
 }
