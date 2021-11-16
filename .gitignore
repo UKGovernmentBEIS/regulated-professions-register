@@ -36,3 +36,4 @@ lerna-debug.log*
 /public
 /.env.development
 /.env.test
+/cypress/videos
