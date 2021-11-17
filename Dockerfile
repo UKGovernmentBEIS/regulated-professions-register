@@ -42,3 +42,22 @@ RUN if [ "$NODE_ENV" = "production" ]; then \
 EXPOSE 3000
 
 CMD ["node", "dist/main"]
+
+# ------------------------------------------------------------------------------
+# Test
+# ------------------------------------------------------------------------------
+FROM web AS test
+
+
+RUN apt-get update && apt-get install -y --fix-missing --no-install-recommends \
+  libgtk2.0-0 \
+  libgtk-3-0 \
+  libgbm-dev \
+  libnotify-dev \
+  libgconf-2-4 \
+  libnss3 \
+  libxss1 \
+  libasound2 \
+  libxtst6 \
+  xauth \
+  xvfb

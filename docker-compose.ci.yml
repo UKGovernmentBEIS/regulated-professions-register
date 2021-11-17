@@ -1,0 +1,38 @@
+version: "3.8"
+services:
+  test:
+    build:
+      context: .
+      target: test
+      args:
+        NODE_ENV: "test"
+      cache_from:
+        - app_test:latest
+    image: app_test
+    ports:
+      - "3000:3000"
+    depends_on:
+      - test-db
+    environment:
+      DATABASE_URL: postgres://postgres:password@test-db:5432/regulated-professions-register-test
+      CI: "true"
+      CYPRESS_INSTALL_BINARY: 0
+    networks:
+      - test
+
+  test-db:
+    image: postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ./sql/create-database.test.sql:/docker-entrypoint-initdb.d/create-database.test.sql
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_HOST_AUTH_METHOD: trust
+    networks:
+      - test
+
+networks:
+  test:
+volumes:
+  db-data:
