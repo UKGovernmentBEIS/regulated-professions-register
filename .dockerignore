@@ -1,18 +1,13 @@
-# Prevent overwriting the node_modules folder generated at the
-# dependencies stage
-node_modules/
-# These folders are generated at the build stage, so we don't
-# need to copy these over
-public/
-dist/
-# These are not required to be copied over, so let's ignore these
-# too
-.git/
-Dockerfile
-docker-compose.yml
+# Only include the files we need for build/test
+!cypress/
+!assets/
+!script/
+!src/
+!views/
+# Ignore the files in the root directory that we don't need
+.gitignore
+.node-version
 docker-compose.ci.yml
+docker-compose.yml
+Dockerfile
 README.md
-doc/
-.github/
-sql/
-
