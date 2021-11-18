@@ -29,10 +29,6 @@ echo "==> Installing dependencies..."
 nodenv install --skip-existing
 npm install
 
-echo "==> Running database migrations"
-
-npm run typeorm migration:run
-
 echo "==> Building assets..."
 
 npm run build:assets
