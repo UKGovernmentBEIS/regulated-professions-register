@@ -1,0 +1,45 @@
+@startuml organisations-and-professions
+entity Organisation {
+  * id: uuid
+  --
+  * name: string
+  alternateName: string
+  * address: string
+  * url: string
+  * email: string
+  contactUrl: string
+  * telephone: string
+  fax: string
+}
+
+entity Profession {
+  * id: uuid
+  --
+  * name: string
+  alternateName: string
+  * description: string
+  * occupationLocation: string[]
+  * regulationType: string
+  * qualificationLevel: string
+  reservedActivities: string[]
+}
+
+entity Legislation {
+  * id: uuid
+  --
+  * name: string
+  * url: string
+}
+
+entity OccupationalCategory {
+  * id: uuid
+  --
+  * identifier: string <<ISCO / NACE>>
+  codeValue: number
+  description: string
+}
+
+Organisation }|--|| Profession
+Profession }|--|{ OccupationalCategory
+Profession }|--|{ Legislation
+@enduml
