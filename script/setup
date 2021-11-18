@@ -26,6 +26,7 @@ echo "DATABASE_URL=postgres://postgres@localhost:5432/$test_db" > .env.test
 
 echo "==> Installing dependencies..."
 
+nodenv install --skip-existing
 npm install
 
 echo "==> Running database migrations"
