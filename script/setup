@@ -11,6 +11,11 @@ app_name=$(basename "$PWD")
 dev_db="$app_name-development"
 test_db="$app_name-test"
 
+if ! brew bundle check >/dev/null 2>&1; then
+  echo "==> Installing Homebrew dependencies…"
+  brew bundle install --verbose --no-lock
+fi
+
 echo "==> Dropping and recreating the database..."
 
 dropdb "$dev_db" > /dev/null 2>&1 || true
@@ -24,7 +29,7 @@ echo "==> Creating env files for dev and test..."
 echo "DATABASE_URL=postgres://postgres@localhost:5432/$dev_db" > .env.development
 echo "DATABASE_URL=postgres://postgres@localhost:5432/$test_db" > .env.test
 
-echo "==> Installing dependencies..."
+echo "==> Installing application dependencies..."
 
 nodenv install --skip-existing
 npm install
