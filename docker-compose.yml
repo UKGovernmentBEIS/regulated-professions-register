@@ -1,0 +1,40 @@
+version: "3.8"
+services:
+  web:
+    build:
+      context: .
+      target: web
+      args:
+        NODE_ENV: "development"
+    command: npm run start:dev
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    env_file:
+       - .env.development
+    environment:
+      DATABASE_URL: postgres://postgres:password@db:5432/regulated-professions-register-development
+    volumes:
+      - .:/srv/app
+    tty: true
+    stdin_open: true
+    networks:
+      - dev
+
+  db:
+    image: postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ./sql/create-database.sql:/docker-entrypoint-initdb.d/create-database.sql
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_HOST_AUTH_METHOD: trust
+    networks:
+      - dev
+
+networks:
+  dev:
+
+volumes:
+  db-data:
