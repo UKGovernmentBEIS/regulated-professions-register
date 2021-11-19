@@ -10,10 +10,10 @@ called `people`, your model will be stored in a file called
 `people.entity.ts`. A TypeORM model looks like this:
 
 ```typescript
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity()
-export class User extends BaseEntity {
+export class User {
   @PrimaryGeneratedColumn('uuid') // All of our models should have UUIDs as their primary keys
   id: number;
 
@@ -25,23 +25,88 @@ export class User extends BaseEntity {
 
   @Column()
   age: number;
+
+  // This is not necessary, but makes it easier to create objects
+  // for testing purposes
+  constructor(firstName?: string, lastName?: string, age?: number) {
+    this.firstName = firstName || '';
+    this.lastName = lastName || '';
+    this.age = age || '';
+  }
 }
 ```
 
-And we can query/update the database like this:
+To query the model, we need to create a service. This will sit in the
+same folder. For our user model, we'll call our service
+`user.service.ts`. This will look something like this:
 
 ```typescript
-const user = new User();
-user.firstName = 'Timber';
-user.lastName = 'Saw';
-user.age = 25;
-await user.save();
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 
-const allUsers = await User.find();
-const firstUser = await User.findOne(1);
-const timber = await User.findOne({ firstName: 'Timber', lastName: 'Saw' });
+import { Repository } from 'typeorm';
 
-await timber.remove();
+import { User } from './user.entity.ts';
+
+@Injectable()
+export class UserService {
+  constructor(
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
+  ) {}
+
+  all(): Promise<User[]> {
+    return this.userRepository.find();
+  }
+
+  // More methods (such as find, where, create, update etc go here)
+}
+```
+
+We can then test our service without touching the database like so:
+
+```typescript
+const userArray = [new Person('Name', 'Person', 25), [new Person('Name', 'Person', 25)];
+
+describe('UserService', () => {
+  let service: UserService;
+  let repo: Repository<User>;
+
+  beforeEach(async () => {
+    // Here we're creating a NestJS module with our UserService
+    // registered as a provider, but we're mocking out the
+    // repository, so we can stub the responses.
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        UserService,
+        {
+          provide: getRepositoryToken(User),
+          useValue: {
+            find: () => {
+              return userArray;
+            },
+          },
+        },
+      ],
+    }).compile();
+
+    service = module.get<UserService>(UserService);
+    repo = module.get<Repository<User>>(getRepositoryToken(User));
+  });
+
+  describe('all', () => {
+    it('should return all users', async () => {
+      const repoSpy = jest.spyOn(repo, 'find');
+      const users = await service.all();
+
+      expect(users).toEqual(userArray);
+      expect(repoSpy).toHaveBeenCalled();
+    });
+  });
+
+  // Tests for other methods
+
+}
 ```
 
 For more information about models in TypeORM,
