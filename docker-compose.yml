@@ -1,18 +1,18 @@
-version: "3.8"
+version: '3.8'
 services:
   web:
     build:
       context: .
       target: web
       args:
-        NODE_ENV: "development"
+        NODE_ENV: 'development'
     command: npm run start:dev
     ports:
-      - "3000:3000"
+      - '3000:3000'
     depends_on:
       - db
     env_file:
-       - .env.development
+      - .env.development
     environment:
       DATABASE_URL: postgres://postgres:password@db:5432/regulated-professions-register-development
     volumes:

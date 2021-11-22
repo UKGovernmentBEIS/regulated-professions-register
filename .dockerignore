@@ -5,7 +5,6 @@
 !src/
 !views/
 # Ignore the files in the root directory that we don't need
-.gitignore
 .node-version
 docker-compose.ci.yml
 docker-compose.yml

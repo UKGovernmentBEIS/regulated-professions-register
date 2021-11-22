@@ -17,6 +17,7 @@ We will use generic naming for our internal data structures where possible to ke
 ![Organisations and professions data models](/doc/architecture/diagrams/organisations-and-professions/organisations-and-professions.png)
 
 There are a few remaining fields from the scraped data that we've not mapped to the Profession model yet, notably:
+
 - `method_obtain_qualifications`
 - `path_obtain_qualifications`
 - `duration_education`

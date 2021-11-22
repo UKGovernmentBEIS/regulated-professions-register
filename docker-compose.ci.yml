@@ -1,21 +1,21 @@
-version: "3.8"
+version: '3.8'
 services:
   test:
     build:
       context: .
       target: test
       args:
-        NODE_ENV: "test"
+        NODE_ENV: 'test'
       cache_from:
         - app_test:latest
     image: app_test
     ports:
-      - "3000:3000"
+      - '3000:3000'
     depends_on:
       - test-db
     environment:
       DATABASE_URL: postgres://postgres:password@test-db:5432/regulated-professions-register-test
-      CI: "true"
+      CI: 'true'
       CYPRESS_INSTALL_BINARY: 0
     networks:
       - test
