@@ -17,6 +17,15 @@ services:
       DATABASE_URL: postgres://postgres:password@test-db:5432/regulated-professions-register-test
       CI: 'true'
       CYPRESS_INSTALL_BINARY: 0
+      HOST_URL: "${HOST_URL}"
+      OKTA_ORG_URL: "${OKTA_ORG_URL}"
+      OKTA_CLIENT_ID: "${OKTA_CLIENT_ID}"
+      OKTA_CLIENT_SECRET: "${OKTA_CLIENT_SECRET}"
+      OKTA_TOKEN: "${OKTA_TOKEN}"
+      OKTA_REDIRECT_URL: "${OKTA_REDIRECT_URL}"
+      APP_SECRET: "${APP_SECRET}"
+      AUTH_USERNAME: "${AUTH_USERNAME}"
+      AUTH_PASSWORD: "${AUTH_PASSWORD}"
     networks:
       - test
 

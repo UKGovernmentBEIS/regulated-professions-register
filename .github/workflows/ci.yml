@@ -7,6 +7,17 @@ on:
       - main
       - develop
 
+env:
+  HOST_URL: ${{ secrets.HOST_URL }}
+  OKTA_ORG_URL: ${{ secrets.OKTA_ORG_URL }}
+  OKTA_CLIENT_ID: ${{ secrets.OKTA_CLIENT_ID }}
+  OKTA_CLIENT_SECRET: ${{ secrets.OKTA_CLIENT_SECRET }}
+  OKTA_TOKEN: ${{ secrets.OKTA_TOKEN }}
+  OKTA_REDIRECT_URL: ${{ secrets.OKTA_REDIRECT_URL }}
+  APP_SECRET: ${{ secrets.APP_SECRET }}
+  AUTH_USERNAME: ${{ secrets.AUTH_USERNAME }}
+  AUTH_PASSWORD: ${{ secrets.AUTH_PASSWORD }}
+
 jobs:
   test:
     runs-on: ubuntu-latest
