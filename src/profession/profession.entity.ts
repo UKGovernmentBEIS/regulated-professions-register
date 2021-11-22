@@ -36,4 +36,24 @@ export class Profession {
   @ManyToMany(() => Legislation)
   @JoinTable()
   legislations: Legislation[];
+
+  constructor(
+    name?: string,
+    alternateName?: string,
+    description?: string,
+    occupationLocation?: string,
+    regulationType?: string,
+    qualificationLevel?: string,
+    reservedActivities?: string[],
+    legislations?: Legislation[],
+  ) {
+    this.name = name || '';
+    this.alternateName = alternateName || '';
+    this.description = description || '';
+    this.occupationLocation = occupationLocation || '';
+    this.regulationType = regulationType || '';
+    this.qualificationLevel = qualificationLevel || '';
+    this.reservedActivities = reservedActivities || [];
+    this.legislations = legislations;
+  }
 }
