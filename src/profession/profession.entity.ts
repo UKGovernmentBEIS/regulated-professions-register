@@ -1,4 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Legislation } from '../legislation/legislation.entity';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToMany,
+  JoinTable,
+} from 'typeorm';
 
 @Entity({ name: 'professions' })
 export class Profession {
@@ -25,4 +32,8 @@ export class Profession {
 
   @Column('text', { array: true })
   reservedActivities: string[];
+
+  @ManyToMany(() => Legislation)
+  @JoinTable()
+  legislations: Legislation[];
 }
