@@ -5,7 +5,7 @@ describe('/', () => {
   });
 
   context('when I am logged in', () => {
-    before(() => {
+    beforeEach(() => {
       cy.login();
     });
 
@@ -13,6 +13,12 @@ describe('/', () => {
       cy.visit('/admin');
 
       cy.get('body').should('contain', 'Hello Admin!');
+    });
+
+    it('allows me to logout', () => {
+      cy.visit('/admin');
+
+      cy.get('[data-purpose=logout]').click();
     });
   });
 });

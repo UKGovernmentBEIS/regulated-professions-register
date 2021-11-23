@@ -1,5 +1,26 @@
 {% extends "base.njk" %}
 
+{% block header %}
+  {{
+    govukHeader({
+      navigation: [
+          {
+            html: '<form method="post" action="/logout">
+              <button
+                type="submit"
+                class="govuk-header__link"
+                role="button"
+                data-purpose="logout"
+              >
+                Logout
+              </button>
+            </form>'
+          }
+      ]
+    })
+  }}
+{% endblock %}
+
 {% block content %}
 Hello Admin!
 {% endblock %}

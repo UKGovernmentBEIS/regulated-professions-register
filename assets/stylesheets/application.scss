@@ -1,3 +1,24 @@
 $govuk-assets-path: '~govuk-frontend/govuk/assets/';
 
 @import 'govuk/all';
+
+button.govuk-header__link {
+  @include govuk-font($size: 16, $weight: bold);
+  @include govuk-typography-common;
+  @include govuk-link-style-inverse;
+
+  background: none;
+  border: none;
+  padding: 0;
+  color: #fff;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+    text-decoration-thickness: 3px;
+  }
+
+  &:focus {
+    @include govuk-focused-text;
+  }
+}
