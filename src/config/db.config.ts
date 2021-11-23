@@ -8,6 +8,7 @@ export default registerAs('database', () => {
     type: 'postgres',
     url: process.env.DATABASE_URL,
     entities: ['./dist/**/*.entity.js'],
+    synchronize: process.env.NODE_ENV === 'development',
     migrations: ['./dist/db/migrate/*.js'],
     migrationsRun: true,
     dropSchema: process.env.NODE_ENV == 'test',

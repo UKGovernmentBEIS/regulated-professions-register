@@ -1,11 +1,28 @@
 # Generate migrations
 
 We use [TypeORM](https://github.com/typeorm/typeorm) to handle
-communication with the database. To generate a migration, run
-the command:
+communication with the database.
+
+## Automatically generating migrations
+
+The vast majority of the time, once you've created or made
+changes to a [model](./database-models.md), TypeORM will pick up
+the changes you have made and automatically generate a migration
+when you run:
 
 ```bash
-npm run typeorm migration:create -- -n YOUR_MIGRATION_NAME
+npm run typeorm:migration:generate YOUR_MIGRATION_NAME
+```
+
+This will generate a file in `src/db/migrate` with your changes
+automatically reflected.
+
+## Manually generating migrations
+
+To generate a migration, run the command:
+
+```bash
+npm run typeorm:migration:create YOUR_MIGRATION_NAME
 ```
 
 This generates a file in `src/db/migrate` in the following format:
@@ -30,3 +47,9 @@ script/server
 ```
 
 The migrations will be automatically run.
+
+You can alternatively run the migrations without starting the server with:
+
+```bash
+npm run typeorm:migration:run
+```
