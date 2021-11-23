@@ -11,6 +11,7 @@ import { LegislationsModule } from './legislations/legislations.module';
 import { OrganisationsModule } from './organisations/organisations.module';
 
 import dbConfiguration from './config/db.config';
+import { RegistrationModule } from './registration/registration.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import dbConfiguration from './config/db.config';
     ProfessionsModule,
     LegislationsModule,
     OrganisationsModule,
+    RegistrationModule
   ],
   controllers: [AppController],
   providers: [AppService],

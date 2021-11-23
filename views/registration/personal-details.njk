@@ -1,0 +1,76 @@
+{% extends "base.njk" %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+
+{% block content %}
+
+<div class="govuk-width-container">
+
+  <main class="govuk-main-wrapper">
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+
+        {% if edit %}
+          {{ govukBackLink({
+            text: "Back",
+            href: "confirm"
+          }) }}
+        {% else %}
+          {{ govukBackLink({
+            text: "Back",
+            href: "start"
+          }) }}
+        {% endif %}
+
+        <span class="govuk-caption-xl">Creating RPR user</span>
+        <h1 class="govuk-heading-xl">Personal details</h1>
+
+        <form method="post" action="personal-details">
+          <input type="hidden" name="edit" value="{{ edit }}" />
+          {{ govukInput({
+            label: {
+              text: "Name",
+              classes: "govuk-label--l",
+              isPageHeading: true
+            },
+            hint: {
+              text: "For example, Clare Jones."
+            },
+            id: "name-input",
+            name: "name",
+            value: name
+          }) }}
+
+          {{ govukInput({
+            label: {
+              text: "Email address",
+              classes: "govuk-label--l",
+              isPageHeading: true
+            },
+            hint: {
+              text: "For example, clarejones@beis.gov.uk."
+            },
+            id: "email-input",
+            name: "email",
+            value: email
+          }) }}
+
+          {{ govukButton({
+            text: "Continue",
+            type: "submit",
+            id: "continue-button"
+          }) }}
+        </form>
+
+      </div>
+
+      <div class="govuk-grid-column-one-third">
+      </div>
+    </div>
+
+  </main>
+</div>
+
+{% endblock %}

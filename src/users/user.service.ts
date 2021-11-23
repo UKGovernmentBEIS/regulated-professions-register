@@ -24,4 +24,8 @@ export class UserService {
       where: { identifier: externalIdentifier },
     });
   }
+
+  async add(user: User): Promise<void> {
+    await this.repository.insert(user);
+  }
 }

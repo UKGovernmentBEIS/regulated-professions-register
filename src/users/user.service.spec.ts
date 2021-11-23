@@ -25,6 +25,9 @@ describe('User', () => {
             findOne: () => {
               return user;
             },
+            insert: () => {
+              return {};
+            },
           },
         },
       ],
@@ -65,6 +68,15 @@ describe('User', () => {
       expect(repoSpy).toHaveBeenCalledWith({
         where: { identifier: 'external-identifier' },
       });
+    });
+  });
+
+  describe('insert', () => {
+    it('should insert a user', async () => {
+      const repoSpy = jest.spyOn(repo, 'insert');
+      await service.add(user);
+
+      expect(repoSpy).toHaveBeenCalledWith(user);
     });
   });
 });
