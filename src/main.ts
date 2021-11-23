@@ -12,6 +12,7 @@ import { AppModule } from './app.module';
 import { AssetsHelper } from './helpers/assets.helper';
 import { ValidationFailedError } from './validation/validation-failed.error';
 import { oidc } from './middleware/oidc';
+import { UnauthorizedExceptionFilter } from './authentication/unauthorised-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -59,6 +60,8 @@ async function bootstrap() {
       },
     }),
   );
+
+  app.useGlobalFilters(new UnauthorizedExceptionFilter());
 
   oidc.on('ready', async () => {
     await app.listen(3000);
