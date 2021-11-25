@@ -4,6 +4,7 @@ import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { ValidationPipe } from '@nestjs/common';
 import { ValidationError } from 'class-validator';
+import { auth } from 'express-openid-connect';
 
 import * as nunjucks from 'nunjucks';
 import * as path from 'path';
@@ -41,6 +42,22 @@ async function bootstrap() {
   app.useStaticAssets(assets);
   app.setBaseViewsDir(views);
   app.setViewEngine('njk');
+
+  app.use(
+    auth({
+      issuerBaseURL: process.env['AUTH0_DOMAIN'],
+      baseURL: process.env['HOST_URL'],
+      clientID: process.env['AUTH0_CLIENT_ID'],
+      clientSecret: process.env['AUTH0_CLIENT_SECRET'],
+      secret: process.env['APP_SECRET'],
+      authRequired: false,
+      auth0Logout: true,
+      authorizationParams: {
+        response_type: 'code',
+        scope: 'openid profile email',
+      },
+    }),
+  );
 
   app.useGlobalPipes(
     new ValidationPipe({

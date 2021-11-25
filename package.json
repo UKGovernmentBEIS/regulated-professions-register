@@ -39,6 +39,7 @@
     "@symfony/webpack-encore": "^1.6.1",
     "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",
+    "express-openid-connect": "^2.5.1",
     "file-loader": "^6.2.0",
     "govuk-frontend": "^3.14.0",
     "nunjucks": "^3.2.3",
