@@ -26,7 +26,7 @@ async function bootstrap() {
   ];
 
   const nunjucksEnv = nunjucks.configure(views, {
-    noCache: process.env.NODE_ENV === 'local' ? true : false,
+    noCache: process.env.NODE_ENV === 'development' ? true : false,
     express: express,
   });
 
