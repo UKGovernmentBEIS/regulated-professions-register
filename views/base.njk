@@ -1,5 +1,14 @@
 {% extends "govuk/template.njk" %}
 
+{% block header %}
+  {{
+    govukHeader({
+      homepageUrl: "/",
+      serviceName: "Regulated Professions Register"
+    })
+  }}
+{% endblock %}
+
 {% block head %}
   {{ encore_entry_link_tags }}
 

@@ -1,0 +1,16 @@
+{% extends "base.njk" %}
+
+{% block header %}
+  {{
+    govukHeader({
+      homepageUrl: "/",
+      serviceName: "Regulated Professions Register",
+        navigation: [
+          {
+            href: "/logout",
+            text: "Logout"
+          }
+        ]
+    })
+  }}
+{% endblock %}
