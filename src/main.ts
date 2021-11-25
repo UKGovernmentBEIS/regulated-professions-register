@@ -12,6 +12,7 @@ import * as path from 'path';
 import { AppModule } from './app.module';
 import { AssetsHelper } from './helpers/assets.helper';
 import { ValidationFailedError } from './validation/validation-failed.error';
+import { UnauthorizedExceptionFilter } from './common/unauthorized-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -59,6 +60,7 @@ async function bootstrap() {
     }),
   );
 
+  app.useGlobalFilters(new UnauthorizedExceptionFilter());
   app.useGlobalPipes(
     new ValidationPipe({
       exceptionFactory: (validationErrors: ValidationError[] = []) => {
