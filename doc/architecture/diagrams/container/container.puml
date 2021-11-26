@@ -1,0 +1,36 @@
+@startuml C4_Elements
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+LAYOUT_AS_SKETCH()
+
+Person(public, "Public User", "People searching for information on regulated professions")
+Person(regulators, "Regulatory Authority", "Users who maintain their information in the system")
+Person(beis, "BEIS Service Owners", "Users who manage access and approve changes")
+
+System_Boundary(rpr, "Reguatory Providers Register") {
+  Container(nestApplication, "NestJS Web application", "NestJS")
+  ContainerDb(postgres, "PostgreSQL database", "PostgreSQL")
+  Container(worker, "Worker", "NodeJS")
+
+  Rel(nestApplication, postgres, "Read/write")
+  Rel(worker, postgres, "Read/write")
+  Rel(nestApplication, worker, "Sends jobs")
+}
+
+System_Ext(notify, "GOV.UK Notify")
+System_Ext(auth0, "Auth0")
+
+Rel(worker, notify, "API calls", "HTTPS")
+Rel(notify, regulators, "Sends notifications", "email")
+Rel(notify, beis, "Sends notifications", "email")
+
+Rel(regulators, auth0, "Logs in", "HTTPS/OAuth2")
+Rel(beis, auth0, "Logs in", "HTTPS/OAuth2")
+
+Rel(public, nestApplication, "Uses")
+Rel(regulators, nestApplication, "Uses")
+Rel(beis, nestApplication, "Uses")
+
+Rel(auth0, nestApplication, "Sends user authentication details", "HTTPS/OAuth2")
+
+SHOW_LEGEND()
+@enduml

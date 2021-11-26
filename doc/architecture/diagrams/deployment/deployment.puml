@@ -1,0 +1,22 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Deployment.puml
+
+LAYOUT_AS_SKETCH()
+
+Deployment_Node(gpaas, "GPaaS", "GOV.UK PaaS"){
+  Deployment_Node(webappDocker, "Docker container") {
+    Container(webApp, "Web Application", "NestJS")
+  }
+
+  Deployment_Node(workerDocker, "Docker container") {
+    Container(worker, "Worker Node", "NodeJS")
+  }
+
+  ContainerDb_Ext(postgres, "PostgreSQL database", "PostgreSQL")
+
+  Rel(webApp, postgres, "Read/write")
+  Rel(worker, postgres, "Read/write")
+}
+
+SHOW_LEGEND()
+@enduml
