@@ -17,6 +17,13 @@ services:
       DATABASE_URL: postgres://postgres:password@test-db:5432/regulated-professions-register-test
       CI: 'true'
       CYPRESS_INSTALL_BINARY: 0
+      HOST_URL: '${HOST_URL}'
+      AUTH0_DOMAIN: '${AUTH0_DOMAIN}'
+      AUTH0_CLIENT_ID: '${AUTH0_CLIENT_ID}'
+      AUTH0_CLIENT_SECRET: '${AUTH0_CLIENT_SECRET}'
+      APP_SECRET: '${APP_SECRET}'
+      AUTH_USERNAME: '${AUTH_USERNAME}'
+      AUTH_PASSWORD: '${AUTH_PASSWORD}'
     networks:
       - test
 
