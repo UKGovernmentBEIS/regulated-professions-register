@@ -15,5 +15,11 @@ export default registerAs('database', () => {
     cli: {
       migrationsDir: 'src/db/migrate',
     },
+    extra: {
+      ssl:
+        process.env.NODE_ENV === 'production'
+          ? { rejectUnauthorized: false }
+          : false,
+    },
   };
 });
