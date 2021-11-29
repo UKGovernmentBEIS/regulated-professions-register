@@ -10,7 +10,9 @@ import {
   Render,
   Res,
   Session,
+  UseFilters,
 } from '@nestjs/common';
+import { ValidationExceptionFilter } from '../validation/validation-exception.filter';
 import { User } from '../users/user.entity';
 import { UserService } from '../users/user.service';
 import { RegisterPersonalDetailsDto } from './dto/register-personal-details.dto';
@@ -55,6 +57,9 @@ export class RegistrationController {
   }
 
   @Post('/personal-details')
+  @UseFilters(
+    new ValidationExceptionFilter('registration/personal-details', 'unused'),
+  )
   namePost(
     @Body() registerNameDto: RegisterPersonalDetailsDto,
     @Session() session,
