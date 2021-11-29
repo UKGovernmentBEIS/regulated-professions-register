@@ -39,4 +39,26 @@ export class Organisation {
   @ManyToMany(() => Profession)
   @JoinTable()
   professions: Profession[];
+
+  constructor(
+    name?: string,
+    alternateName?: string,
+    address?: string,
+    url?: string,
+    email?: string,
+    contactUrl?: string,
+    telephone?: string,
+    fax?: string,
+    professions?: Profession[],
+  ) {
+    this.name = name || '';
+    this.alternateName = alternateName || '';
+    this.address = address || '';
+    this.url = url || '';
+    this.email = email || '';
+    this.contactUrl = contactUrl || '';
+    this.telephone = telephone || '';
+    this.fax = fax;
+    this.professions = professions;
+  }
 }
