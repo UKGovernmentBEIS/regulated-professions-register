@@ -25,6 +25,12 @@ export class UserService {
     });
   }
 
+  findByEmail(email: string): Promise<User> {
+    return this.repository.findOne({
+      where: { email },
+    });
+  }
+
   async add(user: User): Promise<void> {
     await this.repository.insert(user);
   }

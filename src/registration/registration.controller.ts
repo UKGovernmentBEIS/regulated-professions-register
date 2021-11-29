@@ -58,18 +58,35 @@ export class RegistrationController {
 
   @Post('/personal-details')
   @UseFilters(
+    // How do we get necessary params in here, as per the call to `res.render()` below?
     new ValidationExceptionFilter('registration/personal-details', 'unused'),
   )
-  namePost(
+  async namePost(
     @Body() registerNameDto: RegisterPersonalDetailsDto,
     @Session() session,
     @Res() res,
-  ): object {
+  ): Promise<object> {
     if (registerNameDto.edit !== 'true') {
       this.clearSession(session);
     }
 
     const sessionDto = this.getSessionDto(session, 0);
+
+    // Don't talk to Auth0 yet, but at least check our own DB
+    if (await this.userService.findByEmail(registerNameDto.email)) {
+      const errors = {
+        email: { text: 'A user with this email address already exists' },
+      };
+
+      res.render('registration/personal-details', {
+        edit: registerNameDto.edit === 'true',
+        name: registerNameDto.name,
+        email: registerNameDto.email,
+        errors,
+      });
+      return;
+    }
+
     sessionDto.name = registerNameDto.name;
     sessionDto.email = registerNameDto.email;
 
@@ -87,8 +104,7 @@ export class RegistrationController {
   }
 
   @Post('/confirm')
-  @Redirect('done')
-  async confirmPost(@Session() session): Promise<object> {
+  async confirmPost(@Session() session, @Res() res): Promise<object> {
     const sessionDto = this.getSessionDto(session, TOTAL_STEPS);
 
     const { email, name } = sessionDto;
@@ -97,23 +113,28 @@ export class RegistrationController {
       email,
     );
 
-    if (result.result == 'user-created') {
-      this.userService.add(new User(email, name, result.externalIdentifier));
-    } else {
-      // Possible race condition - wrap in transaction?
+    if (result.result == 'user-exists') {
       if (
-        !(await this.userService.findByExternalIdentifier(
+        await this.userService.findByExternalIdentifier(
           result.externalIdentifier,
-        ))
+        )
       ) {
-        this.userService.add(new User(email, name, result.externalIdentifier));
-      } else {
-        // TODO: Redirect to a "user exists" page
-        throw new Error('User already exists');
+        res.render('registration/confirm', {
+          ...sessionDto,
+          userAlreadyExists: true,
+        });
+        return;
       }
     }
 
-    return {};
+    // Assume for now that if the user didn't exist in Auth0, they don't exist
+    // already in our DB. If they're in our DB, they have an identifier from
+    // Auth0, so it'd be very weird if they're *not* in Auth0. Also note this
+    // currently allows for a race condition where a user could have been added
+    // to the DB since the above check, though worst outcome is the user gets
+    // an inelegant error message.
+    this.userService.add(new User(email, name, result.externalIdentifier));
+    res.redirect('done');
   }
 
   @Get('/done')

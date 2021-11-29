@@ -3,6 +3,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
 {% block content %}
 
@@ -17,6 +18,19 @@
           text: "Back",
           href: "personal-details"
         }) }}
+
+        {% if userAlreadyExists %}
+
+        {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: [
+            {
+              text: "A user with this email address already exists"
+            }
+          ]
+        }) }}
+
+        {% endif %}
 
         <span class="govuk-caption-xl">Creating RPR user</span>
         <h1 class="govuk-heading-xl">Check your answers before creating this user</h1>
