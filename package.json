@@ -28,7 +28,11 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "start-server-and-test start:test http://localhost:3000 cy:run"
+    "test:e2e": "start-server-and-test start:test http://localhost:3000 cy:run",
+    "seed": "npm run build && node dist/seeder",
+    "seed:refresh": "npm run build && node dist/seeder --refresh",
+    "seed:test": "npm run build && NODE_ENV=test node dist/seeder",
+    "seed:test:refresh": "npm run build && NODE_ENV=test node dist/seeder --refresh"
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",
@@ -42,6 +46,7 @@
     "express-openid-connect": "^2.5.1",
     "file-loader": "^6.2.0",
     "govuk-frontend": "^3.14.0",
+    "jwt-decode": "^3.1.2",
     "nunjucks": "^3.2.3",
     "pg": "^8.7.1",
     "reflect-metadata": "^0.1.13",
@@ -68,6 +73,7 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
     "jest": "^27.2.5",
+    "nestjs-seeder": "^0.2.0",
     "prettier": "^2.3.2",
     "puppeteer": "^11.0.0",
     "source-map-support": "^0.5.20",

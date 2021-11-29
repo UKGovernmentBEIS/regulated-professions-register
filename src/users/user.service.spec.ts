@@ -53,4 +53,18 @@ describe('User', () => {
       expect(repoSpy).toHaveBeenCalledWith('some-uuid');
     });
   });
+
+  describe('findByExternalIdentifier', () => {
+    it('should return a user', async () => {
+      const repoSpy = jest.spyOn(repo, 'findOne');
+      const post = await service.findByExternalIdentifier(
+        'external-identifier',
+      );
+
+      expect(post).toEqual(user);
+      expect(repoSpy).toHaveBeenCalledWith({
+        where: { identifier: 'external-identifier' },
+      });
+    });
+  });
 });

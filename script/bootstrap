@@ -1,0 +1,21 @@
+#!/bin/sh
+
+# script/bootstrap: Resolve all dependencies that the application requires to
+#                   run.
+
+set -e
+
+cd "$(dirname "$0")/.."
+
+echo "==> Installing application dependencies..."
+
+nodenv install --skip-existing
+npm install
+
+echo "==> Building assets..."
+
+npm run build:assets
+
+echo "==> Seeding database..."
+
+npm run seed

@@ -9,6 +9,13 @@ dependencies, runs the DB migrations, and builds the assets:
 script/setup
 ```
 
+To just update dependencies and database seeds, you can run the bootstrap
+command:
+
+```
+script/bootstrap
+```
+
 ## Running the application
 
 ```

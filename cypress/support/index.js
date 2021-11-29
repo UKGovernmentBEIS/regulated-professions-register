@@ -16,5 +16,10 @@
 // Import commands.js using ES2015 syntax:
 import './commands';
 
+// Seed the database before running the specs
+before(() => {
+  cy.exec('npm run seed:test');
+});
+
 // Alternatively you can use CommonJS syntax:
 // require('./commands')

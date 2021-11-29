@@ -18,4 +18,10 @@ export class UserService {
   find(id: string): Promise<User> {
     return this.repository.findOne(id);
   }
+
+  findByExternalIdentifier(externalIdentifier: string): Promise<User> {
+    return this.repository.findOne({
+      where: { identifier: externalIdentifier },
+    });
+  }
 }
