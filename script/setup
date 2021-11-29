@@ -29,12 +29,5 @@ echo "==> Creating env files for dev and test..."
 echo "DATABASE_URL=postgres://postgres@localhost:5432/$dev_db" > .env.development
 echo "DATABASE_URL=postgres://postgres@localhost:5432/$test_db" > .env.test
 
-echo "==> Installing application dependencies..."
-
-nodenv install --skip-existing
-npm install
-
-echo "==> Building assets..."
-
-npm run build:assets
+script/bootstrap
 
