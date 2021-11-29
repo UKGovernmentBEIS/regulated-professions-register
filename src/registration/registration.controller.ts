@@ -43,11 +43,11 @@ export class RegistrationController {
 
   @Get('/personal-details')
   @Render('registration/personal-details')
-  name(@Query('edit', new DefaultValuePipe(false), ParseBoolPipe) edit: boolean, @Session() session): object {
-    const sessionDto = this.getSessionDto(
-      session,
-      edit ? TOTAL_STEPS : 0,
-    );
+  personalDetails(
+    @Query('edit', new DefaultValuePipe(false), ParseBoolPipe) edit: boolean,
+    @Session() session,
+  ): object {
+    const sessionDto = this.getSessionDto(session, edit ? TOTAL_STEPS : 0);
 
     if (this.getHighestStepSessionValidFor(sessionDto) >= 1) {
       return { edit: true, name: sessionDto.name, email: sessionDto.email };
@@ -61,34 +61,34 @@ export class RegistrationController {
     // How do we get necessary params in here, as per the call to `res.render()` below?
     new ValidationExceptionFilter('registration/personal-details', 'unused'),
   )
-  async namePost(
-    @Body() registerNameDto: RegisterPersonalDetailsDto,
+  async personalDetailsPost(
+    @Body() registerPersonalDetailsDto: RegisterPersonalDetailsDto,
     @Session() session,
     @Res() res,
   ): Promise<object> {
-    if (registerNameDto.edit !== 'true') {
+    if (registerPersonalDetailsDto.edit !== 'true') {
       this.clearSession(session);
     }
 
     const sessionDto = this.getSessionDto(session, 0);
 
     // Don't talk to Auth0 yet, but at least check our own DB
-    if (await this.userService.findByEmail(registerNameDto.email)) {
+    if (await this.userService.findByEmail(registerPersonalDetailsDto.email)) {
       const errors = {
         email: { text: 'A user with this email address already exists' },
       };
 
       res.render('registration/personal-details', {
-        edit: registerNameDto.edit === 'true',
-        name: registerNameDto.name,
-        email: registerNameDto.email,
+        edit: registerPersonalDetailsDto.edit === 'true',
+        name: registerPersonalDetailsDto.name,
+        email: registerPersonalDetailsDto.email,
         errors,
       });
       return;
     }
 
-    sessionDto.name = registerNameDto.name;
-    sessionDto.email = registerNameDto.email;
+    sessionDto.name = registerPersonalDetailsDto.name;
+    sessionDto.email = registerPersonalDetailsDto.email;
 
     res.redirect('confirm');
 
