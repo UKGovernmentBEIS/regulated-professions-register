@@ -1,4 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { Request } from 'express';
+import { RequestContext } from 'express-openid-connect';
+
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
@@ -17,6 +20,21 @@ describe('AppController', () => {
   describe('root', () => {
     it('should return an empty object', () => {
       expect(appController.getHello()).toEqual({});
+    });
+  });
+
+  describe('admin', () => {
+    it('should return the name of the logged in user', () => {
+      const oidc: Partial<RequestContext> = {
+        user: {
+          nickname: 'Nickname',
+        },
+      };
+      const request = { oidc: oidc } as Request;
+
+      expect(appController.admin(request)).toEqual({
+        name: 'Nickname',
+      });
     });
   });
 });

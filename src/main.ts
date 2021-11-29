@@ -4,6 +4,7 @@ import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { ValidationPipe } from '@nestjs/common';
 import { ValidationError } from 'class-validator';
+import { auth } from 'express-openid-connect';
 
 import * as nunjucks from 'nunjucks';
 import * as path from 'path';
@@ -11,6 +12,7 @@ import * as path from 'path';
 import { AppModule } from './app.module';
 import { AssetsHelper } from './helpers/assets.helper';
 import { ValidationFailedError } from './validation/validation-failed.error';
+import { UnauthorizedExceptionFilter } from './common/unauthorized-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -25,7 +27,7 @@ async function bootstrap() {
   ];
 
   const nunjucksEnv = nunjucks.configure(views, {
-    noCache: process.env.NODE_ENV === 'local' ? true : false,
+    noCache: process.env.NODE_ENV === 'development' ? true : false,
     express: express,
   });
 
@@ -42,6 +44,23 @@ async function bootstrap() {
   app.setBaseViewsDir(views);
   app.setViewEngine('njk');
 
+  app.use(
+    auth({
+      issuerBaseURL: process.env['AUTH0_DOMAIN'],
+      baseURL: process.env['HOST_URL'],
+      clientID: process.env['AUTH0_CLIENT_ID'],
+      clientSecret: process.env['AUTH0_CLIENT_SECRET'],
+      secret: process.env['APP_SECRET'],
+      authRequired: false,
+      auth0Logout: true,
+      authorizationParams: {
+        response_type: 'code',
+        scope: 'openid profile email',
+      },
+    }),
+  );
+
+  app.useGlobalFilters(new UnauthorizedExceptionFilter());
   app.useGlobalPipes(
     new ValidationPipe({
       exceptionFactory: (validationErrors: ValidationError[] = []) => {
