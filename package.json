@@ -46,6 +46,7 @@
     "express-openid-connect": "^2.5.1",
     "file-loader": "^6.2.0",
     "govuk-frontend": "^3.14.0",
+    "jwt-decode": "^3.1.2",
     "nunjucks": "^3.2.3",
     "pg": "^8.7.1",
     "reflect-metadata": "^0.1.13",
