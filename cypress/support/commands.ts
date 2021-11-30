@@ -1,11 +1,10 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-
-const { getUnixTime } = require('date-fns');
+import { getUnixTime } from 'date-fns';
+import puppeteer from 'puppeteer';
 
 /*
  * Create the cookie expiration.
  */
-function getFutureTime(minutesInFuture) {
+function getFutureTime(minutesInFuture: number): number {
   const time = new Date(new Date().getTime() + minutesInFuture * 60000);
   return getUnixTime(time);
 }
@@ -14,12 +13,12 @@ function getFutureTime(minutesInFuture) {
  * Create a cookie object.
  * @param {*} cookie
  */
-function createCookie(cookie) {
+function createCookie(cookie: puppeteer.Protocol.Network.Cookie) {
   return {
     name: cookie.name,
     value: cookie.value,
     options: {
-      domain: `${cookie.domain.trimLeft('.')}`,
+      domain: `${cookie.domain.trimLeft()}`,
       expiry: getFutureTime(15),
       httpOnly: cookie.httpOnly,
       path: cookie.path,
@@ -46,12 +45,11 @@ function login() {
  * Login with Auth0.
  */
 Cypress.Commands.add('loginAuth0', () => {
-  cy.session('logged in user', () => {
+  return cy.session('logged in user', () => {
     login().then(({ cookies, callbackUrl }) => {
-      console.log(cookies);
       cookies
         .map(createCookie)
-        .forEach((c) => cy.setCookie(c.name, c.value, c.options));
+        .forEach((c: any) => cy.setCookie(c.name, c.value, c.options));
 
       cy.visit(callbackUrl);
     });
