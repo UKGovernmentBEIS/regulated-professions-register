@@ -7,7 +7,7 @@ export class AssetsHelper {
     this.entrypoints = entrypoints;
   }
 
-  public async entryLinksTags(): Promise<string> {
+  public async entryLinksTags(): Promise<nunjucks.runtime.SafeString> {
     const css = this.entrypoints.entrypoints.app.css
       .map((cssFile: any) => {
         return `<link href="${cssFile}" rel="stylesheet">`;
@@ -17,7 +17,7 @@ export class AssetsHelper {
     return new nunjucks.runtime.SafeString(css);
   }
 
-  public async entryScriptTags(): Promise<string> {
+  public async entryScriptTags(): Promise<nunjucks.runtime.SafeString> {
     const js = this.entrypoints.entrypoints.app.js
       .map((jsFile: any) => {
         return `<script src="${jsFile}"></script>`;
