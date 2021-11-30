@@ -24,7 +24,6 @@ export class Auth0UserCreationService extends ExternalUserCreationService {
   public async createExternalUser(
     email: string,
   ): Promise<CreateExternalUserResult> {
-
     const url = process.env.AUTH0_DOMAIN;
     const domain = url.startsWith('https://') ? url.slice(8) : url;
 

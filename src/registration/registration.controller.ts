@@ -10,9 +10,9 @@ import {
   Render,
   Res,
   Session,
-  UseFilters,
 } from '@nestjs/common';
-import { ValidationExceptionFilter } from '../validation/validation-exception.filter';
+import { ValidationFailedError } from '../validation/validation-failed.error';
+import { Validator } from '../helpers/validator';
 import { User } from '../users/user.entity';
 import { UserService } from '../users/user.service';
 import { RegisterPersonalDetailsDto } from './dto/register-personal-details.dto';
@@ -57,20 +57,37 @@ export class RegistrationController {
   }
 
   @Post('/personal-details')
-  @UseFilters(
-    // How do we get necessary params in here, as per the call to `res.render()` below?
-    new ValidationExceptionFilter('registration/personal-details', 'unused'),
-  )
   async personalDetailsPost(
-    @Body() registerPersonalDetailsDto: RegisterPersonalDetailsDto,
+    @Body() registerPersonalDetailsDto,
     @Session() session,
     @Res() res,
   ): Promise<object> {
-    if (registerPersonalDetailsDto.edit !== 'true') {
+
+    const edit = registerPersonalDetailsDto.edit === 'true';
+
+    // If this is the first step, start with a clean session
+    if (!edit) {
       this.clearSession(session);
     }
 
-    const sessionDto = this.getSessionDto(session, 0);
+    const sessionDto = this.getSessionDto(session, edit ? TOTAL_STEPS : 0);
+
+    // Intentially don't use `ValidationExceptionFilter`, as we have additional
+    // parameters to get into our template
+    const validator = await Validator.validate(
+      RegisterPersonalDetailsDto,
+      registerPersonalDetailsDto,
+    );
+
+    if (!validator.valid()) {
+      res.render('registration/personal-details', {
+        edit,
+        name: registerPersonalDetailsDto.name,
+        email: registerPersonalDetailsDto.email,
+        errors: new ValidationFailedError(validator.errors).fullMessages(),
+      });
+      return;
+    }
 
     // Don't talk to Auth0 yet, but at least check our own DB
     if (await this.userService.findByEmail(registerPersonalDetailsDto.email)) {
@@ -79,7 +96,7 @@ export class RegistrationController {
       };
 
       res.render('registration/personal-details', {
-        edit: registerPersonalDetailsDto.edit === 'true',
+        edit,
         name: registerPersonalDetailsDto.name,
         email: registerPersonalDetailsDto.email,
         errors,
