@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Connection, Repository } from 'typeorm';
 
 import { User } from './user.entity';
 import { UserService } from './user.service';
@@ -29,6 +29,10 @@ describe('User', () => {
               return {};
             },
           },
+        },
+        {
+          provide: Connection,
+          useValue: {},
         },
       ],
     }).compile();

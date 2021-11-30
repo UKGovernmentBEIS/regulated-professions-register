@@ -5,6 +5,7 @@ import { User } from '../users/user.entity';
 import { Auth0UserCreationService } from './auth0-user-creation.service';
 import { ExternalUserCreationService } from './external-user-creation.service';
 import { RegistrationController } from './registration.controller';
+import { Connection } from 'typeorm';
 
 const user = new User('email@example.com', 'name', '212121');
 const userArray = [user, new User('email2@example.com', 'name2', '1234')];
@@ -35,6 +36,10 @@ describe('RegistrationController', () => {
               return {};
             },
           },
+        },
+        {
+          provide: Connection,
+          useValue: {},
         },
       ],
     }).compile();

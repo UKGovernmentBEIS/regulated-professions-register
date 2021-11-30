@@ -62,7 +62,6 @@ export class RegistrationController {
     @Session() session,
     @Res() res,
   ): Promise<object> {
-
     const edit = registerPersonalDetailsDto.edit === 'true';
 
     // If this is the first step, start with a clean session
@@ -126,31 +125,33 @@ export class RegistrationController {
 
     const { email, name } = sessionDto;
 
-    const result = await this.externalUserCreationService.createExternalUser(
-      email,
-    );
+    const externalResult =
+      await this.externalUserCreationService.createExternalUser(email);
 
-    if (result.result == 'user-exists') {
-      if (
-        await this.userService.findByExternalIdentifier(
-          result.externalIdentifier,
-        )
-      ) {
+    if (externalResult.result == 'user-exists') {
+      // In the case where the user already existed in Auth0, we expect they
+      // *may* exist in our DB, so handle that case
+      const internalResult = await this.userService.attemptAdd(
+        new User(email, name, externalResult.externalIdentifier),
+      );
+
+      if (internalResult == 'user-exists') {
         res.render('registration/confirm', {
-          ...sessionDto,
+          email,
+          name,
           userAlreadyExists: true,
         });
         return;
       }
+    } else {
+      // In the case where the user didn't already exist in Auth0, assume they
+      // don't exist already in our DB. If they're in our DB, they have an
+      // identifier from Auth0, so it'd be very weird if they're *not* in Auth0
+      await this.userService.add(
+        new User(email, name, externalResult.externalIdentifier),
+      );
     }
 
-    // Assume for now that if the user didn't exist in Auth0, they don't exist
-    // already in our DB. If they're in our DB, they have an identifier from
-    // Auth0, so it'd be very weird if they're *not* in Auth0. Also note this
-    // currently allows for a race condition where a user could have been added
-    // to the DB since the above check, though worst outcome is the user gets
-    // an inelegant error message.
-    this.userService.add(new User(email, name, result.externalIdentifier));
     res.redirect('done');
   }
 
