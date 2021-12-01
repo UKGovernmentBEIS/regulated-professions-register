@@ -1,9 +1,7 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
+import puppeteer from 'puppeteer';
 
-const puppeteer = require('puppeteer');
-
-const preventApplicationRedirect = function (callbackUrl) {
-  return (request) => {
+const preventApplicationRedirect = (callbackUrl: string) => {
+  return (request: puppeteer.HTTPRequest) => {
     const url = request.url();
     if (request.isNavigationRequest() && url.indexOf(callbackUrl) === 0)
       request.respond({ body: url, status: 200 });
@@ -11,17 +9,29 @@ const preventApplicationRedirect = function (callbackUrl) {
   };
 };
 
-const writeUsername = async function writeUsername({ page, options } = {}) {
+const writeUsername = async ({
+  page,
+  options,
+}: {
+  page: puppeteer.Page;
+  options: any;
+}) => {
   await page.waitForSelector('#username');
   await page.type('#username', options.username);
 };
 
-const writePassword = async function writeUsername({ page, options } = {}) {
+const writePassword = async ({
+  page,
+  options,
+}: {
+  page: puppeteer.Page;
+  options: any;
+}) => {
   await page.waitForSelector('#password', { visible: true });
   await page.type('#password', options.password);
 };
 
-const clickLogin = async function ({ page } = {}) {
+const clickLogin = async ({ page }: { page: puppeteer.Page }) => {
   await page.waitForSelector('button[type="submit"]', {
     visible: true,
     timeout: 5000,
@@ -34,7 +44,7 @@ const clickLogin = async function ({ page } = {}) {
   return response;
 };
 
-exports.Login = async function (options = {}) {
+const login = async (options: any) => {
   const browser = await puppeteer.launch({
     headless: options.headless,
     args: options.args || ['--no-sandbox', '--disable-setuid-sandbox'],
@@ -53,7 +63,7 @@ exports.Login = async function (options = {}) {
     await writeUsername({ page, options });
     await writePassword({ page, options });
 
-    const response = await clickLogin({ page, options });
+    const response = await clickLogin({ page });
 
     if (response.status() >= 400) {
       throw new Error(
@@ -67,8 +77,8 @@ exports.Login = async function (options = {}) {
     if (url.indexOf(options.callbackUrl) !== 0) {
       throw new Error(`User was redirected to unexpected location: ${url}`);
     }
-
-    const { cookies } = await page._client.send('Network.getAllCookies', {});
+    const client = await page.target().createCDPSession();
+    const { cookies } = await client.send('Network.getAllCookies');
     return {
       callbackUrl: url,
       cookies,
@@ -78,3 +88,5 @@ exports.Login = async function (options = {}) {
     await browser.close();
   }
 };
+
+export { login };

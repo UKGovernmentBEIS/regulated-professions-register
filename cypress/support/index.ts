@@ -13,6 +13,19 @@
 // https://on.cypress.io/configuration
 // ***********************************************************
 
+declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
+  namespace Cypress {
+    interface Chainable {
+      /**
+       * Login with Auth0.
+       * @example cy.loginAuth0()
+       */
+      loginAuth0(): Chainable<Element>;
+    }
+  }
+}
+
 // Import commands.js using ES2015 syntax:
 import './commands';
 
