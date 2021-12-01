@@ -8,6 +8,10 @@ import jwt_decode from 'jwt-decode';
 import { UsersModule } from '../users/users.module';
 import { UserService } from '../users/user.service';
 
+const baseURL =
+  process.env['HOST_URL'] ||
+  `https://${process.env['HEROKU_APP_NAME']}.herokuapp.com`;
+
 /**
  * Set up an instance of the `express-openid-connect` authentication middleware for
  * use in the application. Using this in a class allows us to access the database
@@ -33,7 +37,7 @@ export class AuthenticationMidleware {
   public auth(): RequestHandler {
     return auth({
       issuerBaseURL: process.env['AUTH0_DOMAIN'],
-      baseURL: process.env['HOST_URL'],
+      baseURL: baseURL,
       clientID: process.env['AUTH0_CLIENT_ID'],
       clientSecret: process.env['AUTH0_CLIENT_SECRET'],
       secret: process.env['APP_SECRET'],
