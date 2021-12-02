@@ -31,7 +31,9 @@ export class PersonalDetailsController {
   ): object {
     const userCreationFlowSession = new UserCreationFlowSession(
       session,
-      edit ? UserCreationFlowStep.Complete : UserCreationFlowStep.Start,
+      edit
+        ? UserCreationFlowStep.AllDetailsEntered
+        : UserCreationFlowStep.PersonalDetails - 1,
     );
 
     if (
@@ -57,13 +59,10 @@ export class PersonalDetailsController {
 
     const userCreationFlowSession = new UserCreationFlowSession(
       session,
-      edit ? UserCreationFlowStep.Complete : UserCreationFlowStep.Start,
+      edit
+        ? UserCreationFlowStep.AllDetailsEntered
+        : UserCreationFlowStep.PersonalDetails - 1,
     );
-
-    // If this is the first step, start with a clean session
-    if (!edit) {
-      userCreationFlowSession.clearSession();
-    }
 
     // Intentially don't use `ValidationExceptionFilter`, as we have additional
     // parameters to get into our template

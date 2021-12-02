@@ -31,6 +31,13 @@ export class UserController {
   @Post('/admin/user/create-new-user')
   @Redirect('create-new-user/personal-details')
   newPost(@Session() session): object {
+    const userCreationFlowSession = new UserCreationFlowSession(
+      session,
+      UserCreationFlowStep.Any,
+    );
+
+    userCreationFlowSession.resetSession();
+
     return {};
   }
 
@@ -39,7 +46,7 @@ export class UserController {
   confirm(@Session() session): object {
     const userCreationFlowSession = new UserCreationFlowSession(
       session,
-      UserCreationFlowStep.Complete,
+      UserCreationFlowStep.AllDetailsEntered,
     );
     const { email, name } = userCreationFlowSession.sessionDto;
 
@@ -79,6 +86,9 @@ export class UserController {
       await this.userService.add(
         new User(email, name, externalResult.externalIdentifier),
       );
+
+      const sessionDto = userCreationFlowSession.sessionDto;
+      sessionDto.userCreated = true;
     }
 
     res.redirect('done');
@@ -89,7 +99,7 @@ export class UserController {
   done(@Session() session): object {
     const userCreationFlowSession = new UserCreationFlowSession(
       session,
-      UserCreationFlowStep.Complete,
+      UserCreationFlowStep.UserCreated,
     );
     const { email } = userCreationFlowSession.sessionDto;
 

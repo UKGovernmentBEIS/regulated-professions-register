@@ -14,9 +14,14 @@ const populatedSession = {
 describe('PersonalDetailsController', () => {
   let controller: PersonalDetailsController;
   let userService: DeepMocked<UserService>;
+  let populatedSession;
 
   beforeEach(async () => {
     userService = createMock<UserService>();
+
+    populatedSession = {
+      'user-creation-flow': { name, email, userCreated: false },
+    };
 
     const module: TestingModule = await Test.createTestingModule({
       controllers: [PersonalDetailsController],
@@ -41,6 +46,14 @@ describe('PersonalDetailsController', () => {
     it('should throw an exception when called in edit mode with an empty session', () => {
       expect(() => {
         controller.new(true, {});
+      }).toThrowError();
+    });
+
+    it('should throw an exception when called with a session where the user has already been created', () => {
+      expect(() => {
+        controller.new(true, {
+          'user-creation-flow': { name, email, userCreated: true },
+        });
       }).toThrowError();
     });
 
@@ -88,8 +101,15 @@ describe('PersonalDetailsController', () => {
         return null;
       });
 
-      await controller.create({ name: name, email, edit: 'false' }, {}, res);
+      const session = {};
 
+      await controller.create(
+        { name: name, email, edit: 'false' },
+        session,
+        res,
+      );
+
+      expect(session).toEqual(populatedSession);
       expect(res.redirect).toHaveBeenCalledWith('confirm');
     });
 
@@ -97,7 +117,7 @@ describe('PersonalDetailsController', () => {
       await controller.create({ name: '', email, edit: 'false' }, {}, res);
 
       expect(res.render).toBeCalledTimes(1);
-      expect(res.render.mock.calls[0][0]).toEqual('user/personal-details');
+      expect(res.render.mock.calls[0][0]).toEqual('user/personal-details/new');
       expect(res.render.mock.calls[0][1]).toMatchObject({
         name: '',
         email,
@@ -110,7 +130,7 @@ describe('PersonalDetailsController', () => {
       await controller.create({ name, email: '', edit: 'false' }, {}, res);
 
       expect(res.render).toBeCalledTimes(1);
-      expect(res.render.mock.calls[0][0]).toEqual('user/personal-details');
+      expect(res.render.mock.calls[0][0]).toEqual('user/personal-details/new');
       expect(res.render.mock.calls[0][1]).toMatchObject({
         name,
         email: '',
@@ -129,7 +149,7 @@ describe('PersonalDetailsController', () => {
       expect(userService.findByEmail).toHaveBeenCalledWith('name@example.com');
 
       expect(res.render).toBeCalledTimes(1);
-      expect(res.render.mock.calls[0][0]).toEqual('user/personal-details');
+      expect(res.render.mock.calls[0][0]).toEqual('user/personal-details/new');
       expect(res.render.mock.calls[0][1]).toMatchObject({
         name,
         email,
