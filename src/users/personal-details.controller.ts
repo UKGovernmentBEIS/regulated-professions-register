@@ -19,12 +19,12 @@ import {
   UserCreationFlowStep,
 } from './helpers/user-creation-flow-session.helper';
 
-@Controller('/user/personal-details')
+@Controller('/admin/user/create-new-user/personal-details')
 export class PersonalDetailsController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
-  @Render('user/personal-details')
+  @Render('user/personal-details/new')
   new(
     @Query('edit', new DefaultValuePipe(false), ParseBoolPipe) edit: boolean,
     @Session() session,
@@ -73,7 +73,7 @@ export class PersonalDetailsController {
     );
 
     if (!validator.valid()) {
-      res.render('user/personal-details', {
+      res.render('user/personal-details/new', {
         edit,
         name: personalDetailsDto.name,
         email: personalDetailsDto.email,
@@ -88,7 +88,7 @@ export class PersonalDetailsController {
         email: { text: 'A user with this email address already exists' },
       };
 
-      res.render('user/personal-details', {
+      res.render('user/personal-details/new', {
         edit,
         name: personalDetailsDto.name,
         email: personalDetailsDto.email,

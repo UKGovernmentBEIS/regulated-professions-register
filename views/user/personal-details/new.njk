@@ -20,11 +20,11 @@
         {% else %}
           {{ govukBackLink({
             text: "Back",
-            href: "start"
+            href: "../create-new-user"
           }) }}
         {% endif %}
 
-        {% include "../shared/_errors.njk" %}
+        {% include "../../shared/_errors.njk" %}
 
         <span class="govuk-caption-xl">Creating RPR user</span>
         <h1 class="govuk-heading-xl">Personal details</h1>

@@ -15,26 +15,26 @@ import {
 import { User } from './user.entity';
 import { UserService } from './user.service';
 
-@Controller('/user')
+@Controller()
 export class UserController {
   constructor(
     private readonly userService: UserService,
     private readonly externalUserCreationService: ExternalUserCreationService,
   ) {}
 
-  @Get('/start')
-  @Render('user/start')
-  start(): object {
+  @Get('/admin/user/create-new-user')
+  @Render('user/new')
+  new(): object {
     return {};
   }
 
-  @Post('/start')
-  @Redirect('personal-details')
-  startPost(): object {
+  @Post('/admin/user/create-new-user')
+  @Redirect('create-new-user/personal-details')
+  newPost(@Session() session): object {
     return {};
   }
 
-  @Get('/confirm')
+  @Get('/admin/user/create-new-user/confirm')
   @Render('user/confirm')
   confirm(@Session() session): object {
     const userCreationFlowSession = new UserCreationFlowSession(
@@ -46,11 +46,11 @@ export class UserController {
     return { email, name };
   }
 
-  @Post('/confirm')
+  @Post('/admin/user/create-new-user/confirm')
   async create(@Session() session, @Res() res): Promise<object> {
     const userCreationFlowSession = new UserCreationFlowSession(
       session,
-      UserCreationFlowStep.Complete,
+      UserCreationFlowStep.AllDetailsEntered,
     );
     const { email, name } = userCreationFlowSession.sessionDto;
 
@@ -84,7 +84,7 @@ export class UserController {
     res.redirect('done');
   }
 
-  @Get('/done')
+  @Get('/admin/user/create-new-user/done')
   @Render('user/done')
   done(@Session() session): object {
     const userCreationFlowSession = new UserCreationFlowSession(
