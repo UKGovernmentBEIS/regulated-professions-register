@@ -91,7 +91,7 @@ describe('UserController', () => {
       }).rejects.toThrowError();
     });
 
-    it('should redirct to `done` when the user is successfully created', async () => {
+    it('should redirect to `done` when the user is successfully created', async () => {
       await controller.create(populatedSession, res);
 
       expect(externalUserCreationService.createExternalUser).toBeCalledWith(

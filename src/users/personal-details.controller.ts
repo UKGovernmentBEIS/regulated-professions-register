@@ -72,12 +72,8 @@ export class PersonalDetailsController {
     );
 
     if (!validator.valid()) {
-      res.render('user/personal-details/new', {
-        edit,
-        name: personalDetailsDto.name,
-        email: personalDetailsDto.email,
-        errors: new ValidationFailedError(validator.errors).fullMessages(),
-      });
+      const errors = new ValidationFailedError(validator.errors).fullMessages();
+      this.renderWithErrors(res, personalDetailsDto, edit, errors);
       return;
     }
 
@@ -87,12 +83,7 @@ export class PersonalDetailsController {
         email: { text: 'A user with this email address already exists' },
       };
 
-      res.render('user/personal-details/new', {
-        edit,
-        name: personalDetailsDto.name,
-        email: personalDetailsDto.email,
-        errors,
-      });
+      this.renderWithErrors(res, personalDetailsDto, edit, errors);
       return;
     }
 
@@ -102,5 +93,19 @@ export class PersonalDetailsController {
     sessionDto.email = personalDetailsDto.email;
 
     res.redirect('confirm');
+  }
+
+  private renderWithErrors(
+    res: any,
+    personalDetailsDto: PersonalDetailsDto,
+    edit: boolean,
+    errors: object,
+  ): void {
+    res.render('user/personal-details/new', {
+      name: personalDetailsDto.name,
+      email: personalDetailsDto.email,
+      edit,
+      errors,
+    });
   }
 }
