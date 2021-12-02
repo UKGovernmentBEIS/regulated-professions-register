@@ -2,6 +2,24 @@ import { getUnixTime } from 'date-fns';
 import puppeteer from 'puppeteer';
 
 /*
+ * Get a username and password from their role
+ */
+function getUser(role: string): { username: string; password: string } {
+  const users = {
+    admin: {
+      username: Cypress.env('ADMIN_USERNAME'),
+      password: Cypress.env('ADMIN_PASSWORD'),
+    },
+    editor: {
+      username: Cypress.env('EDITOR_USERNAME'),
+      password: Cypress.env('EDITOR_PASSWORD'),
+    },
+  };
+
+  return users[role];
+}
+
+/*
  * Create the cookie expiration.
  */
 function getFutureTime(minutesInFuture: number): number {
@@ -32,10 +50,11 @@ function createCookie(cookie: puppeteer.Protocol.Network.Cookie) {
 /**
  * Login via puppeteer and return the redirect url and cookies.
  */
-function login() {
+function login(role: string) {
+  const { username, password } = getUser(role);
   return cy.task('LoginPuppeteer', {
-    username: Cypress.env('AUTH_USERNAME'),
-    password: Cypress.env('AUTH_PASSWORD'),
+    username: username,
+    password: password,
     loginUrl: 'http://localhost:3000/login',
     callbackUrl: 'http://localhost:3000/callback',
   });
@@ -44,9 +63,9 @@ function login() {
 /**
  * Login with Auth0.
  */
-Cypress.Commands.add('loginAuth0', () => {
-  return cy.session('logged in user', () => {
-    login().then(({ cookies, callbackUrl }) => {
+Cypress.Commands.add('loginAuth0', (role = 'admin') => {
+  return cy.session(`logged in user with ${role} role`, () => {
+    login(role).then(({ cookies, callbackUrl }) => {
       cookies
         .map(createCookie)
         .forEach((c: any) => cy.setCookie(c.name, c.value, c.options));
