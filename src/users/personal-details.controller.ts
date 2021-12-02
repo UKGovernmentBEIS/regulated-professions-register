@@ -9,6 +9,7 @@ import {
   Render,
   Res,
   Session,
+  UseGuards,
 } from '@nestjs/common';
 import { ValidationFailedError } from '../validation/validation-failed.error';
 import { Validator } from '../helpers/validator';
@@ -18,12 +19,14 @@ import {
   UserCreationFlowSession,
   UserCreationFlowStep,
 } from './helpers/user-creation-flow-session.helper';
+import { AuthenticationGuard } from '../common/authentication.guard';
 
 @Controller('/admin/user/create-new-user/personal-details')
 export class PersonalDetailsController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
+  @UseGuards(AuthenticationGuard)
   @Render('user/personal-details/new')
   new(
     @Query('edit', new DefaultValuePipe(false), ParseBoolPipe) edit: boolean,
@@ -50,6 +53,7 @@ export class PersonalDetailsController {
   }
 
   @Post()
+  @UseGuards(AuthenticationGuard)
   async create(
     @Body() personalDetailsDto,
     @Session() session,

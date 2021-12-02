@@ -6,7 +6,9 @@ import {
   Render,
   Res,
   Session,
+  UseGuards,
 } from '@nestjs/common';
+import { AuthenticationGuard } from '../common/authentication.guard';
 import { ExternalUserCreationService } from './external-user-creation.service';
 import {
   UserCreationFlowSession,
@@ -23,12 +25,14 @@ export class UserController {
   ) {}
 
   @Get('/admin/user/create-new-user')
+  @UseGuards(AuthenticationGuard)
   @Render('user/new')
   new(): object {
     return {};
   }
 
   @Post('/admin/user/create-new-user')
+  @UseGuards(AuthenticationGuard)
   @Redirect('create-new-user/personal-details')
   newPost(@Session() session): object {
     const userCreationFlowSession = new UserCreationFlowSession(
@@ -42,6 +46,7 @@ export class UserController {
   }
 
   @Get('/admin/user/create-new-user/confirm')
+  @UseGuards(AuthenticationGuard)
   @Render('user/confirm')
   confirm(@Session() session): object {
     const userCreationFlowSession = new UserCreationFlowSession(
@@ -54,6 +59,7 @@ export class UserController {
   }
 
   @Post('/admin/user/create-new-user/confirm')
+  @UseGuards(AuthenticationGuard)
   async create(@Session() session, @Res() res): Promise<object> {
     const userCreationFlowSession = new UserCreationFlowSession(
       session,
@@ -95,6 +101,7 @@ export class UserController {
   }
 
   @Get('/admin/user/create-new-user/done')
+  @UseGuards(AuthenticationGuard)
   @Render('user/done')
   done(@Session() session): object {
     const userCreationFlowSession = new UserCreationFlowSession(
