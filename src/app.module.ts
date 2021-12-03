@@ -8,7 +8,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
 import { ProfessionsModule } from './professions/professions.module';
 import { LegislationModule } from './legislations/legislation.module';
-import { OrganisationModule } from './organisations/organisation.module';
+import { OrganisationsModule } from './organisations/organisations.module';
 
 import dbConfiguration from './config/db.config';
 
@@ -27,7 +27,7 @@ import dbConfiguration from './config/db.config';
     UsersModule,
     ProfessionsModule,
     LegislationModule,
-    OrganisationModule,
+    OrganisationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
