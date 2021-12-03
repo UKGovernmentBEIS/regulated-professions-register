@@ -6,7 +6,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
-import { ProfessionModule } from './professions/profession.module';
+import { ProfessionsModule } from './professions/professions.module';
 import { LegislationModule } from './legislations/legislation.module';
 import { OrganisationModule } from './organisations/organisation.module';
 
@@ -25,7 +25,7 @@ import dbConfiguration from './config/db.config';
       }),
     }),
     UsersModule,
-    ProfessionModule,
+    ProfessionsModule,
     LegislationModule,
     OrganisationModule,
   ],
