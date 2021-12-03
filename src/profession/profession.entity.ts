@@ -1,10 +1,12 @@
 import { Legislation } from '../legislation/legislation.entity';
+import { Qualification } from '../qualification/qualification.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
   ManyToMany,
   JoinTable,
+  ManyToOne,
 } from 'typeorm';
 
 @Entity({ name: 'professions' })
@@ -27,8 +29,8 @@ export class Profession {
   @Column()
   regulationType: string;
 
-  @Column()
-  qualificationLevel: string;
+  @ManyToOne(() => Qualification)
+  qualification: Qualification;
 
   @Column('text', { array: true })
   reservedActivities: string[];
@@ -43,7 +45,7 @@ export class Profession {
     description?: string,
     occupationLocation?: string,
     regulationType?: string,
-    qualificationLevel?: string,
+    qualification?: Qualification,
     reservedActivities?: string[],
     legislations?: Legislation[],
   ) {
@@ -52,7 +54,7 @@ export class Profession {
     this.description = description || '';
     this.occupationLocation = occupationLocation || '';
     this.regulationType = regulationType || '';
-    this.qualificationLevel = qualificationLevel || '';
+    this.qualification = qualification || new Qualification();
     this.reservedActivities = reservedActivities || [];
     this.legislations = legislations;
   }
