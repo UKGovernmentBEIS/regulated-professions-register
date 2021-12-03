@@ -17,7 +17,7 @@ const legislationArray = [
   ),
 ];
 
-describe('Profession', () => {
+describe('LegislationsService', () => {
   let service: LegislationsService;
   let repo: Repository<Legislation>;
 
