@@ -13,7 +13,7 @@ import {
 } from '@nestjs/common';
 import { ValidationFailedError } from '../validation/validation-failed.error';
 import { Validator } from '../helpers/validator';
-import { UserService } from './user.service';
+import { UsersService } from './users.service';
 import { PersonalDetailsDto } from './dto/personal-details.dto';
 import {
   UserCreationFlowSession,
@@ -23,11 +23,11 @@ import { AuthenticationGuard } from '../common/authentication.guard';
 
 @Controller('/admin/user/create-new-user/personal-details')
 export class PersonalDetailsController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly usersService: UsersService) {}
 
   @Get()
   @UseGuards(AuthenticationGuard)
-  @Render('user/personal-details/new')
+  @Render('users/personal-details/new')
   new(
     @Query('edit', new DefaultValuePipe(false), ParseBoolPipe) edit: boolean,
     @Session() session,
@@ -82,7 +82,7 @@ export class PersonalDetailsController {
     }
 
     // Don't talk to Auth0 yet, but at least check our own DB
-    if (await this.userService.findByEmail(personalDetailsDto.email)) {
+    if (await this.usersService.findByEmail(personalDetailsDto.email)) {
       const errors = {
         email: { text: 'A user with this email address already exists' },
       };
@@ -105,7 +105,7 @@ export class PersonalDetailsController {
     edit: boolean,
     errors: object,
   ): void {
-    res.render('user/personal-details/new', {
+    res.render('users/personal-details/new', {
       name: personalDetailsDto.name,
       email: personalDetailsDto.email,
       edit,

@@ -3,19 +3,19 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { Connection, Repository } from 'typeorm';
 
 import { User } from './user.entity';
-import { UserService } from './user.service';
+import { UsersService } from './users.service';
 
 const user = new User('email@example.com', 'name', '212121');
 const userArray = [user, new User('email2@example.com', 'name2', '1234')];
 
-describe('User', () => {
-  let service: UserService;
+describe('UsersService', () => {
+  let service: UsersService;
   let repo: Repository<User>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        UserService,
+        UsersService,
         {
           provide: getRepositoryToken(User),
           useValue: {
@@ -37,7 +37,7 @@ describe('User', () => {
       ],
     }).compile();
 
-    service = module.get<UserService>(UserService);
+    service = module.get<UsersService>(UsersService);
     repo = module.get<Repository<User>>(getRepositoryToken(User));
   });
 

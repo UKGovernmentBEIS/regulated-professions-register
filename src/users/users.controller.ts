@@ -15,18 +15,18 @@ import {
   UserCreationFlowStep,
 } from './helpers/user-creation-flow-session.helper';
 import { User } from './user.entity';
-import { UserService } from './user.service';
+import { UsersService } from './users.service';
 
 @Controller()
-export class UserController {
+export class UsersController {
   constructor(
-    private readonly userService: UserService,
+    private readonly usersService: UsersService,
     private readonly externalUserCreationService: ExternalUserCreationService,
   ) {}
 
   @Get('/admin/user/create-new-user')
   @UseGuards(AuthenticationGuard)
-  @Render('user/new')
+  @Render('users/new')
   new(): object {
     return {};
   }
@@ -47,7 +47,7 @@ export class UserController {
 
   @Get('/admin/user/create-new-user/confirm')
   @UseGuards(AuthenticationGuard)
-  @Render('user/confirm')
+  @Render('users/confirm')
   confirm(@Session() session): object {
     const userCreationFlowSession = new UserCreationFlowSession(
       session,
@@ -73,12 +73,12 @@ export class UserController {
     if (externalResult.result == 'user-exists') {
       // In the case where the user already existed in Auth0, we expect they
       // *may* exist in our DB, so handle that case
-      const internalResult = await this.userService.attemptAdd(
+      const internalResult = await this.usersService.attemptAdd(
         new User(email, name, externalResult.externalIdentifier),
       );
 
       if (internalResult == 'user-exists') {
-        res.render('user/confirm', {
+        res.render('users/confirm', {
           email,
           name,
           userAlreadyExists: true,
@@ -89,7 +89,7 @@ export class UserController {
       // In the case where the user didn't already exist in Auth0, assume they
       // don't exist already in our DB. If they're in our DB, they have an
       // identifier from Auth0, so it'd be very weird if they're *not* in Auth0
-      await this.userService.add(
+      await this.usersService.add(
         new User(email, name, externalResult.externalIdentifier),
       );
 
@@ -102,7 +102,7 @@ export class UserController {
 
   @Get('/admin/user/create-new-user/done')
   @UseGuards(AuthenticationGuard)
-  @Render('user/done')
+  @Render('users/done')
   done(@Session() session): object {
     const userCreationFlowSession = new UserCreationFlowSession(
       session,

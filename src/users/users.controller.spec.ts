@@ -1,17 +1,17 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UserService } from './user.service';
+import { UsersService } from './users.service';
 import { ExternalUserCreationService } from './external-user-creation.service';
-import { UserController } from './user.controller';
+import { UsersController } from './users.controller';
 import { createMock, DeepMocked } from '@golevelup/ts-jest';
 
 const name = 'Example Name';
 const email = 'name@example.com';
 const identifier = 'example-external-identifier';
 
-describe('UserController', () => {
-  let controller: UserController;
+describe('UsersController', () => {
+  let controller: UsersController;
   let externalUserCreationService: DeepMocked<ExternalUserCreationService>;
-  let userService: DeepMocked<UserService>;
+  let usersService: DeepMocked<UsersService>;
   let populatedSession;
 
   beforeEach(async () => {
@@ -21,18 +21,18 @@ describe('UserController', () => {
       },
     });
 
-    userService = createMock<UserService>();
+    usersService = createMock<UsersService>();
 
     populatedSession = {
       'user-creation-flow': { name, email, userCreated: false },
     };
 
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [UserController],
+      controllers: [UsersController],
       providers: [
         {
-          provide: UserService,
-          useValue: userService,
+          provide: UsersService,
+          useValue: usersService,
         },
         {
           provide: ExternalUserCreationService,
@@ -41,7 +41,7 @@ describe('UserController', () => {
       ],
     }).compile();
 
-    controller = module.get<UserController>(UserController);
+    controller = module.get<UsersController>(UsersController);
   });
 
   it('should be defined', () => {
@@ -97,7 +97,7 @@ describe('UserController', () => {
       expect(externalUserCreationService.createExternalUser).toBeCalledWith(
         email,
       );
-      expect(userService.add).toBeCalledWith({ name, email, identifier });
+      expect(usersService.add).toBeCalledWith({ name, email, identifier });
       expect(res.redirect).toBeCalledWith('done');
     });
 
@@ -116,13 +116,13 @@ describe('UserController', () => {
         },
       );
 
-      userService.attemptAdd.mockImplementationOnce(async () => {
+      usersService.attemptAdd.mockImplementationOnce(async () => {
         return 'user-exists';
       });
 
       await controller.create(populatedSession, res);
 
-      expect(res.render).toBeCalledWith('user/confirm', {
+      expect(res.render).toBeCalledWith('users/confirm', {
         email,
         name,
         userAlreadyExists: true,
@@ -136,13 +136,13 @@ describe('UserController', () => {
         },
       );
 
-      userService.attemptAdd.mockImplementationOnce(async () => {
+      usersService.attemptAdd.mockImplementationOnce(async () => {
         return 'user-created';
       });
 
       await controller.create(populatedSession, res);
 
-      expect(userService.attemptAdd).toBeCalledWith({
+      expect(usersService.attemptAdd).toBeCalledWith({
         name,
         email,
         identifier,

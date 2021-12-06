@@ -49,7 +49,7 @@ import { Repository } from 'typeorm';
 import { User } from './user.entity.ts';
 
 @Injectable()
-export class UserService {
+export class UsersService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
@@ -68,17 +68,17 @@ We can then test our service without touching the database like so:
 ```typescript
 const userArray = [new Person('Name', 'Person', 25), [new Person('Name', 'Person', 25)];
 
-describe('UserService', () => {
-  let service: UserService;
+describe('UsersService', () => {
+  let service: UsersService;
   let repo: Repository<User>;
 
   beforeEach(async () => {
-    // Here we're creating a NestJS module with our UserService
+    // Here we're creating a NestJS module with our UsersService
     // registered as a provider, but we're mocking out the
     // repository, so we can stub the responses.
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        UserService,
+        UsersService,
         {
           provide: getRepositoryToken(User),
           useValue: {
@@ -90,7 +90,7 @@ describe('UserService', () => {
       ],
     }).compile();
 
-    service = module.get<UserService>(UserService);
+    service = module.get<UsersService>(UsersService);
     repo = module.get<Repository<User>>(getRepositoryToken(User));
   });
 
