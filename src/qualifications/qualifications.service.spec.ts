@@ -3,7 +3,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { Qualification } from './qualification.entity';
-import { QualificationService } from './qualification.service';
+import { QualificationsService } from './qualifications.service';
 
 const qualification = new Qualification(
   'ATT - Attestation of competence , Art. 11 a',
@@ -14,13 +14,13 @@ const qualification = new Qualification(
 );
 
 describe('Qualification service', () => {
-  let service: QualificationService;
+  let service: QualificationsService;
   let repo: Repository<Qualification>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        QualificationService,
+        QualificationsService,
         {
           provide: getRepositoryToken(Qualification),
           useValue: {
@@ -35,7 +35,7 @@ describe('Qualification service', () => {
       ],
     }).compile();
 
-    service = module.get<QualificationService>(QualificationService);
+    service = module.get<QualificationsService>(QualificationsService);
     repo = module.get<Repository<Qualification>>(
       getRepositoryToken(Qualification),
     );

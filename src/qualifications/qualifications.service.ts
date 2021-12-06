@@ -5,7 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Qualification } from './qualification.entity';
 
 @Injectable()
-export class QualificationService {
+export class QualificationsService {
   constructor(
     @InjectRepository(Qualification)
     private repository: Repository<Qualification>,
