@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { Qualification } from '../qualification/qualification.entity';
 
 import { Profession } from './profession.entity';
-import { ProfessionService } from './profession.service';
+import { ProfessionsService } from './professions.service';
 
 const profession = new Profession(
   'Registered Gas Engineer',
@@ -36,13 +36,13 @@ const professionArray = [
 ];
 
 describe('Profession', () => {
-  let service: ProfessionService;
+  let service: ProfessionsService;
   let repo: Repository<Profession>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        ProfessionService,
+        ProfessionsService,
         {
           provide: getRepositoryToken(Profession),
           useValue: {
@@ -57,7 +57,7 @@ describe('Profession', () => {
       ],
     }).compile();
 
-    service = module.get<ProfessionService>(ProfessionService);
+    service = module.get<ProfessionsService>(ProfessionsService);
     repo = module.get<Repository<Profession>>(getRepositoryToken(Profession));
   });
 

@@ -1,4 +1,4 @@
-import { Legislation } from '../legislation/legislation.entity';
+import { Legislation } from '../legislations/legislation.entity';
 import { Qualification } from '../qualification/qualification.entity';
 import {
   Entity,

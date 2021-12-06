@@ -2,10 +2,10 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Organisation } from './organisation.entity';
-import { OrganisationService } from './organisation.service';
+import { OrganisationsService } from './organisations.service';
 
-describe('OrganisationService', () => {
-  let service: OrganisationService;
+describe('OrganisationsService', () => {
+  let service: OrganisationsService;
   let repo: Repository<Organisation>;
 
   const organisation = new Organisation(
@@ -23,7 +23,7 @@ describe('OrganisationService', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        OrganisationService,
+        OrganisationsService,
         {
           provide: getRepositoryToken(Organisation),
           useValue: {
@@ -38,7 +38,7 @@ describe('OrganisationService', () => {
       ],
     }).compile();
 
-    service = module.get<OrganisationService>(OrganisationService);
+    service = module.get<OrganisationsService>(OrganisationsService);
     repo = module.get<Repository<Organisation>>(
       getRepositoryToken(Organisation),
     );

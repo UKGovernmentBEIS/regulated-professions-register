@@ -1,4 +1,4 @@
-import { Profession } from '../profession/profession.entity';
+import { Profession } from '../professions/profession.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,

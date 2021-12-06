@@ -3,7 +3,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { Legislation } from './legislation.entity';
-import { LegislationService } from './legislation.service';
+import { LegislationsService } from './legislations.service';
 
 const legislation = new Legislation(
   'Gas Safety (Installation and Use ) Regulations 1998',
@@ -17,14 +17,14 @@ const legislationArray = [
   ),
 ];
 
-describe('Profession', () => {
-  let service: LegislationService;
+describe('LegislationsService', () => {
+  let service: LegislationsService;
   let repo: Repository<Legislation>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        LegislationService,
+        LegislationsService,
         {
           provide: getRepositoryToken(Legislation),
           useValue: {
@@ -39,7 +39,7 @@ describe('Profession', () => {
       ],
     }).compile();
 
-    service = module.get<LegislationService>(LegislationService);
+    service = module.get<LegislationsService>(LegislationsService);
     repo = module.get<Repository<Legislation>>(getRepositoryToken(Legislation));
   });
 
