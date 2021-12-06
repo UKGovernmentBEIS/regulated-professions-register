@@ -7,10 +7,6 @@ import { createMock, DeepMocked } from '@golevelup/ts-jest';
 const name = 'Example Name';
 const email = 'name@example.com';
 
-const populatedSession = {
-  'user-creation-flow': { name, email },
-};
-
 describe('PersonalDetailsController', () => {
   let controller: PersonalDetailsController;
   let userService: DeepMocked<UserService>;
