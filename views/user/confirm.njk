@@ -1,0 +1,100 @@
+{% extends "base.njk" %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+
+{% block content %}
+
+<div class="govuk-width-container">
+
+  <main class="govuk-main-wrapper">
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+
+        {{ govukBackLink({
+          text: "Back",
+          href: "personal-details"
+        }) }}
+
+        {% if userAlreadyExists %}
+
+        {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: [
+            {
+              text: "A user with this email address already exists"
+            }
+          ]
+        }) }}
+
+        {% endif %}
+
+        <span class="govuk-caption-xl">Creating RPR user</span>
+        <h1 class="govuk-heading-xl">Check your answers before creating this user</h1>
+
+        <h2 class="govuk-heading-m">Personal details</h2>
+
+
+        {{ govukSummaryList({
+          rows: [
+            {
+              key: {
+                text: "Name"
+              },
+              value: {
+                text: name
+              },
+              actions: {
+                items: [
+                  {
+                    href: "personal-details?edit=true",
+                    text: "Change",
+                    visuallyHiddenText: "name"
+                  }
+                ]
+              }
+            },
+            {
+              key: {
+                text: "Email address"
+              },
+              value: {
+                text: email
+              },
+              actions: {
+                items: [
+                  {
+                    href: "personal-details?edit=true",
+                    text: "Change",
+                    visuallyHiddenText: "email address"
+                  }
+                ]
+              }
+            }
+          ]
+        }) }}
+
+        <form method="post" action="confirm">
+          {{ govukButton({
+            text: "Create user",
+            preventDoubleClick: true,
+            type: "submit",
+            id: "submit-button"
+          }) }}
+        </form>
+
+      </div>
+
+      <div class="govuk-grid-column-one-third">
+      </div>
+    </div>
+
+  </main>
+</div>
+
+
+
+{% endblock %}

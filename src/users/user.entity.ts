@@ -11,7 +11,7 @@ export class User {
   @Column()
   name: string;
 
-  @Column()
+  @Column({ unique: true })
   identifier: string;
 
   constructor(email?: string, name?: string, identifier?: string) {

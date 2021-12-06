@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Connection, Repository } from 'typeorm';
 
 import { User } from './user.entity';
 import { UserService } from './user.service';
@@ -25,7 +25,14 @@ describe('User', () => {
             findOne: () => {
               return user;
             },
+            insert: () => {
+              return {};
+            },
           },
+        },
+        {
+          provide: Connection,
+          useValue: {},
         },
       ],
     }).compile();
@@ -65,6 +72,15 @@ describe('User', () => {
       expect(repoSpy).toHaveBeenCalledWith({
         where: { identifier: 'external-identifier' },
       });
+    });
+  });
+
+  describe('insert', () => {
+    it('should insert a user', async () => {
+      const repoSpy = jest.spyOn(repo, 'insert');
+      await service.add(user);
+
+      expect(repoSpy).toHaveBeenCalledWith(user);
     });
   });
 });

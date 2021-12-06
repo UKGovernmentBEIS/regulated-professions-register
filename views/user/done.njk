@@ -1,0 +1,34 @@
+{% extends "base.njk" %}
+{% from "govuk/components/panel/macro.njk" import govukPanel %}
+
+{% block content %}
+
+<div class="govuk-width-container">
+
+  <main class="govuk-main-wrapper">
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+
+        {{ govukPanel({
+          titleText: "User added",
+          html: "User <strong>" + email + "</strong> has been added"
+        }) }}
+
+        <p class="govuk-body">We have sent the user a confirmation email.</p>
+
+        <h3 class="govuk-heading-m">What happens next?</h3>
+
+        <p class="govuk-body"><a href="../create-new-user">Click here</a> to go back to the dashboard.</p>
+        
+      </div>
+
+      <div class="govuk-grid-column-one-third">
+
+      </div>
+    </div>
+
+  </main>
+</div>
+
+{% endblock %}

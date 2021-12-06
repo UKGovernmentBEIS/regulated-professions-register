@@ -4,6 +4,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { ValidationError } from 'class-validator';
 
 import * as path from 'path';
+import * as session from 'express-session';
 
 import { AppModule } from './app.module';
 import { ValidationFailedError } from './validation/validation-failed.error';
@@ -36,6 +37,14 @@ async function bootstrap() {
       exceptionFactory: (validationErrors: ValidationError[] = []) => {
         return new ValidationFailedError(validationErrors);
       },
+    }),
+  );
+
+  app.use(
+    session({
+      secret: process.env.APP_SECRET,
+      resave: false,
+      saveUninitialized: false,
     }),
   );
 
