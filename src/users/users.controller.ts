@@ -24,14 +24,14 @@ export class UsersController {
     private readonly externalUserCreationService: ExternalUserCreationService,
   ) {}
 
-  @Get('/admin/user/create-new-user')
+  @Get('/admin/users/create-new-user')
   @UseGuards(AuthenticationGuard)
   @Render('users/new')
   new(): object {
     return {};
   }
 
-  @Post('/admin/user/create-new-user')
+  @Post('/admin/users/create-new-user')
   @UseGuards(AuthenticationGuard)
   @Redirect('create-new-user/personal-details')
   newPost(@Session() session): object {
@@ -45,7 +45,7 @@ export class UsersController {
     return {};
   }
 
-  @Get('/admin/user/create-new-user/confirm')
+  @Get('/admin/users/create-new-user/confirm')
   @UseGuards(AuthenticationGuard)
   @Render('users/confirm')
   confirm(@Session() session): object {
@@ -58,7 +58,7 @@ export class UsersController {
     return { email, name };
   }
 
-  @Post('/admin/user/create-new-user/confirm')
+  @Post('/admin/users/create-new-user/confirm')
   @UseGuards(AuthenticationGuard)
   async create(@Session() session, @Res() res): Promise<object> {
     const userCreationFlowSession = new UserCreationFlowSession(
@@ -100,7 +100,7 @@ export class UsersController {
     res.redirect('done');
   }
 
-  @Get('/admin/user/create-new-user/done')
+  @Get('/admin/users/create-new-user/done')
   @UseGuards(AuthenticationGuard)
   @Render('users/done')
   done(@Session() session): object {
