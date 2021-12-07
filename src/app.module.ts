@@ -9,6 +9,7 @@ import { UsersModule } from './users/users.module';
 import { ProfessionsModule } from './professions/professions.module';
 import { LegislationsModule } from './legislations/legislations.module';
 import { OrganisationsModule } from './organisations/organisations.module';
+import { IndustriesModule } from './industries/industries.module';
 
 import dbConfiguration from './config/db.config';
 
@@ -28,6 +29,7 @@ import dbConfiguration from './config/db.config';
     ProfessionsModule,
     LegislationsModule,
     OrganisationsModule,
+    IndustriesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
