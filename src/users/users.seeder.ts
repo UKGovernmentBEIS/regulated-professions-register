@@ -19,7 +19,7 @@ export class UsersSeeder implements Seeder {
     const userData = require('../../seeds/users.json');
 
     const users: Array<User> = userData.map((user: any) => {
-      return new User(user.email, user.name, user.identifier);
+      return new User(user.email, user.name, user.externalIdentifier);
     });
 
     return this.userRepository.save(users);

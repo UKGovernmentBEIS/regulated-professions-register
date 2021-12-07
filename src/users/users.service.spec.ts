@@ -70,7 +70,7 @@ describe('UsersService', () => {
 
       expect(post).toEqual(user);
       expect(repoSpy).toHaveBeenCalledWith({
-        where: { identifier: 'external-identifier' },
+        where: { externalIdentifier: 'external-identifier' },
       });
     });
   });

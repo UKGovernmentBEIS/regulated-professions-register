@@ -12,11 +12,11 @@ export class User {
   name: string;
 
   @Column({ unique: true })
-  identifier: string;
+  externalIdentifier: string;
 
-  constructor(email?: string, name?: string, identifier?: string) {
+  constructor(email?: string, name?: string, externalIdentifier?: string) {
     this.email = email || '';
     this.name = name || '';
-    this.identifier = identifier || '';
+    this.externalIdentifier = externalIdentifier || '';
   }
 }
