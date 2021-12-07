@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 
@@ -16,6 +14,7 @@ export class UsersSeeder implements Seeder {
   ) {}
 
   async seed(): Promise<any> {
+    /* eslint-disable @typescript-eslint/no-var-requires */
     const userData = require('../../seeds/users.json');
 
     const users: Array<User> = userData.map((user: any) => {
