@@ -6,7 +6,7 @@ import { createMock, DeepMocked } from '@golevelup/ts-jest';
 
 const name = 'Example Name';
 const email = 'name@example.com';
-const identifier = 'example-external-identifier';
+const externalIdentifier = 'example-external-identifier';
 
 describe('UsersController', () => {
   let controller: UsersController;
@@ -17,7 +17,7 @@ describe('UsersController', () => {
   beforeEach(async () => {
     externalUserCreationService = createMock<ExternalUserCreationService>({
       createExternalUser: async () => {
-        return { result: 'user-created', externalIdentifier: identifier };
+        return { result: 'user-created', externalIdentifier };
       },
     });
 
@@ -97,7 +97,11 @@ describe('UsersController', () => {
       expect(externalUserCreationService.createExternalUser).toBeCalledWith(
         email,
       );
-      expect(usersService.add).toBeCalledWith({ name, email, identifier });
+      expect(usersService.add).toBeCalledWith({
+        name,
+        email,
+        externalIdentifier,
+      });
       expect(res.redirect).toBeCalledWith('done');
     });
 
@@ -112,7 +116,7 @@ describe('UsersController', () => {
     it('should render an error if the email already exists externally and in our database', async () => {
       externalUserCreationService.createExternalUser.mockImplementationOnce(
         async () => {
-          return { result: 'user-exists', externalIdentifier: identifier };
+          return { result: 'user-exists', externalIdentifier };
         },
       );
 
@@ -132,7 +136,7 @@ describe('UsersController', () => {
     it('should create a user in our db even if the user already exists externally', async () => {
       externalUserCreationService.createExternalUser.mockImplementationOnce(
         async () => {
-          return { result: 'user-exists', externalIdentifier: identifier };
+          return { result: 'user-exists', externalIdentifier };
         },
       );
 
@@ -145,7 +149,7 @@ describe('UsersController', () => {
       expect(usersService.attemptAdd).toBeCalledWith({
         name,
         email,
-        identifier,
+        externalIdentifier,
       });
       expect(res.redirect).toBeCalledWith('done');
     });

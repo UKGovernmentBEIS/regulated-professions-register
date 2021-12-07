@@ -32,7 +32,7 @@ export class UsersService {
 
   findByExternalIdentifier(externalIdentifier: string): Promise<User> {
     return this.repository.findOne({
-      where: { identifier: externalIdentifier },
+      where: { externalIdentifier },
     });
   }
 
@@ -47,7 +47,7 @@ export class UsersService {
 
     try {
       const foundUser = await queryRunner.manager.findOne(User, {
-        identifier: user.identifier,
+        externalIdentifier: user.externalIdentifier,
       });
 
       if (!foundUser) {
