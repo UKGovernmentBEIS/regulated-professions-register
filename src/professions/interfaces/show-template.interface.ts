@@ -1,0 +1,3 @@
+interface ShowTemplate {
+    professionName: string;
+}
