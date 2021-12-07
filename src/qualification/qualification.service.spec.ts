@@ -42,7 +42,7 @@ describe('Qualification service', () => {
   });
 
   describe('all', () => {
-    it('should return all Legislations', async () => {
+    it('should return all Qualifications', async () => {
       const repoSpy = jest.spyOn(repo, 'find');
       const posts = await service.all();
 
