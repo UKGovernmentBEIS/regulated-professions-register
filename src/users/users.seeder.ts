@@ -6,6 +6,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 import { User } from './user.entity';
 
+type SeedUser = {
+  email: string;
+  name: string;
+  externalIdentifier: string;
+};
+
 @Injectable()
 export class UsersSeeder implements Seeder {
   constructor(
@@ -15,9 +21,9 @@ export class UsersSeeder implements Seeder {
 
   async seed(): Promise<any> {
     /* eslint-disable @typescript-eslint/no-var-requires */
-    const userData = require('../../seeds/users.json');
+    const userData = require('../../seeds/users.json') as SeedUser[];
 
-    const users: Array<User> = userData.map((user: any) => {
+    const users = userData.map((user) => {
       return new User(user.email, user.name, user.externalIdentifier);
     });
 

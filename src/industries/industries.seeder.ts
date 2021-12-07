@@ -6,6 +6,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 import { Industry } from './industry.entity';
 
+type SeedIndustry = {
+  name: string;
+};
+
 @Injectable()
 export class IndustriesSeeder implements Seeder {
   constructor(
@@ -15,13 +19,12 @@ export class IndustriesSeeder implements Seeder {
 
   async seed(): Promise<any> {
     /* eslint-disable @typescript-eslint/no-var-requires */
-    const industryData = require('../../seeds/industries.json');
+    const industryData =
+      require('../../seeds/industries.json') as SeedIndustry[];
 
-    const Industries: Array<Industry> = industryData.map(
-      (industry: Industry) => {
-        return new Industry(industry.name);
-      },
-    );
+    const Industries = industryData.map((industry) => {
+      return new Industry(industry.name);
+    });
 
     return this.industryRepository.save(Industries);
   }
