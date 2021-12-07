@@ -1,8 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Qualification } from '../qualification/qualification.entity';
 
+import { Industry } from '../industries/industry.entity';
+import { Qualification } from '../qualification/qualification.entity';
 import { Profession } from './profession.entity';
 import { ProfessionsService } from './professions.service';
 
@@ -12,6 +13,7 @@ const profession = new Profession(
   'Gas installers work on gas appliances and installations.',
   'All regions',
   'Reserves of activities',
+  new Industry('Construction & Engineering'),
   new Qualification('ATT - Attestation of competence , Art. 11 a'),
   [
     'Gas Safe Register is the official list of gas engineers in the UK, Isle of Man and Guernsey. To work on gas appliances and installations you must be on the gas safe register. The register exists to protect the public from unsafe gas work (EN)',
@@ -25,6 +27,7 @@ const professionArray = [
     'Social workers are trained to: make assessments, taking account of a range of factors',
     'England',
     'Protected title',
+    new Industry('Health'),
     new Qualification(
       'PS3 - Diploma of post-secondary level (3-4 years) , Art. 11 d',
     ),

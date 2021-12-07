@@ -8,6 +8,7 @@ import {
   JoinTable,
   ManyToOne,
 } from 'typeorm';
+import { Industry } from '../industries/industry.entity';
 
 @Entity({ name: 'professions' })
 export class Profession {
@@ -29,6 +30,9 @@ export class Profession {
   @Column()
   regulationType: string;
 
+  @ManyToOne(() => Industry)
+  industry: Industry;
+
   @ManyToOne(() => Qualification)
   qualification: Qualification;
 
@@ -45,6 +49,7 @@ export class Profession {
     description?: string,
     occupationLocation?: string,
     regulationType?: string,
+    industry?: Industry,
     qualification?: Qualification,
     reservedActivities?: string[],
     legislations?: Legislation[],
@@ -54,6 +59,7 @@ export class Profession {
     this.description = description || '';
     this.occupationLocation = occupationLocation || '';
     this.regulationType = regulationType || '';
+    this.industry = industry || new Industry();
     this.qualification = qualification || new Qualification();
     this.reservedActivities = reservedActivities || [];
     this.legislations = legislations;
