@@ -6,6 +6,8 @@ import { ConfigService, ConfigModule } from '@nestjs/config';
 
 import { User } from './users/user.entity';
 import { UsersSeeder } from './users/users.seeder';
+import { Industry } from './industries/industry.entity';
+import { IndustriesSeeder } from './industries/industries.seeder';
 
 import dbConfiguration from './config/db.config';
 
@@ -21,6 +23,6 @@ seeder({
         ...(await configService.get('database')),
       }),
     }),
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([User, Industry]),
   ],
-}).run([UsersSeeder]);
+}).run([UsersSeeder, IndustriesSeeder]);
