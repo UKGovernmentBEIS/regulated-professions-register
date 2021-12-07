@@ -27,6 +27,6 @@ export class IndustriesSeeder implements Seeder {
   }
 
   async drop(): Promise<any> {
-    return this.industryRepository.delete({});
+    // Deletion of industries is handled in `ProfessionsSeeder`
   }
 }
