@@ -1,4 +1,4 @@
-import { ExecutionContext } from '@nestjs/common';
+import { ExecutionContext, UnauthorizedException } from '@nestjs/common';
 
 import { createMock } from '@golevelup/ts-jest';
 import { AuthenticationGuard } from './authentication.guard';
@@ -41,8 +41,10 @@ describe('AuthenticationGuard', () => {
       });
     });
 
-    it('should return true', () => {
-      expect(guard.canActivate(host)).toStrictEqual(false);
+    it('should return raise an UnauthorizedException', () => {
+      expect(() => {
+        guard.canActivate(host);
+      }).toThrow(UnauthorizedException);
     });
   });
 
@@ -53,8 +55,10 @@ describe('AuthenticationGuard', () => {
       });
     });
 
-    it('should return false', () => {
-      expect(guard.canActivate(host)).toStrictEqual(false);
+    it('should return raise an UnauthorizedException', () => {
+      expect(() => {
+        guard.canActivate(host);
+      }).toThrow(UnauthorizedException);
     });
   });
 
@@ -63,8 +67,10 @@ describe('AuthenticationGuard', () => {
       oidc = undefined;
     });
 
-    it('should return false', () => {
-      expect(guard.canActivate(host)).toStrictEqual(false);
+    it('should return raise an UnauthorizedException', () => {
+      expect(() => {
+        guard.canActivate(host);
+      }).toThrow(UnauthorizedException);
     });
   });
 });
