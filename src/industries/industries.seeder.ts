@@ -22,11 +22,11 @@ export class IndustriesSeeder implements Seeder {
     const industryData =
       require('../../seeds/industries.json') as SeedIndustry[];
 
-    const Industries = industryData.map((industry) => {
+    const industries = industryData.map((industry) => {
       return new Industry(industry.name);
     });
 
-    return this.industryRepository.save(Industries);
+    return this.industryRepository.save(industries);
   }
 
   async drop(): Promise<any> {
