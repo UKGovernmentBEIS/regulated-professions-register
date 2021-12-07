@@ -1,0 +1,32 @@
+[
+  {
+    "name": "Registered Trademark Attorney",
+    "alternateName": "Patent Agent / Trademark agent",
+    "description": "Registration protection and exploitation of trade marks",
+    "occupationLocation": "All regions",
+    "regulationType": "Reserves of activities",
+    "industry": "Law",
+    "qualification": "DSE - Diploma (post-secondary education), including Annex II (ex 92/51, Annex C,D) , Art. 11 c",
+    "reservedActivities": [
+      "The exercise of a right of audience.",
+      "The conduct of litigation.",
+      "Reserved instrument activities.",
+      "The administration of oaths."
+    ],
+    "legislations": ["The Trade Marks Act 1994", "Legal Services Act 2007"]
+  },
+  {
+    "name": "Secondary School Teacher in State maintained schools (England)",
+    "alternateName": "Secondary school teacher",
+    "description": "Teaching work (known as specified work), as an activity, is regulated by law through the Education (Specified Work) (England) Regulations 2012/762. Regulation 5 lists the activities which are classed as specified work for the purposes of teaching in a school maintained by a local authority - which includes a maintained nursery - and a special school not so maintained:\n planning and preparing lessons and courses for pupils;\ndelivering lessons to pupils;\nassessing the development, progress and attainment of pupils; and\n reporting on the development, progress and attainment of pupils.",
+    "occupationLocation": "England",
+    "regulationType": "N/A",
+    "industry": "Education",
+    "qualification": "PS3 - Diploma of post-secondary level (3-4 years) , Art. 11 d",
+    "reservedActivities": ["No information submitted"],
+    "legislations": [
+      "The Education (School Teachers' Qualifications) (England) Regulations 2003/1662 (as amended)",
+      "The Education (Induction Arrangements for School Teachers) (England) Regulations 2012/1115 (as amended)"
+    ]
+  }
+]
