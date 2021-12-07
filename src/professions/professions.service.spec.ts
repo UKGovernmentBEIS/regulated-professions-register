@@ -3,7 +3,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { Industry } from '../industries/industry.entity';
-import { Qualification } from '../qualification/qualification.entity';
+import { Qualification } from '../qualifications/qualification.entity';
 import { Profession } from './profession.entity';
 import { ProfessionsService } from './professions.service';
 

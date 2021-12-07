@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UserService } from './user.service';
+import { UsersService } from './users.service';
 import { User } from './user.entity';
 import { PersonalDetailsController } from './personal-details.controller';
 import { createMock, DeepMocked } from '@golevelup/ts-jest';
@@ -9,11 +9,11 @@ const email = 'name@example.com';
 
 describe('PersonalDetailsController', () => {
   let controller: PersonalDetailsController;
-  let userService: DeepMocked<UserService>;
+  let usersService: DeepMocked<UsersService>;
   let populatedSession;
 
   beforeEach(async () => {
-    userService = createMock<UserService>();
+    usersService = createMock<UsersService>();
 
     populatedSession = {
       'user-creation-flow': { name, email, userCreated: false },
@@ -23,8 +23,8 @@ describe('PersonalDetailsController', () => {
       controllers: [PersonalDetailsController],
       providers: [
         {
-          provide: UserService,
-          useValue: userService,
+          provide: UsersService,
+          useValue: usersService,
         },
       ],
     }).compile();
@@ -93,7 +93,7 @@ describe('PersonalDetailsController', () => {
     });
 
     it('should redirect to `confirm` and populate the session when the email address is not already in use and the body is populated', async () => {
-      userService.findByEmail.mockImplementationOnce(() => {
+      usersService.findByEmail.mockImplementationOnce(() => {
         return null;
       });
 
@@ -113,7 +113,7 @@ describe('PersonalDetailsController', () => {
       await controller.create({ name: '', email, edit: 'false' }, {}, res);
 
       expect(res.render).toBeCalledTimes(1);
-      expect(res.render.mock.calls[0][0]).toEqual('user/personal-details/new');
+      expect(res.render.mock.calls[0][0]).toEqual('users/personal-details/new');
       expect(res.render.mock.calls[0][1]).toMatchObject({
         name: '',
         email,
@@ -126,7 +126,7 @@ describe('PersonalDetailsController', () => {
       await controller.create({ name, email: '', edit: 'false' }, {}, res);
 
       expect(res.render).toBeCalledTimes(1);
-      expect(res.render.mock.calls[0][0]).toEqual('user/personal-details/new');
+      expect(res.render.mock.calls[0][0]).toEqual('users/personal-details/new');
       expect(res.render.mock.calls[0][1]).toMatchObject({
         name,
         email: '',
@@ -136,16 +136,16 @@ describe('PersonalDetailsController', () => {
     });
 
     it('should render an error if the email address is already in use', async () => {
-      userService.findByEmail.mockImplementationOnce(async () => {
+      usersService.findByEmail.mockImplementationOnce(async () => {
         return new User('name@example.com', name);
       });
 
       await controller.create({ name, email, edit: 'false' }, {}, res);
 
-      expect(userService.findByEmail).toHaveBeenCalledWith('name@example.com');
+      expect(usersService.findByEmail).toHaveBeenCalledWith('name@example.com');
 
       expect(res.render).toBeCalledTimes(1);
-      expect(res.render.mock.calls[0][0]).toEqual('user/personal-details/new');
+      expect(res.render.mock.calls[0][0]).toEqual('users/personal-details/new');
       expect(res.render.mock.calls[0][1]).toMatchObject({
         name,
         email,

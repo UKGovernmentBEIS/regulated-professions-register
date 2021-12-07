@@ -6,7 +6,7 @@ import { auth } from 'express-openid-connect';
 import jwt_decode from 'jwt-decode';
 
 import { UsersModule } from '../users/users.module';
-import { UserService } from '../users/user.service';
+import { UsersService } from '../users/users.service';
 
 const baseURL =
   process.env['HOST_URL'] ||
@@ -22,10 +22,10 @@ const baseURL =
  *
  */
 export class AuthenticationMidleware {
-  userService: UserService;
+  usersService: UsersService;
 
   constructor(private app: NestExpressApplication) {
-    this.userService = this.app.select(UsersModule).get(UserService);
+    this.usersService = this.app.select(UsersModule).get(UsersService);
   }
 
   /**
@@ -66,7 +66,7 @@ export class AuthenticationMidleware {
    */
   public async afterCallback(session: any): Promise<any> {
     const userInfo = jwt_decode(session.id_token);
-    const user = await this.userService.findByExternalIdentifier(
+    const user = await this.usersService.findByExternalIdentifier(
       userInfo['sub'],
     );
 

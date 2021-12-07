@@ -1,5 +1,5 @@
 import { Legislation } from '../legislations/legislation.entity';
-import { Qualification } from '../qualification/qualification.entity';
+import { Qualification } from '../qualifications/qualification.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
