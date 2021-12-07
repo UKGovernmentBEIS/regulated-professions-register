@@ -32,7 +32,8 @@
     "seed": "npm run build && node dist/seeder",
     "seed:refresh": "npm run build && node dist/seeder --refresh",
     "seed:test": "npm run build && NODE_ENV=test node dist/seeder",
-    "seed:test:refresh": "npm run build && NODE_ENV=test node dist/seeder --refresh"
+    "seed:test:refresh": "npm run build && NODE_ENV=test node dist/seeder --refresh",
+    "heroku:set-callback-urls": "ts-node util/set-callback-urls.ts"
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",
