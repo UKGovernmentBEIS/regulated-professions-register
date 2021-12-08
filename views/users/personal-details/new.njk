@@ -14,34 +14,34 @@
 
         {% if edit %}
           {{ govukBackLink({
-            text: "Back",
+            text: ( "app.back" | t ),
             href: "confirm"
           }) }}
         {% else %}
           {{ govukBackLink({
-            text: "Back",
+            text: ( "app.back" | t ),
             href: "../create-new-user"
           }) }}
         {% endif %}
 
         {% include "../../shared/_errors.njk" %}
 
-        <span class="govuk-caption-xl">Creating RPR user</span>
-        <h1 class="govuk-heading-xl">Personal details</h1>
+        <span class="govuk-caption-xl">{{ "users.form.headings.main" | t }}</span>
+        <h1 class="govuk-heading-xl">{{ "users.form.headings.personalDetails" | t }}</h1>
 
         <form method="post" action="personal-details">
 
           <input type="hidden" name="edit" value="{{ edit }}" />
-          
+
           <a name="name">
             {{ govukInput({
               label: {
-                text: "Name",
+                text: ('users.form.label.name' | t),
                 classes: "govuk-label--l",
                 isPageHeading: true
               },
               hint: {
-                text: "For example, Clare Jones."
+                text: ('users.form.hint.name' | t)
               },
               id: "name-input",
               name: "name",
@@ -53,12 +53,12 @@
           <a name="email">
             {{ govukInput({
               label: {
-                text: "Email address",
+                text: ('users.form.label.email' | t),
                 classes: "govuk-label--l",
                 isPageHeading: true
               },
               hint: {
-                text: "For example, clarejones@beis.gov.uk."
+                text: ('users.form.hint.email' | t)
               },
               id: "email-input",
               name: "email",
@@ -68,7 +68,7 @@
           </a>
 
           {{ govukButton({
-            text: "Continue",
+            text: ('app.continue' | t),
             type: "submit",
             id: "continue-button"
           }) }}

@@ -1,11 +1,11 @@
 {% extends "../base.njk" %}
 
 {% block content %}
-<h1 class="govuk-heading-l">You have not been authorized to see this page</h1>
+<h1 class="govuk-heading-l">{{ "errors.forbidden.heading" | t }}</h1>
 
-<p class="govuk-body">Whilst you have successfully signed in you have not been authorised to see this page.</p>
+<p class="govuk-body">{{ "errors.forbidden.message" | t }}</p>
 
-<p class="govuk-body">Please try <a href="/login" class="govuk-link">logging in</a> again.</p>
+<p class="govuk-body">{{ "errors.forbidden.resolution" | t | safe}}</p>
 
-<p class="govuk-body">If you believe this to be in error, please contact the person who invited you to the service.</p>
+<p class="govuk-body">{{ "errors.forbidden.help" | t }}</p>
 {% endblock %}

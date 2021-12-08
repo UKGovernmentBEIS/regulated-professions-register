@@ -15,34 +15,34 @@
       <div class="govuk-grid-column-two-thirds">
 
         {{ govukBackLink({
-          text: "Back",
+          text: ("app.back" | t),
           href: "personal-details"
         }) }}
 
         {% if userAlreadyExists %}
 
         {{ govukErrorSummary({
-          titleText: "There is a problem",
+          titleText: ("app.errors.heading" | t),
           errorList: [
             {
-              text: "A user with this email address already exists"
+              text: ("users.form.errors.email.alreadyExists" | t)
             }
           ]
         }) }}
 
         {% endif %}
 
-        <span class="govuk-caption-xl">Creating RPR user</span>
-        <h1 class="govuk-heading-xl">Check your answers before creating this user</h1>
+        <span class="govuk-caption-xl">{{ "users.form.headings.main" | t }}</span>
+        <h1 class="govuk-heading-xl">{{ "users.form.headings.checkAnswers" | t }}</h1>
 
-        <h2 class="govuk-heading-m">Personal details</h2>
+        <h2 class="govuk-heading-m">{{ "users.form.headings.personalDetails" | t }}</h2>
 
 
         {{ govukSummaryList({
           rows: [
             {
               key: {
-                text: "Name"
+                text: ("users.form.label.name" | t)
               },
               value: {
                 text: name
@@ -51,15 +51,15 @@
                 items: [
                   {
                     href: "personal-details?edit=true",
-                    text: "Change",
-                    visuallyHiddenText: "name"
+                    text: ("app.change" | t),
+                    visuallyHiddenText: ("users.form.label.name" | t)
                   }
                 ]
               }
             },
             {
               key: {
-                text: "Email address"
+                text: ("users.form.label.email" | t)
               },
               value: {
                 text: email
@@ -68,8 +68,8 @@
                 items: [
                   {
                     href: "personal-details?edit=true",
-                    text: "Change",
-                    visuallyHiddenText: "email address"
+                    text: ("app.change" | t),
+                    visuallyHiddenText: ("users.form.label.email" | t)
                   }
                 ]
               }
@@ -79,7 +79,7 @@
 
         <form method="post" action="confirm">
           {{ govukButton({
-            text: "Create user",
+            text: ("users.form.button.create" | t),
             preventDoubleClick: true,
             type: "submit",
             id: "submit-button"

@@ -9,18 +9,17 @@
 
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
-
         {{ govukPanel({
-          titleText: "User added",
-          html: "User <strong>" + email + "</strong> has been added"
+          titleText: ("users.headings.done" | t),
+          html: ("users.body.panel" | t({email: email}) | safe)
         }) }}
 
-        <p class="govuk-body">We have sent the user a confirmation email.</p>
+        <p class="govuk-body">{{ "users.body.confirmation" | t  }}</p>
 
-        <h3 class="govuk-heading-m">What happens next?</h3>
+        <h3 class="govuk-heading-m">{{ "users.headings.next" | t  }}</h3>
 
-        <p class="govuk-body"><a href="../create-new-user">Click here</a> to go back to the dashboard.</p>
-        
+        <p class="govuk-body"><a href="../create-new-user">{{ "users.body.backToDashboard" | t }}</a></p>
+
       </div>
 
       <div class="govuk-grid-column-one-third">
