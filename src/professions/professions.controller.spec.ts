@@ -7,6 +7,8 @@ import { ProfessionsService } from './professions.service';
 import { Response } from 'express';
 import { NotFoundException } from '@nestjs/common';
 
+const exampleProfession = new Profession('Example Profession');
+
 describe('ProfessionsController', () => {
   let controller: ProfessionsController;
   let professionsService: DeepMocked<ProfessionsService>;
@@ -40,13 +42,14 @@ describe('ProfessionsController', () => {
 
     it('should render a professions details page', async () => {
       professionsService.find.mockImplementationOnce(async () => {
-        return new Profession('Example Profession');
+        return exampleProfession;
       });
 
       await controller.show('example-profession', 'example-id', res);
 
       expect(res.render).toBeCalledWith('professions/show', {
-        professionName: 'Example Profession',
+        profession: exampleProfession,
+        backUrl: '',
       });
 
       expect(professionsService.find).toBeCalledWith('example-id');

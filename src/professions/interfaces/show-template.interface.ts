@@ -1,3 +1,6 @@
+import { Profession } from '../profession.entity';
+
 export interface ShowTemplate {
-    professionName: string;
+  profession: Profession;
+  backUrl: string;
 }

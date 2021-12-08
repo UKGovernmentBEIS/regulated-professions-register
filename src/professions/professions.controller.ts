@@ -27,7 +27,7 @@ export class ProfessionsController {
     if (generatedSlug !== slug) {
       res.redirect(301, `/professions/${generatedSlug}/${id}`);
     } else {
-      const templateParams: ShowTemplate = { professionName: profession.name };
+      const templateParams: ShowTemplate = { profession, backUrl: '' };
       res.render('professions/show', templateParams);
     }
   }
