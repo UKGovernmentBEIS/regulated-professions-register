@@ -18,4 +18,8 @@ export class ProfessionsService {
   find(id: string): Promise<Profession> {
     return this.repository.findOne(id);
   }
+
+  async create(profession: Profession): Promise<void> {
+    await this.repository.insert(profession);
+  }
 }
