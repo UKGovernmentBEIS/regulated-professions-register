@@ -4,6 +4,8 @@ import { Profession } from './profession.entity';
 
 import { ProfessionsController } from './professions.controller';
 import { ProfessionsService } from './professions.service';
+import { Response } from 'express';
+import { NotFoundException } from '@nestjs/common';
 
 describe('ProfessionsController', () => {
   let controller: ProfessionsController;
@@ -30,16 +32,37 @@ describe('ProfessionsController', () => {
   });
 
   describe('show', () => {
-    it('should return populated template params', async () => {
+    let res: DeepMocked<Response>;
+
+    beforeEach(() => {
+      res = createMock<Response>();
+    });
+
+    it('should render a professions details page', async () => {
       professionsService.find.mockImplementationOnce(async () => {
         return new Profession('Example Profession');
       });
 
-      const result = await controller.show('example-slug', 'example-id');
+      await controller.show('example-profession', 'example-id', res);
 
-      expect(result).toEqual({
+      expect(res.render).toBeCalledWith('professions/show', {
         professionName: 'Example Profession',
       });
+
+      expect(professionsService.find).toBeCalledWith('example-id');
+    });
+
+    it('should redirect when the provided slug does not match the expected slug', async () => {
+      professionsService.find.mockImplementationOnce(async () => {
+        return new Profession('Example Profession');
+      });
+
+      await controller.show('unexpected-slug', 'example-id', res);
+
+      expect(res.redirect).toBeCalledWith(
+        301,
+        '/professions/example-profession/example-id',
+      );
 
       expect(professionsService.find).toBeCalledWith('example-id');
     });
@@ -50,8 +73,8 @@ describe('ProfessionsController', () => {
       });
 
       expect(async () => {
-        await controller.show('example-slug', 'example-invalid-id');
-      }).rejects.toThrowError();
+        await controller.show('example-profession', 'example-invalid-id', res);
+      }).rejects.toThrowError(NotFoundException);
     });
   });
 });

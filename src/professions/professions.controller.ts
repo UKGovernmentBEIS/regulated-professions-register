@@ -1,23 +1,34 @@
-import { Controller, Get, Param, Render } from '@nestjs/common';
+import { Controller, Get, NotFoundException, Param, Res } from '@nestjs/common';
+import { generateSlug } from '../helpers/slug.helper';
+import { ShowTemplate } from './interfaces/show-template.interface';
 import { ProfessionsService } from './professions.service';
+import { Response } from 'express';
 
 @Controller()
 export class ProfessionsController {
   constructor(private professionsService: ProfessionsService) {}
 
   @Get('professions/:slug/:id')
-  @Render('professions/read')
   async show(
     @Param('slug') slug: string,
     @Param('id') id: string,
-  ): Promise<ShowTemplate> {
-
+    @Res() res: Response,
+  ): Promise<void> {
     const profession = await this.professionsService.find(id);
 
     if (!profession) {
-      throw new Error(`A profession with ID ${id} could not be found`);
+      throw new NotFoundException(
+        `A profession with ID ${id} could not be found`,
+      );
     }
 
-    return { professionName: profession.name };
+    const generatedSlug = generateSlug(profession.name);
+
+    if (generatedSlug !== slug) {
+      res.redirect(301, `/professions/${generatedSlug}/${id}`);
+    } else {
+      const templateParams: ShowTemplate = { professionName: profession.name };
+      res.render('professions/show', templateParams);
+    }
   }
 }

@@ -1,3 +1,3 @@
-interface ShowTemplate {
+export interface ShowTemplate {
     professionName: string;
 }
