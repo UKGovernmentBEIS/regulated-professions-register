@@ -7,6 +7,7 @@ import { TopLevelInformationController } from './admin/add-profession/top-level-
 import { IndustriesService } from '../industries/industries.service';
 import { Industry } from '../industries/industry.entity';
 import { CheckYourAnswersController } from './admin/add-profession/check-your-answers.controller';
+import { ConfirmationController } from './admin/add-profession/confirmation.controller';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { CheckYourAnswersController } from './admin/add-profession/check-your-an
     ProfessionsController,
     TopLevelInformationController,
     CheckYourAnswersController,
+    ConfirmationController,
   ],
 })
 export class ProfessionsModule {}
