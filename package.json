@@ -59,6 +59,7 @@
     "rxjs": "^7.4.0",
     "sass": "^1.43.4",
     "sass-loader": "^12.3.0",
+    "slugify": "^1.6.3",
     "typeorm": "^0.2.40"
   },
   "devDependencies": {
