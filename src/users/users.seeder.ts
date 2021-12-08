@@ -4,12 +4,13 @@ import { Repository } from 'typeorm';
 import { Seeder } from 'nestjs-seeder';
 import { InjectRepository } from '@nestjs/typeorm';
 
-import { User } from './user.entity';
+import { UserRole, User } from './user.entity';
 
 type SeedUser = {
   email: string;
   name: string;
   externalIdentifier: string;
+  roles: string[];
 };
 
 @Injectable()
@@ -24,7 +25,8 @@ export class UsersSeeder implements Seeder {
     const userData = require('../../seeds/users.json') as SeedUser[];
 
     const users = userData.map((user) => {
-      return new User(user.email, user.name, user.externalIdentifier);
+      const roles = user.roles as UserRole[];
+      return new User(user.email, user.name, user.externalIdentifier, roles);
     });
 
     return this.userRepository.save(users);
