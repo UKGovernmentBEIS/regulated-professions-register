@@ -30,16 +30,22 @@ export class Profession {
   @Column()
   regulationType: string;
 
-  @ManyToOne(() => Industry)
+  @ManyToOne(() => Industry, {
+    eager: true,
+  })
   industry: Industry;
 
-  @ManyToOne(() => Qualification)
+  @ManyToOne(() => Qualification, {
+    eager: true,
+  })
   qualification: Qualification;
 
   @Column('text', { array: true })
   reservedActivities: string[];
 
-  @ManyToMany(() => Legislation)
+  @ManyToMany(() => Legislation, {
+    eager: true,
+  })
   @JoinTable()
   legislations: Legislation[];
 
