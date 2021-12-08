@@ -5,6 +5,7 @@ import { UsersService } from './users.service';
 import { ExternalUserCreationService } from './external-user-creation.service';
 import { UsersController } from './users.controller';
 import { UserRole } from './user.entity';
+import { Response } from 'express';
 
 const name = 'Example Name';
 const email = 'name@example.com';
@@ -79,13 +80,10 @@ describe('UsersController', () => {
   });
 
   describe('create', () => {
-    let res;
+    let res: DeepMocked<Response>;
 
     beforeEach(() => {
-      res = {
-        render: jest.fn(),
-        redirect: jest.fn(),
-      };
+      res = createMock<Response>();
     });
 
     it('should throw an exception when called with an empty session', () => {
