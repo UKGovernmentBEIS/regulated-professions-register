@@ -1,12 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { createMock, DeepMocked } from '@golevelup/ts-jest';
+
 import { UsersService } from './users.service';
 import { ExternalUserCreationService } from './external-user-creation.service';
 import { UsersController } from './users.controller';
-import { createMock, DeepMocked } from '@golevelup/ts-jest';
+import { UserRole } from './user.entity';
 
 const name = 'Example Name';
 const email = 'name@example.com';
 const externalIdentifier = 'example-external-identifier';
+const roles = new Array<UserRole>();
 
 describe('UsersController', () => {
   let controller: UsersController;
@@ -101,6 +104,7 @@ describe('UsersController', () => {
         name,
         email,
         externalIdentifier,
+        roles,
       });
       expect(res.redirect).toBeCalledWith('done');
     });
@@ -150,6 +154,7 @@ describe('UsersController', () => {
         name,
         email,
         externalIdentifier,
+        roles,
       });
       expect(res.redirect).toBeCalledWith('done');
     });

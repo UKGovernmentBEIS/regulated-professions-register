@@ -1,4 +1,4 @@
-import { ExecutionContext, ForbiddenException } from '@nestjs/common';
+import { ExecutionContext, UnauthorizedException } from '@nestjs/common';
 import { Response } from 'express';
 
 import { createMock } from '@golevelup/ts-jest';
@@ -7,7 +7,7 @@ import { UnauthorizedExceptionFilter } from './unauthorized-exception.filter';
 
 const reponse = createMock<Response>();
 
-const exception = createMock<ForbiddenException>();
+const exception = createMock<UnauthorizedException>();
 const host = createMock<ExecutionContext>({
   switchToHttp: () => ({
     getResponse: () => reponse,

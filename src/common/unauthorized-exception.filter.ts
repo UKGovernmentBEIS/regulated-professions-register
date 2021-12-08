@@ -2,24 +2,24 @@ import {
   ExceptionFilter,
   Catch,
   ArgumentsHost,
-  ForbiddenException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { Response } from 'express';
 
 /**
- * Catches a `ForbiddenException` and redirects to the login
+ * Catches an `UnauthorizedException` and redirects to the login
  *
  * This class is a NestJS ExceptionFilter that catches
- * `ForbiddenException`s and redirects to the login page.
+ * `UnauthorizedException`s and redirects to the login page.
  *
  * @example (in a controller, as metadata above a controller action)
  *
  * @UseFilters(UnauthorizedExceptionFilter)
  *
  */
-@Catch(ForbiddenException)
+@Catch(UnauthorizedException)
 export class UnauthorizedExceptionFilter implements ExceptionFilter {
-  async catch(_exception: ForbiddenException, host: ArgumentsHost) {
+  async catch(_exception: UnauthorizedException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
 

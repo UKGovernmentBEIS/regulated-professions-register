@@ -16,15 +16,23 @@ export default (
     },
   ) => void,
   config: {
-    env: { AUTH0_DOMAIN: string; AUTH_USERNAME: string; AUTH_PASSWORD: string };
+    env: {
+      AUTH0_DOMAIN: string;
+      ADMIN_USERNAME: string;
+      ADMIN_PASSWORD: string;
+      EDITOR_USERNAME: string;
+      EDITOR_PASSWORD: string;
+    };
   },
 ) => {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   require('dotenv').config({ path: '.env.test' });
 
   config.env.AUTH0_DOMAIN = process.env['AUTH0_DOMAIN'];
-  config.env.AUTH_USERNAME = process.env['AUTH_USERNAME'];
-  config.env.AUTH_PASSWORD = process.env['AUTH_PASSWORD'];
+  config.env.ADMIN_USERNAME = process.env['ADMIN_USERNAME'];
+  config.env.ADMIN_PASSWORD = process.env['ADMIN_PASSWORD'];
+  config.env.EDITOR_USERNAME = process.env['EDITOR_USERNAME'];
+  config.env.EDITOR_PASSWORD = process.env['EDITOR_PASSWORD'];
 
   on('task', {
     LoginPuppeteer(options) {

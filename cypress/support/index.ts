@@ -19,9 +19,9 @@ declare global {
     interface Chainable {
       /**
        * Login with Auth0.
-       * @example cy.loginAuth0()
+       * @example cy.loginAuth0('admin')
        */
-      loginAuth0(): Chainable<Element>;
+      loginAuth0(role: string): Chainable<Element>;
     }
   }
 }
