@@ -6,6 +6,7 @@ import { ProfessionsController } from './professions.controller';
 import { TopLevelInformationController } from './admin/add-profession/top-level-information.controller';
 import { IndustriesService } from '../industries/industries.service';
 import { Industry } from '../industries/industry.entity';
+import { CheckYourAnswersController } from './admin/add-profession/check-your-answers.controller';
 
 @Module({
   imports: [
@@ -13,6 +14,10 @@ import { Industry } from '../industries/industry.entity';
     TypeOrmModule.forFeature([Industry]),
   ],
   providers: [ProfessionsService, IndustriesService],
-  controllers: [ProfessionsController, TopLevelInformationController],
+  controllers: [
+    ProfessionsController,
+    TopLevelInformationController,
+    CheckYourAnswersController,
+  ],
 })
 export class ProfessionsModule {}
