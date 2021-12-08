@@ -3,6 +3,7 @@ import { UsersService } from './users.service';
 import { User } from './user.entity';
 import { PersonalDetailsController } from './personal-details.controller';
 import { createMock, DeepMocked } from '@golevelup/ts-jest';
+import { Response } from 'express';
 
 const name = 'Example Name';
 const email = 'name@example.com';
@@ -77,13 +78,10 @@ describe('PersonalDetailsController', () => {
   });
 
   describe('create', () => {
-    let res;
+    let res: DeepMocked<Response>;
 
     beforeEach(() => {
-      res = {
-        render: jest.fn(),
-        redirect: jest.fn(),
-      };
+      res = createMock<Response>();
     });
 
     it('should throw an exception when called in edit mode with an empty session', () => {
