@@ -16,7 +16,7 @@
 
           <p class="govuk-body">{{ ('professions.form.description' | t) }}</p>
 
-          <form method="post" action="#">
+          <form method="get" action="/admin/professions/new/top-level-information">
             {{
               govukButton({
                 id: "submit-button",

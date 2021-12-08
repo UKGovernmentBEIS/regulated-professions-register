@@ -1,0 +1,90 @@
+{% extends "base.njk" %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block content %}
+
+  <div class="govuk-width-container">
+    <a href="#" class="govuk-back-link">{{ ('app.back' | t) }}</a>
+
+    <main class="govuk-main-wrapper">
+
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+          <h1 class="govuk-heading-l">{{ ("professions.form.headings.topLevelInformation" | t) }}</h1>
+
+          <form method="post" action="#">
+            {{
+              govukInput({
+                label: {
+                  text: ("professions.form.label.topLevelInformation.name" | t),
+                  classes: "govuk-label--m",
+                  isPageHeading: false
+                },
+                id: "name",
+                name: "name"
+              })
+            }}
+
+            {{
+              govukSelect({
+                id: "nation",
+                name: "nation",
+                label: {
+                  text: ("professions.form.label.topLevelInformation.nation" | t)
+                },
+                items: [
+                  {
+                    value: "Anywhere in the United Kingdom",
+                    text: ("professions.form.select.topLevelInformation.nations.anywhere" | t)
+                  },
+                  {
+                    value: "England",
+                    text: ("professions.form.select.topLevelInformation.nations.england" | t)
+                  },
+                  {
+                    value: "Northern Ireland",
+                    text: ("professions.form.select.topLevelInformation.nations.northernIreland" | t)
+                  },
+                  {
+                    value: "Scotland",
+                    text: ("professions.form.select.topLevelInformation.nations.scotland" | t)
+                  },
+                  {
+                    value: "Wales",
+                    text: ("professions.form.select.topLevelInformation.nations.wales" | t)
+                  }
+                ]
+              })
+            }}
+
+            {{
+              govukSelect({
+                id: "industryId",
+                name: "industryId",
+                label: {
+                  text: ("professions.form.label.topLevelInformation.industry" | t)
+                },
+                items: industriesOptionSelectArgs
+              })
+            }}
+
+            {{
+              govukButton({
+                id: "submit-button",
+                type: "Submit",
+                text: ("app.continue" | t)
+
+              })
+            }}
+          </form>
+
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+{% endblock %}
