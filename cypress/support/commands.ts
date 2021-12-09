@@ -1,4 +1,6 @@
 import { getUnixTime } from 'date-fns';
+import { translate } from '../plugins/i18n';
+
 import puppeteer from 'puppeteer';
 
 /*
@@ -74,3 +76,10 @@ Cypress.Commands.add('loginAuth0', (role = 'admin') => {
     });
   });
 });
+
+Cypress.Commands.add(
+  'translate',
+  (translation: string, personalisations: object = {}) => {
+    return translate(translation, personalisations);
+  },
+);

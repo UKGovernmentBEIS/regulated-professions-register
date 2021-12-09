@@ -11,12 +11,20 @@ describe('/', () => {
     });
 
     it('shows my username', () => {
-      cy.get('body').should('contain', 'Welcome beis-rpr');
+      cy.translate('app.welcome', { name: 'beis-rpr' }).then(
+        (welcomeMessage) => {
+          cy.get('body').should('contain', welcomeMessage);
+        },
+      );
     });
 
     it('allows me to access the super admin area', () => {
       cy.visit('/admin/superadmin');
-      cy.get('body').should('contain', 'You are a superadmin');
+      cy.translate('app.superadmin', { name: 'beis-rpr' }).then(
+        (superadminMessage) => {
+          cy.get('body').should('contain', superadminMessage);
+        },
+      );
     });
   });
 
@@ -27,15 +35,19 @@ describe('/', () => {
     });
 
     it('shows my username', () => {
-      cy.get('body').should('contain', 'Welcome beis-rpr+editor');
+      cy.translate('app.welcome', { name: 'beis-rpr+editor' }).then(
+        (welcomeMessage) => {
+          cy.get('body').should('contain', welcomeMessage);
+        },
+      );
     });
 
     it('does not allow me to access the super admin area', () => {
       cy.visit('/admin/superadmin');
-      cy.get('body').should(
-        'contain',
-        'You have not been authorized to see this page',
-      );
+
+      cy.translate('errors.forbidden.heading').then((errorMessage) => {
+        cy.get('body').should('contain', errorMessage);
+      });
     });
   });
 });
