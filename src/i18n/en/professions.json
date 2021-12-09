@@ -1,0 +1,39 @@
+{
+  "form": {
+    "headings": {
+      "main": "Add a new profession",
+      "topLevelInformation": "Top level information",
+      "checkAnswers": "Check your answers",
+      "confirmation": "New profession created"
+    },
+    "description": "Use this section of the site to add a new profession",
+    "label": {
+      "topLevelInformation": {
+        "name": "Name of regulated profession",
+        "nation": "Nation",
+        "industry": "Industry / sector"
+      }
+    },
+    "button": {
+      "create": "Create profession"
+    },
+    "select": {
+      "topLevelInformation": {
+        "nations": {
+          "england": "England",
+          "anywhere": "Anywhere in the United Kingdom",
+          "northernIreland": "Northern Ireland",
+          "scotland": "Scotland",
+          "wales": "Wales"
+        }
+      }
+    },
+    "body": {
+      "confirmation": {
+        "panel": "<strong>{name}</strong> has been added",
+        "emailNotification": "We have sent you a confirmation email.",
+        "next": "What happens next?"
+      }
+    }
+  }
+}
