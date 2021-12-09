@@ -19,7 +19,13 @@ describe('AssetsHelper', () => {
   it('returns a translated string', async () => {
     await helper.translate('hello world');
 
-    expect(service.translate).toHaveBeenCalledWith('hello world');
+    expect(service.translate).toHaveBeenCalledWith('hello world', { args: {} });
   });
+
+  it('accepts optional personalisation options', async () => {
+    await helper.translate('hello world', { foo: 'bar' });
+    expect(service.translate).toHaveBeenCalledWith('hello world', {
+      args: { foo: 'bar' },
+    });
   });
 });

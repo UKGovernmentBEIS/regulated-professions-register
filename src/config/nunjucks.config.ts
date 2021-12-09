@@ -28,9 +28,12 @@ export const nunjucksConfig = async (
   );
   env.addFilter(
     't',
-    async (text, callback) => {
+    async (...args) => {
+      const callback = args.pop();
+      const text = args[0];
+      const personalisation = args.length < 2 ? {} : args[1];
       try {
-        const result = await i18nHelper.translate(text);
+        const result = await i18nHelper.translate(text, personalisation);
         callback(null, result);
       } catch (error) {
         callback(error);
