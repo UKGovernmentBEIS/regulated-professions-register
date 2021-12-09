@@ -41,3 +41,6 @@ across areas and time.
 
 This model should be validated through user research, and will also need to feed into the service and
 interaction design process.
+
+We will need to add User and Decision concepts to our complete data model in
+future, but those are waiting for further research.
