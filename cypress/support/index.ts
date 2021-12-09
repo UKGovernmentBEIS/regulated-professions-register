@@ -21,7 +21,7 @@ declare global {
        * Login with Auth0.
        * @example cy.loginAuth0('admin')
        */
-      loginAuth0(role: string): Chainable<Element>;
+      loginAuth0(role?: string): Chainable<Element>;
       /**
        * Translate an i18n string
        * @example cy.translate('errors.forbidden.heading')
