@@ -5,20 +5,20 @@
 {% block content %}
 
 <div class="govuk-width-container">
-  <a href="#" class="govuk-back-link">Back</a>
+  <a href="#" class="govuk-back-link">{{ "app.back" | t }}</a>
 
   <main class="govuk-main-wrapper">
 
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
-        
+
         <p class="govuk-body">Use this section of the site to add a new user.</p>
 
         <form method="post" action="create-new-user">
           {{ govukButton({
             id: "submit-button",
             type: "Submit",
-            text: "Start"
+            text: ("app.start" | t)
           }) }}
         </form>
 

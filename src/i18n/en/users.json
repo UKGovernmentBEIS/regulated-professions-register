@@ -1,0 +1,35 @@
+{
+  "form": {
+    "label": {
+      "name": "Name",
+      "email": "Email address"
+    },
+    "hint": {
+      "name": "For example, Clare Jones.",
+      "email": "For example, clarejones@beis.gov.uk."
+    },
+    "button": {
+      "create": "Create user"
+    },
+    "errors": {
+      "email": {
+        "alreadyExists": "A user with this email address already exists"
+      }
+    },
+    "headings": {
+      "main": "Creating RPR user",
+      "checkAnswers": "Check your answers before creating this user",
+      "personalDetails": "Personal details"
+    },
+    "checkAnswers": "Check your answers before creating this user"
+  },
+  "headings": {
+    "done": "User added",
+    "next": "What happens next?"
+  },
+  "body": {
+    "panel": "User <strong>{email}</strong> has been added",
+    "confirmation": "We have sent the user a confirmation email.",
+    "backToDashboard": "Back to the dashboard"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Regulated Professions Register",
+  "welcome": "Welcome {name}",
+  "superadmin": "You are a superadmin",
+  "back": "Back",
+  "continue": "Continue",
+  "change": "Change",
+  "start": "Start",
+  "errors": {
+    "heading": "There is a problem"
+  }
+}
