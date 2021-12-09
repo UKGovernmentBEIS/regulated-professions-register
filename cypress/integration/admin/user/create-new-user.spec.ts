@@ -15,8 +15,13 @@ describe('Creating a new user', () => {
       cy.visit('/admin/users/create-new-user');
       cy.get('button').click();
 
-      cy.get('body').should('contain', 'Name');
-      cy.get('body').should('contain', 'Email');
+      cy.translate('users.form.label.name').then((nameLabel) => {
+        cy.get('body').should('contain', nameLabel);
+      });
+
+      cy.translate('users.form.label.email').then((emailLabel) => {
+        cy.get('body').should('contain', emailLabel);
+      });
 
       cy.get('input[name="name"]').type('Example Name');
       cy.get('input[name="email"]').type('name@example.com');
@@ -27,9 +32,11 @@ describe('Creating a new user', () => {
 
       cy.get('button').click();
 
-      cy.get('body')
-        .should('contain', 'User added')
-        .should('contain', 'name@example.com');
+      cy.translate('users.headings.done').then((successMessage) => {
+        cy.get('body')
+          .should('contain', successMessage)
+          .should('contain', 'name@example.com');
+      });
     });
 
     it('I cannot add a user that already exists', () => {
@@ -40,9 +47,10 @@ describe('Creating a new user', () => {
       cy.get('input[name="email"]').type('beis-rpr@dxw.com');
       cy.get('button').click();
 
-      cy.get('body').should(
-        'contain',
-        'A user with this email address already exists',
+      cy.translate('users.form.errors.email.alreadyExists').then(
+        (emailError) => {
+          cy.get('body').should('contain', emailError);
+        },
       );
     });
 
@@ -54,7 +62,9 @@ describe('Creating a new user', () => {
       cy.get('input[name="email"]').type('name2@example.com');
       cy.get('button').click();
 
-      cy.get('a').contains('Change').click();
+      cy.translate('app.change').then((changeLabel) => {
+        cy.get('a').contains(`${changeLabel}`).click();
+      });
 
       cy.get('input[name="email"]').clear().type('name3@example.com');
       cy.get('button').click();
@@ -62,9 +72,11 @@ describe('Creating a new user', () => {
       cy.get('body').should('contain', 'name3@example.com');
       cy.get('button').click();
 
-      cy.get('body')
-        .should('contain', 'User added')
-        .should('contain', 'name3@example.com');
+      cy.translate('users.headings.done').then((successMessage) => {
+        cy.get('body')
+          .should('contain', successMessage)
+          .should('contain', 'name3@example.com');
+      });
     });
   });
 });

@@ -22,6 +22,14 @@ declare global {
        * @example cy.loginAuth0('admin')
        */
       loginAuth0(role: string): Chainable<Element>;
+      /**
+       * Translate an i18n string
+       * @example cy.translate('errors.forbidden.heading')
+       */
+      translate(
+        translation: string,
+        personalisations?: object,
+      ): Chainable<String>;
     }
   }
 }
