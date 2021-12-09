@@ -14,7 +14,7 @@ Our application will need a mechanism for storing and retrieving data. The 2 key
 
 We will use generic naming for our internal data structures where possible to keep our schema flexible, based on standard naming taken from [schema.org](https://schema.org/). "Competent Authorities" can be mapped to an `Organisation`, while "Regulated Professions" can be mapped to a `Profession`. Using scraped data from the original EU professions register and based on data displayed to our users in the prototypes developed in Alpha, we have decided on the following data models and relational structure:
 
-![Organisations and professions data models](/doc/architecture/diagrams/organisations-and-professions/organisations-and-professions.png)
+![Organisations and professions data models](/doc/architecture/diagrams/organisations-and-professions/organisations-and-professions-0009.png)
 
 There are a few remaining fields from the scraped data that we've not mapped to the Profession model yet, notably:
 
