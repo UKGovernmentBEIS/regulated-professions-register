@@ -1,4 +1,5 @@
 import { Controller, Get, NotFoundException, Param, Render } from '@nestjs/common';
+import { ShowTemplate } from './interfaces/show-template.interface';
 import { ProfessionsService } from './professions.service';
 
 @Controller()
@@ -17,6 +18,7 @@ export class ProfessionsController {
       throw new NotFoundException(`A profession with ID ${id} could not be found`);
     }
 
-    return { professionName: profession.name };
+    const templateParams: ShowTemplate = { profession, backUrl: '' };
+    return templateParams;
   }
 }

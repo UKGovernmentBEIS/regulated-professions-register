@@ -6,6 +6,8 @@ import { Profession } from './profession.entity';
 import { ProfessionsController } from './professions.controller';
 import { ProfessionsService } from './professions.service';
 
+const exampleProfession = new Profession('Example Profession');
+
 describe('ProfessionsController', () => {
   let controller: ProfessionsController;
   let professionsService: DeepMocked<ProfessionsService>;
@@ -32,14 +34,13 @@ describe('ProfessionsController', () => {
 
   describe('show', () => {
     it('should return populated template params', async () => {
-      professionsService.find.mockImplementationOnce(async () => {
-        return new Profession('Example Profession');
-      });
+      professionsService.find.mockImplementationOnce(async () => exampleProfession);
 
       const result = await controller.show('example-id');
 
       expect(result).toEqual({
-        professionName: 'Example Profession',
+        profession: exampleProfession,
+        backUrl: '',
       });
 
       expect(professionsService.find).toBeCalledWith('example-id');
