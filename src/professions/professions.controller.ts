@@ -18,14 +18,14 @@ export class ProfessionsController {
     return {};
   }
 
-  @Get('professions/:id')
+  @Get('professions/:slug')
   @Render('professions/show')
-  async show(@Param('id') id: string): Promise<ShowTemplate> {
-    const profession = await this.professionsService.find(id);
+  async show(@Param('slug') slug: string): Promise<ShowTemplate> {
+    const profession = await this.professionsService.findBySlug(slug);
 
     if (!profession) {
       throw new NotFoundException(
-        `A profession with ID ${id} could not be found`,
+        `A profession with ID ${slug} could not be found`,
       );
     }
 

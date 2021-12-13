@@ -10,6 +10,7 @@ import { ProfessionsService } from './professions.service';
 const profession = new Profession(
   'Registered Gas Engineer',
   'Gas installer/repairer',
+  'registered-gas-engineer',
   'Gas installers work on gas appliances and installations.',
   'All regions',
   'Reserves of activities',
@@ -24,6 +25,7 @@ const professionArray = [
   new Profession(
     'Social worker',
     'Social worker',
+    'social-worker',
     'Social workers are trained to: make assessments, taking account of a range of factors',
     'England',
     'Protected title',
@@ -93,6 +95,16 @@ describe('Profession', () => {
       await service.create(profession);
 
       expect(repoSpy).toHaveBeenCalledWith(profession);
+    });
+  });
+
+  describe('findBySlug', () => {
+    it('should return a profession', async () => {
+      const repoSpy = jest.spyOn(repo, 'findOne');
+      const post = await service.findBySlug('some-slug');
+
+      expect(post).toEqual(profession);
+      expect(repoSpy).toHaveBeenCalledWith({ where: { slug: 'some-slug' } });
     });
   });
 });

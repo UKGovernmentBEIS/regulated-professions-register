@@ -22,4 +22,8 @@ export class ProfessionsService {
   async create(profession: Profession): Promise<Profession> {
     return this.repository.save(profession);
   }
+
+  findBySlug(slug: string): Promise<Profession> {
+    return this.repository.findOne({ where: { slug } });
+  }
 }

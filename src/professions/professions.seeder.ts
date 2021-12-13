@@ -12,6 +12,7 @@ import { Legislation } from 'src/legislations/legislation.entity';
 type SeedProfession = {
   name: string;
   alternateName: string;
+  slug: string;
   description: string;
   occupationLocation: string;
   regulationType: string;
@@ -60,6 +61,7 @@ export class ProfessionsSeeder implements Seeder {
         return new Profession(
           profession.name,
           profession.alternateName,
+          profession.slug,
           profession.description,
           profession.occupationLocation,
           profession.regulationType,

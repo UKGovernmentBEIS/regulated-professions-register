@@ -7,6 +7,7 @@ import {
   ManyToMany,
   JoinTable,
   ManyToOne,
+  Index,
 } from 'typeorm';
 import { Industry } from '../industries/industry.entity';
 
@@ -20,6 +21,10 @@ export class Profession {
 
   @Column()
   alternateName: string;
+
+  @Index()
+  @Column({ unique: true })
+  slug: string;
 
   @Column()
   description: string;
@@ -52,6 +57,7 @@ export class Profession {
   constructor(
     name?: string,
     alternateName?: string,
+    slug?: string,
     description?: string,
     occupationLocation?: string,
     regulationType?: string,
@@ -62,6 +68,7 @@ export class Profession {
   ) {
     this.name = name || '';
     this.alternateName = alternateName || '';
+    this.slug = slug || '';
     this.description = description || '';
     this.occupationLocation = occupationLocation || '';
     this.regulationType = regulationType || '';
