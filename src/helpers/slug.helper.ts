@@ -10,12 +10,14 @@ const maxLength = 100;
  *   slug
  * @returns The slug generated from the provided name
  */
-export function generateSlug(name: string): string {
-  return slugify(name, {
+export function generateSlug(name: string, retryCount: number): string {
+  const base = slugify(name, {
     remove: /[^a-zA-Z0-9 ]/,
     replacement: '-',
     lower: true,
     strict: true,
     trim: true,
   }).slice(0, maxLength);
+
+  return retryCount === 0 ? base : `${base}-${retryCount}`;
 }
