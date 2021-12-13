@@ -39,5 +39,8 @@ describe('Adding a new profession', () => {
         .should('contain', heading)
         .should('contain', 'Example Profession');
     });
+
+    cy.visit('/professions/example-profession');
+    cy.get('body').should('contain', 'Example Profession');
   });
 });
