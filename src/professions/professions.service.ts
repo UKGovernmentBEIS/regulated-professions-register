@@ -18,4 +18,8 @@ export class ProfessionsService {
   find(id: string): Promise<Profession> {
     return this.repository.findOne(id);
   }
+
+  findBySlug(slug: string): Promise<Profession> {
+    return this.repository.findOne({ where: { slug } });
+  }
 }

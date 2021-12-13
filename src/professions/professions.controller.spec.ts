@@ -34,25 +34,27 @@ describe('ProfessionsController', () => {
 
   describe('show', () => {
     it('should return populated template params', async () => {
-      professionsService.find.mockImplementationOnce(async () => exampleProfession);
+      professionsService.findBySlug.mockImplementationOnce(
+        async () => exampleProfession,
+      );
 
-      const result = await controller.show('example-id');
+      const result = await controller.show('example-slug');
 
       expect(result).toEqual({
         profession: exampleProfession,
         backUrl: '',
       });
 
-      expect(professionsService.find).toBeCalledWith('example-id');
+      expect(professionsService.findBySlug).toBeCalledWith('example-slug');
     });
 
-    it('should throw an error when the ID does not match a profession', () => {
-      professionsService.find.mockImplementationOnce(async () => {
+    it('should throw an error when the slug does not match a profession', () => {
+      professionsService.findBySlug.mockImplementationOnce(async () => {
         return null;
       });
 
       expect(async () => {
-        await controller.show('example-invalid-id');
+        await controller.show('example-invalid-slug');
       }).rejects.toThrowError(NotFoundException);
     });
   });
