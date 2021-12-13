@@ -13,7 +13,7 @@
       <div class="govuk-grid-column-two-thirds">
 
         {{ govukBackLink({
-          text: "Back",
+          text: ("app.back" | t),
           href: backUrl
         }) }}
 
@@ -21,14 +21,14 @@
 
         <h1 class="govuk-heading-xl">{{ profession.name }}</h1>
 
-        <h2 class="govuk-heading-m rpr-details__section-title">Overview</h2>
+        <h2 class="govuk-heading-m rpr-details__section-title">{{ "professions.overview.heading" | t }}</h2>
 
         {{ govukSummaryList({
           classes: 'govuk-summary-list--no-border',
           rows: [
             {
               key: {
-                text: "Nations"
+                text: ("professions.overview.nations" | t)
               },
               value: {
                 text: profession.occupationLocation
@@ -36,7 +36,7 @@
             },
             {
               key: {
-                text: "Industry/Sector"
+                text: ("professions.overview.industry" | t)
               },
               value: {
                 text: profession.industry.name
@@ -47,14 +47,14 @@
 
         <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
 
-        <h2 class="govuk-heading-m rpr-details__section-title">Regulatory/professional bodies</h2>
+        <h2 class="govuk-heading-m rpr-details__section-title">{{ "professions.bodies.heading" | t }}</h2>
 
         {{ govukSummaryList({
           classes: 'govuk-summary-list--no-border',
           rows: [
             {
               key: {
-                text: "Regulated authority"
+                text: ("professions.bodies.regulatedAuthority" | t)
               },
               value: {
                 text: "Placeholder authority"
@@ -62,7 +62,7 @@
             },
             {
               key: {
-                text: "Address"
+                text: ("app.labels.address" | t)
               },
               value: {
                 html: 'Placeholder address'
@@ -70,7 +70,7 @@
             },
             {
               key: {
-                text: "Email address"
+                text: ("app.labels.emailAddress" | t)
               },
               value: {
                 text: "Placeholder email"
@@ -78,7 +78,7 @@
             },
             {
               key: {
-                text: "URL"
+                text: ("app.labels.url" | t)
               },
               value: {
                 text: "Placeholder url"
@@ -86,7 +86,7 @@
             },          
             {
               key: {
-                text: "Phone number"
+                text: ("app.labels.phoneNumber" | t)
               },
               value: {
                 text: "Placeholder phone numer"
@@ -94,7 +94,7 @@
             },
             {
               key: {
-                text: "Mandatory registration with professional bodies"
+                text: ("professions.bodies.mandatoryRegistration" | t)
               },
               value: {
                 text: "Placeholder response"
@@ -105,7 +105,7 @@
 
         <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
 
-        <h2 class="govuk-heading-m rpr-details__section-title">Regulated activities</h2>
+        <h2 class="govuk-heading-m rpr-details__section-title">{{ "professions.regulatedActivities.heading" | t }}</h2>
 
         {% set escapedActivites = [] %}
         {% for activity in profession.reservedActivities %}
@@ -117,7 +117,7 @@
           rows: [
             {
               key: {
-                text: "Reserved activities"
+                text: ("professions.regulatedActivities.reservedActivities" | t)
               },
               value: {
                 html: ["<ul class=\"govuk-list\"><li>", (escapedActivites | join("</li><li>")), "</li></ul>"] | join
@@ -125,7 +125,7 @@
             },
             {
               key: {
-                text: "Description of activities/regulation description"
+                text: ("professions.regulatedActivities.description" | t)
               },
               value: {
                 text: profession.description
@@ -136,14 +136,14 @@
 
         <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
 
-        <h2 class="govuk-heading-m rpr-details__section-title">Qualification information</h2>
+        <h2 class="govuk-heading-m rpr-details__section-title">{{ "professions.qualification.heading" | t}}</h2>
 
         {{ govukSummaryList({
           classes: 'govuk-summary-list--no-border',
           rows: [
             {
               key: {
-                text: "Qualification level"
+                text: ("professions.qualification.level" | t)
               },
               value: {
                 text: profession.qualification.level
@@ -151,7 +151,7 @@
             },
             {
               key: {
-                text: "Methods to obtain qualification"
+                text: ("professions.qualification.methods" | t)
               },
               value: {
                 text: profession.qualification.methodToObtain
@@ -159,7 +159,7 @@
             },
             {
               key: {
-                text: "Most common path to obtain qualification"
+                text: ("professions.qualification.commonPath" | t)
               },
               value: {
                 text: profession.qualification.commonPathToObtain
@@ -167,7 +167,7 @@
             },
             {
               key: {
-                text: "Duration of qualification"
+                text: ("professions.qualification.duration" | t)
               },
               value: {
                 text: profession.qualification.educationDuration
@@ -175,10 +175,10 @@
             },
             {
               key: {
-                text: "Existence of mandatory professional experience"
+                text: ("professions.qualification.mandatoryExperience" | t)
               },
               value: {
-                text: "Yes" if profession.qualification.mandatoryProfessionalExperience else "No"
+                text: ("app.yesOrNo.yes" | t) if profession.qualification.mandatoryProfessionalExperience else ("app.yesOrNo.no" | t)
               }
             }
           ]
@@ -186,7 +186,7 @@
 
         <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
 
-        <h2 class="govuk-heading-m rpr-details__section-title">Legislation</h2>
+        <h2 class="govuk-heading-m rpr-details__section-title">{{ "professions.legislation.heading" | t}}</h2>
 
         {% for legislation in profession.legislations %}
 
@@ -195,7 +195,7 @@
           rows: [
             {
               key: {
-                text: "National legislation"
+                text: ( "professions.legislation.nationalLegislation" | t)
               },
               value: {
                 text: legislation.name
@@ -203,7 +203,7 @@
             },
             {
               key: {
-                text: "Legislation link"
+                text: ( "professions.legislation.legislationLink" | t)
               },
               value: {
                 html: ["<a class=\"govuk-link\" href=\"", (legislation.url | escape), "\">", (legislation.url | escape),  "</a>" ] | join

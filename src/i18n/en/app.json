@@ -8,5 +8,16 @@
   "start": "Start",
   "errors": {
     "heading": "There is a problem"
+  },
+  "yesOrNo": {
+    "yes": "Yes",
+    "no": "No"
+  },
+  "labels": {
+    "name": "Name",
+    "address": "Address",
+    "emailAddress": "Email address",
+    "url": "URL",
+    "phoneNumber": "Phone number"
   }
 }

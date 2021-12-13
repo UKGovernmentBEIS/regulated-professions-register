@@ -15,11 +15,11 @@ describe('Creating a new user', () => {
       cy.visit('/admin/users/create-new-user');
       cy.get('button').click();
 
-      cy.translate('users.form.label.name').then((nameLabel) => {
+      cy.translate('app.labels.name').then((nameLabel) => {
         cy.get('body').should('contain', nameLabel);
       });
 
-      cy.translate('users.form.label.email').then((emailLabel) => {
+      cy.translate('app.labels.email').then((emailLabel) => {
         cy.get('body').should('contain', emailLabel);
       });
 

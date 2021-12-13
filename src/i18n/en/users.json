@@ -1,9 +1,5 @@
 {
   "form": {
-    "label": {
-      "name": "Name",
-      "email": "Email address"
-    },
     "hint": {
       "name": "For example, Clare Jones.",
       "email": "For example, clarejones@beis.gov.uk."
