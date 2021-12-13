@@ -11,15 +11,15 @@ import {
   Session,
   UseGuards,
 } from '@nestjs/common';
-import { ValidationFailedError } from '../validation/validation-failed.error';
-import { Validator } from '../helpers/validator';
-import { UsersService } from './users.service';
-import { PersonalDetailsDto } from './dto/personal-details.dto';
+import { ValidationFailedError } from '../../validation/validation-failed.error';
+import { Validator } from '../../helpers/validator';
+import { UsersService } from '../users.service';
+import { PersonalDetailsDto } from '../dto/personal-details.dto';
 import {
   UserCreationFlowSession,
   UserCreationFlowStep,
-} from './helpers/user-creation-flow-session.helper';
-import { AuthenticationGuard } from '../common/authentication.guard';
+} from '../helpers/user-creation-flow-session.helper';
+import { AuthenticationGuard } from '../../common/authentication.guard';
 
 @Controller('/admin/users/create-new-user/personal-details')
 export class PersonalDetailsController {

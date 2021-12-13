@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Auth0UserCreationService } from './auth0-user-creation.service';
 import { ExternalUserCreationService } from './external-user-creation.service';
 import { NullUserCreationService } from './null-user-creation-service';
-import { PersonalDetailsController } from './personal-details.controller';
+import { PersonalDetailsController } from './personal-details/personal-details.controller';
 import { UsersController } from './users.controller';
 
 import { User } from './user.entity';
