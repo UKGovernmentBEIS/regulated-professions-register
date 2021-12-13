@@ -34,7 +34,7 @@ describe('TopLevelInformationController', () => {
   });
 
   describe('new', () => {
-    it('should fetch all Industries to be displayed in an option select', async () => {
+    it('should fetch all Industries and Nations to be displayed in an option select', async () => {
       await controller.new(response);
 
       expect(response.render).toHaveBeenCalledWith(
@@ -48,6 +48,24 @@ describe('TopLevelInformationController', () => {
             {
               text: 'Construction & Engineering',
               value: 'construction-uuid',
+            },
+          ],
+          nationsOptionSelectArgs: [
+            {
+              text: 'nations.england',
+              value: 'GB-ENG',
+            },
+            {
+              text: 'nations.northernIreland',
+              value: 'GB-NIR',
+            },
+            {
+              text: 'nations.scotland',
+              value: 'GB-SCT',
+            },
+            {
+              text: 'nations.wales',
+              value: 'GB-WLS',
             },
           ],
         },
@@ -119,6 +137,24 @@ describe('TopLevelInformationController', () => {
               {
                 text: 'Construction & Engineering',
                 value: 'construction-uuid',
+              },
+            ],
+            nationsOptionSelectArgs: [
+              {
+                text: 'nations.england',
+                value: 'GB-ENG',
+              },
+              {
+                text: 'nations.northernIreland',
+                value: 'GB-NIR',
+              },
+              {
+                text: 'nations.scotland',
+                value: 'GB-SCT',
+              },
+              {
+                text: 'nations.wales',
+                value: 'GB-WLS',
               },
             ],
             errors: { name: { text: 'name should not be empty' } },

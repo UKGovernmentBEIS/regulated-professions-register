@@ -22,13 +22,13 @@ describe('CheckYourAnswersController', () => {
   });
 
   describe('view', () => {
-    it('returns the answers persisted in the session, looking up the Industry name', async () => {
+    it('returns the answers persisted in the session, looking up the Industry and Nation name', async () => {
       const constructionUUID = 'construction-uuid';
       const session = {
         'add-profession': {
           'top-level-details': {
             name: 'Gas Safe Engineer',
-            nation: 'england',
+            nation: 'GB-ENG',
             industryId: constructionUUID,
           },
         },
@@ -41,7 +41,7 @@ describe('CheckYourAnswersController', () => {
 
       expect(await controller.show(session)).toEqual({
         name: 'Gas Safe Engineer',
-        nation: 'england',
+        nation: 'nations.england',
         industry: 'Construction & Engineering',
       });
       expect(industriesService.find).toHaveBeenCalledWith(constructionUUID);

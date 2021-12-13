@@ -2,6 +2,7 @@ import { Body, Controller, Get, Post, Res, Session } from '@nestjs/common';
 import { Response } from 'express';
 import { Validator } from '../../../helpers/validator';
 import { IndustriesService } from '../../../industries/industries.service';
+import { Nation } from '../../../nations/nation';
 import { ValidationFailedError } from '../../../validation/validation-failed.error';
 import { TopLevelDetailsDto } from './dto/top-level-details.dto';
 
@@ -21,8 +22,14 @@ export class TopLevelInformationController {
       value: industry.id,
     }));
 
+    const nationsOptionSelectArgs = Nation.all().map((nation) => ({
+      text: nation.name,
+      value: nation.code,
+    }));
+
     res.render('professions/admin/add-profession/top-level-information', {
       industriesOptionSelectArgs,
+      nationsOptionSelectArgs,
       errors,
     });
   }

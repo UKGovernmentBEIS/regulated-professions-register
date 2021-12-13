@@ -25,7 +25,9 @@ describe('Adding a new profession', () => {
     });
 
     cy.get('body').should('contain', 'Example Profession');
-    cy.get('body').should('contain', 'England');
+    cy.translate('nations.england').then((england) => {
+      cy.get('body').should('contain', england);
+    });
     cy.get('body').should('contain', 'Construction & Engineering');
 
     cy.translate('professions.form.button.create').then((buttonText) => {

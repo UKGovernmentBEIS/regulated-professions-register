@@ -37,28 +37,7 @@
                 label: {
                   text: ("professions.form.label.topLevelInformation.nation" | t)
                 },
-                items: [
-                  {
-                    value: "Anywhere in the United Kingdom",
-                    text: ("professions.form.select.topLevelInformation.nations.anywhere" | t)
-                  },
-                  {
-                    value: "England",
-                    text: ("professions.form.select.topLevelInformation.nations.england" | t)
-                  },
-                  {
-                    value: "Northern Ireland",
-                    text: ("professions.form.select.topLevelInformation.nations.northernIreland" | t)
-                  },
-                  {
-                    value: "Scotland",
-                    text: ("professions.form.select.topLevelInformation.nations.scotland" | t)
-                  },
-                  {
-                    value: "Wales",
-                    text: ("professions.form.select.topLevelInformation.nations.wales" | t)
-                  }
-                ]
+                items: nationsOptionSelectArgs | tOptionSelect
               })
             }}
 

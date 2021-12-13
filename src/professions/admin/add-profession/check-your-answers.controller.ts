@@ -1,6 +1,7 @@
 import { Controller, Get, Render, Session } from '@nestjs/common';
 
 import { IndustriesService } from '../../../industries/industries.service';
+import { Nation } from '../../../nations/nation';
 import { TopLevelDetailsDto } from './dto/top-level-details.dto';
 
 @Controller('admin/professions/new/check-your-answers')
@@ -22,9 +23,11 @@ export class CheckYourAnswersController {
       topLevelDetails.industryId,
     );
 
+    const selectedNation = Nation.find(topLevelDetails.nation);
+
     return {
       name: topLevelDetails.name,
-      nation: topLevelDetails.nation,
+      nation: selectedNation.name,
       industry: selectedIndustry.name,
     };
   }
