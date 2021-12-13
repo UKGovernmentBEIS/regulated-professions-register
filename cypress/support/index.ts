@@ -29,7 +29,7 @@ declare global {
       translate(
         translation: string,
         personalisations?: object,
-      ): Chainable<String>;
+      ): Chainable<string>;
     }
   }
 }
