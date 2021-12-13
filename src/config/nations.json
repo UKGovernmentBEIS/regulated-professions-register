@@ -1,0 +1,18 @@
+[
+  {
+    "code": "GB-ENG",
+    "name": "nations.england"
+  },
+  {
+    "code": "GB-NIR",
+    "name": "nations.northernIreland"
+  },
+  {
+    "code": "GB-SCT",
+    "name": "nations.scotland"
+  },
+  {
+    "code": "GB-WLS",
+    "name": "nations.wales"
+  }
+]
