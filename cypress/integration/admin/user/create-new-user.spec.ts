@@ -1,7 +1,7 @@
 describe('Creating a new user', () => {
   context('when I am not logged in', () => {
     it('I am prompted to log in', () => {
-      cy.visit('/admin/users/create-new-user');
+      cy.visit('/admin/users/new');
       cy.location('pathname').should('contain', 'login');
     });
   });
@@ -12,7 +12,7 @@ describe('Creating a new user', () => {
     });
 
     it('I can add a new user', () => {
-      cy.visit('/admin/users/create-new-user');
+      cy.visit('/admin/users/new');
       cy.get('button').click();
 
       cy.translate('users.form.label.name').then((nameLabel) => {
@@ -40,7 +40,7 @@ describe('Creating a new user', () => {
     });
 
     it('I cannot add a user that already exists', () => {
-      cy.visit('/admin/users/create-new-user');
+      cy.visit('/admin/users/new');
       cy.get('button').click();
 
       cy.get('input[name="name"]').type('Example Name');
@@ -55,7 +55,7 @@ describe('Creating a new user', () => {
     });
 
     it('I can revise user details from the confirmation page', () => {
-      cy.visit('/admin/users/create-new-user');
+      cy.visit('/admin/users/new');
       cy.get('button').click();
 
       cy.get('input[name="name"]').type('Example Name');

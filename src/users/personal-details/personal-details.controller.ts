@@ -21,7 +21,7 @@ import {
 } from '../helpers/user-creation-flow-session.helper';
 import { AuthenticationGuard } from '../../common/authentication.guard';
 
-@Controller('/admin/users/create-new-user/personal-details')
+@Controller('/admin/users/new/personal-details')
 export class PersonalDetailsController {
   constructor(private readonly usersService: UsersService) {}
 
