@@ -9,5 +9,7 @@
   "errors": {
     "heading": "There is a problem"
   },
-  "backToDashboard": "Back to the dashboard"
+  "backToDashboard": "Back to the dashboard",
+  "yes": "Yes",
+  "no": "No"
 }
