@@ -8,5 +8,6 @@
   "start": "Start",
   "errors": {
     "heading": "There is a problem"
-  }
+  },
+  "backToDashboard": "Back to the dashboard"
 }

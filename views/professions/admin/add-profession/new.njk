@@ -1,0 +1,37 @@
+{% extends "base.njk" %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block content %}
+
+  <div class="govuk-width-container">
+    <a href="#" class="govuk-back-link">{{ ('app.back' | t) }}</a>
+
+    <main class="govuk-main-wrapper">
+
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+          <h1 class="govuk-heading-l">{{ ('professions.form.headings.main' | t) }}</h1>
+
+          <p class="govuk-body">{{ ('professions.form.description' | t) }}</p>
+
+          <form method="get" action="/admin/professions/new/top-level-information">
+            {{
+              govukButton({
+                id: "submit-button",
+                type: "Submit",
+                text: ('app.start' | t)
+              })
+            }}
+          </form>
+
+        </div>
+
+        <div class="govuk-grid-column-one-third"></div>
+      </div>
+
+    </main>
+  </div>
+
+{% endblock %}

@@ -42,5 +42,28 @@ export const nunjucksConfig = async (
     true,
   );
 
+  env.addFilter(
+    'tOptionSelect',
+    async (...args) => {
+      const callback = args.pop();
+      const optionSelectArgs = args[0];
+      const personalisation = args.length < 2 ? {} : args[1];
+      const result = await Promise.all(
+        optionSelectArgs.map(async (arg: { text: string; value: string }) => {
+          try {
+            return {
+              text: await i18nHelper.translate(arg['text'], personalisation),
+              value: arg['value'],
+            };
+          } catch (error) {
+            callback(error);
+          }
+        }),
+      );
+      callback(null, result);
+    },
+    true,
+  );
+
   return env;
 };

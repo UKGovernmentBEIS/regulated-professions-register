@@ -55,6 +55,9 @@ describe('Profession', () => {
             findOne: () => {
               return profession;
             },
+            insert: () => {
+              return {};
+            },
           },
         },
       ],
@@ -81,6 +84,15 @@ describe('Profession', () => {
 
       expect(post).toEqual(profession);
       expect(repoSpy).toHaveBeenCalledWith('some-uuid');
+    });
+  });
+
+  describe('create', () => {
+    it('should save and return a Profession', async () => {
+      const repoSpy = jest.spyOn(repo, 'insert');
+      await service.create(profession);
+
+      expect(repoSpy).toHaveBeenCalledWith(profession);
     });
   });
 });
