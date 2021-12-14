@@ -52,7 +52,7 @@ describe('ConfirmationController', () => {
           'add-profession': {
             'top-level-details': {
               name: 'Gas Safe Engineer',
-              nation: 'england',
+              nations: ['GB-ENG'],
               industryId: constructionUUID,
             },
           },
@@ -70,7 +70,7 @@ describe('ConfirmationController', () => {
           expect.objectContaining({
             name: 'Gas Safe Engineer',
             industry: industry,
-            occupationLocations: ['england'],
+            occupationLocations: ['GB-ENG'],
           }),
         );
       });

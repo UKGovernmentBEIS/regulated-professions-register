@@ -22,14 +22,14 @@ export class TopLevelInformationController {
       value: industry.id,
     }));
 
-    const nationsOptionSelectArgs = Nation.all().map((nation) => ({
+    const nationsCheckboxArgs = Nation.all().map((nation) => ({
       text: nation.name,
       value: nation.code,
     }));
 
     res.render('professions/admin/add-profession/top-level-information', {
       industriesOptionSelectArgs,
-      nationsOptionSelectArgs,
+      nationsCheckboxArgs,
       errors,
     });
   }

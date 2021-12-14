@@ -10,6 +10,7 @@ import { IndustriesService } from '../../../industries/industries.service';
 import { Profession } from '../../profession.entity';
 
 import { ProfessionsService } from '../../professions.service';
+import { TopLevelDetailsDto } from './dto/top-level-details.dto';
 
 @Controller('admin/professions/new/confirmation')
 export class ConfirmationController {
@@ -22,7 +23,8 @@ export class ConfirmationController {
   @Redirect('/admin/professions/new/confirmation')
   async create(@Session() session: Record<string, any>) {
     const addProfessionSession = session['add-profession'];
-    const topLevelDetails = addProfessionSession['top-level-details'];
+    const topLevelDetails: TopLevelDetailsDto =
+      addProfessionSession['top-level-details'];
 
     const industry = await this.industriesService.find(
       topLevelDetails.industryId,
@@ -33,7 +35,7 @@ export class ConfirmationController {
       '',
       '',
       '',
-      [topLevelDetails.nation],
+      topLevelDetails.nations,
       '',
       industry,
       null,

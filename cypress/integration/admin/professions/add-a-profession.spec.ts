@@ -13,7 +13,8 @@ describe('Adding a new profession', () => {
     );
 
     cy.get('input[name="name"]').type('Example Profession');
-    cy.get('select[name="nation"]').select('England');
+    // TODO: figure out how to select a single checkbox, as this is currently throwing CORS issues
+    cy.get('[type="checkbox"]').check();
     cy.get('select[name="industryId"]').select('Construction & Engineering');
 
     cy.translate('app.continue').then((buttonText) => {

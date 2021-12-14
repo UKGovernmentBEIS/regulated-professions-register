@@ -52,7 +52,7 @@ describe('TopLevelInformationController', () => {
               value: 'construction-uuid',
             },
           ],
-          nationsOptionSelectArgs: [
+          nationsCheckboxArgs: [
             {
               text: 'nations.england',
               value: 'GB-ENG',
@@ -85,7 +85,7 @@ describe('TopLevelInformationController', () => {
 
         const topLevelDetails = {
           name: 'Gas Safe Engineer',
-          nation: 'england',
+          nations: ['GB-ENG'],
           industryId: 'construction-uuid',
         };
 
@@ -99,7 +99,7 @@ describe('TopLevelInformationController', () => {
           'add-profession': {
             'top-level-details': {
               name: 'Gas Safe Engineer',
-              nation: 'england',
+              nations: ['GB-ENG'],
               industryId: 'construction-uuid',
             },
           },
@@ -118,7 +118,7 @@ describe('TopLevelInformationController', () => {
 
         const topLevelDetailsWithMissingName = {
           name: '',
-          nation: 'england',
+          nations: ['GB-ENG'],
           industryId: 'construction-uuid',
         };
 
@@ -141,7 +141,7 @@ describe('TopLevelInformationController', () => {
                 value: 'construction-uuid',
               },
             ],
-            nationsOptionSelectArgs: [
+            nationsCheckboxArgs: [
               {
                 text: 'nations.england',
                 value: 'GB-ENG',
