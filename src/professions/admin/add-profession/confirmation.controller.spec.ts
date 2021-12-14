@@ -69,7 +69,7 @@ describe('ConfirmationController', () => {
         expect(professionsService.create).toHaveBeenCalledWith(
           expect.objectContaining({
             name: 'Gas Safe Engineer',
-            industry: industry,
+            industries: [industry],
             occupationLocations: ['GB-ENG'],
           }),
         );

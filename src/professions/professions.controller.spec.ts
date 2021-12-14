@@ -2,14 +2,22 @@ import { createMock, DeepMocked } from '@golevelup/ts-jest';
 import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { I18nService } from 'nestjs-i18n';
+import { Industry } from '../industries/industry.entity';
 import { Profession } from './profession.entity';
 
 import { ProfessionsController } from './professions.controller';
 import { ProfessionsService } from './professions.service';
 
-const exampleProfession = new Profession('Example Profession', '', null, '', [
-  'GB-ENG',
-]);
+const industry = new Industry('industries.example');
+const exampleProfession = new Profession(
+  'Example Profession',
+  '',
+  null,
+  '',
+  ['GB-ENG'],
+  '',
+  [industry],
+);
 
 describe('ProfessionsController', () => {
   let controller: ProfessionsController;
@@ -50,8 +58,15 @@ describe('ProfessionsController', () => {
         async () => exampleProfession,
       );
 
-      i18nService.translate.mockImplementation(async () => {
-        return 'England';
+      i18nService.translate.mockImplementation(async (text) => {
+        switch (text) {
+          case 'industries.example':
+            return 'Example industry';
+          case 'nations.england':
+            return 'England';
+          default:
+            return '';
+        }
       });
 
       const result = await controller.show('example-slug');
@@ -59,6 +74,7 @@ describe('ProfessionsController', () => {
       expect(result).toEqual({
         profession: exampleProfession,
         nations: ['England'],
+        industries: ['Example industry'],
         backUrl: '',
       });
 

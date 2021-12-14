@@ -29,6 +29,12 @@
             {% endfor %}
         {% endset %}
 
+        {% set industriesHtml %}
+          {% for industry in industries %}
+            <p class="govuk-body-m"> {{ industry }}
+          {% endfor %}
+        {% endset %}
+
         {{
           govukSummaryList({
           classes: 'govuk-summary-list--no-border',
@@ -46,7 +52,7 @@
                 text: ("professions.show.overview.industry" | t)
               },
               value: {
-                text: (profession.industry.name | t)
+                html: industriesHtml | safe
               }
             }
           ]

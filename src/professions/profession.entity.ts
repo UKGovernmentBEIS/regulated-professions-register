@@ -35,10 +35,9 @@ export class Profession {
   @Column()
   regulationType: string;
 
-  @ManyToOne(() => Industry, {
-    eager: true,
-  })
-  industry: Industry;
+  @ManyToMany(() => Industry, { nullable: true, eager: true })
+  @JoinTable()
+  industries: Industry[];
 
   @ManyToOne(() => Qualification, {
     eager: true,
@@ -61,7 +60,7 @@ export class Profession {
     description?: string,
     occupationLocations?: string[],
     regulationType?: string,
-    industry?: Industry,
+    industries?: Industry[],
     qualification?: Qualification,
     reservedActivities?: string[],
     legislations?: Legislation[],
@@ -72,7 +71,7 @@ export class Profession {
     this.description = description || '';
     this.occupationLocations = occupationLocations || [];
     this.regulationType = regulationType || '';
-    this.industry = industry || null;
+    this.industries = industries || null;
     this.qualification = qualification || null;
     this.reservedActivities = reservedActivities || [];
     this.legislations = legislations || null;

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 
 import { Seeder } from 'nestjs-seeder';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -16,7 +16,7 @@ type SeedProfession = {
   description: string;
   occupationLocations: string[];
   regulationType: string;
-  industry: string;
+  industries: string[];
   qualification: string;
   reservedActivities: string[];
   legislations: string[];
@@ -42,8 +42,8 @@ export class ProfessionsSeeder implements Seeder {
 
     const professions = await Promise.all(
       professionsData.map(async (profession) => {
-        const industry = await this.industriesRepository.findOne({
-          where: { name: profession.industry },
+        const industries = await this.industriesRepository.find({
+          where: { name: In(profession.industries) },
         });
 
         const qualification = await this.qualificationsRepository.findOne({
@@ -65,7 +65,7 @@ export class ProfessionsSeeder implements Seeder {
           profession.description,
           profession.occupationLocations,
           profession.regulationType,
-          industry,
+          industries,
           qualification,
           profession.reservedActivities,
           legislations,

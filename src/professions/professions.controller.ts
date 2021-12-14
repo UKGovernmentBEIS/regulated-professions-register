@@ -42,6 +42,12 @@ export class ProfessionsController {
       }),
     );
 
-    return { profession, nations, backUrl: '' };
+    const industries = await Promise.all(
+      profession.industries.map(
+        async (industry) => await this.i18nService.translate(industry.name),
+      ),
+    );
+
+    return { profession, nations, industries, backUrl: '' };
   }
 }
