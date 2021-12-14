@@ -70,7 +70,7 @@ describe('ConfirmationController', () => {
           expect.objectContaining({
             name: 'Gas Safe Engineer',
             industry: industry,
-            occupationLocation: 'england',
+            occupationLocations: ['england'],
           }),
         );
       });

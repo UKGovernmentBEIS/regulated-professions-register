@@ -23,7 +23,14 @@
 
         <h2 class="govuk-heading-m rpr-details__section-title">{{ "professions.show.overview.heading" | t }}</h2>
 
-        {{ govukSummaryList({
+        {% set nationsHtml %}
+            {% for nation in nations %}
+              <p class="govuk-body-m"> {{ nation }}
+            {% endfor %}
+        {% endset %}
+
+        {{
+          govukSummaryList({
           classes: 'govuk-summary-list--no-border',
           rows: [
             {
@@ -31,7 +38,7 @@
                 text: ("professions.show.overview.nations" | t)
               },
               value: {
-                text: profession.occupationLocation
+                html: nationsHtml | safe
               }
             },
             {

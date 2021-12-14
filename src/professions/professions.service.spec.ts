@@ -13,7 +13,7 @@ const profession = new Profession(
   'Gas installer/repairer',
   'registered-gas-engineer',
   'Gas installers work on gas appliances and installations.',
-  'All regions',
+  ['GB-ENG', 'GB-SCT', 'GB-WLS', 'GB-NIR'],
   'Reserves of activities',
   new Industry('Construction & Engineering'),
   new Qualification('ATT - Attestation of competence , Art. 11 a'),
@@ -28,7 +28,7 @@ const professionArray = [
     'Social worker',
     'social-worker',
     'Social workers are trained to: make assessments, taking account of a range of factors',
-    'England',
+    ['GB-ENG'],
     'Protected title',
     new Industry('Health'),
     new Qualification(

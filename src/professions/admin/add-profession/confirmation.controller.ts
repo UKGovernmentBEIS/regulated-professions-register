@@ -33,7 +33,7 @@ export class ConfirmationController {
       '',
       '',
       '',
-      topLevelDetails.nation,
+      [topLevelDetails.nation],
       '',
       industry,
       null,

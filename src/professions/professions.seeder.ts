@@ -14,7 +14,7 @@ type SeedProfession = {
   alternateName: string;
   slug: string;
   description: string;
-  occupationLocation: string;
+  occupationLocations: string[];
   regulationType: string;
   industry: string;
   qualification: string;
@@ -63,7 +63,7 @@ export class ProfessionsSeeder implements Seeder {
           profession.alternateName,
           profession.slug,
           profession.description,
-          profession.occupationLocation,
+          profession.occupationLocations,
           profession.regulationType,
           industry,
           qualification,
