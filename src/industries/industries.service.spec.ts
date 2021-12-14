@@ -9,7 +9,7 @@ describe('IndustriesService', () => {
   let service: IndustriesService;
   let repo: Repository<Industry>;
 
-  const industry = new Industry('Finance');
+  const industry = new Industry('finance');
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
