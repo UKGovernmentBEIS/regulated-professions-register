@@ -7,7 +7,6 @@ import {
   Session,
 } from '@nestjs/common';
 import { IndustriesService } from '../../../industries/industries.service';
-import { Qualification } from '../../../qualifications/qualification.entity';
 import { Profession } from '../../profession.entity';
 
 import { ProfessionsService } from '../../professions.service';
@@ -36,12 +35,12 @@ export class ConfirmationController {
       topLevelDetails.nation,
       '',
       industry,
-      new Qualification(),
+      null,
       [],
       [],
     );
 
-    this.professionsService.create(profession);
+    await this.professionsService.create(profession);
   }
 
   @Get()
