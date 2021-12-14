@@ -1,5 +1,7 @@
 {% extends "base.njk" %}
 {% from "govuk/components/panel/macro.njk" import govukPanel %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 
 {% block content %}
 
@@ -9,14 +11,214 @@
 
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
-        <h1 class="govuk-heading-xl">{{ professionName }}</h1>
+
+        {{ govukBackLink({
+          text: "Back",
+          href: backUrl
+        }) }}
+
+        <span class="govuk-caption-l">Placeholder Authority</span>
+
+        <h1 class="govuk-heading-xl">{{ profession.name }}</h1>
+
+        <h2 class="govuk-heading-m rpr-details__section-title">Overview</h2>
+
+        {{ govukSummaryList({
+          classes: 'govuk-summary-list--no-border',
+          rows: [
+            {
+              key: {
+                text: "Nations"
+              },
+              value: {
+                text: profession.occupationLocation
+              }
+            },
+            {
+              key: {
+                text: "Industry/Sector"
+              },
+              value: {
+                text: profession.industry.name
+              }
+            }
+          ]
+        }) }}
+
+        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+
+        <h2 class="govuk-heading-m rpr-details__section-title">Regulatory/professional bodies</h2>
+
+        {{ govukSummaryList({
+          classes: 'govuk-summary-list--no-border',
+          rows: [
+            {
+              key: {
+                text: "Regulated authority"
+              },
+              value: {
+                text: "Placeholder authority"
+              }
+            },
+            {
+              key: {
+                text: "Address"
+              },
+              value: {
+                html: 'Placeholder address'
+              }
+            },
+            {
+              key: {
+                text: "Email address"
+              },
+              value: {
+                text: "Placeholder email"
+              }
+            },
+            {
+              key: {
+                text: "URL"
+              },
+              value: {
+                text: "Placeholder url"
+              }
+            },          
+            {
+              key: {
+                text: "Phone number"
+              },
+              value: {
+                text: "Placeholder phone numer"
+              }
+            },
+            {
+              key: {
+                text: "Mandatory registration with professional bodies"
+              },
+              value: {
+                text: "Placeholder response"
+              }
+            }
+          ]
+        }) }}
+
+        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+        <h2 class="govuk-heading-m rpr-details__section-title">Regulated activities</h2>
+
+        {% set escapedActivites = [] %}
+        {% for activity in profession.reservedActivities %}
+          {% set escapedActivites = (escapedActivites.push(activity | escape), escapedActivites) %}
+        {% endfor %}
+        
+        {{ govukSummaryList({
+          classes: 'govuk-summary-list--no-border',
+          rows: [
+            {
+              key: {
+                text: "Reserved activities"
+              },
+              value: {
+                html: ["<ul class=\"govuk-list\"><li>", (escapedActivites | join("</li><li>")), "</li></ul>"] | join
+              }
+            },
+            {
+              key: {
+                text: "Description of activities/regulation description"
+              },
+              value: {
+                text: profession.description
+              }
+            }
+          ]
+        }) }}
+
+        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+        <h2 class="govuk-heading-m rpr-details__section-title">Qualification information</h2>
+
+        {{ govukSummaryList({
+          classes: 'govuk-summary-list--no-border',
+          rows: [
+            {
+              key: {
+                text: "Qualification level"
+              },
+              value: {
+                text: profession.qualification.level
+              }
+            },
+            {
+              key: {
+                text: "Methods to obtain qualification"
+              },
+              value: {
+                text: profession.qualification.methodToObtain
+              }
+            },
+            {
+              key: {
+                text: "Most common path to obtain qualification"
+              },
+              value: {
+                text: profession.qualification.commonPathToObtain
+              }
+            },
+            {
+              key: {
+                text: "Duration of qualification"
+              },
+              value: {
+                text: profession.qualification.educationDuration
+              }
+            },
+            {
+              key: {
+                text: "Existence of mandatory professional experience"
+              },
+              value: {
+                text: "Yes" if profession.qualification.mandatoryProfessionalExperience else "No"
+              }
+            }
+          ]
+        }) }}
+
+        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+        <h2 class="govuk-heading-m rpr-details__section-title">Legislation</h2>
+
+        {% for legislation in profession.legislations %}
+
+          {{ govukSummaryList({
+          classes: 'govuk-summary-list--no-border',
+          rows: [
+            {
+              key: {
+                text: "National legislation"
+              },
+              value: {
+                text: legislation.name
+              }
+            },
+            {
+              key: {
+                text: "Legislation link"
+              },
+              value: {
+                html: ["<a class=\"govuk-link\" href=\"", (legislation.url | escape), "\">", (legislation.url | escape),  "</a>" ] | join
+              }
+            }
+          ]
+          }) }}
+        {% endfor %}
       </div>
 
       <div class="govuk-grid-column-one-third">
-
+        
       </div>
-    </div>
 
+    </div>
   </main>
 </div>
 

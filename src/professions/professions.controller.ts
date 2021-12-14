@@ -29,6 +29,6 @@ export class ProfessionsController {
       );
     }
 
-    return { professionName: profession.name };
+    return { profession, backUrl: '' };
   }
 }
