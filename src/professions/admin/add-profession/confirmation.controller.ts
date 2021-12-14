@@ -40,7 +40,7 @@ export class ConfirmationController {
       [],
     );
 
-    this.professionsService.create(profession);
+    await this.professionsService.create(profession);
   }
 
   @Get()
