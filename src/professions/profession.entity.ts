@@ -59,9 +59,9 @@ export class Profession {
     this.description = description || '';
     this.occupationLocation = occupationLocation || '';
     this.regulationType = regulationType || '';
-    this.industry = industry || new Industry();
-    this.qualification = qualification || new Qualification();
+    this.industry = industry || null;
+    this.qualification = qualification || null;
     this.reservedActivities = reservedActivities || [];
-    this.legislations = legislations;
+    this.legislations = legislations || null;
   }
 }

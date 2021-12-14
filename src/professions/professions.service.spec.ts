@@ -55,8 +55,8 @@ describe('Profession', () => {
             findOne: () => {
               return profession;
             },
-            insert: () => {
-              return {};
+            save: () => {
+              return profession;
             },
           },
         },
@@ -87,9 +87,9 @@ describe('Profession', () => {
     });
   });
 
-  describe('create', () => {
-    it('should save and return a Profession', async () => {
-      const repoSpy = jest.spyOn(repo, 'insert');
+  describe('save', () => {
+    it('should save the Profession', async () => {
+      const repoSpy = jest.spyOn(repo, 'save');
       await service.create(profession);
 
       expect(repoSpy).toHaveBeenCalledWith(profession);
