@@ -29,7 +29,7 @@ export class UsersController {
   @Post('/admin/users')
   @UseGuards(AuthenticationGuard)
   async create(@Res() res) {
-    const user = await this.usersService.create(new User());
+    const user = await this.usersService.save(new User());
 
     res.redirect(`/admin/users/${user.id}/personal-details/edit`);
   }
@@ -69,7 +69,7 @@ export class UsersController {
       // In the case where the user didn't already exist in Auth0, assume they
       // don't exist already in our DB. If they're in our DB, they have an
       // identifier from Auth0, so it'd be very weird if they're *not* in Auth0
-      await this.usersService.add(user);
+      await this.usersService.save(user);
     }
 
     res.redirect('done');

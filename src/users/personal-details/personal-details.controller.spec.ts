@@ -22,7 +22,7 @@ describe('PersonalDetailsController', () => {
       find: async () => {
         return user;
       },
-      create: async () => {
+      save: async () => {
         return user;
       },
     });
@@ -68,7 +68,7 @@ describe('PersonalDetailsController', () => {
 
       await controller.create({ name: name, email: email }, res, 'user-uuid');
 
-      expect(usersService.create).toHaveBeenCalledWith({
+      expect(usersService.save).toHaveBeenCalledWith({
         id: 'user-uuid',
         name: name,
         email: email,

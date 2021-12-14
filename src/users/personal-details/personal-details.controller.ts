@@ -61,7 +61,7 @@ export class PersonalDetailsController {
     const user = await this.usersService.find(id);
     const updated = Object.assign(user, personalDetailsDto);
 
-    await this.usersService.create(updated);
+    await this.usersService.save(updated);
 
     res.redirect(`/admin/users/${id}/confirm`);
   }

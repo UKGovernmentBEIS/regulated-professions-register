@@ -34,7 +34,7 @@ describe('UsersController', () => {
     });
 
     usersService = createMock<UsersService>({
-      create: async () => {
+      save: async () => {
         return user;
       },
       find: async () => {
@@ -69,7 +69,7 @@ describe('UsersController', () => {
 
       await controller.create(res);
 
-      expect(usersService.create).toHaveBeenCalled();
+      expect(usersService.save).toHaveBeenCalled();
       expect(res.redirect).toHaveBeenCalledWith(
         `/admin/users/${user.id}/personal-details/edit`,
       );
@@ -99,7 +99,7 @@ describe('UsersController', () => {
       expect(externalUserCreationService.createExternalUser).toBeCalledWith(
         email,
       );
-      expect(usersService.add).toBeCalledWith({
+      expect(usersService.save).toBeCalledWith({
         name,
         email,
         externalIdentifier,

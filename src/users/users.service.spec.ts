@@ -25,7 +25,7 @@ describe('UsersService', () => {
             findOne: () => {
               return user;
             },
-            insert: () => {
+            save: () => {
               return {};
             },
           },
@@ -75,10 +75,10 @@ describe('UsersService', () => {
     });
   });
 
-  describe('insert', () => {
+  describe('save', () => {
     it('should insert a user', async () => {
-      const repoSpy = jest.spyOn(repo, 'insert');
-      await service.add(user);
+      const repoSpy = jest.spyOn(repo, 'save');
+      await service.save(user);
 
       expect(repoSpy).toHaveBeenCalledWith(user);
     });
