@@ -1,0 +1,9 @@
+{% extends "../base.njk" %}
+
+{% block content %}
+<h1 class="govuk-heading-l">{{ "errors.not-found.heading" | t }}</h1>
+
+<p class="govuk-body">{{ "errors.not-found.message" | t }}</p>
+
+<p class="govuk-body">{{ "errors.not-found.help" | t | safe }}</p>
+{% endblock %}

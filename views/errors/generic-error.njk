@@ -1,0 +1,9 @@
+{% extends "../base.njk" %}
+
+{% block content %}
+<h1 class="govuk-heading-l">{{ "errors.generic.heading" | t }}</h1>
+
+<p class="govuk-body">{{ "errors.generic.message" | t }}</p>
+
+<p class="govuk-body">{{ "errors.generic.help" | t | safe }}</p>
+{% endblock %}

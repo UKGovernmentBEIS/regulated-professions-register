@@ -7,11 +7,11 @@ import * as path from 'path';
 import * as session from 'express-session';
 
 import { AppModule } from './app.module';
-import { ValidationFailedError } from './validation/validation-failed.error';
-import { UnauthorizedExceptionFilter } from './common/unauthorized-exception.filter';
 import { AuthenticationMidleware } from './middleware/authentication.middleware';
 import { nunjucksConfig } from './config/nunjucks.config';
-import { ForbiddenExceptionFilter } from './common/forbidden-exception.filter';
+
+import { ValidationFailedError } from './validation/validation-failed.error';
+import { HttpExceptionFilter } from './common/http-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -32,8 +32,7 @@ async function bootstrap() {
 
   app.use(authenticationMiddleware.auth());
 
-  app.useGlobalFilters(new UnauthorizedExceptionFilter());
-  app.useGlobalFilters(new ForbiddenExceptionFilter());
+  app.useGlobalFilters(new HttpExceptionFilter());
 
   app.useGlobalPipes(
     new ValidationPipe({
