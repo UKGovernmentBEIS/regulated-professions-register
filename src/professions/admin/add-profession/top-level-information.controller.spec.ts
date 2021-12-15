@@ -116,15 +116,15 @@ describe('TopLevelInformationController', () => {
           'add-profession': {},
         };
 
-        const topLevelDetailsWithMissingName = {
+        const topLevelDetailsWithNoAnswers = {
           name: '',
-          nations: ['GB-ENG'],
-          industries: ['construction-uuid'],
+          nations: undefined,
+          industries: undefined,
         };
 
         await controller.addTopLevelInformation(
           session,
-          topLevelDetailsWithMissingName,
+          topLevelDetailsWithNoAnswers,
           response,
         );
 
@@ -159,7 +159,11 @@ describe('TopLevelInformationController', () => {
                 value: 'GB-WLS',
               },
             ],
-            errors: { name: { text: 'name should not be empty' } },
+            errors: {
+              name: { text: 'name should not be empty' },
+              nations: { text: 'nations should not be empty' },
+              industries: { text: 'industries should not be empty' },
+            },
           },
         );
         expect(industriesService.all).toHaveBeenCalled();
