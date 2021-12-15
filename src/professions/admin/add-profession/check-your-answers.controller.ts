@@ -34,12 +34,11 @@ export class CheckYourAnswersController {
     );
 
     const selectedNations: string[] = await Promise.all(
-      topLevelDetails.nations.map(async (nationCode) => {
-        const nationKey = Nation.find(nationCode).name;
-
-        return await this.i18nService.translate(nationKey);
-      }),
+      topLevelDetails.nations.map(async (nationCode) =>
+        Nation.find(nationCode).translatedName(this.i18nService),
+      ),
     );
+
     return {
       name: topLevelDetails.name,
       nations: selectedNations,

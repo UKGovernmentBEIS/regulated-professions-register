@@ -35,11 +35,9 @@ export class ProfessionsController {
     }
 
     const nations = await Promise.all(
-      profession.occupationLocations.map(async (code) => {
-        const name = Nation.find(code).name;
-
-        return await this.i18nService.translate(name);
-      }),
+      profession.occupationLocations.map(async (code) =>
+        Nation.find(code).translatedName(this.i18nService),
+      ),
     );
 
     const industries = await Promise.all(

@@ -1,3 +1,5 @@
+import { createMock } from '@golevelup/ts-jest';
+import { I18nService } from 'nestjs-i18n';
 import { Nation } from './nation';
 
 describe(Nation, () => {
@@ -27,6 +29,17 @@ describe(Nation, () => {
           Nation.find('nothing');
         }).toThrow('Could not find requested Nation');
       });
+    });
+  });
+
+  describe('translatedName', () => {
+    it('calls the translation service to return a translated version of the name', () => {
+      const nation = new Nation('nations.england', 'GB-ENG');
+      const i18nService = createMock<I18nService>();
+      i18nService.translate.mockResolvedValue('England');
+
+      expect(nation.translatedName(i18nService)).resolves.toEqual('England');
+      expect(i18nService.translate).toHaveBeenCalledWith('nations.england');
     });
   });
 });
