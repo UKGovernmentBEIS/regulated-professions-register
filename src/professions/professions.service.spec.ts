@@ -1,6 +1,7 @@
+import { createMock, DeepMocked } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Connection, EntityManager, QueryRunner, Repository } from 'typeorm';
 
 import { Industry } from '../industries/industry.entity';
 import { Qualification } from '../qualifications/qualification.entity';
@@ -10,6 +11,7 @@ import { ProfessionsService } from './professions.service';
 const profession = new Profession(
   'Registered Gas Engineer',
   'Gas installer/repairer',
+  'registered-gas-engineer',
   'Gas installers work on gas appliances and installations.',
   'All regions',
   'Reserves of activities',
@@ -24,6 +26,7 @@ const professionArray = [
   new Profession(
     'Social worker',
     'Social worker',
+    'social-worker',
     'Social workers are trained to: make assessments, taking account of a range of factors',
     'England',
     'Protected title',
@@ -41,8 +44,16 @@ const professionArray = [
 describe('Profession', () => {
   let service: ProfessionsService;
   let repo: Repository<Profession>;
+  let manager: DeepMocked<EntityManager>;
 
   beforeEach(async () => {
+    manager = createMock<EntityManager>();
+
+    const queryRunner = createMock<QueryRunner>({ manager });
+    const connection = createMock<Connection>();
+
+    connection.createQueryRunner.mockReturnValue(queryRunner);
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         ProfessionsService,
@@ -59,6 +70,10 @@ describe('Profession', () => {
               return profession;
             },
           },
+        },
+        {
+          provide: Connection,
+          useValue: connection,
         },
       ],
     }).compile();
@@ -87,12 +102,98 @@ describe('Profession', () => {
     });
   });
 
-  describe('save', () => {
-    it('should save the Profession', async () => {
-      const repoSpy = jest.spyOn(repo, 'save');
-      await service.create(profession);
+  describe('findBySlug', () => {
+    it('should return a profession', async () => {
+      const repoSpy = jest.spyOn(repo, 'findOne');
+      const post = await service.findBySlug('some-slug');
 
-      expect(repoSpy).toHaveBeenCalledWith(profession);
+      expect(post).toEqual(profession);
+      expect(repoSpy).toHaveBeenCalledWith({ where: { slug: 'some-slug' } });
+    });
+  });
+
+  describe('create', () => {
+    it('should save the profession with the "base" slug when there are no colliding slugs', async () => {
+      const profession = new Profession('Example Profession');
+
+      manager.findOne.mockReturnValue(null);
+
+      const result = await service.create(profession);
+
+      expect(manager.findOne).toBeCalledTimes(1);
+
+      expect(manager.findOne).toBeCalledWith(Profession, {
+        where: { slug: 'example-profession' },
+      });
+
+      expect(manager.save).toHaveBeenCalledWith(
+        new Profession('Example Profession', '', 'example-profession'),
+      );
+      expect(result.slug).toEqual('example-profession');
+    });
+
+    it('should save the profession with a slug appended with "-1" when there is a colliding slug', async () => {
+      const profession = new Profession('Example Profession');
+
+      manager.findOne
+        .mockImplementationOnce(async () => {
+          return new Profession();
+        })
+        .mockReturnValue(null);
+
+      const result = await service.create(profession);
+
+      expect(manager.findOne).toBeCalledTimes(2);
+
+      expect(manager.findOne).toBeCalledWith(Profession, {
+        where: { slug: 'example-profession' },
+      });
+      expect(manager.findOne).toBeCalledWith(Profession, {
+        where: { slug: 'example-profession-1' },
+      });
+
+      expect(manager.save).toHaveBeenCalledWith(
+        new Profession('Example Profession', '', 'example-profession-1'),
+      );
+      expect(result.slug).toEqual('example-profession-1');
+    });
+
+    it('should save the profession with a slug appended with a unique postfix where there are multiple colliding slugs', async () => {
+      const profession = new Profession('Example Profession');
+
+      manager.findOne
+        .mockImplementationOnce(async () => {
+          return new Profession();
+        })
+        .mockImplementationOnce(async () => {
+          return new Profession();
+        })
+        .mockImplementationOnce(async () => {
+          return new Profession();
+        })
+        .mockReturnValue(null);
+
+      const result = await service.create(profession);
+
+      expect(manager.findOne).toBeCalledTimes(4);
+
+      expect(manager.findOne).toBeCalledWith(Profession, {
+        where: { slug: 'example-profession' },
+      });
+      expect(manager.findOne).toBeCalledWith(Profession, {
+        where: { slug: 'example-profession-1' },
+      });
+      expect(manager.findOne).toBeCalledWith(Profession, {
+        where: { slug: 'example-profession-2' },
+      });
+      expect(manager.findOne).toBeCalledWith(Profession, {
+        where: { slug: 'example-profession-3' },
+      });
+
+      expect(manager.save).toHaveBeenCalledWith(
+        new Profession('Example Profession', '', 'example-profession-3'),
+      );
+      expect(result.slug).toEqual('example-profession-3');
     });
   });
 });

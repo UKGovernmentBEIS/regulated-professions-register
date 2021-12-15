@@ -35,5 +35,40 @@
         "next": "What happens next?"
       }
     }
+  },
+  "show": {
+    "overview": {
+      "heading": "Overview",
+      "nations": "Nations",
+      "industry": "Industry / sector"
+    },
+    "bodies": {
+      "heading": "Regulatory / professional bodies",
+      "regulatedAuthority": "Regulated authority",
+      "name": "Name",
+      "address": "Address",
+      "emailAddress": "Email address",
+      "url": "URL",
+      "phoneNumber": "Phone number",
+      "mandatoryRegistration": "Mandatory registration with professional bodies"
+    },
+    "regulatedActivities": {
+      "heading": "Regulated activities",
+      "reservedActivities": "Reserved activities",
+      "description": "Description of activities / regulation description"
+    },
+    "qualification": {
+      "heading": "Qualification information",
+      "level": "Qualificiation level",
+      "methods": "Methods to obtain qualification",
+      "commonPath": "Most common path to obtain qualification",
+      "duration": "Duration of qualification",
+      "mandatoryExperience": "Existence of mandatory professional experience"
+    },
+    "legislation": {
+      "heading": "Legislation",
+      "nationalLegislation": "National legislation",
+      "legislationLink": "Legislation link"
+    }
   }
 }
