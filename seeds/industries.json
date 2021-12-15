@@ -1,26 +1,26 @@
 [
   {
-    "name": "Construction & Engineering"
+    "name": "industries.constructionAndEngineering"
   },
   {
-    "name": "Education"
+    "name": "industries.education"
   },
   {
-    "name": "Finance"
+    "name": "industries.finance"
   },
   {
-    "name": "Health"
+    "name": "industries.health"
   },
   {
-    "name": "Law"
+    "name": "industries.law"
   },
   {
-    "name": "Other"
+    "name": "industries.other"
   },
   {
-    "name": "Security"
+    "name": "industries.security"
   },
   {
-    "name": "Transport"
+    "name": "industries.transport"
   }
 ]

@@ -10,9 +10,11 @@ describe('TopLevelInformationController', () => {
   let industriesService: DeepMocked<IndustriesService>;
   let response: DeepMocked<Response>;
 
-  const healthIndustry = new Industry('Health');
+  const healthIndustry = new Industry('industries.health');
   healthIndustry.id = 'health-uuid';
-  const constructionIndustry = new Industry('Construction & Engineering');
+  const constructionIndustry = new Industry(
+    'industries.constructionAndEngineering',
+  );
   constructionIndustry.id = 'construction-uuid';
 
   const industries = [healthIndustry, constructionIndustry];
@@ -42,11 +44,11 @@ describe('TopLevelInformationController', () => {
         {
           industriesOptionSelectArgs: [
             {
-              text: 'Health',
+              text: 'industries.health',
               value: 'health-uuid',
             },
             {
-              text: 'Construction & Engineering',
+              text: 'industries.constructionAndEngineering',
               value: 'construction-uuid',
             },
           ],
@@ -131,11 +133,11 @@ describe('TopLevelInformationController', () => {
           {
             industriesOptionSelectArgs: [
               {
-                text: 'Health',
+                text: 'industries.health',
                 value: 'health-uuid',
               },
               {
-                text: 'Construction & Engineering',
+                text: 'industries.constructionAndEngineering',
                 value: 'construction-uuid',
               },
             ],
