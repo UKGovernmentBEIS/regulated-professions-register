@@ -7,14 +7,18 @@ import {
   Render,
   Res,
   UseGuards,
+  Req,
 } from '@nestjs/common';
+import { Request } from 'express';
+
 import { ValidationFailedError } from '../../validation/validation-failed.error';
 import { Validator } from '../../helpers/validator';
 import { UsersService } from '../users.service';
 import { User } from '../user.entity';
 import { PersonalDetailsDto } from '../dto/personal-details.dto';
 import { AuthenticationGuard } from '../../common/authentication.guard';
-
+import { backLink } from '../../common/utils';
+import { EditTemplate } from './interfaces/edit-template';
 @Controller('/admin/users')
 export class PersonalDetailsController {
   constructor(private readonly usersService: UsersService) {}
@@ -22,10 +26,13 @@ export class PersonalDetailsController {
   @Get(':id/personal-details/edit')
   @UseGuards(AuthenticationGuard)
   @Render('users/personal-details/edit')
-  async edit(@Param('id') id): Promise<User> {
-    const user = this.usersService.find(id);
+  async edit(@Req() req: Request, @Param('id') id): Promise<EditTemplate> {
+    const user = await this.usersService.find(id);
 
-    return user;
+    return {
+      ...user,
+      backLink: backLink(req),
+    };
   }
 
   @Post(':id/personal-details')

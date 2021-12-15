@@ -1,9 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { Request, Response } from 'express';
+
 import { UsersService } from '../users.service';
 import { User } from '../user.entity';
 import { PersonalDetailsController } from './personal-details.controller';
 import { createMock, DeepMocked } from '@golevelup/ts-jest';
-import { Response } from 'express';
+import { createMockRequest } from '../../common/utils';
 
 const name = 'Example Name';
 const email = 'name@example.com';
@@ -48,9 +50,14 @@ describe('PersonalDetailsController', () => {
 
   describe('edit', () => {
     it('should get and return the user from an id', async () => {
-      const result = await controller.edit('user-uuid');
+      const referrer = 'http://example.com/some/path';
+      const request = createMockRequest(referrer, 'example.com');
+      const result = await controller.edit(request, 'user-uuid');
 
-      expect(result).toEqual(user);
+      expect(result).toEqual({
+        ...user,
+        backLink: 'http://example.com/some/path',
+      });
     });
   });
 
