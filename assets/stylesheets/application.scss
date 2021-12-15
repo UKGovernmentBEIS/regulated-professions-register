@@ -5,3 +5,39 @@ $govuk-assets-path: '~govuk-frontend/govuk/assets/';
 .rpr-details__section-title {
   text-transform: uppercase;
 }
+
+.rpr-listing__filters-container {
+  background-color: govuk-colour('light-grey');
+  padding: 1rem;
+}
+
+.rpr-listing__filter {
+  background-color: govuk-colour('white');
+  height: 180px;
+  overflow-y: auto;
+}
+
+.rpr-listing__search-criteria-container {
+  margin-bottom: 5px;
+}
+
+.rpr-listing__profession-title:link,
+.rpr-listing__ra-title:link {
+  text-decoration: none;
+}
+
+.rpr-listing__profession-title:hover,
+.rpr-listing__ra-title:hover {
+  text-decoration: underline;
+}
+
+.rpr-listing__profession-summary-list dt,
+.rpr-listing__profession-summary-list dd,
+.rpr-listing__ra-summary-list dt,
+.rpr-listing__ra-summary-list dd {
+  padding: 2px 0;
+}
+
+.rpr-details__section-title {
+  text-transform: uppercase;
+}

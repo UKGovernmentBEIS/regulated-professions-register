@@ -8,6 +8,7 @@ import { IndustriesService } from '../industries/industries.service';
 import { Industry } from '../industries/industry.entity';
 import { CheckYourAnswersController } from './admin/add-profession/check-your-answers.controller';
 import { ConfirmationController } from './admin/add-profession/confirmation.controller';
+import { SearchController } from './search/search.controller';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { ConfirmationController } from './admin/add-profession/confirmation.cont
   ],
   providers: [ProfessionsService, IndustriesService],
   controllers: [
+    SearchController,
     ProfessionsController,
     TopLevelInformationController,
     CheckYourAnswersController,

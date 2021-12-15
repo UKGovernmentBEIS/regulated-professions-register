@@ -52,6 +52,7 @@ export const nunjucksConfig = async (
         optionSelectArgs.map(async (arg: { text: string; value: string }) => {
           try {
             return {
+              ...arg,
               text: await i18nHelper.translate(arg['text'], personalisation),
               value: arg['value'],
             };

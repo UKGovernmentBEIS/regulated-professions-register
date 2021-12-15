@@ -1,0 +1,182 @@
+{% extends "base.njk" %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+
+{% block content %}
+
+{% if backLink %}
+  {{ govukBackLink({
+    text: ( "app.back" | t ),
+    href: backLink
+  }) }}
+{% endif %}
+
+<h1 class="govuk-heading-xl">{{ "search.heading" | t }}</h1>
+
+  <div class="govuk-grid-row">
+
+    <div class="govuk-grid-column-one-third">
+
+      <div class="rpr-listing__filters-container">
+        <form action="" method="post" class="form">
+          {% from "govuk/components/input/macro.njk" import govukInput %}
+
+          {{ govukInput({
+            label: {
+              text: "search.form.nameFilter.label" | t,
+              classes: "govuk-label--s",
+              isPageHeading: true
+            },
+            classes: "govuk-input--width-10",
+            hint: {
+              text: "search.form.nameFilter.hint" | t
+            },
+            name: "keywords",
+            value: filters.keywords
+          }) }}
+
+          {{ govukCheckboxes({
+            name: "nations",
+            classes: "govuk-checkboxes--small rpr-listing__filter",
+            fieldset: {
+              legend: {
+                text: "search.form.nations.label" | t,
+                isPageHeading: true,
+                classes: "govuk-fieldset__legend--s"
+              }
+            },
+            hint: {
+              text: "search.form.nations.hint" | t
+            },
+            items: nationsOptionSelectArgs | tOptionSelect
+          }) }}
+
+          {{ govukCheckboxes({
+            name: "industries",
+            classes: "govuk-checkboxes--small rpr-listing__filter",
+            fieldset: {
+              legend: {
+                text: "search.form.industries.label" | t,
+                isPageHeading: true,
+                classes: "govuk-fieldset__legend--s"
+              }
+            },
+            hint: {
+              text: ""
+            },
+            items: industriesOptionSelectArgs | tOptionSelect
+          }) }}
+
+          {{ govukButton({
+            text: "search.form.button.filter" | t
+          }) }}
+        </form>
+
+      </div>
+
+      <div class="govuk-!-padding-bottom-9"></div>
+
+    </div>
+
+
+    <div class="govuk-grid-column-two-thirds">
+
+      {% if filters.keywords %}
+        <p class="govuk-body-m rpr-listing__search-criteria-container"><span class="govuk-!-font-weight-bold">{{ "search.labels.keywords" | t }}</span> <strong class="govuk-tag">{{ filters.keywords }}</strong></p>
+      {% endif %}
+
+      {% if filters.nations | length %}
+        <p class="govuk-body-m rpr-listing__search-criteria-container"><span class="govuk-!-font-weight-bold">{{ "search.labels.nations" | t }}</span> 
+        {% for nation in filters.nations %}
+          <strong class="govuk-tag">{{ nation | t }}</strong>
+        {% endfor %}
+        </p>
+      {% endif %}
+
+      {% if filters.industries | length %}
+        <p class="govuk-body-m rpr-listing__search-criteria-container"><span class="govuk-!-font-weight-bold">{{ "search.labels.industries" | t }}</span> 
+        {% for industry in filters.industries %}
+          <strong class="govuk-tag">{{ industry | t }}</strong>
+        {% endfor %}
+        </p>
+      {% endif %}
+      
+      <p class="govuk-body-m"><span class="govuk-!-font-size-36 govuk-!-font-weight-bold">{{ professions.length }}</span> {{ "profession" if (professions.count === 1) else "professions" }} found.</p>
+
+      <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+      <div class="rpr-listing__profession-container">
+
+        {% for profession in professions %}
+          <h2>
+            <a class="govuk-link govuk-heading-l rpr-listing__profession-title" href="/professions/{{ profession.slug }}">{{profession.name}}</a>
+          </h2>
+
+
+          {% set nationsHtml %}
+            {% for nation in profession.nations %}
+              <p class="govuk-body-m">{{ nation }}</p>
+            {% endfor %}
+          {% endset %}
+
+          {% set industriesHtml %}
+            {% for industry in profession.industries %}
+              <p class="govuk-body-m">{{ industry }}</p>
+            {% endfor %}
+          {% endset %}
+
+          {{ govukSummaryList({
+            classes: 'govuk-summary-list--no-border rpr-listing__profession-summary-list',
+            rows: [
+              {
+                key: {
+                  text: ("search.profession.regulatedAuthority" | t)
+                },
+                value: {
+                  text: "Placeholder authority"
+                }
+              },
+              {
+                key: {
+                  text: ("search.profession.nations" | t)
+                },
+                value: {
+                  text: nationsHtml | safe
+                }
+              },
+              {
+                key: {
+                  text: ("search.profession.industry" | t)
+                },
+                value: {
+                  html: industriesHtml | safe
+                }
+              },
+              {
+                key: {
+                  text: ("search.profession.qualificationLevel" | t)
+                },
+                value: {
+                  text: profession.qualification.level
+                }
+              }
+            ]
+          }) }}
+
+          {% if not loop.last %}
+              <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+          {% endif %}
+
+        {% endfor %}
+
+      </div>
+  
+    </div>
+
+  </div>
+
+{% endblock %}}
