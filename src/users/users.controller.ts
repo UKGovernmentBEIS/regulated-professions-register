@@ -2,18 +2,13 @@ import {
   Controller,
   Get,
   Post,
-  Redirect,
+  Param,
   Render,
   Res,
-  Session,
   UseGuards,
 } from '@nestjs/common';
 import { AuthenticationGuard } from '../common/authentication.guard';
 import { ExternalUserCreationService } from './external-user-creation.service';
-import {
-  UserCreationFlowSession,
-  UserCreationFlowStep,
-} from './helpers/user-creation-flow-session.helper';
 import { User } from './user.entity';
 import { UsersService } from './users.service';
 
@@ -39,42 +34,33 @@ export class UsersController {
     res.redirect(`/admin/users/${user.id}/personal-details/edit`);
   }
 
-  @Get('/admin/users/new/confirm')
+  @Get('/admin/users/:id/confirm')
   @UseGuards(AuthenticationGuard)
   @Render('users/confirm')
-  confirm(@Session() session): object {
-    const userCreationFlowSession = new UserCreationFlowSession(
-      session,
-      UserCreationFlowStep.AllDetailsEntered,
-    );
-    const { email, name } = userCreationFlowSession.sessionDto;
+  async confirm(@Param('id') id): Promise<User> {
+    const user = await this.usersService.find(id);
 
-    return { email, name };
+    return user;
   }
 
-  @Post('/admin/users/new/confirm')
+  @Post('/admin/users/:id/confirm')
   @UseGuards(AuthenticationGuard)
-  async complete(@Session() session, @Res() res): Promise<object> {
-    const userCreationFlowSession = new UserCreationFlowSession(
-      session,
-      UserCreationFlowStep.AllDetailsEntered,
-    );
-    const { email, name } = userCreationFlowSession.sessionDto;
+  async complete(@Res() res, @Param('id') id): Promise<void> {
+    const user = await this.usersService.find(id);
+    const { email } = user;
 
     const externalResult =
       await this.externalUserCreationService.createExternalUser(email);
+    user.externalIdentifier = externalResult.externalIdentifier;
 
     if (externalResult.result == 'user-exists') {
       // In the case where the user already existed in Auth0, we expect they
       // *may* exist in our DB, so handle that case
-      const internalResult = await this.usersService.attemptAdd(
-        new User(email, name, externalResult.externalIdentifier),
-      );
+      const internalResult = await this.usersService.attemptAdd(user);
 
       if (internalResult == 'user-exists') {
         res.render('users/confirm', {
-          email,
-          name,
+          ...user,
           userAlreadyExists: true,
         });
         return;
@@ -83,27 +69,18 @@ export class UsersController {
       // In the case where the user didn't already exist in Auth0, assume they
       // don't exist already in our DB. If they're in our DB, they have an
       // identifier from Auth0, so it'd be very weird if they're *not* in Auth0
-      await this.usersService.add(
-        new User(email, name, externalResult.externalIdentifier),
-      );
-
-      const sessionDto = userCreationFlowSession.sessionDto;
-      sessionDto.userCreated = true;
+      await this.usersService.add(user);
     }
 
     res.redirect('done');
   }
 
-  @Get('/admin/users/new/done')
+  @Get('/admin/users/:id/done')
   @UseGuards(AuthenticationGuard)
   @Render('users/done')
-  done(@Session() session): object {
-    const userCreationFlowSession = new UserCreationFlowSession(
-      session,
-      UserCreationFlowStep.UserCreated,
-    );
-    const { email } = userCreationFlowSession.sessionDto;
+  async done(@Param('id') id): Promise<User> {
+    const user = await this.usersService.find(id);
 
-    return { email };
+    return user;
   }
 }

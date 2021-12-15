@@ -16,7 +16,7 @@
 
         {{ govukBackLink({
           text: ("app.back" | t),
-          href: "personal-details"
+          href: "personal-details/edit"
         }) }}
 
         {% if userAlreadyExists %}
@@ -50,7 +50,7 @@
               actions: {
                 items: [
                   {
-                    href: "personal-details?edit=true",
+                    href: "personal-details/edit",
                     text: ("app.change" | t),
                     visuallyHiddenText: ("users.form.label.name" | t)
                   }
@@ -67,7 +67,7 @@
               actions: {
                 items: [
                   {
-                    href: "personal-details?edit=true",
+                    href: "personal-details/edit",
                     text: ("app.change" | t),
                     visuallyHiddenText: ("users.form.label.email" | t)
                   }
