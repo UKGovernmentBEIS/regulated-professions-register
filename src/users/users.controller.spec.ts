@@ -1,11 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { createMock, DeepMocked } from '@golevelup/ts-jest';
+import { Response } from 'express';
 
 import { UsersService } from './users.service';
 import { ExternalUserCreationService } from './external-user-creation.service';
 import { UsersController } from './users.controller';
-import { UserRole } from './user.entity';
-import { Response } from 'express';
+import { User, UserRole } from './user.entity';
 
 const name = 'Example Name';
 const email = 'name@example.com';
@@ -16,16 +16,25 @@ describe('UsersController', () => {
   let controller: UsersController;
   let externalUserCreationService: DeepMocked<ExternalUserCreationService>;
   let usersService: DeepMocked<UsersService>;
+  let user: User;
   let populatedSession;
 
   beforeEach(async () => {
+    user = createMock<User>({
+      id: 'user-uuid',
+    });
+
     externalUserCreationService = createMock<ExternalUserCreationService>({
       createExternalUser: async () => {
         return { result: 'user-created', externalIdentifier };
       },
     });
 
-    usersService = createMock<UsersService>();
+    usersService = createMock<UsersService>({
+      create: async () => {
+        return user;
+      },
+    });
 
     populatedSession = {
       'user-creation-flow': { name, email, userCreated: false },
@@ -52,13 +61,16 @@ describe('UsersController', () => {
     expect(controller).toBeDefined();
   });
 
-  describe('newPost', () => {
-    it('should reset the session', () => {
-      controller.newPost(populatedSession);
+  describe('create', () => {
+    it('should create a user and redirect', async () => {
+      const res = createMock<Response>();
 
-      expect(populatedSession).toEqual({
-        'user-creation-flow': { userCreated: false },
-      });
+      await controller.create(res);
+
+      expect(usersService.create).toHaveBeenCalled();
+      expect(res.redirect).toHaveBeenCalledWith(
+        `/admin/users/${user.id}/personal-details/edit`,
+      );
     });
   });
 
@@ -88,12 +100,12 @@ describe('UsersController', () => {
 
     it('should throw an exception when called with an empty session', () => {
       expect(async () => {
-        await controller.create({}, res);
+        await controller.complete({}, res);
       }).rejects.toThrowError();
     });
 
     it('should redirect to `done` when the user is successfully created', async () => {
-      await controller.create(populatedSession, res);
+      await controller.complete(populatedSession, res);
 
       expect(externalUserCreationService.createExternalUser).toBeCalledWith(
         email,
@@ -108,7 +120,7 @@ describe('UsersController', () => {
     });
 
     it('should mark the user as created in our session when the user is successfully created', async () => {
-      await controller.create(populatedSession, res);
+      await controller.complete(populatedSession, res);
 
       expect(populatedSession).toEqual({
         'user-creation-flow': { name, email, userCreated: true },
@@ -126,7 +138,7 @@ describe('UsersController', () => {
         return 'user-exists';
       });
 
-      await controller.create(populatedSession, res);
+      await controller.complete(populatedSession, res);
 
       expect(res.render).toBeCalledWith('users/confirm', {
         email,
@@ -146,7 +158,7 @@ describe('UsersController', () => {
         return 'user-created';
       });
 
-      await controller.create(populatedSession, res);
+      await controller.complete(populatedSession, res);
 
       expect(usersService.attemptAdd).toBeCalledWith({
         name,

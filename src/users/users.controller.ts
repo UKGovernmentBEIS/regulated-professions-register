@@ -31,18 +31,12 @@ export class UsersController {
     return {};
   }
 
-  @Post('/admin/users/new')
+  @Post('/admin/users')
   @UseGuards(AuthenticationGuard)
-  @Redirect('new/personal-details')
-  newPost(@Session() session): object {
-    const userCreationFlowSession = new UserCreationFlowSession(
-      session,
-      UserCreationFlowStep.Any,
-    );
+  async create(@Res() res) {
+    const user = await this.usersService.create(new User());
 
-    userCreationFlowSession.resetSession();
-
-    return {};
+    res.redirect(`/admin/users/${user.id}/personal-details/edit`);
   }
 
   @Get('/admin/users/new/confirm')
@@ -60,7 +54,7 @@ export class UsersController {
 
   @Post('/admin/users/new/confirm')
   @UseGuards(AuthenticationGuard)
-  async create(@Session() session, @Res() res): Promise<object> {
+  async complete(@Session() session, @Res() res): Promise<object> {
     const userCreationFlowSession = new UserCreationFlowSession(
       session,
       UserCreationFlowStep.AllDetailsEntered,
