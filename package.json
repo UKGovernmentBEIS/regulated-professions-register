@@ -15,6 +15,7 @@
     "typeorm:migration:generate": "npm run build && npm run typeorm -- migration:generate -n",
     "typeorm:migration:create": "npm run typeorm -- migration:create -n",
     "typeorm:migration:run": "npm run build && npm run typeorm -- migration:run",
+    "typeorm:migration:revert": "npm run build && npm run typeorm -- migration:revert",
     "format:check": "prettier --check . --ignore-unknown",
     "format": "prettier --write . --ignore-unknown",
     "start": "nest start",

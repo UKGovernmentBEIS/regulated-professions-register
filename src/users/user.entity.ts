@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, Index } from 'typeorm';
 
 export enum UserRole {
   Admin = 'admin',
@@ -16,7 +16,8 @@ export class User {
   @Column()
   name: string;
 
-  @Column({ unique: true })
+  @Index({ unique: true, where: '"externalIdentifier" IS NOT NULL' })
+  @Column({ nullable: true })
   externalIdentifier: string;
 
   @Column({
@@ -35,7 +36,7 @@ export class User {
   ) {
     this.email = email || '';
     this.name = name || '';
-    this.externalIdentifier = externalIdentifier || '';
+    this.externalIdentifier = externalIdentifier || null;
     this.roles = roles || [];
   }
 }

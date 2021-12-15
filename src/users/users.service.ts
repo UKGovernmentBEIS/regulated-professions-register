@@ -26,8 +26,8 @@ export class UsersService {
     });
   }
 
-  async add(user: User): Promise<void> {
-    await this.repository.insert(user);
+  async save(user: User): Promise<User> {
+    return await this.repository.save(user);
   }
 
   findByExternalIdentifier(externalIdentifier: string): Promise<User> {
