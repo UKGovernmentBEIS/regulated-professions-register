@@ -58,16 +58,16 @@ describe('TopLevelInformationController', () => {
               value: 'GB-ENG',
             },
             {
-              text: 'nations.northernIreland',
-              value: 'GB-NIR',
-            },
-            {
               text: 'nations.scotland',
               value: 'GB-SCT',
             },
             {
               text: 'nations.wales',
               value: 'GB-WLS',
+            },
+            {
+              text: 'nations.northernIreland',
+              value: 'GB-NIR',
             },
           ],
         },
@@ -147,16 +147,16 @@ describe('TopLevelInformationController', () => {
                 value: 'GB-ENG',
               },
               {
-                text: 'nations.northernIreland',
-                value: 'GB-NIR',
-              },
-              {
                 text: 'nations.scotland',
                 value: 'GB-SCT',
               },
               {
                 text: 'nations.wales',
                 value: 'GB-WLS',
+              },
+              {
+                text: 'nations.northernIreland',
+                value: 'GB-NIR',
               },
             ],
             errors: {

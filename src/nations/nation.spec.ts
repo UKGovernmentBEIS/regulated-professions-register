@@ -5,9 +5,9 @@ describe(Nation, () => {
     it('returns all nations in the Nations config file', () => {
       expect(Nation.all()).toEqual([
         new Nation('nations.england', 'GB-ENG'),
-        new Nation('nations.northernIreland', 'GB-NIR'),
         new Nation('nations.scotland', 'GB-SCT'),
         new Nation('nations.wales', 'GB-WLS'),
+        new Nation('nations.northernIreland', 'GB-NIR'),
       ]);
     });
   });
