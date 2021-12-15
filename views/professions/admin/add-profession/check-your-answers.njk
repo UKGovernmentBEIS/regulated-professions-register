@@ -22,6 +22,14 @@
                 {% endfor %}
               </ul>
             {% endset %}
+
+            {% set selectedIndustriesSummaryListHtml %}
+              <ul>
+                {% for industry in industries %}
+                  <li class='govuk-body-m'>{{ industry }}</li>
+                {% endfor %}
+              </ul>
+            {% endset %}
             {{
               govukSummaryList({
                 rows: [
@@ -64,7 +72,7 @@
                       text: ("professions.form.label.topLevelInformation.industry" | t)
                     },
                     value: {
-                      text:  industry | t
+                      html: selectedIndustriesSummaryListHtml | safe
                     },
                     actions: {
                       items: [

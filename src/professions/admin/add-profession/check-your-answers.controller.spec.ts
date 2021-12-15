@@ -35,22 +35,34 @@ describe('CheckYourAnswersController', () => {
           'top-level-details': {
             name: 'Gas Safe Engineer',
             nations: ['GB-ENG'],
-            industryId: constructionUUID,
+            industries: [constructionUUID],
           },
         },
       };
 
-      const industry = new Industry('Construction & Engineering');
+      const industry = new Industry('industries.construction');
       industry.id = constructionUUID;
 
-      industriesService.find.mockImplementation(async () => industry);
-      i18nService.translate.mockImplementationOnce(async () => 'England');
+      industriesService.findByIds.mockImplementation(async () => [industry]);
 
-      const persistedSession = await controller.show(session);
-      expect(persistedSession.name).toEqual('Gas Safe Engineer');
-      expect(persistedSession.nations).toEqual(['England']);
-      expect(persistedSession.industry).toEqual('Construction & Engineering');
-      expect(industriesService.find).toHaveBeenCalledWith(constructionUUID);
+      i18nService.translate.mockImplementation(async (text) => {
+        switch (text) {
+          case 'industries.construction':
+            return 'Construction & Engineering';
+          case 'nations.england':
+            return 'England';
+          default:
+            return '';
+        }
+      });
+
+      const templateParams = await controller.show(session);
+      expect(templateParams.name).toEqual('Gas Safe Engineer');
+      expect(templateParams.nations).toEqual(['England']);
+      expect(templateParams.industries).toEqual(['Construction & Engineering']);
+      expect(industriesService.findByIds).toHaveBeenCalledWith([
+        constructionUUID,
+      ]);
     });
   });
 

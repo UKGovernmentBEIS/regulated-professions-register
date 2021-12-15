@@ -26,8 +26,8 @@ export class ConfirmationController {
     const topLevelDetails: TopLevelDetailsDto =
       addProfessionSession['top-level-details'];
 
-    const industry = await this.industriesService.find(
-      topLevelDetails.industryId,
+    const industries = await this.industriesService.findByIds(
+      topLevelDetails.industries,
     );
 
     const profession = new Profession(
@@ -37,7 +37,7 @@ export class ConfirmationController {
       '',
       topLevelDetails.nations,
       '',
-      [industry],
+      industries,
       null,
       [],
       [],

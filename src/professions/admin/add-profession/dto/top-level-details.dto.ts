@@ -8,5 +8,5 @@ export class TopLevelDetailsDto {
   nations: string[];
 
   @IsNotEmpty()
-  industryId: string;
+  industries: string[];
 }

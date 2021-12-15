@@ -17,14 +17,20 @@ export class CheckYourAnswersController {
   async show(@Session() session: Record<string, any>): Promise<{
     name: string;
     nations: string[];
-    industry: string;
+    industries: string[];
   }> {
     const addProfessionSession = session['add-profession'];
     const topLevelDetails: TopLevelDetailsDto =
       addProfessionSession['top-level-details'];
 
-    const selectedIndustry = await this.industriesService.find(
-      topLevelDetails.industryId,
+    const selectedIndustries = await this.industriesService.findByIds(
+      topLevelDetails.industries,
+    );
+
+    const industryNames = await Promise.all(
+      selectedIndustries.map(
+        async (industry) => await this.i18nService.translate(industry.name),
+      ),
     );
 
     const selectedNations: string[] = await Promise.all(
@@ -37,7 +43,7 @@ export class CheckYourAnswersController {
     return {
       name: topLevelDetails.name,
       nations: selectedNations,
-      industry: selectedIndustry.name,
+      industries: industryNames,
     };
   }
 }

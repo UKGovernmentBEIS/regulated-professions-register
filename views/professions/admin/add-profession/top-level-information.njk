@@ -50,14 +50,20 @@
             }}
 
             {{
-              govukSelect({
-                id: "industryId",
-                name: "industryId",
-                label: {
+              govukCheckboxes({
+                id: "industries",
+                name: "industries[]",
+                fieldset: {
+                  legend: {
                   text: ("professions.form.label.topLevelInformation.industry" | t),
-                  classes: "govuk-label--m"
+                    isPageHeading: false,
+                    classes: "govuk-fieldset__legend--m"
+                  }
                 },
-                items: industriesOptionSelectArgs | tOptionSelect
+                hint: {
+                  text: ("professions.form.checkboxes.hint" | t)
+                },
+                items: industriesCheckboxArgs | tOptionSelect
               })
             }}
 
