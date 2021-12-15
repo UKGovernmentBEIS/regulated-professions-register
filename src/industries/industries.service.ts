@@ -1,4 +1,4 @@
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
@@ -17,5 +17,9 @@ export class IndustriesService {
 
   find(id: string): Promise<Industry> {
     return this.repository.findOne(id);
+  }
+
+  findByIds(ids: string[]): Promise<Industry[]> {
+    return this.repository.find({ where: { id: In(ids) } });
   }
 }

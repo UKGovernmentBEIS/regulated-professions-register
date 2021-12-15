@@ -52,4 +52,24 @@ describe('IndustriesService', () => {
       expect(repoSpy).toHaveBeenCalledWith('some-uuid');
     });
   });
+
+  describe('findByIds', () => {
+    it('should return all Industries for the given IDs', async () => {
+      const shippingIndustry = new Industry('Shipping');
+      const repoSpy = jest
+        .spyOn(repo, 'find')
+        .mockResolvedValueOnce([industry, shippingIndustry]);
+
+      const industries = await service.findByIds(['some-uuid', 'another-uuid']);
+
+      expect(industries).toEqual([industry, shippingIndustry]);
+      expect(repoSpy).toHaveBeenCalledWith({
+        where: {
+          id: expect.objectContaining({
+            _value: ['some-uuid', 'another-uuid'],
+          }),
+        },
+      });
+    });
+  });
 });
