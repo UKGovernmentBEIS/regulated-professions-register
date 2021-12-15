@@ -1,73 +1,40 @@
 import {
   Body,
   Controller,
-  DefaultValuePipe,
   Get,
-  ParseBoolPipe,
   Post,
-  Query,
+  Param,
   Render,
   Res,
-  Session,
   UseGuards,
 } from '@nestjs/common';
 import { ValidationFailedError } from '../../validation/validation-failed.error';
 import { Validator } from '../../helpers/validator';
 import { UsersService } from '../users.service';
+import { User } from '../user.entity';
 import { PersonalDetailsDto } from '../dto/personal-details.dto';
-import {
-  UserCreationFlowSession,
-  UserCreationFlowStep,
-} from '../helpers/user-creation-flow-session.helper';
 import { AuthenticationGuard } from '../../common/authentication.guard';
 
-@Controller('/admin/users/new/personal-details')
+@Controller('/admin/users')
 export class PersonalDetailsController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Get()
+  @Get(':id/personal-details/edit')
   @UseGuards(AuthenticationGuard)
-  @Render('users/personal-details/new')
-  new(
-    @Query('edit', new DefaultValuePipe(false), ParseBoolPipe) edit: boolean,
-    @Session() session,
-  ): object {
-    const userCreationFlowSession = new UserCreationFlowSession(
-      session,
-      edit
-        ? UserCreationFlowStep.AllDetailsEntered
-        : UserCreationFlowStep.PersonalDetails - 1,
-    );
+  @Render('users/personal-details/edit')
+  async edit(@Param('id') id): Promise<User> {
+    const user = this.usersService.find(id);
 
-    if (
-      userCreationFlowSession.hasCompletedStep(
-        UserCreationFlowStep.PersonalDetails,
-      )
-    ) {
-      const { email, name } = userCreationFlowSession.sessionDto;
-
-      return { edit, name, email };
-    } else {
-      return { edit, name: '', email: '' };
-    }
+    return user;
   }
 
-  @Post()
+  @Post(':id/personal-details')
   @UseGuards(AuthenticationGuard)
   async create(
     @Body() personalDetailsDto,
-    @Session() session,
     @Res() res,
-  ): Promise<object> {
-    const edit = personalDetailsDto.edit === 'true';
-
-    const userCreationFlowSession = new UserCreationFlowSession(
-      session,
-      edit
-        ? UserCreationFlowStep.AllDetailsEntered
-        : UserCreationFlowStep.PersonalDetails - 1,
-    );
-
+    @Param('id') id,
+  ): Promise<void> {
     // Intentially don't use `ValidationExceptionFilter`, as we have additional
     // parameters to get into our template
     const validator = await Validator.validate(
@@ -77,7 +44,7 @@ export class PersonalDetailsController {
 
     if (!validator.valid()) {
       const errors = new ValidationFailedError(validator.errors).fullMessages();
-      this.renderWithErrors(res, personalDetailsDto, edit, errors);
+      this.renderWithErrors(res, personalDetailsDto, errors);
       return;
     }
 
@@ -87,28 +54,26 @@ export class PersonalDetailsController {
         email: { text: 'A user with this email address already exists' },
       };
 
-      this.renderWithErrors(res, personalDetailsDto, edit, errors);
+      this.renderWithErrors(res, personalDetailsDto, errors);
       return;
     }
 
-    const sessionDto = userCreationFlowSession.sessionDto;
+    const user = await this.usersService.find(id);
+    const updated = Object.assign(user, personalDetailsDto);
 
-    sessionDto.name = personalDetailsDto.name;
-    sessionDto.email = personalDetailsDto.email;
+    await this.usersService.create(updated);
 
-    res.redirect('confirm');
+    res.redirect(`/admin/users/${id}/confirm`);
   }
 
   private renderWithErrors(
     res: any,
     personalDetailsDto: PersonalDetailsDto,
-    edit: boolean,
     errors: object,
   ): void {
-    res.render('users/personal-details/new', {
+    res.render('users/personal-details/edit', {
       name: personalDetailsDto.name,
       email: personalDetailsDto.email,
-      edit,
       errors,
     });
   }

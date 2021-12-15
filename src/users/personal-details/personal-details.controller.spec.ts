@@ -11,14 +11,21 @@ const email = 'name@example.com';
 describe('PersonalDetailsController', () => {
   let controller: PersonalDetailsController;
   let usersService: DeepMocked<UsersService>;
-  let populatedSession;
+  let user: User;
 
   beforeEach(async () => {
-    usersService = createMock<UsersService>();
+    user = createMock<User>({
+      id: 'user-uuid',
+    });
 
-    populatedSession = {
-      'user-creation-flow': { name, email, userCreated: false },
-    };
+    usersService = createMock<UsersService>({
+      find: async () => {
+        return user;
+      },
+      create: async () => {
+        return user;
+      },
+    });
 
     const module: TestingModule = await Test.createTestingModule({
       controllers: [PersonalDetailsController],
@@ -39,41 +46,11 @@ describe('PersonalDetailsController', () => {
     expect(controller).toBeDefined();
   });
 
-  describe('new', () => {
-    it('should throw an exception when called in edit mode with an empty session', () => {
-      expect(() => {
-        controller.new(true, {});
-      }).toThrowError();
-    });
+  describe('edit', () => {
+    it('should get and return the user from an id', async () => {
+      const result = await controller.edit('user-uuid');
 
-    it('should throw an exception when called with a session where the user has already been created', () => {
-      expect(() => {
-        controller.new(true, {
-          'user-creation-flow': { name, email, userCreated: true },
-        });
-      }).toThrowError();
-    });
-
-    it('should return empty template params when called with an empty session', () => {
-      const result = controller.new(false, {});
-
-      expect(result).toEqual({ name: '', email: '', edit: false });
-    });
-
-    it('should return populated template params when called with a populated session', () => {
-      const result = controller.new(false, populatedSession);
-
-      expect(result).toEqual({
-        name,
-        email,
-        edit: false,
-      });
-    });
-
-    it('should remaining in edit mode when called in edit mode', () => {
-      const result = controller.new(true, populatedSession);
-
-      expect(result).toEqual({ name, email, edit: true });
+      expect(result).toEqual(user);
     });
   });
 
@@ -84,52 +61,48 @@ describe('PersonalDetailsController', () => {
       res = createMock<Response>();
     });
 
-    it('should throw an exception when called in edit mode with an empty session', () => {
-      expect(() => {
-        return controller.create({ name: name, email, edit: 'true' }, {}, res);
-      }).rejects.toThrow();
-    });
-
-    it('should redirect to `confirm` and populate the session when the email address is not already in use and the body is populated', async () => {
+    it('should redirect to confirm and update the user the email address is not already in use and the body is populated', async () => {
       usersService.findByEmail.mockImplementationOnce(() => {
         return null;
       });
 
-      const session = {};
+      await controller.create({ name: name, email: email }, res, 'user-uuid');
 
-      await controller.create(
-        { name: name, email, edit: 'false' },
-        session,
-        res,
+      expect(usersService.create).toHaveBeenCalledWith({
+        id: 'user-uuid',
+        name: name,
+        email: email,
+      });
+      expect(res.redirect).toHaveBeenCalledWith(
+        `/admin/users/user-uuid/confirm`,
       );
-
-      expect(session).toEqual(populatedSession);
-      expect(res.redirect).toHaveBeenCalledWith('confirm');
     });
 
     it('should render an error if the name is empty', async () => {
-      await controller.create({ name: '', email, edit: 'false' }, {}, res);
+      await controller.create({ name: '', email }, res, 'user-uuid');
 
-      expect(res.render).toBeCalledTimes(1);
-      expect(res.render.mock.calls[0][0]).toEqual('users/personal-details/new');
-      expect(res.render.mock.calls[0][1]).toMatchObject({
+      expect(res.render).toHaveBeenCalledWith('users/personal-details/edit', {
         name: '',
         email,
-        edit: false,
-        errors: { name: {} },
+        errors: {
+          name: {
+            text: 'name should not be empty',
+          },
+        },
       });
     });
 
     it('should render an error if the email is empty', async () => {
-      await controller.create({ name, email: '', edit: 'false' }, {}, res);
+      await controller.create({ name, email: '' }, res, 'user-uuid');
 
-      expect(res.render).toBeCalledTimes(1);
-      expect(res.render.mock.calls[0][0]).toEqual('users/personal-details/new');
-      expect(res.render.mock.calls[0][1]).toMatchObject({
+      expect(res.render).toHaveBeenCalledWith('users/personal-details/edit', {
         name,
         email: '',
-        edit: false,
-        errors: { email: {} },
+        errors: {
+          email: {
+            text: 'email must be an email,email should not be empty',
+          },
+        },
       });
     });
 
@@ -138,17 +111,18 @@ describe('PersonalDetailsController', () => {
         return new User('name@example.com', name);
       });
 
-      await controller.create({ name, email, edit: 'false' }, {}, res);
+      await controller.create({ name, email }, res, 'user-uuid');
 
       expect(usersService.findByEmail).toHaveBeenCalledWith('name@example.com');
 
-      expect(res.render).toBeCalledTimes(1);
-      expect(res.render.mock.calls[0][0]).toEqual('users/personal-details/new');
-      expect(res.render.mock.calls[0][1]).toMatchObject({
+      expect(res.render).toHaveBeenCalledWith('users/personal-details/edit', {
         name,
         email,
-        edit: false,
-        errors: { email: {} },
+        errors: {
+          email: {
+            text: 'A user with this email address already exists',
+          },
+        },
       });
     });
   });

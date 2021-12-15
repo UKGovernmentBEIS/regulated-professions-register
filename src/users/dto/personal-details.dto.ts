@@ -7,8 +7,4 @@ export class PersonalDetailsDto {
   @IsNotEmpty()
   @IsEmail()
   email: string;
-
-  @IsNotEmpty()
-  @IsBooleanString()
-  edit: string;
 }
