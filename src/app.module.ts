@@ -3,6 +3,7 @@ process.env.NODE_ENV ||= 'development';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { I18nModule, I18nJsonParser } from 'nestjs-i18n';
+import { BullModule } from '@nestjs/bull';
 
 import * as path from 'path';
 
@@ -36,6 +37,15 @@ import dbConfiguration from './config/db.config';
         path: path.join(__dirname, '/i18n/'),
         watch: process.env.NODE_ENV === 'development',
       },
+    }),
+    BullModule.forRoot({
+      redis: {
+        host: process.env.REDIS_HOST || 'localhost',
+        port: Number(process.env.REDIS_PORT || 6379),
+      },
+    }),
+    BullModule.registerQueue({
+      name: 'default',
     }),
     UsersModule,
     ProfessionsModule,
