@@ -37,6 +37,11 @@
 
         <h2 class="govuk-heading-m">{{ "users.form.headings.personalDetails" | t }}</h2>
 
+          {% set roleItems = "" %}
+          {% for role in roles %}
+            {% set translation = "users.form.label." + role %}
+            {% set roleItems = roleItems + (translation | t) + "<br/>" %}
+          {% endfor %}
 
         {{ govukSummaryList({
           rows: [
@@ -70,6 +75,23 @@
                     href: "personal-details/edit",
                     text: ("app.change" | t),
                     visuallyHiddenText: ("users.form.label.email" | t)
+                  }
+                ]
+              }
+            },
+            {
+              key: {
+                text: ("users.form.label.roles" | t)
+              },
+              value: {
+                text: (roleItems | safe)
+              },
+              actions: {
+                items: [
+                  {
+                    href: "roles/edit",
+                    text: ("app.change" | t),
+                    visuallyHiddenText: ("users.form.label.roles" | t)
                   }
                 ]
               }
