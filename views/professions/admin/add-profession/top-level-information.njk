@@ -1,6 +1,7 @@
 {% extends "base.njk" %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% block content %}
@@ -31,24 +32,38 @@
             }}
 
             {{
-              govukSelect({
-                id: "nation",
-                name: "nation",
-                label: {
-                  text: ("professions.form.label.topLevelInformation.nation" | t)
+              govukCheckboxes({
+                id: "nations",
+                name: "nations[]",
+                fieldset: {
+                  legend: {
+                    text: ("professions.form.label.topLevelInformation.nations" | t),
+                    isPageHeading: false,
+                    classes: "govuk-fieldset__legend--m"
+                  }
                 },
-                items: nationsOptionSelectArgs | tOptionSelect
+                hint: {
+                  text: ("professions.form.checkboxes.hint" | t)
+                },
+                items: nationsCheckboxArgs | tOptionSelect
               })
             }}
 
             {{
-              govukSelect({
-                id: "industryId",
-                name: "industryId",
-                label: {
-                  text: ("professions.form.label.topLevelInformation.industry" | t)
+              govukCheckboxes({
+                id: "industries",
+                name: "industries[]",
+                fieldset: {
+                  legend: {
+                  text: ("professions.form.label.topLevelInformation.industry" | t),
+                    isPageHeading: false,
+                    classes: "govuk-fieldset__legend--m"
+                  }
                 },
-                items: industriesOptionSelectArgs | tOptionSelect
+                hint: {
+                  text: ("professions.form.checkboxes.hint" | t)
+                },
+                items: industriesCheckboxArgs | tOptionSelect
               })
             }}
 

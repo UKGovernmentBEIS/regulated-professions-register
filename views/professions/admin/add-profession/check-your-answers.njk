@@ -15,6 +15,21 @@
           <h1 class="govuk-heading-l">{{ ("professions.form.headings.checkAnswers" | t) }}</h1>
 
           <form method="post" action="confirmation">
+            {% set selectedNationsSummaryListHtml %}
+              <ul>
+                {% for nation in nations %}
+                  <li class='govuk-body-m'>{{ nation }}</li>
+                {% endfor %}
+              </ul>
+            {% endset %}
+
+            {% set selectedIndustriesSummaryListHtml %}
+              <ul>
+                {% for industry in industries %}
+                  <li class='govuk-body-m'>{{ industry }}</li>
+                {% endfor %}
+              </ul>
+            {% endset %}
             {{
               govukSummaryList({
                 rows: [
@@ -37,10 +52,10 @@
                   },
                   {
                     key: {
-                      text: ("professions.form.label.topLevelInformation.nation" | t)
+                      text: ("professions.form.label.topLevelInformation.nations" | t)
                     },
                     value: {
-                      text: (nation | t)
+                      html: selectedNationsSummaryListHtml | safe
                     },
                     actions: {
                       items: [
@@ -57,7 +72,7 @@
                       text: ("professions.form.label.topLevelInformation.industry" | t)
                     },
                     value: {
-                      text:  industry | t
+                      html: selectedIndustriesSummaryListHtml | safe
                     },
                     actions: {
                       items: [

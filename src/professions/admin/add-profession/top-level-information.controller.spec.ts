@@ -42,7 +42,7 @@ describe('TopLevelInformationController', () => {
       expect(response.render).toHaveBeenCalledWith(
         'professions/admin/add-profession/top-level-information',
         {
-          industriesOptionSelectArgs: [
+          industriesCheckboxArgs: [
             {
               text: 'industries.health',
               value: 'health-uuid',
@@ -52,14 +52,10 @@ describe('TopLevelInformationController', () => {
               value: 'construction-uuid',
             },
           ],
-          nationsOptionSelectArgs: [
+          nationsCheckboxArgs: [
             {
               text: 'nations.england',
               value: 'GB-ENG',
-            },
-            {
-              text: 'nations.northernIreland',
-              value: 'GB-NIR',
             },
             {
               text: 'nations.scotland',
@@ -68,6 +64,10 @@ describe('TopLevelInformationController', () => {
             {
               text: 'nations.wales',
               value: 'GB-WLS',
+            },
+            {
+              text: 'nations.northernIreland',
+              value: 'GB-NIR',
             },
           ],
         },
@@ -85,8 +85,8 @@ describe('TopLevelInformationController', () => {
 
         const topLevelDetails = {
           name: 'Gas Safe Engineer',
-          nation: 'england',
-          industryId: 'construction-uuid',
+          nations: ['GB-ENG'],
+          industries: ['construction-uuid'],
         };
 
         await controller.addTopLevelInformation(
@@ -99,8 +99,8 @@ describe('TopLevelInformationController', () => {
           'add-profession': {
             'top-level-details': {
               name: 'Gas Safe Engineer',
-              nation: 'england',
-              industryId: 'construction-uuid',
+              nations: ['GB-ENG'],
+              industries: ['construction-uuid'],
             },
           },
         });
@@ -116,22 +116,22 @@ describe('TopLevelInformationController', () => {
           'add-profession': {},
         };
 
-        const topLevelDetailsWithMissingName = {
+        const topLevelDetailsWithNoAnswers = {
           name: '',
-          nation: 'england',
-          industryId: 'construction-uuid',
+          nations: undefined,
+          industries: undefined,
         };
 
         await controller.addTopLevelInformation(
           session,
-          topLevelDetailsWithMissingName,
+          topLevelDetailsWithNoAnswers,
           response,
         );
 
         expect(response.render).toHaveBeenCalledWith(
           'professions/admin/add-profession/top-level-information',
           {
-            industriesOptionSelectArgs: [
+            industriesCheckboxArgs: [
               {
                 text: 'industries.health',
                 value: 'health-uuid',
@@ -141,14 +141,10 @@ describe('TopLevelInformationController', () => {
                 value: 'construction-uuid',
               },
             ],
-            nationsOptionSelectArgs: [
+            nationsCheckboxArgs: [
               {
                 text: 'nations.england',
                 value: 'GB-ENG',
-              },
-              {
-                text: 'nations.northernIreland',
-                value: 'GB-NIR',
               },
               {
                 text: 'nations.scotland',
@@ -158,8 +154,16 @@ describe('TopLevelInformationController', () => {
                 text: 'nations.wales',
                 value: 'GB-WLS',
               },
+              {
+                text: 'nations.northernIreland',
+                value: 'GB-NIR',
+              },
             ],
-            errors: { name: { text: 'name should not be empty' } },
+            errors: {
+              name: { text: 'name should not be empty' },
+              nations: { text: 'nations should not be empty' },
+              industries: { text: 'industries should not be empty' },
+            },
           },
         );
         expect(industriesService.all).toHaveBeenCalled();

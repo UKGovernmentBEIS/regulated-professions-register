@@ -5,8 +5,8 @@ export class TopLevelDetailsDto {
   name: string;
 
   @IsNotEmpty()
-  nation: string;
+  nations: string[];
 
   @IsNotEmpty()
-  industryId: string;
+  industries: string[];
 }

@@ -33,7 +33,7 @@ describe('ConfirmationController', () => {
           'top-level-details': {
             name: 'Gas Safe Engineer',
             nation: 'england',
-            industryId: constructionUUID,
+            industries: [constructionUUID],
           },
         },
       };
@@ -52,8 +52,8 @@ describe('ConfirmationController', () => {
           'add-profession': {
             'top-level-details': {
               name: 'Gas Safe Engineer',
-              nation: 'england',
-              industryId: constructionUUID,
+              nations: ['GB-ENG'],
+              industries: [constructionUUID],
             },
           },
         };
@@ -61,16 +61,18 @@ describe('ConfirmationController', () => {
         const industry = new Industry('Construction & Engineering');
         industry.id = constructionUUID;
 
-        industriesService.find.mockImplementation(async () => industry);
+        industriesService.findByIds.mockImplementation(async () => [industry]);
 
         await controller.create(session);
 
-        expect(industriesService.find).toHaveBeenCalledWith(constructionUUID);
+        expect(industriesService.findByIds).toHaveBeenCalledWith([
+          constructionUUID,
+        ]);
         expect(professionsService.create).toHaveBeenCalledWith(
           expect.objectContaining({
             name: 'Gas Safe Engineer',
-            industry: industry,
-            occupationLocation: 'england',
+            industries: [industry],
+            occupationLocations: ['GB-ENG'],
           }),
         );
       });

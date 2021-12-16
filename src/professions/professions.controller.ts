@@ -5,12 +5,17 @@ import {
   Param,
   Render,
 } from '@nestjs/common';
+import { I18nService } from 'nestjs-i18n';
+import { Nation } from '../nations/nation';
 import { ShowTemplate } from './interfaces/show-template.interface';
 import { ProfessionsService } from './professions.service';
 
 @Controller()
 export class ProfessionsController {
-  constructor(private professionsService: ProfessionsService) {}
+  constructor(
+    private professionsService: ProfessionsService,
+    private readonly i18nService: I18nService,
+  ) {}
 
   @Get('admin/professions/add-profession')
   @Render('professions/admin/add-profession/new')
@@ -29,6 +34,18 @@ export class ProfessionsController {
       );
     }
 
-    return { profession, backUrl: '' };
+    const nations = await Promise.all(
+      profession.occupationLocations.map(async (code) =>
+        Nation.find(code).translatedName(this.i18nService),
+      ),
+    );
+
+    const industries = await Promise.all(
+      profession.industries.map(
+        async (industry) => await this.i18nService.translate(industry.name),
+      ),
+    );
+
+    return { profession, nations, industries, backUrl: '' };
   }
 }

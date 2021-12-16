@@ -13,8 +13,12 @@ describe('Adding a new profession', () => {
     );
 
     cy.get('input[name="name"]').type('Example Profession');
-    cy.get('select[name="nation"]').select('England');
-    cy.get('select[name="industryId"]').select('Construction & Engineering');
+    cy.get('[type="checkbox"]').check('GB-ENG');
+    cy.translate('industries.constructionAndEngineering').then(
+      (constructionAndEngineering) => {
+        cy.contains(constructionAndEngineering).click();
+      },
+    );
 
     cy.translate('app.continue').then((buttonText) => {
       cy.get('button').contains(buttonText).click();

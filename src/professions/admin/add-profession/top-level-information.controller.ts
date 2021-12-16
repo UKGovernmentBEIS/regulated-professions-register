@@ -17,19 +17,19 @@ export class TopLevelInformationController {
   ): Promise<void> {
     const industries = await this.industriesService.all();
 
-    const industriesOptionSelectArgs = industries.map((industry) => ({
+    const industriesCheckboxArgs = industries.map((industry) => ({
       text: industry.name,
       value: industry.id,
     }));
 
-    const nationsOptionSelectArgs = Nation.all().map((nation) => ({
+    const nationsCheckboxArgs = Nation.all().map((nation) => ({
       text: nation.name,
       value: nation.code,
     }));
 
     res.render('professions/admin/add-profession/top-level-information', {
-      industriesOptionSelectArgs,
-      nationsOptionSelectArgs,
+      industriesCheckboxArgs,
+      nationsCheckboxArgs,
       errors,
     });
   }

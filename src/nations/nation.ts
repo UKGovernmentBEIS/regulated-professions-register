@@ -1,3 +1,5 @@
+import { I18nService } from 'nestjs-i18n';
+
 export class Nation {
   name: string;
   code: string;
@@ -5,6 +7,10 @@ export class Nation {
   constructor(name: string, code: string) {
     this.name = name;
     this.code = code;
+  }
+
+  async translatedName(i18nService: I18nService): Promise<string> {
+    return i18nService.translate(this.name);
   }
 
   static all(): Nation[] {

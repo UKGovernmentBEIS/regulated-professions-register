@@ -10,9 +10,12 @@
     "label": {
       "topLevelInformation": {
         "name": "Name of regulated profession",
-        "nation": "Nation",
+        "nations": "In which nation(s) is this profession regulated?",
         "industry": "Industry / sector"
       }
+    },
+    "checkboxes": {
+      "hint": "Select all that apply."
     },
     "button": {
       "create": "Create profession"

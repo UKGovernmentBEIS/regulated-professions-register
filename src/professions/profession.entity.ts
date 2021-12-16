@@ -29,16 +29,15 @@ export class Profession {
   @Column()
   description: string;
 
-  @Column()
-  occupationLocation: string;
+  @Column('text', { array: true, nullable: true })
+  occupationLocations: string[];
 
   @Column()
   regulationType: string;
 
-  @ManyToOne(() => Industry, {
-    eager: true,
-  })
-  industry: Industry;
+  @ManyToMany(() => Industry, { nullable: true, eager: true })
+  @JoinTable()
+  industries: Industry[];
 
   @ManyToOne(() => Qualification, {
     eager: true,
@@ -59,9 +58,9 @@ export class Profession {
     alternateName?: string,
     slug?: string,
     description?: string,
-    occupationLocation?: string,
+    occupationLocations?: string[],
     regulationType?: string,
-    industry?: Industry,
+    industries?: Industry[],
     qualification?: Qualification,
     reservedActivities?: string[],
     legislations?: Legislation[],
@@ -70,9 +69,9 @@ export class Profession {
     this.alternateName = alternateName || '';
     this.slug = slug || '';
     this.description = description || '';
-    this.occupationLocation = occupationLocation || '';
+    this.occupationLocations = occupationLocations || [];
     this.regulationType = regulationType || '';
-    this.industry = industry || null;
+    this.industries = industries || null;
     this.qualification = qualification || null;
     this.reservedActivities = reservedActivities || [];
     this.legislations = legislations || null;
