@@ -9,6 +9,7 @@ import {
   UseGuards,
   UseFilters,
   Req,
+  Query,
 } from '@nestjs/common';
 import { Request } from 'express';
 
@@ -27,7 +28,11 @@ export class RolesController {
   @Get(':id/roles/edit')
   @UseGuards(AuthenticationGuard)
   @Render('users/roles/edit')
-  async edit(@Req() req: Request, @Param('id') id): Promise<EditTemplate> {
+  async edit(
+    @Req() req: Request,
+    @Param('id') id,
+    @Query('change') change: boolean,
+  ): Promise<EditTemplate> {
     const user = await this.usersService.find(id);
     const roles = Object.values(UserRole);
 
@@ -35,6 +40,7 @@ export class RolesController {
       ...user,
       roles,
       backLink: backLink(req),
+      change: change,
     };
   }
 
@@ -49,7 +55,6 @@ export class RolesController {
     @Param('id') id,
     @Res() res,
   ): Promise<void> {
-    console.log(rolesDto);
     const user = await this.usersService.find(id);
     const updated = Object.assign(user, rolesDto);
 

@@ -3,7 +3,7 @@ import { UsersService } from '../users.service';
 import { User, UserRole } from '../user.entity';
 import { RolesController } from './roles.controller';
 import { createMock, DeepMocked } from '@golevelup/ts-jest';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { createMockRequest } from '../../common/create-mock-request';
 
 describe('RolesController', () => {
@@ -39,15 +39,28 @@ describe('RolesController', () => {
   });
 
   describe('edit', () => {
+    const referrer = 'http://example.com/some/path';
+    const request: Request = createMockRequest(referrer, 'example.com');
+
     it('should get and return the user from an id', async () => {
-      const referrer = 'http://example.com/some/path';
-      const request = createMockRequest(referrer, 'example.com');
-      const result = await controller.edit(request, 'user-uuid');
+      const result = await controller.edit(request, 'user-uuid', false);
 
       expect(result).toEqual({
         ...user,
         roles: ['admin', 'editor'],
         backLink: referrer,
+        change: false,
+      });
+    });
+
+    it('should set change to true', async () => {
+      const result = await controller.edit(request, 'user-uuid', true);
+
+      expect(result).toEqual({
+        ...user,
+        roles: ['admin', 'editor'],
+        backLink: referrer,
+        change: true,
       });
     });
   });
@@ -60,12 +73,15 @@ describe('RolesController', () => {
     });
 
     it('should redirect to confirm and update if the DTO is valid', async () => {
-      const roles = [UserRole.Admin];
-      await controller.create({ roles }, 'user-uuid', res);
+      const rolesDto = {
+        roles: [UserRole.Admin],
+        change: true,
+      };
+      await controller.create(rolesDto, 'user-uuid', res);
 
       expect(usersService.save).toHaveBeenCalledWith({
         id: 'user-uuid',
-        roles,
+        rolesDto,
       });
       expect(res.redirect).toHaveBeenCalledWith(
         `/admin/users/user-uuid/confirm`,

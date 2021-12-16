@@ -75,14 +75,26 @@ describe('Creating a new user', () => {
 
       cy.get('button').click();
 
-      cy.translate('app.change').then((changeLabel) => {
-        cy.get('a').contains(`${changeLabel}`).click();
-      });
+      cy.get('a[href="personal-details/edit?change=true"]:first').click();
 
       cy.get('input[name="email"]').clear().type('name3@example.com');
       cy.get('button').click();
 
       cy.get('body').should('contain', 'name3@example.com');
+
+      cy.get('a[href="roles/edit?change=true"]').click();
+
+      cy.get('[type="checkbox"]').check('editor');
+      cy.get('button').click();
+
+      cy.translate('users.form.label.admin').then((adminLabel) => {
+        cy.get('body').should('not.contain', adminLabel);
+      });
+
+      cy.translate('users.form.label.editor').then((editorLabel) => {
+        cy.get('body').should('contain', editorLabel);
+      });
+
       cy.get('button').click();
 
       cy.translate('users.headings.done').then((successMessage) => {
