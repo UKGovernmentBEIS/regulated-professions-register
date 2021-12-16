@@ -1,6 +1,7 @@
 import { createMock, DeepMocked } from '@golevelup/ts-jest';
 import { Request } from 'express';
-import { backLink, createMockRequest } from './utils';
+import { backLink } from './utils';
+import { createMockRequest } from './create-mock-request';
 
 describe('utils', () => {
   describe('backLink', () => {
