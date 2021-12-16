@@ -6,6 +6,7 @@
     "util",
     "dist",
     "**/*spec.ts",
+    "src/common/create-mock-request.ts",
     "./ormconfig.ts"
   ]
 }
