@@ -68,7 +68,7 @@ describe('PersonalDetailsController', () => {
       res = createMock<Response>();
     });
 
-    it('should redirect to confirm and update the user the email address is not already in use and the body is populated', async () => {
+    it('should redirect to roles and update the user the email address is not already in use and the body is populated', async () => {
       usersService.findByEmail.mockImplementationOnce(() => {
         return null;
       });
@@ -81,7 +81,7 @@ describe('PersonalDetailsController', () => {
         email: email,
       });
       expect(res.redirect).toHaveBeenCalledWith(
-        `/admin/users/user-uuid/confirm`,
+        `/admin/users/user-uuid/roles/edit`,
       );
     });
 

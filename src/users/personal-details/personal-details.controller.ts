@@ -70,7 +70,7 @@ export class PersonalDetailsController {
 
     await this.usersService.save(updated);
 
-    res.redirect(`/admin/users/${id}/confirm`);
+    res.redirect(`/admin/users/${id}/roles/edit`);
   }
 
   private renderWithErrors(

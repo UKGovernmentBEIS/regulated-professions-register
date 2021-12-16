@@ -1,3 +1,5 @@
+import { getYear } from 'date-fns/esm';
+
 describe('Creating a new user', () => {
   context('when I am not logged in', () => {
     it('I am prompted to log in', () => {
@@ -27,8 +29,15 @@ describe('Creating a new user', () => {
       cy.get('input[name="email"]').type('name@example.com');
       cy.get('button').click();
 
+      cy.get('[type="checkbox"]').check('admin');
+
+      cy.get('button').click();
+
       cy.get('body').should('contain', 'Example Name');
       cy.get('body').should('contain', 'name@example.com');
+      cy.translate('users.form.label.admin').then((adminLabel) => {
+        cy.get('body').should('contain', adminLabel);
+      });
 
       cy.get('button').click();
 
@@ -60,6 +69,10 @@ describe('Creating a new user', () => {
 
       cy.get('input[name="name"]').type('Example Name');
       cy.get('input[name="email"]').type('name2@example.com');
+      cy.get('button').click();
+
+      cy.get('[type="checkbox"]').check('admin');
+
       cy.get('button').click();
 
       cy.translate('app.change').then((changeLabel) => {
