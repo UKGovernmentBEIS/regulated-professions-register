@@ -10,3 +10,5 @@ docker-compose.ci.yml
 docker-compose.yml
 Dockerfile
 README.md
+node_modules
+Brewfile
