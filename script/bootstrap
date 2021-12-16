@@ -19,3 +19,7 @@ npm run build:assets
 echo "==> Seeding database..."
 
 npm run seed
+
+echo "==> Running Redis in the background..."
+
+redis-server --daemonize yes
