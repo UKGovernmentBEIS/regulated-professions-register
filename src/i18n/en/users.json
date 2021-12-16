@@ -2,7 +2,10 @@
   "form": {
     "label": {
       "name": "Name",
-      "email": "Email address"
+      "email": "Email address",
+      "roles": "What roles apply to this user?",
+      "admin": "Administrator",
+      "editor": "Editor"
     },
     "hint": {
       "name": "For example, Clare Jones.",
@@ -19,7 +22,8 @@
     "headings": {
       "main": "Creating RPR user",
       "checkAnswers": "Check your answers before creating this user",
-      "personalDetails": "Personal details"
+      "personalDetails": "Personal details",
+      "roles": "Roles"
     },
     "checkAnswers": "Check your answers before creating this user"
   },

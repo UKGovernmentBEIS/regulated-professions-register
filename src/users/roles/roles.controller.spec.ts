@@ -1,0 +1,75 @@
+import { Test, TestingModule } from '@nestjs/testing';
+import { UsersService } from '../users.service';
+import { User, UserRole } from '../user.entity';
+import { RolesController } from './roles.controller';
+import { createMock, DeepMocked } from '@golevelup/ts-jest';
+import { Response } from 'express';
+import { createMockRequest } from '../../common/create-mock-request';
+
+describe('RolesController', () => {
+  let controller: RolesController;
+  let usersService: DeepMocked<UsersService>;
+  let user: User;
+
+  beforeEach(async () => {
+    user = createMock<User>({
+      id: 'user-uuid',
+    });
+
+    usersService = createMock<UsersService>({
+      find: async () => {
+        return user;
+      },
+      save: async () => {
+        return user;
+      },
+    });
+
+    const module: TestingModule = await Test.createTestingModule({
+      controllers: [RolesController],
+      providers: [
+        {
+          provide: UsersService,
+          useValue: usersService,
+        },
+      ],
+    }).compile();
+
+    controller = module.get<RolesController>(RolesController);
+  });
+
+  describe('edit', () => {
+    it('should get and return the user from an id', async () => {
+      const referrer = 'http://example.com/some/path';
+      const request = createMockRequest(referrer, 'example.com');
+      const result = await controller.edit(request, 'user-uuid');
+
+      expect(result).toEqual({
+        ...user,
+        roles: ['admin', 'editor'],
+        backLink: referrer,
+      });
+    });
+  });
+
+  describe('create', () => {
+    let res: DeepMocked<Response>;
+
+    beforeEach(() => {
+      res = createMock<Response>();
+    });
+
+    it('should redirect to confirm and update if the DTO is valid', async () => {
+      const roles = [UserRole.Admin];
+      await controller.create({ roles }, 'user-uuid', res);
+
+      expect(usersService.save).toHaveBeenCalledWith({
+        id: 'user-uuid',
+        roles,
+      });
+      expect(res.redirect).toHaveBeenCalledWith(
+        `/admin/users/user-uuid/confirm`,
+      );
+    });
+  });
+});

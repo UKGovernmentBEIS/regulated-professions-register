@@ -15,7 +15,7 @@ import { ValidationFailedError } from '../../validation/validation-failed.error'
 import { Validator } from '../../helpers/validator';
 import { UsersService } from '../users.service';
 import { User } from '../user.entity';
-import { PersonalDetailsDto } from '../dto/personal-details.dto';
+import { PersonalDetailsDto } from './dto/personal-details.dto';
 import { AuthenticationGuard } from '../../common/authentication.guard';
 import { backLink } from '../../common/utils';
 import { EditTemplate } from './interfaces/edit-template';
