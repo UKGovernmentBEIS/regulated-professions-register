@@ -40,3 +40,10 @@ lerna-debug.log*
 /public
 /.env.development
 /.env.test
+
+# Terraform
+.terraformrc*
+terraform.rc*
+*.tfstate*
+*.tfvars*
+.terraform/
