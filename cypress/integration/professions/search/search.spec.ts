@@ -29,23 +29,59 @@ describe('Searching a profession', () => {
     );
   });
 
-  it('I can enter search filters', () => {
+  it('I can filter by nation', () => {
+    cy.visit('/professions/search');
+
+    cy.get('input[name="nations"][value="GB-WLS"]').check();
+
+    cy.get('button').click();
+
+    cy.get('input[name="nations"][value="GB-WLS"]').should('be.checked');
+
+    cy.get('body').should('contain', 'Registered Trademark Attorney');
+    cy.get('body').should(
+      'not.contain',
+      'Secondary School Teacher in State maintained schools (England)',
+    );
+  });
+
+  it('I can filter by industry', () => {
+    cy.visit('/professions/search');
+
+    cy.translate('industries.education').then((nameLabel) => {
+      cy.get('label').contains(nameLabel).parent().find('input').check();
+    });
+
+    cy.get('button').click();
+
+    cy.translate('industries.education').then((nameLabel) => {
+      cy.get('label')
+        .contains(nameLabel)
+        .parent()
+        .find('input')
+        .should('be.checked');
+    });
+
+    cy.get('body').should(
+      'contain',
+      'Secondary School Teacher in State maintained schools (England)',
+    );
+    cy.get('body').should('not.contain', 'Registered Trademark Attorney');
+  });
+
+  it('I can filter by keyword', () => {
     cy.visit('/professions/search');
 
     cy.get('input[name="keywords"]').type('Attorney');
-    cy.get('input[name="nations"][value="GB-ENG"]').check();
-    cy.get('input[name="nations"][value="GB-NIR"]').check();
-
-    cy.get('input[name="industries"]').eq(0).check();
-    cy.get('input[name="industries"]').eq(2).check();
 
     cy.get('button').click();
 
     cy.get('input[name="keywords"]').should('have.value', 'Attorney');
-    cy.get('input[name="nations"][value="GB-ENG"]').should('be.checked');
-    cy.get('input[name="nations"][value="GB-NIR"]').should('be.checked');
 
-    cy.get('input[name="industries"]').eq(0).should('be.checked');
-    cy.get('input[name="industries"]').eq(2).should('be.checked');
+    cy.get('body').should('contain', 'Registered Trademark Attorney');
+    cy.get('body').should(
+      'not.contain',
+      'Secondary School Teacher in State maintained schools (England)',
+    );
   });
 });

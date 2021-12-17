@@ -8,6 +8,8 @@ import { Nation } from '../../nations/nation';
 import { Profession } from '../profession.entity';
 import { ProfessionsService } from '../professions.service';
 import { FilterDto } from './dto/filter.dto';
+import { FilterHelper } from './helpers/filter.helper';
+import { FilterInput } from './interfaces/filter-input.interface';
 import { IndexTemplate } from './interfaces/index-template.interface';
 
 @Controller('professions/search')
@@ -49,9 +51,8 @@ export class SearchController {
 
     const filterInput = this.getFilterInput(filter, allNations, allIndustries);
 
-    const filterProfessions = this.getFilteredProfessions(
+    const filterProfessions = new FilterHelper(allProfessions).filter(
       filterInput,
-      allProfessions,
     );
 
     return this.presentResults(
@@ -84,13 +85,6 @@ export class SearchController {
     );
 
     return { nations, industries, keywords: filter.keywords };
-  }
-
-  private getFilteredProfessions(
-    filterInput: FilterInput,
-    allProfessions: Profession[],
-  ): Profession[] {
-    return allProfessions;
   }
 
   private async presentResults(
@@ -141,9 +135,3 @@ export class SearchController {
     };
   }
 }
-
-type FilterInput = {
-  nations: Nation[];
-  industries: Industry[];
-  keywords: string;
-};
