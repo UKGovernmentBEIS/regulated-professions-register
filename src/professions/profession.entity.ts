@@ -18,23 +18,23 @@ export class Profession {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({ nullable: true })
   name: string;
 
-  @Column()
+  @Column({ nullable: true })
   alternateName: string;
 
-  @Index()
-  @Column({ unique: true })
+  @Index({ unique: true, where: '"slug" IS NOT NULL' })
+  @Column({ nullable: true })
   slug: string;
 
-  @Column()
+  @Column({ nullable: true })
   description: string;
 
   @Column('text', { array: true, nullable: true })
   occupationLocations: string[];
 
-  @Column()
+  @Column({ nullable: true })
   regulationType: string;
 
   @ManyToMany(() => Industry, { nullable: true, eager: true })
@@ -46,7 +46,7 @@ export class Profession {
   })
   qualification: Qualification;
 
-  @Column('text', { array: true })
+  @Column('text', { array: true, nullable: true })
   reservedActivities: string[];
 
   @ManyToMany(() => Legislation, {
@@ -80,15 +80,15 @@ export class Profession {
     reservedActivities?: string[],
     legislations?: Legislation[],
   ) {
-    this.name = name || '';
-    this.alternateName = alternateName || '';
-    this.slug = slug || '';
-    this.description = description || '';
-    this.occupationLocations = occupationLocations || [];
-    this.regulationType = regulationType || '';
+    this.name = name || null;
+    this.alternateName = alternateName || null;
+    this.slug = slug || null;
+    this.description = description || null;
+    this.occupationLocations = occupationLocations || null;
+    this.regulationType = regulationType || null;
     this.industries = industries || null;
     this.qualification = qualification || null;
-    this.reservedActivities = reservedActivities || [];
+    this.reservedActivities = reservedActivities || null;
     this.legislations = legislations || null;
   }
 }

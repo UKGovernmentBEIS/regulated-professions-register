@@ -32,15 +32,15 @@ export class ConfirmationController {
 
     const profession = new Profession(
       topLevelDetails.name,
-      '',
-      '',
-      '',
+      null,
+      null,
+      null,
       topLevelDetails.nations,
-      '',
+      null,
       industries,
       null,
-      [],
-      [],
+      null,
+      null,
     );
 
     await this.professionsService.create(profession);
