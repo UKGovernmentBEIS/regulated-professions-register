@@ -4,11 +4,16 @@ import { Validator } from '../../../helpers/validator';
 import { IndustriesService } from '../../../industries/industries.service';
 import { Nation } from '../../../nations/nation';
 import { ValidationFailedError } from '../../../validation/validation-failed.error';
+import { Profession } from '../../profession.entity';
+import { ProfessionsService } from '../../professions.service';
 import { TopLevelDetailsDto } from './dto/top-level-details.dto';
 
 @Controller('admin/professions/new/top-level-information')
 export class TopLevelInformationController {
-  constructor(private industriesService: IndustriesService) {}
+  constructor(
+    private readonly professionsService: ProfessionsService,
+    private readonly industriesService: IndustriesService,
+  ) {}
 
   @Get()
   async new(
@@ -51,11 +56,25 @@ export class TopLevelInformationController {
       return;
     }
 
-    if (session['add-profession'] === undefined) {
-      session['add-profession'] = {};
-    }
+    const topLevelDetails: TopLevelDetailsDto = topLevelDetailsDto;
 
-    session['add-profession']['top-level-details'] = topLevelDetailsDto;
+    const industries = await this.industriesService.findByIds(
+      topLevelDetails.industries,
+    );
+
+    const draftProfession: Profession = await this.professionsService.confirm(
+      new Profession(
+        topLevelDetails.name,
+        null,
+        null,
+        null,
+        topLevelDetails.nations,
+        null,
+        industries,
+      ),
+    );
+
+    session['draft-profession-id'] = draftProfession.id;
 
     res.redirect('/admin/professions/new/check-your-answers');
   }

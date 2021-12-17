@@ -3,10 +3,13 @@ import { TestingModule, Test } from '@nestjs/testing';
 import { Response } from 'express';
 import { IndustriesService } from '../../../industries/industries.service';
 import { Industry } from '../../../industries/industry.entity';
+import { Profession } from '../../profession.entity';
+import { ProfessionsService } from '../../professions.service';
 import { TopLevelInformationController } from './top-level-information.controller';
 
 describe('TopLevelInformationController', () => {
   let controller: TopLevelInformationController;
+  let professionsService: DeepMocked<ProfessionsService>;
   let industriesService: DeepMocked<IndustriesService>;
   let response: DeepMocked<Response>;
 
@@ -21,10 +24,14 @@ describe('TopLevelInformationController', () => {
 
   beforeEach(async () => {
     industriesService = createMock<IndustriesService>();
+    professionsService = createMock<ProfessionsService>();
 
     const module: TestingModule = await Test.createTestingModule({
       controllers: [TopLevelInformationController],
-      providers: [{ provide: IndustriesService, useValue: industriesService }],
+      providers: [
+        { provide: IndustriesService, useValue: industriesService },
+        { provide: ProfessionsService, useValue: professionsService },
+      ],
     }).compile();
 
     industriesService.all.mockImplementation(async () => industries);
@@ -78,10 +85,8 @@ describe('TopLevelInformationController', () => {
 
   describe('addTopLevelInformation', () => {
     describe('when all required parameters are entered', () => {
-      it('redirects to the Check your answers page and stores top level information data in the session', async () => {
-        const session = {
-          'add-profession': {},
-        };
+      it('creates a new, draft, Profession, stores its id in the session and redirects to the Check your answers page', async () => {
+        const emptySession = {};
 
         const topLevelDetails = {
           name: 'Gas Safe Engineer',
@@ -89,21 +94,32 @@ describe('TopLevelInformationController', () => {
           industries: ['construction-uuid'],
         };
 
+        const draftProfession = new Profession(
+          'Gas Safe Engineer',
+          null,
+          null,
+          null,
+          ['GB-ENG'],
+          null,
+          industries,
+        );
+
+        const createdProfession = { ...draftProfession };
+        createdProfession.id = 'profession-id';
+
+        professionsService.confirm.mockResolvedValue(createdProfession);
+        industriesService.findByIds.mockResolvedValue(industries);
+
         await controller.addTopLevelInformation(
-          session,
+          emptySession,
           topLevelDetails,
           response,
         );
 
-        expect(session).toEqual({
-          'add-profession': {
-            'top-level-details': {
-              name: 'Gas Safe Engineer',
-              nations: ['GB-ENG'],
-              industries: ['construction-uuid'],
-            },
-          },
-        });
+        expect(professionsService.confirm).toHaveBeenCalledWith(
+          draftProfession,
+        );
+        expect(emptySession['draft-profession-id']).toEqual('profession-id');
         expect(response.redirect).toHaveBeenCalledWith(
           '/admin/professions/new/check-your-answers',
         );
@@ -111,10 +127,8 @@ describe('TopLevelInformationController', () => {
     });
 
     describe('when a required parameter is not entered', () => {
-      it('renders the top level information view and displays an error to the user', async () => {
-        const session = {
-          'add-profession': {},
-        };
+      it('does not create a profession, and re-renders the top level information view with errors', async () => {
+        const emptySession = {};
 
         const topLevelDetailsWithNoAnswers = {
           name: '',
@@ -123,10 +137,12 @@ describe('TopLevelInformationController', () => {
         };
 
         await controller.addTopLevelInformation(
-          session,
+          emptySession,
           topLevelDetailsWithNoAnswers,
           response,
         );
+
+        expect(professionsService.confirm).not.toHaveBeenCalled();
 
         expect(response.render).toHaveBeenCalledWith(
           'professions/admin/add-profession/top-level-information',

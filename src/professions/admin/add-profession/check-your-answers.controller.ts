@@ -1,14 +1,13 @@
 import { Controller, Get, Render, Session } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
 
-import { IndustriesService } from '../../../industries/industries.service';
 import { Nation } from '../../../nations/nation';
-import { TopLevelDetailsDto } from './dto/top-level-details.dto';
+import { ProfessionsService } from '../../professions.service';
 
 @Controller('admin/professions/new/check-your-answers')
 export class CheckYourAnswersController {
   constructor(
-    private industriesService: IndustriesService,
+    private readonly professionsService: ProfessionsService,
     private readonly i18nService: I18nService,
   ) {}
 
@@ -19,28 +18,28 @@ export class CheckYourAnswersController {
     nations: string[];
     industries: string[];
   }> {
-    const addProfessionSession = session['add-profession'];
-    const topLevelDetails: TopLevelDetailsDto =
-      addProfessionSession['top-level-details'];
+    const professionId = session['profession-id'];
 
-    const selectedIndustries = await this.industriesService.findByIds(
-      topLevelDetails.industries,
-    );
+    const draftProfession = await this.professionsService.find(professionId);
+
+    if (!draftProfession) {
+      throw new Error('Draft profession not found');
+    }
 
     const industryNames = await Promise.all(
-      selectedIndustries.map(
+      draftProfession.industries.map(
         async (industry) => await this.i18nService.translate(industry.name),
       ),
     );
 
     const selectedNations: string[] = await Promise.all(
-      topLevelDetails.nations.map(async (nationCode) =>
+      draftProfession.occupationLocations.map(async (nationCode) =>
         Nation.find(nationCode).translatedName(this.i18nService),
       ),
     );
 
     return {
-      name: topLevelDetails.name,
+      name: draftProfession.name,
       nations: selectedNations,
       industries: industryNames,
     };

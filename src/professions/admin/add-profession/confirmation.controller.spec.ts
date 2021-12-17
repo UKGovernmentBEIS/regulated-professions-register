@@ -2,6 +2,7 @@ import { DeepMocked, createMock } from '@golevelup/ts-jest';
 import { TestingModule, Test } from '@nestjs/testing';
 import { IndustriesService } from '../../../industries/industries.service';
 import { Industry } from '../../../industries/industry.entity';
+import { Profession } from '../../profession.entity';
 import { ProfessionsService } from '../../professions.service';
 import { ConfirmationController } from './confirmation.controller';
 
@@ -26,17 +27,24 @@ describe('ConfirmationController', () => {
   });
 
   describe('viewConfirmation', () => {
-    it('looks the name of the profession from the session', async () => {
-      const constructionUUID = 'construction-uuid';
+    it('looks up the Profession from the ID in the session, and returns its name', async () => {
       const session = {
-        'add-profession': {
-          'top-level-details': {
-            name: 'Gas Safe Engineer',
-            nation: 'england',
-            industries: [constructionUUID],
-          },
-        },
+        'profession-id': 'profession-id',
       };
+
+      const industry = new Industry('industries.construction');
+
+      const draftProfession = new Profession(
+        'Gas Safe Engineer',
+        null,
+        null,
+        null,
+        ['GB-ENG'],
+        null,
+        [industry],
+      );
+
+      professionsService.find.mockImplementation(async () => draftProfession);
 
       expect(await controller.viewConfirmation(session)).toEqual({
         name: 'Gas Safe Engineer',
@@ -46,41 +54,38 @@ describe('ConfirmationController', () => {
 
   describe('confirm', () => {
     describe('when all required fields are present in the session', () => {
-      it('creates a Profession, with minimal fields', async () => {
-        const constructionUUID = 'construction-uuid';
+      it('"Confirms" the Profession, saving a slug and clears the profession id from the session', async () => {
         const session = {
-          'add-profession': {
-            'top-level-details': {
-              name: 'Gas Safe Engineer',
-              nations: ['GB-ENG'],
-              industries: [constructionUUID],
-            },
-          },
+          'profession-id': 'profession-id',
         };
 
-        const industry = new Industry('Construction & Engineering');
-        industry.id = constructionUUID;
+        const industry = new Industry('industries.construction');
 
-        industriesService.findByIds.mockImplementation(async () => [industry]);
+        const draftProfession = new Profession(
+          'Gas Safe Engineer',
+          null,
+          null,
+          null,
+          ['GB-ENG'],
+          null,
+          [industry],
+        );
+
+        professionsService.find.mockImplementation(async () => draftProfession);
 
         await controller.confirm(session);
 
-        expect(industriesService.findByIds).toHaveBeenCalledWith([
-          constructionUUID,
-        ]);
         expect(professionsService.confirm).toHaveBeenCalledWith(
-          expect.objectContaining({
-            name: 'Gas Safe Engineer',
-            industries: [industry],
-            occupationLocations: ['GB-ENG'],
-          }),
+          draftProfession,
         );
+
+        expect(session['profession-id']).toBeUndefined;
       });
     });
 
     describe('when the session is empty', () => {
-      it('should throw an exception', () => {
-        expect(async () => {
+      it('should throw an exception', async () => {
+        await expect(async () => {
           await controller.confirm({});
         }).rejects.toThrowError();
       });

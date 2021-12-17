@@ -10,7 +10,6 @@ import { IndustriesService } from '../../../industries/industries.service';
 import { Profession } from '../../profession.entity';
 
 import { ProfessionsService } from '../../professions.service';
-import { TopLevelDetailsDto } from './dto/top-level-details.dto';
 
 @Controller('admin/professions/new/confirmation')
 export class ConfirmationController {
@@ -22,35 +21,36 @@ export class ConfirmationController {
   @Post()
   @Redirect('/admin/professions/new/confirmation')
   async confirm(@Session() session: Record<string, any>) {
-    const addProfessionSession = session['add-profession'];
-    const topLevelDetails: TopLevelDetailsDto =
-      addProfessionSession['top-level-details'];
+    const draftProfession = await this.fetchProfessionOrThrow(session);
 
-    const industries = await this.industriesService.findByIds(
-      topLevelDetails.industries,
-    );
-
-    const profession = new Profession(
-      topLevelDetails.name,
-      null,
-      null,
-      null,
-      topLevelDetails.nations,
-      null,
-      industries,
-      null,
-      null,
-      null,
-    );
-
-    await this.professionsService.confirm(profession);
+    this.professionsService.confirm(draftProfession);
   }
 
   @Get()
   @Render('professions/admin/add-profession/confirmation')
   async viewConfirmation(@Session() session: Record<string, any>) {
-    const addProfessionSession = session['add-profession'];
+    const profession = await this.fetchProfessionOrThrow(session);
 
-    return { name: addProfessionSession['top-level-details'].name };
+    session['profession-id'] = undefined;
+
+    return { name: profession.name };
+  }
+
+  private async fetchProfessionOrThrow(
+    session: Record<string, any>,
+  ): Promise<Profession> {
+    const professionId = session['profession-id'];
+
+    if (professionId === undefined) {
+      throw new Error();
+    }
+
+    const profession = await this.professionsService.find(professionId);
+
+    if (!profession) {
+      throw new Error('Draft profession not found');
+    }
+
+    return profession;
   }
 }
