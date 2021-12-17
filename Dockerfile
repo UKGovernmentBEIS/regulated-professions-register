@@ -41,6 +41,8 @@ RUN if [ "$NODE_ENV" = "production" ]; then \
 
 EXPOSE 3000
 
+ENTRYPOINT [ "./docker-entrypoint.sh" ]
+
 CMD ["node", "dist/main"]
 
 # ------------------------------------------------------------------------------
