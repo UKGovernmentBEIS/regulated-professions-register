@@ -48,15 +48,20 @@ export class User {
   })
   updated_at: Date;
 
+  @Column({ default: false })
+  confirmed: boolean;
+
   constructor(
     email?: string,
     name?: string,
     externalIdentifier?: string,
     roles?: UserRole[],
+    confirmed?: boolean,
   ) {
     this.email = email || '';
     this.name = name || '';
     this.externalIdentifier = externalIdentifier || null;
     this.roles = roles || [];
+    this.confirmed = confirmed || false;
   }
 }
