@@ -7,4 +7,6 @@ export class PersonalDetailsDto {
   @IsNotEmpty()
   @IsEmail()
   email: string;
+
+  change: boolean;
 }

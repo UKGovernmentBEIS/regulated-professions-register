@@ -8,14 +8,14 @@ import {
   Res,
   UseGuards,
   Req,
+  Query,
 } from '@nestjs/common';
 import { Request } from 'express';
 
 import { ValidationFailedError } from '../../validation/validation-failed.error';
 import { Validator } from '../../helpers/validator';
 import { UsersService } from '../users.service';
-import { User } from '../user.entity';
-import { PersonalDetailsDto } from '../dto/personal-details.dto';
+import { PersonalDetailsDto } from './dto/personal-details.dto';
 import { AuthenticationGuard } from '../../common/authentication.guard';
 import { backLink } from '../../common/utils';
 import { EditTemplate } from './interfaces/edit-template';
@@ -26,12 +26,17 @@ export class PersonalDetailsController {
   @Get(':id/personal-details/edit')
   @UseGuards(AuthenticationGuard)
   @Render('users/personal-details/edit')
-  async edit(@Req() req: Request, @Param('id') id): Promise<EditTemplate> {
+  async edit(
+    @Req() req: Request,
+    @Param('id') id,
+    @Query('change') change: boolean,
+  ): Promise<EditTemplate> {
     const user = await this.usersService.find(id);
 
     return {
       ...user,
       backLink: backLink(req),
+      change: change,
     };
   }
 
@@ -70,7 +75,11 @@ export class PersonalDetailsController {
 
     await this.usersService.save(updated);
 
-    res.redirect(`/admin/users/${id}/confirm`);
+    if (personalDetailsDto.change) {
+      res.redirect(`/admin/users/${id}/confirm`);
+    } else {
+      res.redirect(`/admin/users/${id}/roles/edit`);
+    }
   }
 
   private renderWithErrors(

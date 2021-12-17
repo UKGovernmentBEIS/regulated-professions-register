@@ -104,6 +104,7 @@ describe('UsersController', () => {
         email,
         externalIdentifier,
         roles,
+        confirmed: true,
       });
       expect(res.redirect).toBeCalledWith('done');
     });
@@ -145,6 +146,7 @@ describe('UsersController', () => {
         email,
         externalIdentifier,
         roles,
+        confirmed: true,
       });
       expect(res.redirect).toBeCalledWith('done');
     });

@@ -11,6 +11,7 @@ type SeedUser = {
   name: string;
   externalIdentifier: string;
   roles: string[];
+  confirmed: boolean;
 };
 
 @Injectable()
@@ -26,7 +27,13 @@ export class UsersSeeder implements Seeder {
 
     const users = userData.map((user) => {
       const roles = user.roles as UserRole[];
-      return new User(user.email, user.name, user.externalIdentifier, roles);
+      return new User(
+        user.email,
+        user.name,
+        user.externalIdentifier,
+        roles,
+        user.confirmed,
+      );
     });
 
     return this.userRepository.save(users);

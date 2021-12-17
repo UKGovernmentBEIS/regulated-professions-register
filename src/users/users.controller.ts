@@ -52,6 +52,7 @@ export class UsersController {
     const externalResult =
       await this.externalUserCreationService.createExternalUser(email);
     user.externalIdentifier = externalResult.externalIdentifier;
+    user.confirmed = true;
 
     if (externalResult.result == 'user-exists') {
       // In the case where the user already existed in Auth0, we expect they

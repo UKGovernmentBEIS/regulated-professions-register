@@ -49,14 +49,26 @@ describe('PersonalDetailsController', () => {
   });
 
   describe('edit', () => {
+    const referrer = 'http://example.com/some/path';
+    const request: Request = createMockRequest(referrer, 'example.com');
+
     it('should get and return the user from an id', async () => {
-      const referrer = 'http://example.com/some/path';
-      const request = createMockRequest(referrer, 'example.com');
-      const result = await controller.edit(request, 'user-uuid');
+      const result = await controller.edit(request, 'user-uuid', false);
 
       expect(result).toEqual({
         ...user,
-        backLink: 'http://example.com/some/path',
+        backLink: referrer,
+        change: false,
+      });
+    });
+
+    it('should set change to true', async () => {
+      const result = await controller.edit(request, 'user-uuid', true);
+
+      expect(result).toEqual({
+        ...user,
+        backLink: referrer,
+        change: true,
       });
     });
   });
@@ -68,7 +80,7 @@ describe('PersonalDetailsController', () => {
       res = createMock<Response>();
     });
 
-    it('should redirect to confirm and update the user the email address is not already in use and the body is populated', async () => {
+    it('should redirect to roles and update the user the email address is not already in use and the body is populated', async () => {
       usersService.findByEmail.mockImplementationOnce(() => {
         return null;
       });
@@ -81,7 +93,7 @@ describe('PersonalDetailsController', () => {
         email: email,
       });
       expect(res.redirect).toHaveBeenCalledWith(
-        `/admin/users/user-uuid/confirm`,
+        `/admin/users/user-uuid/roles/edit`,
       );
     });
 

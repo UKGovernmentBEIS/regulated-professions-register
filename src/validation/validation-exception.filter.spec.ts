@@ -41,5 +41,24 @@ describe('IneligibleExceptionFilter', () => {
         url: request.url,
       });
     });
+
+    describe('when additional variables are provided', () => {
+      beforeEach(async () => {
+        service = new ValidationExceptionFilter('blog-post/new', 'blogPost', {
+          something: 'else',
+        });
+      });
+
+      it('renders the template with the errors, object, url and additional variables', () => {
+        service.catch(exception, host);
+
+        expect(reponse.render).toHaveBeenCalledWith('blog-post/new', {
+          something: 'else',
+          errors: exception.fullMessages(),
+          blogPost: exception.target,
+          url: request.url,
+        });
+      });
+    });
   });
 });
