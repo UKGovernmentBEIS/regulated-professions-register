@@ -8,6 +8,8 @@ import {
   JoinTable,
   ManyToOne,
   Index,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { Industry } from '../industries/industry.entity';
 
@@ -52,6 +54,19 @@ export class Profession {
   })
   @JoinTable()
   legislations: Legislation[];
+
+  @CreateDateColumn({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP(6)',
+  })
+  created_at: Date;
+
+  @UpdateDateColumn({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP(6)',
+    onUpdate: 'CURRENT_TIMESTAMP(6)',
+  })
+  updated_at: Date;
 
   constructor(
     name?: string,
