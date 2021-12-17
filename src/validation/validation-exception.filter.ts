@@ -28,10 +28,16 @@ import { ValidationFailedError } from './validation-failed.error';
 export class ValidationExceptionFilter implements ExceptionFilter {
   view: string;
   objectName: string;
+  additionalVariables: any;
 
-  constructor(view: string, objectName: string) {
+  constructor(
+    view: string,
+    objectName: string,
+    additionalVariables?: Record<string, unknown>,
+  ) {
     this.view = view;
     this.objectName = objectName;
+    this.additionalVariables = additionalVariables || {};
   }
 
   async catch(exception: ValidationFailedError, host: ArgumentsHost) {
@@ -40,6 +46,7 @@ export class ValidationExceptionFilter implements ExceptionFilter {
     const request = ctx.getRequest<Request>();
 
     response.render(this.view, {
+      ...this.additionalVariables,
       errors: exception.fullMessages(),
       [this.objectName]: exception.target,
       url: request.url,
