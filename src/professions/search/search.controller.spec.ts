@@ -1,5 +1,6 @@
 import { createMock, DeepMocked } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
+import { Request } from 'express';
 import { I18nService } from 'nestjs-i18n';
 import { createMockRequest } from '../../common/create-mock-request';
 import { IndustriesService } from '../../industries/industries.service';
@@ -9,6 +10,9 @@ import { Profession } from '../profession.entity';
 import { ProfessionsService } from '../professions.service';
 import { IndexTemplate } from './interfaces/index-template.interface';
 import { SearchController } from './search.controller';
+
+const referrer = 'http://example.com/some/path';
+const host = 'example.com';
 
 const exampleIndustry1 = new Industry('industries.example1');
 exampleIndustry1.id = 'example-industry-1';
@@ -20,7 +24,7 @@ const exampleIndustry3 = new Industry('industries.example3');
 exampleIndustry3.id = 'example-industry-3';
 
 const exampleProfession1 = new Profession(
-  'Example Profession 1',
+  'Secondary School Teacher',
   '',
   null,
   '',
@@ -30,7 +34,7 @@ const exampleProfession1 = new Profession(
 );
 
 const exampleProfession2 = new Profession(
-  'Example Profession 2',
+  'Trademark Attorny',
   '',
   null,
   '',
@@ -40,12 +44,16 @@ const exampleProfession2 = new Profession(
 );
 
 describe('SearchController', () => {
+  let request: DeepMocked<Request>;
+
   let controller: SearchController;
   let professionsService: DeepMocked<ProfessionsService>;
   let industriesService: DeepMocked<IndustriesService>;
   let i18nService: DeepMocked<I18nService>;
 
   beforeEach(async () => {
+    request = createMockRequest(referrer, host);
+
     professionsService = createMock<ProfessionsService>();
     industriesService = createMock<IndustriesService>();
     i18nService = createMock<I18nService>();
@@ -101,9 +109,6 @@ describe('SearchController', () => {
 
   describe('index', () => {
     it('should return populated template params', async () => {
-      const referrer = 'http://example.com/some/path';
-      const request = createMockRequest(referrer, 'example.com');
-
       const result = await controller.index(request);
 
       expect(result).toMatchObject({
@@ -129,11 +134,6 @@ describe('SearchController', () => {
 
   describe('create', () => {
     it('should return template params populated with provided search filters', async () => {
-      const request = createMockRequest(
-        'http://example.com/some/path',
-        'example.com',
-      );
-
       const result = await controller.create(
         {
           keywords: 'example search',
@@ -155,6 +155,71 @@ describe('SearchController', () => {
           industries: ['industries.example1', 'industries.example2'],
         },
       });
+    });
+
+    it('should return filtered professions when searching by nation', async () => {
+      const result = await controller.create(
+        {
+          keywords: '',
+          industries: [],
+          nations: 'GB-WLS',
+        },
+        request,
+      );
+
+      expect(result.professions).toMatchObject([
+        { name: 'Trademark Attorny' },
+      ]);
+    });
+
+    it('should return filtered professions when searching by industry', async () => {
+      const result = await controller.create(
+        {
+          keywords: '',
+          industries: [exampleIndustry1.id],
+          nations: [],
+        },
+        request,
+      );
+
+      expect(result.professions).toMatchObject([
+        { name: 'Secondary School Teacher' },
+      ]);
+    });
+
+    it('should return filtered professions when searching by keyword', async () => {
+      const result = await controller.create(
+        {
+          keywords: 'Trademark',
+          industries: [],
+          nations: [],
+        },
+        request,
+      );
+
+      expect(result.professions).toMatchObject([
+        { name: 'Trademark Attorny' },
+      ]);
+    });
+
+    it('should return unfiltered professions when no search parameters are specified', async () => {
+      const result = await controller.create(
+        {
+          keywords: '',
+          industries: [],
+          nations: [],
+        },
+        request,
+      );
+
+      expect(result.professions).toMatchObject([
+        {
+          name: 'Secondary School Teacher',
+        },
+        {
+          name: 'Trademark Attorny',
+        },
+      ]);
     });
   });
 });
