@@ -10,14 +10,28 @@ import {
 import { AuthenticationGuard } from '../common/authentication.guard';
 import { ExternalUserCreationService } from './external-user-creation.service';
 import { User } from './user.entity';
+import { UsersPresenter } from './users.presenter';
 import { UsersService } from './users.service';
-
+import { IndexTemplate } from './interfaces/index-template';
 @Controller()
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
     private readonly externalUserCreationService: ExternalUserCreationService,
   ) {}
+
+  @Get('/admin/users')
+  @UseGuards(AuthenticationGuard)
+  @Render('users/index')
+  async index(): Promise<IndexTemplate> {
+    const users = await this.usersService.where({ confirmed: true });
+    const usersPresenter = new UsersPresenter(users);
+
+    return {
+      ...users,
+      rows: usersPresenter.tableRows(),
+    };
+  }
 
   @Get('/admin/users/new')
   @UseGuards(AuthenticationGuard)

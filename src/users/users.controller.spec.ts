@@ -6,6 +6,7 @@ import { UsersService } from './users.service';
 import { ExternalUserCreationService } from './external-user-creation.service';
 import { UsersController } from './users.controller';
 import { User, UserRole } from './user.entity';
+import { UsersPresenter } from './users.presenter';
 
 const name = 'Example Name';
 const email = 'name@example.com';
@@ -40,6 +41,9 @@ describe('UsersController', () => {
       find: async () => {
         return user;
       },
+      where: async () => {
+        return [user];
+      },
     });
 
     const module: TestingModule = await Test.createTestingModule({
@@ -61,6 +65,20 @@ describe('UsersController', () => {
 
   it('should be defined', () => {
     expect(controller).toBeDefined();
+  });
+
+  describe('index', () => {
+    it('should list all confirmed users', async () => {
+      const users = [user];
+      const usersPresenter = new UsersPresenter(users);
+
+      expect(await controller.index()).toEqual({
+        ...users,
+        rows: usersPresenter.tableRows(),
+      });
+
+      expect(usersService.where).toHaveBeenCalledWith({ confirmed: true });
+    });
   });
 
   describe('create', () => {

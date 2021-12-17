@@ -29,7 +29,8 @@
   },
   "headings": {
     "done": "User added",
-    "next": "What happens next?"
+    "next": "What happens next?",
+    "index": "Users"
   },
   "body": {
     "panel": "User <strong>{email}</strong> has been added",
