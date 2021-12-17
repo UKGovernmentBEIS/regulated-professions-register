@@ -2,8 +2,10 @@ import { Body, Controller, Get, Post, Render, Req } from '@nestjs/common';
 import { Request } from 'express';
 import { I18nService } from 'nestjs-i18n';
 import { backLink } from '../../common/utils';
+import { Industry } from '../../industries/industry.entity';
 import { IndustriesService } from '../../industries/industries.service';
 import { Nation } from '../../nations/nation';
+import { Profession } from '../profession.entity';
 import { ProfessionsService } from '../professions.service';
 import { FilterDto } from './dto/filter.dto';
 import { IndexTemplate } from './interfaces/index-template.interface';
@@ -40,42 +42,76 @@ export class SearchController {
   private async createSearchResults(
     filter: FilterDto,
   ): Promise<Omit<IndexTemplate, 'backLink'>> {
-    // Where a single option is selected, NestJS gives us a string rather than
-    // a single element array
-    if (typeof filter.industries === 'string') {
-      filter.industries = [filter.industries];
-    }
-
-    if (typeof filter.nations === 'string') {
-      filter.nations = [filter.nations];
-    }
-
     const allNations = Nation.all();
     const allIndustries = await this.industriesService.all();
-
     const allProfessions = await this.professionsService.all();
 
-    const filterNations = allNations.filter((nation) =>
-      filter.nations.includes(nation.code),
-    );
-    const filterIndustries = allIndustries.filter((industry) =>
-      filter.industries.includes(industry.id),
+    const filterInput = this.getFilterInput(filter, allNations, allIndustries);
+
+    const filterProfessions = this.getFilteredProfessions(
+      filterInput,
+      allProfessions,
     );
 
+    return this.presentResults(
+      filterInput,
+      allNations,
+      allIndustries,
+      filterProfessions,
+    );
+  }
+
+  private getFilterInput(
+    filter: FilterDto,
+    allNations: Nation[],
+    allIndustries: Industry[],
+  ): FilterInput {
+    // Where a single option is selected, NestJS gives us a string rather than
+    // a single element array
+    const filterIndustryIds =
+      typeof filter.industries === 'string'
+        ? [filter.industries]
+        : filter.industries;
+    const filterNationCodes =
+      typeof filter.nations === 'string' ? [filter.nations] : filter.nations;
+
+    const nations = allNations.filter((nation) =>
+      filterNationCodes.includes(nation.code),
+    );
+    const industries = allIndustries.filter((industry) =>
+      filterIndustryIds.includes(industry.id),
+    );
+
+    return { nations, industries, keywords: filter.keywords };
+  }
+
+  private getFilteredProfessions(
+    filterInput: FilterInput,
+    allProfessions: Profession[],
+  ): Profession[] {
+    return allProfessions;
+  }
+
+  private async presentResults(
+    filterInput: FilterInput,
+    allNations: Nation[],
+    allIndustries: Industry[],
+    filteredProfessions: Profession[],
+  ): Promise<Omit<IndexTemplate, 'backLink'>> {
     const nationsOptionSelectArgs = allNations.map((nation) => ({
       text: nation.name,
       value: nation.code,
-      checked: filterNations.includes(nation),
+      checked: filterInput.nations.includes(nation),
     }));
 
     const industriesOptionSelectArgs = allIndustries.map((industry) => ({
       text: industry.name,
       value: industry.id,
-      checked: filterIndustries.includes(industry),
+      checked: filterInput.industries.includes(industry),
     }));
 
     const displayProfessions = await Promise.all(
-      allProfessions.map(async (profession) => {
+      filteredProfessions.map(async (profession) => {
         const nations = await Promise.all(
           profession.occupationLocations.map(async (code) =>
             Nation.find(code).translatedName(this.i18nService),
@@ -97,10 +133,16 @@ export class SearchController {
       nationsOptionSelectArgs,
       industriesOptionSelectArgs,
       filters: {
-        keywords: filter.keywords,
-        nations: filterNations.map((nation) => nation.name),
-        industries: filterIndustries.map((industry) => industry.name),
+        keywords: filterInput.keywords,
+        nations: filterInput.nations.map((nation) => nation.name),
+        industries: filterInput.industries.map((industry) => industry.name),
       },
     };
   }
 }
+
+type FilterInput = {
+  nations: Nation[];
+  industries: Industry[];
+  keywords: string;
+};
