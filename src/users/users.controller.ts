@@ -15,6 +15,9 @@ import { User } from './user.entity';
 import { UsersPresenter } from './users.presenter';
 import { UsersService } from './users.service';
 import { IndexTemplate } from './interfaces/index-template';
+import { ShowTemplate } from './interfaces/show-template';
+
+import { UserPresenter } from './user.presenter';
 @Controller()
 export class UsersController {
   constructor(
@@ -43,6 +46,19 @@ export class UsersController {
     return {};
   }
 
+  @Get('/admin/users/:id')
+  @UseGuards(AuthenticationGuard)
+  @Render('users/show')
+  async show(@Param('id') id): Promise<ShowTemplate> {
+    const user = await this.usersService.find(id);
+    const userPresenter = new UserPresenter(user, this.i18nService);
+
+    return {
+      ...user,
+      roleList: await userPresenter.roleList(),
+    };
+  }
+
   @Post('/admin/users')
   @UseGuards(AuthenticationGuard)
   async create(@Res() res) {
@@ -54,10 +70,14 @@ export class UsersController {
   @Get('/admin/users/:id/confirm')
   @UseGuards(AuthenticationGuard)
   @Render('users/confirm')
-  async confirm(@Param('id') id): Promise<User> {
+  async confirm(@Param('id') id): Promise<ShowTemplate> {
     const user = await this.usersService.find(id);
+    const userPresenter = new UserPresenter(user, this.i18nService);
 
-    return user;
+    return {
+      ...user,
+      roleList: await userPresenter.roleList(),
+    };
   }
 
   @Post('/admin/users/:id/confirm')

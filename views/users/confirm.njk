@@ -37,67 +37,7 @@
 
         <h2 class="govuk-heading-m">{{ "users.form.headings.personalDetails" | t }}</h2>
 
-          {% set roleItems = "" %}
-          {% for role in roles %}
-            {% set translation = "users.form.label." + role %}
-            {% set roleItems = roleItems + (translation | t) + "<br/>" %}
-          {% endfor %}
-
-        {{ govukSummaryList({
-          rows: [
-            {
-              key: {
-                text: ("users.form.label.name" | t)
-              },
-              value: {
-                text: name
-              },
-              actions: {
-                items: [
-                  {
-                    href: "personal-details/edit?change=true",
-                    text: ("app.change" | t),
-                    visuallyHiddenText: ("users.form.label.name" | t)
-                  }
-                ]
-              }
-            },
-            {
-              key: {
-                text: ("users.form.label.email" | t)
-              },
-              value: {
-                text: email
-              },
-              actions: {
-                items: [
-                  {
-                    href: "personal-details/edit?change=true",
-                    text: ("app.change" | t),
-                    visuallyHiddenText: ("users.form.label.email" | t)
-                  }
-                ]
-              }
-            },
-            {
-              key: {
-                text: ("users.form.label.roles" | t)
-              },
-              value: {
-                text: (roleItems | safe)
-              },
-              actions: {
-                items: [
-                  {
-                    href: "roles/edit?change=true",
-                    text: ("app.change" | t),
-                    visuallyHiddenText: ("users.form.label.roles" | t)
-                  }
-                ]
-              }
-            }
-          ]
-        }) }}
+        {% include "./_summary.njk" %}
 
         <form method="post" action="confirm">
           {{ govukButton({

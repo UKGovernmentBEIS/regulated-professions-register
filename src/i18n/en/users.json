@@ -30,7 +30,8 @@
   "headings": {
     "done": "User added",
     "next": "What happens next?",
-    "index": "Users"
+    "index": "Users",
+    "show": "User details"
   },
   "body": {
     "panel": "User <strong>{email}</strong> has been added",

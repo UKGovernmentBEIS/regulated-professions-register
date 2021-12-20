@@ -75,14 +75,14 @@ describe('Creating a new user', () => {
 
       cy.get('button').click();
 
-      cy.get('a[href="personal-details/edit?change=true"]:first').click();
+      cy.get('a[href*="personal-details/edit?change=true"]:first').click();
 
       cy.get('input[name="email"]').clear().type('name3@example.com');
       cy.get('button').click();
 
       cy.get('body').should('contain', 'name3@example.com');
 
-      cy.get('a[href="roles/edit?change=true"]').click();
+      cy.get('a[href*="roles/edit?change=true"]').click();
 
       cy.get('[type="checkbox"]').check('editor');
       cy.get('button').click();
