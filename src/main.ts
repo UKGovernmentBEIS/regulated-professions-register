@@ -3,9 +3,10 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { ValidationPipe } from '@nestjs/common';
 import { ValidationError } from 'class-validator';
 
-import * as path from 'path';
-import * as session from 'express-session';
-import * as methodOverride from 'method-override';
+import path from 'path';
+import session from 'express-session';
+import methodOverride from 'method-override';
+import connectFlash from 'connect-flash';
 
 import { AppModule } from './app.module';
 import { AuthenticationMidleware } from './middleware/authentication.middleware';
@@ -53,6 +54,9 @@ async function bootstrap() {
       saveUninitialized: false,
     }),
   );
+
+  // Allow us to redirect with flash messages
+  app.use(connectFlash());
 
   await app.listen(process.env.PORT || 3000);
 }
