@@ -28,15 +28,6 @@ variable "app_secret" {
   description = "App Secret"
 }
 
-variable "auth_username" {
-  type        = string
-  description = "Auth username"
-}
-variable "auth_password" {
-  type        = string
-  description = "Auth password"
-}
-
 variable "host_url" {
   type        = string
   description = "Host URL"

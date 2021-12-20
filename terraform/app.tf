@@ -20,8 +20,6 @@ resource "cloudfoundry_app" "beis-rpr-app" {
     "AUTH0_DOMAIN"        = var.auth0_domain
     "AUTH0_REDIRECT_URL"  = var.auth0_redirect_url
     "APP_SECRET"          = var.app_secret
-    "AUTH_USERNAME"       = var.auth_username
-    "AUTH_PASSWORD"       = var.auth_password
     "HOST_URL"            = var.host_url
   }
   # routes need to be declared with the app for blue green deployments to work
