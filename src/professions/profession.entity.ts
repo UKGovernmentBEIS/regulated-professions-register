@@ -55,6 +55,9 @@ export class Profession {
   @JoinTable()
   legislations: Legislation[];
 
+  @Column({ default: false })
+  confirmed: boolean;
+
   @CreateDateColumn({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP(6)',
@@ -79,6 +82,7 @@ export class Profession {
     qualification?: Qualification,
     reservedActivities?: string[],
     legislations?: Legislation[],
+    confirmed?: boolean,
   ) {
     this.name = name || null;
     this.alternateName = alternateName || null;
@@ -90,5 +94,6 @@ export class Profession {
     this.qualification = qualification || null;
     this.reservedActivities = reservedActivities || null;
     this.legislations = legislations || null;
+    this.confirmed = confirmed || false;
   }
 }
