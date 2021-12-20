@@ -5,6 +5,7 @@ import {
   Param,
   Render,
   Res,
+  Req,
   UseGuards,
   Delete,
   Redirect,
@@ -32,12 +33,13 @@ export class UsersController {
   @Get('/admin/users')
   @UseGuards(AuthenticationGuard)
   @Render('users/index')
-  async index(): Promise<IndexTemplate> {
+  async index(@Req() req): Promise<IndexTemplate> {
     const users = await this.usersService.where({ confirmed: true });
     const usersPresenter = new UsersPresenter(users, this.i18nService);
 
     return {
       ...users,
+      messages: req.flash('info'),
       rows: usersPresenter.tableRows(),
     };
   }
@@ -128,7 +130,11 @@ export class UsersController {
   @Delete('/admin/users/:id')
   @UseGuards(AuthenticationGuard)
   @Redirect('/admin/users')
-  async delete(@Param('id') id): Promise<DeleteResult> {
-    return this.usersService.delete(id);
+  async delete(@Req() req, @Param('id') id): Promise<void> {
+    req.flash(
+      'info',
+      await this.i18nService.translate('users.form.delete.successMessage'),
+    );
+    await this.usersService.delete(id);
   }
 }

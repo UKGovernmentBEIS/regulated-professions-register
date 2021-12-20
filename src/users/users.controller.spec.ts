@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { createMock, DeepMocked } from '@golevelup/ts-jest';
-import { Response } from 'express';
+import { Response, Request } from 'express';
 import { I18nService } from 'nestjs-i18n';
 
 import { UsersService } from './users.service';
@@ -20,6 +20,7 @@ describe('UsersController', () => {
   let externalUserCreationService: DeepMocked<ExternalUserCreationService>;
   let usersService: DeepMocked<UsersService>;
   let i18nService: DeepMocked<I18nService>;
+  let request: DeepMocked<Request>;
   let user: User;
 
   beforeEach(async () => {
@@ -30,6 +31,8 @@ describe('UsersController', () => {
       externalIdentifier: externalIdentifier,
       roles: roles,
     });
+
+    request = createMock<Request>();
 
     externalUserCreationService = createMock<ExternalUserCreationService>({
       createExternalUser: async () => {
@@ -81,8 +84,9 @@ describe('UsersController', () => {
       const users = [user];
       const usersPresenter = new UsersPresenter(users, i18nService);
 
-      expect(await controller.index()).toEqual({
+      expect(await controller.index(request)).toEqual({
         ...users,
+        messages: request.flash('info'),
         rows: usersPresenter.tableRows(),
       });
 
@@ -206,7 +210,12 @@ describe('UsersController', () => {
 
   describe('delete', () => {
     it('should delete a user', async () => {
-      await controller.delete('some-uuid');
+      await controller.delete(request, 'some-uuid');
+
+      expect(request.flash).toHaveBeenCalledWith(
+        'info',
+        await i18nService.translate('users.form.delete.successMessage'),
+      );
 
       expect(usersService.delete).toHaveBeenCalledWith('some-uuid');
     });

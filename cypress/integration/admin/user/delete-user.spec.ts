@@ -12,6 +12,11 @@ describe('Deleting a user', () => {
         cy.contains(deleteButton).click();
       });
 
+      cy.translate('users.form.delete.successMessage').then(
+        (successMessage) => {
+          cy.get('body').should('contain', successMessage);
+        },
+      );
       cy.get('body').should('not.contain', 'Editor');
     });
   });
