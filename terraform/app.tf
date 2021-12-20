@@ -14,6 +14,7 @@ resource "cloudfoundry_app" "beis-rpr-app" {
   strategy                   = "blue-green-v2"
   health_check_http_endpoint = "/"
   service_binding { service_instance = cloudfoundry_service_instance.beis-rpr-postgres.id }
+  service_binding { service_instance = cloudfoundry_user_provided_service.papertrail.id }
   environment = {
     "AUTH0_CLIENT_ID"     = var.auth0_client_id
     "AUTH0_CLIENT_SECRET" = var.auth0_client_secret
