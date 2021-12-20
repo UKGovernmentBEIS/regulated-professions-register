@@ -1,17 +1,31 @@
+import { createMock, DeepMocked } from '@golevelup/ts-jest';
+import { I18nService } from 'nestjs-i18n';
+
 import { User } from './user.entity';
 import { UsersPresenter } from './users.presenter';
-import { TableRow } from '../common/interfaces/table-row';
 
 const users = [
-  new User('email@example.com', 'name', '212121'),
-  new User('email2@example.com', 'name2', '12345'),
+  createMock<User>({
+    id: 'some-uuid-string',
+    name: 'name',
+    email: 'email@example.com',
+    externalIdentifier: '212121',
+  }),
+  createMock<User>({
+    id: 'some-other-uuid-string',
+    name: 'name2',
+    email: 'emai2l@example.com',
+    externalIdentifier: '12345',
+  }),
 ];
 
 describe('UsersPresenter', () => {
   let presenter: UsersPresenter;
+  let i18nService: DeepMocked<I18nService>;
 
   beforeEach(() => {
-    presenter = new UsersPresenter(users);
+    i18nService = createMock<I18nService>();
+    presenter = new UsersPresenter(users, i18nService);
   });
 
   describe('tableRows', () => {

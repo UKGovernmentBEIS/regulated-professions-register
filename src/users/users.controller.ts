@@ -7,6 +7,8 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
+import { I18nService } from 'nestjs-i18n';
+
 import { AuthenticationGuard } from '../common/authentication.guard';
 import { ExternalUserCreationService } from './external-user-creation.service';
 import { User } from './user.entity';
@@ -18,6 +20,7 @@ export class UsersController {
   constructor(
     private readonly usersService: UsersService,
     private readonly externalUserCreationService: ExternalUserCreationService,
+    private readonly i18nService: I18nService,
   ) {}
 
   @Get('/admin/users')
@@ -25,7 +28,7 @@ export class UsersController {
   @Render('users/index')
   async index(): Promise<IndexTemplate> {
     const users = await this.usersService.where({ confirmed: true });
-    const usersPresenter = new UsersPresenter(users);
+    const usersPresenter = new UsersPresenter(users, this.i18nService);
 
     return {
       ...users,

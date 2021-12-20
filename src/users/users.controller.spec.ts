@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { createMock, DeepMocked } from '@golevelup/ts-jest';
 import { Response } from 'express';
+import { I18nService } from 'nestjs-i18n';
 
 import { UsersService } from './users.service';
 import { ExternalUserCreationService } from './external-user-creation.service';
@@ -17,6 +18,7 @@ describe('UsersController', () => {
   let controller: UsersController;
   let externalUserCreationService: DeepMocked<ExternalUserCreationService>;
   let usersService: DeepMocked<UsersService>;
+  let i18nService: DeepMocked<I18nService>;
   let user: User;
 
   beforeEach(async () => {
@@ -33,6 +35,8 @@ describe('UsersController', () => {
         return { result: 'user-created', externalIdentifier };
       },
     });
+
+    i18nService = createMock<I18nService>();
 
     usersService = createMock<UsersService>({
       save: async () => {
@@ -57,6 +61,10 @@ describe('UsersController', () => {
           provide: ExternalUserCreationService,
           useValue: externalUserCreationService,
         },
+        {
+          provide: I18nService,
+          useValue: i18nService,
+        },
       ],
     }).compile();
 
@@ -70,7 +78,7 @@ describe('UsersController', () => {
   describe('index', () => {
     it('should list all confirmed users', async () => {
       const users = [user];
-      const usersPresenter = new UsersPresenter(users);
+      const usersPresenter = new UsersPresenter(users, i18nService);
 
       expect(await controller.index()).toEqual({
         ...users,
