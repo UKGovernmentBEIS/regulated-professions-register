@@ -124,87 +124,95 @@ describe('Profession', () => {
   });
 
   describe('confirm', () => {
-    it('should save the profession with the "base" slug when there are no colliding slugs', async () => {
-      const profession = new Profession('Example Profession');
+    describe('setting the slug on a Profession', () => {
+      describe('when there are no colliding slugs', () => {
+        it('should save the Profession with the "base" slug', async () => {
+          const profession = new Profession('Example Profession');
 
-      manager.findOne.mockReturnValue(null);
+          manager.findOne.mockReturnValue(null);
 
-      const result = await service.confirm(profession);
+          const result = await service.confirm(profession);
 
-      expect(manager.findOne).toBeCalledTimes(1);
+          expect(manager.findOne).toBeCalledTimes(1);
 
-      expect(manager.findOne).toBeCalledWith(Profession, {
-        where: { slug: 'example-profession' },
+          expect(manager.findOne).toBeCalledWith(Profession, {
+            where: { slug: 'example-profession' },
+          });
+
+          expect(manager.save).toHaveBeenCalledWith(
+            new Profession('Example Profession', '', 'example-profession'),
+          );
+          expect(result.slug).toEqual('example-profession');
+        });
       });
 
-      expect(manager.save).toHaveBeenCalledWith(
-        new Profession('Example Profession', '', 'example-profession'),
-      );
-      expect(result.slug).toEqual('example-profession');
-    });
+      describe('when there is a single colliding slug', () => {
+        it('should save the Profession with a slug appended with "-1"', async () => {
+          const profession = new Profession('Example Profession');
 
-    it('should save the profession with a slug appended with "-1" when there is a colliding slug', async () => {
-      const profession = new Profession('Example Profession');
+          manager.findOne
+            .mockImplementationOnce(async () => {
+              return new Profession();
+            })
+            .mockReturnValue(null);
 
-      manager.findOne
-        .mockImplementationOnce(async () => {
-          return new Profession();
-        })
-        .mockReturnValue(null);
+          const result = await service.confirm(profession);
 
-      const result = await service.confirm(profession);
+          expect(manager.findOne).toBeCalledTimes(2);
 
-      expect(manager.findOne).toBeCalledTimes(2);
+          expect(manager.findOne).toBeCalledWith(Profession, {
+            where: { slug: 'example-profession' },
+          });
+          expect(manager.findOne).toBeCalledWith(Profession, {
+            where: { slug: 'example-profession-1' },
+          });
 
-      expect(manager.findOne).toBeCalledWith(Profession, {
-        where: { slug: 'example-profession' },
-      });
-      expect(manager.findOne).toBeCalledWith(Profession, {
-        where: { slug: 'example-profession-1' },
-      });
-
-      expect(manager.save).toHaveBeenCalledWith(
-        new Profession('Example Profession', '', 'example-profession-1'),
-      );
-      expect(result.slug).toEqual('example-profession-1');
-    });
-
-    it('should save the profession with a slug appended with a unique postfix where there are multiple colliding slugs', async () => {
-      const profession = new Profession('Example Profession');
-
-      manager.findOne
-        .mockImplementationOnce(async () => {
-          return new Profession();
-        })
-        .mockImplementationOnce(async () => {
-          return new Profession();
-        })
-        .mockImplementationOnce(async () => {
-          return new Profession();
-        })
-        .mockReturnValue(null);
-
-      const result = await service.confirm(profession);
-
-      expect(manager.findOne).toBeCalledTimes(4);
-
-      expect(manager.findOne).toBeCalledWith(Profession, {
-        where: { slug: 'example-profession' },
-      });
-      expect(manager.findOne).toBeCalledWith(Profession, {
-        where: { slug: 'example-profession-1' },
-      });
-      expect(manager.findOne).toBeCalledWith(Profession, {
-        where: { slug: 'example-profession-2' },
-      });
-      expect(manager.findOne).toBeCalledWith(Profession, {
-        where: { slug: 'example-profession-3' },
+          expect(manager.save).toHaveBeenCalledWith(
+            new Profession('Example Profession', '', 'example-profession-1'),
+          );
+          expect(result.slug).toEqual('example-profession-1');
+        });
       });
 
-      expect(manager.save).toHaveBeenCalledWith(
-        new Profession('Example Profession', '', 'example-profession-3'),
-      );
-      expect(result.slug).toEqual('example-profession-3');
+      describe('when there are multiple colliding slugs', () => {
+        it('should save the Profession with a slug appended with a unique postfix', async () => {
+          const profession = new Profession('Example Profession');
+
+          manager.findOne
+            .mockImplementationOnce(async () => {
+              return new Profession();
+            })
+            .mockImplementationOnce(async () => {
+              return new Profession();
+            })
+            .mockImplementationOnce(async () => {
+              return new Profession();
+            })
+            .mockReturnValue(null);
+
+          const result = await service.confirm(profession);
+
+          expect(manager.findOne).toBeCalledTimes(4);
+
+          expect(manager.findOne).toBeCalledWith(Profession, {
+            where: { slug: 'example-profession' },
+          });
+          expect(manager.findOne).toBeCalledWith(Profession, {
+            where: { slug: 'example-profession-1' },
+          });
+          expect(manager.findOne).toBeCalledWith(Profession, {
+            where: { slug: 'example-profession-2' },
+          });
+          expect(manager.findOne).toBeCalledWith(Profession, {
+            where: { slug: 'example-profession-3' },
+          });
+
+          expect(manager.save).toHaveBeenCalledWith(
+            new Profession('Example Profession', '', 'example-profession-3'),
+          );
+          expect(result.slug).toEqual('example-profession-3');
+        });
+      });
     });
   });
 });
