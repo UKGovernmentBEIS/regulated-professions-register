@@ -7,63 +7,63 @@ on:
     tags:
       - release
 
-    env:
-      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-      CF_USER: ${{ secrets.CF_USER }}
-      CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+env:
+  DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+  DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+  CF_USER: ${{ secrets.CF_USER }}
+  CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-      jobs:
-        build_and_push_to_dockerhub:
-          runs-on: ubuntu-latest
-          outputs:
-            docker_tag: ${{ steps.set_output.outputs.docker_tag }}
-            steps:
-              - uses: actions/checkout@v2
-              - name: Set Docker tag environment variable
-                run: echo "DOCKER_TAG=${GITHUB_RUN_ID}-${GITHUB_SHA}" >> $GITHUB_ENV
-              - name: Tag and Push Docker Container
-                run: script/docker-push
-              - name: Set Docker tag as an output
-                id: set_output
-                run: echo "::set-output name=docker_tag::${{ env.DOCKER_TAG }}"
-        deploy_to_production:
-          needs: build_and_push_to_dockerhub
-          runs-on: ubuntu-latest
-          if: github.ref == 'refs/tags/release'
-          env:
-            TF_VAR_docker_tag: ${{ needs.build_and_push_to_dockerhub.outputs.docker_tag }}
-            TF_VAR_docker_username: ${{ secrets.DOCKER_USERNAME }}
-            TF_VAR_docker_password: ${{ secrets.DOCKER_PASSWORD }}
-            TF_VAR_environment: 'prod'
-            TF_VAR_app_secret: ${{ secrets.PROD_APP_SECRET }}
-            TF_VAR_auth0_client_id: ${{ secrets.PROD_AUTH0_CLIENT_ID }}
-            TF_VAR_auth0_client_secret: ${{ secrets.PROD_AUTH0_CLIENT_SECRET }}
-            TF_VAR_auth0_domain: ${{ secrets.PROD_AUTH0_DOMAIN }}
-            TF_VAR_auth0_redirect_url: ${{ secrets.PROD_AUTH0_REDIRECT_URL }}
-            TF_VAR_host_url: ${{ secrets.PROD_HOST_URL }}
-            steps:
-              - uses: actions/checkout@v2
-              - name: Deploy latest code to Production
-                run: script/deploy-terraform
-        deploy_to_staging:
-          needs: build_and_push_to_dockerhub
-          runs-on: ubuntu-latest
-          if: github.ref == 'refs/heads/main'
-          env:
-            TF_VAR_docker_tag: ${{ needs.build_and_push_to_dockerhub.outputs.docker_tag }}
-            TF_VAR_docker_username: ${{ secrets.DOCKER_USERNAME }}
-            TF_VAR_docker_password: ${{ secrets.DOCKER_PASSWORD }}
-            TF_VAR_environment: 'staging'
-            TF_VAR_app_secret: ${{ secrets.STAGING_APP_SECRET }}
-            TF_VAR_auth0_client_id: ${{ secrets.STAGING_AUTH0_CLIENT_ID }}
-            TF_VAR_auth0_client_secret: ${{ secrets.STAGING_AUTH0_CLIENT_SECRET }}
-            TF_VAR_auth0_domain: ${{ secrets.STAGING_AUTH0_DOMAIN }}
-            TF_VAR_auth0_redirect_url: ${{ secrets.STAGING_AUTH0_REDIRECT_URL }}
-            TF_VAR_host_url: ${{ secrets.STAGING_HOST_URL }}
-            steps:
-              - uses: actions/checkout@v2
-              - name: Deploy latest code to Staging
-                run: script/deploy-terraform
+jobs:
+  build_and_push_to_dockerhub:
+    runs-on: ubuntu-latest
+    outputs:
+      docker_tag: ${{ steps.set_output.outputs.docker_tag }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set Docker tag environment variable
+        run: echo "DOCKER_TAG=${GITHUB_RUN_ID}-${GITHUB_SHA}" >> $GITHUB_ENV
+      - name: Tag and Push Docker Container
+        run: script/docker-push
+      - name: Set Docker tag as an output
+        id: set_output
+        run: echo "::set-output name=docker_tag::${{ env.DOCKER_TAG }}"
+  deploy_to_production:
+    needs: build_and_push_to_dockerhub
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/tags/release'
+    env:
+      TF_VAR_docker_tag: ${{ needs.build_and_push_to_dockerhub.outputs.docker_tag }}
+      TF_VAR_docker_username: ${{ secrets.DOCKER_USERNAME }}
+      TF_VAR_docker_password: ${{ secrets.DOCKER_PASSWORD }}
+      TF_VAR_environment: 'prod'
+      TF_VAR_app_secret: ${{ secrets.PROD_APP_SECRET }}
+      TF_VAR_auth0_client_id: ${{ secrets.PROD_AUTH0_CLIENT_ID }}
+      TF_VAR_auth0_client_secret: ${{ secrets.PROD_AUTH0_CLIENT_SECRET }}
+      TF_VAR_auth0_domain: ${{ secrets.PROD_AUTH0_DOMAIN }}
+      TF_VAR_auth0_redirect_url: ${{ secrets.PROD_AUTH0_REDIRECT_URL }}
+      TF_VAR_host_url: ${{ secrets.PROD_HOST_URL }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Deploy latest code to Production
+        run: script/deploy-terraform
+  deploy_to_staging:
+    needs: build_and_push_to_dockerhub
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    env:
+      TF_VAR_docker_tag: ${{ needs.build_and_push_to_dockerhub.outputs.docker_tag }}
+      TF_VAR_docker_username: ${{ secrets.DOCKER_USERNAME }}
+      TF_VAR_docker_password: ${{ secrets.DOCKER_PASSWORD }}
+      TF_VAR_environment: 'staging'
+      TF_VAR_app_secret: ${{ secrets.STAGING_APP_SECRET }}
+      TF_VAR_auth0_client_id: ${{ secrets.STAGING_AUTH0_CLIENT_ID }}
+      TF_VAR_auth0_client_secret: ${{ secrets.STAGING_AUTH0_CLIENT_SECRET }}
+      TF_VAR_auth0_domain: ${{ secrets.STAGING_AUTH0_DOMAIN }}
+      TF_VAR_auth0_redirect_url: ${{ secrets.STAGING_AUTH0_REDIRECT_URL }}
+      TF_VAR_host_url: ${{ secrets.STAGING_HOST_URL }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Deploy latest code to Staging
+        run: script/deploy-terraform
