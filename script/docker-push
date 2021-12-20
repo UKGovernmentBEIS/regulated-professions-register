@@ -1,0 +1,9 @@
+#!/bin/bash
+
+echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+docker build --target web \
+         --build-arg current_sha="$GITHUB_SHA" \
+         --build-arg time_of_build="$(date -u +'%Y-%m-%dT%H:%M:%SZ')" \
+         -t "thedxw/beis-rpr:$DOCKER_TAG" \
+         .
+         docker push "thedxw/beis-rpr:$DOCKER_TAG"
