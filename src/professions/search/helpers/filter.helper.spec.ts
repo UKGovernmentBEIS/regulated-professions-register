@@ -47,6 +47,23 @@ describe('FilterHelper', () => {
       expect(results).toEqual([exampleProfessions[0], exampleProfessions[2]]);
     });
 
+    it('keywords are case insensitive', () => {
+      const exampleProfessions = [
+        new Profession('Trademark Attorny'),
+        new Profession('Chartered Accountant'),
+      ];
+
+      const filterHelper = new FilterHelper(exampleProfessions);
+
+      const results = filterHelper.filter({
+        keywords: 'aTtOrNy',
+        industries: [],
+        nations: [],
+      });
+
+      expect(results).toEqual([exampleProfessions[0]]);
+    });
+
     it('can filter professions by nations', () => {
       const exampleProfessions = [
         createProfessionWithNations('GB-NIR'),

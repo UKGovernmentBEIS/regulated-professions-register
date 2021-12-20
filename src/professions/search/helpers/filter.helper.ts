@@ -88,13 +88,18 @@ export class FilterHelper {
   }
 
   private getSearchTerms(filterInput: FilterInput): string[] {
-    return filterInput.keywords.split(' ').filter((term) => term !== '');
+    return filterInput.keywords
+      .toLowerCase()
+      .split(' ')
+      .filter((term) => term !== '');
   }
 
   private matchesKeywords(
     profession: Profession,
     searchTerms: string[],
   ): boolean {
-    return searchTerms.some((term) => profession.name.includes(term));
+    return searchTerms.some((term) =>
+      profession.name.toLowerCase().includes(term),
+    );
   }
 }
