@@ -41,6 +41,9 @@ export class ProfessionsService {
       let retryCount = 0;
 
       while (true) {
+        if (profession.confirmed) {
+          throw new Error('Profession has already been confirmed');
+        }
         const slug = generateSlug(profession.name, retryCount);
         const result = await queryRunner.manager.findOne<Profession>(
           Profession,
@@ -53,6 +56,7 @@ export class ProfessionsService {
           retryCount++;
         } else {
           profession.slug = slug;
+          profession.confirmed = true;
           await queryRunner.manager.save(profession);
           await queryRunner.commitTransaction();
           break;

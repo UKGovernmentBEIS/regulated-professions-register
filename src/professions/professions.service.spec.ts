@@ -139,10 +139,20 @@ describe('Profession', () => {
             where: { slug: 'example-profession' },
           });
 
-          expect(manager.save).toHaveBeenCalledWith(
-            new Profession('Example Profession', '', 'example-profession'),
-          );
-          expect(result.slug).toEqual('example-profession');
+          new Profession(
+            'Example Profession',
+            '',
+            'example-profession',
+            '',
+            null,
+            '',
+            null,
+            null,
+            null,
+            null,
+            true,
+          ),
+            expect(result.slug).toEqual('example-profession');
         });
       });
 
@@ -168,7 +178,19 @@ describe('Profession', () => {
           });
 
           expect(manager.save).toHaveBeenCalledWith(
-            new Profession('Example Profession', '', 'example-profession-1'),
+            new Profession(
+              'Example Profession',
+              '',
+              'example-profession-1',
+              '',
+              null,
+              '',
+              null,
+              null,
+              null,
+              null,
+              true,
+            ),
           );
           expect(result.slug).toEqual('example-profession-1');
         });
@@ -208,9 +230,69 @@ describe('Profession', () => {
           });
 
           expect(manager.save).toHaveBeenCalledWith(
-            new Profession('Example Profession', '', 'example-profession-3'),
+            new Profession(
+              'Example Profession',
+              '',
+              'example-profession-3',
+              '',
+              null,
+              '',
+              null,
+              null,
+              null,
+              null,
+              true,
+            ),
           );
           expect(result.slug).toEqual('example-profession-3');
+        });
+      });
+    });
+
+    describe('marking the Profession as "Confirmed"', () => {
+      describe('when the Profession has not yet been confirmed', () => {
+        it('confirms the Profession', async () => {
+          const profession = new Profession('Example Profession');
+
+          manager.findOne
+            .mockImplementationOnce(async () => {
+              return profession;
+            })
+            .mockResolvedValue(null);
+
+          const result = await service.confirm(profession);
+
+          expect(result.confirmed).toEqual(true);
+        });
+
+        describe('when the Profession has already been confirmed', () => {
+          it('throws an error', async () => {
+            const existingProfession = new Profession(
+              'Example Profession',
+              '',
+              'example-profession-3',
+              '',
+              null,
+              '',
+              null,
+              null,
+              null,
+              null,
+              true,
+            );
+
+            manager.findOne
+              .mockImplementationOnce(async () => {
+                return existingProfession;
+              })
+              .mockResolvedValue(null);
+
+            await expect(async () =>
+              service.confirm(existingProfession),
+            ).rejects.toThrowError('Profession has already been confirmed');
+
+            expect(manager.save).not.toHaveBeenCalled();
+          });
         });
       });
     });
