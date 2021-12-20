@@ -5,6 +5,7 @@ import { ValidationError } from 'class-validator';
 
 import * as path from 'path';
 import * as session from 'express-session';
+import * as methodOverride from 'method-override';
 
 import { AppModule } from './app.module';
 import { AuthenticationMidleware } from './middleware/authentication.middleware';
@@ -22,6 +23,9 @@ async function bootstrap() {
     path.join(__dirname, '..', 'views'),
     path.join(__dirname, '..', 'node_modules', 'govuk-frontend'),
   ];
+
+  // Add method-override to allow us to use PUT and DELETE methods
+  app.use(methodOverride('_method'));
 
   await nunjucksConfig(app, views);
 
