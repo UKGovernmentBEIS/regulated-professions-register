@@ -6,8 +6,11 @@ import {
   Render,
   Res,
   UseGuards,
+  Delete,
+  Redirect,
 } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
+import { DeleteResult } from 'typeorm';
 
 import { AuthenticationGuard } from '../common/authentication.guard';
 import { ExternalUserCreationService } from './external-user-creation.service';
@@ -120,5 +123,12 @@ export class UsersController {
     const user = await this.usersService.find(id);
 
     return user;
+  }
+
+  @Delete('/admin/users/:id')
+  @UseGuards(AuthenticationGuard)
+  @Redirect('/admin/users')
+  async delete(@Param('id') id): Promise<DeleteResult> {
+    return this.usersService.delete(id);
   }
 }

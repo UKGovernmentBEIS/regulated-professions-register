@@ -203,4 +203,12 @@ describe('UsersController', () => {
       });
     });
   });
+
+  describe('delete', () => {
+    it('should delete a user', async () => {
+      await controller.delete('some-uuid');
+
+      expect(usersService.delete).toHaveBeenCalledWith('some-uuid');
+    });
+  });
 });
