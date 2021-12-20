@@ -55,7 +55,7 @@ export class SearchController {
 
     const allProfessions = await this.professionsService.all();
 
-    const filterNations = Nation.all().filter((nation) =>
+    const filterNations = allNations.filter((nation) =>
       filter.nations.includes(nation.code),
     );
     const filterIndustries = allIndustries.filter((industry) =>

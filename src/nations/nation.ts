@@ -14,10 +14,15 @@ export class Nation {
   }
 
   static all(): Nation[] {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const nations: Nation[] = require('../config/nations.json');
+    const rawNations: {
+      name: string;
+      code: string;
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+    }[] = require('../config/nations.json');
 
-    return nations;
+    return rawNations.map(
+      (rawNation) => new Nation(rawNation.name, rawNation.code),
+    );
   }
 
   static find(code: string): Nation {
