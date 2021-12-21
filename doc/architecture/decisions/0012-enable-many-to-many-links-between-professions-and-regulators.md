@@ -19,7 +19,7 @@ around how professions and regulators relate to one another.
 ## Decision
 
 We will represent the relation between organisations and professions not as a 1-to-1 relationship,
-but many-to-many. A Profession will have many Regulations, which refer to the *state of being regulated*.
+but many-to-many. A Profession will have many Regulations, which refer to the _state of being regulated_.
 
 Regulations are valid within a certain geographical area, and within a certain time. A Regulation is owned
 by one or many Organisations; in the case of a statutory regulation, this is likely to be just one per geographical area,
@@ -44,3 +44,14 @@ interaction design process.
 
 We will need to add User and Decision concepts to our complete data model in
 future, but those are waiting for further research.
+
+This new approach does opens up a number of design questions that haven't been addressed
+in the alpha, such as: who can create professions? How do we ensure that professions
+aren't duplicated? There is limited time for the private beta, and there is a
+concern that we won't have time to do the necessary research and iteration.
+
+With this in mind, we're suggesting implementing this model now, but a simpler flow
+on the admin backend that behaves as though a user is creating one profession for one
+regulator. This gives us the flexibility to iterate the backend and rationalise the
+user interfact and clean up the dataset at a later date, but with less (potentially messy)
+work to do on the data model later.
