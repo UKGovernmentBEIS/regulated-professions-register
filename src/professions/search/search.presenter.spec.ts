@@ -64,10 +64,10 @@ describe('SearchPresenter', () => {
           return 'Example industry 3';
         case 'nations.england':
           return 'England';
-        case 'nations.wales':
-          return 'Wales';
         case 'nations.scotland':
           return 'Scotland';
+        case 'nations.wales':
+          return 'Wales';
         case 'nations.northernIreland':
           return 'Northern Ireland';
         default:
@@ -95,14 +95,15 @@ describe('SearchPresenter', () => {
 
       const result = await presenter.present(i18nService, request);
 
-      const industriesCheckboxArgs = new IndustriesCheckboxPresenter(
+      const industriesCheckboxArgs = await new IndustriesCheckboxPresenter(
         exampleIndustries,
         [exampleIndustry2],
-      ).checkboxArgs();
+      ).checkboxArgs(i18nService);
 
-      const nationsCheckboxArgs = new NationsCheckboxPresenter(Nation.all(), [
-        Nation.find('GB-ENG'),
-      ]).checkboxArgs();
+      const nationsCheckboxArgs = await new NationsCheckboxPresenter(
+        Nation.all(),
+        [Nation.find('GB-ENG')],
+      ).checkboxArgs(i18nService);
 
       expect(result).toMatchObject({
         filters: {

@@ -1,6 +1,7 @@
 import { DeepMocked, createMock } from '@golevelup/ts-jest';
 import { TestingModule, Test } from '@nestjs/testing';
 import { Response } from 'express';
+import { I18nService } from 'nestjs-i18n';
 import { IndustriesService } from '../../../industries/industries.service';
 import { Industry } from '../../../industries/industry.entity';
 import { TopLevelInformationController } from './top-level-information.controller';
@@ -9,6 +10,7 @@ describe('TopLevelInformationController', () => {
   let controller: TopLevelInformationController;
   let industriesService: DeepMocked<IndustriesService>;
   let response: DeepMocked<Response>;
+  let i18nService: DeepMocked<I18nService>;
 
   const healthIndustry = new Industry('industries.health');
   healthIndustry.id = 'health-uuid';
@@ -21,10 +23,33 @@ describe('TopLevelInformationController', () => {
 
   beforeEach(async () => {
     industriesService = createMock<IndustriesService>();
+    i18nService = createMock<I18nService>();
+
+    i18nService.translate.mockImplementation(async (text) => {
+      switch (text) {
+        case 'industries.health':
+          return 'Health';
+        case 'industries.constructionAndEngineering':
+          return 'Construction & Engineering';
+        case 'nations.england':
+          return 'England';
+        case 'nations.scotland':
+          return 'Scotland';
+        case 'nations.wales':
+          return 'Wales';
+        case 'nations.northernIreland':
+          return 'Northern Ireland';
+        default:
+          return '';
+      }
+    });
 
     const module: TestingModule = await Test.createTestingModule({
       controllers: [TopLevelInformationController],
-      providers: [{ provide: IndustriesService, useValue: industriesService }],
+      providers: [
+        { provide: IndustriesService, useValue: industriesService },
+        { provide: I18nService, useValue: i18nService },
+      ],
     }).compile();
 
     industriesService.all.mockImplementation(async () => industries);
@@ -44,34 +69,34 @@ describe('TopLevelInformationController', () => {
         {
           industriesCheckboxArgs: [
             {
-              text: 'industries.health',
+              text: 'Health',
               value: 'health-uuid',
               checked: false,
             },
             {
-              text: 'industries.constructionAndEngineering',
+              text: 'Construction & Engineering',
               value: 'construction-uuid',
               checked: false,
             },
           ],
           nationsCheckboxArgs: [
             {
-              text: 'nations.england',
+              text: 'England',
               value: 'GB-ENG',
               checked: false,
             },
             {
-              text: 'nations.scotland',
+              text: 'Scotland',
               value: 'GB-SCT',
               checked: false,
             },
             {
-              text: 'nations.wales',
+              text: 'Wales',
               value: 'GB-WLS',
               checked: false,
             },
             {
-              text: 'nations.northernIreland',
+              text: 'Northern Ireland',
               value: 'GB-NIR',
               checked: false,
             },
@@ -139,34 +164,34 @@ describe('TopLevelInformationController', () => {
           {
             industriesCheckboxArgs: [
               {
-                text: 'industries.health',
+                text: 'Health',
                 value: 'health-uuid',
                 checked: false,
               },
               {
-                text: 'industries.constructionAndEngineering',
+                text: 'Construction & Engineering',
                 value: 'construction-uuid',
                 checked: false,
               },
             ],
             nationsCheckboxArgs: [
               {
-                text: 'nations.england',
+                text: 'England',
                 value: 'GB-ENG',
                 checked: false,
               },
               {
-                text: 'nations.scotland',
+                text: 'Scotland',
                 value: 'GB-SCT',
                 checked: false,
               },
               {
-                text: 'nations.wales',
+                text: 'Wales',
                 value: 'GB-WLS',
                 checked: false,
               },
               {
-                text: 'nations.northernIreland',
+                text: 'Northern Ireland',
                 value: 'GB-NIR',
                 checked: false,
               },

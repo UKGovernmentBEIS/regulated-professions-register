@@ -7,10 +7,14 @@ import { IndustriesService } from '../../../industries/industries.service';
 import { Nation } from '../../../nations/nation';
 import { ValidationFailedError } from '../../../validation/validation-failed.error';
 import { TopLevelDetailsDto } from './dto/top-level-details.dto';
+import { I18nService } from 'nestjs-i18n';
 
 @Controller('admin/professions/new/top-level-information')
 export class TopLevelInformationController {
-  constructor(private industriesService: IndustriesService) {}
+  constructor(
+    private readonly industriesService: IndustriesService,
+    private readonly i18nService: I18nService,
+  ) {}
 
   @Get()
   async new(
@@ -19,12 +23,12 @@ export class TopLevelInformationController {
   ): Promise<void> {
     const industries = await this.industriesService.all();
 
-    const industriesCheckboxArgs = new IndustriesCheckboxPresenter(
+    const industriesCheckboxArgs = await new IndustriesCheckboxPresenter(
       industries,
-    ).checkboxArgs();
-    const nationsCheckboxArgs = new NationsCheckboxPresenter(
+    ).checkboxArgs(this.i18nService);
+    const nationsCheckboxArgs = await new NationsCheckboxPresenter(
       Nation.all(),
-    ).checkboxArgs();
+    ).checkboxArgs(this.i18nService);
 
     res.render('professions/admin/add-profession/top-level-information', {
       industriesCheckboxArgs,
@@ -46,7 +50,7 @@ export class TopLevelInformationController {
 
     if (!validator.valid()) {
       const errors = new ValidationFailedError(validator.errors).fullMessages();
-      this.new(res, errors);
+      await this.new(res, errors);
       return;
     }
 

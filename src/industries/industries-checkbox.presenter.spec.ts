@@ -1,3 +1,5 @@
+import { createMock, DeepMocked } from '@golevelup/ts-jest';
+import { I18nService } from 'nestjs-i18n';
 import { IndustriesCheckboxPresenter } from './industries-checkbox.presenter';
 import { Industry } from './industry.entity';
 
@@ -17,23 +19,42 @@ const exampleIndustries = [
 ];
 
 describe('IndustriesCheckboxPresenter', () => {
+  let i18nService: DeepMocked<I18nService>;
+
+  beforeEach(async () => {
+    i18nService = createMock<I18nService>();
+
+    i18nService.translate.mockImplementation(async (text) => {
+      switch (text) {
+        case 'industries.example1':
+          return 'Example Industry 1';
+        case 'industries.example2':
+          return 'Example Industry 2';
+        case 'industries.example3':
+          return 'Example Industry 3';
+        default:
+          return '';
+      }
+    });
+  });
+
   describe('checkboxArgs', () => {
     it('should return unchecked checkbox arguments when called with one argument', () => {
       const presenter = new IndustriesCheckboxPresenter(exampleIndustries);
 
-      expect(presenter.checkboxArgs()).toEqual([
+      expect(presenter.checkboxArgs(i18nService)).resolves.toEqual([
         {
-          text: 'industries.example1',
+          text: 'Example Industry 1',
           value: 'example-industry-1',
           checked: false,
         },
         {
-          text: 'industries.example2',
+          text: 'Example Industry 2',
           value: 'example-industry-2',
           checked: false,
         },
         {
-          text: 'industries.example3',
+          text: 'Example Industry 3',
           value: 'example-industry-3',
           checked: false,
         },
@@ -46,19 +67,19 @@ describe('IndustriesCheckboxPresenter', () => {
         exampleIndustry3,
       ]);
 
-      expect(presenter.checkboxArgs()).toEqual([
+      expect(presenter.checkboxArgs(i18nService)).resolves.toEqual([
         {
-          text: 'industries.example1',
+          text: 'Example Industry 1',
           value: 'example-industry-1',
           checked: true,
         },
         {
-          text: 'industries.example2',
+          text: 'Example Industry 2',
           value: 'example-industry-2',
           checked: false,
         },
         {
-          text: 'industries.example3',
+          text: 'Example Industry 3',
           value: 'example-industry-3',
           checked: true,
         },
