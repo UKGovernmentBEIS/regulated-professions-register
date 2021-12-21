@@ -1,16 +1,15 @@
 import { Body, Controller, Get, Post, Render, Req } from '@nestjs/common';
 import { Request } from 'express';
 import { I18nService } from 'nestjs-i18n';
-import { backLink } from '../../common/utils';
 import { Industry } from '../../industries/industry.entity';
 import { IndustriesService } from '../../industries/industries.service';
 import { Nation } from '../../nations/nation';
-import { Profession } from '../profession.entity';
 import { ProfessionsService } from '../professions.service';
 import { FilterDto } from './dto/filter.dto';
 import { FilterHelper } from './helpers/filter.helper';
 import { FilterInput } from './interfaces/filter-input.interface';
 import { IndexTemplate } from './interfaces/index-template.interface';
+import { SearchPresenter } from './search.presenter';
 
 @Controller('professions/search')
 export class SearchController {
@@ -23,10 +22,7 @@ export class SearchController {
   @Get()
   @Render('professions/search/index')
   async index(@Req() request: Request): Promise<IndexTemplate> {
-    return {
-      ...(await this.createSearchResults(new FilterDto())),
-      backLink: backLink(request),
-    };
+    return this.createSearchResults(new FilterDto(), request);
   }
 
   @Post()
@@ -35,31 +31,29 @@ export class SearchController {
     @Body() filter: FilterDto,
     @Req() request: Request,
   ): Promise<IndexTemplate> {
-    return {
-      ...(await this.createSearchResults(filter)),
-      backLink: backLink(request),
-    };
+    return this.createSearchResults(filter, request);
   }
 
   private async createSearchResults(
     filter: FilterDto,
-  ): Promise<Omit<IndexTemplate, 'backLink'>> {
+    request: Request,
+  ): Promise<IndexTemplate> {
     const allNations = Nation.all();
     const allIndustries = await this.industriesService.all();
     const allProfessions = await this.professionsService.all();
 
     const filterInput = this.getFilterInput(filter, allNations, allIndustries);
 
-    const filterProfessions = new FilterHelper(allProfessions).filter(
+    const filteredProfessions = new FilterHelper(allProfessions).filter(
       filterInput,
     );
 
-    return this.presentResults(
+    return new SearchPresenter(
       filterInput,
       allNations,
       allIndustries,
-      filterProfessions,
-    );
+      filteredProfessions,
+    ).present(this.i18nService, request);
   }
 
   private getFilterInput(
@@ -84,53 +78,5 @@ export class SearchController {
     );
 
     return { nations, industries, keywords: filter.keywords };
-  }
-
-  private async presentResults(
-    filterInput: FilterInput,
-    allNations: Nation[],
-    allIndustries: Industry[],
-    filteredProfessions: Profession[],
-  ): Promise<Omit<IndexTemplate, 'backLink'>> {
-    const nationsOptionSelectArgs = allNations.map((nation) => ({
-      text: nation.name,
-      value: nation.code,
-      checked: filterInput.nations.includes(nation),
-    }));
-
-    const industriesOptionSelectArgs = allIndustries.map((industry) => ({
-      text: industry.name,
-      value: industry.id,
-      checked: filterInput.industries.includes(industry),
-    }));
-
-    const displayProfessions = await Promise.all(
-      filteredProfessions.map(async (profession) => {
-        const nations = await Promise.all(
-          profession.occupationLocations.map(async (code) =>
-            Nation.find(code).translatedName(this.i18nService),
-          ),
-        );
-
-        const industries = await Promise.all(
-          profession.industries.map(
-            async (industry) => await this.i18nService.translate(industry.name),
-          ),
-        );
-
-        return { ...profession, nations, industries };
-      }),
-    );
-
-    return {
-      professions: displayProfessions,
-      nationsOptionSelectArgs,
-      industriesOptionSelectArgs,
-      filters: {
-        keywords: filterInput.keywords,
-        nations: filterInput.nations.map((nation) => nation.name),
-        industries: filterInput.industries.map((industry) => industry.name),
-      },
-    };
   }
 }

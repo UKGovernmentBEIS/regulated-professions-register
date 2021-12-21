@@ -1,5 +1,7 @@
 import { Body, Controller, Get, Post, Res, Session } from '@nestjs/common';
 import { Response } from 'express';
+import { IndustriesCheckboxPresenter } from '../../../industries/industries-checkbox.presenter';
+import { NationsCheckboxPresenter } from '../../../nations/nations-checkbox.presenter';
 import { Validator } from '../../../helpers/validator';
 import { IndustriesService } from '../../../industries/industries.service';
 import { Nation } from '../../../nations/nation';
@@ -17,15 +19,12 @@ export class TopLevelInformationController {
   ): Promise<void> {
     const industries = await this.industriesService.all();
 
-    const industriesCheckboxArgs = industries.map((industry) => ({
-      text: industry.name,
-      value: industry.id,
-    }));
-
-    const nationsCheckboxArgs = Nation.all().map((nation) => ({
-      text: nation.name,
-      value: nation.code,
-    }));
+    const industriesCheckboxArgs = new IndustriesCheckboxPresenter(
+      industries,
+    ).checkboxArgs();
+    const nationsCheckboxArgs = new NationsCheckboxPresenter(
+      Nation.all(),
+    ).checkboxArgs();
 
     res.render('professions/admin/add-profession/top-level-information', {
       industriesCheckboxArgs,

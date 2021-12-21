@@ -46,28 +46,34 @@ describe('TopLevelInformationController', () => {
             {
               text: 'industries.health',
               value: 'health-uuid',
+              checked: false,
             },
             {
               text: 'industries.constructionAndEngineering',
               value: 'construction-uuid',
+              checked: false,
             },
           ],
           nationsCheckboxArgs: [
             {
               text: 'nations.england',
               value: 'GB-ENG',
+              checked: false,
             },
             {
               text: 'nations.scotland',
               value: 'GB-SCT',
+              checked: false,
             },
             {
               text: 'nations.wales',
               value: 'GB-WLS',
+              checked: false,
             },
             {
               text: 'nations.northernIreland',
               value: 'GB-NIR',
+              checked: false,
             },
           ],
         },
@@ -135,28 +141,34 @@ describe('TopLevelInformationController', () => {
               {
                 text: 'industries.health',
                 value: 'health-uuid',
+                checked: false,
               },
               {
                 text: 'industries.constructionAndEngineering',
                 value: 'construction-uuid',
+                checked: false,
               },
             ],
             nationsCheckboxArgs: [
               {
                 text: 'nations.england',
                 value: 'GB-ENG',
+                checked: false,
               },
               {
                 text: 'nations.scotland',
                 value: 'GB-SCT',
+                checked: false,
               },
               {
                 text: 'nations.wales',
                 value: 'GB-WLS',
+                checked: false,
               },
               {
                 text: 'nations.northernIreland',
                 value: 'GB-NIR',
+                checked: false,
               },
             ],
             errors: {
