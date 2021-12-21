@@ -44,7 +44,7 @@ describe('ConfirmationController', () => {
     });
   });
 
-  describe('create', () => {
+  describe('confirm', () => {
     describe('when all required fields are present in the session', () => {
       it('creates a Profession, with minimal fields', async () => {
         const constructionUUID = 'construction-uuid';
@@ -63,12 +63,12 @@ describe('ConfirmationController', () => {
 
         industriesService.findByIds.mockImplementation(async () => [industry]);
 
-        await controller.create(session);
+        await controller.confirm(session);
 
         expect(industriesService.findByIds).toHaveBeenCalledWith([
           constructionUUID,
         ]);
-        expect(professionsService.create).toHaveBeenCalledWith(
+        expect(professionsService.confirm).toHaveBeenCalledWith(
           expect.objectContaining({
             name: 'Gas Safe Engineer',
             industries: [industry],
@@ -81,7 +81,7 @@ describe('ConfirmationController', () => {
     describe('when the session is empty', () => {
       it('should throw an exception', () => {
         expect(async () => {
-          await controller.create({});
+          await controller.confirm({});
         }).rejects.toThrowError();
       });
     });

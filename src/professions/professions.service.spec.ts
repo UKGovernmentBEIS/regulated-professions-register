@@ -123,13 +123,13 @@ describe('Profession', () => {
     });
   });
 
-  describe('create', () => {
+  describe('confirm', () => {
     it('should save the profession with the "base" slug when there are no colliding slugs', async () => {
       const profession = new Profession('Example Profession');
 
       manager.findOne.mockReturnValue(null);
 
-      const result = await service.create(profession);
+      const result = await service.confirm(profession);
 
       expect(manager.findOne).toBeCalledTimes(1);
 
@@ -152,7 +152,7 @@ describe('Profession', () => {
         })
         .mockReturnValue(null);
 
-      const result = await service.create(profession);
+      const result = await service.confirm(profession);
 
       expect(manager.findOne).toBeCalledTimes(2);
 
@@ -184,7 +184,7 @@ describe('Profession', () => {
         })
         .mockReturnValue(null);
 
-      const result = await service.create(profession);
+      const result = await service.confirm(profession);
 
       expect(manager.findOne).toBeCalledTimes(4);
 

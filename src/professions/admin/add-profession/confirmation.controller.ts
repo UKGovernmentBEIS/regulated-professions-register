@@ -21,7 +21,7 @@ export class ConfirmationController {
 
   @Post()
   @Redirect('/admin/professions/new/confirmation')
-  async create(@Session() session: Record<string, any>) {
+  async confirm(@Session() session: Record<string, any>) {
     const addProfessionSession = session['add-profession'];
     const topLevelDetails: TopLevelDetailsDto =
       addProfessionSession['top-level-details'];
@@ -43,7 +43,7 @@ export class ConfirmationController {
       null,
     );
 
-    await this.professionsService.create(profession);
+    await this.professionsService.confirm(profession);
   }
 
   @Get()

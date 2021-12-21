@@ -29,7 +29,7 @@ export class ProfessionsService {
     return this.repository.save(user);
   }
 
-  async create(profession: Profession): Promise<Profession> {
+  async confirm(profession: Profession): Promise<Profession> {
     const queryRunner = this.connection.createQueryRunner();
 
     await queryRunner.connect();
