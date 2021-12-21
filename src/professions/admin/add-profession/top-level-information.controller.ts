@@ -18,12 +18,14 @@ import { Profession } from '../../profession.entity';
 import { ProfessionsService } from '../../professions.service';
 import { TopLevelDetailsDto } from './dto/top-level-details.dto';
 import { TopLevelDetailsTemplate } from './interfaces/top-level-details.template';
+import { I18nService } from 'nestjs-i18n';
 
 @Controller('admin/professions')
 export class TopLevelInformationController {
   constructor(
     private readonly professionsService: ProfessionsService,
     private readonly industriesService: IndustriesService,
+    private readonly i18nService: I18nService,
   ) {}
 
   @Get('/:id/top-level-information/edit')
@@ -36,16 +38,18 @@ export class TopLevelInformationController {
 
     const industries = await this.industriesService.all();
 
-    const industriesCheckboxArgs = new IndustriesCheckboxPresenter(
+    const industriesCheckboxArgs = await new IndustriesCheckboxPresenter(
       industries,
       profession.industries || [],
+      this.i18nService,
     ).checkboxArgs();
 
-    const nationsCheckboxArgs = new NationsCheckboxPresenter(
+    const nationsCheckboxArgs = await new NationsCheckboxPresenter(
       Nation.all(),
       (profession.occupationLocations || []).map((nationCode) =>
         Nation.find(nationCode),
       ),
+      this.i18nService,
     ).checkboxArgs();
 
     return {

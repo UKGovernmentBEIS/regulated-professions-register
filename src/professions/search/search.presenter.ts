@@ -21,14 +21,16 @@ export class SearchPresenter {
     i18nService: I18nService,
     request: Request,
   ): Promise<IndexTemplate> {
-    const nationsCheckboxArgs = new NationsCheckboxPresenter(
+    const nationsCheckboxArgs = await new NationsCheckboxPresenter(
       this.allNations,
       this.filterInput.nations,
+      i18nService,
     ).checkboxArgs();
 
-    const industriesCheckboxArgs = new IndustriesCheckboxPresenter(
+    const industriesCheckboxArgs = await new IndustriesCheckboxPresenter(
       this.allIndustries,
       this.filterInput.industries,
+      i18nService,
     ).checkboxArgs();
 
     const displayProfessions = await Promise.all(
