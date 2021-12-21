@@ -14,13 +14,13 @@ export interface IndexTemplate {
     keywords: string;
   };
 
-  nationsOptionSelectArgs: {
+  nationsCheckboxArgs: {
     text: string;
     value: string;
     checked: boolean;
   }[];
 
-  industriesOptionSelectArgs: {
+  industriesCheckboxArgs: {
     text: string;
     value: string;
     checked: boolean;

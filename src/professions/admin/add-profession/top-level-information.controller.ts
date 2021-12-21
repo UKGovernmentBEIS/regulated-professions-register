@@ -8,6 +8,8 @@ import {
   Res,
 } from '@nestjs/common';
 import { Response } from 'express';
+import { IndustriesCheckboxPresenter } from '../../../industries/industries-checkbox.presenter';
+import { NationsCheckboxPresenter } from '../../../nations/nations-checkbox.presenter';
 import { Validator } from '../../../helpers/validator';
 import { IndustriesService } from '../../../industries/industries.service';
 import { Nation } from '../../../nations/nation';
@@ -34,29 +36,17 @@ export class TopLevelInformationController {
 
     const industries = await this.industriesService.all();
 
-    const industriesCheckboxArgs = industries.map((industry) => {
-      const hasSelectedIndustry = !!(profession.industries || []).find(
-        (selectedIndustry) => industry.id === selectedIndustry.id,
-      );
+    const industriesCheckboxArgs = new IndustriesCheckboxPresenter(
+      industries,
+      profession.industries || [],
+    ).checkboxArgs();
 
-      return {
-        text: industry.name,
-        value: industry.id,
-        checked: hasSelectedIndustry,
-      };
-    });
-
-    const nationsCheckboxArgs = Nation.all().map((nation) => {
-      const hasSelectedNation = (profession.occupationLocations || []).includes(
-        nation.code,
-      );
-
-      return {
-        text: nation.name,
-        value: nation.code,
-        checked: hasSelectedNation,
-      };
-    });
+    const nationsCheckboxArgs = new NationsCheckboxPresenter(
+      Nation.all(),
+      (profession.occupationLocations || []).map((nationCode) =>
+        Nation.find(nationCode),
+      ),
+    ).checkboxArgs();
 
     return {
       name: profession.name,

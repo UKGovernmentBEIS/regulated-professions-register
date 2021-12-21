@@ -1,5 +1,5 @@
 export interface CheckboxArgs {
-  value: string;
   text: string;
+  value: string;
   checked: boolean;
 }
