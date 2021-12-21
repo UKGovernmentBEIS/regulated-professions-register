@@ -15,7 +15,7 @@ import { ValidationFailedError } from '../../../validation/validation-failed.err
 import { Profession } from '../../profession.entity';
 import { ProfessionsService } from '../../professions.service';
 import { TopLevelDetailsDto } from './dto/top-level-details.dto';
-import { TopLevelDetailsTemplate } from './interfaces/top-level-details';
+import { TopLevelDetailsTemplate } from './interfaces/top-level-details.template';
 
 @Controller('admin/professions')
 export class TopLevelInformationController {

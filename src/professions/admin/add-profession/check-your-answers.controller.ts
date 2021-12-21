@@ -3,6 +3,7 @@ import { I18nService } from 'nestjs-i18n';
 
 import { Nation } from '../../../nations/nation';
 import { ProfessionsService } from '../../professions.service';
+import { CheckYourAnswersTemplate } from './interfaces/check-your-answers.template';
 
 @Controller('admin/professions')
 export class CheckYourAnswersController {
@@ -13,12 +14,7 @@ export class CheckYourAnswersController {
 
   @Get(':id/check-your-answers')
   @Render('professions/admin/add-profession/check-your-answers')
-  async show(@Param('id') id: string): Promise<{
-    name: string;
-    nations: string[];
-    industries: string[];
-    professionId: string;
-  }> {
+  async show(@Param('id') id: string): Promise<CheckYourAnswersTemplate> {
     const draftProfession = await this.professionsService.find(id);
 
     if (!draftProfession) {
