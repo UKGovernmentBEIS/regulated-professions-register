@@ -1,0 +1,36 @@
+#!/bin/sh
+
+# script/release: Tag the latest head commit to a specific version, and
+#                 tag that commit as `latest` and push to the origin repo
+
+set -e
+
+cd "$(dirname "$0")/.."
+
+branch=$(git rev-parse --abbrev-ref HEAD)
+
+if [ "$branch" != "main" ]; then
+  echo "You don't appear to be on the \`main\` branch. Switch to main, and try again"
+  exit 1
+fi
+
+latest_tag=$(git describe --tags --abbrev=0)
+latest_version=$(echo "$latest_tag" | sed 's/[a-z0\-]//g')
+next_version=$(printf "%03d\n" $((latest_version + 1)))
+next_tag="release-$next_version"
+
+if grep -Eq "$next_tag" CHANGELOG.md; then
+  echo "Are you sure you want to push the tag \`$next_tag\` to origin? This will deploy the latest code to production. (y/n)"
+  read -r
+  if expr "$REPLY" : "^[Yy]$" > /dev/null; then
+    git tag "$next_tag"
+    git push origin "$next_tag"
+  else
+    echo "Exiting..."
+    exit 1
+  fi
+else
+  echo "Can't find a reference to the release \`$next_tag\` in CHANGELOG.md. Are you sure you've updated it?"
+fi
+
+
