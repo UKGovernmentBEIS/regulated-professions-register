@@ -5,7 +5,7 @@ on:
     branches:
       - main
     tags:
-      - release
+      - 'release-*'
 
 env:
   DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
