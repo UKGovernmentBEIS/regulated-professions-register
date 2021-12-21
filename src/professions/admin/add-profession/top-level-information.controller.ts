@@ -24,26 +24,42 @@ export class TopLevelInformationController {
     private readonly industriesService: IndustriesService,
   ) {}
 
-  @Get(`/:id/top-level-information/edit`)
+  @Get('/:id/top-level-information/edit')
   @Render('professions/admin/add-profession/top-level-information')
   async edit(
     @Param('id') id: string,
     errors: object | undefined = undefined,
   ): Promise<TopLevelDetailsTemplate> {
+    const profession = await this.professionsService.find(id);
+
     const industries = await this.industriesService.all();
 
-    const industriesCheckboxArgs = industries.map((industry) => ({
-      text: industry.name,
-      value: industry.id,
-    }));
+    const industriesCheckboxArgs = industries.map((industry) => {
+      const hasSelectedIndustry = !!(profession.industries || []).find(
+        (selectedIndustry) => industry.id === selectedIndustry.id,
+      );
 
-    const nationsCheckboxArgs = Nation.all().map((nation) => ({
-      text: nation.name,
-      value: nation.code,
-    }));
+      return {
+        text: industry.name,
+        value: industry.id,
+        checked: hasSelectedIndustry,
+      };
+    });
+
+    const nationsCheckboxArgs = Nation.all().map((nation) => {
+      const hasSelectedNation = (profession.occupationLocations || []).includes(
+        nation.code,
+      );
+
+      return {
+        text: nation.name,
+        value: nation.code,
+        checked: hasSelectedNation,
+      };
+    });
 
     return {
-      professionId: id,
+      name: profession.name,
       industriesCheckboxArgs,
       nationsCheckboxArgs,
       errors,

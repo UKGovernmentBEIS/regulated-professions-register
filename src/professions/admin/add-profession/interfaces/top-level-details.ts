@@ -1,6 +1,6 @@
 export interface TopLevelDetailsTemplate {
-  professionId: string;
-  industriesCheckboxArgs: { text: string; value: string }[];
-  nationsCheckboxArgs: { text: string; value: string }[];
+  name: string | null;
+  industriesCheckboxArgs: { text: string; value: string; checked?: boolean }[];
+  nationsCheckboxArgs: { text: string; value: string: checked?: boolean }[];
   errors: object | undefined;
 }
