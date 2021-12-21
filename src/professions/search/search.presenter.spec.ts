@@ -128,5 +128,48 @@ describe('SearchPresenter', () => {
         ],
       });
     });
+
+    it('should sort the search results alphabetically', async () => {
+      const filterInput: FilterInput = {
+        nations: [],
+        industries: [],
+        keywords: '',
+      };
+
+      const professionA = new Profession('A');
+      professionA.occupationLocations = [];
+      professionA.industries = [];
+
+      const professionB = new Profession('B');
+      professionB.occupationLocations = [];
+      professionB.industries = [];
+
+      const professionC = new Profession('C');
+      professionC.occupationLocations = [];
+      professionC.industries = [];
+
+      const presenter = new SearchPresenter(
+        filterInput,
+        nations,
+        exampleIndustries,
+        [professionC, professionA, professionB],
+      );
+
+      const result = await presenter.present(i18nService, request);
+
+      expect(result).toMatchObject({
+        professions: [
+          await new ProfessionSearchResultPresenter(professionA).present(
+            i18nService,
+          ),
+          await new ProfessionSearchResultPresenter(professionB).present(
+            i18nService,
+          ),
+          await new ProfessionSearchResultPresenter(professionC).present(
+            i18nService,
+          ),
+        ],
+      });
+    });
   });
 });

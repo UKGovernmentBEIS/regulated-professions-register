@@ -40,6 +40,16 @@ export class SearchPresenter {
       ),
     );
 
+    displayProfessions.sort((profession1, profession2) => {
+      if (profession1.name < profession2.name) {
+        return -1;
+      } else if (profession1.name > profession2.name) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+
     return {
       professions: displayProfessions,
       nationsCheckboxArgs,
