@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Res, Session } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Render,
+  Res,
+} from '@nestjs/common';
 import { Response } from 'express';
 import { Validator } from '../../../helpers/validator';
 import { IndustriesService } from '../../../industries/industries.service';
@@ -7,19 +15,21 @@ import { ValidationFailedError } from '../../../validation/validation-failed.err
 import { Profession } from '../../profession.entity';
 import { ProfessionsService } from '../../professions.service';
 import { TopLevelDetailsDto } from './dto/top-level-details.dto';
+import { TopLevelDetailsTemplate } from './interfaces/top-level-details';
 
-@Controller('admin/professions/new/top-level-information')
+@Controller('admin/professions')
 export class TopLevelInformationController {
   constructor(
     private readonly professionsService: ProfessionsService,
     private readonly industriesService: IndustriesService,
   ) {}
 
-  @Get()
-  async new(
-    @Res() res: Response,
+  @Get(`/:id/top-level-information/edit`)
+  @Render('professions/admin/add-profession/top-level-information')
+  async edit(
+    @Param('id') id: string,
     errors: object | undefined = undefined,
-  ): Promise<void> {
+  ): Promise<TopLevelDetailsTemplate> {
     const industries = await this.industriesService.all();
 
     const industriesCheckboxArgs = industries.map((industry) => ({
@@ -32,18 +42,19 @@ export class TopLevelInformationController {
       value: nation.code,
     }));
 
-    res.render('professions/admin/add-profession/top-level-information', {
+    return {
+      professionId: id,
       industriesCheckboxArgs,
       nationsCheckboxArgs,
       errors,
-    });
+    };
   }
 
-  @Post()
-  async addTopLevelInformation(
-    @Session() session: Record<string, any>,
+  @Post('/:id/top-level-information')
+  async update(
     @Body() topLevelDetailsDto, // unfortunately we can't type this here without a validation error being thrown outside of this
     @Res() res: Response,
+    @Param('id') id: string,
   ): Promise<void> {
     const validator = await Validator.validate(
       TopLevelDetailsDto,
@@ -52,7 +63,7 @@ export class TopLevelInformationController {
 
     if (!validator.valid()) {
       const errors = new ValidationFailedError(validator.errors).fullMessages();
-      this.new(res, errors);
+      this.edit(id, errors);
       return;
     }
 
@@ -62,20 +73,19 @@ export class TopLevelInformationController {
       topLevelDetails.industries,
     );
 
-    const draftProfession: Profession = await this.professionsService.confirm(
-      new Profession(
-        topLevelDetails.name,
-        null,
-        null,
-        null,
-        topLevelDetails.nations,
-        null,
-        industries,
-      ),
-    );
+    const profession = await this.professionsService.find(id);
 
-    session['draft-profession-id'] = draftProfession.id;
+    const updated: Profession = {
+      ...profession,
+      ...{
+        name: topLevelDetailsDto.name,
+        occupationLocations: topLevelDetails.nations,
+        industries: industries,
+      },
+    };
 
-    res.redirect('/admin/professions/new/check-your-answers');
+    await this.professionsService.save(updated);
+
+    res.redirect(`/admin/professions/${id}/check-your-answers`);
   }
 }

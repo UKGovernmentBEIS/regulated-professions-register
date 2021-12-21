@@ -1,26 +1,25 @@
-import { Controller, Get, Render, Session } from '@nestjs/common';
+import { Controller, Get, Param, Render } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
 
 import { Nation } from '../../../nations/nation';
 import { ProfessionsService } from '../../professions.service';
 
-@Controller('admin/professions/new/check-your-answers')
+@Controller('admin/professions')
 export class CheckYourAnswersController {
   constructor(
     private readonly professionsService: ProfessionsService,
     private readonly i18nService: I18nService,
   ) {}
 
-  @Get()
+  @Get(':id/check-your-answers')
   @Render('professions/admin/add-profession/check-your-answers')
-  async show(@Session() session: Record<string, any>): Promise<{
+  async show(@Param('id') id: string): Promise<{
     name: string;
     nations: string[];
     industries: string[];
+    professionId: string;
   }> {
-    const professionId = session['profession-id'];
-
-    const draftProfession = await this.professionsService.find(professionId);
+    const draftProfession = await this.professionsService.find(id);
 
     if (!draftProfession) {
       throw new Error('Draft profession not found');
@@ -39,6 +38,7 @@ export class CheckYourAnswersController {
     );
 
     return {
+      professionId: id,
       name: draftProfession.name,
       nations: selectedNations,
       industries: industryNames,

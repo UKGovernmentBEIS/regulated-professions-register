@@ -1,6 +1,7 @@
 import { createMock, DeepMocked } from '@golevelup/ts-jest';
 import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import { Response } from 'express';
 import { I18nService } from 'nestjs-i18n';
 import { Industry } from '../industries/industry.entity';
 import { Profession } from './profession.entity';
@@ -18,6 +19,7 @@ const exampleProfession = new Profession(
   '',
   [industry],
 );
+exampleProfession.id = 'profession-id';
 
 describe('ProfessionsController', () => {
   let controller: ProfessionsController;
@@ -25,7 +27,11 @@ describe('ProfessionsController', () => {
   let i18nService: DeepMocked<I18nService>;
 
   beforeEach(async () => {
-    professionsService = createMock<ProfessionsService>();
+    professionsService = createMock<ProfessionsService>({
+      save: async () => {
+        return exampleProfession;
+      },
+    });
     i18nService = createMock<I18nService>();
 
     const module: TestingModule = await Test.createTestingModule({
@@ -49,6 +55,19 @@ describe('ProfessionsController', () => {
   describe('new', () => {
     it('should return an empty object', () => {
       expect(controller.new()).toEqual({});
+    });
+  });
+
+  describe('create', () => {
+    it('should create a Profession and redirect', async () => {
+      const res = createMock<Response>();
+
+      await controller.create(res);
+
+      expect(professionsService.save).toHaveBeenCalled();
+      expect(res.redirect).toHaveBeenCalledWith(
+        `/admin/professions/${exampleProfession.id}/top-level-information/edit`,
+      );
     });
   });
 

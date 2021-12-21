@@ -12,6 +12,7 @@ describe('TopLevelInformationController', () => {
   let professionsService: DeepMocked<ProfessionsService>;
   let industriesService: DeepMocked<IndustriesService>;
   let response: DeepMocked<Response>;
+  let profession: DeepMocked<Profession>;
 
   const healthIndustry = new Industry('industries.health');
   healthIndustry.id = 'health-uuid';
@@ -23,8 +24,14 @@ describe('TopLevelInformationController', () => {
   const industries = [healthIndustry, constructionIndustry];
 
   beforeEach(async () => {
+    profession = createMock<Profession>({
+      id: 'profession-id',
+    });
+
     industriesService = createMock<IndustriesService>();
-    professionsService = createMock<ProfessionsService>();
+    professionsService = createMock<ProfessionsService>({
+      find: async () => profession,
+    });
 
     const module: TestingModule = await Test.createTestingModule({
       controllers: [TopLevelInformationController],
@@ -42,146 +49,88 @@ describe('TopLevelInformationController', () => {
     );
   });
 
-  describe('new', () => {
+  describe('edit', () => {
     it('should fetch all Industries and Nations to be displayed in an option select', async () => {
-      await controller.new(response);
+      const templateArgs = await controller.edit('profession-id');
 
-      expect(response.render).toHaveBeenCalledWith(
-        'professions/admin/add-profession/top-level-information',
-        {
-          industriesCheckboxArgs: [
-            {
-              text: 'industries.health',
-              value: 'health-uuid',
-            },
-            {
-              text: 'industries.constructionAndEngineering',
-              value: 'construction-uuid',
-            },
-          ],
-          nationsCheckboxArgs: [
-            {
-              text: 'nations.england',
-              value: 'GB-ENG',
-            },
-            {
-              text: 'nations.scotland',
-              value: 'GB-SCT',
-            },
-            {
-              text: 'nations.wales',
-              value: 'GB-WLS',
-            },
-            {
-              text: 'nations.northernIreland',
-              value: 'GB-NIR',
-            },
-          ],
-        },
-      );
+      expect(templateArgs).toEqual({
+        professionId: 'profession-id',
+        industriesCheckboxArgs: [
+          {
+            text: 'industries.health',
+            value: 'health-uuid',
+          },
+          {
+            text: 'industries.constructionAndEngineering',
+            value: 'construction-uuid',
+          },
+        ],
+        nationsCheckboxArgs: [
+          {
+            text: 'nations.england',
+            value: 'GB-ENG',
+          },
+          {
+            text: 'nations.scotland',
+            value: 'GB-SCT',
+          },
+          {
+            text: 'nations.wales',
+            value: 'GB-WLS',
+          },
+          {
+            text: 'nations.northernIreland',
+            value: 'GB-NIR',
+          },
+        ],
+        errors: undefined,
+      });
       expect(industriesService.all).toHaveBeenCalled();
     });
   });
 
-  describe('addTopLevelInformation', () => {
+  describe('update', () => {
     describe('when all required parameters are entered', () => {
-      it('creates a new, draft, Profession, stores its id in the session and redirects to the Check your answers page', async () => {
-        const emptySession = {};
-
-        const topLevelDetails = {
+      it('updates the Profession and redirects to the Check your answers page', async () => {
+        const topLevelDetailsDto = {
           name: 'Gas Safe Engineer',
           nations: ['GB-ENG'],
           industries: ['construction-uuid'],
         };
 
-        const draftProfession = new Profession(
-          'Gas Safe Engineer',
-          null,
-          null,
-          null,
-          ['GB-ENG'],
-          null,
-          industries,
-        );
-
-        const createdProfession = { ...draftProfession };
-        createdProfession.id = 'profession-id';
-
-        professionsService.confirm.mockResolvedValue(createdProfession);
         industriesService.findByIds.mockResolvedValue(industries);
 
-        await controller.addTopLevelInformation(
-          emptySession,
-          topLevelDetails,
-          response,
-        );
+        await controller.update(topLevelDetailsDto, response, 'profession-id');
 
-        expect(professionsService.confirm).toHaveBeenCalledWith(
-          draftProfession,
-        );
-        expect(emptySession['draft-profession-id']).toEqual('profession-id');
+        expect(professionsService.save).toHaveBeenCalledWith({
+          id: 'profession-id',
+          name: 'Gas Safe Engineer',
+          occupationLocations: ['GB-ENG'],
+          industries,
+        });
+
         expect(response.redirect).toHaveBeenCalledWith(
-          '/admin/professions/new/check-your-answers',
+          '/admin/professions/profession-id/check-your-answers',
         );
       });
     });
 
-    describe('when a required parameter is not entered', () => {
+    describe('when required parameters are not entered', () => {
       it('does not create a profession, and re-renders the top level information view with errors', async () => {
-        const emptySession = {};
-
-        const topLevelDetailsWithNoAnswers = {
+        const topLevelDetailsDtoWithNoAnswers = {
           name: '',
           nations: undefined,
           industries: undefined,
         };
 
-        await controller.addTopLevelInformation(
-          emptySession,
-          topLevelDetailsWithNoAnswers,
+        await controller.update(
+          topLevelDetailsDtoWithNoAnswers,
           response,
+          'profession-id',
         );
 
-        expect(professionsService.confirm).not.toHaveBeenCalled();
+        expect(professionsService.save).not.toHaveBeenCalled();
 
-        expect(response.render).toHaveBeenCalledWith(
-          'professions/admin/add-profession/top-level-information',
-          {
-            industriesCheckboxArgs: [
-              {
-                text: 'industries.health',
-                value: 'health-uuid',
-              },
-              {
-                text: 'industries.constructionAndEngineering',
-                value: 'construction-uuid',
-              },
-            ],
-            nationsCheckboxArgs: [
-              {
-                text: 'nations.england',
-                value: 'GB-ENG',
-              },
-              {
-                text: 'nations.scotland',
-                value: 'GB-SCT',
-              },
-              {
-                text: 'nations.wales',
-                value: 'GB-WLS',
-              },
-              {
-                text: 'nations.northernIreland',
-                value: 'GB-NIR',
-              },
-            ],
-            errors: {
-              name: { text: 'name should not be empty' },
-              nations: { text: 'nations should not be empty' },
-              industries: { text: 'industries should not be empty' },
-            },
-          },
-        );
         expect(industriesService.all).toHaveBeenCalled();
       });
     });

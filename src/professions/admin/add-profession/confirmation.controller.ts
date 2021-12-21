@@ -1,56 +1,26 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Redirect,
-  Render,
-  Session,
-} from '@nestjs/common';
-import { IndustriesService } from '../../../industries/industries.service';
-import { Profession } from '../../profession.entity';
+import { Controller, Get, Param, Post, Render, Res } from '@nestjs/common';
+import { Response } from 'express';
 
 import { ProfessionsService } from '../../professions.service';
 
-@Controller('admin/professions/new/confirmation')
+@Controller('admin/professions')
 export class ConfirmationController {
-  constructor(
-    private professionsService: ProfessionsService,
-    private industriesService: IndustriesService,
-  ) {}
+  constructor(private professionsService: ProfessionsService) {}
 
-  @Post()
-  @Redirect('/admin/professions/new/confirmation')
-  async confirm(@Session() session: Record<string, any>) {
-    const draftProfession = await this.fetchProfessionOrThrow(session);
+  @Post('/:id/confirmation')
+  async create(@Res() res: Response, @Param('id') id: string) {
+    const profession = await this.professionsService.find(id);
 
-    this.professionsService.confirm(draftProfession);
+    await this.professionsService.confirm(profession);
+
+    res.redirect(`/admin/professions/${id}/confirmation`);
   }
 
-  @Get()
+  @Get('/:id/confirmation')
   @Render('professions/admin/add-profession/confirmation')
-  async viewConfirmation(@Session() session: Record<string, any>) {
-    const profession = await this.fetchProfessionOrThrow(session);
-
-    session['profession-id'] = undefined;
+  async new(@Param('id') id: string) {
+    const profession = await this.professionsService.find(id);
 
     return { name: profession.name };
-  }
-
-  private async fetchProfessionOrThrow(
-    session: Record<string, any>,
-  ): Promise<Profession> {
-    const professionId = session['profession-id'];
-
-    if (professionId === undefined) {
-      throw new Error();
-    }
-
-    const profession = await this.professionsService.find(professionId);
-
-    if (!profession) {
-      throw new Error('Draft profession not found');
-    }
-
-    return profession;
   }
 }
