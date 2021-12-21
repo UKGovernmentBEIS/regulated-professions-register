@@ -1,0 +1,39 @@
+{% extends "base.njk" %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block content %}
+
+<div class="govuk-width-container">
+
+  <main class="govuk-main-wrapper">
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        {{ govukBackLink({
+          text: ("app.back" | t),
+          href: "/admin/users"
+        }) }}
+
+        <h1 class="govuk-heading-xl">{{ "users.headings.show" | t }}</h1>
+        {% include "./_summary.njk" %}
+
+        <form action="{{ "/admin/users/" + id }}?_method=DELETE" method="post" data-confirm data-confirm-message="{{ ("users.form.delete.confirmMessage" | t) }}">
+          <input type="hidden" name="_method" value="DELETE" />
+          {{
+            govukButton({
+              id: "submit-button",
+              type: "Submit",
+              classes: "govuk-button--warning",
+              text: ("users.form.button.delete" | t)
+            })
+          }}
+        </form>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+{% endblock %}

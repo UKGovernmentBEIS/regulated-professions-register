@@ -1,11 +1,14 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { createMock, DeepMocked } from '@golevelup/ts-jest';
-import { Response } from 'express';
+import { Response, Request } from 'express';
+import { I18nService } from 'nestjs-i18n';
 
 import { UsersService } from './users.service';
 import { ExternalUserCreationService } from './external-user-creation.service';
 import { UsersController } from './users.controller';
 import { User, UserRole } from './user.entity';
+import { UsersPresenter } from './users.presenter';
+import { UserPresenter } from './user.presenter';
 
 const name = 'Example Name';
 const email = 'name@example.com';
@@ -16,6 +19,8 @@ describe('UsersController', () => {
   let controller: UsersController;
   let externalUserCreationService: DeepMocked<ExternalUserCreationService>;
   let usersService: DeepMocked<UsersService>;
+  let i18nService: DeepMocked<I18nService>;
+  let request: DeepMocked<Request>;
   let user: User;
 
   beforeEach(async () => {
@@ -27,11 +32,15 @@ describe('UsersController', () => {
       roles: roles,
     });
 
+    request = createMock<Request>();
+
     externalUserCreationService = createMock<ExternalUserCreationService>({
       createExternalUser: async () => {
         return { result: 'user-created', externalIdentifier };
       },
     });
+
+    i18nService = createMock<I18nService>();
 
     usersService = createMock<UsersService>({
       save: async () => {
@@ -39,6 +48,9 @@ describe('UsersController', () => {
       },
       find: async () => {
         return user;
+      },
+      where: async () => {
+        return [user];
       },
     });
 
@@ -53,6 +65,10 @@ describe('UsersController', () => {
           provide: ExternalUserCreationService,
           useValue: externalUserCreationService,
         },
+        {
+          provide: I18nService,
+          useValue: i18nService,
+        },
       ],
     }).compile();
 
@@ -61,6 +77,34 @@ describe('UsersController', () => {
 
   it('should be defined', () => {
     expect(controller).toBeDefined();
+  });
+
+  describe('index', () => {
+    it('should list all confirmed users', async () => {
+      const users = [user];
+      const usersPresenter = new UsersPresenter(users, i18nService);
+
+      expect(await controller.index(request)).toEqual({
+        ...users,
+        messages: request.flash('info'),
+        rows: usersPresenter.tableRows(),
+      });
+
+      expect(usersService.where).toHaveBeenCalledWith({ confirmed: true });
+    });
+  });
+
+  describe('show', () => {
+    it('should return a user', async () => {
+      const usersPresenter = new UserPresenter(user, i18nService);
+
+      expect(await controller.show('some-uuid')).toEqual({
+        ...user,
+        roleList: await usersPresenter.roleList(),
+      });
+
+      expect(usersService.find).toHaveBeenCalledWith('some-uuid');
+    });
   });
 
   describe('create', () => {
@@ -78,11 +122,15 @@ describe('UsersController', () => {
 
   describe('confirm', () => {
     it('should return the user given an ID', async () => {
+      const usersPresenter = new UserPresenter(user, i18nService);
       const result = await controller.confirm(user.id);
 
       expect(usersService.find).toHaveBeenCalledWith(user.id);
 
-      expect(result).toEqual(user);
+      expect(result).toEqual({
+        ...user,
+        roleList: await usersPresenter.roleList(),
+      });
     });
   });
 
@@ -157,6 +205,19 @@ describe('UsersController', () => {
 
         expect(result).toEqual(user);
       });
+    });
+  });
+
+  describe('delete', () => {
+    it('should delete a user', async () => {
+      await controller.delete(request, 'some-uuid');
+
+      expect(request.flash).toHaveBeenCalledWith(
+        'info',
+        await i18nService.translate('users.form.delete.successMessage'),
+      );
+
+      expect(usersService.delete).toHaveBeenCalledWith('some-uuid');
     });
   });
 });

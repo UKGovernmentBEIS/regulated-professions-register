@@ -5,25 +5,63 @@ import {
   Param,
   Render,
   Res,
+  Req,
   UseGuards,
+  Delete,
+  Redirect,
 } from '@nestjs/common';
+import { I18nService } from 'nestjs-i18n';
+import { DeleteResult } from 'typeorm';
+
 import { AuthenticationGuard } from '../common/authentication.guard';
 import { ExternalUserCreationService } from './external-user-creation.service';
 import { User } from './user.entity';
+import { UsersPresenter } from './users.presenter';
 import { UsersService } from './users.service';
+import { IndexTemplate } from './interfaces/index-template';
+import { ShowTemplate } from './interfaces/show-template';
 
+import { UserPresenter } from './user.presenter';
 @Controller()
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
     private readonly externalUserCreationService: ExternalUserCreationService,
+    private readonly i18nService: I18nService,
   ) {}
+
+  @Get('/admin/users')
+  @UseGuards(AuthenticationGuard)
+  @Render('users/index')
+  async index(@Req() req): Promise<IndexTemplate> {
+    const users = await this.usersService.where({ confirmed: true });
+    const usersPresenter = new UsersPresenter(users, this.i18nService);
+
+    return {
+      ...users,
+      messages: req.flash('info'),
+      rows: usersPresenter.tableRows(),
+    };
+  }
 
   @Get('/admin/users/new')
   @UseGuards(AuthenticationGuard)
   @Render('users/new')
   new(): object {
     return {};
+  }
+
+  @Get('/admin/users/:id')
+  @UseGuards(AuthenticationGuard)
+  @Render('users/show')
+  async show(@Param('id') id): Promise<ShowTemplate> {
+    const user = await this.usersService.find(id);
+    const userPresenter = new UserPresenter(user, this.i18nService);
+
+    return {
+      ...user,
+      roleList: await userPresenter.roleList(),
+    };
   }
 
   @Post('/admin/users')
@@ -37,10 +75,14 @@ export class UsersController {
   @Get('/admin/users/:id/confirm')
   @UseGuards(AuthenticationGuard)
   @Render('users/confirm')
-  async confirm(@Param('id') id): Promise<User> {
+  async confirm(@Param('id') id): Promise<ShowTemplate> {
     const user = await this.usersService.find(id);
+    const userPresenter = new UserPresenter(user, this.i18nService);
 
-    return user;
+    return {
+      ...user,
+      roleList: await userPresenter.roleList(),
+    };
   }
 
   @Post('/admin/users/:id/confirm')
@@ -83,5 +125,16 @@ export class UsersController {
     const user = await this.usersService.find(id);
 
     return user;
+  }
+
+  @Delete('/admin/users/:id')
+  @UseGuards(AuthenticationGuard)
+  @Redirect('/admin/users')
+  async delete(@Req() req, @Param('id') id): Promise<void> {
+    req.flash(
+      'info',
+      await this.i18nService.translate('users.form.delete.successMessage'),
+    );
+    await this.usersService.delete(id);
   }
 }

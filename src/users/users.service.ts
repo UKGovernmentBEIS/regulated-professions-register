@@ -1,4 +1,4 @@
-import { Connection, Repository } from 'typeorm';
+import { Connection, Repository, FindConditions, DeleteResult } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
@@ -16,6 +16,10 @@ export class UsersService {
     return this.repository.find();
   }
 
+  where(query: FindConditions<User>): Promise<User[]> {
+    return this.repository.find({ where: query });
+  }
+
   find(id: string): Promise<User> {
     return this.repository.findOne(id);
   }
@@ -28,6 +32,15 @@ export class UsersService {
 
   async save(user: User): Promise<User> {
     return await this.repository.save(user);
+  }
+
+  async delete(id: string): Promise<DeleteResult> {
+    return this.repository
+      .createQueryBuilder()
+      .delete()
+      .from(User)
+      .where('id = :id', { id: id })
+      .execute();
   }
 
   findByExternalIdentifier(externalIdentifier: string): Promise<User> {
