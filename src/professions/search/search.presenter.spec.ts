@@ -9,6 +9,7 @@ import { FilterInput } from './interfaces/filter-input.interface';
 import { SearchPresenter } from './search.presenter';
 import { IndustriesCheckboxPresenter } from '../../industries/industries-checkbox.presenter';
 import { NationsCheckboxPresenter } from '../../nations/nations-checkbox.presenter';
+import { ProfessionSearchResultPresenter } from './profession-search-result.presenter';
 
 const exampleIndustry1 = new Industry('industries.example1');
 exampleIndustry1.id = 'example-industry-1';
@@ -118,16 +119,12 @@ describe('SearchPresenter', () => {
         industriesCheckboxArgs,
         nationsCheckboxArgs,
         professions: [
-          {
-            name: 'Example Profession 1',
-            industries: ['Example industry 1'],
-            nations: 'England',
-          },
-          {
-            name: 'Example Profession 2',
-            industries: ['Example industry 2', 'Example industry 3'],
-            nations: 'Scotland, Wales',
-          },
+          await new ProfessionSearchResultPresenter(exampleProfession1).present(
+            i18nService,
+          ),
+          await new ProfessionSearchResultPresenter(exampleProfession2).present(
+            i18nService,
+          ),
         ],
       });
     });

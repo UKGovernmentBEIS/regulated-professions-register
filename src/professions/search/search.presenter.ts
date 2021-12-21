@@ -8,6 +8,7 @@ import { NationsCheckboxPresenter } from '../../nations/nations-checkbox.present
 import { Profession } from '../profession.entity';
 import { FilterInput } from './interfaces/filter-input.interface';
 import { IndexTemplate } from './interfaces/index-template.interface';
+import { ProfessionSearchResultPresenter } from './profession-search-result.presenter';
 
 export class SearchPresenter {
   constructor(
@@ -34,22 +35,9 @@ export class SearchPresenter {
     ).checkboxArgs();
 
     const displayProfessions = await Promise.all(
-      this.filteredProfessions.map(async (profession) => {
-        const nations = await this.getNations(profession, i18nService);
-
-        const industries = await Promise.all(
-          profession.industries.map(
-            async (industry) => await i18nService.translate(industry.name),
-          ),
-        );
-
-        return {
-          name: profession.name,
-          slug: profession.slug,
-          nations,
-          industries,
-        };
-      }),
+      this.filteredProfessions.map(async (profession) =>
+        new ProfessionSearchResultPresenter(profession).present(i18nService),
+      ),
     );
 
     return {
@@ -65,18 +53,5 @@ export class SearchPresenter {
       },
       backLink: backLink(request),
     };
-  }
-
-  private async getNations(
-    profession: Profession,
-    i18nService: I18nService,
-  ): Promise<string> {
-    const translatedNations = await Promise.all(
-      profession.occupationLocations.map(async (code) =>
-        Nation.find(code).translatedName(i18nService),
-      ),
-    );
-
-    return translatedNations.join(', ');
   }
 }
