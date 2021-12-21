@@ -112,6 +112,17 @@ describe('Profession', () => {
     });
   });
 
+  describe('save', () => {
+    it('should save a Profession', async () => {
+      const profession = new Profession('Example Profession');
+      const repoSpy = jest.spyOn(repo, 'save');
+
+      await service.save(profession);
+
+      expect(repoSpy).toHaveBeenCalledWith(profession);
+    });
+  });
+
   describe('create', () => {
     it('should save the profession with the "base" slug when there are no colliding slugs', async () => {
       const profession = new Profession('Example Profession');

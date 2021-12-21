@@ -25,6 +25,10 @@ export class ProfessionsService {
     return this.repository.findOne({ where: { slug } });
   }
 
+  async save(user: Profession): Promise<Profession> {
+    return this.repository.save(user);
+  }
+
   async create(profession: Profession): Promise<Profession> {
     const queryRunner = this.connection.createQueryRunner();
 
