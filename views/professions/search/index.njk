@@ -82,7 +82,6 @@
 
     </div>
 
-
     <div class="govuk-grid-column-two-thirds">
 
       {% if filters.keywords %}
@@ -105,76 +104,56 @@
         </p>
       {% endif %}
       
-      <p class="govuk-body-m"><span class="govuk-!-font-size-36 govuk-!-font-weight-bold">{{ professions.length }}</span> {{ "profession" if (professions.count === 1) else "professions" }} found.</p>
+      <p class="govuk-body-m">
+        <span class="govuk-!-font-size-36 govuk-!-font-weight-bold">{{ professions.length }}</span> {{ ("search.foundSingular" | t) if (professions.length === 1) else ("search.foundPlural" | t) }}
+      </p>
 
       <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
 
-      <div class="rpr-listing__profession-container">
+      {% for profession in professions %}
 
-        {% for profession in professions %}
+        {% set industriesHtml %}
+          {% for industry in profession.industries %}
+            <p class="govuk-body-m">{{ industry }}</p>
+          {% endfor %}
+        {% endset %}
+
+        <div class="rpr-listing__profession-container">
           <h2>
-            <a class="govuk-link govuk-heading-l rpr-listing__profession-title" href="/professions/{{ profession.slug }}">{{profession.name}}</a>
+            <a class="govuk-link govuk-heading-l rpr-listing__profession-title" href="/professions/{{ profession.slug }}">{{profession.name}}<br>
+              <span class="govuk-caption-l">{{ profession.nations }}</span></a>
           </h2>
-
-
-          {% set nationsHtml %}
-            {% for nation in profession.nations %}
-              <p class="govuk-body-m">{{ nation }}</p>
-            {% endfor %}
-          {% endset %}
-
-          {% set industriesHtml %}
-            {% for industry in profession.industries %}
-              <p class="govuk-body-m">{{ industry }}</p>
-            {% endfor %}
-          {% endset %}
-
-          {{ govukSummaryList({
-            classes: 'govuk-summary-list--no-border rpr-listing__profession-summary-list',
-            rows: [
-              {
-                key: {
-                  text: ("search.profession.regulatedAuthority" | t)
+      
+            {{ govukSummaryList({
+              classes: 'govuk-summary-list--no-border rpr-listing__profession-summary-list',
+              rows: [
+                {
+                  key: {
+                    text: ("search.profession.regulators" | t)
+                  },
+                  value: {
+                    html: "Placeholder regulators"
+                  }
                 },
-                value: {
-                  text: "Placeholder authority"
+                {
+                  key: {
+                    text: ("search.profession.industry" | t)
+                  },
+                  value: {
+                    html: industriesHtml | safe
+                  }
                 }
-              },
-              {
-                key: {
-                  text: ("search.profession.nations" | t)
-                },
-                value: {
-                  text: nationsHtml | safe
-                }
-              },
-              {
-                key: {
-                  text: ("search.profession.industry" | t)
-                },
-                value: {
-                  html: industriesHtml | safe
-                }
-              },
-              {
-                key: {
-                  text: ("search.profession.qualificationLevel" | t)
-                },
-                value: {
-                  text: profession.qualification.level
-                }
-              }
-            ]
-          }) }}
+              ]
+            }) }}
 
           {% if not loop.last %}
               <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
           {% endif %}
 
-        {% endfor %}
+        </div>
 
-      </div>
-  
+      {% endfor %}
+
     </div>
 
   </div>

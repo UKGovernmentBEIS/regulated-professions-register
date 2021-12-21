@@ -1,11 +1,9 @@
 export interface IndexTemplate {
   professions: {
     name: string;
-    nations: string[];
+    slug: string;
+    nations: string;
     industries: string[];
-    qualification: {
-      level: string;
-    };
   }[];
 
   filters: {
