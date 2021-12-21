@@ -85,9 +85,9 @@ describe('Profession', () => {
   describe('all', () => {
     it('should return all Professions', async () => {
       const repoSpy = jest.spyOn(repo, 'find');
-      const posts = await service.all();
+      const professions = await service.all();
 
-      expect(posts).toEqual(professionArray);
+      expect(professions).toEqual(professionArray);
       expect(repoSpy).toHaveBeenCalled();
     });
   });
@@ -95,9 +95,9 @@ describe('Profession', () => {
   describe('find', () => {
     it('should return a Profession', async () => {
       const repoSpy = jest.spyOn(repo, 'findOne');
-      const post = await service.find('some-uuid');
+      const profession = await service.find('some-uuid');
 
-      expect(post).toEqual(profession);
+      expect(profession).toEqual(profession);
       expect(repoSpy).toHaveBeenCalledWith('some-uuid');
     });
   });
@@ -105,9 +105,9 @@ describe('Profession', () => {
   describe('findBySlug', () => {
     it('should return a profession', async () => {
       const repoSpy = jest.spyOn(repo, 'findOne');
-      const post = await service.findBySlug('some-slug');
+      const profession = await service.findBySlug('some-slug');
 
-      expect(post).toEqual(profession);
+      expect(profession).toEqual(profession);
       expect(repoSpy).toHaveBeenCalledWith({ where: { slug: 'some-slug' } });
     });
   });
