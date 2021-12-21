@@ -1,4 +1,4 @@
-import { createMock, DeepMocked } from '@golevelup/ts-jest';
+import { DeepMocked } from '@golevelup/ts-jest';
 import { Request } from 'express';
 import { backLink } from './utils';
 import { createMockRequest } from './create-mock-request';
