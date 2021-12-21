@@ -70,6 +70,8 @@ describe('SearchPresenter', () => {
           return 'Wales';
         case 'nations.northernIreland':
           return 'Northern Ireland';
+        case 'app.unitedKingdom':
+          return 'United Kingdom';
         default:
           return '';
       }
@@ -117,12 +119,12 @@ describe('SearchPresenter', () => {
           {
             name: 'Example Profession 1',
             industries: ['Example industry 1'],
-            nations: ['England'],
+            nations: 'England',
           },
           {
             name: 'Example Profession 2',
             industries: ['Example industry 2', 'Example industry 3'],
-            nations: ['Scotland', 'Wales'],
+            nations: 'Scotland, Wales',
           },
         ],
       });

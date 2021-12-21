@@ -33,11 +33,7 @@ export class SearchPresenter {
 
     const displayProfessions = await Promise.all(
       this.filteredProfessions.map(async (profession) => {
-        const nations = await Promise.all(
-          profession.occupationLocations.map(async (code) =>
-            Nation.find(code).translatedName(i18nService),
-          ),
-        );
+        const nations = await this.getNations(profession, i18nService);
 
         const industries = await Promise.all(
           profession.industries.map(
@@ -45,7 +41,12 @@ export class SearchPresenter {
           ),
         );
 
-        return { ...profession, nations, industries };
+        return {
+          name: profession.name,
+          slug: profession.slug,
+          nations,
+          industries,
+        };
       }),
     );
 
@@ -62,5 +63,18 @@ export class SearchPresenter {
       },
       backLink: backLink(request),
     };
+  }
+
+  private async getNations(
+    profession: Profession,
+    i18nService: I18nService,
+  ): Promise<string> {
+    const translatedNations = await Promise.all(
+      profession.occupationLocations.map(async (code) =>
+        Nation.find(code).translatedName(i18nService),
+      ),
+    );
+
+    return translatedNations.join(', ');
   }
 }
