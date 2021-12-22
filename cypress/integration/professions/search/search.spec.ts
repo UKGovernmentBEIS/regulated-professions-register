@@ -1,7 +1,20 @@
 describe('Searching a profession', () => {
-  it('I can view an unfiltered list of profession', () => {
-    cy.visit('/professions/search');
+  beforeEach(() => {
+    cy.visit('/');
 
+    cy.translate('app.startButton').then((startButton) => {
+      cy.contains(startButton).click();
+    });
+
+    cy.translate('app.pages.selectService.options.checkRequirements').then(
+      (checkRequirementsOption) => {
+        cy.get('label').contains(checkRequirementsOption).click();
+        cy.get('button').click();
+      },
+    );
+  });
+
+  it('I can view an unfiltered list of profession', () => {
     cy.get('body').should('contain', 'Registered Trademark Attorney');
     cy.get('body').should(
       'contain',
@@ -16,8 +29,6 @@ describe('Searching a profession', () => {
   });
 
   it('I can click a profession to be taken to its details page', () => {
-    cy.visit('/professions/search');
-
     cy.get('a')
       .contains(
         'Secondary School Teacher in State maintained schools (England)',
@@ -30,8 +41,6 @@ describe('Searching a profession', () => {
   });
 
   it('I can filter by nation', () => {
-    cy.visit('/professions/search');
-
     cy.get('input[name="nations[]"][value="GB-WLS"]').check();
 
     cy.get('button').click();
