@@ -83,46 +83,49 @@ describe('TopLevelInformationController', () => {
       it('should fetch all Industries and Nations to be displayed in an option select, with none of them checked', async () => {
         professionsService.find.mockImplementation(async () => blankProfession);
 
-        const templateArgs = await controller.edit('profession-id');
+        await controller.edit(response, 'profession-id');
 
-        expect(templateArgs).toEqual({
-          name: null,
-          industriesCheckboxArgs: [
-            {
-              text: 'Health',
-              value: 'health-uuid',
-              checked: false,
-            },
-            {
-              text: 'Construction & Engineering',
-              value: 'construction-uuid',
-              checked: false,
-            },
-          ],
-          nationsCheckboxArgs: [
-            {
-              text: 'England',
-              value: 'GB-ENG',
-              checked: false,
-            },
-            {
-              text: 'Scotland',
-              value: 'GB-SCT',
-              checked: false,
-            },
-            {
-              text: 'Wales',
-              value: 'GB-WLS',
-              checked: false,
-            },
-            {
-              text: 'Northern Ireland',
-              value: 'GB-NIR',
-              checked: false,
-            },
-          ],
-          errors: undefined,
-        });
+        expect(response.render).toHaveBeenCalledWith(
+          'professions/admin/add-profession/top-level-information',
+          {
+            name: null,
+            industriesCheckboxArgs: [
+              {
+                text: 'Health',
+                value: 'health-uuid',
+                checked: false,
+              },
+              {
+                text: 'Construction & Engineering',
+                value: 'construction-uuid',
+                checked: false,
+              },
+            ],
+            nationsCheckboxArgs: [
+              {
+                text: 'England',
+                value: 'GB-ENG',
+                checked: false,
+              },
+              {
+                text: 'Scotland',
+                value: 'GB-SCT',
+                checked: false,
+              },
+              {
+                text: 'Wales',
+                value: 'GB-WLS',
+                checked: false,
+              },
+              {
+                text: 'Northern Ireland',
+                value: 'GB-NIR',
+                checked: false,
+              },
+            ],
+            errors: undefined,
+          },
+        );
         expect(industriesService.all).toHaveBeenCalled();
       });
     });
@@ -147,46 +150,49 @@ describe('TopLevelInformationController', () => {
           async () => existingProfession,
         );
 
-        const templateArgs = await controller.edit('profession-id');
+        await controller.edit(response, 'profession-id');
 
-        expect(templateArgs).toEqual({
-          name: 'Example Profession',
-          industriesCheckboxArgs: [
-            {
-              text: 'Health',
-              value: 'health-uuid',
-              checked: true,
-            },
-            {
-              text: 'Construction & Engineering',
-              value: 'construction-uuid',
-              checked: false,
-            },
-          ],
-          nationsCheckboxArgs: [
-            {
-              text: 'England',
-              value: 'GB-ENG',
-              checked: true,
-            },
-            {
-              text: 'Scotland',
-              value: 'GB-SCT',
-              checked: true,
-            },
-            {
-              text: 'Wales',
-              value: 'GB-WLS',
-              checked: false,
-            },
-            {
-              text: 'Northern Ireland',
-              value: 'GB-NIR',
-              checked: false,
-            },
-          ],
-          errors: undefined,
-        });
+        expect(response.render).toHaveBeenCalledWith(
+          'professions/admin/add-profession/top-level-information',
+          {
+            name: 'Example Profession',
+            industriesCheckboxArgs: [
+              {
+                text: 'Health',
+                value: 'health-uuid',
+                checked: true,
+              },
+              {
+                text: 'Construction & Engineering',
+                value: 'construction-uuid',
+                checked: false,
+              },
+            ],
+            nationsCheckboxArgs: [
+              {
+                text: 'England',
+                value: 'GB-ENG',
+                checked: true,
+              },
+              {
+                text: 'Scotland',
+                value: 'GB-SCT',
+                checked: true,
+              },
+              {
+                text: 'Wales',
+                value: 'GB-WLS',
+                checked: false,
+              },
+              {
+                text: 'Northern Ireland',
+                value: 'GB-NIR',
+                checked: false,
+              },
+            ],
+            errors: undefined,
+          },
+        );
         expect(industriesService.all).toHaveBeenCalled();
       });
     });
@@ -233,8 +239,146 @@ describe('TopLevelInformationController', () => {
         );
 
         expect(professionsService.save).not.toHaveBeenCalled();
-
         expect(industriesService.all).toHaveBeenCalled();
+      });
+
+      describe('getSelectedIndustriesFromDtoThenProfession', () => {
+        const industry = new Industry('industries.health');
+        const profession = new Profession(
+          'Example Profession',
+          null,
+          null,
+          null,
+          ['GB-ENG', 'GB-SCT'],
+          null,
+          [industry],
+        );
+
+        describe('when there is an existing Profession with Industries selected and new params are submitted', () => {
+          it('returns the dto value, over the Profession', async () => {
+            const replacementIndustry = new Industry(
+              'industries.constructionAndEngineering',
+            );
+
+            const topLevelDetailsWithNewIndustries = {
+              name: 'Example Profession',
+              nations: ['GB-ENG'],
+              industries: ['construction-uuid'],
+            };
+
+            industriesService.findByIds.mockResolvedValue([
+              replacementIndustry,
+            ]);
+
+            await expect(
+              controller.getSelectedIndustriesFromDtoThenProfession(
+                profession,
+                topLevelDetailsWithNewIndustries,
+              ),
+            ).resolves.toEqual([replacementIndustry]);
+          });
+        });
+
+        describe('when there is an existing Profession with Industries selected and empty Industry params are submitted', () => {
+          it('returns the Profession value', async () => {
+            const topLevelDetailsWithNewIndustries = {
+              name: 'Gas Safe Engineer',
+              nations: ['GB-ENG'],
+              industries: null,
+            };
+
+            await expect(
+              controller.getSelectedIndustriesFromDtoThenProfession(
+                profession,
+                topLevelDetailsWithNewIndustries,
+              ),
+            ).resolves.toEqual([industry]);
+          });
+        });
+
+        describe('when there are not yet any Industries on the profession and empty Industries params are submitted', () => {
+          const blankProfession = new Profession();
+
+          it('returns an empty array', async () => {
+            const topLevelDetailsWithMissingIndustries = {
+              name: 'Gas Safe Engineer',
+              nations: ['GB-ENG'],
+              industries: undefined,
+            };
+
+            await expect(
+              controller.getSelectedIndustriesFromDtoThenProfession(
+                blankProfession,
+                topLevelDetailsWithMissingIndustries,
+              ),
+            ).resolves.toEqual([]);
+          });
+        });
+      });
+
+      describe('getSelectedNationsFromDtoThenProfession', () => {
+        const profession = new Profession(
+          'Example Profession',
+          null,
+          null,
+          null,
+          ['GB-ENG', 'GB-SCT'],
+          null,
+          [new Industry('industries.health')],
+        );
+
+        describe('when there is an existing Profession with Nations selected and new params are submitted', () => {
+          it('returns the dto value, over the Profession', () => {
+            const topLevelDetailsWithNewNations = {
+              name: 'Gas Safe Engineer',
+              nations: ['GB-NIR'],
+              industries: ['construction-uuid'],
+            };
+
+            expect(
+              controller.getSelectedNationsFromDtoThenProfession(
+                profession,
+                topLevelDetailsWithNewNations,
+              ),
+            ).toEqual(['GB-NIR']);
+          });
+        });
+
+        describe('when there is an existing Profession with Nations selected and empty Nation params are submitted', () => {
+          it('returns the Profession value', () => {
+            const topLevelDetailsWithMissingNations = {
+              name: 'Gas Safe Engineer',
+              nations: undefined,
+              industries: ['construction-uuid'],
+            };
+
+            expect(
+              controller.getSelectedNationsFromDtoThenProfession(
+                profession,
+                topLevelDetailsWithMissingNations,
+              ),
+            ).toEqual(['GB-ENG', 'GB-SCT']);
+          });
+        });
+
+        describe('when there are not yet any Nations on the profession and empty Nation params are submitted', () => {
+          const blankProfession = new Profession();
+
+          it('returns an empty array', () => {
+            const topLevelDetailsWithMissingNations = {
+              name: 'Gas Safe Engineer',
+              nations: undefined,
+              industries: ['construction-uuid'],
+            };
+
+            expect(
+              controller.getSelectedNationsFromDtoThenProfession(
+                blankProfession,
+                topLevelDetailsWithMissingNations,
+              ),
+            ).toEqual([]);
+          });
+        });
       });
     });
   });
