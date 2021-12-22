@@ -1,12 +1,24 @@
 {% extends "govuk/template.njk" %}
+{% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
 
 {% block header %}
   {{
     govukHeader({
       homepageUrl: "/",
-      serviceName: "Regulated Professions Register"
+      serviceName: ("app.name" | t)
     })
   }}
+
+  <div class="govuk-width-container">
+    {{
+      govukPhaseBanner({
+        tag: {
+          text: ("app.phase.beta.label" | t)
+        },
+        html: ("app.phase.beta.html" | t | safe)
+      })
+    }}
+  </div>
 {% endblock %}
 
 {% block head %}

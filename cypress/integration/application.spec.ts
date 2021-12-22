@@ -1,7 +1,10 @@
 describe('/', () => {
   it('Shows a landing page', () => {
     cy.visit('/');
-    cy.get('body').should('contain', 'Check regulated professions');
+
+    cy.translate('app.service.name').then((serviceName) => {
+      cy.get('body').should('contain', serviceName);
+    });
   });
 
   context('when I am logged in as an admin', () => {
