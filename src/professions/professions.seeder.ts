@@ -20,6 +20,7 @@ type SeedProfession = {
   qualification: string;
   reservedActivities: string[];
   legislations: string[];
+  confirmed: boolean;
 };
 
 @Injectable()
@@ -43,7 +44,7 @@ export class ProfessionsSeeder implements Seeder {
     const professions = await Promise.all(
       professionsData.map(async (profession) => {
         const industries = await this.industriesRepository.find({
-          where: { name: In(profession.industries) },
+          where: { name: In(profession.industries || []) },
         });
 
         const qualification = await this.qualificationsRepository.findOne({
@@ -51,7 +52,7 @@ export class ProfessionsSeeder implements Seeder {
         });
 
         const legislations: Array<Legislation> = await Promise.all(
-          profession.legislations.map(async (legislation) => {
+          (profession.legislations || []).map(async (legislation) => {
             return this.legislationsRepository.findOne({
               where: { name: legislation },
             });
@@ -69,6 +70,7 @@ export class ProfessionsSeeder implements Seeder {
           qualification,
           profession.reservedActivities,
           legislations,
+          profession.confirmed,
         );
       }),
     );
