@@ -17,12 +17,6 @@ describe('AppController', () => {
     appController = app.get<AppController>(AppController);
   });
 
-  describe('root', () => {
-    it('should return an empty object', () => {
-      expect(appController.getHello()).toEqual({});
-    });
-  });
-
   describe('admin', () => {
     it('should return the name of the logged in user', () => {
       const oidc: Partial<RequestContext> = {

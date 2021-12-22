@@ -6,6 +6,7 @@
   "continue": "Continue",
   "change": "Change",
   "start": "Start",
+  "startButton": "Start now",
   "errors": {
     "heading": "There is a problem"
   },
@@ -17,6 +18,24 @@
     "beta": {
       "label": "Beta",
       "html": "This is a new service - your <a class='govuk-link' href='#'>feedback</a> will help us to improve it."
+    }
+  },
+  "service": {
+    "name": "Check a regulated profession in the UK"
+  },
+  "pages": {
+    "index": {
+      "intro": "Some professions in the UK are regulated. If you want to work in a regulated profession, you need to contact the regulatory authority who will recognise your qualification and register you.",
+      "useThisService": "Use this service to:",
+      "servicePurposes": [
+        "Check if your profession is regulated and what qualifications are required",
+        "Find regulatory authority contact details for your profession",
+        "View annual figures regarding applications to work in regulated professions in the UK"
+      ],
+      "otherWays": {
+        "heading": "Other ways to find information",
+        "body": "If you need support checking a regulated profession you can contact The UK Centre for Professional Qualifications (UK CPQ)."
+      }
     }
   }
 }
