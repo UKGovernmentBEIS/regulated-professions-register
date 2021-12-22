@@ -52,3 +52,13 @@ variable "papertrail_destination" {
   type        = string
   description = "Where to send logs hostname:port"
 }
+
+variable "notify_template_id" {
+  type = string
+  description = "The template ID to use when sending emails via Notify"
+}
+
+variable "notify_api_key" {
+  type = string
+  description = "The GOV.UK Notify API key"
+}
