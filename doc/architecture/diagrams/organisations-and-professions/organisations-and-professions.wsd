@@ -1,7 +1,8 @@
 @startuml organisations-and-professions
 entity Organisation {
-  * id: uuid
+  A Regulatory Authority
   --
+  * id: uuid
   * name: string
   alternateName: string
   * address: string
@@ -12,34 +13,63 @@ entity Organisation {
   fax: string
 }
 
+entity Regulation {
+  The state of regulation. A profession is regulated
+  by an organisation in a particular area or time.
+  Can be statutory or voluntary.
+  --
+  * id: uuid
+  --
+  * occupationLocation: string[]
+  * regulationType: string
+  validFrom: datetime
+  validThrough: datetime
+}
+
 entity Profession {
+  e.g. Primary School Teacher
+  --
   * id: uuid
   --
   * name: string
-  alternateName: string
+  alternateNames: string[]
   * description: string
-  * occupationLocation: string[]
-  * regulationType: string
-  * qualificationLevel: string
   reservedActivities: string[]
+  iscoCode: number
+}
+
+entity Qualification {
+  The requirements for a regulation
+  --
+  * id: uuid
+  --
+  * qualificationLevel: string
 }
 
 entity Legislation {
+  The primary source of a regulation
+  --
   * id: uuid
   --
   * name: string
   * url: string
 }
 
-entity OccupationalCategory {
+entity Industry {
+  An industry or sector
+  --
   * id: uuid
   --
-  * identifier: string <<ISCO / NACE>>
-  codeValue: number
+  name: string
   description: string
 }
 
-Organisation }|--|| Profession
-Profession }|--|{ OccupationalCategory
-Profession }|--|{ Legislation
+Profession }o-|| Industry
+
+Profession ||--|{ Regulation
+
+Legislation }o-o{ Regulation
+Regulation ||-o{ Qualification
+
+Regulation }o--|{ Organisation
 @enduml
