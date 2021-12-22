@@ -35,6 +35,7 @@ entity Profession {
   alternateNames: string[]
   * description: string
   reservedActivities: string[]
+  iscoCode: number
 }
 
 entity Qualification {
@@ -54,17 +55,16 @@ entity Legislation {
   * url: string
 }
 
-entity OccupationalCategory {
+entity Industry {
   An industry or sector
   --
   * id: uuid
   --
-  * identifier: string <<ISCO / NACE>>
-  codeValue: number
+  name: string
   description: string
 }
 
-Profession }o-o{ OccupationalCategory
+Profession }o-|| Industry
 
 Profession ||--|{ Regulation
 
