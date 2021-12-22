@@ -11,7 +11,6 @@ import {
   Redirect,
 } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
-import { DeleteResult } from 'typeorm';
 
 import { AuthenticationGuard } from '../common/authentication.guard';
 import { ExternalUserCreationService } from './external-user-creation.service';

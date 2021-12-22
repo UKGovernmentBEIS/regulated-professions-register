@@ -1,5 +1,3 @@
-import { getYear } from 'date-fns/esm';
-
 describe('Creating a new user', () => {
   context('when I am not logged in', () => {
     it('I am prompted to log in', () => {

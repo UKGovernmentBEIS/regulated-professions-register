@@ -5,7 +5,6 @@ import { createMock, DeepMocked } from '@golevelup/ts-jest';
 
 import { User } from './user.entity';
 import { UsersService } from './users.service';
-import exp from 'constants';
 
 const user = new User('email@example.com', 'name', '212121');
 const userArray = [user, new User('email2@example.com', 'name2', '1234')];
