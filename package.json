@@ -23,7 +23,7 @@
     "start:test": "NODE_ENV=test nest start",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
-    "lint": "eslint \"{src,apps,libs,cypress}/**/*.{ts,js}\" --fix",
+    "lint": "eslint \"{src,apps,libs,cypress}/**/*.{ts,js}\" --fix --max-warnings=0",
     "cy:run": "cypress run",
     "test": "jest",
     "test:watch": "jest --watch",
