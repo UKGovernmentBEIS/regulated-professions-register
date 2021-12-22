@@ -92,6 +92,16 @@ describe('Profession', () => {
     });
   });
 
+  describe('allConfirmed', () => {
+    it('should return all confirmed Professions', async () => {
+      const repoSpy = jest.spyOn(repo, 'find');
+      const professions = await service.allConfirmed();
+
+      expect(professions).toEqual(professionArray);
+      expect(repoSpy).toHaveBeenCalledWith({ where: { confirmed: true } });
+    });
+  });
+
   describe('find', () => {
     it('should return a Profession', async () => {
       const repoSpy = jest.spyOn(repo, 'findOne');
