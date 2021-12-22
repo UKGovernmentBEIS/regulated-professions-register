@@ -50,7 +50,7 @@ describe('SearchController', () => {
     industriesService = createMock<IndustriesService>();
     i18nService = createMock<I18nService>();
 
-    professionsService.all.mockImplementation(async () => {
+    professionsService.allConfirmed.mockImplementation(async () => {
       return [exampleProfession1, exampleProfession2];
     });
 
@@ -124,6 +124,25 @@ describe('SearchController', () => {
         ],
         backLink: referrer,
       });
+    });
+
+    it('should request only complete professions from `ProfessionsService`', async () => {
+      const request = createMockRequest(
+        'http://example.com/some/path',
+        'example.com',
+      );
+
+      await controller.create(
+        {
+          keywords: '',
+          industries: [],
+          nations: 'GB-SCT',
+        },
+        request,
+      );
+
+      expect(professionsService.allConfirmed).toHaveBeenCalled();
+      expect(professionsService.all).not.toHaveBeenCalled();
     });
   });
 

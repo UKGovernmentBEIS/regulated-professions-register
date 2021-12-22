@@ -9,6 +9,12 @@ describe('Searching a profession', () => {
     );
   });
 
+  it('The search page does not show draft professions', () => {
+    cy.visit('/professions/search');
+
+    cy.get('body').should('not.contain', 'Draft Profession');
+  });
+
   it('I can click a profession to be taken to its details page', () => {
     cy.visit('/professions/search');
 

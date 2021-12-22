@@ -53,7 +53,7 @@ export class SearchController {
     const allNations = Nation.all();
     const allIndustries = await this.industriesService.all();
 
-    const allProfessions = await this.professionsService.all();
+    const allProfessions = await this.professionsService.allConfirmed();
 
     const filterNations = Nation.all().filter((nation) =>
       filter.nations.includes(nation.code),
