@@ -151,8 +151,9 @@ describe('Profession', () => {
             null,
             null,
             true,
-          ),
-            expect(result.slug).toEqual('example-profession');
+          );
+
+          expect(result.slug).toEqual('example-profession');
         });
       });
 
