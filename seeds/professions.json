@@ -14,7 +14,8 @@
       "Reserved instrument activities.",
       "The administration of oaths."
     ],
-    "legislations": ["The Trade Marks Act 1994", "Legal Services Act 2007"]
+    "legislations": ["The Trade Marks Act 1994", "Legal Services Act 2007"],
+    "confirmed": true
   },
   {
     "name": "Secondary School Teacher in State maintained schools (England)",
@@ -29,6 +30,11 @@
     "legislations": [
       "The Education (School Teachers' Qualifications) (England) Regulations 2003/1662 (as amended)",
       "The Education (Induction Arrangements for School Teachers) (England) Regulations 2012/1115 (as amended)"
-    ]
+    ],
+    "confirmed": true
+  },
+  {
+    "name": "Draft Profession",
+    "confirmed": false
   }
 ]

@@ -8,6 +8,8 @@ import {
   Res,
 } from '@nestjs/common';
 import { Response } from 'express';
+import { IndustriesCheckboxPresenter } from '../../../industries/industries-checkbox.presenter';
+import { NationsCheckboxPresenter } from '../../../nations/nations-checkbox.presenter';
 import { Validator } from '../../../helpers/validator';
 import { IndustriesService } from '../../../industries/industries.service';
 import { Nation } from '../../../nations/nation';
@@ -16,12 +18,14 @@ import { Profession } from '../../profession.entity';
 import { ProfessionsService } from '../../professions.service';
 import { TopLevelDetailsDto } from './dto/top-level-details.dto';
 import { TopLevelDetailsTemplate } from './interfaces/top-level-details.template';
+import { I18nService } from 'nestjs-i18n';
 
 @Controller('admin/professions')
 export class TopLevelInformationController {
   constructor(
     private readonly professionsService: ProfessionsService,
     private readonly industriesService: IndustriesService,
+    private readonly i18nService: I18nService,
   ) {}
 
   @Get('/:id/top-level-information/edit')
@@ -34,29 +38,19 @@ export class TopLevelInformationController {
 
     const industries = await this.industriesService.all();
 
-    const industriesCheckboxArgs = industries.map((industry) => {
-      const hasSelectedIndustry = !!(profession.industries || []).find(
-        (selectedIndustry) => industry.id === selectedIndustry.id,
-      );
+    const industriesCheckboxArgs = await new IndustriesCheckboxPresenter(
+      industries,
+      profession.industries || [],
+      this.i18nService,
+    ).checkboxArgs();
 
-      return {
-        text: industry.name,
-        value: industry.id,
-        checked: hasSelectedIndustry,
-      };
-    });
-
-    const nationsCheckboxArgs = Nation.all().map((nation) => {
-      const hasSelectedNation = (profession.occupationLocations || []).includes(
-        nation.code,
-      );
-
-      return {
-        text: nation.name,
-        value: nation.code,
-        checked: hasSelectedNation,
-      };
-    });
+    const nationsCheckboxArgs = await new NationsCheckboxPresenter(
+      Nation.all(),
+      (profession.occupationLocations || []).map((nationCode) =>
+        Nation.find(nationCode),
+      ),
+      this.i18nService,
+    ).checkboxArgs();
 
     return {
       name: profession.name,

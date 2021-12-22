@@ -17,6 +17,10 @@ export class ProfessionsService {
     return this.repository.find();
   }
 
+  allConfirmed(): Promise<Profession[]> {
+    return this.repository.find({ where: { confirmed: true } });
+  }
+
   find(id: string): Promise<Profession> {
     return this.repository.findOne(id);
   }

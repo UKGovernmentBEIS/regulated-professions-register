@@ -6,11 +6,11 @@
     "industries": "Industries:"
   },
   "profession": {
-    "regulatedAuthority": "Regulated authority",
-    "nations": "Nations",
-    "industry": "Industry / sector",
-    "qualificationLevel": "Qualification level"
+    "regulators": "Regulators",
+    "industry": "Industry / sector"
   },
+  "foundSingular": "profession found.",
+  "foundPlural": "professions found.",
   "form": {
     "nameFilter": {
       "label": "Profession that you are looking for",

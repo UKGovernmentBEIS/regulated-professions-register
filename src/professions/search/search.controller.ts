@@ -1,12 +1,15 @@
 import { Body, Controller, Get, Post, Render, Req } from '@nestjs/common';
 import { Request } from 'express';
 import { I18nService } from 'nestjs-i18n';
-import { backLink } from '../../common/utils';
+import { Industry } from '../../industries/industry.entity';
 import { IndustriesService } from '../../industries/industries.service';
 import { Nation } from '../../nations/nation';
 import { ProfessionsService } from '../professions.service';
 import { FilterDto } from './dto/filter.dto';
+import { FilterHelper } from './helpers/filter.helper';
+import { FilterInput } from './interfaces/filter-input.interface';
 import { IndexTemplate } from './interfaces/index-template.interface';
+import { SearchPresenter } from './search.presenter';
 
 @Controller('professions/search')
 export class SearchController {
@@ -19,10 +22,7 @@ export class SearchController {
   @Get()
   @Render('professions/search/index')
   async index(@Req() request: Request): Promise<IndexTemplate> {
-    return {
-      ...(await this.createSearchResults(new FilterDto())),
-      backLink: backLink(request),
-    };
+    return this.createSearchResults(new FilterDto(), request);
   }
 
   @Post()
@@ -31,76 +31,44 @@ export class SearchController {
     @Body() filter: FilterDto,
     @Req() request: Request,
   ): Promise<IndexTemplate> {
-    return {
-      ...(await this.createSearchResults(filter)),
-      backLink: backLink(request),
-    };
+    return this.createSearchResults(filter, request);
   }
 
   private async createSearchResults(
     filter: FilterDto,
-  ): Promise<Omit<IndexTemplate, 'backLink'>> {
-    // Where a single option is selected, NestJS gives us a string rather than
-    // a single element array
-    if (typeof filter.industries === 'string') {
-      filter.industries = [filter.industries];
-    }
-
-    if (typeof filter.nations === 'string') {
-      filter.nations = [filter.nations];
-    }
-
+    request: Request,
+  ): Promise<IndexTemplate> {
     const allNations = Nation.all();
     const allIndustries = await this.industriesService.all();
 
-    const allProfessions = await this.professionsService.all();
+    const allProfessions = await this.professionsService.allConfirmed();
 
-    const filterNations = Nation.all().filter((nation) =>
+    const filterInput = this.getFilterInput(filter, allNations, allIndustries);
+
+    const filteredProfessions = new FilterHelper(allProfessions).filter(
+      filterInput,
+    );
+
+    return new SearchPresenter(
+      filterInput,
+      allNations,
+      allIndustries,
+      filteredProfessions,
+    ).present(this.i18nService, request);
+  }
+
+  private getFilterInput(
+    filter: FilterDto,
+    allNations: Nation[],
+    allIndustries: Industry[],
+  ): FilterInput {
+    const nations = allNations.filter((nation) =>
       filter.nations.includes(nation.code),
     );
-    const filterIndustries = allIndustries.filter((industry) =>
+    const industries = allIndustries.filter((industry) =>
       filter.industries.includes(industry.id),
     );
 
-    const nationsOptionSelectArgs = allNations.map((nation) => ({
-      text: nation.name,
-      value: nation.code,
-      checked: filterNations.includes(nation),
-    }));
-
-    const industriesOptionSelectArgs = allIndustries.map((industry) => ({
-      text: industry.name,
-      value: industry.id,
-      checked: filterIndustries.includes(industry),
-    }));
-
-    const displayProfessions = await Promise.all(
-      allProfessions.map(async (profession) => {
-        const nations = await Promise.all(
-          profession.occupationLocations.map(async (code) =>
-            Nation.find(code).translatedName(this.i18nService),
-          ),
-        );
-
-        const industries = await Promise.all(
-          profession.industries.map(
-            async (industry) => await this.i18nService.translate(industry.name),
-          ),
-        );
-
-        return { ...profession, nations, industries };
-      }),
-    );
-
-    return {
-      professions: displayProfessions,
-      nationsOptionSelectArgs,
-      industriesOptionSelectArgs,
-      filters: {
-        keywords: filter.keywords,
-        nations: filterNations.map((nation) => nation.name),
-        industries: filterIndustries.map((industry) => industry.name),
-      },
-    };
+    return { nations, industries, keywords: filter.keywords };
   }
 }

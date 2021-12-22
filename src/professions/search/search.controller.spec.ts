@@ -1,14 +1,19 @@
 import { createMock, DeepMocked } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
+import { Request } from 'express';
 import { I18nService } from 'nestjs-i18n';
+import { Nation } from '../../nations/nation';
 import { createMockRequest } from '../../common/create-mock-request';
 import { IndustriesService } from '../../industries/industries.service';
 import { Industry } from '../../industries/industry.entity';
 import { Profession } from '../profession.entity';
 
 import { ProfessionsService } from '../professions.service';
-import { IndexTemplate } from './interfaces/index-template.interface';
 import { SearchController } from './search.controller';
+import { SearchPresenter } from './search.presenter';
+
+const referrer = 'http://example.com/some/path';
+const host = 'example.com';
 
 const exampleIndustry1 = new Industry('industries.example1');
 exampleIndustry1.id = 'example-industry-1';
@@ -19,8 +24,14 @@ exampleIndustry2.id = 'example-industry-2';
 const exampleIndustry3 = new Industry('industries.example3');
 exampleIndustry3.id = 'example-industry-3';
 
+const exampleIndustries = [
+  exampleIndustry1,
+  exampleIndustry2,
+  exampleIndustry3,
+];
+
 const exampleProfession1 = new Profession(
-  'Example Profession 1',
+  'Secondary School Teacher',
   '',
   null,
   '',
@@ -30,7 +41,7 @@ const exampleProfession1 = new Profession(
 );
 
 const exampleProfession2 = new Profession(
-  'Example Profession 2',
+  'Trademark Attorny',
   '',
   null,
   '',
@@ -40,22 +51,26 @@ const exampleProfession2 = new Profession(
 );
 
 describe('SearchController', () => {
+  let request: DeepMocked<Request>;
+
   let controller: SearchController;
   let professionsService: DeepMocked<ProfessionsService>;
   let industriesService: DeepMocked<IndustriesService>;
   let i18nService: DeepMocked<I18nService>;
 
   beforeEach(async () => {
+    request = createMockRequest(referrer, host);
+
     professionsService = createMock<ProfessionsService>();
     industriesService = createMock<IndustriesService>();
     i18nService = createMock<I18nService>();
 
-    professionsService.all.mockImplementation(async () => {
+    professionsService.allConfirmed.mockImplementation(async () => {
       return [exampleProfession1, exampleProfession2];
     });
 
     industriesService.all.mockImplementation(async () => {
-      return [exampleIndustry1, exampleIndustry2, exampleIndustry3];
+      return exampleIndustries;
     });
 
     i18nService.translate.mockImplementation(async (text) => {
@@ -68,10 +83,12 @@ describe('SearchController', () => {
           return 'Example industry 3';
         case 'nations.england':
           return 'England';
-        case 'nations.wales':
-          return 'Wales';
         case 'nations.scotland':
           return 'Scotland';
+        case 'nations.wales':
+          return 'Wales';
+        case 'nations.northernIreland':
+          return 'Northern Ireland';
         default:
           return '';
       }
@@ -101,113 +118,167 @@ describe('SearchController', () => {
 
   describe('index', () => {
     it('should return populated template params', async () => {
-      const referrer = 'http://example.com/some/path';
-      const request = createMockRequest(referrer, 'example.com');
-
       const result = await controller.index(request);
 
-      expect(result).toMatchObject({
-        ...createNationsOptionsSelectArgs(),
-        ...createIndustriesOptionsSelectArgs(),
-        filters: {
+      const expected = await new SearchPresenter(
+        {
           keywords: '',
-          nations: [],
           industries: [],
+          nations: [],
         },
-        professions: [
-          {
-            name: exampleProfession1.name,
-          },
-          {
-            name: exampleProfession2.name,
-          },
-        ],
-        backLink: referrer,
-      });
-    });
-  });
+        Nation.all(),
+        exampleIndustries,
+        [exampleProfession1, exampleProfession2],
+      ).present(i18nService, request);
 
-  describe('create', () => {
-    it('should return template params populated with provided search filters', async () => {
+      expect(result).toEqual(expected);
+    });
+
+    it('should request only complete professions from `ProfessionsService`', async () => {
       const request = createMockRequest(
         'http://example.com/some/path',
         'example.com',
       );
 
-      const result = await controller.create(
+      await controller.create(
         {
-          keywords: 'example search',
-          industries: [exampleIndustry1.id, exampleIndustry2.id],
-          nations: 'GB-SCT',
+          keywords: '',
+          industries: [],
+          nations: [],
         },
         request,
       );
 
-      expect(result).toMatchObject({
-        ...createNationsOptionsSelectArgs('GB-SCT'),
-        ...createIndustriesOptionsSelectArgs(
-          'example-industry-1',
-          'example-industry-2',
-        ),
-        filters: {
+      expect(professionsService.allConfirmed).toHaveBeenCalled();
+      expect(professionsService.all).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('create', () => {
+    it('should return template params populated with provided search filters', async () => {
+      const result = await controller.create(
+        {
           keywords: 'example search',
-          nations: ['nations.scotland'],
-          industries: ['industries.example1', 'industries.example2'],
+          industries: [exampleIndustry1.id, exampleIndustry2.id],
+          nations: ['GB-SCT'],
         },
-      });
+        request,
+      );
+
+      const allNations = Nation.all();
+      const scotland = Nation.find('GB-SCT');
+
+      const expected = await new SearchPresenter(
+        {
+          keywords: 'example search',
+          industries: [exampleIndustry1, exampleIndustry2],
+          nations: [scotland],
+        },
+        allNations,
+        exampleIndustries,
+        [],
+      ).present(i18nService, request);
+
+      expect(result).toEqual(expected);
+    });
+
+    it('should return filtered professions when searching by nation', async () => {
+      const result = await controller.create(
+        {
+          keywords: '',
+          industries: [],
+          nations: ['GB-WLS'],
+        },
+        request,
+      );
+
+      const allNations = Nation.all();
+      const wales = Nation.find('GB-WLS');
+
+      const expected = await new SearchPresenter(
+        {
+          keywords: '',
+          industries: [],
+          nations: [wales],
+        },
+        allNations,
+        exampleIndustries,
+        [exampleProfession2],
+      ).present(i18nService, request);
+
+      expect(result).toEqual(expected);
+    });
+
+    it('should return filtered professions when searching by industry', async () => {
+      const result = await controller.create(
+        {
+          keywords: '',
+          industries: [exampleIndustry1.id],
+          nations: [],
+        },
+        request,
+      );
+
+      const expected = await new SearchPresenter(
+        {
+          keywords: '',
+          industries: [exampleIndustry1],
+          nations: [],
+        },
+        Nation.all(),
+        exampleIndustries,
+        [exampleProfession1],
+      ).present(i18nService, request);
+
+      expect(result).toEqual(expected);
+    });
+
+    it('should return filtered professions when searching by keyword', async () => {
+      const result = await controller.create(
+        {
+          keywords: 'Trademark',
+          industries: [],
+          nations: [],
+        },
+        request,
+      );
+
+      const expected = await new SearchPresenter(
+        {
+          keywords: 'Trademark',
+          industries: [],
+          nations: [],
+        },
+        Nation.all(),
+        exampleIndustries,
+        [exampleProfession2],
+      ).present(i18nService, request);
+
+      expect(result).toEqual(expected);
+    });
+
+    it('should return unfiltered professions when no search parameters are specified', async () => {
+      const result = await controller.create(
+        {
+          keywords: '',
+          industries: [],
+          nations: [],
+        },
+        request,
+      );
+
+      const expected = await new SearchPresenter(
+        {
+          keywords: '',
+          industries: [],
+          nations: [],
+        },
+        Nation.all(),
+        exampleIndustries,
+        [exampleProfession1, exampleProfession2],
+      ).present(i18nService, request);
+
+      expect(result).toEqual(expected);
     });
   });
 });
-
-function createNationsOptionsSelectArgs(
-  ...args: string[]
-): Pick<IndexTemplate, 'nationsOptionSelectArgs'> {
-  return {
-    nationsOptionSelectArgs: [
-      {
-        text: 'nations.england',
-        value: 'GB-ENG',
-        checked: args.includes('GB-ENG'),
-      },
-      {
-        text: 'nations.scotland',
-        value: 'GB-SCT',
-        checked: args.includes('GB-SCT'),
-      },
-      {
-        text: 'nations.wales',
-        value: 'GB-WLS',
-        checked: args.includes('GB-WLS'),
-      },
-      {
-        text: 'nations.northernIreland',
-        value: 'GB-NIR',
-        checked: args.includes('GB-NIR'),
-      },
-    ],
-  };
-}
-
-function createIndustriesOptionsSelectArgs(
-  ...args: string[]
-): Pick<IndexTemplate, 'industriesOptionSelectArgs'> {
-  return {
-    industriesOptionSelectArgs: [
-      {
-        text: exampleIndustry1.name,
-        value: exampleIndustry1.id,
-        checked: args.includes(exampleIndustry1.id),
-      },
-      {
-        text: exampleIndustry2.name,
-        value: exampleIndustry2.id,
-        checked: args.includes(exampleIndustry2.id),
-      },
-      {
-        text: exampleIndustry3.name,
-        value: exampleIndustry3.id,
-        checked: args.includes(exampleIndustry3.id),
-      },
-    ],
-  };
-}

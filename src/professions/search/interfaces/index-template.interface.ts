@@ -1,11 +1,9 @@
 export interface IndexTemplate {
   professions: {
     name: string;
-    nations: string[];
+    slug: string;
+    nations: string;
     industries: string[];
-    qualification: {
-      level: string;
-    };
   }[];
 
   filters: {
@@ -14,13 +12,13 @@ export interface IndexTemplate {
     keywords: string;
   };
 
-  nationsOptionSelectArgs: {
+  nationsCheckboxArgs: {
     text: string;
     value: string;
     checked: boolean;
   }[];
 
-  industriesOptionSelectArgs: {
+  industriesCheckboxArgs: {
     text: string;
     value: string;
     checked: boolean;
