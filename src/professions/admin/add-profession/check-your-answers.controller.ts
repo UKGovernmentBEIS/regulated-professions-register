@@ -1,46 +1,41 @@
-import { Controller, Get, Render, Session } from '@nestjs/common';
+import { Controller, Get, Param, Render } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
 
-import { IndustriesService } from '../../../industries/industries.service';
 import { Nation } from '../../../nations/nation';
-import { TopLevelDetailsDto } from './dto/top-level-details.dto';
+import { ProfessionsService } from '../../professions.service';
+import { CheckYourAnswersTemplate } from './interfaces/check-your-answers.template';
 
-@Controller('admin/professions/new/check-your-answers')
+@Controller('admin/professions')
 export class CheckYourAnswersController {
   constructor(
-    private industriesService: IndustriesService,
+    private readonly professionsService: ProfessionsService,
     private readonly i18nService: I18nService,
   ) {}
 
-  @Get()
+  @Get(':id/check-your-answers')
   @Render('professions/admin/add-profession/check-your-answers')
-  async show(@Session() session: Record<string, any>): Promise<{
-    name: string;
-    nations: string[];
-    industries: string[];
-  }> {
-    const addProfessionSession = session['add-profession'];
-    const topLevelDetails: TopLevelDetailsDto =
-      addProfessionSession['top-level-details'];
+  async show(@Param('id') id: string): Promise<CheckYourAnswersTemplate> {
+    const draftProfession = await this.professionsService.find(id);
 
-    const selectedIndustries = await this.industriesService.findByIds(
-      topLevelDetails.industries,
-    );
+    if (!draftProfession) {
+      throw new Error('Draft profession not found');
+    }
 
     const industryNames = await Promise.all(
-      selectedIndustries.map(
+      draftProfession.industries.map(
         async (industry) => await this.i18nService.translate(industry.name),
       ),
     );
 
     const selectedNations: string[] = await Promise.all(
-      topLevelDetails.nations.map(async (nationCode) =>
+      draftProfession.occupationLocations.map(async (nationCode) =>
         Nation.find(nationCode).translatedName(this.i18nService),
       ),
     );
 
     return {
-      name: topLevelDetails.name,
+      professionId: id,
+      name: draftProfession.name,
       nations: selectedNations,
       industries: industryNames,
     };

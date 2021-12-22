@@ -1,23 +1,34 @@
 import { DeepMocked, createMock } from '@golevelup/ts-jest';
 import { TestingModule, Test } from '@nestjs/testing';
 import { I18nService } from 'nestjs-i18n';
-import { IndustriesService } from '../../../industries/industries.service';
 import { Industry } from '../../../industries/industry.entity';
+import { Profession } from '../../profession.entity';
+import { ProfessionsService } from '../../professions.service';
 import { CheckYourAnswersController } from './check-your-answers.controller';
 
 describe('CheckYourAnswersController', () => {
   let controller: CheckYourAnswersController;
-  let industriesService: DeepMocked<IndustriesService>;
+  let professionsService: DeepMocked<ProfessionsService>;
   let i18nService: DeepMocked<I18nService>;
+  let profession: DeepMocked<Profession>;
 
   beforeEach(async () => {
-    industriesService = createMock<IndustriesService>();
+    profession = createMock<Profession>({
+      id: 'profession-id',
+      name: 'Gas Safe Engineer',
+      occupationLocations: ['GB-ENG'],
+      industries: [new Industry('industries.construction')],
+    });
+
+    professionsService = createMock<ProfessionsService>({
+      find: async () => profession,
+    });
     i18nService = createMock<I18nService>();
 
     const module: TestingModule = await Test.createTestingModule({
       controllers: [CheckYourAnswersController],
       providers: [
-        { provide: IndustriesService, useValue: industriesService },
+        { provide: ProfessionsService, useValue: professionsService },
         { provide: I18nService, useValue: i18nService },
       ],
     }).compile();
@@ -28,41 +39,27 @@ describe('CheckYourAnswersController', () => {
   });
 
   describe('view', () => {
-    it('returns the answers persisted in the session, looking up the Industry and Nation name', async () => {
-      const constructionUUID = 'construction-uuid';
-      const session = {
-        'add-profession': {
-          'top-level-details': {
-            name: 'Gas Safe Engineer',
-            nations: ['GB-ENG'],
-            industries: [constructionUUID],
-          },
-        },
-      };
+    describe('when a Profession has been created with the persisted ID', () => {
+      it('fetches the draft Profession from the persisted ID, and renders the answers on the page', async () => {
+        i18nService.translate.mockImplementation(async (text) => {
+          switch (text) {
+            case 'industries.construction':
+              return 'Construction & Engineering';
+            case 'nations.england':
+              return 'England';
+            default:
+              return '';
+          }
+        });
 
-      const industry = new Industry('industries.construction');
-      industry.id = constructionUUID;
-
-      industriesService.findByIds.mockImplementation(async () => [industry]);
-
-      i18nService.translate.mockImplementation(async (text) => {
-        switch (text) {
-          case 'industries.construction':
-            return 'Construction & Engineering';
-          case 'nations.england':
-            return 'England';
-          default:
-            return '';
-        }
+        const templateParams = await controller.show('profession-id');
+        expect(templateParams.name).toEqual('Gas Safe Engineer');
+        expect(templateParams.nations).toEqual(['England']);
+        expect(templateParams.industries).toEqual([
+          'Construction & Engineering',
+        ]);
+        expect(professionsService.find).toHaveBeenCalledWith('profession-id');
       });
-
-      const templateParams = await controller.show(session);
-      expect(templateParams.name).toEqual('Gas Safe Engineer');
-      expect(templateParams.nations).toEqual(['England']);
-      expect(templateParams.industries).toEqual(['Construction & Engineering']);
-      expect(industriesService.findByIds).toHaveBeenCalledWith([
-        constructionUUID,
-      ]);
     });
   });
 

@@ -1,56 +1,27 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Redirect,
-  Render,
-  Session,
-} from '@nestjs/common';
-import { IndustriesService } from '../../../industries/industries.service';
-import { Profession } from '../../profession.entity';
+import { Controller, Get, Param, Post, Render, Res } from '@nestjs/common';
+import { Response } from 'express';
 
 import { ProfessionsService } from '../../professions.service';
-import { TopLevelDetailsDto } from './dto/top-level-details.dto';
+import { ConfirmationTemplate } from './interfaces/confirmation.template';
 
-@Controller('admin/professions/new/confirmation')
+@Controller('admin/professions')
 export class ConfirmationController {
-  constructor(
-    private professionsService: ProfessionsService,
-    private industriesService: IndustriesService,
-  ) {}
+  constructor(private professionsService: ProfessionsService) {}
 
-  @Post()
-  @Redirect('/admin/professions/new/confirmation')
-  async create(@Session() session: Record<string, any>) {
-    const addProfessionSession = session['add-profession'];
-    const topLevelDetails: TopLevelDetailsDto =
-      addProfessionSession['top-level-details'];
+  @Post('/:id/confirmation')
+  async create(@Res() res: Response, @Param('id') id: string): Promise<void> {
+    const profession = await this.professionsService.find(id);
 
-    const industries = await this.industriesService.findByIds(
-      topLevelDetails.industries,
-    );
+    await this.professionsService.confirm(profession);
 
-    const profession = new Profession(
-      topLevelDetails.name,
-      '',
-      '',
-      '',
-      topLevelDetails.nations,
-      '',
-      industries,
-      null,
-      [],
-      [],
-    );
-
-    await this.professionsService.create(profession);
+    res.redirect(`/admin/professions/${id}/confirmation`);
   }
 
-  @Get()
+  @Get('/:id/confirmation')
   @Render('professions/admin/add-profession/confirmation')
-  async viewConfirmation(@Session() session: Record<string, any>) {
-    const addProfessionSession = session['add-profession'];
+  async new(@Param('id') id: string): Promise<ConfirmationTemplate> {
+    const profession = await this.professionsService.find(id);
 
-    return { name: addProfessionSession['top-level-details'].name };
+    return { name: profession.name };
   }
 }

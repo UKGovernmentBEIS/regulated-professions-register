@@ -3,12 +3,16 @@ import { TestingModule, Test } from '@nestjs/testing';
 import { Response } from 'express';
 import { IndustriesService } from '../../../industries/industries.service';
 import { Industry } from '../../../industries/industry.entity';
+import { Profession } from '../../profession.entity';
+import { ProfessionsService } from '../../professions.service';
 import { TopLevelInformationController } from './top-level-information.controller';
 
 describe('TopLevelInformationController', () => {
   let controller: TopLevelInformationController;
+  let professionsService: DeepMocked<ProfessionsService>;
   let industriesService: DeepMocked<IndustriesService>;
   let response: DeepMocked<Response>;
+  let profession: DeepMocked<Profession>;
 
   const healthIndustry = new Industry('industries.health');
   healthIndustry.id = 'health-uuid';
@@ -20,11 +24,23 @@ describe('TopLevelInformationController', () => {
   const industries = [healthIndustry, constructionIndustry];
 
   beforeEach(async () => {
+    profession = createMock<Profession>({
+      id: 'profession-id',
+      industries: null,
+      occupationLocations: null,
+    });
+
     industriesService = createMock<IndustriesService>();
+    professionsService = createMock<ProfessionsService>({
+      find: async () => profession,
+    });
 
     const module: TestingModule = await Test.createTestingModule({
       controllers: [TopLevelInformationController],
-      providers: [{ provide: IndustriesService, useValue: industriesService }],
+      providers: [
+        { provide: IndustriesService, useValue: industriesService },
+        { provide: ProfessionsService, useValue: professionsService },
+      ],
     }).compile();
 
     industriesService.all.mockImplementation(async () => industries);
@@ -35,137 +51,165 @@ describe('TopLevelInformationController', () => {
     );
   });
 
-  describe('new', () => {
-    it('should fetch all Industries and Nations to be displayed in an option select', async () => {
-      await controller.new(response);
+  describe('edit', () => {
+    describe('when editing a just-created, blank Profession', () => {
+      const blankProfession = new Profession();
+      blankProfession.id = 'profession-id';
 
-      expect(response.render).toHaveBeenCalledWith(
-        'professions/admin/add-profession/top-level-information',
-        {
+      it('should fetch all Industries and Nations to be displayed in an option select, with none of them checked', async () => {
+        professionsService.find.mockImplementation(async () => blankProfession);
+
+        const templateArgs = await controller.edit('profession-id');
+
+        expect(templateArgs).toEqual({
+          name: null,
           industriesCheckboxArgs: [
             {
               text: 'industries.health',
               value: 'health-uuid',
+              checked: false,
             },
             {
               text: 'industries.constructionAndEngineering',
               value: 'construction-uuid',
+              checked: false,
             },
           ],
           nationsCheckboxArgs: [
             {
               text: 'nations.england',
               value: 'GB-ENG',
+              checked: false,
             },
             {
               text: 'nations.scotland',
               value: 'GB-SCT',
+              checked: false,
             },
             {
               text: 'nations.wales',
               value: 'GB-WLS',
+              checked: false,
             },
             {
               text: 'nations.northernIreland',
               value: 'GB-NIR',
+              checked: false,
             },
           ],
-        },
+          errors: undefined,
+        });
+        expect(industriesService.all).toHaveBeenCalled();
+      });
+    });
+
+    describe('when an existing Profession is found', () => {
+      const selectedIndustry = new Industry('industries.health');
+      selectedIndustry.id = 'health-uuid';
+
+      const existingProfession = new Profession(
+        'Example Profession',
+        null,
+        null,
+        null,
+        ['GB-ENG', 'GB-SCT'],
+        null,
+        [selectedIndustry],
       );
-      expect(industriesService.all).toHaveBeenCalled();
+      existingProfession.id = 'profession-id';
+
+      it('should pre-fill the Profession name and pre-select checkboxes for selected Nations and Industries', async () => {
+        professionsService.find.mockImplementation(
+          async () => existingProfession,
+        );
+
+        const templateArgs = await controller.edit('profession-id');
+
+        expect(templateArgs).toEqual({
+          name: 'Example Profession',
+          industriesCheckboxArgs: [
+            {
+              text: 'industries.health',
+              value: 'health-uuid',
+              checked: true,
+            },
+            {
+              text: 'industries.constructionAndEngineering',
+              value: 'construction-uuid',
+              checked: false,
+            },
+          ],
+          nationsCheckboxArgs: [
+            {
+              text: 'nations.england',
+              value: 'GB-ENG',
+              checked: true,
+            },
+            {
+              text: 'nations.scotland',
+              value: 'GB-SCT',
+              checked: true,
+            },
+            {
+              text: 'nations.wales',
+              value: 'GB-WLS',
+              checked: false,
+            },
+            {
+              text: 'nations.northernIreland',
+              value: 'GB-NIR',
+              checked: false,
+            },
+          ],
+          errors: undefined,
+        });
+        expect(industriesService.all).toHaveBeenCalled();
+      });
     });
   });
 
-  describe('addTopLevelInformation', () => {
+  describe('update', () => {
     describe('when all required parameters are entered', () => {
-      it('redirects to the Check your answers page and stores top level information data in the session', async () => {
-        const session = {
-          'add-profession': {},
-        };
-
-        const topLevelDetails = {
+      it('updates the Profession and redirects to the Check your answers page', async () => {
+        const topLevelDetailsDto = {
           name: 'Gas Safe Engineer',
           nations: ['GB-ENG'],
           industries: ['construction-uuid'],
         };
 
-        await controller.addTopLevelInformation(
-          session,
-          topLevelDetails,
-          response,
-        );
+        industriesService.findByIds.mockResolvedValue(industries);
 
-        expect(session).toEqual({
-          'add-profession': {
-            'top-level-details': {
-              name: 'Gas Safe Engineer',
-              nations: ['GB-ENG'],
-              industries: ['construction-uuid'],
-            },
-          },
+        await controller.update(topLevelDetailsDto, response, 'profession-id');
+
+        expect(professionsService.save).toHaveBeenCalledWith({
+          id: 'profession-id',
+          name: 'Gas Safe Engineer',
+          occupationLocations: ['GB-ENG'],
+          industries,
         });
+
         expect(response.redirect).toHaveBeenCalledWith(
-          '/admin/professions/new/check-your-answers',
+          '/admin/professions/profession-id/check-your-answers',
         );
       });
     });
 
-    describe('when a required parameter is not entered', () => {
-      it('renders the top level information view and displays an error to the user', async () => {
-        const session = {
-          'add-profession': {},
-        };
-
-        const topLevelDetailsWithNoAnswers = {
+    describe('when required parameters are not entered', () => {
+      it('does not create a profession, and re-renders the top level information view with errors', async () => {
+        const topLevelDetailsDtoWithNoAnswers = {
           name: '',
           nations: undefined,
           industries: undefined,
         };
 
-        await controller.addTopLevelInformation(
-          session,
-          topLevelDetailsWithNoAnswers,
+        await controller.update(
+          topLevelDetailsDtoWithNoAnswers,
           response,
+          'profession-id',
         );
 
-        expect(response.render).toHaveBeenCalledWith(
-          'professions/admin/add-profession/top-level-information',
-          {
-            industriesCheckboxArgs: [
-              {
-                text: 'industries.health',
-                value: 'health-uuid',
-              },
-              {
-                text: 'industries.constructionAndEngineering',
-                value: 'construction-uuid',
-              },
-            ],
-            nationsCheckboxArgs: [
-              {
-                text: 'nations.england',
-                value: 'GB-ENG',
-              },
-              {
-                text: 'nations.scotland',
-                value: 'GB-SCT',
-              },
-              {
-                text: 'nations.wales',
-                value: 'GB-WLS',
-              },
-              {
-                text: 'nations.northernIreland',
-                value: 'GB-NIR',
-              },
-            ],
-            errors: {
-              name: { text: 'name should not be empty' },
-              nations: { text: 'nations should not be empty' },
-              industries: { text: 'industries should not be empty' },
-            },
-          },
-        );
+        expect(professionsService.save).not.toHaveBeenCalled();
+
         expect(industriesService.all).toHaveBeenCalled();
       });
     });

@@ -1,44 +1,76 @@
-import { Body, Controller, Get, Post, Res, Session } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Render,
+  Res,
+} from '@nestjs/common';
 import { Response } from 'express';
 import { Validator } from '../../../helpers/validator';
 import { IndustriesService } from '../../../industries/industries.service';
 import { Nation } from '../../../nations/nation';
 import { ValidationFailedError } from '../../../validation/validation-failed.error';
+import { Profession } from '../../profession.entity';
+import { ProfessionsService } from '../../professions.service';
 import { TopLevelDetailsDto } from './dto/top-level-details.dto';
+import { TopLevelDetailsTemplate } from './interfaces/top-level-details.template';
 
-@Controller('admin/professions/new/top-level-information')
+@Controller('admin/professions')
 export class TopLevelInformationController {
-  constructor(private industriesService: IndustriesService) {}
+  constructor(
+    private readonly professionsService: ProfessionsService,
+    private readonly industriesService: IndustriesService,
+  ) {}
 
-  @Get()
-  async new(
-    @Res() res: Response,
+  @Get('/:id/top-level-information/edit')
+  @Render('professions/admin/add-profession/top-level-information')
+  async edit(
+    @Param('id') id: string,
     errors: object | undefined = undefined,
-  ): Promise<void> {
+  ): Promise<TopLevelDetailsTemplate> {
+    const profession = await this.professionsService.find(id);
+
     const industries = await this.industriesService.all();
 
-    const industriesCheckboxArgs = industries.map((industry) => ({
-      text: industry.name,
-      value: industry.id,
-    }));
+    const industriesCheckboxArgs = industries.map((industry) => {
+      const hasSelectedIndustry = !!(profession.industries || []).find(
+        (selectedIndustry) => industry.id === selectedIndustry.id,
+      );
 
-    const nationsCheckboxArgs = Nation.all().map((nation) => ({
-      text: nation.name,
-      value: nation.code,
-    }));
+      return {
+        text: industry.name,
+        value: industry.id,
+        checked: hasSelectedIndustry,
+      };
+    });
 
-    res.render('professions/admin/add-profession/top-level-information', {
+    const nationsCheckboxArgs = Nation.all().map((nation) => {
+      const hasSelectedNation = (profession.occupationLocations || []).includes(
+        nation.code,
+      );
+
+      return {
+        text: nation.name,
+        value: nation.code,
+        checked: hasSelectedNation,
+      };
+    });
+
+    return {
+      name: profession.name,
       industriesCheckboxArgs,
       nationsCheckboxArgs,
       errors,
-    });
+    };
   }
 
-  @Post()
-  async addTopLevelInformation(
-    @Session() session: Record<string, any>,
+  @Post('/:id/top-level-information')
+  async update(
     @Body() topLevelDetailsDto, // unfortunately we can't type this here without a validation error being thrown outside of this
     @Res() res: Response,
+    @Param('id') id: string,
   ): Promise<void> {
     const validator = await Validator.validate(
       TopLevelDetailsDto,
@@ -47,16 +79,29 @@ export class TopLevelInformationController {
 
     if (!validator.valid()) {
       const errors = new ValidationFailedError(validator.errors).fullMessages();
-      this.new(res, errors);
+      this.edit(id, errors);
       return;
     }
 
-    if (session['add-profession'] === undefined) {
-      session['add-profession'] = {};
-    }
+    const topLevelDetails: TopLevelDetailsDto = topLevelDetailsDto;
 
-    session['add-profession']['top-level-details'] = topLevelDetailsDto;
+    const industries = await this.industriesService.findByIds(
+      topLevelDetails.industries,
+    );
 
-    res.redirect('/admin/professions/new/check-your-answers');
+    const profession = await this.professionsService.find(id);
+
+    const updated: Profession = {
+      ...profession,
+      ...{
+        name: topLevelDetailsDto.name,
+        occupationLocations: topLevelDetails.nations,
+        industries: industries,
+      },
+    };
+
+    await this.professionsService.save(updated);
+
+    res.redirect(`/admin/professions/${id}/check-your-answers`);
   }
 }
