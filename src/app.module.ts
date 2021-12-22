@@ -9,6 +9,7 @@ import * as path from 'path';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { MailerConsumer } from './common/mailer.consumer';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
 import { ProfessionsModule } from './professions/professions.module';
@@ -54,6 +55,6 @@ import dbConfiguration from './config/db.config';
     IndustriesModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, MailerConsumer],
 })
 export class AppModule {}
