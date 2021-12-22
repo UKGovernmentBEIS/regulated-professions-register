@@ -32,11 +32,11 @@ describe('Searching a profession', () => {
   it('I can filter by nation', () => {
     cy.visit('/professions/search');
 
-    cy.get('input[name="nations"][value="GB-WLS"]').check();
+    cy.get('input[name="nations[]"][value="GB-WLS"]').check();
 
     cy.get('button').click();
 
-    cy.get('input[name="nations"][value="GB-WLS"]').should('be.checked');
+    cy.get('input[name="nations[]"][value="GB-WLS"]').should('be.checked');
 
     cy.get('body').should('contain', 'Registered Trademark Attorney');
     cy.get('body').should(

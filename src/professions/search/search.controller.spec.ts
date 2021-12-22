@@ -144,7 +144,7 @@ describe('SearchController', () => {
         {
           keywords: '',
           industries: [],
-          nations: 'GB-SCT',
+          nations: [],
         },
         request,
       );
@@ -160,7 +160,7 @@ describe('SearchController', () => {
         {
           keywords: 'example search',
           industries: [exampleIndustry1.id, exampleIndustry2.id],
-          nations: 'GB-SCT',
+          nations: ['GB-SCT'],
         },
         request,
       );
@@ -187,7 +187,7 @@ describe('SearchController', () => {
         {
           keywords: '',
           industries: [],
-          nations: 'GB-WLS',
+          nations: ['GB-WLS'],
         },
         request,
       );

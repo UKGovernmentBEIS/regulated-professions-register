@@ -62,20 +62,11 @@ export class SearchController {
     allNations: Nation[],
     allIndustries: Industry[],
   ): FilterInput {
-    // Where a single option is selected, NestJS gives us a string rather than
-    // a single element array
-    const filterIndustryIds =
-      typeof filter.industries === 'string'
-        ? [filter.industries]
-        : filter.industries;
-    const filterNationCodes =
-      typeof filter.nations === 'string' ? [filter.nations] : filter.nations;
-
     const nations = allNations.filter((nation) =>
-      filterNationCodes.includes(nation.code),
+      filter.nations.includes(nation.code),
     );
     const industries = allIndustries.filter((industry) =>
-      filterIndustryIds.includes(industry.id),
+      filter.industries.includes(industry.id),
     );
 
     return { nations, industries, keywords: filter.keywords };
