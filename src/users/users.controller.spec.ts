@@ -9,6 +9,7 @@ import { UsersController } from './users.controller';
 import { User, UserRole } from './user.entity';
 import { UsersPresenter } from './users.presenter';
 import { UserPresenter } from './user.presenter';
+import { UserMailer } from './user.mailer';
 
 const name = 'Example Name';
 const email = 'name@example.com';
@@ -20,6 +21,7 @@ describe('UsersController', () => {
   let externalUserCreationService: DeepMocked<ExternalUserCreationService>;
   let usersService: DeepMocked<UsersService>;
   let i18nService: DeepMocked<I18nService>;
+  let userMailer: DeepMocked<UserMailer>;
   let request: DeepMocked<Request>;
   let user: User;
 
@@ -45,6 +47,7 @@ describe('UsersController', () => {
     });
 
     i18nService = createMock<I18nService>();
+    userMailer = createMock<UserMailer>();
 
     usersService = createMock<UsersService>({
       save: async () => {
@@ -72,6 +75,10 @@ describe('UsersController', () => {
         {
           provide: I18nService,
           useValue: i18nService,
+        },
+        {
+          provide: UserMailer,
+          useValue: userMailer,
         },
       ],
     }).compile();
@@ -158,6 +165,10 @@ describe('UsersController', () => {
         roles,
         confirmed: true,
       });
+      expect(userMailer.confirmation).toBeCalledWith(
+        user,
+        'http://example.org',
+      );
       expect(res.redirect).toBeCalledWith('done');
     });
 
