@@ -1,6 +1,7 @@
 $govuk-assets-path: '~govuk-frontend/govuk/assets/';
 
 @import 'govuk/all';
+@import './admin.scss';
 
 .rpr-details__section-title {
   text-transform: uppercase;
