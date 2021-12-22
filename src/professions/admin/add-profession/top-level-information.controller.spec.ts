@@ -83,7 +83,7 @@ describe('TopLevelInformationController', () => {
       it('should fetch all Industries and Nations to be displayed in an option select, with none of them checked', async () => {
         professionsService.find.mockImplementation(async () => blankProfession);
 
-        await controller.edit(response, 'profession-id');
+        await controller.edit(response, 'profession-id', false);
 
         expect(response.render).toHaveBeenCalledWith(
           'professions/admin/add-profession/top-level-information',
@@ -123,6 +123,7 @@ describe('TopLevelInformationController', () => {
                 checked: false,
               },
             ],
+            change: false,
             errors: undefined,
           },
         );
@@ -150,7 +151,7 @@ describe('TopLevelInformationController', () => {
           async () => existingProfession,
         );
 
-        await controller.edit(response, 'profession-id');
+        await controller.edit(response, 'profession-id', false);
 
         expect(response.render).toHaveBeenCalledWith(
           'professions/admin/add-profession/top-level-information',
@@ -190,6 +191,7 @@ describe('TopLevelInformationController', () => {
                 checked: false,
               },
             ],
+            change: false,
             errors: undefined,
           },
         );
@@ -264,6 +266,7 @@ describe('TopLevelInformationController', () => {
               name: 'Example Profession',
               nations: ['GB-ENG'],
               industries: ['construction-uuid'],
+              change: false,
             };
 
             industriesService.findByIds.mockResolvedValue([
@@ -285,6 +288,7 @@ describe('TopLevelInformationController', () => {
               name: 'Gas Safe Engineer',
               nations: ['GB-ENG'],
               industries: null,
+              change: false,
             };
 
             await expect(
@@ -304,6 +308,7 @@ describe('TopLevelInformationController', () => {
               name: 'Gas Safe Engineer',
               nations: ['GB-ENG'],
               industries: undefined,
+              change: false,
             };
 
             await expect(
@@ -333,6 +338,7 @@ describe('TopLevelInformationController', () => {
               name: 'Gas Safe Engineer',
               nations: ['GB-NIR'],
               industries: ['construction-uuid'],
+              change: false,
             };
 
             expect(
@@ -350,6 +356,7 @@ describe('TopLevelInformationController', () => {
               name: 'Gas Safe Engineer',
               nations: undefined,
               industries: ['construction-uuid'],
+              change: false,
             };
 
             expect(
@@ -369,6 +376,7 @@ describe('TopLevelInformationController', () => {
               name: 'Gas Safe Engineer',
               nations: undefined,
               industries: ['construction-uuid'],
+              change: false,
             };
 
             expect(
@@ -379,6 +387,79 @@ describe('TopLevelInformationController', () => {
             ).toEqual([]);
           });
         });
+      });
+    });
+
+    describe('the "change" query param', () => {
+      it('redirects to check your answers when true', async () => {
+        const existingProfession = new Profession(
+          'Example Profession',
+          null,
+          null,
+          null,
+          ['GB-ENG', 'GB-SCT'],
+          null,
+          [constructionIndustry],
+        );
+        existingProfession.id = 'profession-id';
+
+        professionsService.find.mockImplementation(
+          async () => existingProfession,
+        );
+
+        const topLevelDetailsDtoWithChangeParam = {
+          name: 'A new profession',
+          nations: ['GB-ENG'],
+          industries: ['construction-uuid'],
+          change: true,
+        };
+
+        industriesService.findByIds.mockResolvedValue([constructionIndustry]);
+
+        await controller.update(
+          topLevelDetailsDtoWithChangeParam,
+          response,
+          'profession-id',
+        );
+
+        expect(response.redirect).toHaveBeenCalledWith(
+          '/admin/professions/profession-id/check-your-answers',
+        );
+      });
+
+      it('continues to the next step in the journey when false', async () => {
+        const existingProfession = new Profession(
+          'Example Profession',
+          null,
+          null,
+          null,
+          ['GB-ENG', 'GB-SCT'],
+          null,
+          [constructionIndustry],
+        );
+        existingProfession.id = 'profession-id';
+
+        professionsService.find.mockImplementation(
+          async () => existingProfession,
+        );
+
+        const topLevelDetailsDtoWithoutChangeParam = {
+          name: 'A new profession',
+          nations: ['GB-ENG'],
+          industries: ['construction-uuid'],
+        };
+
+        industriesService.findByIds.mockResolvedValue([constructionIndustry]);
+
+        await controller.update(
+          topLevelDetailsDtoWithoutChangeParam,
+          response,
+          'profession-id',
+        );
+
+        expect(response.redirect).toHaveBeenCalledWith(
+          '/admin/professions/profession-id/check-your-answers',
+        );
       });
     });
   });

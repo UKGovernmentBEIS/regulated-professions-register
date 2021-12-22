@@ -19,6 +19,8 @@
           <h1 class="govuk-heading-l">{{ ("professions.form.headings.topLevelInformation" | t) }}</h1>
 
           <form method="post" action="./">
+            <input type="hidden" name="change" value="{{ change }}" />
+
             {{
               govukInput({
                 label: {

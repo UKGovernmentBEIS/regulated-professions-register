@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Res } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query, Res } from '@nestjs/common';
 import { Response } from 'express';
 import { IndustriesCheckboxPresenter } from '../../../industries/industries-checkbox.presenter';
 import { NationsCheckboxPresenter } from '../../../nations/nations-checkbox.presenter';
@@ -24,6 +24,7 @@ export class TopLevelInformationController {
   async edit(
     @Res() res: Response,
     @Param('id') id: string,
+    @Query('change') change: boolean,
     errors: object | undefined = undefined,
   ): Promise<void> {
     const profession = await this.professionsService.find(id);
@@ -33,6 +34,7 @@ export class TopLevelInformationController {
       profession.name,
       profession.industries || [],
       profession.occupationLocations || [],
+      change,
       errors,
     );
   }
@@ -63,6 +65,7 @@ export class TopLevelInformationController {
           profession,
           topLevelDetailsDto,
         ),
+        topLevelDetailsDto.change,
         errors,
       );
     }
@@ -84,6 +87,11 @@ export class TopLevelInformationController {
 
     await this.professionsService.save(updated);
 
+    if (topLevelDetailsDto.change) {
+      return res.redirect(`/admin/professions/${id}/check-your-answers`);
+    }
+
+    // This will be the next page in the journey, but for now is the same as above
     return res.redirect(`/admin/professions/${id}/check-your-answers`);
   }
 
@@ -92,6 +100,7 @@ export class TopLevelInformationController {
     name: string,
     selectedIndustries: Industry[],
     selectedNations: string[],
+    change: boolean,
     errors: object | undefined = undefined,
   ): Promise<void> {
     const industries = await this.industriesService.all();
@@ -114,6 +123,7 @@ export class TopLevelInformationController {
         name,
         industriesCheckboxArgs,
         nationsCheckboxArgs,
+        change,
         errors,
       },
     );
