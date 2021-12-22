@@ -12,5 +12,11 @@
   "backToDashboard": "Back to the dashboard",
   "yes": "Yes",
   "no": "No",
-  "unitedKingdom": "United Kingdom"
+  "unitedKingdom": "United Kingdom",
+  "phase": {
+    "beta": {
+      "label": "Beta",
+      "html": "This is a new service - your <a class='govuk-link' href='#'>feedback</a> will help us to improve it."
+    }
+  }
 }
