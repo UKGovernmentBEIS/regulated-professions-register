@@ -22,8 +22,8 @@ entity Regulation {
   --
   * occupationLocation: string[]
   * regulationType: string
-  * validFrom: datetime
-  * validThrough: datetime
+  validFrom: datetime
+  validThrough: datetime
 }
 
 entity Profession {
