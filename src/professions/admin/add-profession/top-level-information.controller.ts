@@ -11,6 +11,7 @@ import { ProfessionsService } from '../../professions.service';
 import { TopLevelDetailsDto } from './dto/top-level-details.dto';
 import { I18nService } from 'nestjs-i18n';
 import { Industry } from '../../../industries/industry.entity';
+import { TopLevelDetailsTemplate } from './interfaces/top-level-details.template';
 
 @Controller('admin/professions')
 export class TopLevelInformationController {
@@ -117,15 +118,17 @@ export class TopLevelInformationController {
       this.i18nService,
     ).checkboxArgs();
 
+    const templateArgs: TopLevelDetailsTemplate = {
+      name,
+      industriesCheckboxArgs,
+      nationsCheckboxArgs,
+      change,
+      errors,
+    };
+
     return res.render(
       'professions/admin/add-profession/top-level-information',
-      {
-        name,
-        industriesCheckboxArgs,
-        nationsCheckboxArgs,
-        change,
-        errors,
-      },
+      templateArgs,
     );
   }
 

@@ -4,5 +4,6 @@ export interface TopLevelDetailsTemplate {
   name: string | null;
   industriesCheckboxArgs: CheckboxArgs[];
   nationsCheckboxArgs: CheckboxArgs[];
+  change: boolean;
   errors: object | undefined;
 }
