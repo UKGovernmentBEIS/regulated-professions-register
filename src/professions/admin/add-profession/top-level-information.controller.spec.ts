@@ -203,7 +203,7 @@ describe('TopLevelInformationController', () => {
 
   describe('update', () => {
     describe('when all required parameters are entered', () => {
-      it('updates the Profession and redirects to the Check your answers page', async () => {
+      it('updates the Profession and redirects to the next page in the journey', async () => {
         const topLevelDetailsDto = {
           name: 'Gas Safe Engineer',
           nations: ['GB-ENG'],
@@ -222,7 +222,7 @@ describe('TopLevelInformationController', () => {
         });
 
         expect(response.redirect).toHaveBeenCalledWith(
-          '/admin/professions/profession-id/check-your-answers',
+          '/admin/professions/profession-id/regulatory-body/edit',
         );
       });
     });
@@ -463,7 +463,7 @@ describe('TopLevelInformationController', () => {
         );
 
         expect(response.redirect).toHaveBeenCalledWith(
-          '/admin/professions/profession-id/check-your-answers',
+          '/admin/professions/profession-id/regulatory-body/edit',
         );
       });
     });

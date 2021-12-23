@@ -92,8 +92,7 @@ export class TopLevelInformationController {
       return res.redirect(`/admin/professions/${id}/check-your-answers`);
     }
 
-    // This will be the next page in the journey, but for now is the same as above
-    return res.redirect(`/admin/professions/${id}/check-your-answers`);
+    return res.redirect(`/admin/professions/${id}/regulatory-body/edit`);
   }
 
   private async renderForm(
