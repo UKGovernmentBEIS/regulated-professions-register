@@ -42,6 +42,7 @@ export class Auth0UserCreationService extends ExternalUserCreationService {
     const user = await client.createUser({
       email,
       password: randomUUID(),
+      email_verified: true,
       connection: 'Username-Password-Authentication',
     });
 

@@ -52,6 +52,7 @@ describe('Auth0UserCreationService', () => {
       expect(managementClient.createUser).toHaveBeenCalledWith({
         email: email,
         password: expect.anything(),
+        email_verified: true,
         connection: 'Username-Password-Authentication',
       });
       expect(managementClient.createPasswordChangeTicket).toHaveBeenCalledWith({
