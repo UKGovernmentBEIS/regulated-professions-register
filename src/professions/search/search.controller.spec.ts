@@ -131,7 +131,9 @@ describe('SearchController', () => {
         Nation.all(),
         exampleIndustries,
         [exampleProfession1, exampleProfession2],
-      ).present(i18nService, request);
+        i18nService,
+        request,
+      ).present();
 
       expect(result).toEqual(expected);
     });
@@ -179,7 +181,9 @@ describe('SearchController', () => {
         allNations,
         exampleIndustries,
         [],
-      ).present(i18nService, request);
+        i18nService,
+        request,
+      ).present();
 
       expect(result).toEqual(expected);
     });
@@ -206,7 +210,9 @@ describe('SearchController', () => {
         allNations,
         exampleIndustries,
         [exampleProfession2],
-      ).present(i18nService, request);
+        i18nService,
+        request,
+      ).present();
 
       expect(result).toEqual(expected);
     });
@@ -230,7 +236,9 @@ describe('SearchController', () => {
         Nation.all(),
         exampleIndustries,
         [exampleProfession1],
-      ).present(i18nService, request);
+        i18nService,
+        request,
+      ).present();
 
       expect(result).toEqual(expected);
     });
@@ -254,7 +262,9 @@ describe('SearchController', () => {
         Nation.all(),
         exampleIndustries,
         [exampleProfession2],
-      ).present(i18nService, request);
+        i18nService,
+        request,
+      ).present();
 
       expect(result).toEqual(expected);
     });
@@ -278,7 +288,9 @@ describe('SearchController', () => {
         Nation.all(),
         exampleIndustries,
         [exampleProfession1, exampleProfession2],
-      ).present(i18nService, request);
+        i18nService,
+        request,
+      ).present();
 
       expect(result).toEqual(expected);
     });
