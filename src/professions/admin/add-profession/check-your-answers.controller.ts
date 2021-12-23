@@ -38,6 +38,8 @@ export class CheckYourAnswersController {
       name: draftProfession.name,
       nations: selectedNations,
       industries: industryNames,
+      organisation: draftProfession.organisation.name,
+      mandatoryRegistration: draftProfession.mandatoryRegistration,
     };
   }
 }
