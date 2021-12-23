@@ -1,5 +1,5 @@
-import { TableColumn } from './table-column';
+import { TableCell } from './table-cell';
 
 export interface TableRow {
-  [index: number]: TableColumn;
+  [index: number]: TableCell;
 }
