@@ -1,7 +1,7 @@
 import { randomUUID } from 'crypto';
-import { Industry } from '../../../industries/industry.entity';
-import { Nation } from '../../../nations/nation';
-import { Profession } from '../../../professions/profession.entity';
+import { Industry } from '../../industries/industry.entity';
+import { Nation } from '../../nations/nation';
+import { Profession } from '../profession.entity';
 import { FilterHelper } from './filter.helper';
 
 describe('FilterHelper', () => {

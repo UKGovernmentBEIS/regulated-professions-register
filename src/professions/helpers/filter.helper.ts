@@ -1,5 +1,5 @@
-import { Industry } from '../../../industries/industry.entity';
-import { Profession } from '../../../professions/profession.entity';
+import { Industry } from '../../industries/industry.entity';
+import { Profession } from '../../professions/profession.entity';
 import { FilterInput } from '../interfaces/filter-input.interface';
 
 export class FilterHelper {
