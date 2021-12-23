@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  Post,
-  Render,
-  Res,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Res } from '@nestjs/common';
 import { Response } from 'express';
 import { IndustriesCheckboxPresenter } from '../../../industries/industries-checkbox.presenter';
 import { NationsCheckboxPresenter } from '../../../nations/nations-checkbox.presenter';
@@ -17,8 +9,8 @@ import { ValidationFailedError } from '../../../validation/validation-failed.err
 import { Profession } from '../../profession.entity';
 import { ProfessionsService } from '../../professions.service';
 import { TopLevelDetailsDto } from './dto/top-level-details.dto';
-import { TopLevelDetailsTemplate } from './interfaces/top-level-details.template';
 import { I18nService } from 'nestjs-i18n';
+import { Industry } from '../../../industries/industry.entity';
 
 @Controller('admin/professions')
 export class TopLevelInformationController {
@@ -29,35 +21,20 @@ export class TopLevelInformationController {
   ) {}
 
   @Get('/:id/top-level-information/edit')
-  @Render('professions/admin/add-profession/top-level-information')
   async edit(
+    @Res() res: Response,
     @Param('id') id: string,
     errors: object | undefined = undefined,
-  ): Promise<TopLevelDetailsTemplate> {
+  ): Promise<void> {
     const profession = await this.professionsService.find(id);
 
-    const industries = await this.industriesService.all();
-
-    const industriesCheckboxArgs = await new IndustriesCheckboxPresenter(
-      industries,
+    return this.renderForm(
+      res,
+      profession.name,
       profession.industries || [],
-      this.i18nService,
-    ).checkboxArgs();
-
-    const nationsCheckboxArgs = await new NationsCheckboxPresenter(
-      Nation.all(),
-      (profession.occupationLocations || []).map((nationCode) =>
-        Nation.find(nationCode),
-      ),
-      this.i18nService,
-    ).checkboxArgs();
-
-    return {
-      name: profession.name,
-      industriesCheckboxArgs,
-      nationsCheckboxArgs,
+      profession.occupationLocations || [],
       errors,
-    };
+    );
   }
 
   @Post('/:id/top-level-information')
@@ -71,10 +48,23 @@ export class TopLevelInformationController {
       topLevelDetailsDto,
     );
 
+    const profession = await this.professionsService.find(id);
+
     if (!validator.valid()) {
       const errors = new ValidationFailedError(validator.errors).fullMessages();
-      this.edit(id, errors);
-      return;
+      return this.renderForm(
+        res,
+        topLevelDetailsDto.name || profession.name,
+        await this.getSelectedIndustriesFromDtoThenProfession(
+          profession,
+          topLevelDetailsDto,
+        ),
+        this.getSelectedNationsFromDtoThenProfession(
+          profession,
+          topLevelDetailsDto,
+        ),
+        errors,
+      );
     }
 
     const topLevelDetails: TopLevelDetailsDto = topLevelDetailsDto;
@@ -82,8 +72,6 @@ export class TopLevelInformationController {
     const industries = await this.industriesService.findByIds(
       topLevelDetails.industries,
     );
-
-    const profession = await this.professionsService.find(id);
 
     const updated: Profession = {
       ...profession,
@@ -96,6 +84,54 @@ export class TopLevelInformationController {
 
     await this.professionsService.save(updated);
 
-    res.redirect(`/admin/professions/${id}/check-your-answers`);
+    return res.redirect(`/admin/professions/${id}/check-your-answers`);
+  }
+
+  private async renderForm(
+    res: Response,
+    name: string,
+    selectedIndustries: Industry[],
+    selectedNations: string[],
+    errors: object | undefined = undefined,
+  ): Promise<void> {
+    const industries = await this.industriesService.all();
+
+    const industriesCheckboxArgs = await new IndustriesCheckboxPresenter(
+      industries,
+      selectedIndustries,
+      this.i18nService,
+    ).checkboxArgs();
+
+    const nationsCheckboxArgs = await new NationsCheckboxPresenter(
+      Nation.all(),
+      selectedNations.map((nationCode) => Nation.find(nationCode)),
+      this.i18nService,
+    ).checkboxArgs();
+
+    return res.render(
+      'professions/admin/add-profession/top-level-information',
+      {
+        name,
+        industriesCheckboxArgs,
+        nationsCheckboxArgs,
+        errors,
+      },
+    );
+  }
+
+  async getSelectedIndustriesFromDtoThenProfession(
+    profession: Profession,
+    topLevelDetailsDto: TopLevelDetailsDto,
+  ): Promise<Industry[]> {
+    return topLevelDetailsDto.industries
+      ? await this.industriesService.findByIds(topLevelDetailsDto.industries)
+      : profession.industries || [];
+  }
+
+  getSelectedNationsFromDtoThenProfession(
+    profession: Profession,
+    topLevelDetailsDto: TopLevelDetailsDto,
+  ): string[] {
+    return topLevelDetailsDto.nations || profession.occupationLocations || [];
   }
 }
