@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Res } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query, Res } from '@nestjs/common';
 import { Response } from 'express';
 import { IndustriesCheckboxPresenter } from '../../../industries/industries-checkbox.presenter';
 import { NationsCheckboxPresenter } from '../../../nations/nations-checkbox.presenter';
@@ -11,6 +11,7 @@ import { ProfessionsService } from '../../professions.service';
 import { TopLevelDetailsDto } from './dto/top-level-details.dto';
 import { I18nService } from 'nestjs-i18n';
 import { Industry } from '../../../industries/industry.entity';
+import { TopLevelDetailsTemplate } from './interfaces/top-level-details.template';
 
 @Controller('admin/professions')
 export class TopLevelInformationController {
@@ -24,6 +25,7 @@ export class TopLevelInformationController {
   async edit(
     @Res() res: Response,
     @Param('id') id: string,
+    @Query('change') change: boolean,
     errors: object | undefined = undefined,
   ): Promise<void> {
     const profession = await this.professionsService.find(id);
@@ -33,6 +35,7 @@ export class TopLevelInformationController {
       profession.name,
       profession.industries || [],
       profession.occupationLocations || [],
+      change,
       errors,
     );
   }
@@ -63,6 +66,7 @@ export class TopLevelInformationController {
           profession,
           topLevelDetailsDto,
         ),
+        topLevelDetailsDto.change,
         errors,
       );
     }
@@ -84,6 +88,11 @@ export class TopLevelInformationController {
 
     await this.professionsService.save(updated);
 
+    if (topLevelDetailsDto.change) {
+      return res.redirect(`/admin/professions/${id}/check-your-answers`);
+    }
+
+    // This will be the next page in the journey, but for now is the same as above
     return res.redirect(`/admin/professions/${id}/check-your-answers`);
   }
 
@@ -92,6 +101,7 @@ export class TopLevelInformationController {
     name: string,
     selectedIndustries: Industry[],
     selectedNations: string[],
+    change: boolean,
     errors: object | undefined = undefined,
   ): Promise<void> {
     const industries = await this.industriesService.all();
@@ -108,14 +118,17 @@ export class TopLevelInformationController {
       this.i18nService,
     ).checkboxArgs();
 
+    const templateArgs: TopLevelDetailsTemplate = {
+      name,
+      industriesCheckboxArgs,
+      nationsCheckboxArgs,
+      change,
+      errors,
+    };
+
     return res.render(
       'professions/admin/add-profession/top-level-information',
-      {
-        name,
-        industriesCheckboxArgs,
-        nationsCheckboxArgs,
-        errors,
-      },
+      templateArgs,
     );
   }
 

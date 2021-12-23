@@ -9,4 +9,6 @@ export class TopLevelDetailsDto {
 
   @IsNotEmpty()
   industries: string[];
+
+  change: boolean;
 }
