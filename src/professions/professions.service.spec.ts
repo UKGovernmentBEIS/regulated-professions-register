@@ -160,6 +160,7 @@ describe('Profession', () => {
             null,
             null,
             null,
+            null,
             true,
           );
 
@@ -196,6 +197,7 @@ describe('Profession', () => {
               '',
               null,
               '',
+              null,
               null,
               null,
               null,
@@ -252,6 +254,7 @@ describe('Profession', () => {
               null,
               null,
               null,
+              null,
               true,
             ),
           );
@@ -285,6 +288,7 @@ describe('Profession', () => {
               '',
               null,
               '',
+              null,
               null,
               null,
               null,

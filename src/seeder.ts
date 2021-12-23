@@ -16,6 +16,8 @@ import { Profession } from './professions/profession.entity';
 import { QualificationsSeeder } from './qualifications/qualifications.seeder';
 import { LegislationsSeeder } from './legislations/legislations.seeder';
 import { ProfessionsSeeder } from './professions/professions.seeder';
+import { OrganisationsSeeder } from './organisations/organisations.seeder';
+import { Organisation } from './organisations/organisation.entity';
 
 seeder({
   imports: [
@@ -35,6 +37,7 @@ seeder({
       Qualification,
       Legislation,
       Profession,
+      Organisation,
     ]),
   ],
 }).run([
@@ -43,4 +46,5 @@ seeder({
   QualificationsSeeder,
   LegislationsSeeder,
   ProfessionsSeeder,
+  OrganisationsSeeder,
 ]);

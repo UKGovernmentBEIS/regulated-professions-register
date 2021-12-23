@@ -12,6 +12,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Industry } from '../industries/industry.entity';
+import { Organisation } from '../organisations/organisation.entity';
 
 @Entity({ name: 'professions' })
 export class Profession {
@@ -55,6 +56,11 @@ export class Profession {
   @JoinTable()
   legislations: Legislation[];
 
+  @ManyToOne(() => Organisation, (organisation) => organisation.professions, {
+    eager: true,
+  })
+  organisation: Organisation;
+
   @Column({ default: false })
   confirmed: boolean;
 
@@ -82,6 +88,7 @@ export class Profession {
     qualification?: Qualification,
     reservedActivities?: string[],
     legislations?: Legislation[],
+    organisation?: Organisation,
     confirmed?: boolean,
   ) {
     this.name = name || null;
@@ -94,6 +101,7 @@ export class Profession {
     this.qualification = qualification || null;
     this.reservedActivities = reservedActivities || null;
     this.legislations = legislations || null;
+    this.organisation = organisation || null;
     this.confirmed = confirmed || false;
   }
 }

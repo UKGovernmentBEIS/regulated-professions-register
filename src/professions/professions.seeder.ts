@@ -70,6 +70,7 @@ export class ProfessionsSeeder implements Seeder {
           qualification,
           profession.reservedActivities,
           legislations,
+          null,
           profession.confirmed,
         );
       }),

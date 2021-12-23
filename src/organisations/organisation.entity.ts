@@ -7,6 +7,7 @@ import {
   JoinTable,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
 
 @Entity({ name: 'organisations' })
@@ -38,8 +39,7 @@ export class Organisation {
   @Column({ nullable: true })
   fax: string;
 
-  @ManyToMany(() => Profession)
-  @JoinTable()
+  @OneToMany(() => Profession, (profession) => profession.organisation)
   professions: Profession[];
 
   @CreateDateColumn({
