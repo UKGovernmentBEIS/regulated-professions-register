@@ -10,6 +10,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 - A professions search page that allows for filtering professions by keywords, nations, and industries
 - A landing page for public and admin users
+- Send confirmation email to users once created
+- Add Bull to run background tasks
 
 ### Changed
 
