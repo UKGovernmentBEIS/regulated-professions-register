@@ -47,3 +47,6 @@ terraform.rc*
 *.tfstate*
 *.tfvars*
 .terraform/
+
+# Redis
+dump.rdb
