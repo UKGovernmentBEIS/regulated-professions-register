@@ -1,10 +1,8 @@
+import { CheckboxArgs } from 'src/common/interfaces/checkbox-args.interface';
+import { ProfessionSearchResultTemplate } from './profession-search-result-template.interface';
+
 export interface IndexTemplate {
-  professions: {
-    name: string;
-    slug: string;
-    nations: string;
-    industries: string[];
-  }[];
+  professions: ProfessionSearchResultTemplate[];
 
   filters: {
     industries: string[];
@@ -12,17 +10,9 @@ export interface IndexTemplate {
     keywords: string;
   };
 
-  nationsCheckboxArgs: {
-    text: string;
-    value: string;
-    checked: boolean;
-  }[];
+  nationsCheckboxArgs: CheckboxArgs[];
 
-  industriesCheckboxArgs: {
-    text: string;
-    value: string;
-    checked: boolean;
-  }[];
+  industriesCheckboxArgs: CheckboxArgs[];
 
   backLink: string;
 }
