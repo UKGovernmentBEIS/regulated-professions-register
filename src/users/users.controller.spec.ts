@@ -36,7 +36,11 @@ describe('UsersController', () => {
 
     externalUserCreationService = createMock<ExternalUserCreationService>({
       createExternalUser: async () => {
-        return { result: 'user-created', externalIdentifier };
+        return {
+          result: 'user-created',
+          externalIdentifier,
+          passwordResetLink: 'http://example.org',
+        };
       },
     });
 

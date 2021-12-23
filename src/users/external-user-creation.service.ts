@@ -1,6 +1,7 @@
 type CreateExternalUserResultSuccess = {
   result: 'user-created';
   externalIdentifier: string;
+  passwordResetLink: string;
 };
 
 type CreateExternalUserResultUserExists = {
