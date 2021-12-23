@@ -24,6 +24,7 @@ export class RegulatoryBodyController {
   async edit(
     @Res() res: Response,
     @Param('id') id: string,
+    @Query('change') change: boolean,
     errors: object | undefined = undefined,
   ): Promise<void> {
     const profession = await this.professionsService.find(id);
@@ -35,6 +36,7 @@ export class RegulatoryBodyController {
       res,
       profession.organisation,
       selectedMandatoryRegistration,
+      change,
       errors,
     );
   }
@@ -64,6 +66,7 @@ export class RegulatoryBodyController {
           profession,
           regulatoryBodyDto,
         ),
+        regulatoryBodyDto.change,
         errors,
       );
     }
@@ -87,6 +90,11 @@ export class RegulatoryBodyController {
 
     await this.professionsService.save(updated);
 
+    if (regulatoryBodyDto.change) {
+      return res.redirect(`/admin/professions/${id}/check-your-answers`);
+    }
+
+    // This will be a different page once the next page in the journey is added
     return res.redirect(`/admin/professions/${id}/check-your-answers`);
   }
 
@@ -94,6 +102,7 @@ export class RegulatoryBodyController {
     res: Response,
     selectedRegulatoryAuthority: Organisation | null,
     mandatoryRegistration: MandatoryRegistration | null,
+    change: boolean,
     errors: object | undefined = undefined,
   ): Promise<void> {
     const regulatedAuthorities = await this.organisationsService.all();
@@ -113,6 +122,7 @@ export class RegulatoryBodyController {
     const templateArgs: RegulatoryBodyTemplate = {
       regulatedAuthoritiesSelectArgs,
       mandatoryRegistrationRadioButtonArgs,
+      change,
       errors,
     };
 

@@ -7,4 +7,6 @@ export class RegulatoryBodyDto {
 
   @IsNotEmpty()
   mandatoryRegistration: MandatoryRegistration;
+
+  change: boolean;
 }

@@ -88,7 +88,7 @@ describe(RegulatoryBodyController, () => {
         const mandatoryRegistrationRadioButtonsPresenter =
           new MandatoryRegistrationRadioButtonsPresenter(null, i18nService);
 
-        await controller.edit(response, 'profession-id');
+        await controller.edit(response, 'profession-id', false);
 
         expect(response.render).toHaveBeenCalledWith(
           'professions/admin/add-profession/regulatory-body',
@@ -97,6 +97,7 @@ describe(RegulatoryBodyController, () => {
               regulatedAuthoritiesSelectPresenter.selectArgs(),
             mandatoryRegistrationRadioButtonArgs:
               await mandatoryRegistrationRadioButtonsPresenter.radioButtonArgs(),
+            change: false,
             errors: undefined,
           },
         );
@@ -128,7 +129,7 @@ describe(RegulatoryBodyController, () => {
             i18nService,
           );
 
-        await controller.edit(response, 'profession-id');
+        await controller.edit(response, 'profession-id', false);
 
         expect(response.render).toHaveBeenCalledWith(
           'professions/admin/add-profession/regulatory-body',
@@ -137,6 +138,7 @@ describe(RegulatoryBodyController, () => {
               regulatedAuthoritiesSelectPresenterWithSelectedOrganisation.selectArgs(),
             mandatoryRegistrationRadioButtonArgs:
               await mandatoryRegistrationRadioButtonsPresenterWithSelectedValue.radioButtonArgs(),
+            change: false,
             errors: undefined,
           },
         );
@@ -221,6 +223,7 @@ describe(RegulatoryBodyController, () => {
           const regulatoryBodyDtoWithNewOrganisation = {
             regulatoryBody: 'new-org-id',
             mandatoryRegistration: undefined,
+            change: false,
           };
 
           organisationsService.find.mockImplementationOnce(
@@ -245,6 +248,7 @@ describe(RegulatoryBodyController, () => {
           const regulatoryBodyDtoWithNoOrganisation = {
             regulatoryBody: undefined,
             mandatoryRegistration: MandatoryRegistration.Voluntary,
+            change: false,
           };
 
           await expect(
@@ -267,6 +271,7 @@ describe(RegulatoryBodyController, () => {
           const regulatoryBodyDtoWithNewMandatoryRegistration = {
             regulatoryBody: 'org-id',
             mandatoryRegistration: MandatoryRegistration.Voluntary,
+            change: false,
           };
 
           expect(
@@ -287,6 +292,7 @@ describe(RegulatoryBodyController, () => {
           const regulatoryBodyDtoWithNewMandatoryRegistration = {
             regulatoryBody: 'org-id',
             mandatoryRegistration: undefined,
+            change: false,
           };
 
           expect(
@@ -296,6 +302,76 @@ describe(RegulatoryBodyController, () => {
             ),
           ).toEqual(MandatoryRegistration.Mandatory);
         });
+      });
+    });
+
+    describe('the "change" query param', () => {
+      it('redirects to check your answers when true', async () => {
+        const regulatoryBodyDtoWithChangeParam = {
+          regulatoryBody: 'example-org-id',
+          mandatoryRegistration: MandatoryRegistration.Voluntary,
+          change: true,
+        };
+
+        const organisation = createMock<Organisation>({
+          name: 'Council of Gas Safe Engineers',
+        });
+
+        organisationsService.find.mockImplementationOnce(
+          async () => organisation,
+        );
+
+        await controller.update(
+          response,
+          'profession-id',
+          regulatoryBodyDtoWithChangeParam,
+        );
+
+        expect(professionsService.save).toHaveBeenCalledWith({
+          id: 'profession-id',
+          organisation: organisation,
+          mandatoryRegistration: MandatoryRegistration.Voluntary,
+          occupationLocations: profession.occupationLocations,
+          industries: profession.industries,
+        });
+
+        expect(response.redirect).toHaveBeenCalledWith(
+          '/admin/professions/profession-id/check-your-answers',
+        );
+      });
+
+      it('continues to the next step in the journey when false or missing', async () => {
+        const regulatoryBodyDtoWithFalseChangeParam = {
+          regulatoryBody: 'example-org-id',
+          mandatoryRegistration: MandatoryRegistration.Voluntary,
+          change: false,
+        };
+
+        const organisation = createMock<Organisation>({
+          name: 'Council of Gas Safe Engineers',
+        });
+
+        organisationsService.find.mockImplementationOnce(
+          async () => organisation,
+        );
+
+        await controller.update(
+          response,
+          'profession-id',
+          regulatoryBodyDtoWithFalseChangeParam,
+        );
+
+        expect(professionsService.save).toHaveBeenCalledWith({
+          id: 'profession-id',
+          organisation: organisation,
+          mandatoryRegistration: MandatoryRegistration.Voluntary,
+          occupationLocations: profession.occupationLocations,
+          industries: profession.industries,
+        });
+
+        expect(response.redirect).toHaveBeenCalledWith(
+          '/admin/professions/profession-id/check-your-answers',
+        );
       });
     });
   });

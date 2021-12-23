@@ -18,19 +18,36 @@
       <form method="post" action="./">
         <input type="hidden" name="change" value="{{ change }}" />
 
-          <form method="post" action="./">
-            {{
-              govukSelect({
-                label: {
-                  text: ("professions.form.label.regulatoryBody.regulatedAuthority" | t),
-                  classes: "govuk-label--m",
-                  isPageHeading: false
-                },
-                id: "regulatory-body",
-                name: "regulatoryBody",
-                items: regulatedAuthoritiesSelectArgs
-              })
-            }}
+        {{
+          govukSelect({
+            label: {
+              text: ("professions.form.label.regulatoryBody.regulatedAuthority" | t),
+              classes: "govuk-label--m",
+              isPageHeading: false
+            },
+            id: "regulatory-body",
+            name: "regulatoryBody",
+            items: regulatedAuthoritiesSelectArgs
+          })
+        }}
+
+        {{
+          govukRadios({
+            id: "mandatory-registration",
+            name: "mandatoryRegistration",
+            fieldset: {
+              legend: {
+                text: ("professions.form.label.regulatoryBody.mandatoryRegistration" | t),
+                isPageHeading: false,
+                classes: "govuk-fieldset__legend--m"
+              }
+            },
+            hint: {
+              text: ("professions.form.radioButtons.hint" | t)
+            },
+            items: mandatoryRegistrationRadioButtonArgs
+          })
+        }}
 
         {{
           govukButton({

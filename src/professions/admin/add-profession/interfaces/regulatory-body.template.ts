@@ -4,5 +4,6 @@ import { SelectItemArgs } from '../../../../common/interfaces/select-item-args.i
 export interface RegulatoryBodyTemplate {
   regulatedAuthoritiesSelectArgs: SelectItemArgs[];
   mandatoryRegistrationRadioButtonArgs: RadioButtonArgs[];
+  change: boolean;
   errors: object | undefined;
 }
