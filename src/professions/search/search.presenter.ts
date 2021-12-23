@@ -16,27 +16,29 @@ export class SearchPresenter {
     private readonly allNations: Nation[],
     private readonly allIndustries: Industry[],
     private readonly filteredProfessions: Profession[],
+    private readonly i18nService: I18nService,
+    private readonly request: Request,
   ) {}
 
-  async present(
-    i18nService: I18nService,
-    request: Request,
-  ): Promise<IndexTemplate> {
+  async present(): Promise<IndexTemplate> {
     const nationsCheckboxArgs = await new NationsCheckboxPresenter(
       this.allNations,
       this.filterInput.nations,
-      i18nService,
+      this.i18nService,
     ).checkboxArgs();
 
     const industriesCheckboxArgs = await new IndustriesCheckboxPresenter(
       this.allIndustries,
       this.filterInput.industries,
-      i18nService,
+      this.i18nService,
     ).checkboxArgs();
 
     const displayProfessions = await Promise.all(
       this.filteredProfessions.map(async (profession) =>
-        new ProfessionSearchResultPresenter(profession).present(i18nService),
+        new ProfessionSearchResultPresenter(
+          profession,
+          this.i18nService,
+        ).present(),
       ),
     );
 
@@ -61,7 +63,7 @@ export class SearchPresenter {
           (industry) => industry.name,
         ),
       },
-      backLink: backLink(request),
+      backLink: backLink(this.request),
     };
   }
 }

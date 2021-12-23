@@ -96,9 +96,11 @@ describe('SearchPresenter', () => {
         nations,
         exampleIndustries,
         [exampleProfession1, exampleProfession2],
+        i18nService,
+        request,
       );
 
-      const result = await presenter.present(i18nService, request);
+      const result = await presenter.present();
 
       const industriesCheckboxArgs = await new IndustriesCheckboxPresenter(
         exampleIndustries,
@@ -121,12 +123,14 @@ describe('SearchPresenter', () => {
         industriesCheckboxArgs,
         nationsCheckboxArgs,
         professions: [
-          await new ProfessionSearchResultPresenter(exampleProfession1).present(
+          await new ProfessionSearchResultPresenter(
+            exampleProfession1,
             i18nService,
-          ),
-          await new ProfessionSearchResultPresenter(exampleProfession2).present(
+          ).present(),
+          await new ProfessionSearchResultPresenter(
+            exampleProfession2,
             i18nService,
-          ),
+          ).present(),
         ],
       });
     });
@@ -155,21 +159,26 @@ describe('SearchPresenter', () => {
         nations,
         exampleIndustries,
         [professionC, professionA, professionB],
+        i18nService,
+        request,
       );
 
-      const result = await presenter.present(i18nService, request);
+      const result = await presenter.present();
 
       expect(result).toMatchObject({
         professions: [
-          await new ProfessionSearchResultPresenter(professionA).present(
+          await new ProfessionSearchResultPresenter(
+            professionA,
             i18nService,
-          ),
-          await new ProfessionSearchResultPresenter(professionB).present(
+          ).present(),
+          await new ProfessionSearchResultPresenter(
+            professionB,
             i18nService,
-          ),
-          await new ProfessionSearchResultPresenter(professionC).present(
+          ).present(),
+          await new ProfessionSearchResultPresenter(
+            professionC,
             i18nService,
-          ),
+          ).present(),
         ],
       });
     });

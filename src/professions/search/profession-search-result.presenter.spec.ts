@@ -47,7 +47,8 @@ describe('ProfessionSearchResultPresenter', () => {
 
       const result = await new ProfessionSearchResultPresenter(
         exampleProfession,
-      ).present(i18nService);
+        i18nService,
+      ).present();
 
       expect(result).toEqual({
         name: 'Example Profession',
@@ -76,7 +77,8 @@ describe('ProfessionSearchResultPresenter', () => {
 
       const result = await new ProfessionSearchResultPresenter(
         exampleProfession,
-      ).present(i18nService);
+        i18nService,
+      ).present();
 
       expect(result).toEqual({
         name: 'Example Profession',

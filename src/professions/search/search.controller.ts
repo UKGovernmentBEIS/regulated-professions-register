@@ -54,7 +54,9 @@ export class SearchController {
       allNations,
       allIndustries,
       filteredProfessions,
-    ).present(this.i18nService, request);
+      this.i18nService,
+      request,
+    ).present();
   }
 
   private getFilterInput(
