@@ -5,7 +5,7 @@ import { createMockRequest } from '../../testutils/create-mock-request';
 import { Nation } from '../../nations/nation';
 import { Industry } from '../../industries/industry.entity';
 import { Profession } from '../profession.entity';
-import { FilterInput } from './interfaces/filter-input.interface';
+import { FilterInput } from '../interfaces/filter-input.interface';
 import { SearchPresenter } from './search.presenter';
 import { IndustriesCheckboxPresenter } from '../../industries/industries-checkbox.presenter';
 import { NationsCheckboxPresenter } from '../../nations/nations-checkbox.presenter';
