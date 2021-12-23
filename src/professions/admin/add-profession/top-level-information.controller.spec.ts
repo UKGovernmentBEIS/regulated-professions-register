@@ -142,6 +142,7 @@ describe('TopLevelInformationController', () => {
         null,
         ['GB-ENG', 'GB-SCT'],
         null,
+        null,
         [selectedIndustry],
       );
       existingProfession.id = 'profession-id';
@@ -253,6 +254,7 @@ describe('TopLevelInformationController', () => {
           null,
           ['GB-ENG', 'GB-SCT'],
           null,
+          null,
           [industry],
         );
 
@@ -329,6 +331,7 @@ describe('TopLevelInformationController', () => {
           null,
           ['GB-ENG', 'GB-SCT'],
           null,
+          null,
           [new Industry('industries.health')],
         );
 
@@ -399,6 +402,7 @@ describe('TopLevelInformationController', () => {
           null,
           ['GB-ENG', 'GB-SCT'],
           null,
+          null,
           [constructionIndustry],
         );
         existingProfession.id = 'profession-id';
@@ -434,6 +438,7 @@ describe('TopLevelInformationController', () => {
           null,
           null,
           ['GB-ENG', 'GB-SCT'],
+          null,
           null,
           [constructionIndustry],
         );

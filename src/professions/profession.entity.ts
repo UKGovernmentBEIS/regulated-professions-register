@@ -14,6 +14,12 @@ import {
 import { Industry } from '../industries/industry.entity';
 import { Organisation } from '../organisations/organisation.entity';
 
+export enum MandatoryRegistration {
+  Mandatory = 'mandatory',
+  Voluntary = 'voluntary',
+  Unknown = 'unknown',
+}
+
 @Entity({ name: 'professions' })
 export class Profession {
   @PrimaryGeneratedColumn('uuid')
@@ -37,6 +43,9 @@ export class Profession {
 
   @Column({ nullable: true })
   regulationType: string;
+
+  @Column({ nullable: true, type: 'enum', enum: MandatoryRegistration })
+  mandatoryRegistration: MandatoryRegistration;
 
   @ManyToMany(() => Industry, { nullable: true, eager: true })
   @JoinTable()
@@ -84,6 +93,7 @@ export class Profession {
     description?: string,
     occupationLocations?: string[],
     regulationType?: string,
+    mandatoryRegistration?: MandatoryRegistration,
     industries?: Industry[],
     qualification?: Qualification,
     reservedActivities?: string[],
@@ -97,6 +107,7 @@ export class Profession {
     this.description = description || null;
     this.occupationLocations = occupationLocations || null;
     this.regulationType = regulationType || null;
+    this.mandatoryRegistration = mandatoryRegistration || null;
     this.industries = industries || null;
     this.qualification = qualification || null;
     this.reservedActivities = reservedActivities || null;

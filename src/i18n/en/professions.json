@@ -73,5 +73,10 @@
       "nationalLegislation": "National legislation",
       "legislationLink": "Legislation link"
     }
+  },
+  "mandatoryRegistration": {
+    "mandatory": "Mandatory",
+    "voluntary": "Voluntary",
+    "unknown": "Unknown"
   }
 }

@@ -17,6 +17,7 @@ const exampleProfession = new Profession(
   '',
   ['GB-ENG'],
   '',
+  null,
   [industry],
 );
 exampleProfession.id = 'profession-id';
