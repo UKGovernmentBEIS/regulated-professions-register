@@ -24,10 +24,19 @@ dropdb "$test_db" > /dev/null 2>&1 || true
 createdb "$dev_db"
 createdb "$test_db"
 
-echo "==> Creating env files for dev and test..."
+env_file=$(cat .env.example)
 
-echo "DATABASE_URL=postgres://postgres@localhost:5432/$dev_db" > .env.development
-echo "DATABASE_URL=postgres://postgres@localhost:5432/$test_db" > .env.test
+if [ ! -f .env.development ]; then
+  echo "==> Creating env file for dev..."
+  dev_env_file=$(sed "s/\$DATABASE_NAME/$dev_db/g"  < ".env.example")
+  echo "$dev_env_file" > .env.development
+fi
+
+if [ ! -f .env.test ]; then
+  echo "==> Creating env file for test..."
+  test_env_file=$(sed "s/\$DATABASE_NAME/$dev_db/g"  < ".env.example")
+  echo "$test_env_file" > .env.test
+fi
 
 script/bootstrap
 
