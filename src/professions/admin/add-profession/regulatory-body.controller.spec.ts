@@ -146,6 +146,160 @@ describe(RegulatoryBodyController, () => {
     });
   });
 
+  describe('update', () => {
+    describe('when all required parameters are entered', () => {
+      it('updates the Profession and redirects to the next page in the journey', async () => {
+        const regulatoryBodyDto = {
+          regulatoryBody: 'example-org-id',
+          mandatoryRegistration: MandatoryRegistration.Voluntary,
+        };
+
+        const organisation = createMock<Organisation>({
+          name: 'Council of Gas Safe Engineers',
+        });
+
+        organisationsService.find.mockImplementationOnce(
+          async () => organisation,
+        );
+
+        await controller.update(response, 'profession-id', regulatoryBodyDto);
+
+        expect(professionsService.save).toHaveBeenCalledWith({
+          id: 'profession-id',
+          organisation: organisation,
+          mandatoryRegistration: MandatoryRegistration.Voluntary,
+          occupationLocations: profession.occupationLocations,
+          industries: profession.industries,
+        });
+
+        expect(response.redirect).toHaveBeenCalledWith(
+          '/admin/professions/profession-id/check-your-answers',
+        );
+      });
+    });
+
+    describe('when required parameters are not entered', () => {
+      it('does not update the profession, and re-renders the top level information view with errors', async () => {
+        const regulatoryBodyDtoWithoutMandatoryRegistration = {
+          regulatoryBody: 'example-org-id',
+          mandatoryRegistration: undefined,
+        };
+
+        await controller.update(
+          response,
+          'profession-id',
+          regulatoryBodyDtoWithoutMandatoryRegistration,
+        );
+
+        expect(professionsService.save).not.toHaveBeenCalled();
+
+        expect(response.render).toHaveBeenCalledWith(
+          'professions/admin/add-profession/regulatory-body',
+          expect.objectContaining({
+            errors: {
+              mandatoryRegistration: {
+                text: 'mandatoryRegistration should not be empty',
+              },
+            },
+          }),
+        );
+      });
+    });
+
+    describe('getSelectedOrganisationFromDtoThenProfession', () => {
+      describe('when there is an existing Profession with an Organisation selected and new params are submitted', () => {
+        it('returns the dto value, over the Profession', async () => {
+          const profession = createMock<Profession>({
+            organisation: organisation2,
+          });
+
+          const newOrganisation = createMock<Organisation>({
+            name: 'Council of Gas Safe Engineers',
+            id: 'new-org-id',
+          });
+
+          const regulatoryBodyDtoWithNewOrganisation = {
+            regulatoryBody: 'new-org-id',
+            mandatoryRegistration: undefined,
+          };
+
+          organisationsService.find.mockImplementationOnce(
+            async () => newOrganisation,
+          );
+
+          await expect(
+            controller.getSelectedOrganisationFromDtoThenProfession(
+              profession,
+              regulatoryBodyDtoWithNewOrganisation,
+            ),
+          ).resolves.toEqual(newOrganisation);
+        });
+      });
+
+      describe('when there is an existing Profession with an Organisation selected and empty Organisation params are submitted', () => {
+        it('returns the Profession value, not overwriting it', async () => {
+          const profession = createMock<Profession>({
+            organisation: organisation2,
+          });
+
+          const regulatoryBodyDtoWithNoOrganisation = {
+            regulatoryBody: undefined,
+            mandatoryRegistration: MandatoryRegistration.Voluntary,
+          };
+
+          await expect(
+            controller.getSelectedOrganisationFromDtoThenProfession(
+              profession,
+              regulatoryBodyDtoWithNoOrganisation,
+            ),
+          ).resolves.toEqual(organisation2);
+        });
+      });
+    });
+
+    describe('getSelectedMandatoryRegistrationFromDtoThenProfession', () => {
+      describe('when there is an existing Profession with a Mandatory Registration value selected and new params are submitted', () => {
+        it('returns the dto value, over the Profession', () => {
+          const profession = createMock<Profession>({
+            mandatoryRegistration: MandatoryRegistration.Mandatory,
+          });
+
+          const regulatoryBodyDtoWithNewMandatoryRegistration = {
+            regulatoryBody: 'org-id',
+            mandatoryRegistration: MandatoryRegistration.Voluntary,
+          };
+
+          expect(
+            controller.getSelectedMandatoryRegistrationFromDtoThenProfession(
+              profession,
+              regulatoryBodyDtoWithNewMandatoryRegistration,
+            ),
+          ).toEqual(MandatoryRegistration.Voluntary);
+        });
+      });
+
+      describe('when there is an existing Profession with a Mandatory Registration selected and empty Mandatory Registration params are submitted', () => {
+        it('returns the Profession value, not overwriting it', () => {
+          const profession = createMock<Profession>({
+            mandatoryRegistration: MandatoryRegistration.Mandatory,
+          });
+
+          const regulatoryBodyDtoWithNewMandatoryRegistration = {
+            regulatoryBody: 'org-id',
+            mandatoryRegistration: undefined,
+          };
+
+          expect(
+            controller.getSelectedMandatoryRegistrationFromDtoThenProfession(
+              profession,
+              regulatoryBodyDtoWithNewMandatoryRegistration,
+            ),
+          ).toEqual(MandatoryRegistration.Mandatory);
+        });
+      });
+    });
+  });
+
   afterEach(() => {
     jest.resetAllMocks();
   });
