@@ -12,6 +12,7 @@ import { SearchController } from './search/search.controller';
 import { RegulatoryBodyController } from './admin/add-profession/regulatory-body.controller';
 import { Organisation } from '../organisations/organisation.entity';
 import { OrganisationsService } from '../organisations/organisations.service';
+import { ListController } from './admin/list/list.controller';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { OrganisationsService } from '../organisations/organisations.service';
     RegulatoryBodyController,
     CheckYourAnswersController,
     ConfirmationController,
+    ListController,
   ],
 })
 export class ProfessionsModule {}
