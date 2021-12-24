@@ -42,3 +42,8 @@ $govuk-assets-path: '~govuk-frontend/govuk/assets/';
 .rpr-details__section-title {
   text-transform: uppercase;
 }
+
+.rpr-sidebar {
+  border-top: 2px solid #1d70b8;
+  padding-top: 10px;
+}
