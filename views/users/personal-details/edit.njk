@@ -5,77 +5,70 @@
 
 {% block content %}
 
-<div class="govuk-width-container">
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
 
-  <main class="govuk-main-wrapper">
+    {% if backLink %}
+      {{ govukBackLink({
+        text: ( "app.back" | t ),
+        href: backLink
+      }) }}
+    {% endif %}
+    
+    {% include "../../shared/_errors.njk" %}
 
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-two-thirds">
+    <span class="govuk-caption-xl">{{ "users.form.headings.main" | t }}</span>
+    <h1 class="govuk-heading-xl">{{ "users.form.headings.personalDetails" | t }}</h1>
 
-        {% if backLink %}
-          {{ govukBackLink({
-            text: ( "app.back" | t ),
-            href: backLink
-          }) }}
-        {% endif %}
+    <form method="post" action="./">
 
-        {% include "../../shared/_errors.njk" %}
+      <input type="hidden" name="change" value="{{ change }}" />
 
-        <span class="govuk-caption-xl">{{ "users.form.headings.main" | t }}</span>
-        <h1 class="govuk-heading-xl">{{ "users.form.headings.personalDetails" | t }}</h1>
+      <a name="name">
+        {{ govukInput({
+          label: {
+            text: ('users.form.label.name' | t),
+            classes: "govuk-label--l",
+            isPageHeading: true
+          },
+          hint: {
+            text: ('users.form.hint.name' | t)
+          },
+          id: "name-input",
+          name: "name",
+          value: name,
+          errorMessage: errors.name
+        }) }}
+      </a>
 
-        <form method="post" action="./">
+      <a name="email">
+        {{ govukInput({
+          label: {
+            text: ('users.form.label.email' | t),
+            classes: "govuk-label--l",
+            isPageHeading: true
+          },
+          hint: {
+            text: ('users.form.hint.email' | t)
+          },
+          id: "email-input",
+          name: "email",
+          value: email,
+          errorMessage: errors.email
+        }) }}
+      </a>
 
-          <input type="hidden" name="change" value="{{ change }}" />
+      {{ govukButton({
+        text: ('app.continue' | t),
+        type: "submit",
+        id: "continue-button"
+      }) }}
+    </form>
 
-          <a name="name">
-            {{ govukInput({
-              label: {
-                text: ('users.form.label.name' | t),
-                classes: "govuk-label--l",
-                isPageHeading: true
-              },
-              hint: {
-                text: ('users.form.hint.name' | t)
-              },
-              id: "name-input",
-              name: "name",
-              value: name,
-              errorMessage: errors.name
-            }) }}
-          </a>
+  </div>
 
-          <a name="email">
-            {{ govukInput({
-              label: {
-                text: ('users.form.label.email' | t),
-                classes: "govuk-label--l",
-                isPageHeading: true
-              },
-              hint: {
-                text: ('users.form.hint.email' | t)
-              },
-              id: "email-input",
-              name: "email",
-              value: email,
-              errorMessage: errors.email
-            }) }}
-          </a>
-
-          {{ govukButton({
-            text: ('app.continue' | t),
-            type: "submit",
-            id: "continue-button"
-          }) }}
-        </form>
-
-      </div>
-
-      <div class="govuk-grid-column-one-third">
-      </div>
-    </div>
-
-  </main>
+  <div class="govuk-grid-column-one-third">
+  </div>
 </div>
 
 {% endblock %}

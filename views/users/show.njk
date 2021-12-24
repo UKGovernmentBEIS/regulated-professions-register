@@ -8,6 +8,11 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
+    {{ govukBackLink({
+      text: ("app.back" | t),
+      href: "/admin/users"
+    }) }}
+        
     <h1 class="govuk-heading-xl">{{ "users.headings.show" | t }}</h1>
     {% include "./_summary.njk" %}
 

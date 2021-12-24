@@ -5,65 +5,58 @@
 
 {% block content %}
 
-<div class="govuk-width-container">
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
 
-  <main class="govuk-main-wrapper">
+    {% if backLink %}
+      {{ govukBackLink({
+        text: ( "app.back" | t ),
+        href: backLink
+      }) }}
+    {% endif %}
+    
+    {% include "../../shared/_errors.njk" %}
 
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-two-thirds">
+    <span class="govuk-caption-xl">{{ "users.form.headings.main" | t }}</span>
+    <h1 class="govuk-heading-xl">{{ "users.form.headings.roles" | t }}</h1>
 
-        {% if backLink %}
-          {{ govukBackLink({
-            text: ( "app.back" | t ),
-            href: backLink
-          }) }}
-        {% endif %}
+    <form method="post" action="./">
 
-        {% include "../../shared/_errors.njk" %}
+      <input type="hidden" name="change" value="{{ change }}" />
 
-        <span class="govuk-caption-xl">{{ "users.form.headings.main" | t }}</span>
-        <h1 class="govuk-heading-xl">{{ "users.form.headings.roles" | t }}</h1>
+      {% set roleItems = [] %}
+      {% for role in roles %}
+        {% set translation = "users.form.label." + role %}
+        {% set roleItems = (roleItems.push({value: role, text: (translation | t)}), roleItems) %}
+      {% endfor %}
 
-        <form method="post" action="./">
+      {{ govukCheckboxes({
+        id: "roles[]",
+        name: "roles[]",
+        fieldset: {
+          legend: {
+            text: ("users.form.label.roles" | t),
+            isPageHeading: false,
+            classes: "govuk-fieldset__legend--l"
+          }
+        },
+        hint: {
+          text: "Select all that apply."
+        },
+        items: roleItems
+      }) }}
 
-          <input type="hidden" name="change" value="{{ change }}" />
+      {{ govukButton({
+        text: ('app.continue' | t),
+        type: "submit",
+        id: "continue-button"
+      }) }}
+    </form>
 
-          {% set roleItems = [] %}
-          {% for role in roles %}
-            {% set translation = "users.form.label." + role %}
-            {% set roleItems = (roleItems.push({value: role, text: (translation | t)}), roleItems) %}
-          {% endfor %}
+  </div>
 
-          {{ govukCheckboxes({
-            id: "roles[]",
-            name: "roles[]",
-            fieldset: {
-              legend: {
-                text: ("users.form.label.roles" | t),
-                isPageHeading: false,
-                classes: "govuk-fieldset__legend--l"
-              }
-            },
-            hint: {
-              text: "Select all that apply."
-            },
-            items: roleItems
-          }) }}
-
-          {{ govukButton({
-            text: ('app.continue' | t),
-            type: "submit",
-            id: "continue-button"
-          }) }}
-        </form>
-
-      </div>
-
-      <div class="govuk-grid-column-one-third">
-      </div>
-    </div>
-
-  </main>
+  <div class="govuk-grid-column-one-third">
+  </div>
 </div>
 
 {% endblock %}

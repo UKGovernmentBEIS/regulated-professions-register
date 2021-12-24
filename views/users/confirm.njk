@@ -7,56 +7,47 @@
 
 {% block content %}
 
-<div class="govuk-width-container">
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
 
-  <main class="govuk-main-wrapper">
+    {{ govukBackLink({
+      text: ("app.back" | t),
+      href: "roles/edit"
+    }) }}
+    
+    {% if userAlreadyExists %}
 
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-two-thirds">
+    {{ govukErrorSummary({
+      titleText: ("app.errors.heading" | t),
+      errorList: [
+        {
+          text: ("users.form.errors.email.alreadyExists" | t)
+        }
+      ]
+    }) }}
 
-        {{ govukBackLink({
-          text: ("app.back" | t),
-          href: "roles/edit"
-        }) }}
+    {% endif %}
 
-        {% if userAlreadyExists %}
+    <span class="govuk-caption-xl">{{ "users.form.headings.main" | t }}</span>
+    <h1 class="govuk-heading-xl">{{ "users.form.headings.checkAnswers" | t }}</h1>
 
-        {{ govukErrorSummary({
-          titleText: ("app.errors.heading" | t),
-          errorList: [
-            {
-              text: ("users.form.errors.email.alreadyExists" | t)
-            }
-          ]
-        }) }}
+    <h2 class="govuk-heading-m">{{ "users.form.headings.personalDetails" | t }}</h2>
 
-        {% endif %}
+    {% include "./_summary.njk" %}
 
-        <span class="govuk-caption-xl">{{ "users.form.headings.main" | t }}</span>
-        <h1 class="govuk-heading-xl">{{ "users.form.headings.checkAnswers" | t }}</h1>
+    <form method="post" action="confirm">
+      {{ govukButton({
+        text: ("users.form.button.create" | t),
+        preventDoubleClick: true,
+        type: "submit",
+        id: "submit-button"
+      }) }}
+    </form>
 
-        <h2 class="govuk-heading-m">{{ "users.form.headings.personalDetails" | t }}</h2>
+  </div>
 
-        {% include "./_summary.njk" %}
-
-        <form method="post" action="confirm">
-          {{ govukButton({
-            text: ("users.form.button.create" | t),
-            preventDoubleClick: true,
-            type: "submit",
-            id: "submit-button"
-          }) }}
-        </form>
-
-      </div>
-
-      <div class="govuk-grid-column-one-third">
-      </div>
-    </div>
-
-  </main>
+  <div class="govuk-grid-column-one-third">
+  </div>
 </div>
-
-
 
 {% endblock %}
