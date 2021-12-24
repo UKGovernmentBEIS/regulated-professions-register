@@ -1,6 +1,6 @@
 import { DeepMocked } from '@golevelup/ts-jest';
 import { Request } from 'express';
-import { backLink } from './utils';
+import { backLink, formatDate } from './utils';
 import { createMockRequest } from '../testutils/create-mock-request';
 
 describe('utils', () => {
@@ -46,6 +46,13 @@ describe('utils', () => {
       it('returns undefined', () => {
         expect(backLink(req)).toBeUndefined();
       });
+    });
+  });
+
+  describe('formatDate', () => {
+    it('returns a date in DD-MM-YYYY format', () => {
+      // Months are zero-indexed
+      expect(formatDate(new Date(1999, 5, 23))).toEqual('23-06-1999');
     });
   });
 });
