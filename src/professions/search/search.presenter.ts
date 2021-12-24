@@ -9,6 +9,7 @@ import { Profession } from '../profession.entity';
 import { FilterInput } from './interfaces/filter-input.interface';
 import { IndexTemplate } from './interfaces/index-template.interface';
 import { ProfessionSearchResultPresenter } from './profession-search-result.presenter';
+import { ProfessionsSorter } from '../helpers/professions-sorter';
 
 export class SearchPresenter {
   constructor(
@@ -33,24 +34,18 @@ export class SearchPresenter {
       this.i18nService,
     ).checkboxArgs();
 
+    const sortedProfessions = new ProfessionsSorter(
+      this.filteredProfessions,
+    ).sortByName();
+
     const displayProfessions = await Promise.all(
-      this.filteredProfessions.map(async (profession) =>
+      sortedProfessions.map(async (profession) =>
         new ProfessionSearchResultPresenter(
           profession,
           this.i18nService,
         ).present(),
       ),
     );
-
-    displayProfessions.sort((profession1, profession2) => {
-      if (profession1.name < profession2.name) {
-        return -1;
-      } else if (profession1.name > profession2.name) {
-        return 1;
-      } else {
-        return 0;
-      }
-    });
 
     return {
       professions: displayProfessions,

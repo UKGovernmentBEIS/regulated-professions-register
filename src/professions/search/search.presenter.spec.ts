@@ -20,8 +20,8 @@ exampleIndustry2.id = 'example-industry-2';
 const exampleIndustry3 = new Industry('industries.example3');
 exampleIndustry3.id = 'example-industry-3';
 
-const exampleProfession1 = new Profession(
-  'Example Profession 1',
+const exampleProfessionA = new Profession(
+  'Example Profession A',
   '',
   null,
   '',
@@ -31,12 +31,23 @@ const exampleProfession1 = new Profession(
   [exampleIndustry1],
 );
 
-const exampleProfession2 = new Profession(
-  'Example Profession 2',
+const exampleProfessionB = new Profession(
+  'Example Profession B',
   '',
   null,
   '',
   ['GB-SCT', 'GB-WLS'],
+  '',
+  null,
+  [exampleIndustry2, exampleIndustry3],
+);
+
+const exampleProfessionC = new Profession(
+  'Example Profession C',
+  '',
+  null,
+  '',
+  ['GB-NIR'],
   '',
   null,
   [exampleIndustry2, exampleIndustry3],
@@ -95,7 +106,8 @@ describe('SearchPresenter', () => {
         filterInput,
         nations,
         exampleIndustries,
-        [exampleProfession1, exampleProfession2],
+        // Intentionally mis-ordered to exercise sorting
+        [exampleProfessionC, exampleProfessionA, exampleProfessionB],
         i18nService,
         request,
       );
@@ -124,59 +136,15 @@ describe('SearchPresenter', () => {
         nationsCheckboxArgs,
         professions: [
           await new ProfessionSearchResultPresenter(
-            exampleProfession1,
+            exampleProfessionA,
             i18nService,
           ).present(),
           await new ProfessionSearchResultPresenter(
-            exampleProfession2,
-            i18nService,
-          ).present(),
-        ],
-      });
-    });
-
-    it('should sort the search results alphabetically', async () => {
-      const filterInput: FilterInput = {
-        nations: [],
-        industries: [],
-        keywords: '',
-      };
-
-      const professionA = new Profession('A');
-      professionA.occupationLocations = [];
-      professionA.industries = [];
-
-      const professionB = new Profession('B');
-      professionB.occupationLocations = [];
-      professionB.industries = [];
-
-      const professionC = new Profession('C');
-      professionC.occupationLocations = [];
-      professionC.industries = [];
-
-      const presenter = new SearchPresenter(
-        filterInput,
-        nations,
-        exampleIndustries,
-        [professionC, professionA, professionB],
-        i18nService,
-        request,
-      );
-
-      const result = await presenter.present();
-
-      expect(result).toMatchObject({
-        professions: [
-          await new ProfessionSearchResultPresenter(
-            professionA,
+            exampleProfessionB,
             i18nService,
           ).present(),
           await new ProfessionSearchResultPresenter(
-            professionB,
-            i18nService,
-          ).present(),
-          await new ProfessionSearchResultPresenter(
-            professionC,
+            exampleProfessionC,
             i18nService,
           ).present(),
         ],
