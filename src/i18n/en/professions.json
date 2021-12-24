@@ -123,6 +123,63 @@
     "voluntary": "Voluntary",
     "unknown": "Unknown"
   },
+  "admin": {
+    "heading": "Regulated professions",
+    "addHeading": "Add a new profession",
+    "addButtonLabel": "Add a new profession",
+    "addText": "You can add a new profession for your organisation here.",
+    "manageHeading": "Manage existing professions",
+    "showFilters": "Show filters",
+    "labels": {
+      "keywords": "Keywords:",
+      "nations": "Nations:",
+      "organisations": "Regulators:",
+      "industries": "Industries:",
+      "changedBy": "Changed by:"
+    },
+    "foundSingular": "profession found.",
+    "foundPlural": "professions found.",
+    "form": {
+      "nameFilter": {
+        "label": "Keyword",
+        "hint": "For example, RP155, nuclear"
+      },
+      "nations": {
+        "label": "Nations",
+        "hint": "Select all that apply."
+      },
+      "organisations": {
+        "label": "Regulators",
+        "hint": "Select all that apply."
+      },
+      "industries": {
+        "label": "Industry / sector",
+        "hint": "Select all that apply."
+      },
+      "changedBy": {
+        "label": "Changed by",
+        "hint": "Select all that apply."
+      },
+      "button": {
+        "filter": "Filter results"
+      }
+    },
+    "tableHeading": {
+      "profession": "Profession",
+      "id": "ID",
+      "nations": "Nations",
+      "lastModified": "Last modified",
+      "changedBy": "Changed by",
+      "organisation": "Regulator",
+      "industry": "Industry / sector",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "status": {
+      "published": "Published"
+    },
+    "viewDetails": "View details"
+  },
   "search": {
     "heading": "Search for a regulated profession",
     "labels": {
@@ -153,5 +210,5 @@
         "filter": "Filter results"
       }
     }
-  }  
+  }
 }
