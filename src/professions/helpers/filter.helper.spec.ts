@@ -6,10 +6,10 @@ import { FilterHelper } from './filter.helper';
 
 describe('FilterHelper', () => {
   describe('filter', () => {
-    it('returns all professions when given an empty filter', () => {
+    it('returns all professions when given an empty filter input', () => {
       const exampleProfessions = [
         createProfession('Example 1', ['GB-ENG'], ['education', 'law']),
-        createProfession('Example 1', ['GB-SCT'], ['construction']),
+        createProfession('Example 2', ['GB-SCT'], ['construction']),
         createProfession(
           'Example 3',
           ['GB-WLS', 'GB-NIR'],
@@ -19,10 +19,26 @@ describe('FilterHelper', () => {
 
       const filterHelper = new FilterHelper(exampleProfessions);
 
+      const results = filterHelper.filter({});
+
+      expect(results).toEqual(exampleProfessions);
+    });
+
+    it('returns all professions when individual filter criteria are empty', () => {
+      const exampleProfessions = [
+        createProfession('Example 1', ['GB-WLS'], ['law', 'other']),
+        createProfession('Example 2', ['GB-NIR', 'GB-ENG'], ['health']),
+        createProfession('Example 3', ['GB-SCT'], ['security']),
+      ];
+
+      const filterHelper = new FilterHelper(exampleProfessions);
+
       const results = filterHelper.filter({
         keywords: '',
-        industries: [],
         nations: [],
+        organisations: [],
+        industries: [],
+        changedBy: [],
       });
 
       expect(results).toEqual(exampleProfessions);
@@ -40,8 +56,6 @@ describe('FilterHelper', () => {
       const results = filterHelper.filter({
         // Test a complete and incomplete word match
         keywords: 'Attorny    condar',
-        industries: [],
-        nations: [],
       });
 
       expect(results).toEqual([exampleProfessions[0], exampleProfessions[2]]);
@@ -57,8 +71,6 @@ describe('FilterHelper', () => {
 
       const results = filterHelper.filter({
         keywords: 'aTtOrNy',
-        industries: [],
-        nations: [],
       });
 
       expect(results).toEqual([exampleProfessions[0]]);
@@ -75,8 +87,6 @@ describe('FilterHelper', () => {
       const filterHelper = new FilterHelper(exampleProfessions);
 
       const results = filterHelper.filter({
-        keywords: '',
-        industries: [],
         nations: [
           new Nation('nations.england', 'GB-ENG'),
           new Nation('nations.northernIreland', 'GB-NIR'),
@@ -101,12 +111,10 @@ describe('FilterHelper', () => {
       const filterHelper = new FilterHelper(exampleProfessions);
 
       const results = filterHelper.filter({
-        keywords: '',
         industries: [
           createIndustryWithId('education'),
           createIndustryWithId('finance'),
         ],
-        nations: [],
       });
 
       expect(results).toEqual([exampleProfessions[0], exampleProfessions[3]]);

@@ -30,9 +30,7 @@ export class FilterHelper {
     filterInput: FilterInput,
     professions: Profession[],
   ): Profession[] {
-    if (filterInput.nations.length === 0) {
-      return professions;
-    } else {
+    if (filterInput.nations?.length) {
       const filterNationCodes = filterInput.nations.map(
         (nation) => nation.code,
       );
@@ -40,6 +38,8 @@ export class FilterHelper {
       return professions.filter((profession) =>
         this.isNationOverlap(profession.occupationLocations, filterNationCodes),
       );
+    } else {
+      return professions;
     }
   }
 
@@ -47,12 +47,12 @@ export class FilterHelper {
     filterInput: FilterInput,
     professions: Profession[],
   ): Profession[] {
-    if (filterInput.industries.length == 0) {
-      return professions;
-    } else {
+    if (filterInput.industries?.length) {
       return professions.filter((profession) =>
         this.isIndustryOverlap(profession.industries, filterInput.industries),
       );
+    } else {
+      return professions;
     }
   }
 
@@ -62,12 +62,12 @@ export class FilterHelper {
   ): Profession[] {
     const searchTerms = this.getSearchTerms(filterInput);
 
-    if (searchTerms.length === 0) {
-      return professions;
-    } else {
+    if (searchTerms?.length) {
       return professions.filter((profession) =>
         this.matchesKeywords(profession, searchTerms),
       );
+    } else {
+      return professions;
     }
   }
 
@@ -88,7 +88,7 @@ export class FilterHelper {
   }
 
   private getSearchTerms(filterInput: FilterInput): string[] {
-    return filterInput.keywords
+    return (filterInput.keywords || '')
       .toLowerCase()
       .split(' ')
       .filter((term) => term !== '');
