@@ -12,6 +12,7 @@
       "email": "For example, clarejones@beis.gov.uk."
     },
     "button": {
+      "add": "Add a new user",
       "create": "Create user",
       "delete": "Delete user"
     },
@@ -35,10 +36,13 @@
   "headings": {
     "done": "User added",
     "next": "What happens next?",
-    "index": "Users",
-    "show": "User details"
+    "index": "Manage users",
+    "show": "User details",
+    "addNew": "Add a new user",
+    "manageExisting": "Existing users"
   },
   "body": {
+    "intro": "You can add a new user here.",
     "panel": "User <strong>{email}</strong> has been added",
     "confirmation": "We have sent the user a confirmation email.",
     "backToDashboard": "Back to the dashboard"

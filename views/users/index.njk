@@ -1,38 +1,53 @@
 {% extends "base.njk" %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% block content %}
 
-<div class="govuk-width-container">
+  {% include "../_messages.njk" %}
 
-  <main class="govuk-main-wrapper">
-    {% include "../_messages.njk" %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
 
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-full">
-        <h1 class="govuk-heading-xl">{{ "users.headings.index" | t }}</h1>
-          {{
-            govukTable({
-              firstCellIsHeader: true,
-              head: [
-                {
-                  text: "Name"
-                },
-                {
-                  text: "Email"
-                },
-                {
-                  html: "<span class='govuk-visually-hidden'>Actions</span>"
-                }
+      <h1 class="govuk-heading-xl">{{ "users.headings.index" | t }}</h1>
 
-              ],
-              rows: rows
-            })
-          }}
-      </div>
+      <h2 class="govuk-heading-l">{{ "users.headings.addNew" | t }}</h2>
+      <p class="govuk-body">{{ "users.body.intro" | t }}</p>
+
+      <form action="/admin/users/new/" method="get">
+        {{
+          govukButton({
+            id: "submit-button",
+            type: "Submit",
+            classes: "govuk-button",
+            text: ("users.form.button.add" | t)
+          })
+        }}
+      </form>
+
+      <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+      <h2 class="govuk-heading-l">{{ "users.headings.manageExisting" | t }}</h2>
+
+      {{
+        govukTable({
+          firstCellIsHeader: true,
+          head: [
+            {
+              text: "Name"
+            },
+            {
+              text: "Email"
+            },
+            {
+              html: "Actions"
+            }
+
+          ],
+          rows: rows
+        })
+      }}
     </div>
-
-  </main>
-</div>
+  </div>
 
 {% endblock %}
