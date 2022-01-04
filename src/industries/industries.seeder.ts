@@ -6,6 +6,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 import { Industry } from './industry.entity';
 
+const environment = process.env['NODE_ENV'] || 'development';
+
 type SeedIndustry = {
   name: string;
 };
@@ -20,7 +22,7 @@ export class IndustriesSeeder implements Seeder {
   async seed(): Promise<any> {
     /* eslint-disable @typescript-eslint/no-var-requires */
     const industryData =
-      require('../../seeds/industries.json') as SeedIndustry[];
+      require(`../../seeds/${environment}/industries.json`) as SeedIndustry[];
 
     const industries = industryData.map((industry) => {
       return new Industry(industry.name);

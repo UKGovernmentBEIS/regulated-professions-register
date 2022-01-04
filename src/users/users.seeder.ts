@@ -6,6 +6,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 import { UserRole, User } from './user.entity';
 
+const environment = process.env['NODE_ENV'] || 'development';
+
 type SeedUser = {
   email: string;
   name: string;
@@ -23,7 +25,8 @@ export class UsersSeeder implements Seeder {
 
   async seed(): Promise<any> {
     /* eslint-disable @typescript-eslint/no-var-requires */
-    const userData = require('../../seeds/users.json') as SeedUser[];
+    const userData =
+      require(`../../seeds/${environment}/users.json`) as SeedUser[];
 
     const users = userData.map((user) => {
       const roles = user.roles as UserRole[];

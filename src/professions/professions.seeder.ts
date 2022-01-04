@@ -9,6 +9,8 @@ import { Industry } from 'src/industries/industry.entity';
 import { Qualification } from 'src/qualifications/qualification.entity';
 import { Legislation } from 'src/legislations/legislation.entity';
 
+const environment = process.env['NODE_ENV'] || 'development';
+
 type SeedProfession = {
   name: string;
   alternateName: string;
@@ -40,7 +42,7 @@ export class ProfessionsSeeder implements Seeder {
   async seed(): Promise<any> {
     /* eslint-disable @typescript-eslint/no-var-requires */
     const professionsData =
-      require('../../seeds/professions.json') as SeedProfession[];
+      require(`../../seeds/${environment}/professions.json`) as SeedProfession[];
 
     const professions = await Promise.all(
       professionsData.map(async (profession) => {

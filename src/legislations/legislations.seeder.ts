@@ -6,6 +6,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 import { Legislation } from './legislation.entity';
 
+const environment = process.env['NODE_ENV'] || 'development';
+
 type SeedLegislation = {
   name: string;
   url: string;
@@ -21,7 +23,7 @@ export class LegislationsSeeder implements Seeder {
   async seed(): Promise<any> {
     /* eslint-disable @typescript-eslint/no-var-requires */
     const userData =
-      require('../../seeds/legislations.json') as SeedLegislation[];
+      require(`../../seeds/${environment}/legislations.json`) as SeedLegislation[];
 
     const legislations = userData.map((legislation) => {
       return new Legislation(legislation.name, legislation.url);
