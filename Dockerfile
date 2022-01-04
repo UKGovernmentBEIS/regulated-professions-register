@@ -34,6 +34,7 @@ RUN cp -R $DEPS_HOME/node_modules $APP_HOME/node_modules
 RUN if [ "$NODE_ENV" = "production" ]; then \
   npm run build:assets:prod && \
   npm run build; \
+  npm run seed:production; \
   else \
   npm run build:assets && \
   npm run build; \
