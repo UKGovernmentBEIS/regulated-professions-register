@@ -6,6 +6,10 @@ import {
 
 export class NullUserCreationService extends ExternalUserCreationService {
   public async createExternalUser(): Promise<CreateExternalUserResult> {
-    return { result: 'user-created', externalIdentifier: randomUUID() };
+    return {
+      result: 'user-created',
+      externalIdentifier: randomUUID(),
+      passwordResetLink: 'http://example.com',
+    };
   }
 }

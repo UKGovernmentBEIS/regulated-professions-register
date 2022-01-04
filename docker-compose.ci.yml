@@ -13,6 +13,7 @@ services:
       - '3000:3000'
     depends_on:
       - test-db
+      - redis
     environment:
       DATABASE_URL: postgres://postgres:password@test-db:5432/regulated-professions-register-test
       CI: 'true'
@@ -26,6 +27,7 @@ services:
       ADMIN_PASSWORD: '${ADMIN_PASSWORD}'
       EDITOR_USERNAME: '${EDITOR_USERNAME}'
       EDITOR_PASSWORD: '${EDITOR_PASSWORD}'
+      REDIS_HOST: redis
     networks:
       - test
 
@@ -41,7 +43,17 @@ services:
     networks:
       - test
 
+  redis:
+    image: 'redis:alpine'
+    networks:
+      - test
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis-data:/var/lib/redis
+
 networks:
   test:
 volumes:
   db-data:
+  redis-data:

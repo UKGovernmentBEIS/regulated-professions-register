@@ -10,11 +10,19 @@ import { UsersController } from './users.controller';
 
 import { User } from './user.entity';
 import { UsersService } from './users.service';
+import { UserMailer } from './user.mailer';
+import { BullModule } from '@nestjs/bull';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User])],
+  imports: [
+    TypeOrmModule.forFeature([User]),
+    BullModule.registerQueue({
+      name: 'default',
+    }),
+  ],
   providers: [
     UsersService,
+    UserMailer,
     {
       provide: ExternalUserCreationService,
       useValue:

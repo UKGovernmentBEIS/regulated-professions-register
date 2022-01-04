@@ -21,12 +21,14 @@ import { IndexTemplate } from './interfaces/index-template';
 import { ShowTemplate } from './interfaces/show-template';
 
 import { UserPresenter } from './user.presenter';
+import { UserMailer } from './user.mailer';
 @Controller()
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
     private readonly externalUserCreationService: ExternalUserCreationService,
     private readonly i18nService: I18nService,
+    private readonly userMailer: UserMailer,
   ) {}
 
   @Get('/admin/users')
@@ -112,6 +114,10 @@ export class UsersController {
       // don't exist already in our DB. If they're in our DB, they have an
       // identifier from Auth0, so it'd be very weird if they're *not* in Auth0
       await this.usersService.save(user);
+      await this.userMailer.confirmation(
+        user,
+        externalResult.passwordResetLink,
+      );
     }
 
     res.redirect('done');

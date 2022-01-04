@@ -15,6 +15,7 @@ resource "cloudfoundry_app" "beis-rpr-app" {
   health_check_http_endpoint = "/"
   service_binding { service_instance = cloudfoundry_service_instance.beis-rpr-postgres.id }
   service_binding { service_instance = cloudfoundry_user_provided_service.papertrail.id }
+  service_binding { service_instance = cloudfoundry_service_instance.beis-rpr-redis.id }
   environment = {
     "AUTH0_CLIENT_ID"     = var.auth0_client_id
     "AUTH0_CLIENT_SECRET" = var.auth0_client_secret
@@ -22,6 +23,8 @@ resource "cloudfoundry_app" "beis-rpr-app" {
     "AUTH0_REDIRECT_URL"  = var.auth0_redirect_url
     "APP_SECRET"          = var.app_secret
     "HOST_URL"            = var.host_url
+    "NOTIFY_TEMPLATE_ID"  = var.notify_template_id
+    "NOTIFY_API_KEY"      = var.notify_api_key
   }
   # routes need to be declared with the app for blue green deployments to work
   routes {

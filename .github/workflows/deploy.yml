@@ -45,6 +45,8 @@ jobs:
       TF_VAR_auth0_redirect_url: ${{ secrets.PROD_AUTH0_REDIRECT_URL }}
       TF_VAR_host_url: ${{ secrets.PROD_HOST_URL }}
       TF_VAR_papertrail_destination: ${{ secrets.PROD_PAPERTRAIL_DESTINATION }}
+      TF_VAR_notify_template_id: ${{ secrets.PROD_NOTIFY_TEMPLATE_ID }}
+      TF_VAR_notify_api_key: ${{ secrets.PROD_NOTIFY_API_KEY }}
     steps:
       - uses: actions/checkout@v2
       - name: Deploy latest code to Production
@@ -65,6 +67,8 @@ jobs:
       TF_VAR_auth0_redirect_url: ${{ secrets.STAGING_AUTH0_REDIRECT_URL }}
       TF_VAR_host_url: ${{ secrets.STAGING_HOST_URL }}
       TF_VAR_papertrail_destination: ${{ secrets.STAGING_PAPERTRAIL_DESTINATION }}
+      TF_VAR_notify_template_id: ${{ secrets.STAGING_NOTIFY_TEMPLATE_ID }}
+      TF_VAR_notify_api_key: ${{ secrets.STAGING_NOTIFY_API_KEY }}
     steps:
       - uses: actions/checkout@v2
       - name: Deploy latest code to Staging

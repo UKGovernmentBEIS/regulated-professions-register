@@ -3,11 +3,13 @@ process.env.NODE_ENV ||= 'development';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { I18nModule, I18nJsonParser } from 'nestjs-i18n';
+import { BullModule } from '@nestjs/bull';
 
 import * as path from 'path';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { MailerConsumer } from './common/mailer.consumer';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
 import { ProfessionsModule } from './professions/professions.module';
@@ -37,6 +39,15 @@ import dbConfiguration from './config/db.config';
         watch: process.env.NODE_ENV === 'development',
       },
     }),
+    BullModule.forRoot({
+      redis: {
+        host: process.env.REDIS_HOST || 'localhost',
+        port: Number(process.env.REDIS_PORT || 6379),
+      },
+    }),
+    BullModule.registerQueue({
+      name: 'default',
+    }),
     UsersModule,
     ProfessionsModule,
     LegislationsModule,
@@ -44,6 +55,6 @@ import dbConfiguration from './config/db.config';
     IndustriesModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, MailerConsumer],
 })
 export class AppModule {}

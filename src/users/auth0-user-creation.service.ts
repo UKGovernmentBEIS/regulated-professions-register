@@ -26,13 +26,7 @@ export class Auth0UserCreationService extends ExternalUserCreationService {
   ): Promise<CreateExternalUserResult> {
     const url = process.env.AUTH0_DOMAIN;
     const domain = url.startsWith('https://') ? url.slice(8) : url;
-
-    const client = new ManagementClient({
-      domain,
-      clientId: process.env.AUTH0_CLIENT_ID,
-      clientSecret: process.env.AUTH0_CLIENT_SECRET,
-      scope: 'create:users read:users',
-    });
+    const client = this.getClient(domain);
 
     // As an interaction with an external service, we're unable to wrap this in
     // a transaction with `createUser`, but at least attempt to avoid creating
@@ -48,9 +42,28 @@ export class Auth0UserCreationService extends ExternalUserCreationService {
     const user = await client.createUser({
       email,
       password: randomUUID(),
+      email_verified: true,
       connection: 'Username-Password-Authentication',
     });
 
-    return { result: 'user-created', externalIdentifier: user.user_id };
+    const passwordChangeTicket = await client.createPasswordChangeTicket({
+      result_url: `${process.env['HOST_URL']}/admin`,
+      user_id: user.user_id,
+    });
+
+    return {
+      result: 'user-created',
+      externalIdentifier: user.user_id,
+      passwordResetLink: passwordChangeTicket.ticket,
+    };
+  }
+
+  private getClient(domain: string) {
+    return new ManagementClient({
+      domain,
+      clientId: process.env['AUTH0_CLIENT_ID'],
+      clientSecret: process.env['AUTH0_CLIENT_SECRET'],
+      scope: 'create:users read:users create:user_tickets',
+    });
   }
 }
