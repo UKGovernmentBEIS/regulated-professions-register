@@ -23,8 +23,6 @@ describe('Searching a profession', () => {
   });
 
   it('The search page does not show draft professions', () => {
-    cy.visit('/professions/search');
-
     cy.get('body').should('not.contain', 'Draft Profession');
   });
 
@@ -55,8 +53,6 @@ describe('Searching a profession', () => {
   });
 
   it('I can filter by industry', () => {
-    cy.visit('/professions/search');
-
     cy.translate('industries.education').then((nameLabel) => {
       cy.get('label').contains(nameLabel).parent().find('input').check();
     });
@@ -79,8 +75,6 @@ describe('Searching a profession', () => {
   });
 
   it('I can filter by keyword', () => {
-    cy.visit('/professions/search');
-
     cy.get('input[name="keywords"]').type('Attorney');
 
     cy.get('button').click();
