@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Send confirmation email to users once created
 - Add Bull to run background tasks
 - New screen for selecting a regulatory authority when creating a new profession
+- Seed users at deploy time
 
 ### Changed
 
