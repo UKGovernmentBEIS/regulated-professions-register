@@ -1,0 +1,16 @@
+[
+  {
+    "email": "beis-rpr@dxw.com",
+    "name": "beis-rpr",
+    "externalIdentifier": "auth0|61d421ae91488b0069f2fbf1",
+    "roles": ["admin"],
+    "confirmed": true
+  },
+  {
+    "email": "beis-rpr+editor@dxw.com",
+    "name": "Editor",
+    "externalIdentifier": "auth0|61d4220c20680d00696f50a1",
+    "roles": ["editor"],
+    "confirmed": true
+  }
+]
