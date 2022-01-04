@@ -29,8 +29,8 @@ export class ProfessionsService {
     return this.repository.findOne({ where: { slug } });
   }
 
-  async save(user: Profession): Promise<Profession> {
-    return this.repository.save(user);
+  async save(profession: Profession): Promise<Profession> {
+    return this.repository.save(profession);
   }
 
   async confirm(profession: Profession): Promise<Profession> {

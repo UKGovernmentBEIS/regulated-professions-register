@@ -5,7 +5,7 @@ import { Connection, EntityManager, QueryRunner, Repository } from 'typeorm';
 
 import { Industry } from '../industries/industry.entity';
 import { Qualification } from '../qualifications/qualification.entity';
-import { Profession } from './profession.entity';
+import { MandatoryRegistration, Profession } from './profession.entity';
 import { ProfessionsService } from './professions.service';
 
 const profession = new Profession(
@@ -15,6 +15,7 @@ const profession = new Profession(
   'Gas installers work on gas appliances and installations.',
   ['GB-ENG', 'GB-SCT', 'GB-WLS', 'GB-NIR'],
   'Reserves of activities',
+  MandatoryRegistration.Voluntary,
   [new Industry('Construction & Engineering')],
   new Qualification('ATT - Attestation of competence , Art. 11 a'),
   [
@@ -30,6 +31,7 @@ const professionArray = [
     'Social workers are trained to: make assessments, taking account of a range of factors',
     ['GB-ENG'],
     'Protected title',
+    MandatoryRegistration.Mandatory,
     [new Industry('Health')],
     new Qualification(
       'PS3 - Diploma of post-secondary level (3-4 years) , Art. 11 d',
@@ -160,6 +162,8 @@ describe('Profession', () => {
             null,
             null,
             null,
+            null,
+            null,
             true,
           );
 
@@ -196,6 +200,8 @@ describe('Profession', () => {
               '',
               null,
               '',
+              null,
+              null,
               null,
               null,
               null,
@@ -252,6 +258,8 @@ describe('Profession', () => {
               null,
               null,
               null,
+              null,
+              null,
               true,
             ),
           );
@@ -285,6 +293,8 @@ describe('Profession', () => {
               '',
               null,
               '',
+              null,
+              null,
               null,
               null,
               null,

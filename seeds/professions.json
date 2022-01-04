@@ -15,6 +15,7 @@
       "The administration of oaths."
     ],
     "legislations": ["The Trade Marks Act 1994", "Legal Services Act 2007"],
+    "mandatoryRegistration": "voluntary",
     "confirmed": true
   },
   {
@@ -31,6 +32,7 @@
       "The Education (School Teachers' Qualifications) (England) Regulations 2003/1662 (as amended)",
       "The Education (Induction Arrangements for School Teachers) (England) Regulations 2012/1115 (as amended)"
     ],
+    "mandatoryRegistration": "mandatory",
     "confirmed": true
   },
   {

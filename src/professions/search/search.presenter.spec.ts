@@ -27,6 +27,7 @@ const exampleProfession1 = new Profession(
   '',
   ['GB-ENG'],
   '',
+  null,
   [exampleIndustry1],
 );
 
@@ -37,6 +38,7 @@ const exampleProfession2 = new Profession(
   '',
   ['GB-SCT', 'GB-WLS'],
   '',
+  null,
   [exampleIndustry2, exampleIndustry3],
 );
 

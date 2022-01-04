@@ -9,17 +9,22 @@ import { Industry } from '../industries/industry.entity';
 import { CheckYourAnswersController } from './admin/add-profession/check-your-answers.controller';
 import { ConfirmationController } from './admin/add-profession/confirmation.controller';
 import { SearchController } from './search/search.controller';
+import { RegulatoryBodyController } from './admin/add-profession/regulatory-body.controller';
+import { Organisation } from '../organisations/organisation.entity';
+import { OrganisationsService } from '../organisations/organisations.service';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Profession]),
     TypeOrmModule.forFeature([Industry]),
+    TypeOrmModule.forFeature([Organisation]),
   ],
-  providers: [ProfessionsService, IndustriesService],
+  providers: [ProfessionsService, IndustriesService, OrganisationsService],
   controllers: [
     SearchController,
     ProfessionsController,
     TopLevelInformationController,
+    RegulatoryBodyController,
     CheckYourAnswersController,
     ConfirmationController,
   ],

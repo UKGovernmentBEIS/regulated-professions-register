@@ -15,6 +15,8 @@
           <h1 class="govuk-heading-l">{{ ("professions.form.headings.checkAnswers" | t) }}</h1>
 
           <form method="post" action="confirmation">
+            <h2 class="govuk-heading-m">{{ ("professions.form.headings.topLevelInformation" | t) }}</h2>
+
             {% set selectedNationsSummaryListHtml %}
               <ul>
                 {% for nation in nations %}
@@ -80,6 +82,49 @@
                           href: "/admin/professions/" + professionId +"/top-level-information/edit?change=true",
                           text: ("app.change" | t),
                           visuallyHiddenText: ("professions.form.label.topLevelInformation.industry" | t)
+                        }
+                      ]
+                    }
+                  }
+                ]
+              })
+            }}
+
+            <h2 class="govuk-heading-m">{{ ("professions.form.headings.regulatoryBody" | t) }}</h2>
+
+            {{
+              govukSummaryList({
+                rows: [
+                  {
+                    key: {
+                      text: ("professions.form.label.regulatoryBody.regulatedAuthority" | t)
+                    },
+                    value: {
+                      text: organisation
+                    },
+                    actions: {
+                      items: [
+                        {
+                          href: "/admin/professions/" + professionId +"/regulatory-body/edit?change=true",
+                          text: ("app.change" | t),
+                          visuallyHiddenText: ("professions.form.label.regulatoryBody.regulatedAuthority" | t)
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    key: {
+                      text: ("professions.form.label.regulatoryBody.mandatoryRegistration" | t)
+                    },
+                    value: {
+                      text: ("professions.mandatoryRegistration." + mandatoryRegistration) | t
+                    },
+                    actions: {
+                      items: [
+                        {
+                          href: "/admin/professions/" + professionId + "/regulatory-body/edit?change=true",
+                          text: ("app.change" | t),
+                          visuallyHiddenText: ("professions.form.label.regulatoryBody.mandatoryRegistration" | t)
                         }
                       ]
                     }

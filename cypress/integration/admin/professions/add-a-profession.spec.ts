@@ -24,6 +24,15 @@ describe('Adding a new profession', () => {
       cy.get('button').contains(buttonText).click();
     });
 
+    cy.translate('professions.form.headings.regulatoryBody').then((heading) => {
+      cy.get('body').should('contain', heading);
+    });
+    cy.get('select[name="regulatoryBody"]').select('Department for Education');
+    cy.get('input[name="mandatoryRegistration"][value="mandatory"]').check();
+    cy.translate('app.continue').then((buttonText) => {
+      cy.get('button').contains(buttonText).click();
+    });
+
     cy.translate('professions.form.headings.checkAnswers').then((heading) => {
       cy.get('body').should('contain', heading);
     });
@@ -33,6 +42,12 @@ describe('Adding a new profession', () => {
       cy.get('body').should('contain', england);
     });
     cy.get('body').should('contain', 'Construction & Engineering');
+    cy.get('body').should('contain', 'Department for Education');
+    cy.translate(
+      'professions.form.radioButtons.mandatoryRegistration.mandatory',
+    ).then((mandatoryRegistration) => {
+      cy.get('body').should('contain', mandatoryRegistration);
+    });
 
     cy.translate('professions.form.button.create').then((buttonText) => {
       cy.get('button').contains(buttonText).click();

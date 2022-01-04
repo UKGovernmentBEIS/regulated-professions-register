@@ -2,7 +2,8 @@ import { DeepMocked, createMock } from '@golevelup/ts-jest';
 import { TestingModule, Test } from '@nestjs/testing';
 import { I18nService } from 'nestjs-i18n';
 import { Industry } from '../../../industries/industry.entity';
-import { Profession } from '../../profession.entity';
+import { Organisation } from '../../../organisations/organisation.entity';
+import { MandatoryRegistration, Profession } from '../../profession.entity';
 import { ProfessionsService } from '../../professions.service';
 import { CheckYourAnswersController } from './check-your-answers.controller';
 
@@ -18,6 +19,10 @@ describe('CheckYourAnswersController', () => {
       name: 'Gas Safe Engineer',
       occupationLocations: ['GB-ENG'],
       industries: [new Industry('industries.construction')],
+      organisation: createMock<Organisation>({
+        name: 'Council of Gas Registered Engineers',
+      }),
+      mandatoryRegistration: MandatoryRegistration.Voluntary,
     });
 
     professionsService = createMock<ProfessionsService>({
@@ -58,6 +63,12 @@ describe('CheckYourAnswersController', () => {
         expect(templateParams.industries).toEqual([
           'Construction & Engineering',
         ]);
+        expect(templateParams.organisation).toEqual(
+          'Council of Gas Registered Engineers',
+        );
+        expect(templateParams.mandatoryRegistration).toEqual(
+          MandatoryRegistration.Voluntary,
+        );
         expect(professionsService.find).toHaveBeenCalledWith('profession-id');
       });
     });

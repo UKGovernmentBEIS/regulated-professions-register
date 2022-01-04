@@ -3,6 +3,7 @@
     "headings": {
       "main": "Add a new profession",
       "topLevelInformation": "Top level information",
+      "regulatoryBody": "Regulatory / professional bodies",
       "checkAnswers": "Check your answers",
       "confirmation": "New profession created"
     },
@@ -12,6 +13,18 @@
         "name": "Name of regulated profession",
         "nations": "In which nation(s) is this profession regulated?",
         "industry": "Industry / sector"
+      },
+      "regulatoryBody": {
+        "regulatedAuthority": "Which body regulates this profession?",
+        "mandatoryRegistration": "Is registration mandatory with professional bodies?"
+      }
+    },
+    "radioButtons": {
+      "hint": "Select one option.",
+      "mandatoryRegistration": {
+        "mandatory": "Mandatory",
+        "voluntary": "Voluntary",
+        "unknown": "Unknown"
       }
     },
     "checkboxes": {
@@ -73,5 +86,10 @@
       "nationalLegislation": "National legislation",
       "legislationLink": "Legislation link"
     }
+  },
+  "mandatoryRegistration": {
+    "mandatory": "Mandatory",
+    "voluntary": "Voluntary",
+    "unknown": "Unknown"
   }
 }

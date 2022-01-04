@@ -4,7 +4,7 @@ import { In, Repository } from 'typeorm';
 import { Seeder } from 'nestjs-seeder';
 import { InjectRepository } from '@nestjs/typeorm';
 
-import { Profession } from './profession.entity';
+import { MandatoryRegistration, Profession } from './profession.entity';
 import { Industry } from 'src/industries/industry.entity';
 import { Qualification } from 'src/qualifications/qualification.entity';
 import { Legislation } from 'src/legislations/legislation.entity';
@@ -20,6 +20,7 @@ type SeedProfession = {
   qualification: string;
   reservedActivities: string[];
   legislations: string[];
+  mandatoryRegistration: MandatoryRegistration;
   confirmed: boolean;
 };
 
@@ -66,10 +67,12 @@ export class ProfessionsSeeder implements Seeder {
           profession.description,
           profession.occupationLocations,
           profession.regulationType,
+          profession.mandatoryRegistration,
           industries,
           qualification,
           profession.reservedActivities,
           legislations,
+          null,
           profession.confirmed,
         );
       }),
