@@ -57,7 +57,7 @@ export class Profession {
   qualification: Qualification;
 
   @Column('text', { array: true, nullable: true })
-  reservedActivities: string[];
+  reservedActivitiesDeprecated: string[];
 
   @ManyToMany(() => Legislation, {
     eager: true,
@@ -110,7 +110,7 @@ export class Profession {
     this.mandatoryRegistration = mandatoryRegistration || null;
     this.industries = industries || null;
     this.qualification = qualification || null;
-    this.reservedActivities = reservedActivities || null;
+    this.reservedActivitiesDeprecated = reservedActivities || null;
     this.legislations = legislations || null;
     this.organisation = organisation || null;
     this.confirmed = confirmed || false;
