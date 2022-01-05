@@ -59,9 +59,6 @@ export class Profession {
   @Column({ nullable: true })
   reservedActivities: string;
 
-  @Column('text', { array: true, nullable: true })
-  reservedActivitiesDeprecated: string[];
-
   @ManyToMany(() => Legislation, {
     eager: true,
   })
