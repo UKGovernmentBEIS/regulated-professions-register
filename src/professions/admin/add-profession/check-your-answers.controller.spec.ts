@@ -23,6 +23,8 @@ describe('CheckYourAnswersController', () => {
         name: 'Council of Gas Registered Engineers',
       }),
       mandatoryRegistration: MandatoryRegistration.Voluntary,
+      description: 'A description of the regulation',
+      reservedActivities: 'Some reserved activities',
     });
 
     professionsService = createMock<ProfessionsService>({
@@ -68,6 +70,12 @@ describe('CheckYourAnswersController', () => {
         );
         expect(templateParams.mandatoryRegistration).toEqual(
           MandatoryRegistration.Voluntary,
+        );
+        expect(templateParams.reservedActivities).toEqual(
+          'Some reserved activities',
+        );
+        expect(templateParams.description).toEqual(
+          'A description of the regulation',
         );
         expect(professionsService.find).toHaveBeenCalledWith('profession-id');
       });

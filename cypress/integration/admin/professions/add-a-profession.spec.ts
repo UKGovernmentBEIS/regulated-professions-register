@@ -63,6 +63,8 @@ describe('Adding a new profession', () => {
     ).then((mandatoryRegistration) => {
       cy.get('body').should('contain', mandatoryRegistration);
     });
+    cy.get('body').should('contain', 'An example activity');
+    cy.get('body').should('contain', 'A description of the regulation');
 
     cy.translate('professions.form.button.create').then((buttonText) => {
       cy.get('button').contains(buttonText).click();
