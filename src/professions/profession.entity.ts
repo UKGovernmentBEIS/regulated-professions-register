@@ -56,8 +56,8 @@ export class Profession {
   })
   qualification: Qualification;
 
-  @Column('text', { array: true, nullable: true })
-  reservedActivities: string[];
+  @Column({ nullable: true })
+  reservedActivities: string;
 
   @ManyToMany(() => Legislation, {
     eager: true,
@@ -96,7 +96,7 @@ export class Profession {
     mandatoryRegistration?: MandatoryRegistration,
     industries?: Industry[],
     qualification?: Qualification,
-    reservedActivities?: string[],
+    reservedActivities?: string,
     legislations?: Legislation[],
     organisation?: Organisation,
     confirmed?: boolean,
