@@ -3,10 +3,9 @@ import { Repository } from 'typeorm';
 
 import { Seeder } from 'nestjs-seeder';
 import { InjectRepository } from '@nestjs/typeorm';
+import { InjectData } from '../common/decorators/seeds.decorator';
 
 import { Industry } from './industry.entity';
-
-const environment = process.env['NODE_ENV'] || 'development';
 
 type SeedIndustry = {
   name: string;
@@ -14,17 +13,16 @@ type SeedIndustry = {
 
 @Injectable()
 export class IndustriesSeeder implements Seeder {
+  @InjectData('industries')
+  data: SeedIndustry[];
+
   constructor(
     @InjectRepository(Industry)
     private readonly industryRepository: Repository<Industry>,
   ) {}
 
   async seed(): Promise<any> {
-    /* eslint-disable @typescript-eslint/no-var-requires */
-    const industryData =
-      require(`../../seeds/${environment}/industries.json`) as SeedIndustry[];
-
-    const industries = industryData.map((industry) => {
+    const industries = this.data.map((industry) => {
       return new Industry(industry.name);
     });
 

@@ -5,8 +5,7 @@ import { Seeder } from 'nestjs-seeder';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { Qualification } from './qualification.entity';
-
-const environment = process.env['NODE_ENV'] || 'development';
+import { InjectData } from '../common/decorators/seeds.decorator';
 
 type SeedQualification = {
   level: string;
@@ -18,17 +17,16 @@ type SeedQualification = {
 
 @Injectable()
 export class QualificationsSeeder implements Seeder {
+  @InjectData('qualifications')
+  data: SeedQualification[];
+
   constructor(
     @InjectRepository(Qualification)
     private readonly qualificationsRepository: Repository<Qualification>,
   ) {}
 
   async seed(): Promise<any> {
-    /* eslint-disable @typescript-eslint/no-var-requires */
-    const userData =
-      require(`../../seeds/${environment}/qualifications.json`) as SeedQualification[];
-
-    const qualifications = userData.map((qualification) => {
+    const qualifications = this.data.map((qualification) => {
       return new Qualification(
         qualification.level,
         qualification.methodToObtain,

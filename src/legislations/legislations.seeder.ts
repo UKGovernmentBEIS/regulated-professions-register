@@ -3,10 +3,9 @@ import { Repository } from 'typeorm';
 
 import { Seeder } from 'nestjs-seeder';
 import { InjectRepository } from '@nestjs/typeorm';
+import { InjectData } from '../common/decorators/seeds.decorator';
 
 import { Legislation } from './legislation.entity';
-
-const environment = process.env['NODE_ENV'] || 'development';
 
 type SeedLegislation = {
   name: string;
@@ -15,17 +14,16 @@ type SeedLegislation = {
 
 @Injectable()
 export class LegislationsSeeder implements Seeder {
+  @InjectData('legislations')
+  data: SeedLegislation[];
+
   constructor(
     @InjectRepository(Legislation)
     private readonly legislationsRepository: Repository<Legislation>,
   ) {}
 
   async seed(): Promise<any> {
-    /* eslint-disable @typescript-eslint/no-var-requires */
-    const userData =
-      require(`../../seeds/${environment}/legislations.json`) as SeedLegislation[];
-
-    const legislations = userData.map((legislation) => {
+    const legislations = this.data.map((legislation) => {
       return new Legislation(legislation.name, legislation.url);
     });
 
