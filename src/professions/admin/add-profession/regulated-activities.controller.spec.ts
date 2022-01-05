@@ -39,13 +39,14 @@ describe(RegulatedActivitiesController, () => {
         description: 'A description of the profession',
       });
 
-      await controller.edit(response, 'profession-id');
+      await controller.edit(response, 'profession-id', false);
 
       expect(response.render).toHaveBeenCalledWith(
         'professions/admin/add-profession/regulated-activities',
         {
           reservedActivities: 'Example reserved activities',
           regulationDescription: 'A description of the profession',
+          change: false,
           errors: undefined,
         },
       );
@@ -54,27 +55,57 @@ describe(RegulatedActivitiesController, () => {
 
   describe('update', () => {
     describe('when all required parameters are entered', () => {
-      it('updates the Profession and redirects to the next page in the journey', async () => {
-        const regulatedActivitiesDto: RegulatedActivitiesDto = {
-          activities: 'Example reserved activities',
-          description: 'A description of the profession',
-        };
+      describe('when the "Change" query param is false', () => {
+        it('updates the Profession and redirects to the next page in the journey', async () => {
+          const regulatedActivitiesDto: RegulatedActivitiesDto = {
+            activities: 'Example reserved activities',
+            description: 'A description of the profession',
+            change: false,
+          };
 
-        await controller.update(
-          response,
-          'profession-id',
-          regulatedActivitiesDto,
-        );
+          await controller.update(
+            response,
+            'profession-id',
+            regulatedActivitiesDto,
+          );
 
-        expect(professionsService.save).toHaveBeenCalledWith({
-          id: 'profession-id',
-          description: 'A description of the profession',
-          reservedActivities: 'Example reserved activities',
+          expect(professionsService.save).toHaveBeenCalledWith({
+            id: 'profession-id',
+            description: 'A description of the profession',
+            reservedActivities: 'Example reserved activities',
+          });
+
+          // This will be the Qualification information page in future
+          expect(response.redirect).toHaveBeenCalledWith(
+            '/admin/professions/profession-id/check-your-answers',
+          );
         });
+      });
 
-        expect(response.redirect).toHaveBeenCalledWith(
-          '/admin/professions/profession-id/check-your-answers',
-        );
+      describe('when the "Change" query param is true', () => {
+        it('updates the Profession and redirects to the Check your answers page', async () => {
+          const regulatedActivitiesDto: RegulatedActivitiesDto = {
+            activities: 'Example reserved activities',
+            description: 'A description of the profession',
+            change: true,
+          };
+
+          await controller.update(
+            response,
+            'profession-id',
+            regulatedActivitiesDto,
+          );
+
+          expect(professionsService.save).toHaveBeenCalledWith({
+            id: 'profession-id',
+            description: 'A description of the profession',
+            reservedActivities: 'Example reserved activities',
+          });
+
+          expect(response.redirect).toHaveBeenCalledWith(
+            '/admin/professions/profession-id/check-your-answers',
+          );
+        });
       });
     });
 
@@ -83,6 +114,7 @@ describe(RegulatedActivitiesController, () => {
         const regulatedActivitiesDto: RegulatedActivitiesDto = {
           activities: 'Example reserved activities',
           description: undefined,
+          change: false,
         };
 
         await controller.update(
@@ -118,6 +150,7 @@ describe(RegulatedActivitiesController, () => {
             {
               activities: 'Newer reserved activities',
               description: undefined,
+              change: false,
             };
 
           expect(
@@ -139,6 +172,7 @@ describe(RegulatedActivitiesController, () => {
             {
               activities: undefined,
               description: 'Example description',
+              change: false,
             };
 
           expect(
@@ -161,6 +195,7 @@ describe(RegulatedActivitiesController, () => {
           const regulatoryBodyDtoWithNewDescription: RegulatedActivitiesDto = {
             description: 'Newer description',
             activities: undefined,
+            change: false,
           };
 
           expect(
@@ -182,6 +217,7 @@ describe(RegulatedActivitiesController, () => {
             {
               description: undefined,
               activities: undefined,
+              change: false,
             };
 
           expect(

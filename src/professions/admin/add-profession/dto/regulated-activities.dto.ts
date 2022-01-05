@@ -6,4 +6,6 @@ export class RegulatedActivitiesDto {
 
   @IsNotEmpty()
   description: string;
+
+  change: boolean;
 }

@@ -1,4 +1,4 @@
-import { Controller, Get, Res, Param, Post, Body } from '@nestjs/common';
+import { Controller, Get, Res, Param, Post, Body, Query } from '@nestjs/common';
 import { Response } from 'express';
 import { Validator } from '../../../helpers/validator';
 import { ValidationFailedError } from '../../../validation/validation-failed.error';
@@ -12,10 +12,19 @@ export class RegulatedActivitiesController {
   constructor(private readonly professionsService: ProfessionsService) {}
 
   @Get('/:id/regulated-activities/edit')
-  async edit(@Res() res: Response, @Param('id') id: string): Promise<void> {
+  async edit(
+    @Res() res: Response,
+    @Param('id') id: string,
+    @Query('change') change: boolean,
+  ): Promise<void> {
     const profession = await this.professionsService.find(id);
 
-    this.renderForm(res, profession.reservedActivities, profession.description);
+    this.renderForm(
+      res,
+      profession.reservedActivities,
+      profession.description,
+      change,
+    );
   }
 
   @Post('/:id/regulated-activities')
@@ -47,6 +56,7 @@ export class RegulatedActivitiesController {
           profession,
           regulatedActivitiesAnswers,
         ),
+        regulatedActivitiesAnswers.change,
         errors,
       );
     }
@@ -61,6 +71,11 @@ export class RegulatedActivitiesController {
 
     await this.professionsService.save(updated);
 
+    if (regulatedActivitiesAnswers.change) {
+      return res.redirect(`/admin/professions/${id}/check-your-answers`);
+    }
+
+    // This will go to the Qualification information in future
     return res.redirect(`/admin/professions/${id}/check-your-answers`);
   }
 
@@ -68,12 +83,14 @@ export class RegulatedActivitiesController {
     res: Response,
     reservedActivities: string | null,
     regulationDescription: string | null,
+    change: boolean,
     errors: object | undefined = undefined,
   ): Promise<void> {
     const templateArgs: RegulatedActivitiesTemplate = {
       reservedActivities,
       regulationDescription,
-      errors: errors,
+      change,
+      errors,
     };
 
     return res.render(
