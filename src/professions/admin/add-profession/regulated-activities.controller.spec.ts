@@ -3,6 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { Response } from 'express';
 import { Profession } from '../../profession.entity';
 import { ProfessionsService } from '../../professions.service';
+import { RegulatedActivitiesDto } from './dto/regulated-activities.dto';
 import { RegulatedActivitiesController } from './regulated-activities.controller';
 
 describe(RegulatedActivitiesController, () => {
@@ -52,12 +53,145 @@ describe(RegulatedActivitiesController, () => {
   });
 
   describe('update', () => {
-    it('redirects to the "Check your answers" page', async () => {
-      await controller.update(response, 'profession-id');
+    describe('when all required parameters are entered', () => {
+      it('updates the Profession and redirects to the next page in the journey', async () => {
+        const regulatedActivitiesDto: RegulatedActivitiesDto = {
+          activities: 'Example reserved activities',
+          description: 'A description of the profession',
+        };
 
-      expect(response.redirect).toHaveBeenCalledWith(
-        '/admin/professions/profession-id/check-your-answers',
-      );
+        await controller.update(
+          response,
+          'profession-id',
+          regulatedActivitiesDto,
+        );
+
+        expect(professionsService.save).toHaveBeenCalledWith({
+          id: 'profession-id',
+          description: 'A description of the profession',
+          reservedActivities: 'Example reserved activities',
+        });
+
+        expect(response.redirect).toHaveBeenCalledWith(
+          '/admin/professions/profession-id/check-your-answers',
+        );
+      });
+    });
+
+    describe('when required parameters are not entered', () => {
+      it('does not update the profession, and re-renders the regulated activities form page with errors', async () => {
+        const regulatedActivitiesDto: RegulatedActivitiesDto = {
+          activities: 'Example reserved activities',
+          description: undefined,
+        };
+
+        await controller.update(
+          response,
+          'profession-id',
+          regulatedActivitiesDto,
+        );
+
+        expect(professionsService.save).not.toHaveBeenCalled();
+
+        expect(response.render).toHaveBeenCalledWith(
+          'professions/admin/add-profession/regulated-activities',
+          expect.objectContaining({
+            reservedActivities: 'Example reserved activities',
+            errors: {
+              description: {
+                text: 'description should not be empty',
+              },
+            },
+          }),
+        );
+      });
+    });
+
+    describe('getPreviouslyEnteredReservedActivitiesFromDtoThenProfession', () => {
+      describe('when there is an existing Profession with ReservedActivities and new params are submitted', () => {
+        it('returns the dto value, over the Profession', () => {
+          profession = createMock<Profession>({
+            reservedActivities: 'Older reserved activities',
+          });
+
+          const regulatoryBodyDtoWithNewReservedActivities: RegulatedActivitiesDto =
+            {
+              activities: 'Newer reserved activities',
+              description: undefined,
+            };
+
+          expect(
+            controller.getPreviouslyEnteredReservedActivitiesFromDtoThenProfession(
+              profession,
+              regulatoryBodyDtoWithNewReservedActivities,
+            ),
+          ).toEqual('Newer reserved activities');
+        });
+      });
+
+      describe('when there is an existing Profession with ReservedActivities and empty params are submitted', () => {
+        it('returns the Profession value, not overwriting it', () => {
+          profession = createMock<Profession>({
+            reservedActivities: 'Older reserved activities',
+          });
+
+          const regulatoryBodyDtoWithMissingReservedActivities: RegulatedActivitiesDto =
+            {
+              activities: undefined,
+              description: 'Example description',
+            };
+
+          expect(
+            controller.getPreviouslyEnteredReservedActivitiesFromDtoThenProfession(
+              profession,
+              regulatoryBodyDtoWithMissingReservedActivities,
+            ),
+          ).toEqual('Older reserved activities');
+        });
+      });
+    });
+
+    describe('getPreviouslyEnteredDescriptionFromDtoThenProfession ', () => {
+      describe('when there is an existing Profession with a Description and new params are submitted', () => {
+        it('returns the dto value, over the Profession', () => {
+          profession = createMock<Profession>({
+            description: 'Older description',
+          });
+
+          const regulatoryBodyDtoWithNewDescription: RegulatedActivitiesDto = {
+            description: 'Newer description',
+            activities: undefined,
+          };
+
+          expect(
+            controller.getPreviouslyEnteredDescriptionFromDtoThenProfession(
+              profession,
+              regulatoryBodyDtoWithNewDescription,
+            ),
+          ).toEqual('Newer description');
+        });
+      });
+
+      describe('when there is an existing Profession with Description and empty params are submitted', () => {
+        it('returns the Profession value, not overwriting it', () => {
+          profession = createMock<Profession>({
+            description: 'Older description',
+          });
+
+          const regulatoryBodyDtoWithMissingDescription: RegulatedActivitiesDto =
+            {
+              description: undefined,
+              activities: undefined,
+            };
+
+          expect(
+            controller.getPreviouslyEnteredDescriptionFromDtoThenProfession(
+              profession,
+              regulatoryBodyDtoWithMissingDescription,
+            ),
+          ).toEqual('Older description');
+        });
+      });
     });
   });
 

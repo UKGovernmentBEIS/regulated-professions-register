@@ -39,6 +39,11 @@ describe('Adding a new profession', () => {
       },
     );
 
+    cy.get('textarea[name="activities"]').type('An example activity');
+    cy.get('textarea[name="description"]').type(
+      'A description of the regulation',
+    );
+
     cy.translate('app.continue').then((buttonText) => {
       cy.get('button').contains(buttonText).click();
     });
