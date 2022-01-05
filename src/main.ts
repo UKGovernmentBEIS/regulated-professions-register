@@ -7,6 +7,7 @@ import path from 'path';
 import session from 'express-session';
 import methodOverride from 'method-override';
 import connectFlash from 'connect-flash';
+import Rollbar from 'rollbar';
 
 import { AppModule } from './app.module';
 import { AuthenticationMidleware } from './middleware/authentication.middleware';
@@ -57,6 +58,19 @@ async function bootstrap() {
 
   // Allow us to redirect with flash messages
   app.use(connectFlash());
+
+  // Send errors to Rollbar in production
+  if (process.env['NODE_ENV'] === 'production') {
+    const rollbar = new Rollbar({
+      accessToken: process.env['ROLLBAR_TOKEN'],
+      captureUncaught: true,
+      captureUnhandledRejections: true,
+      payload: {
+        environment: process.env['ENVIRONMENT'],
+      },
+    });
+    app.use(rollbar.errorHandler());
+  }
 
   await app.listen(process.env.PORT || 3000);
 }
