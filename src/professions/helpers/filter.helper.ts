@@ -1,4 +1,5 @@
 import { Industry } from '../../industries/industry.entity';
+import { Organisation } from '../../organisations/organisation.entity';
 import { Profession } from '../../professions/profession.entity';
 import { FilterInput } from '../interfaces/filter-input.interface';
 
@@ -13,9 +14,14 @@ export class FilterHelper {
       unfilteredProfessions,
     );
 
-    const industryFilteredProfessions = this.filterByIndustry(
+    const organisationFilteredProfessions = this.filterByOrganisation(
       filterInput,
       nationFilteredProfessions,
+    );
+
+    const industryFilteredProfessions = this.filterByIndustry(
+      filterInput,
+      organisationFilteredProfessions,
     );
 
     const keywordFilteredProfessions = this.filterByKeyword(
@@ -37,6 +43,22 @@ export class FilterHelper {
 
       return professions.filter((profession) =>
         this.isNationOverlap(profession.occupationLocations, filterNationCodes),
+      );
+    } else {
+      return professions;
+    }
+  }
+
+  private filterByOrganisation(
+    filterInput: FilterInput,
+    professions: Profession[],
+  ): Profession[] {
+    if (filterInput.organisations?.length) {
+      return professions.filter((profession) =>
+        this.isOrganisationOverlap(
+          profession.organisation ? [profession.organisation] : [],
+          filterInput.organisations,
+        ),
       );
     } else {
       return professions;
@@ -78,12 +100,23 @@ export class FilterHelper {
     return nationCodes1.some((code) => nationCodes2.includes(code));
   }
 
+  private isOrganisationOverlap(
+    organisations1: Organisation[],
+    organisations2: Organisation[],
+  ): boolean {
+    return organisations1.some((organisation1) => {
+      return organisations2.some(
+        (organisation2) => organisation1.id === organisation2.id,
+      );
+    });
+  }
+
   private isIndustryOverlap(
     industries1: Industry[],
     industries2: Industry[],
   ): boolean {
     return industries1.some((industry1) => {
-      return industries2.some((industry2) => industry1.id == industry2.id);
+      return industries2.some((industry2) => industry1.id === industry2.id);
     });
   }
 
