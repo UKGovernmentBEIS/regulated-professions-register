@@ -35,7 +35,8 @@
     "seed:test": "NODE_ENV=test node dist/seeder",
     "seed:production": "NODE_ENV=production node dist/seeder",
     "seed:test:refresh": "npm run build && NODE_ENV=test node dist/seeder --refresh",
-    "heroku:set-callback-urls": "ts-node util/set-callback-urls.ts"
+    "heroku:set-callback-urls": "ts-node util/set-callback-urls.ts",
+    "bull:repl": "bull-repl"
   },
   "dependencies": {
     "@nestjs/bull": "^0.4.2",
@@ -50,6 +51,7 @@
     "@types/express-session": "^1.17.4",
     "auth0": "^2.37.0",
     "bull": "^3.29.3",
+    "bull-repl": "^0.26.3",
     "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",
     "connect-flash": "^0.1.1",
