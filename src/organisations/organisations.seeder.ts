@@ -49,6 +49,6 @@ export class OrganisationsSeeder implements Seeder {
   }
 
   async drop(): Promise<any> {
-    await this.organisationsRepository.delete({});
+    // Deletion of legislations is handled in `ProfessionsSeeder`
   }
 }
