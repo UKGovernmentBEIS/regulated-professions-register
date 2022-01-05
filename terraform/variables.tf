@@ -62,3 +62,8 @@ variable "notify_api_key" {
   type = string
   description = "The GOV.UK Notify API key"
 }
+
+variable "rollbar_token" {
+  type = string
+  description = "The access token to use when sending Rollbar errors"
+}

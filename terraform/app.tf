@@ -26,6 +26,7 @@ resource "cloudfoundry_app" "beis-rpr-app" {
     "NOTIFY_TEMPLATE_ID"  = var.notify_template_id
     "NOTIFY_API_KEY"      = var.notify_api_key
     "ENVIRONMENT"         = var.environment
+    "ROLLBAR_TOKEN"       = var.rollbar_token
   }
   # routes need to be declared with the app for blue green deployments to work
   routes {
