@@ -175,7 +175,7 @@ describe(RegulatoryBodyController, () => {
         });
 
         expect(response.redirect).toHaveBeenCalledWith(
-          '/admin/professions/profession-id/check-your-answers',
+          '/admin/professions/profession-id/regulated-activities/edit',
         );
       });
     });
@@ -370,7 +370,7 @@ describe(RegulatoryBodyController, () => {
         });
 
         expect(response.redirect).toHaveBeenCalledWith(
-          '/admin/professions/profession-id/check-your-answers',
+          '/admin/professions/profession-id/regulated-activities/edit',
         );
       });
     });

@@ -12,6 +12,7 @@ import { SearchController } from './search/search.controller';
 import { RegulatoryBodyController } from './admin/add-profession/regulatory-body.controller';
 import { Organisation } from '../organisations/organisation.entity';
 import { OrganisationsService } from '../organisations/organisations.service';
+import { RegulatedActivitiesController } from './admin/add-profession/regulated-activities.controller';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { OrganisationsService } from '../organisations/organisations.service';
     ProfessionsController,
     TopLevelInformationController,
     RegulatoryBodyController,
+    RegulatedActivitiesController,
     CheckYourAnswersController,
     ConfirmationController,
   ],

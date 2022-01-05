@@ -5,7 +5,8 @@
       "topLevelInformation": "Top level information",
       "regulatoryBody": "Regulatory / professional bodies",
       "checkAnswers": "Check your answers",
-      "confirmation": "New profession created"
+      "confirmation": "New profession created",
+      "regulatedActivities": "Regulated activities"
     },
     "description": "Use this section of the site to add a new profession",
     "label": {
@@ -17,6 +18,16 @@
       "regulatoryBody": {
         "regulatedAuthority": "Which body regulates this profession?",
         "mandatoryRegistration": "Is registration mandatory with professional bodies?"
+      },
+      "regulatedActivities": {
+        "activities": "Reserved activities",
+        "description": "Description of activities / regulation description"
+      }
+    },
+    "details": {
+      "regulatedActivities": {
+        "summaryText": "What are reserved activities?",
+        "text": "Reserved activities means a form of regulating a profession where the access to a professional activity or group of professional activities is reserved, directly or indirectly, by virtue of legislative, regulatory or administrative provisions to members of a regulated profession holding a specific professional qualification, including where the activity is shared with other regulated professions."
       }
     },
     "radioButtons": {
