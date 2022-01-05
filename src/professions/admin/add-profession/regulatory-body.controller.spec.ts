@@ -181,7 +181,7 @@ describe(RegulatoryBodyController, () => {
     });
 
     describe('when required parameters are not entered', () => {
-      it('does not update the profession, and re-renders the top level information view with errors', async () => {
+      it('does not update the profession, and re-renders the regulatory body form page with errors', async () => {
         const regulatoryBodyDtoWithoutMandatoryRegistration = {
           regulatoryBody: 'example-org-id',
           mandatoryRegistration: undefined,
