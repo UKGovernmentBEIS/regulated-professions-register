@@ -47,6 +47,7 @@ jobs:
       TF_VAR_papertrail_destination: ${{ secrets.PROD_PAPERTRAIL_DESTINATION }}
       TF_VAR_notify_template_id: ${{ secrets.PROD_NOTIFY_TEMPLATE_ID }}
       TF_VAR_notify_api_key: ${{ secrets.PROD_NOTIFY_API_KEY }}
+      TF_VAR_rollbar_token: ${{ secrets.PROD_ROLLBAR_TOKEN }}
     steps:
       - uses: actions/checkout@v2
       - name: Deploy latest code to Production
@@ -69,6 +70,7 @@ jobs:
       TF_VAR_papertrail_destination: ${{ secrets.STAGING_PAPERTRAIL_DESTINATION }}
       TF_VAR_notify_template_id: ${{ secrets.STAGING_NOTIFY_TEMPLATE_ID }}
       TF_VAR_notify_api_key: ${{ secrets.STAGING_NOTIFY_API_KEY }}
+      TF_VAR_rollbar_token: ${{ secrets.STAGING_ROLLBAR_TOKEN }}
     steps:
       - uses: actions/checkout@v2
       - name: Deploy latest code to Staging
