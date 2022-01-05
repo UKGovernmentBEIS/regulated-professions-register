@@ -19,7 +19,7 @@ type SeedProfession = {
   regulationType: string;
   industries: string[];
   qualification: string;
-  reservedActivities: string[];
+  reservedActivities: string;
   legislations: string[];
   mandatoryRegistration: MandatoryRegistration;
   confirmed: boolean;

@@ -56,6 +56,9 @@ export class Profession {
   })
   qualification: Qualification;
 
+  @Column({ nullable: true })
+  reservedActivities: string;
+
   @Column('text', { array: true, nullable: true })
   reservedActivitiesDeprecated: string[];
 
@@ -96,7 +99,7 @@ export class Profession {
     mandatoryRegistration?: MandatoryRegistration,
     industries?: Industry[],
     qualification?: Qualification,
-    reservedActivities?: string[],
+    reservedActivities?: string,
     legislations?: Legislation[],
     organisation?: Organisation,
     confirmed?: boolean,
@@ -110,7 +113,7 @@ export class Profession {
     this.mandatoryRegistration = mandatoryRegistration || null;
     this.industries = industries || null;
     this.qualification = qualification || null;
-    this.reservedActivitiesDeprecated = reservedActivities || null;
+    this.reservedActivities = reservedActivities || null;
     this.legislations = legislations || null;
     this.organisation = organisation || null;
     this.confirmed = confirmed || false;
