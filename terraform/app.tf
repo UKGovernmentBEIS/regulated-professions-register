@@ -25,6 +25,7 @@ resource "cloudfoundry_app" "beis-rpr-app" {
     "HOST_URL"            = var.host_url
     "NOTIFY_TEMPLATE_ID"  = var.notify_template_id
     "NOTIFY_API_KEY"      = var.notify_api_key
+    "ENVIRONMENT"         = var.environment
   }
   # routes need to be declared with the app for blue green deployments to work
   routes {

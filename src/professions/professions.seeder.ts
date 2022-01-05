@@ -8,6 +8,7 @@ import { MandatoryRegistration, Profession } from './profession.entity';
 import { Industry } from 'src/industries/industry.entity';
 import { Qualification } from 'src/qualifications/qualification.entity';
 import { Legislation } from 'src/legislations/legislation.entity';
+import { InjectData } from '../common/decorators/seeds.decorator';
 
 type SeedProfession = {
   name: string;
@@ -26,6 +27,9 @@ type SeedProfession = {
 
 @Injectable()
 export class ProfessionsSeeder implements Seeder {
+  @InjectData('professions')
+  data: SeedProfession[];
+
   constructor(
     @InjectRepository(Profession)
     private readonly professionsRepository: Repository<Profession>,
@@ -38,12 +42,8 @@ export class ProfessionsSeeder implements Seeder {
   ) {}
 
   async seed(): Promise<any> {
-    /* eslint-disable @typescript-eslint/no-var-requires */
-    const professionsData =
-      require('../../seeds/professions.json') as SeedProfession[];
-
     const professions = await Promise.all(
-      professionsData.map(async (profession) => {
+      this.data.map(async (profession) => {
         const industries = await this.industriesRepository.find({
           where: { name: In(profession.industries || []) },
         });

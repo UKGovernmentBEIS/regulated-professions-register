@@ -5,6 +5,7 @@ import { Seeder } from 'nestjs-seeder';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { Organisation } from '../organisations/organisation.entity';
+import { InjectData } from '../common/decorators/seeds.decorator';
 
 type SeedOrganisation = {
   name: string;
@@ -19,18 +20,17 @@ type SeedOrganisation = {
 
 @Injectable()
 export class OrganisationsSeeder implements Seeder {
+  @InjectData('organisations')
+  data: SeedOrganisation[];
+
   constructor(
     @InjectRepository(Organisation)
     private readonly organisationsRepository: Repository<Organisation>,
   ) {}
 
   async seed(): Promise<any> {
-    /* eslint-disable @typescript-eslint/no-var-requires */
-    const organisationsData =
-      require('../../seeds/organisations.json') as SeedOrganisation[];
-
     const organisations = await Promise.all(
-      organisationsData.map(async (organisation) => {
+      this.data.map(async (organisation) => {
         return new Organisation(
           organisation.name,
           organisation.alternateName,
