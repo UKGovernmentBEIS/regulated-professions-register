@@ -211,7 +211,7 @@ describe(RegulatoryBodyController, () => {
     describe('getSelectedOrganisationFromDtoThenProfession', () => {
       describe('when there is an existing Profession with an Organisation selected and new params are submitted', () => {
         it('returns the dto value, over the Profession', async () => {
-          const profession = createMock<Profession>({
+          profession = createMock<Profession>({
             organisation: organisation2,
           });
 
@@ -241,7 +241,7 @@ describe(RegulatoryBodyController, () => {
 
       describe('when there is an existing Profession with an Organisation selected and empty Organisation params are submitted', () => {
         it('returns the Profession value, not overwriting it', async () => {
-          const profession = createMock<Profession>({
+          profession = createMock<Profession>({
             organisation: organisation2,
           });
 
@@ -264,7 +264,7 @@ describe(RegulatoryBodyController, () => {
     describe('getSelectedMandatoryRegistrationFromDtoThenProfession', () => {
       describe('when there is an existing Profession with a Mandatory Registration value selected and new params are submitted', () => {
         it('returns the dto value, over the Profession', () => {
-          const profession = createMock<Profession>({
+          profession = createMock<Profession>({
             mandatoryRegistration: MandatoryRegistration.Mandatory,
           });
 
@@ -285,7 +285,7 @@ describe(RegulatoryBodyController, () => {
 
       describe('when there is an existing Profession with a Mandatory Registration selected and empty Mandatory Registration params are submitted', () => {
         it('returns the Profession value, not overwriting it', () => {
-          const profession = createMock<Profession>({
+          profession = createMock<Profession>({
             mandatoryRegistration: MandatoryRegistration.Mandatory,
           });
 
