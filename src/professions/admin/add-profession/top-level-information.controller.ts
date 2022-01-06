@@ -36,6 +36,7 @@ export class TopLevelInformationController {
       profession.industries || [],
       profession.occupationLocations || [],
       change,
+      this.backLink(change, id),
       errors,
     );
   }
@@ -67,6 +68,7 @@ export class TopLevelInformationController {
           topLevelDetailsDto,
         ),
         topLevelDetailsDto.change,
+        this.backLink(topLevelDetailsDto.change, id),
         errors,
       );
     }
@@ -101,6 +103,7 @@ export class TopLevelInformationController {
     selectedIndustries: Industry[],
     selectedNations: string[],
     change: boolean,
+    backLink: string,
     errors: object | undefined = undefined,
   ): Promise<void> {
     const industries = await this.industriesService.all();
@@ -122,6 +125,7 @@ export class TopLevelInformationController {
       industriesCheckboxArgs,
       nationsCheckboxArgs,
       change,
+      backLink,
       errors,
     };
 
@@ -145,5 +149,11 @@ export class TopLevelInformationController {
     topLevelDetailsDto: TopLevelDetailsDto,
   ): string[] {
     return topLevelDetailsDto.nations || profession.occupationLocations || [];
+  }
+
+  private backLink(change: boolean, id: string) {
+    return change
+      ? `/admin/professions/${id}/check-your-answers`
+      : '/admin/professions/add-profession';
   }
 }
