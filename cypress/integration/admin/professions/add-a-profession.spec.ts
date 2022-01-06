@@ -33,6 +33,21 @@ describe('Adding a new profession', () => {
       cy.get('button').contains(buttonText).click();
     });
 
+    cy.translate('professions.form.headings.regulatedActivities').then(
+      (heading) => {
+        cy.get('body').should('contain', heading);
+      },
+    );
+
+    cy.get('textarea[name="activities"]').type('An example activity');
+    cy.get('textarea[name="description"]').type(
+      'A description of the regulation',
+    );
+
+    cy.translate('app.continue').then((buttonText) => {
+      cy.get('button').contains(buttonText).click();
+    });
+
     cy.translate('professions.form.headings.checkAnswers').then((heading) => {
       cy.get('body').should('contain', heading);
     });
@@ -48,6 +63,8 @@ describe('Adding a new profession', () => {
     ).then((mandatoryRegistration) => {
       cy.get('body').should('contain', mandatoryRegistration);
     });
+    cy.get('body').should('contain', 'An example activity');
+    cy.get('body').should('contain', 'A description of the regulation');
 
     cy.translate('professions.form.button.create').then((buttonText) => {
       cy.get('button').contains(buttonText).click();

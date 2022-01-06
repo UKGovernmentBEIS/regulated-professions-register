@@ -40,6 +40,8 @@ export class CheckYourAnswersController {
       industries: industryNames,
       organisation: draftProfession.organisation.name,
       mandatoryRegistration: draftProfession.mandatoryRegistration,
+      description: draftProfession.description,
+      reservedActivities: draftProfession.reservedActivities,
     };
   }
 }

@@ -132,6 +132,50 @@
                 ]
               })
             }}
+
+            <h2 class="govuk-heading-m">{{ ("professions.form.headings.regulatedActivities" | t) }}</h2>
+
+            {{
+              govukSummaryList({
+                rows: [
+                  {
+                    key: {
+                      text: ("professions.form.label.regulatedActivities.activities" | t)
+                    },
+                    value: {
+                      text: reservedActivities
+                    },
+                    actions: {
+                      items: [
+                        {
+                          href: "/admin/professions/" + professionId + "/regulated-activities/edit?change=true",
+                          text: ("app.change" | t),
+                          visuallyHiddenText: ("professions.form.label.regulatedActivities.activities" | t)
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    key: {
+                      text: ("professions.form.label.regulatedActivities.description" | t)
+                    },
+                    value: {
+                      text: description
+                    },
+                    actions: {
+                      items: [
+                        {
+                          href: "/admin/professions/" + professionId + "/regulated-activities/edit?change=true",
+                          text: ("app.change" | t),
+                          visuallyHiddenText: ("professions.form.label.regulatedActivities.description" | t)
+                        }
+                      ]
+                    }
+                  }
+                ]
+              })
+            }}
+
             {{
               govukButton({
                 id: "submit-button",

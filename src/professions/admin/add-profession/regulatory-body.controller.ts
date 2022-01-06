@@ -94,8 +94,7 @@ export class RegulatoryBodyController {
       return res.redirect(`/admin/professions/${id}/check-your-answers`);
     }
 
-    // This will be a different page once the next page in the journey is added
-    return res.redirect(`/admin/professions/${id}/check-your-answers`);
+    return res.redirect(`/admin/professions/${id}/regulated-activities/edit`);
   }
 
   private async renderForm(

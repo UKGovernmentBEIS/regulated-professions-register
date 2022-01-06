@@ -5,4 +5,6 @@ export interface CheckYourAnswersTemplate {
   professionId: string;
   organisation: string;
   mandatoryRegistration: string;
+  reservedActivities: string;
+  description: string;
 }
