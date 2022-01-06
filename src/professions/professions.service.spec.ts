@@ -3,39 +3,17 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Connection, EntityManager, QueryRunner, Repository } from 'typeorm';
 
-import { Industry } from '../industries/industry.entity';
-import { Qualification } from '../qualifications/qualification.entity';
-import { MandatoryRegistration, Profession } from './profession.entity';
+import professionFactory from '../testutils/factories/profession';
+import { Profession } from './profession.entity';
 import { ProfessionsService } from './professions.service';
 
-const profession = new Profession(
-  'Registered Gas Engineer',
-  'Gas installer/repairer',
-  'registered-gas-engineer',
-  'Gas installers work on gas appliances and installations.',
-  ['GB-ENG', 'GB-SCT', 'GB-WLS', 'GB-NIR'],
-  'Reserves of activities',
-  MandatoryRegistration.Voluntary,
-  [new Industry('Construction & Engineering')],
-  new Qualification('ATT - Attestation of competence , Art. 11 a'),
-  'Gas Safe Register is the official list of gas engineers in the UK, Isle of Man and Guernsey. To work on gas appliances and installations you must be on the gas safe register. The register exists to protect the public from unsafe gas work (EN)',
-);
+const gasSafeEngineer = professionFactory.build({
+  name: 'Registered Gas Engineer',
+});
+
 const professionArray = [
-  profession,
-  new Profession(
-    'Social worker',
-    'Social worker',
-    'social-worker',
-    'Social workers are trained to: make assessments, taking account of a range of factors',
-    ['GB-ENG'],
-    'Protected title',
-    MandatoryRegistration.Mandatory,
-    [new Industry('Health')],
-    new Qualification(
-      'PS3 - Diploma of post-secondary level (3-4 years) , Art. 11 d',
-    ),
-    'England, must be registered with the Health and Care Professions Council (HCPC); Northern Ireland, must be registered with the Northern Ireland Social Care Council (NISCC)',
-  ),
+  gasSafeEngineer,
+  professionFactory.build({ name: 'Social worker' }),
 ];
 
 describe('Profession', () => {
@@ -61,10 +39,10 @@ describe('Profession', () => {
               return professionArray;
             },
             findOne: () => {
-              return profession;
+              return gasSafeEngineer;
             },
             save: () => {
-              return profession;
+              return gasSafeEngineer;
             },
           },
         },
@@ -121,7 +99,7 @@ describe('Profession', () => {
 
   describe('save', () => {
     it('should save a Profession', async () => {
-      const profession = new Profession('Example Profession');
+      const profession = professionFactory.build();
       const repoSpy = jest.spyOn(repo, 'save');
 
       await service.save(profession);
@@ -134,7 +112,7 @@ describe('Profession', () => {
     describe('setting the slug on a Profession', () => {
       describe('when there are no colliding slugs', () => {
         it('should save the Profession with the "base" slug', async () => {
-          const profession = new Profession('Example Profession');
+          const profession = professionFactory.build();
 
           manager.findOne.mockReturnValue(null);
 
@@ -168,7 +146,7 @@ describe('Profession', () => {
 
       describe('when there is a single colliding slug', () => {
         it('should save the Profession with a slug appended with "-1"', async () => {
-          const profession = new Profession('Example Profession');
+          const profession = professionFactory.build();
 
           manager.findOne
             .mockImplementationOnce(async () => {
@@ -188,21 +166,9 @@ describe('Profession', () => {
           });
 
           expect(manager.save).toHaveBeenCalledWith(
-            new Profession(
-              'Example Profession',
-              '',
-              'example-profession-1',
-              '',
-              null,
-              '',
-              null,
-              null,
-              null,
-              null,
-              null,
-              null,
-              true,
-            ),
+            expect.objectContaining({
+              slug: 'example-profession-1',
+            }),
           );
           expect(result.slug).toEqual('example-profession-1');
         });
@@ -210,7 +176,7 @@ describe('Profession', () => {
 
       describe('when there are multiple colliding slugs', () => {
         it('should save the Profession with a slug appended with a unique postfix', async () => {
-          const profession = new Profession('Example Profession');
+          const profession = professionFactory.build();
 
           manager.findOne
             .mockImplementationOnce(async () => {
@@ -242,21 +208,9 @@ describe('Profession', () => {
           });
 
           expect(manager.save).toHaveBeenCalledWith(
-            new Profession(
-              'Example Profession',
-              '',
-              'example-profession-3',
-              '',
-              null,
-              '',
-              null,
-              null,
-              null,
-              null,
-              null,
-              null,
-              true,
-            ),
+            expect.objectContaining({
+              slug: 'example-profession-3',
+            }),
           );
           expect(result.slug).toEqual('example-profession-3');
         });
@@ -266,7 +220,7 @@ describe('Profession', () => {
     describe('marking the Profession as "Confirmed"', () => {
       describe('when the Profession has not yet been confirmed', () => {
         it('confirms the Profession', async () => {
-          const profession = new Profession('Example Profession');
+          const profession = professionFactory.build();
 
           manager.findOne
             .mockImplementationOnce(async () => {
@@ -281,21 +235,9 @@ describe('Profession', () => {
 
         describe('when the Profession has already been confirmed', () => {
           it('throws an error', async () => {
-            const existingProfession = new Profession(
-              'Example Profession',
-              '',
-              'example-profession-3',
-              '',
-              null,
-              '',
-              null,
-              null,
-              null,
-              null,
-              null,
-              null,
-              true,
-            );
+            const existingProfession = professionFactory.build({
+              confirmed: true,
+            });
 
             manager.findOne
               .mockImplementationOnce(async () => {
