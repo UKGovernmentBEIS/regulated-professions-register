@@ -3,9 +3,13 @@ import { Queue } from 'bull';
 import { getQueueToken } from '@nestjs/bull';
 
 import { UserMailer } from './user.mailer';
-import { User } from './user.entity';
+import userFactory from '../testutils/factories/user';
 
-const user = new User('email@example.com', 'name', '212121');
+const user = userFactory.build({
+  email: 'email@example.com',
+  name: 'name',
+  externalIdentifier: '212121',
+});
 
 describe('UserMailer', () => {
   let service: UserMailer;
