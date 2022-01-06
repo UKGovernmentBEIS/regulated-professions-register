@@ -1,12 +1,13 @@
 import { createMock, DeepMocked } from '@golevelup/ts-jest';
 import { I18nService } from 'nestjs-i18n';
+import userFactory from '../testutils/factories/user';
 
-import { User, UserRole } from './user.entity';
+import { UserRole } from './user.entity';
 import { UserPresenter } from './user.presenter';
 
 describe('UserPresenter', () => {
   const roles: UserRole[] = [UserRole.Admin];
-  const user: DeepMocked<User> = createMock<User>({
+  const user = userFactory.build({
     id: 'some-uuid-string',
     email: 'email@example.com',
     name: 'name',
@@ -62,7 +63,7 @@ describe('UserPresenter', () => {
 
     describe('when there are multiple roles', () => {
       const roles: UserRole[] = [UserRole.Admin, UserRole.Editor];
-      const user: DeepMocked<User> = createMock<User>({
+      const user = userFactory.build({
         id: 'some-uuid-string',
         name: 'name',
         email: 'email@example.com',
