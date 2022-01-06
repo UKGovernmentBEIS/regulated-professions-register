@@ -18,12 +18,13 @@ import { OrganisationsModule } from './organisations/organisations.module';
 import { IndustriesModule } from './industries/industries.module';
 
 import dbConfiguration from './config/db.config';
+import redisConfiguration from './config/redis.config';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [dbConfiguration],
+      load: [dbConfiguration, redisConfiguration],
     }),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
@@ -39,11 +40,11 @@ import dbConfiguration from './config/db.config';
         watch: process.env.NODE_ENV === 'development',
       },
     }),
-    BullModule.forRoot({
-      redis: {
-        host: process.env.REDIS_HOST || 'localhost',
-        port: Number(process.env.REDIS_PORT || 6379),
-      },
+    BullModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
+        ...(await configService.get('redis')),
+      }),
     }),
     BullModule.registerQueue({
       name: 'default',
