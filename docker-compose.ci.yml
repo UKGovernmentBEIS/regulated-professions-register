@@ -27,7 +27,7 @@ services:
       ADMIN_PASSWORD: '${ADMIN_PASSWORD}'
       EDITOR_USERNAME: '${EDITOR_USERNAME}'
       EDITOR_PASSWORD: '${EDITOR_PASSWORD}'
-      REDIS_HOST: redis
+      REDIS_URI: redis://redis:6379
     networks:
       - test
 
