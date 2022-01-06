@@ -1,7 +1,7 @@
 import { createMock, DeepMocked } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Response } from 'express';
-import { Profession } from '../../profession.entity';
+import professionFactory from '../../../testutils/factories/profession';
 import { ProfessionsService } from '../../professions.service';
 import { RegulatedActivitiesDto } from './dto/regulated-activities.dto';
 import { RegulatedActivitiesController } from './regulated-activities.controller';
@@ -10,9 +10,10 @@ describe(RegulatedActivitiesController, () => {
   let controller: RegulatedActivitiesController;
   let professionsService: DeepMocked<ProfessionsService>;
   let response: DeepMocked<Response>;
-  let profession: DeepMocked<Profession>;
 
   beforeEach(async () => {
+    const profession = professionFactory.build();
+
     professionsService = createMock<ProfessionsService>({
       find: async () => profession,
     });
@@ -33,11 +34,13 @@ describe(RegulatedActivitiesController, () => {
 
   describe('edit', () => {
     it('should render the regulated activities page, passing in any values on the Profession that have already been set', async () => {
-      profession = createMock<Profession>({
+      const profession = professionFactory.build({
         id: 'profession-id',
         reservedActivities: 'Example reserved activities',
         description: 'A description of the profession',
       });
+
+      professionsService.find.mockImplementation(async () => profession);
 
       await controller.edit(response, 'profession-id', false);
 
@@ -57,6 +60,10 @@ describe(RegulatedActivitiesController, () => {
     describe('when all required parameters are entered', () => {
       describe('when the "Change" query param is false', () => {
         it('updates the Profession and redirects to the next page in the journey', async () => {
+          const profession = professionFactory.build({ id: 'profession-id' });
+
+          professionsService.find.mockImplementation(async () => profession);
+
           const regulatedActivitiesDto: RegulatedActivitiesDto = {
             activities: 'Example reserved activities',
             description: 'A description of the profession',
@@ -69,11 +76,13 @@ describe(RegulatedActivitiesController, () => {
             regulatedActivitiesDto,
           );
 
-          expect(professionsService.save).toHaveBeenCalledWith({
-            id: 'profession-id',
-            description: 'A description of the profession',
-            reservedActivities: 'Example reserved activities',
-          });
+          expect(professionsService.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              id: 'profession-id',
+              description: 'A description of the profession',
+              reservedActivities: 'Example reserved activities',
+            }),
+          );
 
           // This will be the Qualification information page in future
           expect(response.redirect).toHaveBeenCalledWith(
@@ -84,6 +93,10 @@ describe(RegulatedActivitiesController, () => {
 
       describe('when the "Change" query param is true', () => {
         it('updates the Profession and redirects to the Check your answers page', async () => {
+          const profession = professionFactory.build({ id: 'profession-id' });
+
+          professionsService.find.mockImplementation(async () => profession);
+
           const regulatedActivitiesDto: RegulatedActivitiesDto = {
             activities: 'Example reserved activities',
             description: 'A description of the profession',
@@ -96,11 +109,13 @@ describe(RegulatedActivitiesController, () => {
             regulatedActivitiesDto,
           );
 
-          expect(professionsService.save).toHaveBeenCalledWith({
-            id: 'profession-id',
-            description: 'A description of the profession',
-            reservedActivities: 'Example reserved activities',
-          });
+          expect(professionsService.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              id: 'profession-id',
+              description: 'A description of the profession',
+              reservedActivities: 'Example reserved activities',
+            }),
+          );
 
           expect(response.redirect).toHaveBeenCalledWith(
             '/admin/professions/profession-id/check-your-answers',
@@ -111,6 +126,10 @@ describe(RegulatedActivitiesController, () => {
 
     describe('when required parameters are not entered', () => {
       it('does not update the profession, and re-renders the regulated activities form page with errors', async () => {
+        const profession = professionFactory.build();
+
+        professionsService.find.mockImplementation(async () => profession);
+
         const regulatedActivitiesDto: RegulatedActivitiesDto = {
           activities: 'Example reserved activities',
           description: undefined,
@@ -142,7 +161,7 @@ describe(RegulatedActivitiesController, () => {
     describe('getPreviouslyEnteredReservedActivitiesFromDtoThenProfession', () => {
       describe('when there is an existing Profession with ReservedActivities and new params are submitted', () => {
         it('returns the dto value, over the Profession', () => {
-          profession = createMock<Profession>({
+          const profession = professionFactory.build({
             reservedActivities: 'Older reserved activities',
           });
 
@@ -164,7 +183,7 @@ describe(RegulatedActivitiesController, () => {
 
       describe('when there is an existing Profession with ReservedActivities and empty params are submitted', () => {
         it('returns the Profession value, not overwriting it', () => {
-          profession = createMock<Profession>({
+          const profession = professionFactory.build({
             reservedActivities: 'Older reserved activities',
           });
 
@@ -188,7 +207,7 @@ describe(RegulatedActivitiesController, () => {
     describe('getPreviouslyEnteredDescriptionFromDtoThenProfession ', () => {
       describe('when there is an existing Profession with a Description and new params are submitted', () => {
         it('returns the dto value, over the Profession', () => {
-          profession = createMock<Profession>({
+          const profession = professionFactory.build({
             description: 'Older description',
           });
 
@@ -209,7 +228,7 @@ describe(RegulatedActivitiesController, () => {
 
       describe('when there is an existing Profession with Description and empty params are submitted', () => {
         it('returns the Profession value, not overwriting it', () => {
-          profession = createMock<Profession>({
+          const profession = professionFactory.build({
             description: 'Older description',
           });
 
