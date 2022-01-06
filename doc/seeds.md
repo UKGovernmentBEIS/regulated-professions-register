@@ -30,7 +30,8 @@ cf ssh beis-rpr-prod
 Once you're logged in, you can run:
 
 ```bash
-NODE_ENV=production /usr/local/bin/node dist/seeder
+cd /srv/app
+script/seed
 ```
 
 At the moment, we only seed intiial staging / production users, but this may change in future.

@@ -1,0 +1,5 @@
+#!/bin/sh
+
+# script/seed: Seed the database with default values
+
+script/npm run seed "$@"

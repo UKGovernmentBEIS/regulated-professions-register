@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# script/npm: Run an `npm` command. This is particularly useful in production
+#             as npm is not part of the PATH.
+
+if [ "$NODE_ENV" = 'production' ]; then
+  PATH="/usr/local/bin:$PATH" npm "$@"
+else
+  npm "$@"
+fi
