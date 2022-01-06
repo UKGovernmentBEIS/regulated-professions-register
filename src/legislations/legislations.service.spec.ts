@@ -1,21 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import legislationFactory from '../testutils/factories/legislation';
 
 import { Legislation } from './legislation.entity';
 import { LegislationsService } from './legislations.service';
 
-const legislation = new Legislation(
-  'Gas Safety (Installation and Use ) Regulations 1998',
-  'http://www.legislation.gov.uk/uksi/1998/2451/made',
-);
-const legislationArray = [
-  legislation,
-  new Legislation(
-    'Health and Social Work Professions Order 2001.',
-    'http://www.hcpc-uk.org/aboutus/legislation/',
-  ),
-];
+const legislation = legislationFactory.build();
+const legislationArray = legislationFactory.buildList(2);
 
 describe('LegislationsService', () => {
   let service: LegislationsService;

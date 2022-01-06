@@ -2,12 +2,13 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Connection, Repository, SelectQueryBuilder } from 'typeorm';
 import { createMock, DeepMocked } from '@golevelup/ts-jest';
+import userFactory from '../testutils/factories/user';
 
 import { User } from './user.entity';
 import { UsersService } from './users.service';
 
-const user = new User('email@example.com', 'name', '212121');
-const userArray = [user, new User('email2@example.com', 'name2', '1234')];
+const user = userFactory.build();
+const userArray = userFactory.buildList(2);
 
 describe('UsersService', () => {
   let service: UsersService;

@@ -1,9 +1,10 @@
 import { DeepMocked, createMock } from '@golevelup/ts-jest';
 import { TestingModule, Test } from '@nestjs/testing';
 import { I18nService } from 'nestjs-i18n';
-import { Industry } from '../../../industries/industry.entity';
-import { Organisation } from '../../../organisations/organisation.entity';
-import { MandatoryRegistration, Profession } from '../../profession.entity';
+import industryFactory from '../../../testutils/factories/industry';
+import organisationFactory from '../../../testutils/factories/organisation';
+import professionFactory from '../../../testutils/factories/profession';
+import { MandatoryRegistration } from '../../profession.entity';
 import { ProfessionsService } from '../../professions.service';
 import { CheckYourAnswersController } from './check-your-answers.controller';
 
@@ -11,15 +12,14 @@ describe('CheckYourAnswersController', () => {
   let controller: CheckYourAnswersController;
   let professionsService: DeepMocked<ProfessionsService>;
   let i18nService: DeepMocked<I18nService>;
-  let profession: DeepMocked<Profession>;
 
   beforeEach(async () => {
-    profession = createMock<Profession>({
+    const profession = professionFactory.build({
       id: 'profession-id',
       name: 'Gas Safe Engineer',
       occupationLocations: ['GB-ENG'],
-      industries: [new Industry('industries.construction')],
-      organisation: createMock<Organisation>({
+      industries: [industryFactory.build({ name: 'industries.construction' })],
+      organisation: organisationFactory.build({
         name: 'Council of Gas Registered Engineers',
       }),
       mandatoryRegistration: MandatoryRegistration.Voluntary,

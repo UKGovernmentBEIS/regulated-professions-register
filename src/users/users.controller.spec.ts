@@ -10,6 +10,7 @@ import { User, UserRole } from './user.entity';
 import { UsersPresenter } from './users.presenter';
 import { UserPresenter } from './user.presenter';
 import { UserMailer } from './user.mailer';
+import userFactory from '../testutils/factories/user';
 
 const name = 'Example Name';
 const email = 'name@example.com';
@@ -26,7 +27,7 @@ describe('UsersController', () => {
   let user: User;
 
   beforeEach(async () => {
-    user = createMock<User>({
+    user = userFactory.build({
       id: 'user-uuid',
       name: name,
       email: email,
@@ -158,13 +159,15 @@ describe('UsersController', () => {
       expect(externalUserCreationService.createExternalUser).toBeCalledWith(
         email,
       );
-      expect(usersService.save).toBeCalledWith({
-        name,
-        email,
-        externalIdentifier,
-        roles,
-        confirmed: true,
-      });
+      expect(usersService.save).toBeCalledWith(
+        expect.objectContaining({
+          name,
+          email,
+          externalIdentifier,
+          roles,
+          confirmed: true,
+        }),
+      );
       expect(userMailer.confirmation).toBeCalledWith(
         user,
         'http://example.org',
@@ -204,13 +207,15 @@ describe('UsersController', () => {
 
       await controller.complete(res, user.id);
 
-      expect(usersService.attemptAdd).toBeCalledWith({
-        name,
-        email,
-        externalIdentifier,
-        roles,
-        confirmed: true,
-      });
+      expect(usersService.attemptAdd).toBeCalledWith(
+        expect.objectContaining({
+          name,
+          email,
+          externalIdentifier,
+          roles,
+          confirmed: true,
+        }),
+      );
       expect(res.redirect).toBeCalledWith('done');
     });
 
