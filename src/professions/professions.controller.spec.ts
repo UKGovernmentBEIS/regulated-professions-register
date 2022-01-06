@@ -3,24 +3,19 @@ import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Response } from 'express';
 import { I18nService } from 'nestjs-i18n';
-import { Industry } from '../industries/industry.entity';
-import { Profession } from './profession.entity';
+import industryFactory from '../testutils/factories/industry';
+import professionFactory from '../testutils/factories/profession';
 
 import { ProfessionsController } from './professions.controller';
 import { ProfessionsService } from './professions.service';
 
-const industry = new Industry('industries.example');
-const exampleProfession = new Profession(
-  'Example Profession',
-  '',
-  null,
-  '',
-  ['GB-ENG'],
-  '',
-  null,
-  [industry],
-);
-exampleProfession.id = 'profession-id';
+const industry = industryFactory.build({ name: 'industries.example' });
+const exampleProfession = professionFactory.build({
+  id: 'profession-id',
+  name: 'Example Profession',
+  occupationLocations: ['GB-ENG'],
+  industries: [industry],
+});
 
 describe('ProfessionsController', () => {
   let controller: ProfessionsController;
