@@ -2,18 +2,20 @@ import { DeepMocked, createMock } from '@golevelup/ts-jest';
 import { TestingModule, Test } from '@nestjs/testing';
 import { Response } from 'express';
 import { I18nService } from 'nestjs-i18n';
+import professionFactory from '../../../testutils/factories/profession';
+
 import { IndustriesService } from '../../../industries/industries.service';
 import { Industry } from '../../../industries/industry.entity';
-import { Profession } from '../../profession.entity';
 import { ProfessionsService } from '../../professions.service';
 import { TopLevelInformationController } from './top-level-information.controller';
+import industryFactory from '../../../testutils/factories/industry';
+import industry from '../../../testutils/factories/industry';
 
 describe('TopLevelInformationController', () => {
   let controller: TopLevelInformationController;
   let professionsService: DeepMocked<ProfessionsService>;
   let industriesService: DeepMocked<IndustriesService>;
   let response: DeepMocked<Response>;
-  let profession: DeepMocked<Profession>;
   let i18nService: DeepMocked<I18nService>;
 
   const healthIndustry = new Industry('industries.health');
@@ -26,7 +28,7 @@ describe('TopLevelInformationController', () => {
   const industries = [healthIndustry, constructionIndustry];
 
   beforeEach(async () => {
-    profession = createMock<Profession>({
+    const profession = professionFactory.build({
       id: 'profession-id',
       industries: null,
       occupationLocations: null,
@@ -77,8 +79,9 @@ describe('TopLevelInformationController', () => {
 
   describe('edit', () => {
     describe('when editing a just-created, blank Profession', () => {
-      const blankProfession = new Profession();
-      blankProfession.id = 'profession-id';
+      const blankProfession = professionFactory
+        .justCreated('profession-id')
+        .build();
 
       it('should fetch all Industries and Nations to be displayed in an option select, with none of them checked', async () => {
         professionsService.find.mockImplementation(async () => blankProfession);
@@ -88,7 +91,7 @@ describe('TopLevelInformationController', () => {
         expect(response.render).toHaveBeenCalledWith(
           'professions/admin/add-profession/top-level-information',
           {
-            name: null,
+            name: undefined,
             industriesCheckboxArgs: [
               {
                 text: 'Health',
@@ -132,20 +135,16 @@ describe('TopLevelInformationController', () => {
     });
 
     describe('when an existing Profession is found', () => {
-      const selectedIndustry = new Industry('industries.health');
-      selectedIndustry.id = 'health-uuid';
-
-      const existingProfession = new Profession(
-        'Example Profession',
-        null,
-        null,
-        null,
-        ['GB-ENG', 'GB-SCT'],
-        null,
-        null,
-        [selectedIndustry],
-      );
-      existingProfession.id = 'profession-id';
+      const existingProfession = professionFactory.build({
+        name: 'Example Profession',
+        occupationLocations: ['GB-ENG', 'GB-SCT'],
+        industries: [
+          industryFactory.build({
+            id: 'health-uuid',
+            name: 'industries.health ',
+          }),
+        ],
+      });
 
       it('should pre-fill the Profession name and pre-select checkboxes for selected Nations and Industries', async () => {
         professionsService.find.mockImplementation(
@@ -214,12 +213,14 @@ describe('TopLevelInformationController', () => {
 
         await controller.update(topLevelDetailsDto, response, 'profession-id');
 
-        expect(professionsService.save).toHaveBeenCalledWith({
-          id: 'profession-id',
-          name: 'Gas Safe Engineer',
-          occupationLocations: ['GB-ENG'],
-          industries,
-        });
+        expect(professionsService.save).toHaveBeenCalledWith(
+          expect.objectContaining({
+            id: 'profession-id',
+            name: 'Gas Safe Engineer',
+            occupationLocations: ['GB-ENG'],
+            industries,
+          }),
+        );
 
         expect(response.redirect).toHaveBeenCalledWith(
           '/admin/professions/profession-id/regulatory-body/edit',
@@ -246,23 +247,16 @@ describe('TopLevelInformationController', () => {
       });
 
       describe('getSelectedIndustriesFromDtoThenProfession', () => {
-        const industry = new Industry('industries.health');
-        const profession = new Profession(
-          'Example Profession',
-          null,
-          null,
-          null,
-          ['GB-ENG', 'GB-SCT'],
-          null,
-          null,
-          [industry],
-        );
-
         describe('when there is an existing Profession with Industries selected and new params are submitted', () => {
           it('returns the dto value, over the Profession', async () => {
-            const replacementIndustry = new Industry(
-              'industries.constructionAndEngineering',
-            );
+            const profession = professionFactory.build({
+              occupationLocations: ['GB-ENG', 'GB-SCT'],
+              industries: [industryFactory.build()],
+            });
+
+            const replacementIndustry = industryFactory.build({
+              name: 'industries.constructionAndEngineering',
+            });
 
             const topLevelDetailsWithNewIndustries = {
               name: 'Example Profession',
@@ -286,7 +280,15 @@ describe('TopLevelInformationController', () => {
 
         describe('when there is an existing Profession with Industries selected and empty Industry params are submitted', () => {
           it('returns the Profession value', async () => {
-            const topLevelDetailsWithNewIndustries = {
+            const industry = industryFactory.build();
+            const profession = professionFactory.build({
+              occupationLocations: ['GB-ENG', 'GB-SCT'],
+              industries: [industry],
+            });
+
+            professionsService.find.mockImplementation(async () => profession);
+
+            const topLevelDetailsWithMissingIndustries = {
               name: 'Gas Safe Engineer',
               nations: ['GB-ENG'],
               industries: null,
@@ -296,16 +298,18 @@ describe('TopLevelInformationController', () => {
             await expect(
               controller.getSelectedIndustriesFromDtoThenProfession(
                 profession,
-                topLevelDetailsWithNewIndustries,
+                topLevelDetailsWithMissingIndustries,
               ),
             ).resolves.toEqual([industry]);
           });
         });
 
         describe('when there are not yet any Industries on the profession and empty Industries params are submitted', () => {
-          const blankProfession = new Profession();
-
           it('returns an empty array', async () => {
+            const blankProfession = professionFactory
+              .justCreated('profession-id')
+              .build();
+
             const topLevelDetailsWithMissingIndustries = {
               name: 'Gas Safe Engineer',
               nations: ['GB-ENG'],
@@ -324,19 +328,13 @@ describe('TopLevelInformationController', () => {
       });
 
       describe('getSelectedNationsFromDtoThenProfession', () => {
-        const profession = new Profession(
-          'Example Profession',
-          null,
-          null,
-          null,
-          ['GB-ENG', 'GB-SCT'],
-          null,
-          null,
-          [new Industry('industries.health')],
-        );
-
         describe('when there is an existing Profession with Nations selected and new params are submitted', () => {
           it('returns the dto value, over the Profession', () => {
+            const profession = professionFactory.build({
+              occupationLocations: ['GB-ENG', 'GB-SCT'],
+              industries: [industry.build()],
+            });
+
             const topLevelDetailsWithNewNations = {
               name: 'Gas Safe Engineer',
               nations: ['GB-NIR'],
@@ -355,6 +353,11 @@ describe('TopLevelInformationController', () => {
 
         describe('when there is an existing Profession with Nations selected and empty Nation params are submitted', () => {
           it('returns the Profession value', () => {
+            const profession = professionFactory.build({
+              occupationLocations: ['GB-ENG', 'GB-SCT'],
+              industries: [industry.build()],
+            });
+
             const topLevelDetailsWithMissingNations = {
               name: 'Gas Safe Engineer',
               nations: undefined,
@@ -372,9 +375,11 @@ describe('TopLevelInformationController', () => {
         });
 
         describe('when there are not yet any Nations on the profession and empty Nation params are submitted', () => {
-          const blankProfession = new Profession();
-
           it('returns an empty array', () => {
+            const blankProfession = professionFactory
+              .justCreated('profession-id')
+              .build();
+
             const topLevelDetailsWithMissingNations = {
               name: 'Gas Safe Engineer',
               nations: undefined,
@@ -395,21 +400,11 @@ describe('TopLevelInformationController', () => {
 
     describe('the "change" query param', () => {
       it('redirects to check your answers when true', async () => {
-        const existingProfession = new Profession(
-          'Example Profession',
-          null,
-          null,
-          null,
-          ['GB-ENG', 'GB-SCT'],
-          null,
-          null,
-          [constructionIndustry],
-        );
-        existingProfession.id = 'profession-id';
+        const profession = professionFactory.build({
+          id: 'profession-id',
+        });
 
-        professionsService.find.mockImplementation(
-          async () => existingProfession,
-        );
+        professionsService.find.mockImplementation(async () => profession);
 
         const topLevelDetailsDtoWithChangeParam = {
           name: 'A new profession',
@@ -432,21 +427,11 @@ describe('TopLevelInformationController', () => {
       });
 
       it('continues to the next step in the journey when false', async () => {
-        const existingProfession = new Profession(
-          'Example Profession',
-          null,
-          null,
-          null,
-          ['GB-ENG', 'GB-SCT'],
-          null,
-          null,
-          [constructionIndustry],
-        );
-        existingProfession.id = 'profession-id';
+        const profession = professionFactory.build({
+          id: 'profession-id',
+        });
 
-        professionsService.find.mockImplementation(
-          async () => existingProfession,
-        );
+        professionsService.find.mockImplementation(async () => profession);
 
         const topLevelDetailsDtoWithoutChangeParam = {
           name: 'A new profession',
