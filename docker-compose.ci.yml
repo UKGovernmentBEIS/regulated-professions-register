@@ -30,6 +30,9 @@ services:
       REDIS_URI: redis://redis:6379
     networks:
       - test
+    volumes:
+      - ./cypress/screenshots:/srv/app/cypress/screenshots:Z
+      - ./cypress/videos:/srv/app/cypress/videos:Z
 
   test-db:
     image: postgres
