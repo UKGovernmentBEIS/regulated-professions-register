@@ -1,8 +1,6 @@
 import { DeepMocked, createMock } from '@golevelup/ts-jest';
 import { TestingModule, Test } from '@nestjs/testing';
 import { Response } from 'express';
-import { IndustriesService } from '../../../industries/industries.service';
-import { Industry } from '../../../industries/industry.entity';
 import professionFactory from '../../../testutils/factories/profession';
 import { Profession } from '../../profession.entity';
 import { ProfessionsService } from '../../professions.service';
@@ -11,7 +9,6 @@ import { ConfirmationController } from './confirmation.controller';
 describe('ConfirmationController', () => {
   let controller: ConfirmationController;
   let professionsService: DeepMocked<ProfessionsService>;
-  let industriesService: DeepMocked<IndustriesService>;
   let profession: Profession;
 
   beforeEach(async () => {
@@ -24,13 +21,11 @@ describe('ConfirmationController', () => {
       find: async () => profession,
       save: async () => profession,
     });
-    industriesService = createMock<IndustriesService>();
 
     const module: TestingModule = await Test.createTestingModule({
       controllers: [ConfirmationController],
       providers: [
         { provide: ProfessionsService, useValue: professionsService },
-        { provide: IndustriesService, useValue: industriesService },
       ],
     }).compile();
 
