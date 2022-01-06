@@ -1,7 +1,27 @@
 import { registerAs } from '@nestjs/config';
 import { config as setConfig } from 'dotenv';
 
+import IORedis from 'ioredis';
+
 setConfig({ path: `.env.${process.env.NODE_ENV}` });
+
+const redisOptsFromUrl = (urlString: string): IORedis.RedisOptions => {
+  const redisOpts: IORedis.RedisOptions = {};
+  try {
+    const redisUrl = new URL(urlString);
+    redisOpts.port = Number(redisUrl.port) || 6379;
+    redisOpts.host = redisUrl.hostname;
+    if (redisUrl.password) {
+      redisOpts.password = redisUrl.password;
+    }
+    if (redisUrl.protocol === 'rediss:') {
+      redisOpts.tls = {};
+    }
+  } catch (e) {
+    throw new Error(e.message);
+  }
+  return redisOpts;
+};
 
 export default registerAs('redis', () => {
   let redisURI: string;
@@ -14,6 +34,6 @@ export default registerAs('redis', () => {
   }
 
   return {
-    redis: redisURI,
+    redis: redisOptsFromUrl(redisURI),
   };
 });
