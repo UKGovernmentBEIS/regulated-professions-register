@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import organisationFactory from '../testutils/factories/organisation';
 import { Organisation } from './organisation.entity';
 import { OrganisationsService } from './organisations.service';
 
@@ -8,17 +9,7 @@ describe('OrganisationsService', () => {
   let service: OrganisationsService;
   let repo: Repository<Organisation>;
 
-  const organisation = new Organisation(
-    'Department of Business, Energy and Industrial Strategy',
-    'BEIS',
-    '123 Fake Street',
-    'www.beis.gov.uk',
-    'beis@example.com',
-    'contact-us.example.com',
-    '0123456789',
-    '0123456780',
-    [],
-  );
+  const organisation = organisationFactory.build();
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
