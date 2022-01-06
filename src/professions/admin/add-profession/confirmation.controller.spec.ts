@@ -3,6 +3,7 @@ import { TestingModule, Test } from '@nestjs/testing';
 import { Response } from 'express';
 import { IndustriesService } from '../../../industries/industries.service';
 import { Industry } from '../../../industries/industry.entity';
+import professionFactory from '../../../testutils/factories/profession';
 import { Profession } from '../../profession.entity';
 import { ProfessionsService } from '../../professions.service';
 import { ConfirmationController } from './confirmation.controller';
@@ -11,14 +12,12 @@ describe('ConfirmationController', () => {
   let controller: ConfirmationController;
   let professionsService: DeepMocked<ProfessionsService>;
   let industriesService: DeepMocked<IndustriesService>;
-  let profession: DeepMocked<Profession>;
+  let profession: Profession;
 
   beforeEach(async () => {
-    profession = createMock<Profession>({
+    profession = professionFactory.build({
       id: 'profession-id',
       name: 'Gas Safe Engineer',
-      occupationLocations: ['GB-ENG'],
-      industries: [new Industry('industries.construction')],
     });
 
     professionsService = createMock<ProfessionsService>({
