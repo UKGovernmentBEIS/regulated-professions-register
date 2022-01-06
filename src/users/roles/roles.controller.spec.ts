@@ -5,6 +5,7 @@ import { RolesController } from './roles.controller';
 import { createMock, DeepMocked } from '@golevelup/ts-jest';
 import { Request, Response } from 'express';
 import { createMockRequest } from '../../common/create-mock-request';
+import userFactory from '../../testutils/factories/user';
 
 describe('RolesController', () => {
   let controller: RolesController;
@@ -12,7 +13,7 @@ describe('RolesController', () => {
   let user: User;
 
   beforeEach(async () => {
-    user = createMock<User>({
+    user = userFactory.build({
       id: 'user-uuid',
     });
 
@@ -79,10 +80,12 @@ describe('RolesController', () => {
       };
       await controller.create(rolesDto, 'user-uuid', res);
 
-      expect(usersService.save).toHaveBeenCalledWith({
-        id: 'user-uuid',
-        rolesDto,
-      });
+      expect(usersService.save).toHaveBeenCalledWith(
+        expect.objectContaining({
+          id: 'user-uuid',
+          ...rolesDto,
+        }),
+      );
       expect(res.redirect).toHaveBeenCalledWith(
         `/admin/users/user-uuid/confirm`,
       );
