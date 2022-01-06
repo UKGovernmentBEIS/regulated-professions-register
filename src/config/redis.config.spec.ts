@@ -27,7 +27,12 @@ describe('redisConfiguration', () => {
       process.env['VCAP_SERVICES'] = JSON.stringify(vcap_json);
 
       expect(redisConfiguration()).toEqual({
-        redis: 'rediss://:password@host:6379',
+        redis: {
+          port: 6379,
+          host: 'host',
+          password: 'password',
+          tls: {},
+        },
       });
     });
   });
@@ -37,7 +42,10 @@ describe('redisConfiguration', () => {
 
     it('should get the Redis configuration from the REDIS_URI environment variable', () => {
       expect(redisConfiguration()).toEqual({
-        redis: 'redis://localhost:6379',
+        redis: {
+          port: 6379,
+          host: 'localhost',
+        },
       });
     });
   });
