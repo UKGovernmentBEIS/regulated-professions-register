@@ -4,12 +4,13 @@ import { Repository } from 'typeorm';
 
 import { Industry } from './industry.entity';
 import { IndustriesService } from './industries.service';
+import industryFactory from '../testutils/factories/industry';
 
 describe('IndustriesService', () => {
   let service: IndustriesService;
   let repo: Repository<Industry>;
 
-  const industry = new Industry('finance');
+  const industry = industryFactory.build();
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -55,7 +56,7 @@ describe('IndustriesService', () => {
 
   describe('findByIds', () => {
     it('should return all Industries for the given IDs', async () => {
-      const shippingIndustry = new Industry('Shipping');
+      const shippingIndustry = industryFactory.build({ name: 'Shipping' });
       const repoSpy = jest
         .spyOn(repo, 'find')
         .mockResolvedValueOnce([industry, shippingIndustry]);
