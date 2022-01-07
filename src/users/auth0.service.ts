@@ -1,14 +1,25 @@
-import { ManagementClient } from 'auth0';
+import { ManagementClient } from './auth0-management-client';
 import { randomUUID } from 'crypto';
-import {
-  CreateExternalUserResult,
-  ExternalAuthProviderService,
-} from './external-auth-provider.service';
+
+type CreateExternalUserResultSuccess = {
+  result: 'user-created';
+  externalIdentifier: string;
+  passwordResetLink: string;
+};
+
+type CreateExternalUserResultUserExists = {
+  result: 'user-exists';
+  externalIdentifier: string;
+};
+
+type CreateExternalUserResult =
+  | CreateExternalUserResultSuccess
+  | CreateExternalUserResultUserExists;
 
 /**
  * Service class for creating a new user in Auth0
  */
-export class Auth0Service extends ExternalAuthProviderService {
+export class Auth0Service {
   /**
    * Create a new user in Auth0. The created user will have the provided email
    * address, and a randonly generated password. In the case where a user

@@ -4,7 +4,7 @@ import { Response, Request } from 'express';
 import { I18nService } from 'nestjs-i18n';
 
 import { UsersService } from './users.service';
-import { ExternalAuthProviderService } from './external-auth-provider.service';
+import { Auth0Service } from './auth0.service';
 import { UsersController } from './users.controller';
 import { User, UserRole } from './user.entity';
 import { UsersPresenter } from './users.presenter';
@@ -19,7 +19,7 @@ const roles = new Array<UserRole>();
 
 describe('UsersController', () => {
   let controller: UsersController;
-  let userService: DeepMocked<ExternalAuthProviderService>;
+  let auth0Service: DeepMocked<Auth0Service>;
   let usersService: DeepMocked<UsersService>;
   let i18nService: DeepMocked<I18nService>;
   let userMailer: DeepMocked<UserMailer>;
@@ -37,7 +37,7 @@ describe('UsersController', () => {
 
     request = createMock<Request>();
 
-    userService = createMock<ExternalAuthProviderService>({
+    auth0Service = createMock<Auth0Service>({
       createUser: async () => {
         return {
           result: 'user-created',
@@ -70,8 +70,8 @@ describe('UsersController', () => {
           useValue: usersService,
         },
         {
-          provide: ExternalAuthProviderService,
-          useValue: userService,
+          provide: Auth0Service,
+          useValue: auth0Service,
         },
         {
           provide: I18nService,
@@ -156,7 +156,7 @@ describe('UsersController', () => {
     it('should redirect to done when the user is successfully created', async () => {
       await controller.complete(res, user.id);
 
-      expect(userService.createUser).toBeCalledWith(email);
+      expect(auth0Service.createUser).toBeCalledWith(email);
       expect(usersService.save).toBeCalledWith(
         expect.objectContaining({
           name,
@@ -174,7 +174,7 @@ describe('UsersController', () => {
     });
 
     it('should render an error if the email already exists externally and in our database', async () => {
-      userService.createUser.mockImplementationOnce(async () => {
+      auth0Service.createUser.mockImplementationOnce(async () => {
         return { result: 'user-exists', externalIdentifier };
       });
 
@@ -191,7 +191,7 @@ describe('UsersController', () => {
     });
 
     it('should create a user in our db even if the user already exists externally', async () => {
-      userService.createUser.mockImplementationOnce(async () => {
+      auth0Service.createUser.mockImplementationOnce(async () => {
         return { result: 'user-exists', externalIdentifier };
       });
 
