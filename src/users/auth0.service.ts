@@ -1,4 +1,7 @@
 import { ManagementClient } from './auth0-management-client';
+import { PerformNowOrLater } from '../common/interfaces/perform-now-or-later';
+import { Queue } from 'bull';
+import { InjectQueue } from '@nestjs/bull';
 import { randomUUID } from 'crypto';
 
 type CreateExternalUserResultSuccess = {
@@ -17,9 +20,11 @@ type CreateExternalUserResult =
   | CreateExternalUserResultUserExists;
 
 /**
- * Service class for creating a new user in Auth0
+ * Service class for interacting with Auth0
  */
 export class Auth0Service {
+  constructor(@InjectQueue('auth0') private queue: Queue) {}
+
   /**
    * Create a new user in Auth0. The created user will have the provided email
    * address, and a randonly generated password. In the case where a user
@@ -65,10 +70,18 @@ export class Auth0Service {
     };
   }
 
-  public async deleteUser(externalIdentifier: string): Promise<void> {
-    const client = this.getClient();
-
-    await client.deleteUser({ id: externalIdentifier });
+  public deleteUser(externalIdentifier: string): PerformNowOrLater {
+    return {
+      performNow: async () => {
+        const client = this.getClient();
+        return await client.deleteUser({ id: externalIdentifier });
+      },
+      performLater: async () => {
+        return await this.queue.add('deleteUser', {
+          externalIdentifier: externalIdentifier,
+        });
+      },
+    };
   }
 
   private getClient() {

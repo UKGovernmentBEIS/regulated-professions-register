@@ -10,6 +10,7 @@ import { User } from './user.entity';
 import { UsersService } from './users.service';
 import { UserMailer } from './user.mailer';
 import { BullModule } from '@nestjs/bull';
+import { Auth0Consumer } from './auth0.consumer';
 
 @Module({
   imports: [
@@ -17,8 +18,11 @@ import { BullModule } from '@nestjs/bull';
     BullModule.registerQueue({
       name: 'default',
     }),
+    BullModule.registerQueue({
+      name: 'auth0',
+    }),
   ],
-  providers: [UsersService, UserMailer, Auth0Service],
+  providers: [UsersService, UserMailer, Auth0Service, Auth0Consumer],
   controllers: [UsersController, PersonalDetailsController, RolesController],
   exports: [UsersService],
 })

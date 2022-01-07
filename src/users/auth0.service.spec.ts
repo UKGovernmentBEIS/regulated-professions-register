@@ -3,6 +3,7 @@ import { ManagementClient } from 'auth0';
 import { createMock, DeepMocked } from '@golevelup/ts-jest';
 
 import * as dotenv from 'dotenv';
+import { Queue } from 'bull';
 
 dotenv.config({ path: '.env.test' });
 
@@ -11,6 +12,7 @@ describe('Auth0Service', () => {
   let email: string;
   let managementClient: DeepMocked<ManagementClient>;
   let users: Array<any>;
+  let queue: DeepMocked<Queue>;
 
   beforeEach(() => {
     email = 'email@example.com';
@@ -32,7 +34,8 @@ describe('Auth0Service', () => {
         };
       },
     });
-    auth0Service = new Auth0Service();
+    queue = createMock<Queue>();
+    auth0Service = new Auth0Service(queue);
 
     const getClient = jest.spyOn(Auth0Service.prototype as any, 'getClient');
     getClient.mockImplementation(() => {
@@ -98,11 +101,23 @@ describe('Auth0Service', () => {
   });
 
   describe('deleteUser', () => {
-    it('should delete a user via the API', async () => {
-      await auth0Service.deleteUser('some-uuid');
+    describe('performNow', () => {
+      it('should delete a user via the API', async () => {
+        await auth0Service.deleteUser('some-uuid').performNow();
 
-      expect(managementClient.deleteUser).toHaveBeenCalledWith({
-        id: 'some-uuid',
+        expect(managementClient.deleteUser).toHaveBeenCalledWith({
+          id: 'some-uuid',
+        });
+      });
+    });
+
+    describe('performLater', () => {
+      it('should delete a user via the API', async () => {
+        await auth0Service.deleteUser('some-uuid').performLater();
+
+        expect(queue.add).toHaveBeenCalledWith('deleteUser', {
+          externalIdentifier: 'some-uuid',
+        });
       });
     });
   });
