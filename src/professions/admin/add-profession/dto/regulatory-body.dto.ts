@@ -5,7 +5,9 @@ export class RegulatoryBodyDto {
   @IsNotEmpty()
   regulatoryBody: string;
 
-  @IsNotEmpty()
+  @IsNotEmpty({
+    message: 'professions.form.errors.mandatoryRegistration.empty',
+  })
   mandatoryRegistration: MandatoryRegistration;
 
   change: boolean;

@@ -31,7 +31,7 @@
                 id: "name",
                 name: "name",
                 value: name,
-                errorMessage: errors.name
+                errorMessage: errors.name | tError
               })
             }}
 
@@ -50,7 +50,7 @@
                   text: ("professions.form.checkboxes.hint" | t)
                 },
                 items: nationsCheckboxArgs,
-                errorMessage: errors.nations
+                errorMessage: errors.nations | tError
               })
             }}
 
@@ -69,7 +69,7 @@
                   text: ("professions.form.checkboxes.hint" | t)
                 },
                 items: industriesCheckboxArgs,
-                errorMessage: errors.industries
+                errorMessage: errors.industries | tError
               })
             }}
 

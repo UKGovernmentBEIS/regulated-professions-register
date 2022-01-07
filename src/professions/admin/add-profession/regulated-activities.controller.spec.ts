@@ -188,7 +188,7 @@ describe(RegulatedActivitiesController, () => {
             reservedActivities: 'Example reserved activities',
             errors: {
               description: {
-                text: 'description should not be empty',
+                text: 'professions.form.errors.description.empty',
               },
             },
           }),
