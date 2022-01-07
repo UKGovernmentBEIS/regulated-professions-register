@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Auth0UserCreationService } from './auth0-user-creation.service';
-import { ExternalUserCreationService } from './external-user-creation.service';
-import { NullUserCreationService } from './null-user-creation-service';
+import { Auth0Service } from './auth0.service';
+import { ExternalAuthProviderService } from './external-auth-provider.service';
+import { NullAuthProviderService } from './null-auth-provider-service';
 import { PersonalDetailsController } from './personal-details/personal-details.controller';
 import { RolesController } from './roles/roles.controller';
 
@@ -24,11 +24,11 @@ import { BullModule } from '@nestjs/bull';
     UsersService,
     UserMailer,
     {
-      provide: ExternalUserCreationService,
+      provide: ExternalAuthProviderService,
       useValue:
         process.env.NODE_ENV == 'test'
-          ? new NullUserCreationService()
-          : new Auth0UserCreationService(),
+          ? new NullAuthProviderService()
+          : new Auth0Service(),
     },
   ],
   controllers: [UsersController, PersonalDetailsController, RolesController],

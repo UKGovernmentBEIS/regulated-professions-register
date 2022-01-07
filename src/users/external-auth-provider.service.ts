@@ -13,8 +13,6 @@ export type CreateExternalUserResult =
   | CreateExternalUserResultSuccess
   | CreateExternalUserResultUserExists;
 
-export abstract class ExternalUserCreationService {
-  public abstract createExternalUser(
-    email: string,
-  ): Promise<CreateExternalUserResult>;
+export abstract class ExternalAuthProviderService {
+  public abstract createUser(email: string): Promise<CreateExternalUserResult>;
 }

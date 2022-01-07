@@ -2,13 +2,13 @@ import { ManagementClient } from 'auth0';
 import { randomUUID } from 'crypto';
 import {
   CreateExternalUserResult,
-  ExternalUserCreationService,
-} from './external-user-creation.service';
+  ExternalAuthProviderService,
+} from './external-auth-provider.service';
 
 /**
  * Service class for creating a new user in Auth0
  */
-export class Auth0UserCreationService extends ExternalUserCreationService {
+export class Auth0Service extends ExternalAuthProviderService {
   /**
    * Create a new user in Auth0. The created user will have the provided email
    * address, and a randonly generated password. In the case where a user
@@ -21,12 +21,8 @@ export class Auth0UserCreationService extends ExternalUserCreationService {
    *   containing either the Auth0 identifier of the new user, or the Auth0
    *   identifier of the existing user with the provided email address
    */
-  public async createExternalUser(
-    email: string,
-  ): Promise<CreateExternalUserResult> {
-    const url = process.env.AUTH0_DOMAIN;
-    const domain = url.startsWith('https://') ? url.slice(8) : url;
-    const client = this.getClient(domain);
+  public async createUser(email: string): Promise<CreateExternalUserResult> {
+    const client = this.getClient();
 
     // As an interaction with an external service, we're unable to wrap this in
     // a transaction with `createUser`, but at least attempt to avoid creating
@@ -58,12 +54,15 @@ export class Auth0UserCreationService extends ExternalUserCreationService {
     };
   }
 
-  private getClient(domain: string) {
+  private getClient() {
+    const url = process.env['AUTH0_DOMAIN'];
+    const domain = url.startsWith('https://') ? url.slice(8) : url;
+
     return new ManagementClient({
       domain,
       clientId: process.env['AUTH0_CLIENT_ID'],
       clientSecret: process.env['AUTH0_CLIENT_SECRET'],
-      scope: 'create:users read:users create:user_tickets',
+      scope: 'create:users read:users create:user_tickets delete:users',
     });
   }
 }

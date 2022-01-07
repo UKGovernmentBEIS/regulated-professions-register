@@ -4,7 +4,7 @@ import { Response, Request } from 'express';
 import { I18nService } from 'nestjs-i18n';
 
 import { UsersService } from './users.service';
-import { ExternalUserCreationService } from './external-user-creation.service';
+import { ExternalAuthProviderService } from './external-auth-provider.service';
 import { UsersController } from './users.controller';
 import { User, UserRole } from './user.entity';
 import { UsersPresenter } from './users.presenter';
@@ -19,7 +19,7 @@ const roles = new Array<UserRole>();
 
 describe('UsersController', () => {
   let controller: UsersController;
-  let externalUserCreationService: DeepMocked<ExternalUserCreationService>;
+  let userService: DeepMocked<ExternalAuthProviderService>;
   let usersService: DeepMocked<UsersService>;
   let i18nService: DeepMocked<I18nService>;
   let userMailer: DeepMocked<UserMailer>;
@@ -37,8 +37,8 @@ describe('UsersController', () => {
 
     request = createMock<Request>();
 
-    externalUserCreationService = createMock<ExternalUserCreationService>({
-      createExternalUser: async () => {
+    userService = createMock<ExternalAuthProviderService>({
+      createUser: async () => {
         return {
           result: 'user-created',
           externalIdentifier,
@@ -70,8 +70,8 @@ describe('UsersController', () => {
           useValue: usersService,
         },
         {
-          provide: ExternalUserCreationService,
-          useValue: externalUserCreationService,
+          provide: ExternalAuthProviderService,
+          useValue: userService,
         },
         {
           provide: I18nService,
@@ -156,9 +156,7 @@ describe('UsersController', () => {
     it('should redirect to done when the user is successfully created', async () => {
       await controller.complete(res, user.id);
 
-      expect(externalUserCreationService.createExternalUser).toBeCalledWith(
-        email,
-      );
+      expect(userService.createUser).toBeCalledWith(email);
       expect(usersService.save).toBeCalledWith(
         expect.objectContaining({
           name,
@@ -176,11 +174,9 @@ describe('UsersController', () => {
     });
 
     it('should render an error if the email already exists externally and in our database', async () => {
-      externalUserCreationService.createExternalUser.mockImplementationOnce(
-        async () => {
-          return { result: 'user-exists', externalIdentifier };
-        },
-      );
+      userService.createUser.mockImplementationOnce(async () => {
+        return { result: 'user-exists', externalIdentifier };
+      });
 
       usersService.attemptAdd.mockImplementationOnce(async () => {
         return 'user-exists';
@@ -195,11 +191,9 @@ describe('UsersController', () => {
     });
 
     it('should create a user in our db even if the user already exists externally', async () => {
-      externalUserCreationService.createExternalUser.mockImplementationOnce(
-        async () => {
-          return { result: 'user-exists', externalIdentifier };
-        },
-      );
+      userService.createUser.mockImplementationOnce(async () => {
+        return { result: 'user-exists', externalIdentifier };
+      });
 
       usersService.attemptAdd.mockImplementationOnce(async () => {
         return 'user-created';
