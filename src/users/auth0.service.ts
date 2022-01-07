@@ -54,6 +54,12 @@ export class Auth0Service extends ExternalAuthProviderService {
     };
   }
 
+  public async deleteUser(externalIdentifier: string): Promise<void> {
+    const client = this.getClient();
+
+    await client.deleteUser({ id: externalIdentifier });
+  }
+
   private getClient() {
     const url = process.env['AUTH0_DOMAIN'];
     const domain = url.startsWith('https://') ? url.slice(8) : url;

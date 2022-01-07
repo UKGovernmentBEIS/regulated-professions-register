@@ -12,4 +12,8 @@ export class NullAuthProviderService extends ExternalAuthProviderService {
       passwordResetLink: 'http://example.com',
     };
   }
+
+  public async deleteUser(): Promise<void> {
+    // Do nothing
+  }
 }

@@ -15,4 +15,6 @@ export type CreateExternalUserResult =
 
 export abstract class ExternalAuthProviderService {
   public abstract createUser(email: string): Promise<CreateExternalUserResult>;
+
+  public abstract deleteUser(externalIdentifier: string): Promise<void>;
 }

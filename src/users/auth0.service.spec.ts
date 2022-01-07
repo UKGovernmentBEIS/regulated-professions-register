@@ -23,6 +23,9 @@ describe('Auth0Service', () => {
           user_id: 123,
         };
       },
+      deleteUser: () => {
+        return null;
+      },
       createPasswordChangeTicket: () => {
         return {
           ticket: 'http://example.com',
@@ -90,6 +93,16 @@ describe('Auth0Service', () => {
           result: 'user-exists',
           externalIdentifier: 123,
         });
+      });
+    });
+  });
+
+  describe('deleteUser', () => {
+    it('should delete a user via the API', async () => {
+      await auth0Service.deleteUser('some-uuid');
+
+      expect(managementClient.deleteUser).toHaveBeenCalledWith({
+        id: 'some-uuid',
       });
     });
   });
