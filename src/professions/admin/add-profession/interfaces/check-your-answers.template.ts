@@ -7,4 +7,5 @@ export interface CheckYourAnswersTemplate {
   mandatoryRegistration: string;
   reservedActivities: string;
   description: string;
+  backLink: string;
 }
