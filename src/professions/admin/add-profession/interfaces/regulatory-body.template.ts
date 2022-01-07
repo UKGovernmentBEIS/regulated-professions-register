@@ -5,5 +5,6 @@ export interface RegulatoryBodyTemplate {
   regulatedAuthoritiesSelectArgs: SelectItemArgs[];
   mandatoryRegistrationRadioButtonArgs: RadioButtonArgs[];
   change: boolean;
+  backLink: string;
   errors: object | undefined;
 }

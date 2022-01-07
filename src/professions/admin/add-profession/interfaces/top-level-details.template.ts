@@ -5,5 +5,6 @@ export interface TopLevelDetailsTemplate {
   industriesCheckboxArgs: CheckboxArgs[];
   nationsCheckboxArgs: CheckboxArgs[];
   change: boolean;
+  backLink: string;
   errors: object | undefined;
 }

@@ -90,7 +90,7 @@ describe('TopLevelInformationController', () => {
 
         expect(response.render).toHaveBeenCalledWith(
           'professions/admin/add-profession/top-level-information',
-          {
+          expect.objectContaining({
             name: undefined,
             industriesCheckboxArgs: [
               {
@@ -126,9 +126,7 @@ describe('TopLevelInformationController', () => {
                 checked: false,
               },
             ],
-            change: false,
-            errors: undefined,
-          },
+          }),
         );
         expect(industriesService.all).toHaveBeenCalled();
       });
@@ -155,7 +153,7 @@ describe('TopLevelInformationController', () => {
 
         expect(response.render).toHaveBeenCalledWith(
           'professions/admin/add-profession/top-level-information',
-          {
+          expect.objectContaining({
             name: 'Example Profession',
             industriesCheckboxArgs: [
               {
@@ -191,9 +189,7 @@ describe('TopLevelInformationController', () => {
                 checked: false,
               },
             ],
-            change: false,
-            errors: undefined,
-          },
+          }),
         );
         expect(industriesService.all).toHaveBeenCalled();
       });
@@ -399,56 +395,94 @@ describe('TopLevelInformationController', () => {
     });
 
     describe('the "change" query param', () => {
-      it('redirects to check your answers when true', async () => {
-        const profession = professionFactory.build({
-          id: 'profession-id',
+      describe('when set to true', () => {
+        it('redirects to check your answers on submit', async () => {
+          const profession = professionFactory.build({
+            id: 'profession-id',
+          });
+
+          professionsService.find.mockImplementation(async () => profession);
+
+          const topLevelDetailsDtoWithChangeParam = {
+            name: 'A new profession',
+            nations: ['GB-ENG'],
+            industries: ['construction-uuid'],
+            change: true,
+          };
+
+          industriesService.findByIds.mockResolvedValue([constructionIndustry]);
+
+          await controller.update(
+            topLevelDetailsDtoWithChangeParam,
+            response,
+            'profession-id',
+          );
+
+          expect(response.redirect).toHaveBeenCalledWith(
+            '/admin/professions/profession-id/check-your-answers',
+          );
         });
 
-        professionsService.find.mockImplementation(async () => profession);
+        it('sets the back link to point to check your answers', async () => {
+          const profession = professionFactory.build({
+            id: 'profession-id',
+          });
 
-        const topLevelDetailsDtoWithChangeParam = {
-          name: 'A new profession',
-          nations: ['GB-ENG'],
-          industries: ['construction-uuid'],
-          change: true,
-        };
+          professionsService.find.mockImplementation(async () => profession);
 
-        industriesService.findByIds.mockResolvedValue([constructionIndustry]);
+          await controller.edit(response, 'profession-id', true);
 
-        await controller.update(
-          topLevelDetailsDtoWithChangeParam,
-          response,
-          'profession-id',
-        );
-
-        expect(response.redirect).toHaveBeenCalledWith(
-          '/admin/professions/profession-id/check-your-answers',
-        );
+          expect(response.render).toHaveBeenCalledWith(
+            'professions/admin/add-profession/top-level-information',
+            expect.objectContaining({
+              backLink: '/admin/professions/profession-id/check-your-answers',
+            }),
+          );
+        });
       });
 
-      it('continues to the next step in the journey when false', async () => {
+      describe('when set to false', () => {
+        it('continues to the next step in the journey', async () => {
+          const profession = professionFactory.build({
+            id: 'profession-id',
+          });
+
+          professionsService.find.mockImplementation(async () => profession);
+
+          const topLevelDetailsDtoWithoutChangeParam = {
+            name: 'A new profession',
+            nations: ['GB-ENG'],
+            industries: ['construction-uuid'],
+          };
+
+          industriesService.findByIds.mockResolvedValue([constructionIndustry]);
+
+          await controller.update(
+            topLevelDetailsDtoWithoutChangeParam,
+            response,
+            'profession-id',
+          );
+
+          expect(response.redirect).toHaveBeenCalledWith(
+            '/admin/professions/profession-id/regulatory-body/edit',
+          );
+        });
+      });
+
+      it('sets the back link to point to the previous page in the journey', async () => {
         const profession = professionFactory.build({
           id: 'profession-id',
         });
 
         professionsService.find.mockImplementation(async () => profession);
 
-        const topLevelDetailsDtoWithoutChangeParam = {
-          name: 'A new profession',
-          nations: ['GB-ENG'],
-          industries: ['construction-uuid'],
-        };
+        await controller.edit(response, 'profession-id', false);
 
-        industriesService.findByIds.mockResolvedValue([constructionIndustry]);
-
-        await controller.update(
-          topLevelDetailsDtoWithoutChangeParam,
-          response,
-          'profession-id',
-        );
-
-        expect(response.redirect).toHaveBeenCalledWith(
-          '/admin/professions/profession-id/regulatory-body/edit',
+        expect(response.render).toHaveBeenCalledWith(
+          'professions/admin/add-profession/top-level-information',
+          expect.objectContaining({
+            backLink: '/admin/professions/add-profession',
+          }),
         );
       });
     });

@@ -1,5 +1,7 @@
-import { Controller, Get, Param, Render } from '@nestjs/common';
+import { Controller, Get, Param, Render, Req } from '@nestjs/common';
+import { Request } from 'express';
 import { I18nService } from 'nestjs-i18n';
+import { backLink } from '../../../common/utils';
 
 import { Nation } from '../../../nations/nation';
 import { ProfessionsService } from '../../professions.service';
@@ -14,7 +16,10 @@ export class CheckYourAnswersController {
 
   @Get(':id/check-your-answers')
   @Render('professions/admin/add-profession/check-your-answers')
-  async show(@Param('id') id: string): Promise<CheckYourAnswersTemplate> {
+  async show(
+    @Req() req: Request,
+    @Param('id') id: string,
+  ): Promise<CheckYourAnswersTemplate> {
     const draftProfession = await this.professionsService.find(id);
 
     if (!draftProfession) {
@@ -42,6 +47,7 @@ export class CheckYourAnswersController {
       mandatoryRegistration: draftProfession.mandatoryRegistration,
       description: draftProfession.description,
       reservedActivities: draftProfession.reservedActivities,
+      backLink: backLink(req),
     };
   }
 }

@@ -1,6 +1,8 @@
 import { DeepMocked, createMock } from '@golevelup/ts-jest';
 import { TestingModule, Test } from '@nestjs/testing';
+import { Request } from 'express';
 import { I18nService } from 'nestjs-i18n';
+import { createMockRequest } from '../../../common/create-mock-request';
 import industryFactory from '../../../testutils/factories/industry';
 import organisationFactory from '../../../testutils/factories/organisation';
 import professionFactory from '../../../testutils/factories/profession';
@@ -48,6 +50,11 @@ describe('CheckYourAnswersController', () => {
   describe('view', () => {
     describe('when a Profession has been created with the persisted ID', () => {
       it('fetches the draft Profession from the persisted ID, and renders the answers on the page', async () => {
+        const request: Request = createMockRequest(
+          'http://example.com/some/path',
+          'example.com',
+        );
+
         i18nService.translate.mockImplementation(async (text) => {
           switch (text) {
             case 'industries.construction':
@@ -59,7 +66,7 @@ describe('CheckYourAnswersController', () => {
           }
         });
 
-        const templateParams = await controller.show('profession-id');
+        const templateParams = await controller.show(request, 'profession-id');
         expect(templateParams.name).toEqual('Gas Safe Engineer');
         expect(templateParams.nations).toEqual(['England']);
         expect(templateParams.industries).toEqual([

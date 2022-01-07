@@ -37,6 +37,7 @@ export class RegulatoryBodyController {
       profession.organisation,
       selectedMandatoryRegistration,
       change,
+      this.backLink(change, id),
       errors,
     );
   }
@@ -67,6 +68,7 @@ export class RegulatoryBodyController {
           regulatoryBodyDto,
         ),
         regulatoryBodyDto.change,
+        this.backLink(regulatoryBodyDto.change, id),
         errors,
       );
     }
@@ -102,6 +104,7 @@ export class RegulatoryBodyController {
     selectedRegulatoryAuthority: Organisation | null,
     mandatoryRegistration: MandatoryRegistration | null,
     change: boolean,
+    backLink: string,
     errors: object | undefined = undefined,
   ): Promise<void> {
     const regulatedAuthorities = await this.organisationsService.all();
@@ -122,6 +125,7 @@ export class RegulatoryBodyController {
       regulatedAuthoritiesSelectArgs,
       mandatoryRegistrationRadioButtonArgs,
       change,
+      backLink,
       errors,
     };
 
@@ -149,5 +153,11 @@ export class RegulatoryBodyController {
       profession.mandatoryRegistration;
 
     return selectedMandatoryRegistration as MandatoryRegistration;
+  }
+
+  private backLink(change: boolean, id: string) {
+    return change
+      ? `/admin/professions/${id}/check-your-answers`
+      : `/admin/professions/${id}/top-level-information/edit`;
   }
 }
