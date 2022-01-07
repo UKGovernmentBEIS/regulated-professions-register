@@ -97,14 +97,12 @@ describe(RegulatoryBodyController, () => {
 
         expect(response.render).toHaveBeenCalledWith(
           'professions/admin/add-profession/regulatory-body',
-          {
+          expect.objectContaining({
             regulatedAuthoritiesSelectArgs:
               regulatedAuthoritiesSelectPresenter.selectArgs(),
             mandatoryRegistrationRadioButtonArgs:
               await mandatoryRegistrationRadioButtonsPresenter.radioButtonArgs(),
-            change: false,
-            errors: undefined,
-          },
+          }),
         );
         expect(organisationsService.all).toHaveBeenCalled();
       });
@@ -136,14 +134,12 @@ describe(RegulatoryBodyController, () => {
 
         expect(response.render).toHaveBeenCalledWith(
           'professions/admin/add-profession/regulatory-body',
-          {
+          expect.objectContaining({
             regulatedAuthoritiesSelectArgs:
               regulatedAuthoritiesSelectPresenterWithSelectedOrganisation.selectArgs(),
             mandatoryRegistrationRadioButtonArgs:
               await mandatoryRegistrationRadioButtonsPresenterWithSelectedValue.radioButtonArgs(),
-            change: false,
-            errors: undefined,
-          },
+          }),
         );
 
         expect(organisationsService.all).toHaveBeenCalled();
@@ -322,80 +318,119 @@ describe(RegulatoryBodyController, () => {
     });
 
     describe('the "change" query param', () => {
-      it('redirects to check your answers when true', async () => {
-        const profession = professionFactory.build({ id: 'profession-id' });
+      describe('when set to true', () => {
+        it('redirects to check your answers on submit', async () => {
+          const profession = professionFactory.build({ id: 'profession-id' });
 
-        professionsService.find.mockImplementation(async () => profession);
+          professionsService.find.mockImplementation(async () => profession);
 
-        const regulatoryBodyDtoWithChangeParam = {
-          regulatoryBody: 'example-org-id',
-          mandatoryRegistration: MandatoryRegistration.Voluntary,
-          change: true,
-        };
-
-        const organisation = organisationFactory.build();
-
-        organisationsService.find.mockImplementationOnce(
-          async () => organisation,
-        );
-
-        await controller.update(
-          response,
-          'profession-id',
-          regulatoryBodyDtoWithChangeParam,
-        );
-
-        expect(professionsService.save).toHaveBeenCalledWith(
-          expect.objectContaining({
-            id: 'profession-id',
-            organisation: organisation,
+          const regulatoryBodyDtoWithChangeParam = {
+            regulatoryBody: 'example-org-id',
             mandatoryRegistration: MandatoryRegistration.Voluntary,
-            occupationLocations: profession.occupationLocations,
-            industries: profession.industries,
-          }),
-        );
+            change: true,
+          };
 
-        expect(response.redirect).toHaveBeenCalledWith(
-          '/admin/professions/profession-id/check-your-answers',
-        );
+          const organisation = organisationFactory.build();
+
+          organisationsService.find.mockImplementationOnce(
+            async () => organisation,
+          );
+
+          await controller.update(
+            response,
+            'profession-id',
+            regulatoryBodyDtoWithChangeParam,
+          );
+
+          expect(professionsService.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              id: 'profession-id',
+              organisation: organisation,
+              mandatoryRegistration: MandatoryRegistration.Voluntary,
+              occupationLocations: profession.occupationLocations,
+              industries: profession.industries,
+            }),
+          );
+
+          expect(response.redirect).toHaveBeenCalledWith(
+            '/admin/professions/profession-id/check-your-answers',
+          );
+        });
+
+        it('sets the back link to point to check your answers', async () => {
+          const profession = professionFactory.build({
+            id: 'profession-id',
+          });
+
+          professionsService.find.mockImplementation(async () => profession);
+
+          await controller.edit(response, 'profession-id', true);
+
+          expect(response.render).toHaveBeenCalledWith(
+            'professions/admin/add-profession/regulatory-body',
+            expect.objectContaining({
+              backLink: '/admin/professions/profession-id/check-your-answers',
+            }),
+          );
+        });
       });
 
-      it('continues to the next step in the journey when false or missing', async () => {
-        const profession = professionFactory.build({ id: 'profession-id' });
+      describe('when false or missing', () => {
+        it('continues to the next step in the journey', async () => {
+          const profession = professionFactory.build({ id: 'profession-id' });
 
-        professionsService.find.mockImplementation(async () => profession);
+          professionsService.find.mockImplementation(async () => profession);
 
-        const regulatoryBodyDtoWithFalseChangeParam = {
-          regulatoryBody: 'example-org-id',
-          mandatoryRegistration: MandatoryRegistration.Voluntary,
-          change: false,
-        };
-
-        const organisation = organisationFactory.build();
-
-        organisationsService.find.mockImplementationOnce(
-          async () => organisation,
-        );
-
-        await controller.update(
-          response,
-          'profession-id',
-          regulatoryBodyDtoWithFalseChangeParam,
-        );
-
-        expect(professionsService.save).toHaveBeenCalledWith(
-          expect.objectContaining({
-            id: 'profession-id',
-            organisation: organisation,
+          const regulatoryBodyDtoWithFalseChangeParam = {
+            regulatoryBody: 'example-org-id',
             mandatoryRegistration: MandatoryRegistration.Voluntary,
-            occupationLocations: profession.occupationLocations,
-            industries: profession.industries,
-          }),
-        );
+            change: false,
+          };
 
-        expect(response.redirect).toHaveBeenCalledWith(
-          '/admin/professions/profession-id/regulated-activities/edit',
-        );
+          const organisation = organisationFactory.build();
+
+          organisationsService.find.mockImplementationOnce(
+            async () => organisation,
+          );
+
+          await controller.update(
+            response,
+            'profession-id',
+            regulatoryBodyDtoWithFalseChangeParam,
+          );
+
+          expect(professionsService.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              id: 'profession-id',
+              organisation: organisation,
+              mandatoryRegistration: MandatoryRegistration.Voluntary,
+              occupationLocations: profession.occupationLocations,
+              industries: profession.industries,
+            }),
+          );
+
+          expect(response.redirect).toHaveBeenCalledWith(
+            '/admin/professions/profession-id/regulated-activities/edit',
+          );
+        });
+
+        it('sets the back link to point to the previous step in the journey', async () => {
+          const profession = professionFactory.build({
+            id: 'profession-id',
+          });
+
+          professionsService.find.mockImplementation(async () => profession);
+
+          await controller.edit(response, 'profession-id', false);
+
+          expect(response.render).toHaveBeenCalledWith(
+            'professions/admin/add-profession/regulatory-body',
+            expect.objectContaining({
+              backLink:
+                '/admin/professions/profession-id/top-level-information/edit',
+            }),
+          );
+        });
       });
     });
   });
