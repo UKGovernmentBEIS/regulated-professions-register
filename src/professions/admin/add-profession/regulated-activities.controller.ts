@@ -24,6 +24,7 @@ export class RegulatedActivitiesController {
       profession.reservedActivities,
       profession.description,
       change,
+      this.backLink(change, id),
     );
   }
 
@@ -57,6 +58,7 @@ export class RegulatedActivitiesController {
           regulatedActivitiesAnswers,
         ),
         regulatedActivitiesAnswers.change,
+        this.backLink(regulatedActivitiesAnswers.change, id),
         errors,
       );
     }
@@ -84,12 +86,14 @@ export class RegulatedActivitiesController {
     reservedActivities: string | null,
     regulationDescription: string | null,
     change: boolean,
+    backLink: string,
     errors: object | undefined = undefined,
   ): Promise<void> {
     const templateArgs: RegulatedActivitiesTemplate = {
       reservedActivities,
       regulationDescription,
       change,
+      backLink,
       errors,
     };
 
@@ -111,5 +115,11 @@ export class RegulatedActivitiesController {
     regulatedActivitiesDto: RegulatedActivitiesDto,
   ) {
     return regulatedActivitiesDto.description || profession.description;
+  }
+
+  private backLink(change: boolean, id: string) {
+    return change
+      ? `/admin/professions/${id}/check-your-answers`
+      : `/admin/professions/${id}/regulatory-body/edit`;
   }
 }
