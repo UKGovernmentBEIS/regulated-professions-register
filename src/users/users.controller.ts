@@ -139,6 +139,10 @@ export class UsersController {
       'info',
       await this.i18nService.translate('users.form.delete.successMessage'),
     );
+    const user = await this.usersService.find(id);
+
+    await this.auth0Service.deleteUser(user.externalIdentifier).performLater();
+
     await this.usersService.delete(id);
   }
 }

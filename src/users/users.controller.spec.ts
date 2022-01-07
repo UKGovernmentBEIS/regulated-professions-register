@@ -10,6 +10,8 @@ import { User, UserRole } from './user.entity';
 import { UsersPresenter } from './users.presenter';
 import { UserPresenter } from './user.presenter';
 import { UserMailer } from './user.mailer';
+import { PerformNowOrLater } from '../common/interfaces/perform-now-or-later';
+
 import userFactory from '../testutils/factories/user';
 
 const name = 'Example Name';
@@ -25,6 +27,7 @@ describe('UsersController', () => {
   let userMailer: DeepMocked<UserMailer>;
   let request: DeepMocked<Request>;
   let user: User;
+  let deleteUserResponse: jest.Mock<PerformNowOrLater>;
 
   beforeEach(async () => {
     user = userFactory.build({
@@ -37,6 +40,17 @@ describe('UsersController', () => {
 
     request = createMock<Request>();
 
+    deleteUserResponse = jest.fn(() => {
+      return {
+        performNow: async () => {
+          return null;
+        },
+        performLater: async () => {
+          return null;
+        },
+      };
+    });
+
     auth0Service = createMock<Auth0Service>({
       createUser: async () => {
         return {
@@ -45,6 +59,7 @@ describe('UsersController', () => {
           passwordResetLink: 'http://example.org',
         };
       },
+      deleteUser: deleteUserResponse,
     });
 
     i18nService = createMock<I18nService>();
@@ -230,6 +245,11 @@ describe('UsersController', () => {
         'info',
         await i18nService.translate('users.form.delete.successMessage'),
       );
+
+      expect(auth0Service.deleteUser).toHaveBeenCalledWith(
+        user.externalIdentifier,
+      );
+      expect(deleteUserResponse).toHaveBeenCalled();
 
       expect(usersService.delete).toHaveBeenCalledWith('some-uuid');
     });
