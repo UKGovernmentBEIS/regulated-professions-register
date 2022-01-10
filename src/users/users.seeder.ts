@@ -13,6 +13,7 @@ type SeedUser = {
   name: string;
   externalIdentifier: string;
   roles: string[];
+  serviceOwner: boolean;
   confirmed: boolean;
 };
 
@@ -34,6 +35,7 @@ export class UsersSeeder implements Seeder {
         user.name,
         user.externalIdentifier,
         roles,
+        user.serviceOwner,
         user.confirmed,
       );
     });
