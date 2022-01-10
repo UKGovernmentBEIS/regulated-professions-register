@@ -1,0 +1,13 @@
+{% extends "base.njk" %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+
+{% block content %}
+
+  {% if backLink %}
+    {{ govukBackLink({
+      text: ( "app.back" | t ),
+      href: backLink
+    }) }}
+  {% endif %}
+
+{% endblock %}

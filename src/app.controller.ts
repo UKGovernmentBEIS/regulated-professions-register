@@ -37,7 +37,7 @@ export class AppController {
     } else {
       const path = {
         professions: '/professions/search',
-        'regulatory-authorities': '/regulatory-authorities',
+        'regulatory-authorities': '/regulatory-authorities/search',
         'annual-figures': '/annual-figures',
       }[service];
 
