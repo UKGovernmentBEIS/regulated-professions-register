@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [Unreleased]
+
+### Added
+
+### Changed
+
+- No longer display previous values on a profession when rendering form errors
+
 ## [release-001] - 2022-01-10
 
 ### Added
@@ -27,8 +35,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Update Regulated Activities to represent free text, rather than a list of items
 - Fix links in error messages when adding a new profession
 - Make validation errors more human readable
-
-## [Unreleased]
 
 [unreleased]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-001...HEAD
 [release-001]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release...release-001
