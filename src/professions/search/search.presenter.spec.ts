@@ -3,7 +3,7 @@ import { Request } from 'express';
 import { I18nService } from 'nestjs-i18n';
 import { createMockRequest } from '../../testutils/create-mock-request';
 import { Nation } from '../../nations/nation';
-import { FilterInput } from '../interfaces/filter-input.interface';
+import { FilterInput } from '../../common/interfaces/filter-input.interface';
 import { SearchPresenter } from './search.presenter';
 import { IndustriesCheckboxPresenter } from '../../industries/industries-checkbox.presenter';
 import { NationsCheckboxPresenter } from '../../nations/nations-checkbox.presenter';

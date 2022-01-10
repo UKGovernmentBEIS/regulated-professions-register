@@ -6,7 +6,7 @@ import { IndustriesCheckboxPresenter } from '../../industries/industries-checkbo
 import { Nation } from '../../nations/nation';
 import { NationsCheckboxPresenter } from '../../nations/nations-checkbox.presenter';
 import { OrganisationsCheckboxPresenter } from '../../organisations/organisations-checkbox-presenter';
-import { FilterInput } from '../interfaces/filter-input.interface';
+import { FilterInput } from '../../common/interfaces/filter-input.interface';
 import { IndexTemplate } from './interfaces/index-template.interface';
 import { ProfessionsPresenter as ProfessionsPresenter } from './professions.presenter';
 import { ListEntryPresenter } from './list-entry.presenter';

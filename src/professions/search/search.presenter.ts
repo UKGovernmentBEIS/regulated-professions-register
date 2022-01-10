@@ -6,7 +6,7 @@ import { Industry } from '../../industries/industry.entity';
 import { Nation } from '../../nations/nation';
 import { NationsCheckboxPresenter } from '../../nations/nations-checkbox.presenter';
 import { Profession } from '../profession.entity';
-import { FilterInput } from '../interfaces/filter-input.interface';
+import { FilterInput } from '../../common/interfaces/filter-input.interface';
 import { IndexTemplate } from './interfaces/index-template.interface';
 import { ProfessionSearchResultPresenter } from './profession-search-result.presenter';
 import { ProfessionsSorter } from '../helpers/professions-sorter';

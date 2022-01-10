@@ -15,7 +15,7 @@ import { IndustriesService } from '../../industries/industries.service';
 import { Nation } from '../../nations/nation';
 import { ProfessionsService } from '../professions.service';
 import { ProfessionsFilterHelper } from '../helpers/professions-filter.helper';
-import { FilterInput } from '../interfaces/filter-input.interface';
+import { FilterInput } from '../../common/interfaces/filter-input.interface';
 import { IndexTemplate } from './interfaces/index-template.interface';
 import {
   ProfessionsPresenter,

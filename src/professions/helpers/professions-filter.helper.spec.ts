@@ -9,56 +9,17 @@ import organisationFactory from '../../testutils/factories/organisation';
 
 describe('ProfessionsFilterHelper', () => {
   describe('filter', () => {
-    it('returns all professions when given an empty filter input', () => {
-      const exampleProfessions = [
-        createProfession('Example 1', ['GB-ENG'], 'general-medical-council', [
-          'education',
-          'law',
-        ]),
-        createProfession('Example 2', ['GB-SCT'], 'law-society', [
-          'construction',
-        ]),
-        createProfession(
-          'Example 3',
-          ['GB-WLS', 'GB-NIR'],
-          'department-for-education',
-          ['education', 'finance'],
-        ),
-      ];
+    it('returns successfully when a profession has undefined fields', () => {
+      const filterHelper = new ProfessionsFilterHelper([new Profession()]);
 
-      const filterHelper = new ProfessionsFilterHelper(exampleProfessions);
-
-      const results = filterHelper.filter({});
-
-      expect(results).toEqual(exampleProfessions);
-    });
-
-    it('returns all professions when individual filter criteria are empty', () => {
-      const exampleProfessions = [
-        createProfession('Example 1', ['GB-WLS'], 'general-medical-council', [
-          'law',
-          'other',
-        ]),
-        createProfession(
-          'Example 2',
-          ['GB-NIR', 'GB-ENG'],
-          'department-for-education',
-          ['health'],
-        ),
-        createProfession('Example 3', ['GB-SCT'], 'law-society', ['security']),
-      ];
-
-      const filterHelper = new ProfessionsFilterHelper(exampleProfessions);
-
-      const results = filterHelper.filter({
-        keywords: '',
-        nations: [],
-        organisations: [],
-        industries: [],
-        changedBy: [],
-      });
-
-      expect(results).toEqual(exampleProfessions);
+      expect(
+        filterHelper.filter({
+          keywords: 'dentist',
+          nations: [Nation.find('GB-NIR')],
+          organisations: [organisationFactory.build()],
+          industries: [industryFactory.build()],
+        }),
+      ).toEqual([]);
     });
 
     it('can filter professions by keywords', () => {
@@ -71,26 +32,10 @@ describe('ProfessionsFilterHelper', () => {
       const filterHelper = new ProfessionsFilterHelper(exampleProfessions);
 
       const results = filterHelper.filter({
-        // Test a complete and incomplete word match
-        keywords: 'Attorny    condar',
+        keywords: 'School',
       });
 
-      expect(results).toEqual([exampleProfessions[0], exampleProfessions[2]]);
-    });
-
-    it('keywords are case insensitive', () => {
-      const exampleProfessions = [
-        professionFactory.build({ name: 'Trademark Attorny' }),
-        professionFactory.build({ name: 'Chartered Accountant' }),
-      ];
-
-      const filterHelper = new ProfessionsFilterHelper(exampleProfessions);
-
-      const results = filterHelper.filter({
-        keywords: 'aTtOrNy',
-      });
-
-      expect(results).toEqual([exampleProfessions[0]]);
+      expect(results).toEqual([exampleProfessions[2]]);
     });
 
     it('can filter professions by nations', () => {
@@ -104,10 +49,7 @@ describe('ProfessionsFilterHelper', () => {
       const filterHelper = new ProfessionsFilterHelper(exampleProfessions);
 
       const results = filterHelper.filter({
-        nations: [
-          new Nation('nations.england', 'GB-ENG'),
-          new Nation('nations.northernIreland', 'GB-NIR'),
-        ],
+        nations: [Nation.find('GB-ENG'), Nation.find('GB-NIR')],
       });
 
       expect(results).toEqual([
@@ -155,59 +97,9 @@ describe('ProfessionsFilterHelper', () => {
 
       expect(results).toEqual([exampleProfessions[0], exampleProfessions[3]]);
     });
-
-    it('can filter by multiple criteria', () => {
-      const exampleProfessions = [
-        // Won't match on nation
-        createProfession(
-          'Secondary School Teacher',
-          ['GB-SCT'],
-          'department-for-education',
-          ['education'],
-        ),
-        // Won't match on organisation
-        createProfession(
-          'Dentistry Teacher',
-          ['GB-NIR'],
-          'general-medical-council',
-          ['education', 'medical'],
-        ),
-        // Won't match on industry
-        createProfession(
-          'Bricklaying Teacher',
-          ['GB-NIR'],
-          'department-for-education',
-          ['construction'],
-        ),
-        // Won't match on keyword
-        createProfession(
-          'Leagal Training Facilitator',
-          ['GB-WLS', 'GB-NIR'],
-          'department-for-education',
-          ['education', 'law'],
-        ),
-        // Will match on all
-        createProfession(
-          'Primary School Teacher',
-          ['GB-NIR', 'GB-ENG'],
-          'department-for-education',
-          ['education'],
-        ),
-      ];
-
-      const filterHelper = new ProfessionsFilterHelper(exampleProfessions);
-
-      const results = filterHelper.filter({
-        keywords: 'Teacher',
-        organisations: [createOrganisationWithId('department-for-education')],
-        industries: [createIndustryWithId('education')],
-        nations: [new Nation('nations.northernIreland', 'GB-NIR')],
-      });
-
-      expect(results).toEqual([exampleProfessions[4]]);
-    });
   });
 });
+
 function createProfessionWithNations(...nationCodes: string[]): Profession {
   return professionFactory.build({ occupationLocations: nationCodes });
 }
@@ -221,22 +113,6 @@ function createProfessionWithOrganisation(organisationId: string): Profession {
 function createProfessionWithIndustries(...industryIds: string[]): Profession {
   return professionFactory.build({
     industries: industryIds.map((name) => createIndustryWithId(name)),
-  });
-}
-
-function createProfession(
-  name: string,
-  nationCodes: string[],
-  organisation: string,
-  industryNames: string[],
-): Profession {
-  const industries = industryNames.map((name) => createIndustryWithId(name));
-
-  return professionFactory.build({
-    name,
-    industries,
-    occupationLocations: nationCodes,
-    organisation: createOrganisationWithId(organisation),
   });
 }
 
