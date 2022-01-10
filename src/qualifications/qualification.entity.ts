@@ -14,11 +14,11 @@ export class Qualification {
   @Column()
   level: string;
 
-  @Column()
-  methodToObtain: string;
+  @Column({ nullable: true })
+  methodToObtainDeprecated: string;
 
-  @Column()
-  commonPathToObtain: string;
+  @Column({ nullable: true })
+  commonPathToObtainDeprecated: string;
 
   @Column()
   educationDuration: string;
@@ -47,8 +47,8 @@ export class Qualification {
     mandatoryProfessionalExperience?: boolean,
   ) {
     this.level = level || '';
-    this.methodToObtain = methodToObtain || '';
-    this.commonPathToObtain = commonPathToObtain || '';
+    this.methodToObtainDeprecated = methodToObtain || null;
+    this.commonPathToObtainDeprecated = commonPathToObtain || null;
     this.educationDuration = educationDuration || '';
     this.mandatoryProfessionalExperience =
       mandatoryProfessionalExperience || true;
