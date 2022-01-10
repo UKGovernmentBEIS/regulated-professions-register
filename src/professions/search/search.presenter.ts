@@ -7,7 +7,6 @@ import { Profession } from '../profession.entity';
 import { FilterInput } from '../../common/interfaces/filter-input.interface';
 import { IndexTemplate } from './interfaces/index-template.interface';
 import { ProfessionSearchResultPresenter } from './profession-search-result.presenter';
-import { ProfessionsSorter } from '../helpers/professions-sorter';
 
 export class SearchPresenter {
   constructor(
@@ -32,12 +31,8 @@ export class SearchPresenter {
       this.i18nService,
     ).checkboxArgs();
 
-    const sortedProfessions = new ProfessionsSorter(
-      this.filteredProfessions,
-    ).sortByName();
-
     const displayProfessions = await Promise.all(
-      sortedProfessions.map(async (profession) =>
+      this.filteredProfessions.map(async (profession) =>
         new ProfessionSearchResultPresenter(
           profession,
           this.i18nService,

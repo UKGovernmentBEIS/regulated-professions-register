@@ -14,11 +14,14 @@ export class ProfessionsService {
   ) {}
 
   all(): Promise<Profession[]> {
-    return this.repository.find();
+    return this.repository.find({ order: { name: 'ASC' } });
   }
 
   allConfirmed(): Promise<Profession[]> {
-    return this.repository.find({ where: { confirmed: true } });
+    return this.repository.find({
+      order: { name: 'ASC' },
+      where: { confirmed: true },
+    });
   }
 
   find(id: string): Promise<Profession> {

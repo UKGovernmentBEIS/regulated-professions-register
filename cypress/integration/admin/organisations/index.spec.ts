@@ -3,11 +3,11 @@ describe('Listing organisations', () => {
     beforeEach(() => {
       cy.loginAuth0('admin');
       cy.visit('/admin');
+
+      cy.get('a').contains('Regulatory authorities').click();
     });
 
     it('Lists all the organisations', () => {
-      cy.get('a').contains('Regulatory authorities').click();
-
       cy.readFile('./seeds/test/professions.json').then((professions) => {
         cy.readFile('./seeds/test/organisations.json').then((organisations) => {
           organisations.forEach((organisation) => {
@@ -32,6 +32,13 @@ describe('Listing organisations', () => {
               });
           });
         });
+      });
+    });
+
+    it('Organisations are sorted alphabetically', () => {
+      cy.get('tbody tr th').then((elements) => {
+        const names = elements.map((_, element) => element.innerText).toArray();
+        cy.wrap(names).should('deep.equal', names.sort());
       });
     });
   });

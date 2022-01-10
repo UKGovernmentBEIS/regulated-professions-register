@@ -24,18 +24,18 @@ const industry3 = industryFactory.build({
   id: 'example-industry-3',
 });
 
-const professionA = professionFactory.build({
-  name: 'Example Profession A',
+const profession1 = professionFactory.build({
+  name: 'Example Profession 1',
   occupationLocations: ['GB-ENG'],
   industries: [industry1],
 });
-const professionB = professionFactory.build({
-  name: 'Example Profession B',
+const profession2 = professionFactory.build({
+  name: 'Example Profession 1',
   occupationLocations: ['GB-SCT', 'GB-WLS'],
   industries: [industry2, industry3],
 });
-const professionC = professionFactory.build({
-  name: 'Example Profession C',
+const profession3 = professionFactory.build({
+  name: 'Example Profession 3',
   occupationLocations: ['GB-NIR'],
   industries: [industry2, industry3],
 });
@@ -64,8 +64,7 @@ describe('SearchPresenter', () => {
         filterInput,
         nations,
         industries,
-        // Intentionally mis-ordered to exercise sorting
-        [professionC, professionA, professionB],
+        [profession1, profession2, profession3],
         i18nService,
         'back-link',
       );
@@ -94,15 +93,15 @@ describe('SearchPresenter', () => {
         nationsCheckboxArgs,
         professions: [
           await new ProfessionSearchResultPresenter(
-            professionA,
+            profession1,
             i18nService,
           ).present(),
           await new ProfessionSearchResultPresenter(
-            professionB,
+            profession2,
             i18nService,
           ).present(),
           await new ProfessionSearchResultPresenter(
-            professionC,
+            profession3,
             i18nService,
           ).present(),
         ],

@@ -58,22 +58,52 @@ describe('Profession', () => {
   });
 
   describe('all', () => {
-    it('should return all Professions', async () => {
-      const repoSpy = jest.spyOn(repo, 'find');
-      const professions = await service.all();
+    let repoSpy: jest.SpyInstance<Promise<Profession[]>>;
+    let professions: Profession[];
 
+    beforeEach(async () => {
+      repoSpy = jest.spyOn(repo, 'find');
+      professions = await service.all();
+    });
+
+    it('should return all Professions', async () => {
       expect(professions).toEqual(professionArray);
       expect(repoSpy).toHaveBeenCalled();
+    });
+
+    it('Professions should be sorted', () => {
+      expect(repoSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          order: { name: 'ASC' },
+        }),
+      );
     });
   });
 
   describe('allConfirmed', () => {
-    it('should return all confirmed Professions', async () => {
-      const repoSpy = jest.spyOn(repo, 'find');
-      const professions = await service.allConfirmed();
+    let repoSpy: jest.SpyInstance<Promise<Profession[]>>;
+    let professions: Profession[];
 
+    beforeEach(async () => {
+      repoSpy = jest.spyOn(repo, 'find');
+      professions = await service.allConfirmed();
+    });
+
+    it('should return all confirmed Professions', async () => {
       expect(professions).toEqual(professionArray);
-      expect(repoSpy).toHaveBeenCalledWith({ where: { confirmed: true } });
+      expect(repoSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: { confirmed: true },
+        }),
+      );
+    });
+
+    it('Professions should be sorted', () => {
+      expect(repoSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          order: { name: 'ASC' },
+        }),
+      );
     });
   });
 

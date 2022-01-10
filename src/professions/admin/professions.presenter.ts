@@ -9,7 +9,6 @@ import { Profession } from '../profession.entity';
 import { FilterInput } from '../../common/interfaces/filter-input.interface';
 import { IndexTemplate } from './interfaces/index-template.interface';
 import { ListEntryPresenter } from './list-entry.presenter';
-import { ProfessionsSorter } from '../helpers/professions-sorter';
 import { Organisation } from '../../organisations/organisation.entity';
 import { OrganisationsCheckboxPresenter } from '../../organisations/organisations-checkbox-presenter';
 
@@ -52,12 +51,8 @@ export class ProfessionsPresenter {
       this.i18nService,
     ).checkboxArgs();
 
-    const sortedProfessions = new ProfessionsSorter(
-      this.filteredProfessions,
-    ).sortByName();
-
     const displayProfessions = await Promise.all(
-      sortedProfessions.map(async (profession) =>
+      this.filteredProfessions.map(async (profession) =>
         new ListEntryPresenter(profession, this.i18nService).tableRow(view),
       ),
     );

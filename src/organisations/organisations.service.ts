@@ -11,11 +11,14 @@ export class OrganisationsService {
   ) {}
 
   all(): Promise<Organisation[]> {
-    return this.repository.find();
+    return this.repository.find({ order: { name: 'ASC' } });
   }
 
   allWithProfessions(): Promise<Organisation[]> {
-    return this.repository.find({ relations: ['professions'] });
+    return this.repository.find({
+      order: { name: 'ASC' },
+      relations: ['professions'],
+    });
   }
 
   find(id: string): Promise<Organisation> {

@@ -75,8 +75,12 @@ export class ProfessionsController {
       : 'single-organisation';
 
     // Once the user has an organisation, we will want to use that here for
-    // non-admin users
-    const userOrganisation = showAllOrgs ? null : allOrganisations[0];
+    // non-admin users. Until then, select a default organisation
+    const userOrganisation = showAllOrgs
+      ? null
+      : allOrganisations.find(
+          (organisation) => organisation.name === 'Department for Education',
+        ) || allOrganisations[0];
 
     const filterInput = this.getFilterInput(
       filter,
@@ -85,7 +89,7 @@ export class ProfessionsController {
       allIndustries,
     );
 
-    if (userOrganisation !== null) {
+    if (userOrganisation) {
       filterInput.organisations = [userOrganisation];
     }
 
