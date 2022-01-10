@@ -209,7 +209,7 @@ describe(RegulatoryBodyController, () => {
           expect.objectContaining({
             errors: {
               mandatoryRegistration: {
-                text: 'mandatoryRegistration should not be empty',
+                text: 'professions.form.errors.mandatoryRegistration.empty',
               },
             },
           }),

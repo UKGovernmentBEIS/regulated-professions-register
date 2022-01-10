@@ -1,10 +1,12 @@
 import { IsNotEmpty } from 'class-validator';
 
 export class RegulatedActivitiesDto {
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'professions.form.errors.reservedActivities.empty' })
   activities: string;
 
-  @IsNotEmpty()
+  @IsNotEmpty({
+    message: 'professions.form.errors.description.empty',
+  })
   description: string;
 
   change: boolean;

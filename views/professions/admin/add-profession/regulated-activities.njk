@@ -34,7 +34,8 @@
             id: "activities",
             name: "activities",
             value: reservedActivities,
-            rows: "7"
+            rows: "7",
+            errorMessage: errors.activities | tError
           })
         }}
 
@@ -48,7 +49,8 @@
             id: "description",
             name: "description",
             value: regulationDescription,
-            rows: "7"
+            rows: "7",
+            errorMessage: errors.description | tError
           })
         }}
 
