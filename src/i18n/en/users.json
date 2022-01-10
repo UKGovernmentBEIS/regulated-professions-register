@@ -5,11 +5,13 @@
       "email": "Email address",
       "roles": "What roles apply to this user?",
       "admin": "Administrator",
-      "editor": "Editor"
+      "editor": "Editor",
+      "serviceOwner": "Is this user a service owner?"
     },
     "hint": {
       "name": "For example, Clare Jones.",
-      "email": "For example, clarejones@beis.gov.uk."
+      "email": "For example, clarejones@beis.gov.uk.",
+      "serviceOwner": "Service owners can access all content across organisations"
     },
     "button": {
       "add": "Add a new user",
@@ -19,6 +21,12 @@
     "errors": {
       "email": {
         "alreadyExists": "A user with this email address already exists"
+      },
+      "serviceOwner": {
+        "empty": "You must select if a user is a service owner"
+      },
+      "roles": {
+        "empty": "You must select at least one role"
       }
     },
     "headings": {

@@ -14,6 +14,10 @@
   "backToDashboard": "Back to the dashboard",
   "yes": "Yes",
   "no": "No",
+  "boolean": {
+    "true": "Yes",
+    "false": "No"
+  },
   "unitedKingdom": "United Kingdom",
   "phase": {
     "beta": {

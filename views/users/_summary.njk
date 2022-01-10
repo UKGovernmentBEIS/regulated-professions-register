@@ -39,6 +39,23 @@
       },
       {
         key: {
+          text: ("users.form.label.serviceOwner" | t)
+        },
+        value: {
+          text: (("app.boolean." + serviceOwner) | t)
+        },
+        actions: {
+          items: [
+            {
+              href: "/admin/users/" + id + "/roles/edit?change=true",
+              text: ("app.change" | t),
+              visuallyHiddenText: ("users.form.label.roles" | t)
+            }
+          ]
+        }
+      },
+      {
+        key: {
           text: ("users.form.label.roles" | t)
         },
         value: {

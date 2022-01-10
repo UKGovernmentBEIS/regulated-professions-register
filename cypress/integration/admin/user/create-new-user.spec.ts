@@ -27,6 +27,7 @@ describe('Creating a new user', () => {
       cy.get('input[name="email"]').type('name@example.com');
       cy.get('button').click();
 
+      cy.get('input[name="serviceOwner"][value="1"]').check();
       cy.get('[type="checkbox"]').check('admin');
 
       cy.get('button').click();
@@ -35,6 +36,9 @@ describe('Creating a new user', () => {
       cy.get('body').should('contain', 'name@example.com');
       cy.translate('users.form.label.admin').then((adminLabel) => {
         cy.get('body').should('contain', adminLabel);
+      });
+      cy.translate('app.boolean.true').then((isServiceOwner) => {
+        cy.get('body').should('contain', isServiceOwner);
       });
 
       cy.get('button').click();
@@ -69,6 +73,7 @@ describe('Creating a new user', () => {
       cy.get('input[name="email"]').type('name2@example.com');
       cy.get('button').click();
 
+      cy.get('input[name="serviceOwner"][value="1"]').check();
       cy.get('[type="checkbox"]').check('admin');
 
       cy.get('button').click();
@@ -80,9 +85,10 @@ describe('Creating a new user', () => {
 
       cy.get('body').should('contain', 'name3@example.com');
 
-      cy.get('a[href*="roles/edit?change=true"]').click();
+      cy.get('a[href*="roles/edit?change=true"]').first().click();
 
       cy.get('[type="checkbox"]').check('editor');
+      cy.get('input[name="serviceOwner"][value="0"]').check();
       cy.get('button').click();
 
       cy.translate('users.form.label.admin').then((adminLabel) => {
@@ -91,6 +97,14 @@ describe('Creating a new user', () => {
 
       cy.translate('users.form.label.editor').then((editorLabel) => {
         cy.get('body').should('contain', editorLabel);
+      });
+
+      cy.translate('app.boolean.false').then((isServiceOwner) => {
+        cy.get('body').should('not.contain', isServiceOwner);
+      });
+
+      cy.translate('app.boolean.true').then((isServiceOwner) => {
+        cy.get('body').should('contain', isServiceOwner);
       });
 
       cy.get('button').click();
