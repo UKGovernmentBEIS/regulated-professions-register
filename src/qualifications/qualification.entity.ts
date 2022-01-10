@@ -35,12 +35,6 @@ export class Qualification {
   @Column({ nullable: true })
   otherCommonPathToObtain: string;
 
-  @Column({ nullable: true })
-  methodToObtainDeprecated: string;
-
-  @Column({ nullable: true })
-  commonPathToObtainDeprecated: string;
-
   @Column()
   educationDuration: string;
 
