@@ -1,8 +1,9 @@
-import { randomUUID } from 'crypto';
 import { Industry } from '../../industries/industry.entity';
+import { FilterHelper } from './filter.helper';
+import industryFactory from '../../testutils/factories/industry';
+import professionFactory from '../../testutils/factories/profession';
 import { Nation } from '../../nations/nation';
 import { Profession } from '../profession.entity';
-import { FilterHelper } from './filter.helper';
 
 describe('FilterHelper', () => {
   describe('filter', () => {
@@ -30,9 +31,9 @@ describe('FilterHelper', () => {
 
     it('can filter professions by keywords', () => {
       const exampleProfessions = [
-        new Profession('Trademark Attorny'),
-        new Profession('Chartered Accountant'),
-        new Profession('Secondary School Teacher'),
+        professionFactory.build({ name: 'Trademark Attorny' }),
+        professionFactory.build({ name: 'Chartered Accountant' }),
+        professionFactory.build({ name: 'Secondary School Teacher' }),
       ];
 
       const filterHelper = new FilterHelper(exampleProfessions);
@@ -49,8 +50,8 @@ describe('FilterHelper', () => {
 
     it('keywords are case insensitive', () => {
       const exampleProfessions = [
-        new Profession('Trademark Attorny'),
-        new Profession('Chartered Accountant'),
+        professionFactory.build({ name: 'Trademark Attorny' }),
+        professionFactory.build({ name: 'Chartered Accountant' }),
       ];
 
       const filterHelper = new FilterHelper(exampleProfessions);
@@ -146,21 +147,13 @@ describe('FilterHelper', () => {
 });
 
 function createProfessionWithNations(...nationCodes: string[]): Profession {
-  const profession = new Profession(randomUUID());
-  profession.occupationLocations = nationCodes;
-
-  return profession;
+  return professionFactory.build({ occupationLocations: nationCodes });
 }
 
-function createProfessionWithIndustries(
-  ...industryNames: string[]
-): Profession {
-  const profession = new Profession(randomUUID());
-  const industries = industryNames.map((name) => createIndustryWithId(name));
-
-  profession.industries = industries;
-
-  return profession;
+function createProfessionWithIndustries(...industryIds: string[]): Profession {
+  return professionFactory.build({
+    industries: industryIds.map((name) => createIndustryWithId(name)),
+  });
 }
 
 function createProfession(
@@ -168,18 +161,15 @@ function createProfession(
   nationCodes: string[],
   industryNames: string[],
 ): Profession {
-  const profession = new Profession(name);
   const industries = industryNames.map((name) => createIndustryWithId(name));
 
-  profession.occupationLocations = nationCodes;
-  profession.industries = industries;
-
-  return profession;
+  return professionFactory.build({
+    name,
+    industries,
+    occupationLocations: nationCodes,
+  });
 }
 
-function createIndustryWithId(industryId: string): Industry {
-  const industry = new Industry(industryId);
-  industry.id = industryId;
-
-  return industry;
+function createIndustryWithId(id: string): Industry {
+  return industryFactory.build({ id });
 }
