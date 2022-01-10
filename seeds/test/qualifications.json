@@ -1,15 +1,19 @@
 [
   {
     "level": "DSE - Diploma (post-secondary education), including Annex II (ex 92/51, Annex C,D) , Art. 11 c",
-    "methodToObtain": "Vocational post-secondary education level",
-    "commonPathToObtain": "Vocational post-secondary education level",
+    "methodToObtain": "generalSecondaryEducation",
+    "otherMethodToObtain": "",
+    "commonPathToObtain": "generalSecondaryEducation",
+    "otherCommonPathToObtain": "",
     "educationDuration": " 5.0 Year",
     "mandatoryProfessionalExperience": true
   },
   {
     "level": "PS3 - Diploma of post-secondary level (3-4 years) , Art. 11 d",
-    "methodToObtain": "No information submitted",
-    "commonPathToObtain": "No information submitted",
+    "methodToObtain": "generalOrVocationalPostSecondaryEducation",
+    "otherMethodToObtain": "",
+    "commonPathToObtain": "generalOrVocationalPostSecondaryEducation",
+    "otherCommonPathToObtain": "",
     "educationDuration": "No information submitted",
     "mandatoryProfessionalExperience": true
   }

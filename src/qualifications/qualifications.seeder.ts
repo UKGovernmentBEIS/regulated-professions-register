@@ -4,13 +4,15 @@ import { Repository } from 'typeorm';
 import { Seeder } from 'nestjs-seeder';
 import { InjectRepository } from '@nestjs/typeorm';
 
-import { Qualification } from './qualification.entity';
+import { MethodToObtain, Qualification } from './qualification.entity';
 import { InjectData } from '../common/decorators/seeds.decorator';
 
 type SeedQualification = {
   level: string;
-  methodToObtain: string;
-  commonPathToObtain: string;
+  methodToObtain: MethodToObtain;
+  otherMethodToObtain: string;
+  commonPathToObtain: MethodToObtain;
+  otherCommonPathToObtain: MethodToObtain;
   educationDuration: string;
   mandatoryProfessionalExperience: boolean;
 };
@@ -29,8 +31,10 @@ export class QualificationsSeeder implements Seeder {
     const qualifications = this.data.map((qualification) => {
       return new Qualification(
         qualification.level,
-        qualification.methodToObtain,
-        qualification.commonPathToObtain,
+        qualification.methodToObtain as MethodToObtain,
+        qualification.otherMethodToObtain,
+        qualification.commonPathToObtain as MethodToObtain,
+        qualification.otherCommonPathToObtain,
         qualification.educationDuration,
         qualification.mandatoryProfessionalExperience,
       );
