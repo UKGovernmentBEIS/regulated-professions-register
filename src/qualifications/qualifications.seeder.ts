@@ -14,6 +14,10 @@ type SeedQualification = {
   commonPathToObtain: MethodToObtain;
   otherCommonPathToObtain: MethodToObtain;
   educationDuration: string;
+  educationDurationYears: number;
+  educationDurationMonths: number;
+  educationDurationDays: number;
+  educationDurationHours: number;
   mandatoryProfessionalExperience: boolean;
 };
 
@@ -36,6 +40,10 @@ export class QualificationsSeeder implements Seeder {
         qualification.commonPathToObtain as MethodToObtain,
         qualification.otherCommonPathToObtain,
         qualification.educationDuration,
+        qualification.educationDurationYears,
+        qualification.educationDurationMonths,
+        qualification.educationDurationDays,
+        qualification.educationDurationHours,
         qualification.mandatoryProfessionalExperience,
       );
     });

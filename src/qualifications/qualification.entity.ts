@@ -39,6 +39,18 @@ export class Qualification {
   educationDuration: string;
 
   @Column()
+  educationDurationYears: number;
+
+  @Column()
+  educationDurationMonths: number;
+
+  @Column()
+  educationDurationDays: number;
+
+  @Column()
+  educationDurationHours: number;
+
+  @Column()
   mandatoryProfessionalExperience: boolean;
 
   @CreateDateColumn({
@@ -61,6 +73,10 @@ export class Qualification {
     commonPathToObtain?: MethodToObtain,
     otherCommonPathToObtain?: string,
     educationDuration?: string,
+    educationDurationYears?: number,
+    educationDurationMonths?: number,
+    educationDurationDays?: number,
+    educationDurationHours?: number,
     mandatoryProfessionalExperience?: boolean,
   ) {
     this.level = level || '';
@@ -69,6 +85,10 @@ export class Qualification {
     this.otherMethodToObtain = otherMethodToObtain || '';
     this.otherCommonPathToObtain = otherCommonPathToObtain || '';
     this.educationDuration = educationDuration || '';
+    this.educationDurationYears = educationDurationYears || 0;
+    this.educationDurationMonths = educationDurationMonths || 0;
+    this.educationDurationDays = educationDurationDays || 0;
+    this.educationDurationHours = educationDurationHours || 0;
     this.mandatoryProfessionalExperience =
       mandatoryProfessionalExperience || true;
   }

@@ -6,6 +6,10 @@
     "commonPathToObtain": "generalSecondaryEducation",
     "otherCommonPathToObtain": "",
     "educationDuration": " 5.0 Year",
+    "educationDurationYears": 5,
+    "educationDurationMonths": 0,
+    "educationDurationDays": 0,
+    "educationDurationHours": 0,
     "mandatoryProfessionalExperience": true
   },
   {
@@ -14,7 +18,11 @@
     "otherMethodToObtain": "",
     "commonPathToObtain": "generalOrVocationalPostSecondaryEducation",
     "otherCommonPathToObtain": "",
-    "educationDuration": "No information submitted",
+    "educationDuration": "3.5 Year",
+    "educationDurationYears": 3,
+    "educationDurationMonths": 6,
+    "educationDurationDays": 0,
+    "educationDurationHours": 0,
     "mandatoryProfessionalExperience": true
   }
 ]
