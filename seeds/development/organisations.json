@@ -2,6 +2,7 @@
   {
     "name": "Department for Education",
     "alternateName": "",
+    "slug": "department-for-education",
     "address": "123 Example Street, London, EC1 1AB",
     "url": "https://www.gov.uk/guidance/early-years-qualifications-finder#overseas-qualifications",
     "email": "dfe@example.com",
@@ -12,6 +13,7 @@
   {
     "name": "Council of Registered Gas Installers",
     "alternateName": "",
+    "slug": "council-of-registered-gas-installers",
     "address": "123 Fake Street, London, EC1 1AB",
     "url": "www.corgi-gas-safety.com",
     "email": "gas@example.com",
@@ -22,6 +24,7 @@
   {
     "name": "Law Society of England and Wales",
     "alternateName": "",
+    "slug": "law-society-of-england-and-wales",
     "address": "456 Example Street, London, EC1 1AB",
     "url": "www.lawsociety.org.uk",
     "email": "law@example.com",
@@ -32,6 +35,7 @@
   {
     "name": "General Medical Council",
     "alternateName": "",
+    "slug": "general-medical-council",
     "address": "456 Fake Street, London, EC1 1AB",
     "url": "www.gmc.com",
     "email": "gmc@example.com",
