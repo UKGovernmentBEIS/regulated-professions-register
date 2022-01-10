@@ -3,10 +3,7 @@
 We use [Bull](https://docs.nestjs.com/techniques/queues) to handle background tasks that
 may take a long time, or need some fault tolerace.
 
-Currently we use it mainly for sending messages via Notify, but this may change in future
-as the service evolves.
-
-## Adding a new email
+## Sending emails
 
 We use the concept of "mailers" to send emails. These accept arguments that come from the
 controller. We then build up the content of the email from a Nunjucks template, and set the
@@ -55,3 +52,60 @@ which takes anything put in the `mailer` queue and makes an API call to GOV.UK N
 We use a default template in GOV.UK Notify, which has a placeholder for the whole body
 and subject line. This allows us to keep our email body tightly coupled to the code, and
 version-controlled.
+
+## Other background jobs
+
+When setting up a background job, the usual approach is to add a method to the relevant
+service. If the service doesn't already have a queue injected, you will need to inject
+this into your service class like so:
+
+```typescript
+export class MyService {
+  constructor(@InjectQueue('myService') private queue: Queue) {}
+
+  ...
+}
+```
+
+You can then add a method that responds with a `PerformNowOrLater` type like so:
+
+```typescript
+public myLongRunningTask(ARGS): PerformNowOrLater {
+  return {
+    performNow() => {
+      // This is what actually carries out the job
+    },
+    performLater() => {
+      return await this.queue.add('myLongRunningTask', ARGS);
+    }
+  }
+}
+```
+
+Once this is done, you'll need to add a consumer class to run the job:
+
+```typescript
+import { Processor, Process } from '@nestjs/bull';
+import { Job } from 'bull';
+import { Injectable } from '@nestjs/common';
+
+@Processor('serviceName')
+@Injectable()
+export class MyConsumer {
+  constructor(private readonly service: MyService) {}
+
+  @Process('myLongRunningTask')
+  async myLongRunningTask(job: Job) {
+    // job.data is the ARGS argument we passed to `queue.add` in the service
+    this.service.myLongRunningTask(job.data).performNow();
+  }
+}
+```
+
+(Make sure you add the processor to the `providers` array in your module)
+
+You can then queue the job (for example, in a controller) with:
+
+```typescript
+myService.myLongRunningTask(ARGS).performLater();
+```

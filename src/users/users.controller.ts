@@ -13,7 +13,7 @@ import {
 import { I18nService } from 'nestjs-i18n';
 
 import { AuthenticationGuard } from '../common/authentication.guard';
-import { ExternalUserCreationService } from './external-user-creation.service';
+import { Auth0Service } from './auth0.service';
 import { User } from './user.entity';
 import { UsersPresenter } from './users.presenter';
 import { UsersService } from './users.service';
@@ -26,7 +26,7 @@ import { UserMailer } from './user.mailer';
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
-    private readonly externalUserCreationService: ExternalUserCreationService,
+    private readonly auth0Service: Auth0Service,
     private readonly i18nService: I18nService,
     private readonly userMailer: UserMailer,
   ) {}
@@ -92,8 +92,7 @@ export class UsersController {
     const user = await this.usersService.find(id);
     const { email } = user;
 
-    const externalResult =
-      await this.externalUserCreationService.createExternalUser(email);
+    const externalResult = await this.auth0Service.createUser(email);
     user.externalIdentifier = externalResult.externalIdentifier;
     user.confirmed = true;
 
@@ -140,6 +139,10 @@ export class UsersController {
       'info',
       await this.i18nService.translate('users.form.delete.successMessage'),
     );
+    const user = await this.usersService.find(id);
+
+    await this.auth0Service.deleteUser(user.externalIdentifier).performLater();
+
     await this.usersService.delete(id);
   }
 }
