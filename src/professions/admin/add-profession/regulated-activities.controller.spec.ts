@@ -169,7 +169,7 @@ describe(RegulatedActivitiesController, () => {
         professionsService.find.mockImplementation(async () => profession);
 
         const regulatedActivitiesDto: RegulatedActivitiesDto = {
-          activities: 'Example reserved activities',
+          activities: undefined,
           description: undefined,
           change: false,
         };
@@ -185,105 +185,16 @@ describe(RegulatedActivitiesController, () => {
         expect(response.render).toHaveBeenCalledWith(
           'professions/admin/add-profession/regulated-activities',
           expect.objectContaining({
-            reservedActivities: 'Example reserved activities',
             errors: {
+              activities: {
+                text: 'professions.form.errors.reservedActivities.empty',
+              },
               description: {
                 text: 'professions.form.errors.description.empty',
               },
             },
           }),
         );
-      });
-    });
-
-    describe('getPreviouslyEnteredReservedActivitiesFromDtoThenProfession', () => {
-      describe('when there is an existing Profession with ReservedActivities and new params are submitted', () => {
-        it('returns the dto value, over the Profession', () => {
-          const profession = professionFactory.build({
-            reservedActivities: 'Older reserved activities',
-          });
-
-          const regulatoryBodyDtoWithNewReservedActivities: RegulatedActivitiesDto =
-            {
-              activities: 'Newer reserved activities',
-              description: undefined,
-              change: false,
-            };
-
-          expect(
-            controller.getPreviouslyEnteredReservedActivitiesFromDtoThenProfession(
-              profession,
-              regulatoryBodyDtoWithNewReservedActivities,
-            ),
-          ).toEqual('Newer reserved activities');
-        });
-      });
-
-      describe('when there is an existing Profession with ReservedActivities and empty params are submitted', () => {
-        it('returns the Profession value, not overwriting it', () => {
-          const profession = professionFactory.build({
-            reservedActivities: 'Older reserved activities',
-          });
-
-          const regulatoryBodyDtoWithMissingReservedActivities: RegulatedActivitiesDto =
-            {
-              activities: undefined,
-              description: 'Example description',
-              change: false,
-            };
-
-          expect(
-            controller.getPreviouslyEnteredReservedActivitiesFromDtoThenProfession(
-              profession,
-              regulatoryBodyDtoWithMissingReservedActivities,
-            ),
-          ).toEqual('Older reserved activities');
-        });
-      });
-    });
-
-    describe('getPreviouslyEnteredDescriptionFromDtoThenProfession ', () => {
-      describe('when there is an existing Profession with a Description and new params are submitted', () => {
-        it('returns the dto value, over the Profession', () => {
-          const profession = professionFactory.build({
-            description: 'Older description',
-          });
-
-          const regulatoryBodyDtoWithNewDescription: RegulatedActivitiesDto = {
-            description: 'Newer description',
-            activities: undefined,
-            change: false,
-          };
-
-          expect(
-            controller.getPreviouslyEnteredDescriptionFromDtoThenProfession(
-              profession,
-              regulatoryBodyDtoWithNewDescription,
-            ),
-          ).toEqual('Newer description');
-        });
-      });
-
-      describe('when there is an existing Profession with Description and empty params are submitted', () => {
-        it('returns the Profession value, not overwriting it', () => {
-          const profession = professionFactory.build({
-            description: 'Older description',
-          });
-
-          const regulatoryBodyDtoWithMissingDescription: RegulatedActivitiesDto =
-            {
-              description: undefined,
-              activities: undefined,
-              change: false,
-            };
-
-          expect(
-            controller.getPreviouslyEnteredDescriptionFromDtoThenProfession(
-              profession,
-              regulatoryBodyDtoWithMissingDescription,
-            ),
-          ).toEqual('Older description');
-        });
       });
     });
   });
