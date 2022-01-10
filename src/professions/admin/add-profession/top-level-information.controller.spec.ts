@@ -5,11 +5,9 @@ import { I18nService } from 'nestjs-i18n';
 import professionFactory from '../../../testutils/factories/profession';
 
 import { IndustriesService } from '../../../industries/industries.service';
-import { Industry } from '../../../industries/industry.entity';
 import { ProfessionsService } from '../../professions.service';
 import { TopLevelInformationController } from './top-level-information.controller';
 import industryFactory from '../../../testutils/factories/industry';
-import industry from '../../../testutils/factories/industry';
 
 describe('TopLevelInformationController', () => {
   let controller: TopLevelInformationController;
@@ -18,12 +16,14 @@ describe('TopLevelInformationController', () => {
   let response: DeepMocked<Response>;
   let i18nService: DeepMocked<I18nService>;
 
-  const healthIndustry = new Industry('industries.health');
-  healthIndustry.id = 'health-uuid';
-  const constructionIndustry = new Industry(
-    'industries.constructionAndEngineering',
-  );
-  constructionIndustry.id = 'construction-uuid';
+  const healthIndustry = industryFactory.build({
+    name: 'industries.health',
+    id: 'health-uuid',
+  });
+  const constructionIndustry = industryFactory.build({
+    name: 'industries.constructionAndEngineering',
+    id: 'construction-uuid',
+  });
 
   const industries = [healthIndustry, constructionIndustry];
 
@@ -238,159 +238,25 @@ describe('TopLevelInformationController', () => {
           'profession-id',
         );
 
+        expect(response.render).toHaveBeenCalledWith(
+          'professions/admin/add-profession/top-level-information',
+          expect.objectContaining({
+            errors: {
+              name: {
+                text: 'professions.form.errors.name.empty',
+              },
+              nations: {
+                text: 'professions.form.errors.nations.empty',
+              },
+              industries: {
+                text: 'professions.form.errors.industries.empty',
+              },
+            },
+          }),
+        );
+
         expect(professionsService.save).not.toHaveBeenCalled();
         expect(industriesService.all).toHaveBeenCalled();
-      });
-
-      describe('getSelectedIndustriesFromDtoThenProfession', () => {
-        describe('when there is an existing Profession with Industries selected and new params are submitted', () => {
-          it('returns the dto value, over the Profession', async () => {
-            const profession = professionFactory.build({
-              occupationLocations: ['GB-ENG', 'GB-SCT'],
-              industries: [industryFactory.build()],
-            });
-
-            const replacementIndustry = industryFactory.build({
-              name: 'industries.constructionAndEngineering',
-            });
-
-            const topLevelDetailsWithNewIndustries = {
-              name: 'Example Profession',
-              nations: ['GB-ENG'],
-              industries: ['construction-uuid'],
-              change: false,
-            };
-
-            industriesService.findByIds.mockResolvedValue([
-              replacementIndustry,
-            ]);
-
-            await expect(
-              controller.getSelectedIndustriesFromDtoThenProfession(
-                profession,
-                topLevelDetailsWithNewIndustries,
-              ),
-            ).resolves.toEqual([replacementIndustry]);
-          });
-        });
-
-        describe('when there is an existing Profession with Industries selected and empty Industry params are submitted', () => {
-          it('returns the Profession value', async () => {
-            const industry = industryFactory.build();
-            const profession = professionFactory.build({
-              occupationLocations: ['GB-ENG', 'GB-SCT'],
-              industries: [industry],
-            });
-
-            professionsService.find.mockImplementation(async () => profession);
-
-            const topLevelDetailsWithMissingIndustries = {
-              name: 'Gas Safe Engineer',
-              nations: ['GB-ENG'],
-              industries: null,
-              change: false,
-            };
-
-            await expect(
-              controller.getSelectedIndustriesFromDtoThenProfession(
-                profession,
-                topLevelDetailsWithMissingIndustries,
-              ),
-            ).resolves.toEqual([industry]);
-          });
-        });
-
-        describe('when there are not yet any Industries on the profession and empty Industries params are submitted', () => {
-          it('returns an empty array', async () => {
-            const blankProfession = professionFactory
-              .justCreated('profession-id')
-              .build();
-
-            const topLevelDetailsWithMissingIndustries = {
-              name: 'Gas Safe Engineer',
-              nations: ['GB-ENG'],
-              industries: undefined,
-              change: false,
-            };
-
-            await expect(
-              controller.getSelectedIndustriesFromDtoThenProfession(
-                blankProfession,
-                topLevelDetailsWithMissingIndustries,
-              ),
-            ).resolves.toEqual([]);
-          });
-        });
-      });
-
-      describe('getSelectedNationsFromDtoThenProfession', () => {
-        describe('when there is an existing Profession with Nations selected and new params are submitted', () => {
-          it('returns the dto value, over the Profession', () => {
-            const profession = professionFactory.build({
-              occupationLocations: ['GB-ENG', 'GB-SCT'],
-              industries: [industry.build()],
-            });
-
-            const topLevelDetailsWithNewNations = {
-              name: 'Gas Safe Engineer',
-              nations: ['GB-NIR'],
-              industries: ['construction-uuid'],
-              change: false,
-            };
-
-            expect(
-              controller.getSelectedNationsFromDtoThenProfession(
-                profession,
-                topLevelDetailsWithNewNations,
-              ),
-            ).toEqual(['GB-NIR']);
-          });
-        });
-
-        describe('when there is an existing Profession with Nations selected and empty Nation params are submitted', () => {
-          it('returns the Profession value', () => {
-            const profession = professionFactory.build({
-              occupationLocations: ['GB-ENG', 'GB-SCT'],
-              industries: [industry.build()],
-            });
-
-            const topLevelDetailsWithMissingNations = {
-              name: 'Gas Safe Engineer',
-              nations: undefined,
-              industries: ['construction-uuid'],
-              change: false,
-            };
-
-            expect(
-              controller.getSelectedNationsFromDtoThenProfession(
-                profession,
-                topLevelDetailsWithMissingNations,
-              ),
-            ).toEqual(['GB-ENG', 'GB-SCT']);
-          });
-        });
-
-        describe('when there are not yet any Nations on the profession and empty Nation params are submitted', () => {
-          it('returns an empty array', () => {
-            const blankProfession = professionFactory
-              .justCreated('profession-id')
-              .build();
-
-            const topLevelDetailsWithMissingNations = {
-              name: 'Gas Safe Engineer',
-              nations: undefined,
-              industries: ['construction-uuid'],
-              change: false,
-            };
-
-            expect(
-              controller.getSelectedNationsFromDtoThenProfession(
-                blankProfession,
-                topLevelDetailsWithMissingNations,
-              ),
-            ).toEqual([]);
-          });
-        });
       });
     });
 

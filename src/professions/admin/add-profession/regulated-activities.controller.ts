@@ -41,24 +41,17 @@ export class RegulatedActivitiesController {
 
     const profession = await this.professionsService.find(id);
 
-    const regulatedActivitiesAnswers: RegulatedActivitiesDto =
-      regulatedActivitiesDto;
+    const submittedValues: RegulatedActivitiesDto = regulatedActivitiesDto;
 
     if (!validator.valid()) {
       const errors = new ValidationFailedError(validator.errors).fullMessages();
 
       return this.renderForm(
         res,
-        this.getPreviouslyEnteredReservedActivitiesFromDtoThenProfession(
-          profession,
-          regulatedActivitiesAnswers,
-        ),
-        this.getPreviouslyEnteredDescriptionFromDtoThenProfession(
-          profession,
-          regulatedActivitiesAnswers,
-        ),
-        regulatedActivitiesAnswers.change,
-        this.backLink(regulatedActivitiesAnswers.change, id),
+        submittedValues.activities,
+        submittedValues.description,
+        submittedValues.change,
+        this.backLink(submittedValues.change, id),
         errors,
       );
     }
@@ -66,14 +59,14 @@ export class RegulatedActivitiesController {
     const updated: Profession = {
       ...profession,
       ...{
-        reservedActivities: regulatedActivitiesAnswers.activities,
-        description: regulatedActivitiesAnswers.description,
+        reservedActivities: submittedValues.activities,
+        description: submittedValues.description,
       },
     };
 
     await this.professionsService.save(updated);
 
-    if (regulatedActivitiesAnswers.change) {
+    if (submittedValues.change) {
       return res.redirect(`/admin/professions/${id}/check-your-answers`);
     }
 
@@ -101,20 +94,6 @@ export class RegulatedActivitiesController {
       'professions/admin/add-profession/regulated-activities',
       templateArgs,
     );
-  }
-
-  getPreviouslyEnteredReservedActivitiesFromDtoThenProfession(
-    profession: Profession,
-    regulatedActivitiesDto: RegulatedActivitiesDto,
-  ) {
-    return regulatedActivitiesDto.activities || profession.reservedActivities;
-  }
-
-  getPreviouslyEnteredDescriptionFromDtoThenProfession(
-    profession: Profession,
-    regulatedActivitiesDto: RegulatedActivitiesDto,
-  ) {
-    return regulatedActivitiesDto.description || profession.description;
   }
 
   private backLink(change: boolean, id: string) {

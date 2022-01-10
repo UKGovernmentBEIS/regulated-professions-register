@@ -52,45 +52,39 @@ export class TopLevelInformationController {
       topLevelDetailsDto,
     );
 
+    const submittedValues: TopLevelDetailsDto = topLevelDetailsDto;
+
     const profession = await this.professionsService.find(id);
+
+    const submittedIndustries = await this.industriesService.findByIds(
+      submittedValues.industries || [],
+    );
 
     if (!validator.valid()) {
       const errors = new ValidationFailedError(validator.errors).fullMessages();
       return this.renderForm(
         res,
-        topLevelDetailsDto.name || profession.name,
-        await this.getSelectedIndustriesFromDtoThenProfession(
-          profession,
-          topLevelDetailsDto,
-        ),
-        this.getSelectedNationsFromDtoThenProfession(
-          profession,
-          topLevelDetailsDto,
-        ),
-        topLevelDetailsDto.change,
-        this.backLink(topLevelDetailsDto.change, id),
+        submittedValues.name,
+        submittedIndustries,
+        submittedValues.nations || [],
+        submittedValues.change,
+        this.backLink(submittedValues.change, id),
         errors,
       );
     }
 
-    const topLevelDetails: TopLevelDetailsDto = topLevelDetailsDto;
-
-    const industries = await this.industriesService.findByIds(
-      topLevelDetails.industries,
-    );
-
     const updated: Profession = {
       ...profession,
       ...{
-        name: topLevelDetailsDto.name,
-        occupationLocations: topLevelDetails.nations,
-        industries: industries,
+        name: submittedValues.name,
+        occupationLocations: submittedValues.nations,
+        industries: submittedIndustries,
       },
     };
 
     await this.professionsService.save(updated);
 
-    if (topLevelDetailsDto.change) {
+    if (submittedValues.change) {
       return res.redirect(`/admin/professions/${id}/check-your-answers`);
     }
 
@@ -133,22 +127,6 @@ export class TopLevelInformationController {
       'professions/admin/add-profession/top-level-information',
       templateArgs,
     );
-  }
-
-  async getSelectedIndustriesFromDtoThenProfession(
-    profession: Profession,
-    topLevelDetailsDto: TopLevelDetailsDto,
-  ): Promise<Industry[]> {
-    return topLevelDetailsDto.industries
-      ? await this.industriesService.findByIds(topLevelDetailsDto.industries)
-      : profession.industries || [];
-  }
-
-  getSelectedNationsFromDtoThenProfession(
-    profession: Profession,
-    topLevelDetailsDto: TopLevelDetailsDto,
-  ): string[] {
-    return topLevelDetailsDto.nations || profession.occupationLocations || [];
   }
 
   private backLink(change: boolean, id: string) {

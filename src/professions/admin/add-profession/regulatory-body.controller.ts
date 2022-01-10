@@ -29,8 +29,7 @@ export class RegulatoryBodyController {
   ): Promise<void> {
     const profession = await this.professionsService.find(id);
 
-    const selectedMandatoryRegistration: MandatoryRegistration =
-      profession.mandatoryRegistration as MandatoryRegistration;
+    const selectedMandatoryRegistration = profession.mandatoryRegistration;
 
     return this.renderForm(
       res,
@@ -55,37 +54,30 @@ export class RegulatoryBodyController {
 
     const profession = await this.professionsService.find(id);
 
+    const submittedValues: RegulatoryBodyDto = regulatoryBodyDto;
+
+    const selectedOrganisation = await this.organisationsService.find(
+      submittedValues.regulatoryBody,
+    );
+
+    const selectedMandatoryRegistration = submittedValues.mandatoryRegistration;
+
     if (!validator.valid()) {
       const errors = new ValidationFailedError(validator.errors).fullMessages();
       return this.renderForm(
         res,
-        await this.getSelectedOrganisationFromDtoThenProfession(
-          profession,
-          regulatoryBodyDto,
-        ),
-        this.getSelectedMandatoryRegistrationFromDtoThenProfession(
-          profession,
-          regulatoryBodyDto,
-        ),
+        selectedOrganisation,
+        selectedMandatoryRegistration,
         regulatoryBodyDto.change,
         this.backLink(regulatoryBodyDto.change, id),
         errors,
       );
     }
 
-    const regulatoryBodyAnswers: RegulatoryBodyDto = regulatoryBodyDto;
-
-    const organisation = await this.organisationsService.find(
-      regulatoryBodyAnswers.regulatoryBody,
-    );
-
-    const selectedMandatoryRegistration: MandatoryRegistration =
-      regulatoryBodyDto.mandatoryRegistration as MandatoryRegistration;
-
     const updated: Profession = {
       ...profession,
       ...{
-        organisation: organisation,
+        organisation: selectedOrganisation,
         mandatoryRegistration: selectedMandatoryRegistration,
       },
     };
@@ -133,26 +125,6 @@ export class RegulatoryBodyController {
       'professions/admin/add-profession/regulatory-body',
       templateArgs,
     );
-  }
-
-  async getSelectedOrganisationFromDtoThenProfession(
-    profession: Profession,
-    regulatoryBodyDto: RegulatoryBodyDto,
-  ): Promise<Organisation> {
-    return regulatoryBodyDto.regulatoryBody
-      ? await this.organisationsService.find(regulatoryBodyDto.regulatoryBody)
-      : profession.organisation;
-  }
-
-  getSelectedMandatoryRegistrationFromDtoThenProfession(
-    profession: Profession,
-    regulatoryBodyDto: RegulatoryBodyDto,
-  ): MandatoryRegistration {
-    const selectedMandatoryRegistration =
-      regulatoryBodyDto.mandatoryRegistration ||
-      profession.mandatoryRegistration;
-
-    return selectedMandatoryRegistration as MandatoryRegistration;
   }
 
   private backLink(change: boolean, id: string) {
