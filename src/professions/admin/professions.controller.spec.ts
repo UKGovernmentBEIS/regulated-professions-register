@@ -9,7 +9,7 @@ import { Nation } from '../../nations/nation';
 import { Organisation } from '../../organisations/organisation.entity';
 import { OrganisationsService } from '../../organisations/organisations.service';
 import { User } from '../../users/user.entity';
-import { FilterInput } from '../interfaces/filter-input.interface';
+import { FilterInput } from '../../common/interfaces/filter-input.interface';
 import { Profession } from '../profession.entity';
 import { ProfessionsService } from '../professions.service';
 import { ProfessionsController as ProfessionsController } from './professions.controller';
