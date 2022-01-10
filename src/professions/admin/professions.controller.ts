@@ -29,7 +29,7 @@ export class ProfessionsController {
 
   @Get()
   @UseGuards(AuthenticationGuard)
-  @Render('professions/admin/list/index')
+  @Render('professions/admin/index')
   async index(
     @Req() request: Request,
     @Query() query: FilterDto = null,
