@@ -1,4 +1,5 @@
 import { CheckboxArgs } from '../common/interfaces/checkbox-args.interface';
+import { OrganisationsSorter } from './helpers/organisations-sorter';
 import { Organisation } from './organisation.entity';
 
 export class OrganisationsCheckboxPresenter {
@@ -8,7 +9,11 @@ export class OrganisationsCheckboxPresenter {
   ) {}
 
   checkboxArgs(): CheckboxArgs[] {
-    return this.allOrganisations.map((organisation) => ({
+    const organisations = new OrganisationsSorter(
+      this.allOrganisations,
+    ).sortByName();
+
+    return organisations.map((organisation) => ({
       text: organisation.name,
       value: organisation.id,
       checked: !!this.checkedOrganisations.find(

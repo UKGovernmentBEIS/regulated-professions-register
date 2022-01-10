@@ -1,16 +1,16 @@
 import { Organisation } from './organisation.entity';
 import { OrganisationsCheckboxPresenter } from './organisations-checkbox-presenter';
 
-const organisation1 = new Organisation('Example Organisation 1');
-organisation1.id = 'example-organisation-1';
+const organisationA = new Organisation('Example Organisation A');
+organisationA.id = 'example-organisation-a';
 
-const organisation2 = new Organisation('Example Organisation 2');
-organisation2.id = 'example-organisation-2';
+const organisationB = new Organisation('Example Organisation B');
+organisationB.id = 'example-organisation-b';
 
-const organisation3 = new Organisation('Example Organisation 3');
-organisation3.id = 'example-organisation-3';
+const organisationC = new Organisation('Example Organisation C');
+organisationC.id = 'example-organisation-c';
 
-const organisations = [organisation1, organisation2, organisation3];
+const organisations = [organisationA, organisationB, organisationC];
 
 describe('OrganisationsCheckboxPresenter', () => {
   describe('checkboxArgs', () => {
@@ -19,18 +19,18 @@ describe('OrganisationsCheckboxPresenter', () => {
 
       expect(presenter.checkboxArgs()).toEqual([
         {
-          text: 'Example Organisation 1',
-          value: 'example-organisation-1',
+          text: 'Example Organisation A',
+          value: 'example-organisation-a',
           checked: false,
         },
         {
-          text: 'Example Organisation 2',
-          value: 'example-organisation-2',
+          text: 'Example Organisation B',
+          value: 'example-organisation-b',
           checked: false,
         },
         {
-          text: 'Example Organisation 3',
-          value: 'example-organisation-3',
+          text: 'Example Organisation C',
+          value: 'example-organisation-c',
           checked: false,
         },
       ]);
@@ -38,25 +38,50 @@ describe('OrganisationsCheckboxPresenter', () => {
 
     it('should return some checked checkbox arguments when called with a non-empty list of Organisations', async () => {
       const presenter = new OrganisationsCheckboxPresenter(organisations, [
-        organisation3,
-        organisation1,
+        organisationC,
+        organisationA,
       ]);
 
       expect(presenter.checkboxArgs()).toEqual([
         {
-          text: 'Example Organisation 1',
-          value: 'example-organisation-1',
+          text: 'Example Organisation A',
+          value: 'example-organisation-a',
           checked: true,
         },
         {
-          text: 'Example Organisation 2',
-          value: 'example-organisation-2',
+          text: 'Example Organisation B',
+          value: 'example-organisation-b',
           checked: false,
         },
         {
-          text: 'Example Organisation 3',
-          value: 'example-organisation-3',
+          text: 'Example Organisation C',
+          value: 'example-organisation-c',
           checked: true,
+        },
+      ]);
+    });
+
+    it('should return checkbox arguments sorted by Organisation name', async () => {
+      const presenter = new OrganisationsCheckboxPresenter(
+        [organisations[2], organisations[0], organisations[1]],
+        [],
+      );
+
+      expect(presenter.checkboxArgs()).toEqual([
+        {
+          text: 'Example Organisation A',
+          value: 'example-organisation-a',
+          checked: false,
+        },
+        {
+          text: 'Example Organisation B',
+          value: 'example-organisation-b',
+          checked: false,
+        },
+        {
+          text: 'Example Organisation C',
+          value: 'example-organisation-c',
+          checked: false,
         },
       ]);
     });
