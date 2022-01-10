@@ -2,7 +2,7 @@ import { DeepMocked, createMock } from '@golevelup/ts-jest';
 import { TestingModule, Test } from '@nestjs/testing';
 import { Request } from 'express';
 import { I18nService } from 'nestjs-i18n';
-import { createMockRequest } from '../../../common/create-mock-request';
+import { createMockRequest } from '../../../testutils/create-mock-request';
 import industryFactory from '../../../testutils/factories/industry';
 import organisationFactory from '../../../testutils/factories/organisation';
 import professionFactory from '../../../testutils/factories/profession';

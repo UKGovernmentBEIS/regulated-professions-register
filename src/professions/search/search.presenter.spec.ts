@@ -1,7 +1,7 @@
 import { createMock, DeepMocked } from '@golevelup/ts-jest';
 import { Request } from 'express';
 import { I18nService } from 'nestjs-i18n';
-import { createMockRequest } from '../../common/create-mock-request';
+import { createMockRequest } from '../../testutils/create-mock-request';
 import { Nation } from '../../nations/nation';
 import { Industry } from '../../industries/industry.entity';
 import { Profession } from '../profession.entity';

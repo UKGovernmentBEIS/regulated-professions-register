@@ -3,7 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { Request } from 'express';
 import { I18nService } from 'nestjs-i18n';
 import { Nation } from '../../nations/nation';
-import { createMockRequest } from '../../common/create-mock-request';
+import { createMockRequest } from '../../testutils/create-mock-request';
 import { IndustriesService } from '../../industries/industries.service';
 import { Industry } from '../../industries/industry.entity';
 import { Profession } from '../profession.entity';

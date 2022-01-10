@@ -5,7 +5,7 @@ import { UsersService } from '../users.service';
 import { User } from '../user.entity';
 import { PersonalDetailsController } from './personal-details.controller';
 import { createMock, DeepMocked } from '@golevelup/ts-jest';
-import { createMockRequest } from '../../common/create-mock-request';
+import { createMockRequest } from '../../testutils/create-mock-request';
 
 const name = 'Example Name';
 const email = 'name@example.com';
