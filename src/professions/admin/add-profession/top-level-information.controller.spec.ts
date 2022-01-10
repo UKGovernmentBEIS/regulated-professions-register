@@ -5,7 +5,6 @@ import { I18nService } from 'nestjs-i18n';
 import professionFactory from '../../../testutils/factories/profession';
 
 import { IndustriesService } from '../../../industries/industries.service';
-import { Industry } from '../../../industries/industry.entity';
 import { ProfessionsService } from '../../professions.service';
 import { TopLevelInformationController } from './top-level-information.controller';
 import industryFactory from '../../../testutils/factories/industry';
@@ -17,12 +16,14 @@ describe('TopLevelInformationController', () => {
   let response: DeepMocked<Response>;
   let i18nService: DeepMocked<I18nService>;
 
-  const healthIndustry = new Industry('industries.health');
-  healthIndustry.id = 'health-uuid';
-  const constructionIndustry = new Industry(
-    'industries.constructionAndEngineering',
-  );
-  constructionIndustry.id = 'construction-uuid';
+  const healthIndustry = industryFactory.build({
+    name: 'industries.health',
+    id: 'health-uuid',
+  });
+  const constructionIndustry = industryFactory.build({
+    name: 'industries.constructionAndEngineering',
+    id: 'construction-uuid',
+  });
 
   const industries = [healthIndustry, constructionIndustry];
 
