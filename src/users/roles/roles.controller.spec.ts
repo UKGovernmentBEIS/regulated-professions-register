@@ -4,7 +4,7 @@ import { User, UserRole } from '../user.entity';
 import { RolesController } from './roles.controller';
 import { createMock, DeepMocked } from '@golevelup/ts-jest';
 import { Request, Response } from 'express';
-import { createMockRequest } from '../../common/create-mock-request';
+import { createMockRequest } from '../../testutils/create-mock-request';
 import userFactory from '../../testutils/factories/user';
 
 describe('RolesController', () => {

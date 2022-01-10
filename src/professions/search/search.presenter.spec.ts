@@ -1,11 +1,11 @@
 import { createMock, DeepMocked } from '@golevelup/ts-jest';
 import { Request } from 'express';
 import { I18nService } from 'nestjs-i18n';
-import { createMockRequest } from '../../common/create-mock-request';
+import { createMockRequest } from '../../testutils/create-mock-request';
 import { Nation } from '../../nations/nation';
 import { Industry } from '../../industries/industry.entity';
 import { Profession } from '../profession.entity';
-import { FilterInput } from './interfaces/filter-input.interface';
+import { FilterInput } from '../interfaces/filter-input.interface';
 import { SearchPresenter } from './search.presenter';
 import { IndustriesCheckboxPresenter } from '../../industries/industries-checkbox.presenter';
 import { NationsCheckboxPresenter } from '../../nations/nations-checkbox.presenter';
@@ -20,8 +20,8 @@ exampleIndustry2.id = 'example-industry-2';
 const exampleIndustry3 = new Industry('industries.example3');
 exampleIndustry3.id = 'example-industry-3';
 
-const exampleProfession1 = new Profession(
-  'Example Profession 1',
+const exampleProfessionA = new Profession(
+  'Example Profession A',
   '',
   null,
   '',
@@ -31,12 +31,23 @@ const exampleProfession1 = new Profession(
   [exampleIndustry1],
 );
 
-const exampleProfession2 = new Profession(
-  'Example Profession 2',
+const exampleProfessionB = new Profession(
+  'Example Profession B',
   '',
   null,
   '',
   ['GB-SCT', 'GB-WLS'],
+  '',
+  null,
+  [exampleIndustry2, exampleIndustry3],
+);
+
+const exampleProfessionC = new Profession(
+  'Example Profession C',
+  '',
+  null,
+  '',
+  ['GB-NIR'],
   '',
   null,
   [exampleIndustry2, exampleIndustry3],
@@ -95,10 +106,13 @@ describe('SearchPresenter', () => {
         filterInput,
         nations,
         exampleIndustries,
-        [exampleProfession1, exampleProfession2],
+        // Intentionally mis-ordered to exercise sorting
+        [exampleProfessionC, exampleProfessionA, exampleProfessionB],
+        i18nService,
+        request,
       );
 
-      const result = await presenter.present(i18nService, request);
+      const result = await presenter.present();
 
       const industriesCheckboxArgs = await new IndustriesCheckboxPresenter(
         exampleIndustries,
@@ -121,55 +135,18 @@ describe('SearchPresenter', () => {
         industriesCheckboxArgs,
         nationsCheckboxArgs,
         professions: [
-          await new ProfessionSearchResultPresenter(exampleProfession1).present(
+          await new ProfessionSearchResultPresenter(
+            exampleProfessionA,
             i18nService,
-          ),
-          await new ProfessionSearchResultPresenter(exampleProfession2).present(
+          ).present(),
+          await new ProfessionSearchResultPresenter(
+            exampleProfessionB,
             i18nService,
-          ),
-        ],
-      });
-    });
-
-    it('should sort the search results alphabetically', async () => {
-      const filterInput: FilterInput = {
-        nations: [],
-        industries: [],
-        keywords: '',
-      };
-
-      const professionA = new Profession('A');
-      professionA.occupationLocations = [];
-      professionA.industries = [];
-
-      const professionB = new Profession('B');
-      professionB.occupationLocations = [];
-      professionB.industries = [];
-
-      const professionC = new Profession('C');
-      professionC.occupationLocations = [];
-      professionC.industries = [];
-
-      const presenter = new SearchPresenter(
-        filterInput,
-        nations,
-        exampleIndustries,
-        [professionC, professionA, professionB],
-      );
-
-      const result = await presenter.present(i18nService, request);
-
-      expect(result).toMatchObject({
-        professions: [
-          await new ProfessionSearchResultPresenter(professionA).present(
+          ).present(),
+          await new ProfessionSearchResultPresenter(
+            exampleProfessionC,
             i18nService,
-          ),
-          await new ProfessionSearchResultPresenter(professionB).present(
-            i18nService,
-          ),
-          await new ProfessionSearchResultPresenter(professionC).present(
-            i18nService,
-          ),
+          ).present(),
         ],
       });
     });

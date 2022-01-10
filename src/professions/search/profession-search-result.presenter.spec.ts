@@ -18,14 +18,8 @@ describe('ProfessionSearchResultPresenter', () => {
           return 'Law';
         case 'nations.england':
           return 'England';
-        case 'nations.scotland':
-          return 'Scotland';
         case 'nations.wales':
           return 'Wales';
-        case 'nations.northernIreland':
-          return 'Northern Ireland';
-        case 'app.unitedKingdom':
-          return 'United Kingdom';
         default:
           return '';
       }
@@ -47,41 +41,13 @@ describe('ProfessionSearchResultPresenter', () => {
 
       const result = await new ProfessionSearchResultPresenter(
         exampleProfession,
-      ).present(i18nService);
+        i18nService,
+      ).present();
 
       expect(result).toEqual({
         name: 'Example Profession',
         slug: 'example-profession',
         nations: 'England, Wales',
-        industries: ['Health', 'Law'],
-      });
-    });
-
-    it('Collapses four nations into "United Kingdom"', async () => {
-      const exampleProfession = new Profession(
-        'Example Profession',
-        '',
-        'example-profession',
-      );
-      exampleProfession.occupationLocations = [
-        'GB-WLS',
-        'GB-SCT',
-        'GB-ENG',
-        'GB-NIR',
-      ];
-      exampleProfession.industries = [
-        new Industry('industries.health'),
-        new Industry('industries.law'),
-      ];
-
-      const result = await new ProfessionSearchResultPresenter(
-        exampleProfession,
-      ).present(i18nService);
-
-      expect(result).toEqual({
-        name: 'Example Profession',
-        slug: 'example-profession',
-        nations: 'United Kingdom',
         industries: ['Health', 'Law'],
       });
     });

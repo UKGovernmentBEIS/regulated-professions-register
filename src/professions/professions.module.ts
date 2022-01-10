@@ -13,6 +13,7 @@ import { RegulatoryBodyController } from './admin/add-profession/regulatory-body
 import { Organisation } from '../organisations/organisation.entity';
 import { OrganisationsService } from '../organisations/organisations.service';
 import { RegulatedActivitiesController } from './admin/add-profession/regulated-activities.controller';
+import { ProfessionsController as AdminProfessionsController } from './admin/professions.controller';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { RegulatedActivitiesController } from './admin/add-profession/regulated-
     RegulatedActivitiesController,
     CheckYourAnswersController,
     ConfirmationController,
+    AdminProfessionsController,
   ],
 })
 export class ProfessionsModule {}

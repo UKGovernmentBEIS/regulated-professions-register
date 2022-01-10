@@ -36,8 +36,8 @@ seeder({
       Industry,
       Qualification,
       Legislation,
-      Profession,
       Organisation,
+      Profession,
     ]),
   ],
 }).run([
@@ -45,6 +45,6 @@ seeder({
   IndustriesSeeder,
   QualificationsSeeder,
   LegislationsSeeder,
-  ProfessionsSeeder,
   OrganisationsSeeder,
+  ProfessionsSeeder,
 ]);
