@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Seed users at deploy time
 - New screen for inputting reserved activities and a description of the regulation when creating a new profession
 - Add functional backlinks to Add a profession journey
+- Delete a user in Auth0 when deleted in the app
 
 ### Changed
 
