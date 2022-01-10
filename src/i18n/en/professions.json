@@ -6,7 +6,8 @@
       "regulatoryBody": "Regulatory / professional bodies",
       "checkAnswers": "Check your answers",
       "confirmation": "New profession created",
-      "regulatedActivities": "Regulated activities"
+      "regulatedActivities": "Regulated activities",
+      "qualificationInformation": "Qualification information"
     },
     "description": "Use this section of the site to add a new profession",
     "label": {
@@ -22,6 +23,13 @@
       "regulatedActivities": {
         "activities": "Reserved activities",
         "description": "Description of activities / regulation description"
+      },
+      "qualificationInformation": {
+        "qualificationLevel": "Qualification level",
+        "methodsToObtainQualification": "Method to obtain qualification",
+        "mostCommonPathToObtainQualification": "Most common path to obtain qualification",
+        "duration": "Duration of qualification",
+        "mandatoryProfessionalExperience": "Existence of mandatory professional experience"
       }
     },
     "details": {
@@ -36,6 +44,15 @@
         "mandatory": "Mandatory",
         "voluntary": "Voluntary",
         "unknown": "Unknown"
+      },
+      "methodsToObtainQualification": {
+        "generalSecondaryEducation": "General secondary education",
+        "generalOrVocationalPostSecondaryEducation": "General or vocational post-secondary education",
+        "generalPostSecondaryEducationMandatoryVocational": "General post-secondary education incorporating mandatory vocational content",
+        "vocationalPostSecondaryEducation": "Vocational post-secondary education level",
+        "degreeLevel": "Degree level education in an approved education institution",
+        "others": "Others",
+        "otherHint": "Please provide the methods to obtain the qualification"
       }
     },
     "checkboxes": {
@@ -80,6 +97,29 @@
       },
       "description": {
         "empty": "Enter a description of the regulation / reserved activities"
+      },
+      "qualification": {
+        "level": {
+          "empty": "Enter the qualification level"
+        },
+        "methodToObtain": {
+          "empty": "Select the method to obtain the qualification"
+        },
+        "otherMethodToObtain": {
+          "empty": "Enter the other method to obtain the qualification"
+        },
+        "mostCommonPathToObtain": {
+          "empty": "Select the most common path to obtain the qualification"
+        },
+        "otherMostCommonPathToObtain": {
+          "empty": "Enter the other most common path to obtain the qualification"
+        },
+        "duration": {
+          "empty": "Enter the duration of the qualification"
+        },
+        "mandatoryProfessionalExperience": {
+          "empty": "Select whether existence of professional experience is mandatory"
+        }
       }
     }
   },
@@ -107,7 +147,7 @@
     "qualification": {
       "heading": "Qualification information",
       "level": "Qualificiation level",
-      "methods": "Methods to obtain qualification",
+      "methods": "Method to obtain qualification",
       "commonPath": "Most common path to obtain qualification",
       "duration": "Duration of qualification",
       "mandatoryExperience": "Existence of mandatory professional experience"
