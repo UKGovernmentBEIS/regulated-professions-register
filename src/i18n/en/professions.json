@@ -122,5 +122,36 @@
     "mandatory": "Mandatory",
     "voluntary": "Voluntary",
     "unknown": "Unknown"
-  }
+  },
+  "search": {
+    "heading": "Search for a regulated profession",
+    "labels": {
+      "keywords": "Keywords:",
+      "nations": "Nations:",
+      "industries": "Industries:"
+    },
+    "profession": {
+      "regulators": "Regulators",
+      "industry": "Industry / sector"
+    },
+    "foundSingular": "profession found.",
+    "foundPlural": "professions found.",
+    "form": {
+      "nameFilter": {
+        "label": "Profession that you are looking for",
+        "hint": "For example, technology"
+      },
+      "nations": {
+        "label": "Nations",
+        "hint": "Select all that apply."
+      },
+      "industries": {
+        "label": "Industry / sector",
+        "hint": "Select all that apply."
+      },
+      "button": {
+        "filter": "Filter results"
+      }
+    }
+  }  
 }

@@ -15,7 +15,7 @@
   }) }}
 {% endif %}
 
-<h1 class="govuk-heading-xl">{{ "search.heading" | t }}</h1>
+<h1 class="govuk-heading-xl">{{ "professions.search.heading" | t }}</h1>
 
   <div class="govuk-grid-row">
 
@@ -27,13 +27,13 @@
 
           {{ govukInput({
             label: {
-              text: "search.form.nameFilter.label" | t,
+              text: "professions.search.form.nameFilter.label" | t,
               classes: "govuk-label--s",
               isPageHeading: true
             },
             classes: "govuk-input--width-10",
             hint: {
-              text: "search.form.nameFilter.hint" | t
+              text: "professions.search.form.nameFilter.hint" | t
             },
             name: "keywords",
             value: filters.keywords
@@ -44,13 +44,13 @@
             classes: "govuk-checkboxes--small rpr-listing__filter",
             fieldset: {
               legend: {
-                text: "search.form.nations.label" | t,
+                text: "professions.search.form.nations.label" | t,
                 isPageHeading: true,
                 classes: "govuk-fieldset__legend--s"
               }
             },
             hint: {
-              text: "search.form.nations.hint" | t
+              text: "professions.search.form.nations.hint" | t
             },
             items: nationsCheckboxArgs
           }) }}
@@ -60,7 +60,7 @@
             classes: "govuk-checkboxes--small rpr-listing__filter",
             fieldset: {
               legend: {
-                text: "search.form.industries.label" | t,
+                text: "professions.search.form.industries.label" | t,
                 isPageHeading: true,
                 classes: "govuk-fieldset__legend--s"
               }
@@ -72,7 +72,7 @@
           }) }}
 
           {{ govukButton({
-            text: "search.form.button.filter" | t
+            text: "professions.search.form.button.filter" | t
           }) }}
         </form>
 
@@ -85,11 +85,11 @@
     <div class="govuk-grid-column-two-thirds">
 
       {% if filters.keywords %}
-        <p class="govuk-body-m rpr-listing__search-criteria-container"><span class="govuk-!-font-weight-bold">{{ "search.labels.keywords" | t }}</span> <strong class="govuk-tag">{{ filters.keywords }}</strong></p>
+        <p class="govuk-body-m rpr-listing__search-criteria-container"><span class="govuk-!-font-weight-bold">{{ "professions.search.labels.keywords" | t }}</span> <strong class="govuk-tag">{{ filters.keywords }}</strong></p>
       {% endif %}
 
       {% if filters.nations | length %}
-        <p class="govuk-body-m rpr-listing__search-criteria-container"><span class="govuk-!-font-weight-bold">{{ "search.labels.nations" | t }}</span> 
+        <p class="govuk-body-m rpr-listing__search-criteria-container"><span class="govuk-!-font-weight-bold">{{ "professions.search.labels.nations" | t }}</span> 
         {% for nation in filters.nations %}
           <strong class="govuk-tag">{{ nation | t }}</strong>
         {% endfor %}
@@ -97,7 +97,7 @@
       {% endif %}
 
       {% if filters.industries | length %}
-        <p class="govuk-body-m rpr-listing__search-criteria-container"><span class="govuk-!-font-weight-bold">{{ "search.labels.industries" | t }}</span> 
+        <p class="govuk-body-m rpr-listing__search-criteria-container"><span class="govuk-!-font-weight-bold">{{ "professions.search.labels.industries" | t }}</span> 
         {% for industry in filters.industries %}
           <strong class="govuk-tag">{{ industry | t }}</strong>
         {% endfor %}
@@ -105,7 +105,7 @@
       {% endif %}
       
       <p class="govuk-body-m">
-        <span class="govuk-!-font-size-36 govuk-!-font-weight-bold">{{ professions.length }}</span> {{ ("search.foundSingular" | t) if (professions.length === 1) else ("search.foundPlural" | t) }}
+        <span class="govuk-!-font-size-36 govuk-!-font-weight-bold">{{ professions.length }}</span> {{ ("professions.search.foundSingular" | t) if (professions.length === 1) else ("professions.search.foundPlural" | t) }}
       </p>
 
       <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
@@ -129,7 +129,7 @@
               rows: [
                 {
                   key: {
-                    text: ("search.profession.regulators" | t)
+                    text: ("professions.search.profession.regulators" | t)
                   },
                   value: {
                     html: "Placeholder regulators"
@@ -137,7 +137,7 @@
                 },
                 {
                   key: {
-                    text: ("search.profession.industry" | t)
+                    text: ("professions.search.profession.industry" | t)
                   },
                   value: {
                     html: industriesHtml | safe
