@@ -347,7 +347,7 @@ describe('TopLevelInformationController', () => {
         expect(response.render).toHaveBeenCalledWith(
           'professions/admin/add-profession/top-level-information',
           expect.objectContaining({
-            backLink: '/admin/professions/add-profession',
+            backLink: '/admin/professions',
           }),
         );
       });

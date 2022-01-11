@@ -3,15 +3,11 @@ import {
   Get,
   NotFoundException,
   Param,
-  Post,
   Render,
-  Res,
 } from '@nestjs/common';
-import { Response } from 'express';
 import { I18nService } from 'nestjs-i18n';
 import { Nation } from '../nations/nation';
 import { ShowTemplate } from './interfaces/show-template.interface';
-import { Profession } from './profession.entity';
 import { ProfessionsService } from './professions.service';
 
 @Controller()
@@ -20,21 +16,6 @@ export class ProfessionsController {
     private professionsService: ProfessionsService,
     private readonly i18nService: I18nService,
   ) {}
-
-  @Get('admin/professions/add-profession')
-  @Render('professions/admin/add-profession/new')
-  new(): Record<string, any> {
-    return {};
-  }
-
-  @Post('admin/professions')
-  async create(@Res() res: Response): Promise<void> {
-    const profession = await this.professionsService.save(new Profession());
-
-    res.redirect(
-      `/admin/professions/${profession.id}/top-level-information/edit`,
-    );
-  }
 
   @Get('/professions/:slug')
   @Render('professions/show')

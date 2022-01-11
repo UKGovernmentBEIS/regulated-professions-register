@@ -1,8 +1,10 @@
 describe('Adding a new profession', () => {
   it('I can add a new profession', () => {
-    cy.visit('/admin/professions/add-profession');
+    cy.loginAuth0('admin');
 
-    cy.translate('app.start').then((buttonText) => {
+    cy.visit('/admin/professions');
+
+    cy.translate('professions.admin.addButtonLabel').then((buttonText) => {
       cy.get('button').contains(buttonText).click();
     });
 

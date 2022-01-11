@@ -1,5 +1,14 @@
-import { Controller, Get, Query, Render, Req, UseGuards } from '@nestjs/common';
-import { Request } from 'express';
+import {
+  Controller,
+  Get,
+  Post,
+  Query,
+  Render,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
+import { Request, Response } from 'express';
 import { I18nService } from 'nestjs-i18n';
 import { Industry } from '../../industries/industry.entity';
 import { IndustriesService } from '../../industries/industries.service';
@@ -17,7 +26,9 @@ import { User } from '../../users/user.entity';
 import { FilterDto } from './dto/filter.dto';
 import { OrganisationsService } from '../../organisations/organisations.service';
 import { Organisation } from '../../organisations/organisation.entity';
+import { Profession } from '../profession.entity';
 
+@UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
 export class ProfessionsController {
   constructor(
@@ -27,8 +38,16 @@ export class ProfessionsController {
     private readonly i18Service: I18nService,
   ) {}
 
+  @Post()
+  async create(@Res() res: Response): Promise<void> {
+    const profession = await this.professionsService.save(new Profession());
+
+    res.redirect(
+      `/admin/professions/${profession.id}/top-level-information/edit`,
+    );
+  }
+
   @Get()
-  @UseGuards(AuthenticationGuard)
   @Render('professions/admin/index')
   async index(
     @Req() request: Request,

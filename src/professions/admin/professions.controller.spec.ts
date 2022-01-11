@@ -1,6 +1,6 @@
 import { createMock, DeepMocked } from '@golevelup/ts-jest';
 import { Test } from '@nestjs/testing';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 import { I18nService } from 'nestjs-i18n';
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 import { createMockRequest } from '../../testutils/create-mock-request';
@@ -120,8 +120,27 @@ describe('ProfessionsController', () => {
     controller = module.get<ProfessionsController>(ProfessionsController);
   });
 
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
   it('should be defined', () => {
     expect(controller).toBeDefined();
+  });
+
+  describe('create', () => {
+    it('should create a Profession and redirect', async () => {
+      const res = createMock<Response>();
+
+      professionsService.save.mockResolvedValue(profession1);
+
+      await controller.create(res);
+
+      expect(professionsService.save).toHaveBeenCalled();
+      expect(res.redirect).toHaveBeenCalledWith(
+        `/admin/professions/${profession1.id}/top-level-information/edit`,
+      );
+    });
   });
 
   describe('index', () => {

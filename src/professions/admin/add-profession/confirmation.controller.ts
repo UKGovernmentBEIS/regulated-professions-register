@@ -1,9 +1,19 @@
-import { Controller, Get, Param, Post, Render, Res } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  Post,
+  Render,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { Response } from 'express';
+import { AuthenticationGuard } from '../../../common/authentication.guard';
 
 import { ProfessionsService } from '../../professions.service';
 import { ConfirmationTemplate } from './interfaces/confirmation.template';
 
+@UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
 export class ConfirmationController {
   constructor(private professionsService: ProfessionsService) {}
