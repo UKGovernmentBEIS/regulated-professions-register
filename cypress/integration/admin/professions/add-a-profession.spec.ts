@@ -15,11 +15,7 @@ describe('Adding a new profession', () => {
       cy.visit('/admin/professions');
 
       cy.translate('professions.admin.addButtonLabel').then((buttonText) => {
-        cy.get('button').contains(buttonText).click();
-      });
-
-      cy.translate('errors.forbidden.heading').then((errorMessage) => {
-        cy.get('body').should('contain', errorMessage);
+        cy.get('body').should('not.contain', buttonText);
       });
     });
   });
