@@ -10,6 +10,7 @@ import { InjectData } from '../common/decorators/seeds.decorator';
 type SeedOrganisation = {
   name: string;
   alternateName: string;
+  slug: string;
   address: string;
   url: string;
   email: string;
@@ -34,6 +35,7 @@ export class OrganisationsSeeder implements Seeder {
         return new Organisation(
           organisation.name,
           organisation.alternateName,
+          organisation.slug,
           organisation.address,
           organisation.url,
           organisation.email,

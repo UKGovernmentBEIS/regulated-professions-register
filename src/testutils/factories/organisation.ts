@@ -5,6 +5,7 @@ export default Factory.define<Organisation>(({ sequence }) => ({
   id: sequence.toString(),
   name: 'Example Organisation',
   alternateName: 'Alternate Organisation Name',
+  slug: 'example-slug',
   address: '123 Fake Street, London, AB1 2AB, England',
   url: 'https://www.example-org.com',
   email: 'hello@example-org.com',

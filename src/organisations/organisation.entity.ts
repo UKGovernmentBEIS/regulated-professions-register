@@ -6,6 +6,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
+  Index,
 } from 'typeorm';
 
 @Entity({ name: 'organisations' })
@@ -18,6 +19,10 @@ export class Organisation {
 
   @Column({ nullable: true })
   alternateName: string;
+
+  @Index({ unique: true, where: '"slug" IS NOT NULL' })
+  @Column({ nullable: true })
+  slug: string;
 
   @Column()
   address: string;
@@ -56,6 +61,7 @@ export class Organisation {
   constructor(
     name?: string,
     alternateName?: string,
+    slug?: string,
     address?: string,
     url?: string,
     email?: string,
@@ -66,6 +72,7 @@ export class Organisation {
   ) {
     this.name = name || '';
     this.alternateName = alternateName || '';
+    this.slug = slug || '';
     this.address = address || '';
     this.url = url || '';
     this.email = email || '';
