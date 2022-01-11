@@ -12,6 +12,7 @@ import Rollbar from 'rollbar';
 import { AppModule } from './app.module';
 import { AuthenticationMidleware } from './middleware/authentication.middleware';
 import { nunjucksConfig } from './config/nunjucks.config';
+import { globalLocals } from './common/global-locals';
 
 import { ValidationFailedError } from './validation/validation-failed.error';
 import { HttpExceptionFilter } from './common/http-exception.filter';
@@ -71,6 +72,9 @@ async function bootstrap() {
     });
     app.use(rollbar.errorHandler());
   }
+
+  // Add global variables to the application to be used in the templates
+  app.use(globalLocals);
 
   await app.listen(process.env.PORT || 3000);
 }
