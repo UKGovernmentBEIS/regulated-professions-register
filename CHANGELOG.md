@@ -10,12 +10,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 - Add more granular database fields for storing the duration of a qualification
 - Add a service owner boolean to a user
+- Define new user permissions
 
 ### Changed
 
 - No longer display previous values on a profession when rendering form errors
 - Use enums for storing methods to obtain and common paths to obtain a qualification
 - Require users to be logged in to be able to add a profession
+- Change roles to permissions
 
 ## [release-001] - 2022-01-10
 
