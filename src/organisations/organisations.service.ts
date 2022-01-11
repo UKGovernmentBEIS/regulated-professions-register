@@ -14,6 +14,10 @@ export class OrganisationsService {
     return this.repository.find();
   }
 
+  allWithProfessions(): Promise<Organisation[]> {
+    return this.repository.find({ relations: ['professions'] });
+  }
+
   find(id: string): Promise<Organisation> {
     return this.repository.findOne(id);
   }

@@ -45,6 +45,16 @@ describe('OrganisationsService', () => {
     });
   });
 
+  describe('allWithProfessions', () => {
+    it('returns all Organisations, populated with Professions', async () => {
+      const repoSpy = jest.spyOn(repo, 'find');
+      const organisations = await service.allWithProfessions();
+
+      expect(organisations).toEqual([organisation]);
+      expect(repoSpy).toHaveBeenCalledWith({ relations: ['professions'] });
+    });
+  });
+
   describe('find', () => {
     it('returns an Organisation', async () => {
       const repoSpy = jest.spyOn(repo, 'findOne');
