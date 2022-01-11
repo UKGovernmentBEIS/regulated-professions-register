@@ -2,6 +2,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
 
 {% block content %}
 
@@ -14,7 +15,7 @@
         href: backLink
       }) }}
     {% endif %}
-    
+
     {% include "../../shared/_errors.njk" %}
 
     <span class="govuk-caption-xl">{{ "users.form.headings.main" | t }}</span>
@@ -23,6 +24,31 @@
     <form method="post" action="./">
 
       <input type="hidden" name="change" value="{{ change }}" />
+
+      {{ govukRadios({
+        classes: "govuk-radios--inline",
+        name: "serviceOwner",
+        fieldset: {
+          legend: {
+            text: ("users.form.label.serviceOwner" | t),
+            isPageHeading: false,
+            classes: "govuk-fieldset__legend--l"
+          }
+        },
+        hint: {
+          text: ("users.form.hint.serviceOwner" | t)
+        },
+        items: [
+          {
+            value: 1,
+            text: ("app.yes" | t)
+          },
+          {
+            value: 0,
+            text: ("app.no" | t)
+          }
+        ]
+      }) }}
 
       {% set roleItems = [] %}
       {% for role in roles %}

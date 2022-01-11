@@ -8,7 +8,7 @@ import { IndustriesService } from '../../industries/industries.service';
 import { Nation } from '../../nations/nation';
 import { Organisation } from '../../organisations/organisation.entity';
 import { OrganisationsService } from '../../organisations/organisations.service';
-import { User, UserRole } from '../../users/user.entity';
+import { User } from '../../users/user.entity';
 import { FilterInput } from '../interfaces/filter-input.interface';
 import { Profession } from '../profession.entity';
 import { ProfessionsService } from '../professions.service';
@@ -125,10 +125,10 @@ describe('ProfessionsController', () => {
   });
 
   describe('index', () => {
-    describe('when the user is an admin', () => {
+    describe('when the user is a service owner', () => {
       beforeEach(() => {
         request['appSession'].user = createMock<User>({
-          roles: [UserRole.Admin],
+          serviceOwner: true,
         });
       });
 
@@ -238,10 +238,10 @@ describe('ProfessionsController', () => {
       });
     });
 
-    describe('when the user is not an admin', () => {
+    describe('when the user is not a service owner', () => {
       beforeEach(() => {
         request['appSession'].user = createMock<User>({
-          roles: [UserRole.Editor],
+          serviceOwner: false,
         });
       });
 

@@ -49,6 +49,9 @@ export class User {
   updated_at: Date;
 
   @Column({ default: false })
+  serviceOwner: boolean;
+
+  @Column({ default: false })
   confirmed: boolean;
 
   constructor(
@@ -56,12 +59,14 @@ export class User {
     name?: string,
     externalIdentifier?: string,
     roles?: UserRole[],
+    serviceOwner?: boolean,
     confirmed?: boolean,
   ) {
     this.email = email || '';
     this.name = name || '';
     this.externalIdentifier = externalIdentifier || null;
     this.roles = roles || [];
+    this.serviceOwner = serviceOwner || false;
     this.confirmed = confirmed || false;
   }
 }

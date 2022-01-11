@@ -76,6 +76,7 @@ describe('RolesController', () => {
     it('should redirect to confirm and update if the DTO is valid', async () => {
       const rolesDto = {
         roles: [UserRole.Admin],
+        serviceOwner: true,
         change: true,
       };
       await controller.create(rolesDto, 'user-uuid', res);
