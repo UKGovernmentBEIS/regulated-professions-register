@@ -13,7 +13,7 @@ import {
   ProfessionsPresenterView,
 } from './professions.presenter';
 import { AuthenticationGuard } from '../../common/authentication.guard';
-import { User, UserRole } from '../../users/user.entity';
+import { User } from '../../users/user.entity';
 import { FilterDto } from './dto/filter.dto';
 import { OrganisationsService } from '../../organisations/organisations.service';
 import { Organisation } from '../../organisations/organisation.entity';
@@ -49,15 +49,15 @@ export class ProfessionsController {
 
     const user = request['appSession'].user as User;
 
-    const overview = user.roles.includes(UserRole.Admin);
+    const showAllOrgs = user.serviceOwner;
 
-    const view: ProfessionsPresenterView = overview
+    const view: ProfessionsPresenterView = showAllOrgs
       ? 'overview'
       : 'single-organisation';
 
     // Once the user has an organisation, we will want to use that here for
     // non-admin users
-    const userOrganisaiton = overview ? null : allOrganisations[0];
+    const userOrganisation = showAllOrgs ? null : allOrganisations[0];
 
     const filterInput = this.getFilterInput(
       filter,
@@ -66,8 +66,8 @@ export class ProfessionsController {
       allIndustries,
     );
 
-    if (userOrganisaiton !== null) {
-      filterInput.organisations = [userOrganisaiton];
+    if (userOrganisation !== null) {
+      filterInput.organisations = [userOrganisation];
     }
 
     const filteredProfessions = new FilterHelper(allProfessions).filter(
@@ -76,7 +76,7 @@ export class ProfessionsController {
 
     return new ProfessionsPresenter(
       filterInput,
-      userOrganisaiton,
+      userOrganisation,
       allNations,
       allOrganisations,
       allIndustries,
