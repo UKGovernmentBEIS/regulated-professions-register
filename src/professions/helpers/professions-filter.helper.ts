@@ -3,7 +3,7 @@ import { Organisation } from '../../organisations/organisation.entity';
 import { Profession } from '../../professions/profession.entity';
 import { FilterInput } from '../interfaces/filter-input.interface';
 
-export class FilterHelper {
+export class ProfessionsFilterHelper {
   constructor(private readonly allProfessions: Profession[]) {}
 
   filter(filterInput: FilterInput): Profession[] {

@@ -1,5 +1,5 @@
 import { Industry } from '../../industries/industry.entity';
-import { FilterHelper } from './filter.helper';
+import { ProfessionsFilterHelper } from './professions-filter.helper';
 import { Nation } from '../../nations/nation';
 import { Organisation } from '../../organisations/organisation.entity';
 import { Profession } from '../profession.entity';
@@ -7,7 +7,7 @@ import industryFactory from '../../testutils/factories/industry';
 import professionFactory from '../../testutils/factories/profession';
 import organisationFactory from '../../testutils/factories/organisation';
 
-describe('FilterHelper', () => {
+describe('ProfessionsFilterHelper', () => {
   describe('filter', () => {
     it('returns all professions when given an empty filter input', () => {
       const exampleProfessions = [
@@ -26,7 +26,7 @@ describe('FilterHelper', () => {
         ),
       ];
 
-      const filterHelper = new FilterHelper(exampleProfessions);
+      const filterHelper = new ProfessionsFilterHelper(exampleProfessions);
 
       const results = filterHelper.filter({});
 
@@ -48,7 +48,7 @@ describe('FilterHelper', () => {
         createProfession('Example 3', ['GB-SCT'], 'law-society', ['security']),
       ];
 
-      const filterHelper = new FilterHelper(exampleProfessions);
+      const filterHelper = new ProfessionsFilterHelper(exampleProfessions);
 
       const results = filterHelper.filter({
         keywords: '',
@@ -68,7 +68,7 @@ describe('FilterHelper', () => {
         professionFactory.build({ name: 'Secondary School Teacher' }),
       ];
 
-      const filterHelper = new FilterHelper(exampleProfessions);
+      const filterHelper = new ProfessionsFilterHelper(exampleProfessions);
 
       const results = filterHelper.filter({
         // Test a complete and incomplete word match
@@ -84,7 +84,7 @@ describe('FilterHelper', () => {
         professionFactory.build({ name: 'Chartered Accountant' }),
       ];
 
-      const filterHelper = new FilterHelper(exampleProfessions);
+      const filterHelper = new ProfessionsFilterHelper(exampleProfessions);
 
       const results = filterHelper.filter({
         keywords: 'aTtOrNy',
@@ -101,7 +101,7 @@ describe('FilterHelper', () => {
         createProfessionWithNations('GB-ENG'),
       ];
 
-      const filterHelper = new FilterHelper(exampleProfessions);
+      const filterHelper = new ProfessionsFilterHelper(exampleProfessions);
 
       const results = filterHelper.filter({
         nations: [
@@ -124,7 +124,7 @@ describe('FilterHelper', () => {
         createProfessionWithOrganisation('general-medical-council'),
       ];
 
-      const filterHelper = new FilterHelper(exampleProfessions);
+      const filterHelper = new ProfessionsFilterHelper(exampleProfessions);
 
       const results = filterHelper.filter({
         organisations: [
@@ -144,7 +144,7 @@ describe('FilterHelper', () => {
         createProfessionWithIndustries('law', 'education'),
       ];
 
-      const filterHelper = new FilterHelper(exampleProfessions);
+      const filterHelper = new ProfessionsFilterHelper(exampleProfessions);
 
       const results = filterHelper.filter({
         industries: [
@@ -195,7 +195,7 @@ describe('FilterHelper', () => {
         ),
       ];
 
-      const filterHelper = new FilterHelper(exampleProfessions);
+      const filterHelper = new ProfessionsFilterHelper(exampleProfessions);
 
       const results = filterHelper.filter({
         keywords: 'Teacher',

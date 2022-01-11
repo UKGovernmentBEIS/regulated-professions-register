@@ -14,7 +14,7 @@ import { Industry } from '../../industries/industry.entity';
 import { IndustriesService } from '../../industries/industries.service';
 import { Nation } from '../../nations/nation';
 import { ProfessionsService } from '../professions.service';
-import { FilterHelper } from '../helpers/filter.helper';
+import { ProfessionsFilterHelper } from '../helpers/professions-filter.helper';
 import { FilterInput } from '../interfaces/filter-input.interface';
 import { IndexTemplate } from './interfaces/index-template.interface';
 import {
@@ -89,9 +89,9 @@ export class ProfessionsController {
       filterInput.organisations = [userOrganisation];
     }
 
-    const filteredProfessions = new FilterHelper(allProfessions).filter(
-      filterInput,
-    );
+    const filteredProfessions = new ProfessionsFilterHelper(
+      allProfessions,
+    ).filter(filterInput);
 
     return new ProfessionsPresenter(
       filterInput,

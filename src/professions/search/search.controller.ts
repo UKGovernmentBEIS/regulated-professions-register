@@ -5,7 +5,7 @@ import { IndustriesService } from '../../industries/industries.service';
 import { Nation } from '../../nations/nation';
 import { ProfessionsService } from '../professions.service';
 import { FilterDto } from './dto/filter.dto';
-import { FilterHelper } from '../helpers/filter.helper';
+import { ProfessionsFilterHelper } from '../helpers/professions-filter.helper';
 import { FilterInput } from '../interfaces/filter-input.interface';
 import { IndexTemplate } from './interfaces/index-template.interface';
 import { SearchPresenter } from './search.presenter';
@@ -38,9 +38,9 @@ export class SearchController {
 
     const filterInput = this.getFilterInput(filter, allNations, allIndustries);
 
-    const filteredProfessions = new FilterHelper(allProfessions).filter(
-      filterInput,
-    );
+    const filteredProfessions = new ProfessionsFilterHelper(
+      allProfessions,
+    ).filter(filterInput);
 
     return new SearchPresenter(
       filterInput,
