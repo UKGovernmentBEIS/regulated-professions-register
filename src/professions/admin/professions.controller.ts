@@ -28,6 +28,7 @@ import { OrganisationsService } from '../../organisations/organisations.service'
 import { Organisation } from '../../organisations/organisation.entity';
 import { Profession } from '../profession.entity';
 
+@UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
 export class ProfessionsController {
   constructor(
@@ -47,7 +48,6 @@ export class ProfessionsController {
   }
 
   @Get()
-  @UseGuards(AuthenticationGuard)
   @Render('professions/admin/index')
   async index(
     @Req() request: Request,
