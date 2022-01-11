@@ -7,16 +7,16 @@ export class AddGranularEducationDurations1641834876892
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      `ALTER TABLE "qualifications" ADD "educationDurationYears" integer NOT NULL`,
+      `ALTER TABLE "qualifications" ADD "educationDurationYears" integer`,
     );
     await queryRunner.query(
-      `ALTER TABLE "qualifications" ADD "educationDurationMonths" integer NOT NULL`,
+      `ALTER TABLE "qualifications" ADD "educationDurationMonths" integer`,
     );
     await queryRunner.query(
-      `ALTER TABLE "qualifications" ADD "educationDurationDays" integer NOT NULL`,
+      `ALTER TABLE "qualifications" ADD "educationDurationDays" integer`,
     );
     await queryRunner.query(
-      `ALTER TABLE "qualifications" ADD "educationDurationHours" integer NOT NULL`,
+      `ALTER TABLE "qualifications" ADD "educationDurationHours" integer`,
     );
   }
 

@@ -38,16 +38,16 @@ export class Qualification {
   @Column()
   educationDuration: string;
 
-  @Column()
+  @Column({ nullable: true })
   educationDurationYears: number;
 
-  @Column()
+  @Column({ nullable: true })
   educationDurationMonths: number;
 
-  @Column()
+  @Column({ nullable: true })
   educationDurationDays: number;
 
-  @Column()
+  @Column({ nullable: true })
   educationDurationHours: number;
 
   @Column()
