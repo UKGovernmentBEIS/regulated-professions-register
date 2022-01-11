@@ -28,7 +28,7 @@
       <h2 class="govuk-heading-l">{{ "professions.admin.addHeading" | t }} </h2>
       
       <p class="govuk-body-m">{{ "professions.admin.addText" | t }}</p>
-      <form action="/admin/professions/add-profession/" method="get" class="form">
+      <form action="/admin/professions" method="post" class="form">
         {{ govukButton({
           text: "professions.admin.addButtonLabel" | t
         }) }}

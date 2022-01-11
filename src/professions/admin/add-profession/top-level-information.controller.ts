@@ -132,6 +132,6 @@ export class TopLevelInformationController {
   private backLink(change: boolean, id: string) {
     return change
       ? `/admin/professions/${id}/check-your-answers`
-      : '/admin/professions/add-profession';
+      : '/admin/professions';
   }
 }
