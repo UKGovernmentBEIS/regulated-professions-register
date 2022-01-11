@@ -14,6 +14,7 @@ import { Organisation } from '../organisations/organisation.entity';
 import { OrganisationsService } from '../organisations/organisations.service';
 import { RegulatedActivitiesController } from './admin/add-profession/regulated-activities.controller';
 import { ProfessionsController as AdminProfessionsController } from './admin/professions.controller';
+import { QualificationInformationController } from './admin/add-profession/qualification-information.controller';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { ProfessionsController as AdminProfessionsController } from './admin/pro
     TopLevelInformationController,
     RegulatoryBodyController,
     RegulatedActivitiesController,
+    QualificationInformationController,
     CheckYourAnswersController,
     ConfirmationController,
     AdminProfessionsController,

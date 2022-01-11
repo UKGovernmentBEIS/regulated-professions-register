@@ -84,8 +84,9 @@ export class RegulatedActivitiesController {
       return res.redirect(`/admin/professions/${id}/check-your-answers`);
     }
 
-    // This will go to the Qualification information in future
-    return res.redirect(`/admin/professions/${id}/check-your-answers`);
+    return res.redirect(
+      `/admin/professions/${id}/qualification-information/edit`,
+    );
   }
 
   private async renderForm(

@@ -78,6 +78,16 @@ describe('Adding a new profession', () => {
         cy.get('button').contains(buttonText).click();
       });
 
+      cy.translate('professions.form.headings.qualificationInformation').then(
+        (heading) => {
+          cy.get('body').should('contain', heading);
+        },
+      );
+
+      cy.translate('app.continue').then((buttonText) => {
+        cy.get('button').contains(buttonText).click();
+      });
+
       cy.translate('professions.form.headings.checkAnswers').then((heading) => {
         cy.get('body').should('contain', heading);
       });
