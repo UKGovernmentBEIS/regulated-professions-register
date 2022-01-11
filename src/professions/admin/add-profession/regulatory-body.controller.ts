@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Param, Post, Query, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Query,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { Response } from 'express';
 import { ProfessionsService } from '../../professions.service';
 import { I18nService } from 'nestjs-i18n';
@@ -11,7 +20,9 @@ import { MandatoryRegistrationRadioButtonsPresenter } from '../mandatory-registr
 import { Validator } from '../../../helpers/validator';
 import { RegulatoryBodyDto } from './dto/regulatory-body.dto';
 import { ValidationFailedError } from '../../../validation/validation-failed.error';
+import { AuthenticationGuard } from '../../../common/authentication.guard';
 
+@UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
 export class RegulatoryBodyController {
   constructor(

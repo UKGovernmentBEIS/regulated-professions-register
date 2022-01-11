@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Param, Post, Query, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Query,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { Response } from 'express';
 import { IndustriesCheckboxPresenter } from '../../../industries/industries-checkbox.presenter';
 import { NationsCheckboxPresenter } from '../../../nations/nations-checkbox.presenter';
@@ -12,7 +21,9 @@ import { TopLevelDetailsDto } from './dto/top-level-details.dto';
 import { I18nService } from 'nestjs-i18n';
 import { Industry } from '../../../industries/industry.entity';
 import { TopLevelDetailsTemplate } from './interfaces/top-level-details.template';
+import { AuthenticationGuard } from '../../../common/authentication.guard';
 
+@UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
 export class TopLevelInformationController {
   constructor(
