@@ -12,6 +12,12 @@ describe('Creating a new user', () => {
     });
 
     it('does not allow me to add a user', () => {
+      cy.visit('/admin');
+
+      cy.translate('users.headings.index').then((userLabel) => {
+        cy.get('body').should('not.contain', userLabel);
+      });
+
       cy.visit('/admin/users/new');
 
       cy.translate('errors.forbidden.heading').then((errorMessage) => {
