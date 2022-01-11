@@ -6,6 +6,15 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
+export enum MethodToObtain {
+  GeneralSecondaryEducation = 'generalSecondaryEducation',
+  GeneralOrVocationalPostSecondaryEducation = 'generalOrVocationalPostSecondaryEducation',
+  GeneralPostSecondaryEducationMandatoryVocational = 'generalPostSecondaryEducationMandatoryVocational',
+  VocationalPostSecondaryEducation = 'vocationalPostSecondaryEducation',
+  DegreeLevel = 'degreeLevel',
+  Others = 'others',
+}
+
 @Entity({ name: 'qualifications' })
 export class Qualification {
   @PrimaryGeneratedColumn('uuid')
@@ -14,14 +23,32 @@ export class Qualification {
   @Column()
   level: string;
 
-  @Column()
-  methodToObtain: string;
+  @Column({ type: 'enum', enum: MethodToObtain })
+  methodToObtain: MethodToObtain;
 
-  @Column()
-  commonPathToObtain: string;
+  @Column({ nullable: true })
+  otherMethodToObtain: string;
+
+  @Column({ type: 'enum', enum: MethodToObtain })
+  commonPathToObtain: MethodToObtain;
+
+  @Column({ nullable: true })
+  otherCommonPathToObtain: string;
 
   @Column()
   educationDuration: string;
+
+  @Column()
+  educationDurationYears: number;
+
+  @Column()
+  educationDurationMonths: number;
+
+  @Column()
+  educationDurationDays: number;
+
+  @Column()
+  educationDurationHours: number;
 
   @Column()
   mandatoryProfessionalExperience: boolean;
@@ -41,15 +68,27 @@ export class Qualification {
 
   constructor(
     level?: string,
-    methodToObtain?: string,
-    commonPathToObtain?: string,
+    methodToObtain?: MethodToObtain,
+    otherMethodToObtain?: string,
+    commonPathToObtain?: MethodToObtain,
+    otherCommonPathToObtain?: string,
     educationDuration?: string,
+    educationDurationYears?: number,
+    educationDurationMonths?: number,
+    educationDurationDays?: number,
+    educationDurationHours?: number,
     mandatoryProfessionalExperience?: boolean,
   ) {
     this.level = level || '';
-    this.methodToObtain = methodToObtain || '';
-    this.commonPathToObtain = commonPathToObtain || '';
+    this.methodToObtain = methodToObtain || undefined;
+    this.commonPathToObtain = commonPathToObtain || undefined;
+    this.otherMethodToObtain = otherMethodToObtain || '';
+    this.otherCommonPathToObtain = otherCommonPathToObtain || '';
     this.educationDuration = educationDuration || '';
+    this.educationDurationYears = educationDurationYears || 0;
+    this.educationDurationMonths = educationDurationMonths || 0;
+    this.educationDurationDays = educationDurationDays || 0;
+    this.educationDurationHours = educationDurationHours || 0;
     this.mandatoryProfessionalExperience =
       mandatoryProfessionalExperience || true;
   }

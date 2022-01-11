@@ -8,9 +8,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
+- Add more granular database fields for storing the duration of a qualification
+
 ### Changed
 
 - No longer display previous values on a profession when rendering form errors
+- Use enums for storing methods to obtain and common paths to obtain a qualification
 
 ## [release-001] - 2022-01-10
 

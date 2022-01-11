@@ -1,17 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import qualificationFactory from '../testutils/factories/qualification';
 
 import { Qualification } from './qualification.entity';
 import { QualificationsService } from './qualifications.service';
 
-const qualification = new Qualification(
-  'ATT - Attestation of competence , Art. 11 a',
-  'Accredited Certification Scheme accredited by the United Kongdom Accrediation Service UKAS in accordance with ISO EN 17024 or an approprate National/Scottish Vocational Qualification at level 2',
-  'General secondary education',
-  '1 Year',
-  false,
-);
+const qualification = qualificationFactory.build();
 
 describe('Qualification service', () => {
   let service: QualificationsService;
