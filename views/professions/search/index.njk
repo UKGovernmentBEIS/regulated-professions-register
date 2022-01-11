@@ -1,8 +1,4 @@
 {% extends "base.njk" %}
-{% from "govuk/components/input/macro.njk" import govukInput %}
-{% from "govuk/components/select/macro.njk" import govukSelect %}
-{% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 
@@ -21,64 +17,8 @@
 
     <div class="govuk-grid-column-one-third">
 
-      <div class="rpr-listing__filters-container">
-        <form action="" method="post" class="form">
-          {% from "govuk/components/input/macro.njk" import govukInput %}
-
-          {{ govukInput({
-            label: {
-              text: "professions.search.form.nameFilter.label" | t,
-              classes: "govuk-label--s",
-              isPageHeading: true
-            },
-            classes: "govuk-input--width-10",
-            hint: {
-              text: "professions.search.form.nameFilter.hint" | t
-            },
-            name: "keywords",
-            value: filters.keywords
-          }) }}
-
-          {{ govukCheckboxes({
-            name: "nations[]",
-            classes: "govuk-checkboxes--small rpr-listing__filter",
-            fieldset: {
-              legend: {
-                text: "professions.search.form.nations.label" | t,
-                isPageHeading: true,
-                classes: "govuk-fieldset__legend--s"
-              }
-            },
-            hint: {
-              text: "professions.search.form.nations.hint" | t
-            },
-            items: nationsCheckboxArgs
-          }) }}
-
-          {{ govukCheckboxes({
-            name: "industries[]",
-            classes: "govuk-checkboxes--small rpr-listing__filter",
-            fieldset: {
-              legend: {
-                text: "professions.search.form.industries.label" | t,
-                isPageHeading: true,
-                classes: "govuk-fieldset__legend--s"
-              }
-            },
-            hint: {
-              text: ""
-            },
-            items: industriesCheckboxArgs
-          }) }}
-
-          {{ govukButton({
-            text: "professions.search.form.button.filter" | t
-          }) }}
-        </form>
-
-      </div>
-
-      <div class="govuk-!-padding-bottom-9"></div>
+      {% set filterTextPrefix = "professions.search" %}
+      {% include "../../shared/_filter.njk" %}
 
     </div>
 
@@ -120,7 +60,7 @@
 
         <div>
           <h2>
-            <a class="govuk-link govuk-heading-l rpr-listing__profession-title" href="/professions/{{ profession.slug }}">{{profession.name}}<br>
+            <a class="govuk-link govuk-heading-l rpr-listing__profession-title" href="/professions/{{ profession.slug }}">{{ profession.name }}<br>
               <span class="govuk-caption-l">{{ profession.nations }}</span></a>
           </h2>
       
@@ -147,7 +87,7 @@
             }) }}
 
           {% if not loop.last %}
-              <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+            <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
           {% endif %}
 
         </div>
