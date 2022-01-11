@@ -1,4 +1,4 @@
-import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Organisation } from './organisation.entity';
@@ -10,19 +10,22 @@ export class OrganisationsService {
     private repository: Repository<Organisation>,
   ) {}
 
-  all(options: FindManyOptions = {}): Promise<Organisation[]> {
-    return this.repository.find(options);
+  all(): Promise<Organisation[]> {
+    return this.repository.find();
+  }
+
+  allWithProfessions(): Promise<Organisation[]> {
+    return this.repository.find({ relations: ['professions'] });
   }
 
   find(id: string): Promise<Organisation> {
     return this.repository.findOne(id);
   }
 
-  findBySlug(
-    slug: string,
-    options: FindOneOptions = {},
-  ): Promise<Organisation> {
-    options = Object.assign({ where: { slug } }, options);
-    return this.repository.findOne(options);
+  findBySlugWithProfessions(slug: string): Promise<Organisation> {
+    return this.repository.findOne({
+      where: { slug },
+      relations: ['professions'],
+    });
   }
 }

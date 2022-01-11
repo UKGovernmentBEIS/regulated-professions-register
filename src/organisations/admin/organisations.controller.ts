@@ -19,9 +19,7 @@ export class OrganisationsController {
   @Get()
   @Render('admin/organisations/index')
   async index() {
-    const organisations = await this.organisationsService.all({
-      relations: ['professions', 'professions.industries'],
-    });
+    const organisations = await this.organisationsService.allWithProfessions();
     const presenter = new OrganisationsPresenter(
       organisations,
       this.i18nService,
@@ -35,9 +33,8 @@ export class OrganisationsController {
   @Get('/:slug')
   @Render('admin/organisations/show')
   async show(@Param('slug') slug: string): Promise<EditTemplate> {
-    const organisation = await this.organisationsService.findBySlug(slug, {
-      relations: ['professions'],
-    });
+    const organisation =
+      await this.organisationsService.findBySlugWithProfessions(slug);
     const organisationPresenter = new OrganisationPresenter(
       organisation,
       this.i18nService,

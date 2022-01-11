@@ -107,7 +107,7 @@ export class OrganisationPresenter {
 
     if (professions === undefined) {
       throw new Error(
-        "You must eagerly load professions to show industries. Try adding `{ relations: ['professions'] }` to your finder in the `OrganisationsService` class",
+        'You must eagerly load professions to show industries. Try calling a "WithProfessions" method on the `OrganisationsService` class',
       );
     }
 
@@ -115,7 +115,7 @@ export class OrganisationPresenter {
       .map((profession) => {
         if (profession.industries === undefined) {
           throw new Error(
-            "You must eagerly load industries to show industries. Try adding `{ relations: ['professions.industries'] }` to your finder in the `OrganisationsService` class",
+            'You must eagerly load industries to show industries. Try calling a "WithProfessions" method on the `OrganisationsService` class',
           );
         }
 
