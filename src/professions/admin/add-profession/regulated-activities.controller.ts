@@ -16,13 +16,15 @@ import { Profession } from '../../profession.entity';
 import { ProfessionsService } from '../../professions.service';
 import { RegulatedActivitiesDto } from './dto/regulated-activities.dto';
 import { RegulatedActivitiesTemplate } from './interfaces/regulated-activities.template';
-
+import { Permissions } from '../../../common/permissions.decorator';
+import { UserPermission } from '../../../users/user.entity';
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
 export class RegulatedActivitiesController {
   constructor(private readonly professionsService: ProfessionsService) {}
 
   @Get('/:id/regulated-activities/edit')
+  @Permissions(UserPermission.CreateProfession)
   async edit(
     @Res() res: Response,
     @Param('id') id: string,
@@ -40,6 +42,7 @@ export class RegulatedActivitiesController {
   }
 
   @Post('/:id/regulated-activities')
+  @Permissions(UserPermission.CreateProfession)
   async update(
     @Res() res: Response,
     @Param('id') id: string,

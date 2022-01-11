@@ -22,7 +22,8 @@ import { I18nService } from 'nestjs-i18n';
 import { Industry } from '../../../industries/industry.entity';
 import { TopLevelDetailsTemplate } from './interfaces/top-level-details.template';
 import { AuthenticationGuard } from '../../../common/authentication.guard';
-
+import { Permissions } from '../../../common/permissions.decorator';
+import { UserPermission } from '../../../users/user.entity';
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
 export class TopLevelInformationController {
@@ -33,6 +34,7 @@ export class TopLevelInformationController {
   ) {}
 
   @Get('/:id/top-level-information/edit')
+  @Permissions(UserPermission.CreateProfession)
   async edit(
     @Res() res: Response,
     @Param('id') id: string,
@@ -53,6 +55,7 @@ export class TopLevelInformationController {
   }
 
   @Post('/:id/top-level-information')
+  @Permissions(UserPermission.CreateProfession)
   async update(
     @Body() topLevelDetailsDto, // unfortunately we can't type this here without a validation error being thrown outside of this
     @Res() res: Response,

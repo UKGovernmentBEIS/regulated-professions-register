@@ -7,7 +7,8 @@ import { backLink } from '../../../common/utils';
 import { Nation } from '../../../nations/nation';
 import { ProfessionsService } from '../../professions.service';
 import { CheckYourAnswersTemplate } from './interfaces/check-your-answers.template';
-
+import { Permissions } from '../../../common/permissions.decorator';
+import { UserPermission } from '../../../users/user.entity';
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
 export class CheckYourAnswersController {
@@ -17,6 +18,7 @@ export class CheckYourAnswersController {
   ) {}
 
   @Get(':id/check-your-answers')
+  @Permissions(UserPermission.CreateProfession)
   @Render('professions/admin/add-profession/check-your-answers')
   async show(
     @Req() req: Request,
