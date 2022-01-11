@@ -24,25 +24,8 @@
 
     <div class="govuk-grid-column-two-thirds">
 
-      {% if filters.keywords %}
-        <p class="govuk-body-m rpr-listing__search-criteria-container"><span class="govuk-!-font-weight-bold">{{ "professions.search.labels.keywords" | t }}</span> <strong class="govuk-tag">{{ filters.keywords }}</strong></p>
-      {% endif %}
-
-      {% if filters.nations | length %}
-        <p class="govuk-body-m rpr-listing__search-criteria-container"><span class="govuk-!-font-weight-bold">{{ "professions.search.labels.nations" | t }}</span> 
-        {% for nation in filters.nations %}
-          <strong class="govuk-tag">{{ nation | t }}</strong>
-        {% endfor %}
-        </p>
-      {% endif %}
-
-      {% if filters.industries | length %}
-        <p class="govuk-body-m rpr-listing__search-criteria-container"><span class="govuk-!-font-weight-bold">{{ "professions.search.labels.industries" | t }}</span> 
-        {% for industry in filters.industries %}
-          <strong class="govuk-tag">{{ industry | t }}</strong>
-        {% endfor %}
-        </p>
-      {% endif %}
+      {% set filterCriteriaTextPrefix = "professions.search" %}
+      {% include "../../shared/_filter-criteria.njk" %}
       
       <p class="govuk-body-m">
         <span class="govuk-!-font-size-36 govuk-!-font-weight-bold">{{ professions.length }}</span> {{ ("professions.search.foundSingular" | t) if (professions.length === 1) else ("professions.search.foundPlural" | t) }}

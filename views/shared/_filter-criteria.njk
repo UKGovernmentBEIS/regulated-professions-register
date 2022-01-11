@@ -1,0 +1,35 @@
+{% if filters.keywords %}
+  <p class="govuk-body-m rpr-listing__search-criteria-container"><span class="govuk-!-font-weight-bold">{{ (filterCriteriaTextPrefix + ".labels.keywords") | t }}</span> <strong class="govuk-tag">{{ filters.keywords }}</strong></p>
+{% endif %}
+
+{% if filters.nations | length %}
+  <p class="govuk-body-m rpr-listing__search-criteria-container"><span class="govuk-!-font-weight-bold">{{ (filterCriteriaTextPrefix + ".labels.nations") | t }}</span>
+    {% for nation in filters.nations %}
+      <strong class="govuk-tag">{{ nation | t }}</strong>
+    {% endfor %}
+  </p>
+{% endif %}
+
+{% if (filters.organisations | length) and not hideOrganisationTags %}
+  <p class="govuk-body-m rpr-listing__search-criteria-container"><span class="govuk-!-font-weight-bold">{{ (filterCriteriaTextPrefix + ".labels.organisations") | t }}</span>
+    {% for organisation in filters.organisations %}
+      <strong class="govuk-tag">{{ organisation }}</strong>
+    {% endfor %}
+  </p>
+{% endif %}
+
+{% if filters.industries | length %}
+  <p class="govuk-body-m rpr-listing__search-criteria-container"><span class="govuk-!-font-weight-bold">{{ (filterCriteriaTextPrefix + ".labels.industries") | t }}</span>
+    {% for industry in filters.industries %}
+      <strong class="govuk-tag">{{ industry | t }}</strong>
+    {% endfor %}
+  </p>
+{% endif %}
+
+{% if filters.changedBy | length %}
+  <p class="govuk-body-m rpr-listing__search-criteria-container"><span class="govuk-!-font-weight-bold">{{ (filterCriteriaTextPrefix + ".labels.changedBy") | t }}</span>
+    {% for name in filters.changedBy %}
+      <strong class="govuk-tag">{{ name }}</strong>
+    {% endfor %}
+  </p>
+{% endif %}
