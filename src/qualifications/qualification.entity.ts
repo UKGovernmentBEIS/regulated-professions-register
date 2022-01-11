@@ -23,13 +23,13 @@ export class Qualification {
   @Column()
   level: string;
 
-  @Column({ type: 'enum', enum: MethodToObtain })
+  @Column({ type: 'enum', enum: MethodToObtain, nullable: true })
   methodToObtain: MethodToObtain;
 
   @Column({ nullable: true })
   otherMethodToObtain: string;
 
-  @Column({ type: 'enum', enum: MethodToObtain })
+  @Column({ type: 'enum', enum: MethodToObtain, nullable: true })
   commonPathToObtain: MethodToObtain;
 
   @Column({ nullable: true })

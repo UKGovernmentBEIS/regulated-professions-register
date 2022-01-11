@@ -10,7 +10,7 @@ export class AddEnumMethodToObtainValues1641834068149
       `CREATE TYPE "public"."qualifications_methodtoobtain_enum" AS ENUM('generalSecondaryEducation', 'generalOrVocationalPostSecondaryEducation', 'generalPostSecondaryEducationMandatoryVocational', 'vocationalPostSecondaryEducation', 'degreeLevel', 'others')`,
     );
     await queryRunner.query(
-      `ALTER TABLE "qualifications" ADD "methodToObtain" "public"."qualifications_methodtoobtain_enum" NOT NULL`,
+      `ALTER TABLE "qualifications" ADD "methodToObtain" "public"."qualifications_methodtoobtain_enum"`,
     );
     await queryRunner.query(
       `ALTER TABLE "qualifications" ADD "otherMethodToObtain" character varying`,
@@ -19,7 +19,7 @@ export class AddEnumMethodToObtainValues1641834068149
       `CREATE TYPE "public"."qualifications_commonpathtoobtain_enum" AS ENUM('generalSecondaryEducation', 'generalOrVocationalPostSecondaryEducation', 'generalPostSecondaryEducationMandatoryVocational', 'vocationalPostSecondaryEducation', 'degreeLevel', 'others')`,
     );
     await queryRunner.query(
-      `ALTER TABLE "qualifications" ADD "commonPathToObtain" "public"."qualifications_commonpathtoobtain_enum" NOT NULL`,
+      `ALTER TABLE "qualifications" ADD "commonPathToObtain" "public"."qualifications_commonpathtoobtain_enum"`,
     );
     await queryRunner.query(
       `ALTER TABLE "qualifications" ADD "otherCommonPathToObtain" character varying`,
