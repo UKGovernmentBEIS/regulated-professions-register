@@ -1,5 +1,32 @@
 {
   "admin": {
     "heading": "Regulatory authorities"
+  },
+  "search": {
+    "heading": "Find a regulatory authority",
+    "labels": {
+      "keywords": "Keywords:",
+      "nations": "Nations:",
+      "industries": "Industries:"
+    },
+    "foundSingular": "authority found.",
+    "foundPlural": "authorities found.",
+    "form": {
+      "nameFilter": {
+        "label": "Authority that you are looking for",
+        "hint": "For example, education"
+      },
+      "nations": {
+        "label": "Nations",
+        "hint": "Select all that apply."
+      },
+      "industries": {
+        "label": "Industry / sector",
+        "hint": "Select all that apply."
+      },
+      "button": {
+        "filter": "Filter results"
+      }
+    }
   }
 }
