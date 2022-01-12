@@ -35,7 +35,7 @@ export class UsersController {
 
   @Get('/admin/users')
   @Permissions(UserPermission.CreateUser, UserPermission.EditUser)
-  @Render('users/index')
+  @Render('admin/users/index')
   async index(@Req() req): Promise<IndexTemplate> {
     const users = await this.usersService.where({ confirmed: true });
     const usersPresenter = new UsersPresenter(users, this.i18nService);
@@ -49,14 +49,14 @@ export class UsersController {
 
   @Get('/admin/users/new')
   @Permissions(UserPermission.CreateUser, UserPermission.EditUser)
-  @Render('users/new')
+  @Render('admin/users/new')
   new(): object {
     return {};
   }
 
   @Get('/admin/users/:id')
   @Permissions(UserPermission.CreateUser, UserPermission.EditUser)
-  @Render('users/show')
+  @Render('admin/users/show')
   async show(@Param('id') id): Promise<ShowTemplate> {
     const user = await this.usersService.find(id);
     const userPresenter = new UserPresenter(user, this.i18nService);
@@ -77,7 +77,7 @@ export class UsersController {
 
   @Get('/admin/users/:id/confirm')
   @Permissions(UserPermission.CreateUser)
-  @Render('users/confirm')
+  @Render('admin/users/confirm')
   async confirm(@Param('id') id): Promise<ShowTemplate> {
     const user = await this.usersService.find(id);
     const userPresenter = new UserPresenter(user, this.i18nService);
@@ -126,7 +126,7 @@ export class UsersController {
 
   @Get('/admin/users/:id/done')
   @Permissions(UserPermission.CreateUser)
-  @Render('users/done')
+  @Render('admin/users/done')
   async done(@Param('id') id): Promise<User> {
     const user = await this.usersService.find(id);
 

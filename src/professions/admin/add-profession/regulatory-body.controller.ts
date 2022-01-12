@@ -136,7 +136,7 @@ export class RegulatoryBodyController {
     };
 
     return res.render(
-      'professions/admin/add-profession/regulatory-body',
+      'admin/professions/add-profession/regulatory-body',
       templateArgs,
     );
   }

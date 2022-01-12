@@ -45,7 +45,7 @@ describe(RegulatedActivitiesController, () => {
       await controller.edit(response, 'profession-id', false);
 
       expect(response.render).toHaveBeenCalledWith(
-        'professions/admin/add-profession/regulated-activities',
+        'admin/professions/add-profession/regulated-activities',
         expect.objectContaining({
           reservedActivities: 'Example reserved activities',
           regulationDescription: 'A description of the profession',
@@ -65,7 +65,7 @@ describe(RegulatedActivitiesController, () => {
           await controller.edit(response, 'profession-id', false);
 
           expect(response.render).toHaveBeenCalledWith(
-            'professions/admin/add-profession/regulated-activities',
+            'admin/professions/add-profession/regulated-activities',
             expect.objectContaining({
               backLink: '/admin/professions/profession-id/regulatory-body/edit',
             }),
@@ -84,7 +84,7 @@ describe(RegulatedActivitiesController, () => {
           await controller.edit(response, 'profession-id', true);
 
           expect(response.render).toHaveBeenCalledWith(
-            'professions/admin/add-profession/regulated-activities',
+            'admin/professions/add-profession/regulated-activities',
             expect.objectContaining({
               backLink: '/admin/professions/profession-id/check-your-answers',
             }),
@@ -183,7 +183,7 @@ describe(RegulatedActivitiesController, () => {
         expect(professionsService.save).not.toHaveBeenCalled();
 
         expect(response.render).toHaveBeenCalledWith(
-          'professions/admin/add-profession/regulated-activities',
+          'admin/professions/add-profession/regulated-activities',
           expect.objectContaining({
             errors: {
               activities: {

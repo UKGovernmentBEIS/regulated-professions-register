@@ -138,7 +138,7 @@ export class TopLevelInformationController {
     };
 
     return res.render(
-      'professions/admin/add-profession/top-level-information',
+      'admin/professions/add-profession/top-level-information',
       templateArgs,
     );
   }

@@ -100,29 +100,35 @@ describe('PersonalDetailsController', () => {
     it('should render an error if the name is empty', async () => {
       await controller.create({ name: '', email }, res, 'user-uuid');
 
-      expect(res.render).toHaveBeenCalledWith('users/personal-details/edit', {
-        name: '',
-        email,
-        errors: {
-          name: {
-            text: 'name should not be empty',
+      expect(res.render).toHaveBeenCalledWith(
+        'admin/users/personal-details/edit',
+        {
+          name: '',
+          email,
+          errors: {
+            name: {
+              text: 'name should not be empty',
+            },
           },
         },
-      });
+      );
     });
 
     it('should render an error if the email is empty', async () => {
       await controller.create({ name, email: '' }, res, 'user-uuid');
 
-      expect(res.render).toHaveBeenCalledWith('users/personal-details/edit', {
-        name,
-        email: '',
-        errors: {
-          email: {
-            text: 'email must be an email,email should not be empty',
+      expect(res.render).toHaveBeenCalledWith(
+        'admin/users/personal-details/edit',
+        {
+          name,
+          email: '',
+          errors: {
+            email: {
+              text: 'email must be an email,email should not be empty',
+            },
           },
         },
-      });
+      );
     });
 
     it('should render an error if the email address is already in use', async () => {
@@ -134,15 +140,18 @@ describe('PersonalDetailsController', () => {
 
       expect(usersService.findByEmail).toHaveBeenCalledWith('name@example.com');
 
-      expect(res.render).toHaveBeenCalledWith('users/personal-details/edit', {
-        name,
-        email,
-        errors: {
-          email: {
-            text: 'A user with this email address already exists',
+      expect(res.render).toHaveBeenCalledWith(
+        'admin/users/personal-details/edit',
+        {
+          name,
+          email,
+          errors: {
+            email: {
+              text: 'A user with this email address already exists',
+            },
           },
         },
-      });
+      );
     });
   });
 });

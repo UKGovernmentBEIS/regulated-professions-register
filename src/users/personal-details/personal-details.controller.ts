@@ -28,7 +28,7 @@ export class PersonalDetailsController {
 
   @Get(':id/personal-details/edit')
   @Permissions(UserPermission.CreateUser, UserPermission.EditUser)
-  @Render('users/personal-details/edit')
+  @Render('admin/users/personal-details/edit')
   async edit(
     @Req() req: Request,
     @Param('id') id,
@@ -90,7 +90,7 @@ export class PersonalDetailsController {
     personalDetailsDto: PersonalDetailsDto,
     errors: object,
   ): void {
-    res.render('users/personal-details/edit', {
+    res.render('admin/users/personal-details/edit', {
       name: personalDetailsDto.name,
       email: personalDetailsDto.email,
       errors,
