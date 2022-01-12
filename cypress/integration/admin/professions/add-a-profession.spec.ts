@@ -84,6 +84,21 @@ describe('Adding a new profession', () => {
         },
       );
 
+      cy.get('textarea[name="level"]').type('An example Qualification level');
+      cy.get(
+        'input[name="methodToObtainQualification"][value="others"]',
+      ).check();
+      cy.get('textarea[name="otherMethodToObtainQualification"]').type(
+        'Another method',
+      );
+      cy.get(
+        'input[name="mostCommonPathToObtainQualification"][value="generalSecondaryEducation"]',
+      ).check();
+      cy.get('input[name="duration"]').type('4.0 Years');
+      cy.get(
+        'input[name="mandatoryProfessionalExperience"][value="1"]',
+      ).check();
+
       cy.translate('app.continue').then((buttonText) => {
         cy.get('button').contains(buttonText).click();
       });

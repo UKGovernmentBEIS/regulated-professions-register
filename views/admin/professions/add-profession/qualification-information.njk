@@ -25,7 +25,9 @@
             },
             id: "level",
             name: "level",
-            rows: "7"
+            rows: "7",
+            value: level,
+            errorMessage: errors.level | tError
           })
         }}
 
@@ -43,7 +45,8 @@
             hint: {
               text: ("professions.form.radioButtons.hint" | t)
             },
-            items: methodToObtainQualificationRadioButtonArgs
+            items: methodToObtainQualificationRadioButtonArgs,
+            errorMessage: errors.methodToObtainQualification | tError
           })
         }}
 
@@ -61,7 +64,8 @@
             hint: {
               text: ("professions.form.radioButtons.hint" | t)
             },
-            items: mostCommonPathToObtainQualificationRadioButtonArgs
+            items: mostCommonPathToObtainQualificationRadioButtonArgs,
+            errorMessage: errors.mostCommonPathToObtainQualification | tError
           })
         }}
 
@@ -72,9 +76,12 @@
               classes: "govuk-label--m"
             },
             id: "duration",
-            name: "duration"
+            name: "duration",
+            value: duration,
+            errorMessage: errors.duration | tError
           })
         }}
+
         {{
           govukRadios({
             id: "mandatoryProfessionalExperience",
@@ -89,7 +96,8 @@
             hint: {
               text: ("professions.form.radioButtons.hint" | t)
             },
-            items: mandatoryProfessionalExperienceRadioButtonArgs
+            items: mandatoryProfessionalExperienceRadioButtonArgs,
+            errorMessage: errors.mandatoryProfessionalExperience | tError
           })
         }}
 
