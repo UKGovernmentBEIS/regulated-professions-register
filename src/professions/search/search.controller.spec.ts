@@ -5,52 +5,41 @@ import { I18nService } from 'nestjs-i18n';
 import { Nation } from '../../nations/nation';
 import { createMockRequest } from '../../testutils/create-mock-request';
 import { IndustriesService } from '../../industries/industries.service';
-import { Industry } from '../../industries/industry.entity';
-import { Profession } from '../profession.entity';
-
 import { ProfessionsService } from '../professions.service';
 import { SearchController } from './search.controller';
 import { SearchPresenter } from './search.presenter';
+import industryFactory from '../../testutils/factories/industry';
+import professionFactory from '../../testutils/factories/profession';
+import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 
 const referrer = 'http://example.com/some/path';
 const host = 'example.com';
 
-const exampleIndustry1 = new Industry('industries.example1');
-exampleIndustry1.id = 'example-industry-1';
+const industry1 = industryFactory.build({
+  name: 'industries.example1',
+  id: 'example-industry-1',
+});
+const industry2 = industryFactory.build({
+  name: 'industries.example2',
+  id: 'example-industry-2',
+});
+const industry3 = industryFactory.build({
+  name: 'industries.example3',
+  id: 'example-industry-3',
+});
 
-const exampleIndustry2 = new Industry('industries.example2');
-exampleIndustry2.id = 'example-industry-2';
+const profession1 = professionFactory.build({
+  name: 'Secondary School Teacher',
+  occupationLocations: ['GB-ENG'],
+  industries: [industry1],
+});
+const profession2 = professionFactory.build({
+  name: 'Trademark Attorny',
+  occupationLocations: ['GB-SCT', 'GB-WLS'],
+  industries: [industry2, industry3],
+});
 
-const exampleIndustry3 = new Industry('industries.example3');
-exampleIndustry3.id = 'example-industry-3';
-
-const exampleIndustries = [
-  exampleIndustry1,
-  exampleIndustry2,
-  exampleIndustry3,
-];
-
-const exampleProfession1 = new Profession(
-  'Secondary School Teacher',
-  '',
-  null,
-  '',
-  ['GB-ENG'],
-  '',
-  null,
-  [exampleIndustry1],
-);
-
-const exampleProfession2 = new Profession(
-  'Trademark Attorny',
-  '',
-  null,
-  '',
-  ['GB-SCT', 'GB-WLS'],
-  '',
-  null,
-  [exampleIndustry2, exampleIndustry3],
-);
+const industries = [industry1, industry2, industry3];
 
 describe('SearchController', () => {
   let request: DeepMocked<Request>;
@@ -65,36 +54,14 @@ describe('SearchController', () => {
 
     professionsService = createMock<ProfessionsService>();
     industriesService = createMock<IndustriesService>();
-    i18nService = createMock<I18nService>();
 
-    professionsService.allConfirmed.mockImplementation(async () => {
-      return [exampleProfession1, exampleProfession2];
-    });
+    professionsService.allConfirmed.mockResolvedValue([
+      profession1,
+      profession2,
+    ]);
+    industriesService.all.mockResolvedValue(industries);
 
-    industriesService.all.mockImplementation(async () => {
-      return exampleIndustries;
-    });
-
-    i18nService.translate.mockImplementation(async (text) => {
-      switch (text) {
-        case 'industries.example1':
-          return 'Example industry 1';
-        case 'industries.example2':
-          return 'Example industry 2';
-        case 'industries.example3':
-          return 'Example industry 3';
-        case 'nations.england':
-          return 'England';
-        case 'nations.scotland':
-          return 'Scotland';
-        case 'nations.wales':
-          return 'Wales';
-        case 'nations.northernIreland':
-          return 'Northern Ireland';
-        default:
-          return '';
-      }
-    });
+    i18nService = createMockI18nService();
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -129,8 +96,8 @@ describe('SearchController', () => {
           nations: [],
         },
         Nation.all(),
-        exampleIndustries,
-        [exampleProfession1, exampleProfession2],
+        industries,
+        [profession1, profession2],
         i18nService,
         request,
       ).present();
@@ -139,11 +106,6 @@ describe('SearchController', () => {
     });
 
     it('should request only complete professions from `ProfessionsService`', async () => {
-      const request = createMockRequest(
-        'http://example.com/some/path',
-        'example.com',
-      );
-
       await controller.create(
         {
           keywords: '',
@@ -163,23 +125,20 @@ describe('SearchController', () => {
       const result = await controller.create(
         {
           keywords: 'example search',
-          industries: [exampleIndustry1.id, exampleIndustry2.id],
+          industries: [industry1.id, industry2.id],
           nations: ['GB-SCT'],
         },
         request,
       );
 
-      const allNations = Nation.all();
-      const scotland = Nation.find('GB-SCT');
-
       const expected = await new SearchPresenter(
         {
           keywords: 'example search',
-          industries: [exampleIndustry1, exampleIndustry2],
-          nations: [scotland],
+          industries: [industry1, industry2],
+          nations: [Nation.find('GB-SCT')],
         },
-        allNations,
-        exampleIndustries,
+        Nation.all(),
+        industries,
         [],
         i18nService,
         request,
@@ -198,18 +157,15 @@ describe('SearchController', () => {
         request,
       );
 
-      const allNations = Nation.all();
-      const wales = Nation.find('GB-WLS');
-
       const expected = await new SearchPresenter(
         {
           keywords: '',
           industries: [],
-          nations: [wales],
+          nations: [Nation.find('GB-WLS')],
         },
-        allNations,
-        exampleIndustries,
-        [exampleProfession2],
+        Nation.all(),
+        industries,
+        [profession2],
         i18nService,
         request,
       ).present();
@@ -221,7 +177,7 @@ describe('SearchController', () => {
       const result = await controller.create(
         {
           keywords: '',
-          industries: [exampleIndustry1.id],
+          industries: [industry1.id],
           nations: [],
         },
         request,
@@ -230,12 +186,12 @@ describe('SearchController', () => {
       const expected = await new SearchPresenter(
         {
           keywords: '',
-          industries: [exampleIndustry1],
+          industries: [industry1],
           nations: [],
         },
         Nation.all(),
-        exampleIndustries,
-        [exampleProfession1],
+        industries,
+        [profession1],
         i18nService,
         request,
       ).present();
@@ -260,8 +216,8 @@ describe('SearchController', () => {
           nations: [],
         },
         Nation.all(),
-        exampleIndustries,
-        [exampleProfession2],
+        industries,
+        [profession2],
         i18nService,
         request,
       ).present();
@@ -286,8 +242,8 @@ describe('SearchController', () => {
           nations: [],
         },
         Nation.all(),
-        exampleIndustries,
-        [exampleProfession1, exampleProfession2],
+        industries,
+        [profession1, profession2],
         i18nService,
         request,
       ).present();
