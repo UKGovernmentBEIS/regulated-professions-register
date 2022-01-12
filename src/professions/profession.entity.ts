@@ -55,6 +55,7 @@ export class Profession {
 
   @OneToOne(() => Qualification, {
     eager: true,
+    cascade: true,
   })
   @JoinColumn()
   qualification: Qualification;
