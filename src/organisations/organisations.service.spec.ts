@@ -43,6 +43,14 @@ describe('OrganisationsService', () => {
       expect(organisations).toEqual([organisation]);
       expect(repoSpy).toHaveBeenCalled();
     });
+
+    it('allows options to be passed to the finder', async () => {
+      const repoSpy = jest.spyOn(repo, 'find');
+      const organisations = await service.all({ relations: ['professions'] });
+
+      expect(organisations).toEqual([organisation]);
+      expect(repoSpy).toHaveBeenCalledWith({ relations: ['professions'] });
+    });
   });
 
   describe('find', () => {
