@@ -15,16 +15,19 @@ import { Request } from 'express';
 import { ValidationFailedError } from '../../validation/validation-failed.error';
 import { Validator } from '../../helpers/validator';
 import { UsersService } from '../users.service';
+import { UserPermission } from './../user.entity';
 import { PersonalDetailsDto } from './dto/personal-details.dto';
 import { AuthenticationGuard } from '../../common/authentication.guard';
+import { Permissions } from '../../common/permissions.decorator';
 import { backLink } from '../../common/utils';
 import { EditTemplate } from './interfaces/edit-template';
 @Controller('/admin/users')
+@UseGuards(AuthenticationGuard)
 export class PersonalDetailsController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get(':id/personal-details/edit')
-  @UseGuards(AuthenticationGuard)
+  @Permissions(UserPermission.CreateUser, UserPermission.EditUser)
   @Render('users/personal-details/edit')
   async edit(
     @Req() req: Request,
@@ -41,7 +44,7 @@ export class PersonalDetailsController {
   }
 
   @Post(':id/personal-details')
-  @UseGuards(AuthenticationGuard)
+  @Permissions(UserPermission.CreateUser, UserPermission.EditUser)
   async create(
     @Body() personalDetailsDto,
     @Res() res,

@@ -17,6 +17,7 @@ import { AuthenticationGuard } from '../../common/authentication.guard';
 import { UsersService } from '../users.service';
 import { UserPermission } from '../user.entity';
 import { PermissionsDto } from './dto/permissions.dto';
+import { Permissions } from '../../common/permissions.decorator';
 import { ValidationExceptionFilter } from '../../validation/validation-exception.filter';
 import { backLink } from '../../common/utils';
 import { EditTemplate } from './interfaces/edit-template';
@@ -26,7 +27,7 @@ export class PermissionsController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get(':id/permissions/edit')
-  @UseGuards(AuthenticationGuard)
+  @Permissions(UserPermission.CreateUser, UserPermission.EditUser)
   @Render('users/permissions/edit')
   async edit(
     @Req() req: Request,
@@ -45,6 +46,7 @@ export class PermissionsController {
   }
 
   @Post(':id/permissions')
+  @Permissions(UserPermission.CreateUser, UserPermission.EditUser)
   @UseFilters(
     new ValidationExceptionFilter('users/permissions/edit', 'user', {
       permissions: Object.values(UserPermission),

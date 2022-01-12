@@ -6,7 +6,21 @@ describe('Creating a new user', () => {
     });
   });
 
-  context('when I am logged in', () => {
+  context('when I am logged in without the correct permissions', () => {
+    beforeEach(() => {
+      cy.loginAuth0('editor');
+    });
+
+    it('does not allow me to add a user', () => {
+      cy.visit('/admin/users/new');
+
+      cy.translate('errors.forbidden.heading').then((errorMessage) => {
+        cy.get('body').should('contain', errorMessage);
+      });
+    });
+  });
+
+  context('when I am logged in with the correct permissions', () => {
     beforeEach(() => {
       cy.loginAuth0();
     });

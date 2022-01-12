@@ -14,15 +14,17 @@ import { I18nService } from 'nestjs-i18n';
 
 import { AuthenticationGuard } from '../common/authentication.guard';
 import { Auth0Service } from './auth0.service';
-import { User } from './user.entity';
+import { User, UserPermission } from './user.entity';
 import { UsersPresenter } from './users.presenter';
 import { UsersService } from './users.service';
 import { IndexTemplate } from './interfaces/index-template';
 import { ShowTemplate } from './interfaces/show-template';
+import { Permissions } from '../common/permissions.decorator';
 
 import { UserPresenter } from './user.presenter';
 import { UserMailer } from './user.mailer';
 @Controller()
+@UseGuards(AuthenticationGuard)
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
@@ -32,7 +34,7 @@ export class UsersController {
   ) {}
 
   @Get('/admin/users')
-  @UseGuards(AuthenticationGuard)
+  @Permissions(UserPermission.CreateUser, UserPermission.EditUser)
   @Render('users/index')
   async index(@Req() req): Promise<IndexTemplate> {
     const users = await this.usersService.where({ confirmed: true });
@@ -46,14 +48,14 @@ export class UsersController {
   }
 
   @Get('/admin/users/new')
-  @UseGuards(AuthenticationGuard)
+  @Permissions(UserPermission.CreateUser, UserPermission.EditUser)
   @Render('users/new')
   new(): object {
     return {};
   }
 
   @Get('/admin/users/:id')
-  @UseGuards(AuthenticationGuard)
+  @Permissions(UserPermission.CreateUser, UserPermission.EditUser)
   @Render('users/show')
   async show(@Param('id') id): Promise<ShowTemplate> {
     const user = await this.usersService.find(id);
@@ -66,7 +68,7 @@ export class UsersController {
   }
 
   @Post('/admin/users')
-  @UseGuards(AuthenticationGuard)
+  @Permissions(UserPermission.CreateUser, UserPermission.EditUser)
   async create(@Res() res) {
     const user = await this.usersService.save(new User());
 
@@ -74,7 +76,7 @@ export class UsersController {
   }
 
   @Get('/admin/users/:id/confirm')
-  @UseGuards(AuthenticationGuard)
+  @Permissions(UserPermission.CreateUser)
   @Render('users/confirm')
   async confirm(@Param('id') id): Promise<ShowTemplate> {
     const user = await this.usersService.find(id);
@@ -87,7 +89,7 @@ export class UsersController {
   }
 
   @Post('/admin/users/:id/confirm')
-  @UseGuards(AuthenticationGuard)
+  @Permissions(UserPermission.CreateUser)
   async complete(@Res() res, @Param('id') id): Promise<void> {
     const user = await this.usersService.find(id);
     const { email } = user;
@@ -123,7 +125,7 @@ export class UsersController {
   }
 
   @Get('/admin/users/:id/done')
-  @UseGuards(AuthenticationGuard)
+  @Permissions(UserPermission.CreateUser)
   @Render('users/done')
   async done(@Param('id') id): Promise<User> {
     const user = await this.usersService.find(id);
@@ -132,7 +134,7 @@ export class UsersController {
   }
 
   @Delete('/admin/users/:id')
-  @UseGuards(AuthenticationGuard)
+  @Permissions(UserPermission.DeleteUser)
   @Redirect('/admin/users')
   async delete(@Req() req, @Param('id') id): Promise<void> {
     req.flash(
