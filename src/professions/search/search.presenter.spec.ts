@@ -1,63 +1,48 @@
-import { createMock, DeepMocked } from '@golevelup/ts-jest';
+import { DeepMocked } from '@golevelup/ts-jest';
 import { Request } from 'express';
 import { I18nService } from 'nestjs-i18n';
 import { createMockRequest } from '../../testutils/create-mock-request';
 import { Nation } from '../../nations/nation';
-import { Industry } from '../../industries/industry.entity';
-import { Profession } from '../profession.entity';
 import { FilterInput } from '../interfaces/filter-input.interface';
 import { SearchPresenter } from './search.presenter';
 import { IndustriesCheckboxPresenter } from '../../industries/industries-checkbox.presenter';
 import { NationsCheckboxPresenter } from '../../nations/nations-checkbox.presenter';
 import { ProfessionSearchResultPresenter } from './profession-search-result.presenter';
+import industryFactory from '../../testutils/factories/industry';
+import professionFactory from '../../testutils/factories/profession';
+import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
+import { IndexTemplate } from './interfaces/index-template.interface';
 
-const exampleIndustry1 = new Industry('industries.example1');
-exampleIndustry1.id = 'example-industry-1';
+const industry1 = industryFactory.build({
+  name: 'industries.example1',
+  id: 'example-industry-1',
+});
+const industry2 = industryFactory.build({
+  name: 'industries.example2',
+  id: 'example-industry-2',
+});
+const industry3 = industryFactory.build({
+  name: 'industries.example3',
+  id: 'example-industry-3',
+});
 
-const exampleIndustry2 = new Industry('industries.example2');
-exampleIndustry2.id = 'example-industry-2';
+const professionA = professionFactory.build({
+  name: 'Example Profession A',
+  occupationLocations: ['GB-ENG'],
+  industries: [industry1],
+});
+const professionB = professionFactory.build({
+  name: 'Example Profession B',
+  occupationLocations: ['GB-SCT', 'GB-WLS'],
+  industries: [industry2, industry3],
+});
+const professionC = professionFactory.build({
+  name: 'Example Profession C',
+  occupationLocations: ['GB-NIR'],
+  industries: [industry2, industry3],
+});
 
-const exampleIndustry3 = new Industry('industries.example3');
-exampleIndustry3.id = 'example-industry-3';
-
-const exampleProfessionA = new Profession(
-  'Example Profession A',
-  '',
-  null,
-  '',
-  ['GB-ENG'],
-  '',
-  null,
-  [exampleIndustry1],
-);
-
-const exampleProfessionB = new Profession(
-  'Example Profession B',
-  '',
-  null,
-  '',
-  ['GB-SCT', 'GB-WLS'],
-  '',
-  null,
-  [exampleIndustry2, exampleIndustry3],
-);
-
-const exampleProfessionC = new Profession(
-  'Example Profession C',
-  '',
-  null,
-  '',
-  ['GB-NIR'],
-  '',
-  null,
-  [exampleIndustry2, exampleIndustry3],
-);
-
-const exampleIndustries = [
-  exampleIndustry1,
-  exampleIndustry2,
-  exampleIndustry3,
-];
+const industries = [industry1, industry2, industry3];
 
 describe('SearchPresenter', () => {
   let request: DeepMocked<Request>;
@@ -66,30 +51,8 @@ describe('SearchPresenter', () => {
 
   beforeEach(() => {
     request = createMockRequest('http://example.com/some/path', 'example.com');
-    i18nService = createMock<I18nService>();
 
-    i18nService.translate.mockImplementation(async (text) => {
-      switch (text) {
-        case 'industries.example1':
-          return 'Example industry 1';
-        case 'industries.example2':
-          return 'Example industry 2';
-        case 'industries.example3':
-          return 'Example industry 3';
-        case 'nations.england':
-          return 'England';
-        case 'nations.scotland':
-          return 'Scotland';
-        case 'nations.wales':
-          return 'Wales';
-        case 'nations.northernIreland':
-          return 'Northern Ireland';
-        case 'app.unitedKingdom':
-          return 'United Kingdom';
-        default:
-          return '';
-      }
-    });
+    i18nService = createMockI18nService();
 
     nations = Nation.all();
   });
@@ -98,16 +61,16 @@ describe('SearchPresenter', () => {
     it('should return a IndexTemplate', async () => {
       const filterInput: FilterInput = {
         nations: [nations[0]],
-        industries: [exampleIndustry2],
+        industries: [industry2],
         keywords: 'Example Keywords',
       };
 
       const presenter = new SearchPresenter(
         filterInput,
         nations,
-        exampleIndustries,
+        industries,
         // Intentionally mis-ordered to exercise sorting
-        [exampleProfessionC, exampleProfessionA, exampleProfessionB],
+        [professionC, professionA, professionB],
         i18nService,
         request,
       );
@@ -115,8 +78,8 @@ describe('SearchPresenter', () => {
       const result = await presenter.present();
 
       const industriesCheckboxArgs = await new IndustriesCheckboxPresenter(
-        exampleIndustries,
-        [exampleIndustry2],
+        industries,
+        [industry2],
         i18nService,
       ).checkboxArgs();
 
@@ -136,19 +99,19 @@ describe('SearchPresenter', () => {
         nationsCheckboxArgs,
         professions: [
           await new ProfessionSearchResultPresenter(
-            exampleProfessionA,
+            professionA,
             i18nService,
           ).present(),
           await new ProfessionSearchResultPresenter(
-            exampleProfessionB,
+            professionB,
             i18nService,
           ).present(),
           await new ProfessionSearchResultPresenter(
-            exampleProfessionC,
+            professionC,
             i18nService,
           ).present(),
         ],
-      });
+      } as IndexTemplate);
     });
   });
 });
