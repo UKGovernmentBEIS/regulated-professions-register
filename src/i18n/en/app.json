@@ -7,6 +7,7 @@
   "change": "Change",
   "start": "Start",
   "startButton": "Start now",
+  "logout": "Logout",
   "or": "Or",
   "errors": {
     "heading": "There is a problem"

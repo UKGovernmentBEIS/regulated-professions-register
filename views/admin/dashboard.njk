@@ -6,16 +6,18 @@
     <nav role="navigation" aria-labelledby="subsection-title">
       <ul class="govuk-list">
         <li>
-          <a class="govuk-link" href="/admin/professions">Regulated professions</a>
+          <a class="govuk-link" href="/admin/professions">{{ "professions.admin.heading" | t }}</a>
         </li>
         <li>
-          <a class="govuk-link" href="#">Regulatory authorities</a>
+          <a class="govuk-link" href="#">{{ "organisations.admin.heading" | t }}</a>
         </li>
+        {% if user.serviceOwner %}
+          <li>
+            <a class="govuk-link" href="/admin/users">{{ "users.headings.index" | t }}</a>
+          </li>
+        {% endif %}
         <li>
-          <a class="govuk-link" href="/admin/users">Manage users</a>
-        </li>
-        <li>
-          <a class="govuk-link" href="/logout">Logout</a>
+          <a class="govuk-link" href="/logout">{{ "app.logout" | t }}</a>
         </li>
       </ul>
     </nav>

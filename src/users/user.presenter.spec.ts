@@ -2,17 +2,17 @@ import { createMock, DeepMocked } from '@golevelup/ts-jest';
 import { I18nService } from 'nestjs-i18n';
 import userFactory from '../testutils/factories/user';
 
-import { UserRole } from './user.entity';
+import { UserPermission } from './user.entity';
 import { UserPresenter } from './user.presenter';
 
 describe('UserPresenter', () => {
-  const roles: UserRole[] = [UserRole.Admin];
+  const permissions: UserPermission[] = [UserPermission.CreateUser];
   const user = userFactory.build({
     id: 'some-uuid-string',
     email: 'email@example.com',
     name: 'name',
     externalIdentifier: '212121',
-    roles: roles,
+    permissions: permissions,
   });
   const i18nService: DeepMocked<I18nService> = createMock<I18nService>();
   let presenter: UserPresenter;
@@ -51,41 +51,46 @@ describe('UserPresenter', () => {
     });
   });
 
-  describe('roleList', () => {
-    it('should return a single role', async () => {
-      i18nService.translate.mockResolvedValue('Administrator');
+  describe('permissionList', () => {
+    it('should return a single permission', async () => {
+      i18nService.translate.mockResolvedValue('Create User');
 
-      expect(await presenter.roleList()).toEqual('Administrator');
+      expect(await presenter.permissionList()).toEqual('Create User');
       expect(i18nService.translate).toHaveBeenCalledWith(
-        'users.form.label.admin',
+        'users.form.label.createUser',
       );
     });
 
-    describe('when there are multiple roles', () => {
-      const roles: UserRole[] = [UserRole.Admin, UserRole.Editor];
+    describe('when there are multiple permissions', () => {
+      const permissions: UserPermission[] = [
+        UserPermission.CreateUser,
+        UserPermission.DeleteUser,
+      ];
       const user = userFactory.build({
         id: 'some-uuid-string',
         name: 'name',
         email: 'email@example.com',
         externalIdentifier: '212121',
-        roles: roles,
+        permissions: permissions,
       });
 
       beforeEach(() => {
         presenter = new UserPresenter(user, i18nService);
       });
 
-      it('should return a list of roles', async () => {
+      it('should return a list of permissions', async () => {
         i18nService.translate
-          .mockResolvedValueOnce('Administrator')
-          .mockResolvedValueOnce('Editor');
+          .mockResolvedValueOnce('Create User')
+          .mockResolvedValueOnce('Delete User');
 
-        expect(await presenter.roleList()).toEqual('Administrator<br />Editor');
-        expect(i18nService.translate).toHaveBeenCalledWith(
-          'users.form.label.admin',
+        expect(await presenter.permissionList()).toEqual(
+          'Create User<br />Delete User',
         );
         expect(i18nService.translate).toHaveBeenCalledWith(
-          'users.form.label.editor',
+          'users.form.label.createUser',
+        );
+        expect(i18nService.translate).toHaveBeenCalledWith(
+          'users.form.label.deleteUser',
         );
       });
     });

@@ -3,9 +3,17 @@
     "label": {
       "name": "Name",
       "email": "Email address",
-      "roles": "What roles apply to this user?",
-      "admin": "Administrator",
-      "editor": "Editor",
+      "permissions": "What permissions apply to this user?",
+      "createUser": "Create User",
+      "editUser": "Edit User",
+      "deleteUser": "Delete User",
+      "createOrganisation": "Create organisation",
+      "deleteOrganisation": "Delete organisation",
+      "createProfession": "Create profession",
+      "deleteprofession": "Delete profession",
+      "uploadDecisionData": "Upload decision data",
+      "downloadDecisionData": "Download decision data",
+      "viewDecisionData": "View decision data",
       "serviceOwner": "Is this user a service owner?"
     },
     "hint": {
@@ -33,7 +41,7 @@
       "main": "Creating RPR user",
       "checkAnswers": "Check your answers before creating this user",
       "personalDetails": "Personal details",
-      "roles": "Roles"
+      "permissions": "Permissions"
     },
     "delete": {
       "confirmMessage": "Are you sure you want to delete this user?",

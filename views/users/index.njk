@@ -11,21 +11,23 @@
 
       <h1 class="govuk-heading-xl">{{ "users.headings.index" | t }}</h1>
 
-      <h2 class="govuk-heading-l">{{ "users.headings.addNew" | t }}</h2>
-      <p class="govuk-body">{{ "users.body.intro" | t }}</p>
+      {% if 'createUser' in user.permissions %}
+        <h2 class="govuk-heading-l">{{ "users.headings.addNew" | t }}</h2>
+        <p class="govuk-body">{{ "users.body.intro" | t }}</p>
 
-      <form action="/admin/users/new/" method="get">
-        {{
-          govukButton({
-            id: "submit-button",
-            type: "Submit",
-            classes: "govuk-button",
-            text: ("users.form.button.add" | t)
-          })
-        }}
-      </form>
+        <form action="/admin/users/new/" method="get">
+          {{
+            govukButton({
+              id: "submit-button",
+              type: "Submit",
+              classes: "govuk-button",
+              text: ("users.form.button.add" | t)
+            })
+          }}
+        </form>
 
-      <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+      {% endif %}
 
       <h2 class="govuk-heading-l">{{ "users.headings.manageExisting" | t }}</h2>
 

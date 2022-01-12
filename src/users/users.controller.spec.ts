@@ -6,7 +6,7 @@ import { I18nService } from 'nestjs-i18n';
 import { UsersService } from './users.service';
 import { Auth0Service } from './auth0.service';
 import { UsersController } from './users.controller';
-import { User, UserRole } from './user.entity';
+import { User, UserPermission } from './user.entity';
 import { UsersPresenter } from './users.presenter';
 import { UserPresenter } from './user.presenter';
 import { UserMailer } from './user.mailer';
@@ -17,7 +17,7 @@ import userFactory from '../testutils/factories/user';
 const name = 'Example Name';
 const email = 'name@example.com';
 const externalIdentifier = 'example-external-identifier';
-const roles = new Array<UserRole>();
+const permissions = new Array<UserPermission>();
 
 describe('UsersController', () => {
   let controller: UsersController;
@@ -35,7 +35,7 @@ describe('UsersController', () => {
       name: name,
       email: email,
       externalIdentifier: externalIdentifier,
-      roles: roles,
+      permissions: permissions,
     });
 
     request = createMock<Request>();
@@ -127,7 +127,7 @@ describe('UsersController', () => {
 
       expect(await controller.show('some-uuid')).toEqual({
         ...user,
-        roleList: await usersPresenter.roleList(),
+        permissionList: await usersPresenter.permissionList(),
       });
 
       expect(usersService.find).toHaveBeenCalledWith('some-uuid');
@@ -156,7 +156,7 @@ describe('UsersController', () => {
 
       expect(result).toEqual({
         ...user,
-        roleList: await usersPresenter.roleList(),
+        permissionList: await usersPresenter.permissionList(),
       });
     });
   });
@@ -177,7 +177,7 @@ describe('UsersController', () => {
           name,
           email,
           externalIdentifier,
-          roles,
+          permissions,
           confirmed: true,
         }),
       );
@@ -221,7 +221,7 @@ describe('UsersController', () => {
           name,
           email,
           externalIdentifier,
-          roles,
+          permissions,
           confirmed: true,
         }),
       );

@@ -3,7 +3,18 @@
     "email": "beis-rpr@dxw.com",
     "name": "beis-rpr",
     "externalIdentifier": "auth0|61a0f8d2d6e3f3006b5b722e",
-    "roles": ["admin"],
+    "permissions": [
+      "createUser",
+      "editUser",
+      "deleteUser",
+      "createOrganisation",
+      "deleteOrganisation",
+      "createProfession",
+      "deleteprofession",
+      "uploadDecisionData",
+      "downloadDecisionData",
+      "viewDecisionData"
+    ],
     "confirmed": true,
     "serviceOwner": true
   },
@@ -11,7 +22,7 @@
     "email": "beis-rpr+editor@dxw.com",
     "name": "Editor",
     "externalIdentifier": "auth0|61a8b60ecf6b7100741ab726",
-    "roles": ["editor"],
+    "permissions": [],
     "confirmed": true,
     "serviceOwner": false
   }

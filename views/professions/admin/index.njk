@@ -25,16 +25,18 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
 
-      <h2 class="govuk-heading-l">{{ "professions.admin.addHeading" | t }} </h2>
-      
-      <p class="govuk-body-m">{{ "professions.admin.addText" | t }}</p>
-      <form action="/admin/professions" method="post" class="form">
-        {{ govukButton({
-          text: "professions.admin.addButtonLabel" | t
-        }) }}
-      </form>
+      {% if 'createProfession' in user.permissions %}
+        <h2 class="govuk-heading-l">{{ "professions.admin.addHeading" | t }} </h2>
 
-      <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+        <p class="govuk-body-m">{{ "professions.admin.addText" | t }}</p>
+        <form action="/admin/professions" method="post" class="form">
+          {{ govukButton({
+            text: "professions.admin.addButtonLabel" | t
+          }) }}
+        </form>
+
+        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+      {% endif %}
 
       <h2 class="govuk-heading-l">{{ "professions.admin.manageHeading" | t }} </h2>
 
@@ -65,7 +67,7 @@
                     },
                     classes: "{{ keywordsWidthClass }}",
                     hint: {
-                        text: "professions.admin.form.nameFilter.hint" | t 
+                        text: "professions.admin.form.nameFilter.hint" | t
                     },
                     name: "keywords",
                     value: filters.keywords
@@ -180,7 +182,7 @@
       {% endif %}
 
       {% if filters.nations | length %}
-        <p class="govuk-body-m rpr-listing__search-criteria-container"><span class="govuk-!-font-weight-bold">{{ "professions.admin.labels.nations" | t }}</span> 
+        <p class="govuk-body-m rpr-listing__search-criteria-container"><span class="govuk-!-font-weight-bold">{{ "professions.admin.labels.nations" | t }}</span>
         {% for nation in filters.nations %}
           <strong class="govuk-tag">{{ nation | t }}</strong>
         {% endfor %}
@@ -188,7 +190,7 @@
       {% endif %}
 
       {% if (filters.organisations | length) and (view === 'overview') %}
-        <p class="govuk-body-m rpr-listing__search-criteria-container"><span class="govuk-!-font-weight-bold">{{ "professions.admin.labels.organisations" | t }}</span> 
+        <p class="govuk-body-m rpr-listing__search-criteria-container"><span class="govuk-!-font-weight-bold">{{ "professions.admin.labels.organisations" | t }}</span>
         {% for organisation in filters.organisations %}
           <strong class="govuk-tag">{{ organisation }}</strong>
         {% endfor %}
@@ -196,7 +198,7 @@
       {% endif %}
 
       {% if filters.industries | length %}
-        <p class="govuk-body-m rpr-listing__search-criteria-container"><span class="govuk-!-font-weight-bold">{{ "professions.admin.labels.industries" | t }}</span> 
+        <p class="govuk-body-m rpr-listing__search-criteria-container"><span class="govuk-!-font-weight-bold">{{ "professions.admin.labels.industries" | t }}</span>
         {% for industry in filters.industries %}
           <strong class="govuk-tag">{{ industry | t }}</strong>
         {% endfor %}
@@ -204,7 +206,7 @@
       {% endif %}
 
       {% if filters.changedBy | length %}
-        <p class="govuk-body-m rpr-listing__search-criteria-container"><span class="govuk-!-font-weight-bold">{{ "professions.admin.labels.changedBy" | t }}</span> 
+        <p class="govuk-body-m rpr-listing__search-criteria-container"><span class="govuk-!-font-weight-bold">{{ "professions.admin.labels.changedBy" | t }}</span>
         {% for name in filters.changedBy %}
           <strong class="govuk-tag">{{ name | t }}</strong>
         {% endfor %}

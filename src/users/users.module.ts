@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Auth0Service } from './auth0.service';
 import { PersonalDetailsController } from './personal-details/personal-details.controller';
-import { RolesController } from './roles/roles.controller';
+import { PermissionsController } from './permissions/permissions.controller';
 
 import { UsersController } from './users.controller';
 
@@ -23,7 +23,11 @@ import { Auth0Consumer } from './auth0.consumer';
     }),
   ],
   providers: [UsersService, UserMailer, Auth0Service, Auth0Consumer],
-  controllers: [UsersController, PersonalDetailsController, RolesController],
+  controllers: [
+    UsersController,
+    PersonalDetailsController,
+    PermissionsController,
+  ],
   exports: [UsersService],
 })
 export class UsersModule {}

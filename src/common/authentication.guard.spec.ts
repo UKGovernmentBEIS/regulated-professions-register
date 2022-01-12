@@ -3,14 +3,14 @@ import { Reflector } from '@nestjs/core';
 
 import { createMock } from '@golevelup/ts-jest';
 import { AuthenticationGuard } from './authentication.guard';
-import { UserRole, User } from '../users/user.entity';
+import { UserPermission, User } from '../users/user.entity';
 
 describe('AuthenticationGuard', () => {
   let host: ExecutionContext;
   let oidc: any;
   let guard: AuthenticationGuard;
   let reflector: Reflector;
-  let roles: string[];
+  let permissions: string[];
   let user: User;
 
   beforeEach(() => {
@@ -28,7 +28,7 @@ describe('AuthenticationGuard', () => {
     });
     reflector = createMock<Reflector>({
       get: () => {
-        return roles;
+        return permissions;
       },
     });
 
@@ -46,28 +46,28 @@ describe('AuthenticationGuard', () => {
       expect(guard.canActivate(host)).toStrictEqual(true);
     });
 
-    describe('when roles are specified', () => {
+    describe('when permissions are specified', () => {
       beforeEach(() => {
-        roles = [UserRole.Admin];
+        permissions = [UserPermission.CreateUser];
       });
 
-      it('should return true when the user has the appropriate role', () => {
+      it('should return true when the user has the appropriate permission', () => {
         user = new User();
-        user.roles = [UserRole.Admin];
+        user.permissions = [UserPermission.CreateUser];
 
         expect(guard.canActivate(host)).toStrictEqual(true);
       });
 
-      it('should return false when the user does not have the appropriate role', () => {
+      it('should return false when the user does not have the appropriate permission', () => {
         user = new User();
-        user.roles = [UserRole.Editor];
+        user.permissions = [UserPermission.CreateOrganisation];
 
         expect(guard.canActivate(host)).toStrictEqual(false);
       });
 
-      it('should return false when the user has no roles', () => {
+      it('should return false when the user has no permissions', () => {
         user = new User();
-        user.roles = [];
+        user.permissions = [];
 
         expect(guard.canActivate(host)).toStrictEqual(false);
       });

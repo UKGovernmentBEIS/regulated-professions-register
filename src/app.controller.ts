@@ -10,9 +10,7 @@ import {
 } from '@nestjs/common';
 import { AppService } from './app.service';
 import { AuthenticationGuard } from './common/authentication.guard';
-import { Roles } from './common/roles.decorator';
 import { Request, Response } from 'express';
-import { UserRole } from './users/user.entity';
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
@@ -49,15 +47,5 @@ export class AppController {
 
       res.redirect(path);
     }
-  }
-
-  @Get('/admin/superadmin')
-  @UseGuards(AuthenticationGuard)
-  @Roles(UserRole.Admin)
-  @Render('admin/superadmin')
-  superAdmin(@Req() req: Request): object {
-    return {
-      name: req.oidc.user.nickname,
-    };
   }
 }

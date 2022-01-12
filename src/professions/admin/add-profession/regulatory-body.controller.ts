@@ -9,6 +9,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { Response } from 'express';
+import { AuthenticationGuard } from '../../../common/authentication.guard';
 import { ProfessionsService } from '../../professions.service';
 import { I18nService } from 'nestjs-i18n';
 import { OrganisationsService } from '../../../organisations/organisations.service';
@@ -20,8 +21,8 @@ import { MandatoryRegistrationRadioButtonsPresenter } from '../mandatory-registr
 import { Validator } from '../../../helpers/validator';
 import { RegulatoryBodyDto } from './dto/regulatory-body.dto';
 import { ValidationFailedError } from '../../../validation/validation-failed.error';
-import { AuthenticationGuard } from '../../../common/authentication.guard';
-
+import { Permissions } from '../../../common/permissions.decorator';
+import { UserPermission } from '../../../users/user.entity';
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
 export class RegulatoryBodyController {
@@ -32,6 +33,7 @@ export class RegulatoryBodyController {
   ) {}
 
   @Get('/:id/regulatory-body/edit')
+  @Permissions(UserPermission.CreateProfession)
   async edit(
     @Res() res: Response,
     @Param('id') id: string,
@@ -53,6 +55,7 @@ export class RegulatoryBodyController {
   }
 
   @Post('/:id/regulatory-body')
+  @Permissions(UserPermission.CreateProfession)
   async update(
     @Res() res: Response,
     @Param('id') id: string,

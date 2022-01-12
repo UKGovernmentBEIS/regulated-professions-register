@@ -7,9 +7,17 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-export enum UserRole {
-  Admin = 'admin',
-  Editor = 'editor',
+export enum UserPermission {
+  CreateUser = 'createUser',
+  EditUser = 'editUser',
+  DeleteUser = 'deleteUser',
+  CreateOrganisation = 'createOrganisation',
+  DeleteOrganisation = 'deleteOrganisation',
+  CreateProfession = 'createProfession',
+  DeleteProfession = 'deleteprofession',
+  UploadDecisionData = 'uploadDecisionData',
+  DownloadDecisionData = 'downloadDecisionData',
+  ViewDecisionData = 'viewDecisionData',
 }
 
 @Entity({ name: 'users' })
@@ -29,11 +37,11 @@ export class User {
 
   @Column({
     type: 'enum',
-    enum: UserRole,
+    enum: UserPermission,
     array: true,
     default: [],
   })
-  roles: UserRole[];
+  permissions: UserPermission[];
 
   @CreateDateColumn({
     type: 'timestamp',
@@ -58,14 +66,14 @@ export class User {
     email?: string,
     name?: string,
     externalIdentifier?: string,
-    roles?: UserRole[],
+    permissions?: UserPermission[],
     serviceOwner?: boolean,
     confirmed?: boolean,
   ) {
     this.email = email || '';
     this.name = name || '';
     this.externalIdentifier = externalIdentifier || null;
-    this.roles = roles || [];
+    this.permissions = permissions || [];
     this.serviceOwner = serviceOwner || false;
     this.confirmed = confirmed || false;
   }
