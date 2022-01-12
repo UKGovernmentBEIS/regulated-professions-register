@@ -1,12 +1,12 @@
 import { IsNotEmpty } from 'class-validator';
 import { Type } from 'class-transformer';
-import { UserRole } from '../../user.entity';
+import { UserPermission } from '../../user.entity';
 
-export class RolesDto {
+export class PermissionsDto {
   @IsNotEmpty({
     message: 'users.form.errors.roles.empty',
   })
-  roles: Array<UserRole>;
+  permissions: Array<UserPermission>;
 
   @Type(() => Boolean)
   @IsNotEmpty({

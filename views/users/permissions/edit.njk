@@ -19,7 +19,7 @@
     {% include "../../shared/_errors.njk" %}
 
     <span class="govuk-caption-xl">{{ "users.form.headings.main" | t }}</span>
-    <h1 class="govuk-heading-xl">{{ "users.form.headings.roles" | t }}</h1>
+    <h1 class="govuk-heading-xl">{{ "users.form.headings.permissions" | t }}</h1>
 
     <form method="post" action="./">
 
@@ -51,17 +51,17 @@
       }) }}
 
       {% set roleItems = [] %}
-      {% for role in roles %}
+      {% for role in permissions %}
         {% set translation = "users.form.label." + role %}
         {% set roleItems = (roleItems.push({value: role, text: (translation | t)}), roleItems) %}
       {% endfor %}
 
       {{ govukCheckboxes({
-        id: "roles[]",
-        name: "roles[]",
+        id: "permissions[]",
+        name: "permissions[]",
         fieldset: {
           legend: {
-            text: ("users.form.label.roles" | t),
+            text: ("users.form.label.permissions" | t),
             isPageHeading: false,
             classes: "govuk-fieldset__legend--l"
           }

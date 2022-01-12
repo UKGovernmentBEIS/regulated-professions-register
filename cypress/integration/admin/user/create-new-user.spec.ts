@@ -28,14 +28,14 @@ describe('Creating a new user', () => {
       cy.get('button').click();
 
       cy.get('input[name="serviceOwner"][value="1"]').check();
-      cy.get('[type="checkbox"]').check('admin');
+      cy.get('[type="checkbox"]').check('createOrganisation');
 
       cy.get('button').click();
 
       cy.get('body').should('contain', 'Example Name');
       cy.get('body').should('contain', 'name@example.com');
-      cy.translate('users.form.label.admin').then((adminLabel) => {
-        cy.get('body').should('contain', adminLabel);
+      cy.translate('users.form.label.createOrganisation').then((label) => {
+        cy.get('body').should('contain', label);
       });
       cy.translate('app.boolean.true').then((isServiceOwner) => {
         cy.get('body').should('contain', isServiceOwner);
@@ -74,7 +74,7 @@ describe('Creating a new user', () => {
       cy.get('button').click();
 
       cy.get('input[name="serviceOwner"][value="1"]').check();
-      cy.get('[type="checkbox"]').check('admin');
+      cy.get('[type="checkbox"]').check('createOrganisation');
 
       cy.get('button').click();
 
@@ -85,18 +85,19 @@ describe('Creating a new user', () => {
 
       cy.get('body').should('contain', 'name3@example.com');
 
-      cy.get('a[href*="roles/edit?change=true"]').first().click();
+      cy.get('a[href*="permissions/edit?change=true"]').first().click();
 
-      cy.get('[type="checkbox"]').check('editor');
       cy.get('input[name="serviceOwner"][value="0"]').check();
+      cy.get('[type="checkbox"]').check('createUser');
+
       cy.get('button').click();
 
-      cy.translate('users.form.label.admin').then((adminLabel) => {
-        cy.get('body').should('not.contain', adminLabel);
+      cy.translate('users.form.label.createOrganisation').then((label) => {
+        cy.get('body').should('not.contain', label);
       });
 
-      cy.translate('users.form.label.editor').then((editorLabel) => {
-        cy.get('body').should('contain', editorLabel);
+      cy.translate('users.form.label.createUser').then((label) => {
+        cy.get('body').should('contain', label);
       });
 
       cy.translate('app.boolean.false').then((isServiceOwner) => {

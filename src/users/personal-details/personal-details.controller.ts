@@ -78,7 +78,7 @@ export class PersonalDetailsController {
     if (personalDetailsDto.change) {
       res.redirect(`/admin/users/${id}/confirm`);
     } else {
-      res.redirect(`/admin/users/${id}/roles/edit`);
+      res.redirect(`/admin/users/${id}/permissions/edit`);
     }
   }
 

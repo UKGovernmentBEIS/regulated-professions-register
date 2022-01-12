@@ -8,7 +8,7 @@ export class UserPresenter extends User {
       user.email,
       user.name,
       user.externalIdentifier,
-      user.roles,
+      user.permissions,
       user.confirmed,
     );
   }
@@ -38,13 +38,13 @@ export class UserPresenter extends User {
     `;
   }
 
-  public async roleList(): Promise<string> {
-    const roles = await Promise.all(
-      this.roles.map((role) => {
-        return this.i18n.translate(`users.form.label.${role}`);
+  public async permissionList(): Promise<string> {
+    const permissions = await Promise.all(
+      this.permissions.map((permission) => {
+        return this.i18n.translate(`users.form.label.${permission}`);
       }),
     );
 
-    return roles.join('<br />');
+    return permissions.join('<br />');
   }
 }

@@ -56,17 +56,17 @@
       },
       {
         key: {
-          text: ("users.form.label.roles" | t)
+          text: ("users.form.label.permissions" | t)
         },
         value: {
-          text: (roleList | safe)
+          text: (permissionList | safe)
         },
         actions: {
           items: [
             {
-              href: "/admin/users/" + id + "/roles/edit?change=true",
+              href: "/admin/users/" + id + "/permissions/edit?change=true",
               text: ("app.change" | t),
-              visuallyHiddenText: ("users.form.label.roles" | t)
+              visuallyHiddenText: ("users.form.label.permissions" | t)
             }
           ]
         }

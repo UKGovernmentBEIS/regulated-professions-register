@@ -61,7 +61,7 @@ export class UsersController {
 
     return {
       ...user,
-      roleList: await userPresenter.roleList(),
+      permissionList: await userPresenter.permissionList(),
     };
   }
 
@@ -82,7 +82,7 @@ export class UsersController {
 
     return {
       ...user,
-      roleList: await userPresenter.roleList(),
+      permissionList: await userPresenter.permissionList(),
     };
   }
 
