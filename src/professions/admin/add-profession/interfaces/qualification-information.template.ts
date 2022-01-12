@@ -7,5 +7,6 @@ export interface QualificationInformationTemplate {
   duration: string;
   mandatoryProfessionalExperienceRadioButtonArgs: RadioButtonArgs[];
   change: boolean;
+  backLink: string;
   errors: object | undefined;
 }

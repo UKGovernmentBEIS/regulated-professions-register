@@ -25,7 +25,12 @@ export class QualificationInformationController {
   ): Promise<void> {
     const profession = await this.professionsService.find(id);
 
-    return this.renderForm(res, profession.qualification, change);
+    return this.renderForm(
+      res,
+      profession.qualification,
+      change,
+      this.backLink(change, profession.id),
+    );
   }
 
   @Post('/:id/qualification-information')
@@ -70,6 +75,7 @@ export class QualificationInformationController {
         res,
         updatedQualification,
         submittedValues.change,
+        this.backLink(submittedValues.change, profession.id),
         errors,
       );
     }
@@ -90,6 +96,7 @@ export class QualificationInformationController {
     res: Response,
     qualification: Qualification | null,
     change: boolean,
+    backLink: string,
     errors: object | undefined = undefined,
   ) {
     const mostCommonPathToObtainQualificationRadioButtonArgs =
@@ -121,6 +128,7 @@ export class QualificationInformationController {
       mandatoryProfessionalExperienceRadioButtonArgs,
       duration: qualification?.educationDuration,
       change,
+      backLink,
       errors,
     };
 
@@ -128,5 +136,11 @@ export class QualificationInformationController {
       'admin/professions/add-profession/qualification-information',
       templateArgs,
     );
+  }
+
+  private backLink(change: boolean, id: string) {
+    return change
+      ? `/admin/professions/${id}/check-your-answers`
+      : `/admin/professions/${id}/regulated-activities/edit`;
   }
 }

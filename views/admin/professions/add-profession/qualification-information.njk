@@ -6,7 +6,7 @@
 
 {% block content %}
 
-  <a href="#" class="govuk-back-link">{{ ('app.back' | t) }}</a>
+  <a href="{{backLink}}" class="govuk-back-link">{{ ('app.back' | t) }}</a>
 
   {% include "../../../shared/_errors.njk" %}
 

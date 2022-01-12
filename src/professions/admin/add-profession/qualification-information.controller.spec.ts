@@ -207,6 +207,47 @@ describe(QualificationInformationController, () => {
         );
       });
     });
+
+    describe('back links', () => {
+      describe('when the "Change" query param is false', () => {
+        it('links back to the previous page in the journey', async () => {
+          const profession = professionFactory.build({
+            id: 'profession-id',
+          });
+
+          professionsService.find.mockImplementation(async () => profession);
+
+          await controller.edit(response, 'profession-id', false);
+
+          expect(response.render).toHaveBeenCalledWith(
+            'admin/professions/add-profession/qualification-information',
+            expect.objectContaining({
+              backLink:
+                '/admin/professions/profession-id/regulated-activities/edit',
+            }),
+          );
+        });
+      });
+
+      describe('when the "Change" query param is true', () => {
+        it('links back to the Check your Answers page', async () => {
+          const profession = professionFactory.build({
+            id: 'profession-id',
+          });
+
+          professionsService.find.mockImplementation(async () => profession);
+
+          await controller.edit(response, 'profession-id', true);
+
+          expect(response.render).toHaveBeenCalledWith(
+            'admin/professions/add-profession/qualification-information',
+            expect.objectContaining({
+              backLink: '/admin/professions/profession-id/check-your-answers',
+            }),
+          );
+        });
+      });
+    });
   });
 
   afterEach(() => {
