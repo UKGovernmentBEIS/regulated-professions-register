@@ -14,7 +14,7 @@ describe('Searching a profession', () => {
     );
   });
 
-  it('I can view an unfiltered list of profession', () => {
+  it('I can view an unfiltered list of professions', () => {
     cy.get('body').should('contain', 'Registered Trademark Attorney');
     cy.get('body').should(
       'contain',
