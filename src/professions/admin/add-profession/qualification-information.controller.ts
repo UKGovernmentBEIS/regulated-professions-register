@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Res } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query, Res } from '@nestjs/common';
 import { Response } from 'express';
 import { I18nService } from 'nestjs-i18n';
 import { Validator } from '../../../helpers/validator';
@@ -18,10 +18,14 @@ export class QualificationInformationController {
   ) {}
 
   @Get('/:id/qualification-information/edit')
-  async edit(@Res() res: Response, @Param('id') id: string): Promise<void> {
+  async edit(
+    @Res() res: Response,
+    @Param('id') id: string,
+    @Query('change') change: boolean,
+  ): Promise<void> {
     const profession = await this.professionsService.find(id);
 
-    return this.renderForm(res, profession.qualification);
+    return this.renderForm(res, profession.qualification, change);
   }
 
   @Post('/:id/qualification-information')
@@ -62,19 +66,30 @@ export class QualificationInformationController {
     if (!validator.valid()) {
       const errors = new ValidationFailedError(validator.errors).fullMessages();
 
-      return this.renderForm(res, updatedQualification, errors);
+      return this.renderForm(
+        res,
+        updatedQualification,
+        submittedValues.change,
+        errors,
+      );
     }
 
     profession.qualification = updatedQualification;
 
     await this.professionsService.save(profession);
 
+    if (submittedValues.change) {
+      return res.redirect(`/admin/professions/${id}/check-your-answers`);
+    }
+
+    // This will go to the Legislation information page in future
     return res.redirect(`/admin/professions/${id}/check-your-answers`);
   }
 
   private async renderForm(
     res: Response,
     qualification: Qualification | null,
+    change: boolean,
     errors: object | undefined = undefined,
   ) {
     const mostCommonPathToObtainQualificationRadioButtonArgs =
@@ -105,6 +120,7 @@ export class QualificationInformationController {
       mostCommonPathToObtainQualificationRadioButtonArgs,
       mandatoryProfessionalExperienceRadioButtonArgs,
       duration: qualification?.educationDuration,
+      change,
       errors,
     };
 

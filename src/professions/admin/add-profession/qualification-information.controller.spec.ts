@@ -60,7 +60,7 @@ describe(QualificationInformationController, () => {
 
       professionsService.find.mockResolvedValue(profession);
 
-      await controller.edit(response, 'profession-id');
+      await controller.edit(response, 'profession-id', false);
 
       expect(response.render).toHaveBeenCalledWith(
         'admin/professions/add-profession/qualification-information',
@@ -79,40 +79,83 @@ describe(QualificationInformationController, () => {
 
   describe('update', () => {
     describe('when all required parameters are entered', () => {
-      it('creates a new Qualification on the Profession and redirects to "Check your answers"', async () => {
-        const profession = professionFactory.build({ id: 'profession-id' });
+      describe('when the "Change" query param is false', () => {
+        it('creates a new Qualification on the Profession and redirects to the next page in the journey', async () => {
+          const profession = professionFactory.build({ id: 'profession-id' });
 
-        const dto: QualificationInformationDto = {
-          level: 'Qualification level',
-          methodToObtainQualification: MethodToObtain.DegreeLevel,
-          otherMethodToObtainQualification: '',
-          mostCommonPathToObtainQualification: MethodToObtain.DegreeLevel,
-          otherMostCommonPathToObtainQualification: '',
-          duration: '3.0 Years',
-          mandatoryProfessionalExperience: '1',
-        };
+          const dto: QualificationInformationDto = {
+            level: 'Qualification level',
+            methodToObtainQualification: MethodToObtain.DegreeLevel,
+            otherMethodToObtainQualification: '',
+            mostCommonPathToObtainQualification: MethodToObtain.DegreeLevel,
+            otherMostCommonPathToObtainQualification: '',
+            duration: '3.0 Years',
+            mandatoryProfessionalExperience: '1',
+            change: false,
+          };
 
-        professionsService.find.mockResolvedValue(profession);
+          professionsService.find.mockResolvedValue(profession);
 
-        await controller.update(response, 'profession-id', dto);
+          await controller.update(response, 'profession-id', dto);
 
-        expect(professionsService.save).toHaveBeenCalledWith(
-          expect.objectContaining({
-            qualification: expect.objectContaining({
-              commonPathToObtain: 'degreeLevel',
-              otherMethodToObtain: '',
-              otherCommonPathToObtain: '',
-              educationDuration: '3.0 Years',
-              level: 'Qualification level',
-              mandatoryProfessionalExperience: true,
-              methodToObtain: 'degreeLevel',
+          expect(professionsService.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              qualification: expect.objectContaining({
+                commonPathToObtain: 'degreeLevel',
+                otherMethodToObtain: '',
+                otherCommonPathToObtain: '',
+                educationDuration: '3.0 Years',
+                level: 'Qualification level',
+                mandatoryProfessionalExperience: true,
+                methodToObtain: 'degreeLevel',
+              }),
             }),
-          }),
-        );
+          );
 
-        expect(response.redirect).toHaveBeenCalledWith(
-          '/admin/professions/profession-id/check-your-answers',
-        );
+          expect(response.redirect).toHaveBeenCalledWith(
+            // This will be the Legislation page in future
+            '/admin/professions/profession-id/check-your-answers',
+          );
+        });
+      });
+
+      describe('when the "Change" query param is true', () => {
+        it('creates a new Qualification on the Profession and redirects to "Check your answers"', async () => {
+          const profession = professionFactory.build({ id: 'profession-id' });
+
+          const dto: QualificationInformationDto = {
+            level: 'Qualification level',
+            methodToObtainQualification: MethodToObtain.DegreeLevel,
+            otherMethodToObtainQualification: '',
+            mostCommonPathToObtainQualification: MethodToObtain.DegreeLevel,
+            otherMostCommonPathToObtainQualification: '',
+            duration: '3.0 Years',
+            mandatoryProfessionalExperience: '1',
+            change: true,
+          };
+
+          professionsService.find.mockResolvedValue(profession);
+
+          await controller.update(response, 'profession-id', dto);
+
+          expect(professionsService.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              qualification: expect.objectContaining({
+                commonPathToObtain: 'degreeLevel',
+                otherMethodToObtain: '',
+                otherCommonPathToObtain: '',
+                educationDuration: '3.0 Years',
+                level: 'Qualification level',
+                mandatoryProfessionalExperience: true,
+                methodToObtain: 'degreeLevel',
+              }),
+            }),
+          );
+
+          expect(response.redirect).toHaveBeenCalledWith(
+            '/admin/professions/profession-id/check-your-answers',
+          );
+        });
       });
     });
 
@@ -128,6 +171,7 @@ describe(QualificationInformationController, () => {
           otherMostCommonPathToObtainQualification: '',
           duration: '',
           mandatoryProfessionalExperience: undefined,
+          change: false,
         };
 
         professionsService.find.mockResolvedValue(profession);

@@ -45,4 +45,6 @@ export class QualificationInformationDto {
       'professions.form.errors.qualification.mandatoryProfessionalExperience.empty',
   })
   mandatoryProfessionalExperience: string;
+
+  change: boolean;
 }
