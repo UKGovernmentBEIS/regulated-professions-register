@@ -176,6 +176,100 @@
               })
             }}
 
+            <h2 class="govuk-heading-m">{{ ("professions.form.headings.qualificationInformation" | t) }}</h2>
+
+            {{
+              govukSummaryList({
+                rows: [
+                  {
+                    key: {
+                      text: ("professions.form.label.qualificationInformation.qualificationLevel" | t)
+                    },
+                    value: {
+                      text: qualification.level
+                    },
+                    actions: {
+                      items: [
+                        {
+                          href: "/admin/professions/" + professionId + "/qualification-information/edit",
+                          text: ("app.change" | t),
+                          visuallyHiddenText: ("professions.form.label.qualificationInformation.qualificationLevel" | t)
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    key: {
+                      text: ("professions.form.label.qualificationInformation.methodsToObtainQualification" | t)
+                    },
+                    value: {
+                      text: (qualification.methodToObtainQualification | t)
+                    },
+                    actions: {
+                      items: [
+                        {
+                          href: "/admin/professions/" + professionId + "/qualification-information/edit",
+                          text: ("app.change" | t),
+                          visuallyHiddenText: ("professions.form.label.qualificationInformation.methodsToObtainQualification" | t)
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    key: {
+                      text: ("professions.form.label.qualificationInformation.mostCommonPathToObtainQualification" | t)
+                    },
+                    value: {
+                      text: (qualification.mostCommonPathToObtainQualification | t)
+                    },
+                    actions: {
+                      items: [
+                        {
+                          href: "/admin/professions/" + professionId + "/qualification-information/edit",
+                          text: ("app.change" | t),
+                          visuallyHiddenText: ("professions.form.label.qualificationInformation.mostCommonPathToObtainQualification" | t)
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    key: {
+                      text: ("professions.form.label.qualificationInformation.duration" | t)
+                    },
+                    value: {
+                      text: qualification.duration
+                    },
+                    actions: {
+                      items: [
+                        {
+                          href: "/admin/professions/" + professionId + "/qualification-information/edit",
+                          text: ("app.change" | t),
+                          visuallyHiddenText: ("professions.form.label.qualificationInformation.mostCommonPathToObtainQualification" | t)
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    key: {
+                      text: ("professions.form.label.qualificationInformation.mandatoryProfessionalExperience" | t)
+                    },
+                    value: {
+                      text: qualification.mandatoryProfessionalExperience | t
+                    },
+                    actions: {
+                      items: [
+                        {
+                          href: "/admin/professions/" + professionId + "/qualification-information/edit",
+                          text: ("app.change" | t),
+                          visuallyHiddenText: ("professions.form.label.qualificationInformation.mandatoryProfessionalExperience" | t)
+                        }
+                      ]
+                    }
+                  }
+                ]
+              })
+            }}
+
             {{
               govukButton({
                 id: "submit-button",

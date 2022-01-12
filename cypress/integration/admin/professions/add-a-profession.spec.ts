@@ -121,6 +121,18 @@ describe('Adding a new profession', () => {
       cy.get('body').should('contain', 'An example activity');
       cy.get('body').should('contain', 'A description of the regulation');
 
+      cy.get('body').should('contain', 'An example Qualification level');
+      cy.get('body').should('contain', 'Another method');
+      cy.translate(
+        'professions.form.radioButtons.methodsToObtainQualification.generalSecondaryEducation',
+      ).then((method) => {
+        cy.get('body').should('contain', method);
+      });
+      cy.get('body').should('contain', '4.0 Years');
+      cy.translate('app.yes').then((yes) => {
+        cy.get('body').should('contain', yes);
+      });
+
       cy.translate('professions.form.button.create').then((buttonText) => {
         cy.get('button').contains(buttonText).click();
       });
