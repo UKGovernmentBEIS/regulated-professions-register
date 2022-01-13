@@ -71,5 +71,18 @@ describe('OrganisationsService', () => {
       expect(organisation).toEqual(organisation);
       expect(repoSpy).toHaveBeenCalledWith({ where: { slug: 'some-slug' } });
     });
+
+    it('should allow options to be passed', async () => {
+      const repoSpy = jest.spyOn(repo, 'findOne');
+      const organisation = await service.findBySlug('some-slug', {
+        order: { id: 'DESC' },
+      });
+
+      expect(organisation).toEqual(organisation);
+      expect(repoSpy).toHaveBeenCalledWith({
+        where: { slug: 'some-slug' },
+        order: { id: 'DESC' },
+      });
+    });
   });
 });
