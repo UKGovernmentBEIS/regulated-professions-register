@@ -17,4 +17,8 @@ export class OrganisationsService {
   find(id: string): Promise<Organisation> {
     return this.repository.findOne(id);
   }
+
+  findBySlug(slug: string): Promise<Organisation> {
+    return this.repository.findOne({ where: { slug } });
+  }
 }
