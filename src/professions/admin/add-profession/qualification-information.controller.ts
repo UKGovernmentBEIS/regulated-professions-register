@@ -1,8 +1,20 @@
-import { Body, Controller, Get, Param, Post, Query, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Query,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { Response } from 'express';
 import { I18nService } from 'nestjs-i18n';
+import { AuthenticationGuard } from '../../../common/authentication.guard';
+import { Permissions } from '../../../common/permissions.decorator';
 import { Validator } from '../../../helpers/validator';
 import { Qualification } from '../../../qualifications/qualification.entity';
+import { UserPermission } from '../../../users/user.entity';
 import { ValidationFailedError } from '../../../validation/validation-failed.error';
 import { ProfessionsService } from '../../professions.service';
 import { MethodToObtainQualificationRadioButtonsPresenter } from '../method-to-obtain-qualification-radio-buttons.presenter';
@@ -10,6 +22,7 @@ import { YesNoRadioButtonArgsPresenter } from '../yes-no-radio-buttons-presenter
 import { QualificationInformationDto } from './dto/qualification-information.dto';
 import { QualificationInformationTemplate } from './interfaces/qualification-information.template';
 
+@UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
 export class QualificationInformationController {
   constructor(
@@ -18,6 +31,7 @@ export class QualificationInformationController {
   ) {}
 
   @Get('/:id/qualification-information/edit')
+  @Permissions(UserPermission.CreateProfession)
   async edit(
     @Res() res: Response,
     @Param('id') id: string,
@@ -34,6 +48,7 @@ export class QualificationInformationController {
   }
 
   @Post('/:id/qualification-information')
+  @Permissions(UserPermission.CreateProfession)
   async update(
     @Res() res: Response,
     @Param('id') id: string,
