@@ -125,6 +125,14 @@
         "mandatoryProfessionalExperience": {
           "empty": "Select whether existence of professional experience is mandatory"
         }
+      },
+      "legislation": {
+        "nationalLegislation": {
+          "empty": "Enter the national legislation"
+        },
+        "link": {
+          "empty": "Enter a link to the registration"
+        }
       }
     }
   },

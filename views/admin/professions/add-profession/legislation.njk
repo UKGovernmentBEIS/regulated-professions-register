@@ -24,7 +24,9 @@
               isPageHeading: false
             },
             id: "nationalLegislation",
-            name: "nationalLegislation"
+            name: "nationalLegislation",
+            value: legislation.name,
+            errorMessage: errors.nationalLegislation | tError
           })
         }}
 
@@ -36,7 +38,9 @@
               isPageHeading: false
             },
             id: "link",
-            name: "link"
+            name: "link",
+            value: legislation.url,
+            errorMessage: errors.link | tError
           })
         }}
 

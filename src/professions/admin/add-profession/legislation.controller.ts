@@ -1,33 +1,103 @@
 import {
+  Body,
   Controller,
   Get,
   Param,
   Post,
-  Render,
+  Query,
   Res,
+  UseFilters,
   UseGuards,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { AuthenticationGuard } from '../../../common/authentication.guard';
 import { Permissions } from '../../../common/permissions.decorator';
+import { Validator } from '../../../helpers/validator';
+import { Legislation } from '../../../legislations/legislation.entity';
 import { UserPermission } from '../../../users/user.entity';
+import { ValidationExceptionFilter } from '../../../validation/validation-exception.filter';
+import { ValidationFailedError } from '../../../validation/validation-failed.error';
+import { ProfessionsService } from '../../professions.service';
+import LegislationDto from './dto/legislation.dto';
 import { LegislationTemplate } from './interfaces/legislation.template';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
 export class LegislationController {
+  constructor(private readonly professionsService: ProfessionsService) {}
+
   @Get('/:id/legislation/edit')
-  @Render('admin/professions/add-profession/legislation')
   @Permissions(UserPermission.CreateProfession)
-  async edit(@Param('id') id: string): Promise<LegislationTemplate> {
-    return {
-      backLink: `/admin/professions/${id}/qualification-information/edit`,
-    };
+  async edit(@Res() res: Response, @Param('id') id: string): Promise<void> {
+    const profession = await this.professionsService.find(id);
+
+    this.renderForm(res, profession.legislation, this.backLink(id));
   }
 
   @Post('/:id/legislation')
   @Permissions(UserPermission.CreateProfession)
-  async update(@Res() res: Response, @Param('id') id: string): Promise<void> {
+  @UseFilters(
+    new ValidationExceptionFilter(
+      'admin/professions/add-profession/legislation',
+      'legislation',
+    ),
+  )
+  async update(
+    @Res() res: Response,
+    @Param('id') id: string,
+    @Body() legislationDto,
+  ): Promise<void> {
+    const validator = await Validator.validate(LegislationDto, legislationDto);
+
+    const profession = await this.professionsService.find(id);
+
+    const submittedValues: LegislationDto = legislationDto;
+
+    const updatedLegislation: Legislation = {
+      ...profession.legislation,
+      ...{
+        name: submittedValues.nationalLegislation,
+        url: submittedValues.link,
+      },
+    };
+
+    if (!validator.valid()) {
+      const errors = new ValidationFailedError(validator.errors).fullMessages();
+
+      return this.renderForm(
+        res,
+        updatedLegislation,
+        this.backLink(id),
+        errors,
+      );
+    }
+
+    profession.legislation = updatedLegislation;
+
+    await this.professionsService.save(profession);
+
     res.redirect(`/admin/professions/${id}/check-your-answers`);
+  }
+
+  private async renderForm(
+    res: Response,
+    legislation: Legislation,
+    backLink: string,
+    errors: object | undefined = undefined,
+  ): Promise<void> {
+    const templateArgs: LegislationTemplate = {
+      legislation,
+      backLink,
+      errors,
+    };
+
+    return res.render(
+      'admin/professions/add-profession/legislation',
+      templateArgs,
+    );
+  }
+
+  private backLink(id: string) {
+    return `/admin/professions/${id}/qualification-information/edit`;
   }
 }

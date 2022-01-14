@@ -107,6 +107,11 @@ describe('Adding a new profession', () => {
         cy.get('body').should('contain', heading);
       });
 
+      cy.get('textarea[name="nationalLegislation"]').type(
+        'National legislation description',
+      );
+      cy.get('input[name="link"]').type('www.example-legislation.com');
+
       cy.translate('app.continue').then((buttonText) => {
         cy.get('button').contains(buttonText).click();
       });
