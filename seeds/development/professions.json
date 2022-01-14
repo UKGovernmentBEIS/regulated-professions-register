@@ -9,7 +9,7 @@
     "industries": ["industries.law"],
     "qualification": "DSE - Diploma (post-secondary education), including Annex II (ex 92/51, Annex C,D) , Art. 11 c",
     "reservedActivities": "England and Wales: the exercise of a right of audience; the conduct of litigation; reserved instrument activities; probate activities; the administration of oaths (see section 12 Legal Services Act 2007).",
-    "legislations": ["The Trade Marks Act 1994", "Legal Services Act 2007"],
+    "legislation": "The Trade Marks Act 1994",
     "organisation": "Law Society of England and Wales",
     "mandatoryRegistration": "voluntary",
     "confirmed": true
@@ -24,10 +24,7 @@
     "industries": ["industries.education"],
     "qualification": "PS3 - Diploma of post-secondary level (3-4 years) , Art. 11 d",
     "reservedActivities": "No information submitted",
-    "legislations": [
-      "The Education (School Teachers' Qualifications) (England) Regulations 2003/1662 (as amended)",
-      "The Education (Induction Arrangements for School Teachers) (England) Regulations 2012/1115 (as amended)"
-    ],
+    "legislation": "The Education (School Teachers' Qualifications) (England) Regulations 2003/1662 (as amended)",
     "organisation": "Department for Education",
     "mandatoryRegistration": "mandatory",
     "confirmed": true
