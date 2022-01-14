@@ -122,9 +122,8 @@ describe(RegulatedActivitiesController, () => {
             }),
           );
 
-          // This will be the Qualification information page in future
           expect(response.redirect).toHaveBeenCalledWith(
-            '/admin/professions/profession-id/check-your-answers',
+            '/admin/professions/profession-id/qualification-information/edit',
           );
         });
       });

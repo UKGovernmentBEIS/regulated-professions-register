@@ -6,6 +6,7 @@ import { backLink } from '../../../common/utils';
 
 import { Nation } from '../../../nations/nation';
 import { ProfessionsService } from '../../professions.service';
+import QualificationPresenter from '../../../qualifications/presenters/qualification.presenter';
 import { CheckYourAnswersTemplate } from './interfaces/check-your-answers.template';
 import { Permissions } from '../../../common/permissions.decorator';
 import { UserPermission } from '../../../users/user.entity';
@@ -51,6 +52,7 @@ export class CheckYourAnswersController {
       mandatoryRegistration: draftProfession.mandatoryRegistration,
       description: draftProfession.description,
       reservedActivities: draftProfession.reservedActivities,
+      qualification: new QualificationPresenter(draftProfession.qualification),
       backLink: backLink(req),
     };
   }

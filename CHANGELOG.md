@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Add a service owner boolean to a user
 - Define new user permissions
 - List Regulatory Authorities
+- Add page for adding a new qualification to a profession
 
 ### Changed
 

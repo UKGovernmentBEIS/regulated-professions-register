@@ -10,6 +10,8 @@ import {
   Index,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToOne,
+  JoinColumn,
 } from 'typeorm';
 import { Industry } from '../industries/industry.entity';
 import { Organisation } from '../organisations/organisation.entity';
@@ -51,9 +53,11 @@ export class Profession {
   @JoinTable()
   industries: Industry[];
 
-  @ManyToOne(() => Qualification, {
+  @OneToOne(() => Qualification, {
     eager: true,
+    cascade: true,
   })
+  @JoinColumn()
   qualification: Qualification;
 
   @Column({ nullable: true })

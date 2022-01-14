@@ -1,3 +1,5 @@
+import QualificationPresenter from '../../../../qualifications/presenters/qualification.presenter';
+
 export interface CheckYourAnswersTemplate {
   name: string;
   nations: string[];
@@ -7,5 +9,6 @@ export interface CheckYourAnswersTemplate {
   mandatoryRegistration: string;
   reservedActivities: string;
   description: string;
+  qualification: QualificationPresenter;
   backLink: string;
 }

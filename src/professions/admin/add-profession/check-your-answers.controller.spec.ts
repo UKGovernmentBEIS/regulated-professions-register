@@ -2,10 +2,12 @@ import { DeepMocked, createMock } from '@golevelup/ts-jest';
 import { TestingModule, Test } from '@nestjs/testing';
 import { Request } from 'express';
 import { I18nService } from 'nestjs-i18n';
+import QualificationPresenter from '../../../qualifications/presenters/qualification.presenter';
 import { createMockRequest } from '../../../testutils/create-mock-request';
 import industryFactory from '../../../testutils/factories/industry';
 import organisationFactory from '../../../testutils/factories/organisation';
 import professionFactory from '../../../testutils/factories/profession';
+import qualificationFactory from '../../../testutils/factories/qualification';
 import { MandatoryRegistration } from '../../profession.entity';
 import { ProfessionsService } from '../../professions.service';
 import { CheckYourAnswersController } from './check-your-answers.controller';
@@ -14,6 +16,8 @@ describe('CheckYourAnswersController', () => {
   let controller: CheckYourAnswersController;
   let professionsService: DeepMocked<ProfessionsService>;
   let i18nService: DeepMocked<I18nService>;
+
+  const qualification = qualificationFactory.build();
 
   beforeEach(async () => {
     const profession = professionFactory.build({
@@ -27,6 +31,7 @@ describe('CheckYourAnswersController', () => {
       mandatoryRegistration: MandatoryRegistration.Voluntary,
       description: 'A description of the regulation',
       reservedActivities: 'Some reserved activities',
+      qualification,
     });
 
     professionsService = createMock<ProfessionsService>({
@@ -84,6 +89,10 @@ describe('CheckYourAnswersController', () => {
         expect(templateParams.description).toEqual(
           'A description of the regulation',
         );
+        expect(templateParams.qualification).toEqual(
+          new QualificationPresenter(qualification),
+        );
+
         expect(professionsService.find).toHaveBeenCalledWith('profession-id');
       });
     });
