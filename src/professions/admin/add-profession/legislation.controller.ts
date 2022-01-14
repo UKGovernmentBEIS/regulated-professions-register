@@ -28,10 +28,14 @@ export class LegislationController {
 
   @Get('/:id/legislation/edit')
   @Permissions(UserPermission.CreateProfession)
-  async edit(@Res() res: Response, @Param('id') id: string): Promise<void> {
+  async edit(
+    @Res() res: Response,
+    @Param('id') id: string,
+    @Query('change') change: boolean,
+  ): Promise<void> {
     const profession = await this.professionsService.find(id);
 
-    this.renderForm(res, profession.legislation, this.backLink(id));
+    this.renderForm(res, profession.legislation, this.backLink(change, id));
   }
 
   @Post('/:id/legislation')
@@ -46,6 +50,7 @@ export class LegislationController {
     @Res() res: Response,
     @Param('id') id: string,
     @Body() legislationDto,
+    @Query() change: boolean,
   ): Promise<void> {
     const validator = await Validator.validate(LegislationDto, legislationDto);
 
@@ -67,7 +72,7 @@ export class LegislationController {
       return this.renderForm(
         res,
         updatedLegislation,
-        this.backLink(id),
+        this.backLink(change, id),
         errors,
       );
     }
@@ -97,7 +102,9 @@ export class LegislationController {
     );
   }
 
-  private backLink(id: string) {
-    return `/admin/professions/${id}/qualification-information/edit`;
+  private backLink(change: boolean, id: string) {
+    return change
+      ? `/admin/professions/${id}/check-your-answers`
+      : `/admin/professions/${id}/qualification-information/edit`;
   }
 }

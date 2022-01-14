@@ -40,7 +40,7 @@ describe(LegislationController, () => {
 
       professionsService.find.mockResolvedValue(profession);
 
-      await controller.edit(response, 'profession-id');
+      await controller.edit(response, 'profession-id', true);
 
       expect(response.render).toHaveBeenCalledWith(
         'admin/professions/add-profession/legislation',
@@ -63,7 +63,7 @@ describe(LegislationController, () => {
 
         professionsService.find.mockResolvedValue(profession);
 
-        await controller.update(response, 'profession-id', dto);
+        await controller.update(response, 'profession-id', dto, false);
 
         expect(professionsService.save).toHaveBeenCalledWith(
           expect.objectContaining({
@@ -91,7 +91,7 @@ describe(LegislationController, () => {
 
         professionsService.find.mockResolvedValue(profession);
 
-        await controller.update(response, 'profession-id', dto);
+        await controller.update(response, 'profession-id', dto, false);
 
         expect(professionsService.save).not.toHaveBeenCalled();
 
@@ -106,6 +106,47 @@ describe(LegislationController, () => {
                 text: 'professions.form.errors.legislation.nationalLegislation.empty',
               },
             },
+          }),
+        );
+      });
+    });
+  });
+
+  describe('back links', () => {
+    describe('when the "Change" query param is false', () => {
+      it('links back to the previous page in the journey', async () => {
+        const profession = professionFactory.build({
+          id: 'profession-id',
+        });
+
+        professionsService.find.mockImplementation(async () => profession);
+
+        await controller.edit(response, 'profession-id', false);
+
+        expect(response.render).toHaveBeenCalledWith(
+          'admin/professions/add-profession/legislation',
+          expect.objectContaining({
+            backLink:
+              '/admin/professions/profession-id/qualification-information/edit',
+          }),
+        );
+      });
+    });
+
+    describe('when the "Change" query param is true', () => {
+      it('links back to the Check your Answers page', async () => {
+        const profession = professionFactory.build({
+          id: 'profession-id',
+        });
+
+        professionsService.find.mockImplementation(async () => profession);
+
+        await controller.edit(response, 'profession-id', true);
+
+        expect(response.render).toHaveBeenCalledWith(
+          'admin/professions/add-profession/legislation',
+          expect.objectContaining({
+            backLink: '/admin/professions/profession-id/check-your-answers',
           }),
         );
       });
