@@ -124,22 +124,6 @@ describe('Profession', () => {
             where: { slug: 'example-profession' },
           });
 
-          new Profession(
-            'Example Profession',
-            '',
-            'example-profession',
-            '',
-            null,
-            '',
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            true,
-          );
-
           expect(result.slug).toEqual('example-profession');
         });
       });
