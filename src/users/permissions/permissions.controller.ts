@@ -28,7 +28,7 @@ export class PermissionsController {
 
   @Get(':id/permissions/edit')
   @Permissions(UserPermission.CreateUser, UserPermission.EditUser)
-  @Render('users/permissions/edit')
+  @Render('admin/users/permissions/edit')
   async edit(
     @Req() req: Request,
     @Param('id') id,
@@ -48,7 +48,7 @@ export class PermissionsController {
   @Post(':id/permissions')
   @Permissions(UserPermission.CreateUser, UserPermission.EditUser)
   @UseFilters(
-    new ValidationExceptionFilter('users/permissions/edit', 'user', {
+    new ValidationExceptionFilter('admin/users/permissions/edit', 'user', {
       permissions: Object.values(UserPermission),
     }),
   )

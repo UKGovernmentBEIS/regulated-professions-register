@@ -19,7 +19,7 @@ export class CheckYourAnswersController {
 
   @Get(':id/check-your-answers')
   @Permissions(UserPermission.CreateProfession)
-  @Render('professions/admin/add-profession/check-your-answers')
+  @Render('admin/professions/add-profession/check-your-answers')
   async show(
     @Req() req: Request,
     @Param('id') id: string,

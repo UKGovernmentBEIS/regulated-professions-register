@@ -1,5 +1,11 @@
 {
   "admin": {
-    "heading": "Regulatory authorities"
+    "heading": "Regulatory authorities",
+    "tableHeading": {
+      "name": "Name",
+      "alternateName": "Alternate name",
+      "industries": "Industry/Sector(s)",
+      "actions": "Actions"
+    }
   }
 }

@@ -105,7 +105,7 @@ export class RegulatedActivitiesController {
     };
 
     return res.render(
-      'professions/admin/add-profession/regulated-activities',
+      'admin/professions/add-profession/regulated-activities',
       templateArgs,
     );
   }

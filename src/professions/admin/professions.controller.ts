@@ -48,7 +48,7 @@ export class ProfessionsController {
   }
 
   @Get()
-  @Render('professions/admin/index')
+  @Render('admin/professions/index')
   async index(
     @Req() request: Request,
     @Query() query: FilterDto = null,
