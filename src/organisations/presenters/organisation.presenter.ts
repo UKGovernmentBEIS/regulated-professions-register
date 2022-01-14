@@ -20,7 +20,12 @@ export class OrganisationPresenter {
         html: await this.industries(),
       },
       {
-        text: '',
+        html: `<a class="govuk-link" href="/admin/organisations/${this.organisation.slug}">
+          View details
+          <span class="govuk-visually-hidden">
+            about ${this.organisation.name}
+          </span>
+        </a>`,
       },
     ];
   }
