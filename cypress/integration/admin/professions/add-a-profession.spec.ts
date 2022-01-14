@@ -146,6 +146,9 @@ describe('Adding a new profession', () => {
         cy.get('body').should('contain', yes);
       });
 
+      cy.get('body').should('contain', 'National legislation description');
+      cy.get('body').should('contain', 'www.example-legislation.com');
+
       cy.translate('professions.form.button.create').then((buttonText) => {
         cy.get('button').contains(buttonText).click();
       });
