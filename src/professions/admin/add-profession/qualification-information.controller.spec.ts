@@ -113,8 +113,7 @@ describe(QualificationInformationController, () => {
           );
 
           expect(response.redirect).toHaveBeenCalledWith(
-            // This will be the Legislation page in future
-            '/admin/professions/profession-id/check-your-answers',
+            '/admin/professions/profession-id/legislation/edit',
           );
         });
       });

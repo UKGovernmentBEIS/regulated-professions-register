@@ -7,7 +7,8 @@
       "checkAnswers": "Check your answers",
       "confirmation": "New profession created",
       "regulatedActivities": "Regulated activities",
-      "qualificationInformation": "Qualification information"
+      "qualificationInformation": "Qualification information",
+      "legislation": "Legislation"
     },
     "description": "Use this section of the site to add a new profession",
     "label": {
@@ -30,6 +31,10 @@
         "mostCommonPathToObtainQualification": "Most common path to obtain qualification",
         "duration": "Duration of qualification",
         "mandatoryProfessionalExperience": "Existence of mandatory professional experience"
+      },
+      "legislation": {
+        "nationalLegislation": "National legislation",
+        "link": "Legislation link"
       }
     },
     "details": {
