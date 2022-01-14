@@ -8,9 +8,11 @@
         <li>
           <a class="govuk-link" href="/admin/professions">{{ "professions.admin.heading" | t }}</a>
         </li>
-        <li>
-          <a class="govuk-link" href="#">{{ "organisations.admin.heading" | t }}</a>
-        </li>
+        {% if user.serviceOwner %}
+          <li>
+            <a class="govuk-link" href="/admin/organisations">{{ "organisations.admin.heading" | t }}</a>
+          </li>
+        {% endif %}
         {% if user.serviceOwner %}
           <li>
             <a class="govuk-link" href="/admin/users">{{ "users.headings.index" | t }}</a>
