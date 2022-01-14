@@ -91,4 +91,19 @@ $govuk-assets-path: '~govuk-frontend/govuk/assets/';
       color: govuk-colour('white');
     }
   }
+
+  &__details-page {
+    &-sidebar {
+      border-top: 2px solid govuk-colour('blue');
+      padding-top: govuk-spacing(2);
+
+      .govuk-list > li {
+        margin-bottom: govuk-spacing(2);
+      }
+
+      .govuk-button {
+        margin-bottom: 0;
+      }
+    }
+  }
 }
