@@ -358,6 +358,49 @@ describe('ProfessionsController', () => {
       }).rejects.toThrowError(NotFoundException);
     });
   });
+
+  describe('edit', () => {
+    it('should render the name of the profession passed in', async () => {
+      const profession = professionFactory.build({
+        slug: 'example-slug',
+      });
+
+      professionsService.findBySlug.mockResolvedValue(profession);
+
+      const result = await controller.edit('example-slug');
+
+      expect(result).toEqual({
+        profession: profession,
+      });
+
+      expect(professionsService.findBySlug).toHaveBeenCalledWith(
+        'example-slug',
+      );
+    });
+  });
+
+  describe('update', () => {
+    it('should look up the profession via its slug and redirect to the "Check your answers" page', async () => {
+      const profession = professionFactory.build({
+        id: 'profession-id',
+        slug: 'example-slug',
+      });
+
+      const res = createMock<Response>();
+
+      professionsService.findBySlug.mockResolvedValue(profession);
+
+      await controller.update(res, 'example-slug');
+
+      expect(professionsService.findBySlug).toHaveBeenCalledWith(
+        'example-slug',
+      );
+
+      expect(res.redirect).toHaveBeenCalledWith(
+        `/admin/professions/profession-id/check-your-answers?edit=true`,
+      );
+    });
+  });
 });
 
 function createPresenter(

@@ -12,5 +12,7 @@ export interface CheckYourAnswersTemplate {
   description: string;
   qualification: QualificationPresenter;
   legislation: Legislation;
+  confirmed: boolean;
+  edit: boolean;
   backLink: string;
 }

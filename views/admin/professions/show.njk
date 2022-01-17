@@ -1,5 +1,6 @@
 {% extends "base.njk" %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% block content %}
 
@@ -15,6 +16,14 @@
         {% include "../../professions/_profession-details.njk" %}
       </div>
       <div class="govuk-grid-column-one-third">
+        <aside class="app-related-items rpr-internal__details-page-sidebar" role="complementary">
+        {{ govukButton({
+          text: ('professions.admin.editProfession' | t),
+          classes: "govuk-button",
+          id: "edit-button",
+          href: "/admin/professions/" + profession.slug + "/edit"
+        }) }}
+        </aside>
       </div>
     </div>
   </main>

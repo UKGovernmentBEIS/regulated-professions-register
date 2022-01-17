@@ -38,6 +38,7 @@ describe('CheckYourAnswersController', () => {
       reservedActivities: 'Some reserved activities',
       qualification,
       legislation,
+      confirmed: false,
     });
 
     professionsService = createMock<ProfessionsService>({
@@ -77,7 +78,11 @@ describe('CheckYourAnswersController', () => {
           }
         });
 
-        const templateParams = await controller.show(request, 'profession-id');
+        const templateParams = await controller.show(
+          request,
+          'profession-id',
+          false,
+        );
         expect(templateParams.name).toEqual('Gas Safe Engineer');
         expect(templateParams.nations).toEqual(['England']);
         expect(templateParams.industries).toEqual([
@@ -104,6 +109,7 @@ describe('CheckYourAnswersController', () => {
         expect(templateParams.legislation.name).toEqual(
           'Gas Safety Legislation',
         );
+        expect(templateParams.confirmed).toEqual(false);
 
         expect(professionsService.find).toHaveBeenCalledWith('profession-id');
       });

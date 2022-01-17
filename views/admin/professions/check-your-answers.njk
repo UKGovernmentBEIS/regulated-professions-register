@@ -12,7 +12,11 @@
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
 
-          <h1 class="govuk-heading-l">{{ ("professions.form.headings.checkAnswers" | t) }}</h1>
+          {% if edit %}
+            <h1 class="govuk-heading-l">{{ ("professions.form.headings.originalAnswers" | t) }}</h1>
+          {% else %}
+            <h1 class="govuk-heading-l">{{ ("professions.form.headings.checkAnswers" | t) }}</h1>
+          {% endif %}
 
           <form method="post" action="confirmation">
             <h2 class="govuk-heading-m">{{ ("professions.form.headings.topLevelInformation" | t) }}</h2>
@@ -313,14 +317,26 @@
               })
             }}
 
-            {{
-              govukButton({
-                id: "submit-button",
-                type: "Submit",
-                preventDoubleClick: true,
-                text: ("professions.form.button.create" | t)
-              })
-            }}
+            {% if edit %}
+            {% elif confirmed %}
+              {{
+                govukButton({
+                  id: "submit-button",
+                  type: "Submit",
+                  preventDoubleClick: true,
+                  text: ("professions.form.button.publishNow" | t)
+                })
+              }}
+            {% else %}
+              {{
+                govukButton({
+                  id: "submit-button",
+                  type: "Submit",
+                  preventDoubleClick: true,
+                  text: ("professions.form.button.create" | t)
+                })
+              }}
+            {% endif %}
           </form>
 
         </div>

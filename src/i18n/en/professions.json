@@ -5,12 +5,14 @@
       "topLevelInformation": "Top level information",
       "regulatoryBody": "Regulatory / professional bodies",
       "checkAnswers": "Check your answers",
+      "originalAnswers": "Your original answers",
       "confirmation": "New profession created",
       "regulatedActivities": "Regulated activities",
       "qualificationInformation": "Qualification information",
-      "legislation": "Legislation"
+      "legislation": "Legislation",
+      "edit": "Are you sure you want to amend {professionName}?"
     },
-    "description": "Use this section of the site to add a new profession",
+    "editProfession": "Use this section of the site to add a new profession",
     "label": {
       "topLevelInformation": {
         "name": "Name of regulated profession",
@@ -64,7 +66,9 @@
       "hint": "Select all that apply."
     },
     "button": {
-      "create": "Create profession"
+      "create": "Create profession",
+      "edit": "Yes, continue",
+      "publishNow": "Publish now"
     },
     "select": {
       "topLevelInformation": {
@@ -181,6 +185,7 @@
     "addHeading": "Add a new profession",
     "addButtonLabel": "Add a new profession",
     "addText": "You can add a new profession for your organisation here.",
+    "editProfession": "Edit this profession",
     "manageHeading": "Manage existing professions",
     "showFilters": "Show filters",
     "labels": {

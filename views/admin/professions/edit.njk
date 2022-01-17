@@ -5,23 +5,21 @@
 {% block content %}
 
   <div class="govuk-width-container">
-    <a href="#" class="govuk-back-link">{{ ('app.back' | t) }}</a>
+    <a href="/admin/professions/{{ profession.slug }}" class="govuk-back-link">{{ ('app.back' | t) }}</a>
 
     <main class="govuk-main-wrapper">
 
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
 
-          <h1 class="govuk-heading-l">{{ ('professions.form.headings.main' | t) }}</h1>
+          <h1 class="govuk-heading-l">{{ ('professions.form.headings.edit' | t({professionName: profession.name})) }}</h1>
 
-          <p class="govuk-body">{{ ('professions.form.description' | t) }}</p>
-
-          <form method="post" action="/admin/professions">
+          <form method="post" action="/admin/professions/{{ profession.slug }}/edit">
             {{
               govukButton({
                 id: "submit-button",
                 type: "Submit",
-                text: ('app.start' | t)
+                text: ('professions.form.button.edit' | t)
               })
             }}
           </form>

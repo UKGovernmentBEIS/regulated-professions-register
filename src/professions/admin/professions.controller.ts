@@ -24,12 +24,14 @@ import {
   ProfessionsPresenterView,
 } from './professions.presenter';
 import { AuthenticationGuard } from '../../common/authentication.guard';
-import { User } from '../../users/user.entity';
+import { User, UserPermission } from '../../users/user.entity';
 import { FilterDto } from './dto/filter.dto';
 import { OrganisationsService } from '../../organisations/organisations.service';
 import { Organisation } from '../../organisations/organisation.entity';
 import { Profession } from '../profession.entity';
 import { ShowTemplate } from '../interfaces/show-template.interface';
+import { EditTemplate } from './interfaces/edit-template.interface';
+import { Permissions } from '../../common/permissions.decorator';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
@@ -83,6 +85,30 @@ export class ProfessionsController {
     );
 
     return { profession, nations, industries, backLink: '' };
+  }
+
+  @Get('/:slug/edit')
+  @Permissions(UserPermission.CreateProfession)
+  @Render('admin/professions/edit')
+  async edit(@Param('slug') slug: string): Promise<EditTemplate> {
+    const profession = await this.professionsService.findBySlug(slug);
+
+    return {
+      profession,
+    };
+  }
+
+  @Post(':slug/edit')
+  @Permissions(UserPermission.CreateProfession)
+  async update(
+    @Res() res: Response,
+    @Param('slug') slug: string,
+  ): Promise<void> {
+    const profession = await this.professionsService.findBySlug(slug);
+
+    return res.redirect(
+      `/admin/professions/${profession.id}/check-your-answers?edit=true`,
+    );
   }
 
   private async createListEntries(

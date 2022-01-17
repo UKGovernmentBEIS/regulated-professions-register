@@ -1,4 +1,12 @@
-import { Controller, Get, Param, Render, Req, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  Query,
+  Render,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { Request } from 'express';
 import { I18nService } from 'nestjs-i18n';
 import { AuthenticationGuard } from '../../common/authentication.guard';
@@ -24,6 +32,7 @@ export class CheckYourAnswersController {
   async show(
     @Req() req: Request,
     @Param('id') id: string,
+    @Query('edit') edit: boolean,
   ): Promise<CheckYourAnswersTemplate> {
     const draftProfession = await this.professionsService.find(id);
 
@@ -54,6 +63,8 @@ export class CheckYourAnswersController {
       reservedActivities: draftProfession.reservedActivities,
       qualification: new QualificationPresenter(draftProfession.qualification),
       legislation: draftProfession.legislation,
+      confirmed: Boolean(draftProfession.confirmed),
+      edit: Boolean(edit),
       backLink: backLink(req),
     };
   }
