@@ -32,7 +32,7 @@ export class ValidationExceptionFilter implements ExceptionFilter {
 
   constructor(
     view: string,
-    objectName: string,
+    objectName?: string,
     additionalVariables?: Record<string, unknown>,
   ) {
     this.view = view;
@@ -45,11 +45,21 @@ export class ValidationExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
 
-    response.render(this.view, {
+    let values = {
       ...this.additionalVariables,
       errors: exception.fullMessages(),
-      [this.objectName]: exception.target,
       url: request.url,
-    });
+    };
+
+    if (this.objectName === undefined) {
+      values = { ...values, ...exception.target };
+    } else {
+      values = {
+        ...values,
+        [this.objectName]: exception.target,
+      };
+    }
+
+    response.render(this.view, values);
   }
 }
