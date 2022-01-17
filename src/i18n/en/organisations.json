@@ -16,6 +16,10 @@
         "email": "Email",
         "telephone": "Phone number"
       }
+    },
+    "button": {
+      "edit": "Edit this regulatory authority",
+      "delete": "Delete this regulatory authority"
     }
   },
   "search": {

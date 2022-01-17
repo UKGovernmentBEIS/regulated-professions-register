@@ -50,15 +50,15 @@
             <li>
               {{
                 govukButton({
-                  text: "Edit this regulatory authority",
-                  href: "#"
+                  text: ("organisations.admin.button.edit" | t),
+                  href: "/admin/organisations/" + organisation.slug + "/edit"
                 })
               }}
             </li>
             <li>
               {{
                 govukButton({
-                  text: "Delete this regulatory authority",
+                  text: ("organisations.admin.button.delete" | t),
                   href: "#",
                   classes: "govuk-button--warning"
                 })
