@@ -15,6 +15,7 @@ import { OrganisationsService } from '../organisations/organisations.service';
 import { RegulatedActivitiesController } from './admin/add-profession/regulated-activities.controller';
 import { ProfessionsController as AdminProfessionsController } from './admin/professions.controller';
 import { QualificationInformationController } from './admin/add-profession/qualification-information.controller';
+import { LegislationController } from './admin/add-profession/legislation.controller';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { QualificationInformationController } from './admin/add-profession/quali
     RegulatoryBodyController,
     RegulatedActivitiesController,
     QualificationInformationController,
+    LegislationController,
     CheckYourAnswersController,
     ConfirmationController,
     AdminProfessionsController,

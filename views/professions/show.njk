@@ -196,30 +196,27 @@
 
         <h2 class="govuk-heading-m rpr-details__section-title">{{ "professions.show.legislation.heading" | t}}</h2>
 
-        {% for legislation in profession.legislations %}
-
-          {{ govukSummaryList({
-          classes: 'govuk-summary-list--no-border',
-          rows: [
-            {
-              key: {
-                text: ( "professions.show.legislation.nationalLegislation" | t)
-              },
-              value: {
-                text: legislation.name
-              }
+        {{ govukSummaryList({
+        classes: 'govuk-summary-list--no-border',
+        rows: [
+          {
+            key: {
+              text: ( "professions.show.legislation.nationalLegislation" | t)
             },
-            {
-              key: {
-                text: ( "professions.show.legislation.legislationLink" | t)
-              },
-              value: {
-                html: ["<a class=\"govuk-link\" href=\"", (legislation.url | escape), "\">", (legislation.url | escape),  "</a>" ] | join
-              }
+            value: {
+              text: profession.legislation.name
             }
-          ]
-          }) }}
-        {% endfor %}
+          },
+          {
+            key: {
+              text: ( "professions.show.legislation.legislationLink" | t)
+            },
+            value: {
+              html: ["<a class=\"govuk-link\" href=\"", (profession.legislation.url | escape), "\">", (profession.legislation.url | escape),  "</a>" ] | join
+            }
+          }
+        ]
+        }) }}
       </div>
 
       <div class="govuk-grid-column-one-third">

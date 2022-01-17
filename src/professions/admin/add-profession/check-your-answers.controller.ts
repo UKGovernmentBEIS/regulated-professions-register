@@ -53,6 +53,7 @@ export class CheckYourAnswersController {
       description: draftProfession.description,
       reservedActivities: draftProfession.reservedActivities,
       qualification: new QualificationPresenter(draftProfession.qualification),
+      legislation: draftProfession.legislation,
       backLink: backLink(req),
     };
   }

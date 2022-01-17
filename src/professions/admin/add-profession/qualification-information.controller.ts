@@ -103,8 +103,7 @@ export class QualificationInformationController {
       return res.redirect(`/admin/professions/${id}/check-your-answers`);
     }
 
-    // This will go to the Legislation information page in future
-    return res.redirect(`/admin/professions/${id}/check-your-answers`);
+    return res.redirect(`/admin/professions/${id}/legislation/edit`);
   }
 
   private async renderForm(

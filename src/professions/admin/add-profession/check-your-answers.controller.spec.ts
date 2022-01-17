@@ -5,6 +5,7 @@ import { I18nService } from 'nestjs-i18n';
 import QualificationPresenter from '../../../qualifications/presenters/qualification.presenter';
 import { createMockRequest } from '../../../testutils/create-mock-request';
 import industryFactory from '../../../testutils/factories/industry';
+import legislationFactory from '../../../testutils/factories/legislation';
 import organisationFactory from '../../../testutils/factories/organisation';
 import professionFactory from '../../../testutils/factories/profession';
 import qualificationFactory from '../../../testutils/factories/qualification';
@@ -18,6 +19,10 @@ describe('CheckYourAnswersController', () => {
   let i18nService: DeepMocked<I18nService>;
 
   const qualification = qualificationFactory.build();
+  const legislation = legislationFactory.build({
+    url: 'www.gas-legislation.com',
+    name: 'Gas Safety Legislation',
+  });
 
   beforeEach(async () => {
     const profession = professionFactory.build({
@@ -32,6 +37,7 @@ describe('CheckYourAnswersController', () => {
       description: 'A description of the regulation',
       reservedActivities: 'Some reserved activities',
       qualification,
+      legislation,
     });
 
     professionsService = createMock<ProfessionsService>({
@@ -91,6 +97,12 @@ describe('CheckYourAnswersController', () => {
         );
         expect(templateParams.qualification).toEqual(
           new QualificationPresenter(qualification),
+        );
+        expect(templateParams.legislation.url).toEqual(
+          'www.gas-legislation.com',
+        );
+        expect(templateParams.legislation.name).toEqual(
+          'Gas Safety Legislation',
         );
 
         expect(professionsService.find).toHaveBeenCalledWith('profession-id');

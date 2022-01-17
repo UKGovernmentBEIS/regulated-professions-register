@@ -270,6 +270,49 @@
               })
             }}
 
+            <h2 class="govuk-heading-m">{{ ("professions.form.headings.legislation" | t) }}</h2>
+
+            {{
+              govukSummaryList({
+                rows: [
+                  {
+                    key: {
+                      text: ("professions.form.label.legislation.nationalLegislation" | t)
+                    },
+                    value: {
+                      text: legislation.name
+                    },
+                    actions: {
+                      items: [
+                        {
+                          href: "/admin/professions/" + professionId + "/legislation/edit?change=true",
+                          text: ("app.change" | t),
+                          visuallyHiddenText: ("professions.form.label.legislation.nationalLegislation" | t)
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    key: {
+                      text: ("professions.form.label.legislation.link" | t)
+                    },
+                    value: {
+                      html: "<a class='govuk-link' href='" + legislation.url | escape + "'>" + legislation.url | escape + "</a>"
+                    },
+                    actions: {
+                      items: [
+                        {
+                          href: "/admin/professions/" + professionId + "/legislation/edit?change=true",
+                          text: ("app.change" | t),
+                          visuallyHiddenText: ("professions.form.label.legislation.nationalLegislation" | t)
+                        }
+                      ]
+                    }
+                  }
+                ]
+              })
+            }}
+
             {{
               govukButton({
                 id: "submit-button",

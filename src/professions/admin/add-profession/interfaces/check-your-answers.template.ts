@@ -1,3 +1,4 @@
+import { Legislation } from '../../../../legislations/legislation.entity';
 import QualificationPresenter from '../../../../qualifications/presenters/qualification.presenter';
 
 export interface CheckYourAnswersTemplate {
@@ -10,5 +11,6 @@ export interface CheckYourAnswersTemplate {
   reservedActivities: string;
   description: string;
   qualification: QualificationPresenter;
+  legislation: Legislation;
   backLink: string;
 }

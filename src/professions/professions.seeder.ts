@@ -21,7 +21,7 @@ type SeedProfession = {
   industries: string[];
   qualification: string;
   reservedActivities: string;
-  legislations: string[];
+  legislation: string;
   organisation: string;
   mandatoryRegistration: MandatoryRegistration;
   confirmed: boolean;
@@ -56,13 +56,10 @@ export class ProfessionsSeeder implements Seeder {
           where: { level: profession.qualification },
         });
 
-        const legislations: Array<Legislation> = await Promise.all(
-          (profession.legislations || []).map(async (legislation) => {
-            return this.legislationsRepository.findOne({
-              where: { name: legislation },
-            });
-          }),
-        );
+        const legislation: Legislation =
+          await this.legislationsRepository.findOne({
+            where: { name: profession.legislation },
+          });
 
         const organisation = await this.organisationRepository.findOne({
           where: { name: profession.organisation },
@@ -83,7 +80,8 @@ export class ProfessionsSeeder implements Seeder {
           industries,
           qualification,
           profession.reservedActivities,
-          legislations,
+          [],
+          legislation,
           organisation,
           profession.confirmed,
         );

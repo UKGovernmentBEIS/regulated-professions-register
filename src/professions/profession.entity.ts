@@ -63,6 +63,13 @@ export class Profession {
   @Column({ nullable: true })
   reservedActivities: string;
 
+  @OneToOne(() => Legislation, {
+    eager: true,
+    cascade: true,
+  })
+  @JoinColumn()
+  legislation: Legislation;
+
   @ManyToMany(() => Legislation, {
     eager: true,
   })
@@ -102,6 +109,7 @@ export class Profession {
     qualification?: Qualification,
     reservedActivities?: string,
     legislations?: Legislation[],
+    legislation?: Legislation,
     organisation?: Organisation,
     confirmed?: boolean,
   ) {
@@ -116,6 +124,7 @@ export class Profession {
     this.qualification = qualification || null;
     this.reservedActivities = reservedActivities || null;
     this.legislations = legislations || null;
+    this.legislation = legislation || null;
     this.organisation = organisation || null;
     this.confirmed = confirmed || false;
   }

@@ -103,6 +103,19 @@ describe('Adding a new profession', () => {
         cy.get('button').contains(buttonText).click();
       });
 
+      cy.translate('professions.form.headings.legislation').then((heading) => {
+        cy.get('body').should('contain', heading);
+      });
+
+      cy.get('textarea[name="nationalLegislation"]').type(
+        'National legislation description',
+      );
+      cy.get('input[name="link"]').type('www.example-legislation.com');
+
+      cy.translate('app.continue').then((buttonText) => {
+        cy.get('button').contains(buttonText).click();
+      });
+
       cy.translate('professions.form.headings.checkAnswers').then((heading) => {
         cy.get('body').should('contain', heading);
       });
@@ -132,6 +145,9 @@ describe('Adding a new profession', () => {
       cy.translate('app.yes').then((yes) => {
         cy.get('body').should('contain', yes);
       });
+
+      cy.get('body').should('contain', 'National legislation description');
+      cy.get('body').should('contain', 'www.example-legislation.com');
 
       cy.translate('professions.form.button.create').then((buttonText) => {
         cy.get('button').contains(buttonText).click();
