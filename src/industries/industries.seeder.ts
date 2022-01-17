@@ -22,11 +22,23 @@ export class IndustriesSeeder implements Seeder {
   ) {}
 
   async seed(): Promise<any> {
-    const industries = this.data.map((industry) => {
-      return new Industry(industry.name);
-    });
+    const industries = await Promise.all(
+      this.data.map(async (industry) => {
+        const existingIndustry = await this.industryRepository.findOne({
+          name: industry.name,
+        });
 
-    return this.industryRepository.save(industries);
+        if (existingIndustry) {
+          return;
+        }
+
+        return new Industry(industry.name);
+      }),
+    );
+
+    const definedIndustries = industries.filter((industry) => industry);
+
+    return this.industryRepository.save(definedIndustries);
   }
 
   async drop(): Promise<any> {
