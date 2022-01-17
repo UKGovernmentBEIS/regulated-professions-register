@@ -68,7 +68,11 @@ export class ProfessionsSeeder implements Seeder {
           where: { name: profession.organisation },
         });
 
-        return new Profession(
+        const existingProfession = await this.professionsRepository.findOne({
+          slug: profession.slug,
+        });
+
+        const newProfession = new Profession(
           profession.name,
           profession.alternateName,
           profession.slug,
@@ -83,6 +87,8 @@ export class ProfessionsSeeder implements Seeder {
           organisation,
           profession.confirmed,
         );
+
+        return { ...existingProfession, ...newProfession };
       }),
     );
 

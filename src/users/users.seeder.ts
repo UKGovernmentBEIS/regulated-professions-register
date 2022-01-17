@@ -28,17 +28,25 @@ export class UsersSeeder implements Seeder {
   ) {}
 
   async seed(): Promise<any> {
-    const users = this.data.map((user) => {
-      const permissions = user.permissions as UserPermission[];
-      return new User(
-        user.email,
-        user.name,
-        user.externalIdentifier,
-        permissions,
-        user.serviceOwner,
-        user.confirmed,
-      );
-    });
+    const users = await Promise.all(
+      this.data.map(async (user) => {
+        const permissions = user.permissions as UserPermission[];
+        const existingUser = await this.userRepository.findOne({
+          email: user.email,
+        });
+
+        const newUser = new User(
+          user.email,
+          user.name,
+          user.externalIdentifier,
+          permissions,
+          user.serviceOwner,
+          user.confirmed,
+        );
+
+        return { ...existingUser, ...newUser };
+      }),
+    );
 
     return this.userRepository.save(users);
   }

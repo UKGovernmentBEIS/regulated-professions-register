@@ -32,7 +32,13 @@ export class OrganisationsSeeder implements Seeder {
   async seed(): Promise<any> {
     const organisations = await Promise.all(
       this.data.map(async (organisation) => {
-        return new Organisation(
+        const existingOrganisation = await this.organisationsRepository.findOne(
+          {
+            slug: organisation.slug,
+          },
+        );
+
+        const newOrganisation = new Organisation(
           organisation.name,
           organisation.alternateName,
           organisation.slug,
@@ -44,6 +50,8 @@ export class OrganisationsSeeder implements Seeder {
           organisation.fax,
           null,
         );
+
+        return { ...existingOrganisation, ...newOrganisation };
       }),
     );
 
