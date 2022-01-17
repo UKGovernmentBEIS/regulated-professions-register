@@ -1,7 +1,7 @@
 import { I18nService } from 'nestjs-i18n';
 import { Organisation } from './../organisation.entity';
 import { TableRow } from '../../common/interfaces/table-row';
-
+import { SummaryList } from '../../common/interfaces/summary-list';
 export class OrganisationPresenter {
   constructor(
     private readonly organisation: Organisation,
@@ -20,9 +20,86 @@ export class OrganisationPresenter {
         html: await this.industries(),
       },
       {
-        text: '',
+        html: `<a class="govuk-link" href="/admin/organisations/${this.organisation.slug}">
+          View details
+          <span class="govuk-visually-hidden">
+            about ${this.organisation.name}
+          </span>
+        </a>`,
       },
     ];
+  }
+
+  public async summaryList(): Promise<SummaryList> {
+    return {
+      classes: 'govuk-summary-list--no-border',
+      rows: [
+        {
+          key: {
+            text: await this.i18nService.translate(
+              'organisations.admin.form.label.alternateName',
+            ),
+          },
+          value: {
+            text: this.organisation.alternateName,
+          },
+        },
+        {
+          key: {
+            text: await this.i18nService.translate(
+              'organisations.admin.form.label.contactUrl',
+            ),
+          },
+          value: {
+            html: this.contactUrl(),
+          },
+        },
+        {
+          key: {
+            text: await this.i18nService.translate(
+              'organisations.admin.form.label.address',
+            ),
+          },
+          value: {
+            html: this.address(),
+          },
+        },
+        {
+          key: {
+            text: await this.i18nService.translate(
+              'organisations.admin.form.label.email',
+            ),
+          },
+          value: {
+            html: this.email(),
+          },
+        },
+        {
+          key: {
+            text: await this.i18nService.translate(
+              'organisations.admin.form.label.telephone',
+            ),
+          },
+          value: {
+            text: this.organisation.telephone,
+          },
+        },
+      ].filter((item) => {
+        return item.value.text !== '' && item.value.html !== '';
+      }),
+    };
+  }
+
+  public address(): string {
+    return this.organisation.address.split(',').join('<br />');
+  }
+
+  public email(): string {
+    return `<a href="mailto:${this.organisation.email}" class="govuk-link">${this.organisation.email}</a>`;
+  }
+
+  public contactUrl(): string {
+    return `<a href="${this.organisation.contactUrl}" class="govuk-link">${this.organisation.contactUrl}</a>`;
   }
 
   private async industries(): Promise<string> {

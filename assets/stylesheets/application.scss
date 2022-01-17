@@ -3,95 +3,107 @@ $govuk-assets-path: '~govuk-frontend/govuk/assets/';
 @import 'govuk/all';
 @import './admin.scss';
 
-.rpr-details__section-title {
-  text-transform: uppercase;
-}
-
-.rpr-listing__filters-container {
-  background-color: govuk-colour('light-grey');
-  padding: 1rem;
-}
-
-.rpr-listing__filter {
-  background-color: govuk-colour('white');
-  height: 180px;
-  overflow-y: auto;
-}
-
-.rpr-listing__search-criteria-container {
-  margin-bottom: 5px;
-}
-
-.rpr-listing__profession-title:link,
-.rpr-listing__ra-title:link {
-  text-decoration: none;
-}
-
-.rpr-listing__profession-title:hover,
-.rpr-listing__ra-title:hover {
-  text-decoration: underline;
-}
-
-.rpr-listing__profession-summary-list dt,
-.rpr-listing__profession-summary-list dd,
-.rpr-listing__ra-summary-list dt,
-.rpr-listing__ra-summary-list dd {
-  padding: 2px 0;
-}
-
-.rpr-internal__page {
-  .govuk-header__container {
-    border-bottom: 10px solid govuk-colour('yellow');
-  }
-}
-
-.rpr-listing__filters-container {
-  background-color: govuk-colour('light-grey');
-  padding: 1rem;
-}
-
-.rpr-listing__filter {
-  background-color: govuk-colour('white');
-  height: 180px;
-  overflow-y: auto;
-}
-
-.rpr-internal__listing {
-  .govuk-width-container {
-    max-width: 1200px;
-  }
-}
-
-.rpr-internal-listing__filters-container {
-  background-color: govuk-colour('light-grey');
-  padding: 1rem;
-
-  .govuk-details__text {
-    border: 0;
-  }
-
-  .govuk-details {
-    margin-bottom: 0;
-  }
-}
-
-.rpr-internal-listing__filter {
-  background-color: govuk-colour('white');
-  height: 180px;
-  overflow-y: auto;
-}
-
-.rpr-internal-listing__filter-button {
-  margin-bottom: 10px;
-  background-color: govuk-colour('black');
-  color: govuk-colour('white');
-}
-
-.rpr-details__section-title {
-  text-transform: uppercase;
-}
-
 .rpr-sidebar {
   border-top: 2px solid #1d70b8;
   padding-top: 10px;
+}
+
+.rpr-details {
+  &__section-title {
+    text-transform: uppercase;
+  }
+
+  &__section-title {
+    text-transform: uppercase;
+  }
+}
+
+.rpr-listing {
+  &__filters-container {
+    background-color: govuk-colour('light-grey');
+    padding: 1rem;
+  }
+
+  &__filter {
+    background-color: govuk-colour('white');
+    height: 180px;
+    overflow-y: auto;
+  }
+
+  &__search-criteria-container {
+    margin-bottom: 5px;
+  }
+
+  &__profession-title:link,
+  &__ra-title:link {
+    text-decoration: none;
+  }
+
+  &__profession-title:hover,
+  &__ra-title:hover {
+    text-decoration: underline;
+  }
+
+  &__profession-summary-list dt,
+  &__profession-summary-list dd,
+  &__ra-summary-list dt,
+  &__ra-summary-list dd {
+    padding: 2px 0;
+  }
+}
+
+.rpr-internal {
+  &__page {
+    .govuk-header__container {
+      border-bottom: 10px solid govuk-colour('yellow');
+    }
+  }
+
+  &__listing {
+    .govuk-width-container {
+      max-width: 1200px;
+    }
+  }
+
+  &__filters-container {
+    background-color: govuk-colour('light-grey');
+    padding: 1rem;
+
+    .govuk-details__text {
+      border: 0;
+    }
+
+    .govuk-details {
+      margin-bottom: 0;
+    }
+  }
+
+  &-listing {
+    &__filter {
+      background-color: govuk-colour('white');
+      height: 180px;
+      overflow-y: auto;
+    }
+
+    &__filter-button {
+      margin-bottom: 10px;
+      background-color: govuk-colour('black');
+      color: govuk-colour('white');
+    }
+  }
+
+  &__details-page {
+    &-sidebar {
+      border-top: 2px solid govuk-colour('blue');
+      padding-top: govuk-spacing(2);
+
+      .govuk-list > li {
+        margin-bottom: govuk-spacing(2);
+      }
+
+      .govuk-button {
+        margin-bottom: 0;
+      }
+    }
+  }
 }

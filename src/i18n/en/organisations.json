@@ -6,6 +6,19 @@
       "alternateName": "Alternate name",
       "industries": "Industry/Sector(s)",
       "actions": "Actions"
+    },
+    "form": {
+      "label": {
+        "name": "Name",
+        "alternateName": "Alternate name",
+        "contactUrl": "Website",
+        "address": "Address",
+        "email": "Email",
+        "telephone": "Phone number"
+      }
     }
+  },
+  "headings": {
+    "professions": "Regulated professions"
   }
 }

@@ -45,6 +45,14 @@ describe('OrganisationPresenter', () => {
           expect(tableRow[2]).toEqual({
             html: `Translation of \`${industries[0].name}\``,
           });
+          expect(tableRow[3]).toEqual({
+            html: expect.stringContaining(
+              `<a class="govuk-link" href="/admin/organisations/${organisation.slug}">`,
+            ),
+          });
+          expect(tableRow[3]).toEqual({
+            html: expect.stringContaining(`about ${organisation.name}`),
+          });
         });
       });
 
@@ -122,6 +130,119 @@ describe('OrganisationPresenter', () => {
           "You must eagerly load industries to show industries. Try adding `{ relations: ['professions.industries'] }` to your finder in the `OrganisationsService` class",
         );
       });
+    });
+  });
+
+  describe('summaryList', () => {
+    describe('when all fields are present', () => {
+      it('should return all fields', async () => {
+        const presenter = new OrganisationPresenter(organisation, i18nService);
+
+        expect(await presenter.summaryList()).toEqual({
+          classes: 'govuk-summary-list--no-border',
+          rows: [
+            {
+              key: {
+                text: 'Translation of `organisations.admin.form.label.alternateName`',
+              },
+              value: {
+                text: organisation.alternateName,
+              },
+            },
+            {
+              key: {
+                text: 'Translation of `organisations.admin.form.label.contactUrl`',
+              },
+              value: {
+                html: presenter.contactUrl(),
+              },
+            },
+            {
+              key: {
+                text: 'Translation of `organisations.admin.form.label.address`',
+              },
+              value: {
+                html: presenter.address(),
+              },
+            },
+            {
+              key: {
+                text: 'Translation of `organisations.admin.form.label.email`',
+              },
+              value: {
+                html: presenter.email(),
+              },
+            },
+            {
+              key: {
+                text: 'Translation of `organisations.admin.form.label.telephone`',
+              },
+              value: {
+                text: organisation.telephone,
+              },
+            },
+          ],
+        });
+      });
+    });
+
+    describe('when a field is missing', () => {
+      it('should filter out empty fields', async () => {
+        organisation = organisationFactory.build({ alternateName: '' });
+        const presenter = new OrganisationPresenter(organisation, i18nService);
+        const list = await presenter.summaryList();
+
+        expect(list.rows.length).toEqual(4);
+        expect(
+          list.rows.filter(
+            (item) =>
+              item.key ===
+              { text: 'organisations.admin.form.label.alternateName' },
+          ).length,
+        ).toEqual(0);
+      });
+    });
+  });
+
+  describe('address', () => {
+    it('breaks the address into lines', () => {
+      organisation = organisationFactory.build({
+        address: '123 Fake Street, London, SW1A 1AA',
+      });
+
+      const presenter = new OrganisationPresenter(organisation, i18nService);
+
+      expect(presenter.address()).toEqual(
+        '123 Fake Street<br /> London<br /> SW1A 1AA',
+      );
+    });
+  });
+
+  describe('email', () => {
+    it('makes the email into a link', () => {
+      organisation = organisationFactory.build({
+        email: 'foo@example.com',
+      });
+
+      const presenter = new OrganisationPresenter(organisation, i18nService);
+
+      expect(presenter.email()).toEqual(
+        '<a href="mailto:foo@example.com" class="govuk-link">foo@example.com</a>',
+      );
+    });
+  });
+
+  describe('contactUrl', () => {
+    it('makes the url into a link', () => {
+      organisation = organisationFactory.build({
+        contactUrl: 'http://www.example.com',
+      });
+
+      const presenter = new OrganisationPresenter(organisation, i18nService);
+
+      expect(presenter.contactUrl()).toEqual(
+        '<a href="http://www.example.com" class="govuk-link">http://www.example.com</a>',
+      );
     });
   });
 });

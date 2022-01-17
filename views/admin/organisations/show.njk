@@ -1,0 +1,73 @@
+{% extends "base.njk" %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set bodyClasses = "rpr-internal__page" %}
+
+{% block content %}
+
+  {% if backLink %}
+    {{ govukBackLink({
+      text: ( "app.back" | t ),
+      href: backLink
+    }) }}
+  {% endif %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-xl">{{ organisation.name }}</h1>
+
+      {{ govukSummaryList(summaryList) }}
+
+      <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible"/>
+
+      <h2 class="govuk-heading-l">{{ "organisations.headings.professions" | t }}</h2>
+
+      {% for profession in professions %}
+        <div class="rpr-listing__ra-container">
+          <h3>
+            <a class="govuk-link govuk-heading-m rpr-listing__profession-title" class="govuk-link" href="/professions/{{ profession.slug }}">
+              {{ profession.name }}
+            </a>
+          </h3>
+
+          {{ govukSummaryList(profession.summaryList) }}
+        </div>
+      {% endfor %}
+
+    </div>
+    <div class="govuk-grid-column-one-third">
+      <aside class="app-related-items rpr-internal__details-page-sidebar" role="complementary">
+
+        <h2 class="govuk-heading-s">
+          Status<br>
+          <span class="govuk-body">Published</span>
+        </h2>
+
+        <nav role="navigation" aria-labelledby="subsection-title">
+          <ul class="govuk-list">
+            <li>
+              {{
+                govukButton({
+                  text: "Edit this regulatory authority",
+                  href: "#"
+                })
+              }}
+            </li>
+            <li>
+              {{
+                govukButton({
+                  text: "Delete this regulatory authority",
+                  href: "#",
+                  classes: "govuk-button--warning"
+                })
+              }}
+            </li>
+          </ul>
+        </nav>
+      </aside>
+    </div>
+  </div>
+
+{% endblock %}
