@@ -147,7 +147,7 @@ export class QualificationInformationController {
     };
 
     return res.render(
-      'admin/professions/add-profession/qualification-information',
+      'admin/professions/qualification-information',
       templateArgs,
     );
   }

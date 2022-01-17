@@ -63,7 +63,7 @@ describe(QualificationInformationController, () => {
       await controller.edit(response, 'profession-id', false);
 
       expect(response.render).toHaveBeenCalledWith(
-        'admin/professions/add-profession/qualification-information',
+        'admin/professions/qualification-information',
         expect.objectContaining({
           methodToObtainQualificationRadioButtonArgs,
           mostCommonPathToObtainQualificationRadioButtonArgs,
@@ -178,7 +178,7 @@ describe(QualificationInformationController, () => {
         await controller.update(response, 'profession-id', dto);
 
         expect(response.render).toHaveBeenCalledWith(
-          'admin/professions/add-profession/qualification-information',
+          'admin/professions/qualification-information',
           expect.objectContaining({
             mandatoryProfessionalExperienceRadioButtonArgs:
               await new YesNoRadioButtonArgsPresenter(
@@ -219,7 +219,7 @@ describe(QualificationInformationController, () => {
           await controller.edit(response, 'profession-id', false);
 
           expect(response.render).toHaveBeenCalledWith(
-            'admin/professions/add-profession/qualification-information',
+            'admin/professions/qualification-information',
             expect.objectContaining({
               backLink:
                 '/admin/professions/profession-id/regulated-activities/edit',
@@ -239,7 +239,7 @@ describe(QualificationInformationController, () => {
           await controller.edit(response, 'profession-id', true);
 
           expect(response.render).toHaveBeenCalledWith(
-            'admin/professions/add-profession/qualification-information',
+            'admin/professions/qualification-information',
             expect.objectContaining({
               backLink: '/admin/professions/profession-id/check-your-answers',
             }),

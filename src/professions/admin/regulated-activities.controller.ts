@@ -105,10 +105,7 @@ export class RegulatedActivitiesController {
       errors,
     };
 
-    return res.render(
-      'admin/professions/add-profession/regulated-activities',
-      templateArgs,
-    );
+    return res.render('admin/professions/regulated-activities', templateArgs);
   }
 
   private backLink(change: boolean, id: string) {

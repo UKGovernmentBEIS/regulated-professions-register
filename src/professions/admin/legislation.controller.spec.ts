@@ -43,7 +43,7 @@ describe(LegislationController, () => {
       await controller.edit(response, 'profession-id', true);
 
       expect(response.render).toHaveBeenCalledWith(
-        'admin/professions/add-profession/legislation',
+        'admin/professions/legislation',
         expect.objectContaining({
           legislation: legislation,
         }),
@@ -96,7 +96,7 @@ describe(LegislationController, () => {
         expect(professionsService.save).not.toHaveBeenCalled();
 
         expect(response.render).toHaveBeenCalledWith(
-          'admin/professions/add-profession/legislation',
+          'admin/professions/legislation',
           expect.objectContaining({
             errors: {
               link: {
@@ -124,7 +124,7 @@ describe(LegislationController, () => {
         await controller.edit(response, 'profession-id', false);
 
         expect(response.render).toHaveBeenCalledWith(
-          'admin/professions/add-profession/legislation',
+          'admin/professions/legislation',
           expect.objectContaining({
             backLink:
               '/admin/professions/profession-id/qualification-information/edit',
@@ -144,7 +144,7 @@ describe(LegislationController, () => {
         await controller.edit(response, 'profession-id', true);
 
         expect(response.render).toHaveBeenCalledWith(
-          'admin/professions/add-profession/legislation',
+          'admin/professions/legislation',
           expect.objectContaining({
             backLink: '/admin/professions/profession-id/check-your-answers',
           }),

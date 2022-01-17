@@ -30,7 +30,7 @@ export class ConfirmationController {
 
   @Get('/:id/confirmation')
   @Permissions(UserPermission.CreateProfession)
-  @Render('admin/professions/add-profession/confirmation')
+  @Render('admin/professions/confirmation')
   async new(@Param('id') id: string): Promise<ConfirmationTemplate> {
     const profession = await this.professionsService.find(id);
 

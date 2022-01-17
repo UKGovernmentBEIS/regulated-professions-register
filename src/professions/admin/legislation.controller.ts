@@ -42,7 +42,7 @@ export class LegislationController {
   @Permissions(UserPermission.CreateProfession)
   @UseFilters(
     new ValidationExceptionFilter(
-      'admin/professions/add-profession/legislation',
+      'admin/professions/legislation',
       'legislation',
     ),
   )
@@ -96,10 +96,7 @@ export class LegislationController {
       errors,
     };
 
-    return res.render(
-      'admin/professions/add-profession/legislation',
-      templateArgs,
-    );
+    return res.render('admin/professions/legislation', templateArgs);
   }
 
   private backLink(change: boolean, id: string) {

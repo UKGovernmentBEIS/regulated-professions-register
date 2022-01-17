@@ -89,7 +89,7 @@ describe('TopLevelInformationController', () => {
         await controller.edit(response, 'profession-id', false);
 
         expect(response.render).toHaveBeenCalledWith(
-          'admin/professions/add-profession/top-level-information',
+          'admin/professions/top-level-information',
           expect.objectContaining({
             name: undefined,
             industriesCheckboxArgs: [
@@ -152,7 +152,7 @@ describe('TopLevelInformationController', () => {
         await controller.edit(response, 'profession-id', false);
 
         expect(response.render).toHaveBeenCalledWith(
-          'admin/professions/add-profession/top-level-information',
+          'admin/professions/top-level-information',
           expect.objectContaining({
             name: 'Example Profession',
             industriesCheckboxArgs: [
@@ -239,7 +239,7 @@ describe('TopLevelInformationController', () => {
         );
 
         expect(response.render).toHaveBeenCalledWith(
-          'admin/professions/add-profession/top-level-information',
+          'admin/professions/top-level-information',
           expect.objectContaining({
             errors: {
               name: {
@@ -299,7 +299,7 @@ describe('TopLevelInformationController', () => {
           await controller.edit(response, 'profession-id', true);
 
           expect(response.render).toHaveBeenCalledWith(
-            'admin/professions/add-profession/top-level-information',
+            'admin/professions/top-level-information',
             expect.objectContaining({
               backLink: '/admin/professions/profession-id/check-your-answers',
             }),
@@ -345,7 +345,7 @@ describe('TopLevelInformationController', () => {
         await controller.edit(response, 'profession-id', false);
 
         expect(response.render).toHaveBeenCalledWith(
-          'admin/professions/add-profession/top-level-information',
+          'admin/professions/top-level-information',
           expect.objectContaining({
             backLink: '/admin/professions',
           }),

@@ -137,10 +137,7 @@ export class TopLevelInformationController {
       errors,
     };
 
-    return res.render(
-      'admin/professions/add-profession/top-level-information',
-      templateArgs,
-    );
+    return res.render('admin/professions/top-level-information', templateArgs);
   }
 
   private backLink(change: boolean, id: string) {

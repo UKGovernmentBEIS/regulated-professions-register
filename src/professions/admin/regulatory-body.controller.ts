@@ -135,10 +135,7 @@ export class RegulatoryBodyController {
       errors,
     };
 
-    return res.render(
-      'admin/professions/add-profession/regulatory-body',
-      templateArgs,
-    );
+    return res.render('admin/professions/regulatory-body', templateArgs);
   }
 
   private backLink(change: boolean, id: string) {

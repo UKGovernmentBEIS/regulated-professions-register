@@ -96,7 +96,7 @@ describe(RegulatoryBodyController, () => {
         await controller.edit(response, 'profession-id', false);
 
         expect(response.render).toHaveBeenCalledWith(
-          'admin/professions/add-profession/regulatory-body',
+          'admin/professions/regulatory-body',
           expect.objectContaining({
             regulatedAuthoritiesSelectArgs:
               regulatedAuthoritiesSelectPresenter.selectArgs(),
@@ -133,7 +133,7 @@ describe(RegulatoryBodyController, () => {
         await controller.edit(response, 'profession-id', false);
 
         expect(response.render).toHaveBeenCalledWith(
-          'admin/professions/add-profession/regulatory-body',
+          'admin/professions/regulatory-body',
           expect.objectContaining({
             regulatedAuthoritiesSelectArgs:
               regulatedAuthoritiesSelectPresenterWithSelectedOrganisation.selectArgs(),
@@ -205,7 +205,7 @@ describe(RegulatoryBodyController, () => {
         expect(professionsService.save).not.toHaveBeenCalled();
 
         expect(response.render).toHaveBeenCalledWith(
-          'admin/professions/add-profession/regulatory-body',
+          'admin/professions/regulatory-body',
           expect.objectContaining({
             errors: {
               mandatoryRegistration: {
@@ -267,7 +267,7 @@ describe(RegulatoryBodyController, () => {
           await controller.edit(response, 'profession-id', true);
 
           expect(response.render).toHaveBeenCalledWith(
-            'admin/professions/add-profession/regulatory-body',
+            'admin/professions/regulatory-body',
             expect.objectContaining({
               backLink: '/admin/professions/profession-id/check-your-answers',
             }),
@@ -324,7 +324,7 @@ describe(RegulatoryBodyController, () => {
           await controller.edit(response, 'profession-id', false);
 
           expect(response.render).toHaveBeenCalledWith(
-            'admin/professions/add-profession/regulatory-body',
+            'admin/professions/regulatory-body',
             expect.objectContaining({
               backLink:
                 '/admin/professions/profession-id/top-level-information/edit',
