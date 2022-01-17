@@ -50,6 +50,11 @@ export class AuthenticationMidleware {
       afterCallback: async (_req, _res, session) => {
         return await this.afterCallback(session);
       },
+      getLoginState() {
+        return {
+          returnTo: '/admin',
+        };
+      },
     });
   }
 
