@@ -2,12 +2,12 @@ import { createMock, DeepMocked } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Response } from 'express';
 import { I18nService } from 'nestjs-i18n';
-import { MethodToObtain } from '../../../qualifications/qualification.entity';
-import { createMockI18nService } from '../../../testutils/create-mock-i18n-service';
-import professionFactory from '../../../testutils/factories/profession';
-import { ProfessionsService } from '../../professions.service';
-import { MethodToObtainQualificationRadioButtonsPresenter } from '../method-to-obtain-qualification-radio-buttons.presenter';
-import { YesNoRadioButtonArgsPresenter } from '../yes-no-radio-buttons-presenter';
+import { MethodToObtain } from '../../qualifications/qualification.entity';
+import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
+import professionFactory from '../../testutils/factories/profession';
+import { ProfessionsService } from '../professions.service';
+import { MethodToObtainQualificationRadioButtonsPresenter } from './method-to-obtain-qualification-radio-buttons.presenter';
+import { YesNoRadioButtonArgsPresenter } from './yes-no-radio-buttons-presenter';
 import { QualificationInformationDto } from './dto/qualification-information.dto';
 import { QualificationInformationController } from './qualification-information.controller';
 

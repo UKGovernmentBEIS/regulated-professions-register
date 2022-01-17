@@ -1,15 +1,15 @@
 import { Controller, Get, Param, Render, Req, UseGuards } from '@nestjs/common';
 import { Request } from 'express';
 import { I18nService } from 'nestjs-i18n';
-import { AuthenticationGuard } from '../../../common/authentication.guard';
-import { backLink } from '../../../common/utils';
+import { AuthenticationGuard } from '../../common/authentication.guard';
+import { backLink } from '../../common/utils';
 
-import { Nation } from '../../../nations/nation';
-import { ProfessionsService } from '../../professions.service';
-import QualificationPresenter from '../../../qualifications/presenters/qualification.presenter';
+import { Nation } from '../../nations/nation';
+import { ProfessionsService } from '../professions.service';
+import QualificationPresenter from '../../qualifications/presenters/qualification.presenter';
 import { CheckYourAnswersTemplate } from './interfaces/check-your-answers.template';
-import { Permissions } from '../../../common/permissions.decorator';
-import { UserPermission } from '../../../users/user.entity';
+import { Permissions } from '../../common/permissions.decorator';
+import { UserPermission } from '../../users/user.entity';
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
 export class CheckYourAnswersController {

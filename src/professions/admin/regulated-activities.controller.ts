@@ -9,15 +9,15 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { Response } from 'express';
-import { AuthenticationGuard } from '../../../common/authentication.guard';
-import { Validator } from '../../../helpers/validator';
-import { ValidationFailedError } from '../../../common/validation/validation-failed.error';
-import { Profession } from '../../profession.entity';
-import { ProfessionsService } from '../../professions.service';
+import { AuthenticationGuard } from '../../common/authentication.guard';
+import { Validator } from '../../helpers/validator';
+import { ValidationFailedError } from '../../common/validation/validation-failed.error';
+import { Profession } from '../profession.entity';
+import { ProfessionsService } from '../professions.service';
 import { RegulatedActivitiesDto } from './dto/regulated-activities.dto';
 import { RegulatedActivitiesTemplate } from './interfaces/regulated-activities.template';
-import { Permissions } from '../../../common/permissions.decorator';
-import { UserPermission } from '../../../users/user.entity';
+import { Permissions } from '../../common/permissions.decorator';
+import { UserPermission } from '../../users/user.entity';
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
 export class RegulatedActivitiesController {

@@ -1,4 +1,4 @@
-import { Legislation } from '../../../../legislations/legislation.entity';
+import { Legislation } from '../../../legislations/legislation.entity';
 
 export interface LegislationTemplate {
   legislation: Legislation | null;

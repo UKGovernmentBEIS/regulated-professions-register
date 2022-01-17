@@ -9,20 +9,20 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { Response } from 'express';
-import { AuthenticationGuard } from '../../../common/authentication.guard';
-import { ProfessionsService } from '../../professions.service';
+import { AuthenticationGuard } from '../../common/authentication.guard';
+import { ProfessionsService } from '../professions.service';
 import { I18nService } from 'nestjs-i18n';
-import { OrganisationsService } from '../../../organisations/organisations.service';
+import { OrganisationsService } from '../../organisations/organisations.service';
 import { RegulatoryBodyTemplate } from './interfaces/regulatory-body.template';
-import { RegulatedAuthoritiesSelectPresenter } from '../regulated-authorities-select-presenter';
-import { MandatoryRegistration, Profession } from '../../profession.entity';
-import { Organisation } from '../../../organisations/organisation.entity';
-import { MandatoryRegistrationRadioButtonsPresenter } from '../mandatory-registration-radio-buttons-presenter';
-import { Validator } from '../../../helpers/validator';
+import { RegulatedAuthoritiesSelectPresenter } from './regulated-authorities-select-presenter';
+import { MandatoryRegistration, Profession } from '../profession.entity';
+import { Organisation } from '../../organisations/organisation.entity';
+import { MandatoryRegistrationRadioButtonsPresenter } from './mandatory-registration-radio-buttons-presenter';
+import { Validator } from '../../helpers/validator';
 import { RegulatoryBodyDto } from './dto/regulatory-body.dto';
-import { ValidationFailedError } from '../../../common/validation/validation-failed.error';
-import { Permissions } from '../../../common/permissions.decorator';
-import { UserPermission } from '../../../users/user.entity';
+import { ValidationFailedError } from '../../common/validation/validation-failed.error';
+import { Permissions } from '../../common/permissions.decorator';
+import { UserPermission } from '../../users/user.entity';
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
 export class RegulatoryBodyController {

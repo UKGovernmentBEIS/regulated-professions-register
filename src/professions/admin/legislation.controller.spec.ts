@@ -1,9 +1,9 @@
 import { createMock, DeepMocked } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Response } from 'express';
-import legislationFactory from '../../../testutils/factories/legislation';
-import professionFactory from '../../../testutils/factories/profession';
-import { ProfessionsService } from '../../professions.service';
+import legislationFactory from '../../testutils/factories/legislation';
+import professionFactory from '../../testutils/factories/profession';
+import { ProfessionsService } from '../professions.service';
 import LegislationDto from './dto/legislation.dto';
 import { LegislationController } from './legislation.controller';
 

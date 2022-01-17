@@ -1,5 +1,5 @@
-import { Legislation } from '../../../../legislations/legislation.entity';
-import QualificationPresenter from '../../../../qualifications/presenters/qualification.presenter';
+import { Legislation } from '../../../legislations/legislation.entity';
+import QualificationPresenter from '../../../qualifications/presenters/qualification.presenter';
 
 export interface CheckYourAnswersTemplate {
   name: string;

@@ -1,4 +1,4 @@
-import { RadioButtonArgs } from '../../../../common/interfaces/radio-button-args.interface';
+import { RadioButtonArgs } from '../../../common/interfaces/radio-button-args.interface';
 
 export interface QualificationInformationTemplate {
   level: string;

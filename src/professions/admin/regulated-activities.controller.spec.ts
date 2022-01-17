@@ -1,8 +1,8 @@
 import { createMock, DeepMocked } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Response } from 'express';
-import professionFactory from '../../../testutils/factories/profession';
-import { ProfessionsService } from '../../professions.service';
+import professionFactory from '../../testutils/factories/profession';
+import { ProfessionsService } from '../professions.service';
 import { RegulatedActivitiesDto } from './dto/regulated-activities.dto';
 import { RegulatedActivitiesController } from './regulated-activities.controller';
 

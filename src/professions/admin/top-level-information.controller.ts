@@ -9,21 +9,21 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { Response } from 'express';
-import { IndustriesCheckboxPresenter } from '../../../industries/industries-checkbox.presenter';
-import { NationsCheckboxPresenter } from '../../../nations/nations-checkbox.presenter';
-import { Validator } from '../../../helpers/validator';
-import { IndustriesService } from '../../../industries/industries.service';
-import { Nation } from '../../../nations/nation';
-import { ValidationFailedError } from '../../../common/validation/validation-failed.error';
-import { Profession } from '../../profession.entity';
-import { ProfessionsService } from '../../professions.service';
+import { IndustriesCheckboxPresenter } from '../../industries/industries-checkbox.presenter';
+import { NationsCheckboxPresenter } from '../../nations/nations-checkbox.presenter';
+import { Validator } from '../../helpers/validator';
+import { IndustriesService } from '../../industries/industries.service';
+import { Nation } from '../../nations/nation';
+import { ValidationFailedError } from '../../common/validation/validation-failed.error';
+import { Profession } from '../profession.entity';
+import { ProfessionsService } from '../professions.service';
 import { TopLevelDetailsDto } from './dto/top-level-details.dto';
 import { I18nService } from 'nestjs-i18n';
-import { Industry } from '../../../industries/industry.entity';
+import { Industry } from '../../industries/industry.entity';
 import { TopLevelDetailsTemplate } from './interfaces/top-level-details.template';
-import { AuthenticationGuard } from '../../../common/authentication.guard';
-import { Permissions } from '../../../common/permissions.decorator';
-import { UserPermission } from '../../../users/user.entity';
+import { AuthenticationGuard } from '../../common/authentication.guard';
+import { Permissions } from '../../common/permissions.decorator';
+import { UserPermission } from '../../users/user.entity';
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
 export class TopLevelInformationController {

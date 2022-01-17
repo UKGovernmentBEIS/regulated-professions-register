@@ -2,13 +2,13 @@ import { DeepMocked, createMock } from '@golevelup/ts-jest';
 import { TestingModule, Test } from '@nestjs/testing';
 import { Response } from 'express';
 import { I18nService } from 'nestjs-i18n';
-import { OrganisationsService } from '../../../organisations/organisations.service';
-import organisationFactory from '../../../testutils/factories/organisation';
-import professionFactory from '../../../testutils/factories/profession';
-import { MandatoryRegistration } from '../../profession.entity';
-import { ProfessionsService } from '../../professions.service';
-import { MandatoryRegistrationRadioButtonsPresenter } from '../mandatory-registration-radio-buttons-presenter';
-import { RegulatedAuthoritiesSelectPresenter } from '../regulated-authorities-select-presenter';
+import { OrganisationsService } from '../../organisations/organisations.service';
+import organisationFactory from '../../testutils/factories/organisation';
+import professionFactory from '../../testutils/factories/profession';
+import { MandatoryRegistration } from '../profession.entity';
+import { ProfessionsService } from '../professions.service';
+import { MandatoryRegistrationRadioButtonsPresenter } from './mandatory-registration-radio-buttons-presenter';
+import { RegulatedAuthoritiesSelectPresenter } from './regulated-authorities-select-presenter';
 import { RegulatoryBodyController } from './regulatory-body.controller';
 
 describe(RegulatoryBodyController, () => {

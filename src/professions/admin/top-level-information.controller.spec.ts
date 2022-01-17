@@ -2,12 +2,12 @@ import { DeepMocked, createMock } from '@golevelup/ts-jest';
 import { TestingModule, Test } from '@nestjs/testing';
 import { Response } from 'express';
 import { I18nService } from 'nestjs-i18n';
-import professionFactory from '../../../testutils/factories/profession';
+import professionFactory from '../../testutils/factories/profession';
 
-import { IndustriesService } from '../../../industries/industries.service';
-import { ProfessionsService } from '../../professions.service';
+import { IndustriesService } from '../../industries/industries.service';
+import { ProfessionsService } from '../professions.service';
 import { TopLevelInformationController } from './top-level-information.controller';
-import industryFactory from '../../../testutils/factories/industry';
+import industryFactory from '../../testutils/factories/industry';
 
 describe('TopLevelInformationController', () => {
   let controller: TopLevelInformationController;

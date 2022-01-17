@@ -1,5 +1,5 @@
 import { IsNotEmpty, ValidateIf } from 'class-validator';
-import { MethodToObtain } from '../../../../qualifications/qualification.entity';
+import { MethodToObtain } from '../../../qualifications/qualification.entity';
 
 export class QualificationInformationDto {
   @IsNotEmpty({ message: 'professions.form.errors.qualification.level.empty' })

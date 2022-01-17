@@ -10,15 +10,15 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 import { I18nService } from 'nestjs-i18n';
-import { AuthenticationGuard } from '../../../common/authentication.guard';
-import { Permissions } from '../../../common/permissions.decorator';
-import { Validator } from '../../../helpers/validator';
-import { Qualification } from '../../../qualifications/qualification.entity';
-import { UserPermission } from '../../../users/user.entity';
-import { ValidationFailedError } from '../../../common/validation/validation-failed.error';
-import { ProfessionsService } from '../../professions.service';
-import { MethodToObtainQualificationRadioButtonsPresenter } from '../method-to-obtain-qualification-radio-buttons.presenter';
-import { YesNoRadioButtonArgsPresenter } from '../yes-no-radio-buttons-presenter';
+import { AuthenticationGuard } from '../../common/authentication.guard';
+import { Permissions } from '../../common/permissions.decorator';
+import { Validator } from '../../helpers/validator';
+import { Qualification } from '../../qualifications/qualification.entity';
+import { UserPermission } from '../../users/user.entity';
+import { ValidationFailedError } from '../../common/validation/validation-failed.error';
+import { ProfessionsService } from '../professions.service';
+import { MethodToObtainQualificationRadioButtonsPresenter } from './method-to-obtain-qualification-radio-buttons.presenter';
+import { YesNoRadioButtonArgsPresenter } from './yes-no-radio-buttons-presenter';
 import { QualificationInformationDto } from './dto/qualification-information.dto';
 import { QualificationInformationTemplate } from './interfaces/qualification-information.template';
 

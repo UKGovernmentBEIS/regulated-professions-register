@@ -1,9 +1,9 @@
 import { DeepMocked, createMock } from '@golevelup/ts-jest';
 import { TestingModule, Test } from '@nestjs/testing';
 import { Response } from 'express';
-import professionFactory from '../../../testutils/factories/profession';
-import { Profession } from '../../profession.entity';
-import { ProfessionsService } from '../../professions.service';
+import professionFactory from '../../testutils/factories/profession';
+import { Profession } from '../profession.entity';
+import { ProfessionsService } from '../professions.service';
 import { ConfirmationController } from './confirmation.controller';
 
 describe('ConfirmationController', () => {
