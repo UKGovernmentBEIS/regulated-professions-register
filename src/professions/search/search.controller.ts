@@ -1,5 +1,4 @@
-import { Body, Controller, Get, Post, Render, Req } from '@nestjs/common';
-import { Request } from 'express';
+import { Body, Controller, Get, Post, Render } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
 import { Industry } from '../../industries/industry.entity';
 import { IndustriesService } from '../../industries/industries.service';
@@ -21,23 +20,17 @@ export class SearchController {
 
   @Get()
   @Render('professions/search/index')
-  async index(@Req() request: Request): Promise<IndexTemplate> {
-    return this.createSearchResults(new FilterDto(), request);
+  async index(): Promise<IndexTemplate> {
+    return this.createSearchResults(new FilterDto());
   }
 
   @Post()
   @Render('professions/search/index')
-  async create(
-    @Body() filter: FilterDto,
-    @Req() request: Request,
-  ): Promise<IndexTemplate> {
-    return this.createSearchResults(filter, request);
+  async create(@Body() filter: FilterDto): Promise<IndexTemplate> {
+    return this.createSearchResults(filter);
   }
 
-  private async createSearchResults(
-    filter: FilterDto,
-    request: Request,
-  ): Promise<IndexTemplate> {
+  private async createSearchResults(filter: FilterDto): Promise<IndexTemplate> {
     const allNations = Nation.all();
     const allIndustries = await this.industriesService.all();
 
@@ -55,7 +48,7 @@ export class SearchController {
       allIndustries,
       filteredProfessions,
       this.i18nService,
-      request,
+      '/select-service',
     ).present();
   }
 

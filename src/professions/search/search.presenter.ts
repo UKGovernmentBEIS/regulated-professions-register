@@ -1,6 +1,4 @@
-import { Request } from 'express';
 import { I18nService } from 'nestjs-i18n';
-import { backLink } from '../../common/utils';
 import { IndustriesCheckboxPresenter } from '../../industries/industries-checkbox.presenter';
 import { Industry } from '../../industries/industry.entity';
 import { Nation } from '../../nations/nation';
@@ -18,7 +16,7 @@ export class SearchPresenter {
     private readonly allIndustries: Industry[],
     private readonly filteredProfessions: Profession[],
     private readonly i18nService: I18nService,
-    private readonly request: Request,
+    private readonly backLink: string,
   ) {}
 
   async present(): Promise<IndexTemplate> {
@@ -58,7 +56,7 @@ export class SearchPresenter {
           (industry) => industry.name,
         ),
       },
-      backLink: backLink(this.request),
+      backLink: this.backLink,
     };
   }
 }

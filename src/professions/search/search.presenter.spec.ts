@@ -1,7 +1,5 @@
 import { DeepMocked } from '@golevelup/ts-jest';
-import { Request } from 'express';
 import { I18nService } from 'nestjs-i18n';
-import { createMockRequest } from '../../testutils/create-mock-request';
 import { Nation } from '../../nations/nation';
 import { FilterInput } from '../interfaces/filter-input.interface';
 import { SearchPresenter } from './search.presenter';
@@ -45,13 +43,10 @@ const professionC = professionFactory.build({
 const industries = [industry1, industry2, industry3];
 
 describe('SearchPresenter', () => {
-  let request: DeepMocked<Request>;
   let i18nService: DeepMocked<I18nService>;
   let nations: Nation[];
 
   beforeEach(() => {
-    request = createMockRequest('http://example.com/some/path', 'example.com');
-
     i18nService = createMockI18nService();
 
     nations = Nation.all();
@@ -72,7 +67,7 @@ describe('SearchPresenter', () => {
         // Intentionally mis-ordered to exercise sorting
         [professionC, professionA, professionB],
         i18nService,
-        request,
+        'back-link',
       );
 
       const result = await presenter.present();
@@ -89,7 +84,7 @@ describe('SearchPresenter', () => {
         i18nService,
       ).checkboxArgs();
 
-      expect(result).toMatchObject({
+      const expected: IndexTemplate = {
         filters: {
           industries: ['industries.example2'],
           keywords: 'Example Keywords',
@@ -111,7 +106,10 @@ describe('SearchPresenter', () => {
             i18nService,
           ).present(),
         ],
-      } as IndexTemplate);
+        backLink: 'back-link',
+      };
+
+      expect(result).toEqual(expected);
     });
   });
 });
