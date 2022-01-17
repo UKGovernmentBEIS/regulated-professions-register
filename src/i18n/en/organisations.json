@@ -19,6 +19,20 @@
         "address": "Address",
         "email": "Email",
         "telephone": "Phone number"
+      },
+      "errors": {
+        "name": {
+          "empty": "Enter the name of the regulated profession"
+        },
+        "email": {
+          "invalid": "Please enter a valid email address"
+        },
+        "url": {
+          "invalid": "Please enter a valid website address"
+        },
+        "contactUrl": {
+          "invalid": "Please enter a valid contact details web address"
+        }
       }
     },
     "button": {

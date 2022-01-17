@@ -21,7 +21,11 @@
   <div class="govuk-grid-row">
 
     <div class="govuk-grid-column-two-thirds">
-      <form method="post" action="/admin/organisations/{{ slug }}/confirm">
+      {% include "../../shared/_errors.njk" %}
+
+      {% set targetUrl = ( currentUrl if '/confirm' in currentUrl else "/admin/organisations/"+ slug +"/confirm" ) %}
+
+      <form method="post" action="{{ targetUrl }}">
         {{
           govukInput({
             label: {

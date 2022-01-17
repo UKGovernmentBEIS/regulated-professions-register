@@ -1,7 +1,17 @@
-import { Controller, UseGuards, Get, Render, Param } from '@nestjs/common';
+import {
+  Controller,
+  UseGuards,
+  Get,
+  Render,
+  Param,
+  Post,
+  Body,
+  UseFilters,
+} from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
 
 import { AuthenticationGuard } from '../../common/authentication.guard';
+import { ValidationExceptionFilter } from '../../common/validation/validation-exception.filter';
 import { OrganisationsService } from '../organisations.service';
 import { Organisation } from '../organisation.entity';
 import { OrganisationPresenter } from '../presenters/organisation.presenter';
@@ -9,6 +19,8 @@ import { OrganisationsPresenter } from '../presenters/organisations.presenter';
 import { ProfessionPresenter } from '../../professions/presenters/profession.presenter';
 
 import { ShowTemplate } from './interfaces/show-template.interface';
+import { OrganisationDto } from './dto/organisation.dto';
+
 @UseGuards(AuthenticationGuard)
 @Controller('/admin/organisations')
 export class OrganisationsController {
@@ -66,5 +78,17 @@ export class OrganisationsController {
     const organisation = await this.organisationsService.findBySlug(slug);
 
     return organisation;
+  }
+
+  @Post('/:slug/confirm')
+  @Render('admin/organisations/confirm')
+  @UseFilters(new ValidationExceptionFilter('admin/organisations/edit'))
+  async confirm(
+    @Param('slug') slug: string,
+    @Body() organisationDto: OrganisationDto,
+  ): Promise<Organisation> {
+    const organisation = await this.organisationsService.findBySlug(slug);
+
+    return { ...organisation, ...organisationDto };
   }
 }
