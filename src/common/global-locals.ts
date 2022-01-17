@@ -14,6 +14,7 @@ export function globalLocals(
 
   res.app.locals.isLoggedin = user !== undefined;
   res.app.locals.user = user;
+  res.app.locals.currentUrl = req.originalUrl;
 
   next();
 }
