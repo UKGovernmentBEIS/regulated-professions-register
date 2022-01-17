@@ -17,6 +17,7 @@ import { ProfessionsPresenter } from './professions.presenter';
 import industryFactory from '../../testutils/factories/industry';
 import organisationFactory from '../../testutils/factories/organisation';
 import professionFactory from '../../testutils/factories/profession';
+import { NotFoundException } from '@nestjs/common';
 
 const referrer = 'http://example.com/some/path';
 const host = 'example.com';
@@ -323,6 +324,38 @@ describe('ProfessionsController', () => {
 
         expect(result).toEqual(expected);
       });
+    });
+  });
+
+  describe('show', () => {
+    it('should return populated template params', async () => {
+      const profession = professionFactory.build({
+        occupationLocations: ['GB-ENG'],
+        industries: [industryFactory.build({ name: 'industries.example' })],
+      });
+
+      professionsService.findBySlug.mockResolvedValue(profession);
+
+      const result = await controller.show('example-slug');
+
+      expect(result).toEqual({
+        profession: profession,
+        nations: ['Translation of `nations.england`'],
+        industries: ['Translation of `industries.example`'],
+        backLink: '',
+      });
+
+      expect(professionsService.findBySlug).toHaveBeenCalledWith(
+        'example-slug',
+      );
+    });
+
+    it('should throw an error when the slug does not match a profession', () => {
+      professionsService.findBySlug.mockResolvedValue(undefined);
+
+      expect(async () => {
+        await controller.show('example-invalid-slug');
+      }).rejects.toThrowError(NotFoundException);
     });
   });
 });

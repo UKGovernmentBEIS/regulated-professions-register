@@ -77,7 +77,7 @@ export class ListEntryPresenter {
       )
     ).join(', ');
 
-    const viewDetails = `<a href="/professions/${
+    const viewDetails = `<a href="/admin/professions/${
       this.profession.slug
     }">${await this.i18nService.translate(
       'professions.admin.viewDetails',

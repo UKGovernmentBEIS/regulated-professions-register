@@ -56,7 +56,9 @@ describe('ListEntryPresenter', () => {
         { text: 'Example Organisation' },
         { text: 'Law, Finance' },
         { text: 'Published' },
-        { html: '<a href="/professions/example-profession">View details</a>' },
+        {
+          html: '<a href="/admin/professions/example-profession">View details</a>',
+        },
       ];
 
       expect(presenter.tableRow(`overview`)).resolves.toEqual(expected);
@@ -70,7 +72,9 @@ describe('ListEntryPresenter', () => {
         { text: '12-08-2003' },
         { text: 'Placeholder name' },
         { text: 'Published' },
-        { html: '<a href="/professions/example-profession">View details</a>' },
+        {
+          html: '<a href="/admin/professions/example-profession">View details</a>',
+        },
       ];
 
       expect(presenter.tableRow(`single-organisation`)).resolves.toEqual(

@@ -1,6 +1,8 @@
 import {
   Controller,
   Get,
+  NotFoundException,
+  Param,
   Post,
   Query,
   Render,
@@ -27,6 +29,7 @@ import { FilterDto } from './dto/filter.dto';
 import { OrganisationsService } from '../../organisations/organisations.service';
 import { Organisation } from '../../organisations/organisation.entity';
 import { Profession } from '../profession.entity';
+import { ShowTemplate } from '../interfaces/show-template.interface';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
@@ -54,6 +57,32 @@ export class ProfessionsController {
     @Query() query: FilterDto = null,
   ): Promise<IndexTemplate> {
     return this.createListEntries(query || new FilterDto(), request);
+  }
+
+  @Get('/:slug')
+  @Render('admin/professions/show')
+  async show(@Param('slug') slug: string): Promise<ShowTemplate> {
+    const profession = await this.professionsService.findBySlug(slug);
+
+    if (!profession) {
+      throw new NotFoundException(
+        `A profession with ID ${slug} could not be found`,
+      );
+    }
+
+    const nations = await Promise.all(
+      profession.occupationLocations.map(async (code) =>
+        Nation.find(code).translatedName(this.i18Service),
+      ),
+    );
+
+    const industries = await Promise.all(
+      profession.industries.map(
+        async (industry) => await this.i18Service.translate(industry.name),
+      ),
+    );
+
+    return { profession, nations, industries, backLink: '' };
   }
 
   private async createListEntries(
