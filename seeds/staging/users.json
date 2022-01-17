@@ -22,7 +22,7 @@
     "email": "beis-rpr+editor@dxw.com",
     "name": "Editor",
     "externalIdentifier": "auth0|61d4220c20680d00696f50a1",
-    "permissions": ["editor"],
+    "permissions": [],
     "confirmed": true,
     "serviceOwner": false
   }
