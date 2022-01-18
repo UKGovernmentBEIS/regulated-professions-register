@@ -24,6 +24,9 @@ describe('OrganisationsService', () => {
             findOne: () => {
               return organisation;
             },
+            save: () => {
+              return organisation;
+            },
           },
         },
       ],
@@ -117,6 +120,17 @@ describe('OrganisationsService', () => {
         where: { slug: 'some-slug' },
         relations: ['professions'],
       });
+    });
+  });
+
+  describe('save', () => {
+    it('should save an Organisation', async () => {
+      const organisation = organisationFactory.build();
+      const repoSpy = jest.spyOn(repo, 'save');
+
+      await service.save(organisation);
+
+      expect(repoSpy).toHaveBeenCalledWith(organisation);
     });
   });
 });

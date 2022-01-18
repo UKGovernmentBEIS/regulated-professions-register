@@ -37,4 +37,8 @@ export class OrganisationsService {
       relations: ['professions'],
     });
   }
+
+  async save(organisation: Organisation): Promise<Organisation> {
+    return this.repository.save(organisation);
+  }
 }
