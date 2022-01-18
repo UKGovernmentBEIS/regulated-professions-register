@@ -40,6 +40,6 @@ export class ProfessionsController {
       ),
     );
 
-    return { profession, nations, industries, backUrl: '' };
+    return { profession, nations, industries, backLink: '/professions/search' };
   }
 }
