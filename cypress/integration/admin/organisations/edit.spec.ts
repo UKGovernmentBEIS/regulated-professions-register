@@ -135,6 +135,16 @@ describe('Editing organisations', () => {
         'foo@example.com',
       );
       cy.checkSummaryListRowValue('organisations.label.telephone', '1234');
+
+      cy.translate('organisations.admin.button.amend').then((buttonText) => {
+        cy.get('button').contains(buttonText).click();
+      });
+
+      cy.translate('organisations.admin.form.headings.confirmation').then(
+        (confirmationText) => {
+          cy.get('html').contains(confirmationText).click();
+        },
+      );
     });
   });
 });

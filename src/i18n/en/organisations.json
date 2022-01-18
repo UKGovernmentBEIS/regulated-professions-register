@@ -33,6 +33,15 @@
         "contactUrl": {
           "invalid": "Please enter a valid contact details web address"
         }
+      },
+      "headings": {
+        "confirmation": "Regulatory authority amended"
+      },
+      "body": {
+        "confirmation": {
+          "panel": "{name} has been updated",
+          "next": "What happens next?"
+        }
       }
     },
     "button": {

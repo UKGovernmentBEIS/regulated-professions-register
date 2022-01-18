@@ -118,9 +118,13 @@ export class OrganisationsController {
   }
 
   @Put('/:slug')
-  @Render('admin/organisations/confirmation')
+  @Render('admin/organisations/complete')
   async create(@Param('slug') slug: string): Promise<Organisation> {
     const organisation = await this.organisationsService.findBySlug(slug);
+
+    // This should potentially add a confirmed flag to the object once
+    // we have draft functionality in place
+    await this.organisationsService.save(organisation);
 
     return organisation;
   }
