@@ -11,6 +11,7 @@ import { SummaryList } from '../../common/interfaces/summary-list';
 import { OrganisationsPresenter } from '../presenters/organisations.presenter';
 import { OrganisationPresenter } from '../presenters/organisation.presenter';
 import { ProfessionPresenter } from '../../professions/presenters/profession.presenter';
+import { OrganisationDto } from './dto/organisation.dto';
 
 import organisationFactory from '../../testutils/factories/organisation';
 import professionFactory from '../../testutils/factories/profession';
@@ -34,6 +35,12 @@ const organisationsPresenter = {
   table: mockTable,
 };
 
+const organisationPresenter = {
+  summaryList: jest.fn(() => {
+    return mockSummaryList();
+  }),
+};
+
 jest.mock('../presenters/organisations.presenter', () => {
   return {
     OrganisationsPresenter: jest.fn().mockImplementation(() => {
@@ -45,9 +52,7 @@ jest.mock('../presenters/organisations.presenter', () => {
 jest.mock('../presenters/organisation.presenter', () => {
   return {
     OrganisationPresenter: jest.fn().mockImplementation(() => {
-      return {
-        summaryList: mockSummaryList,
-      };
+      return organisationPresenter;
     }),
   };
 });
@@ -89,6 +94,12 @@ describe('OrganisationsController', () => {
         return organisations;
       },
       findBySlugWithProfessions: async () => {
+        return organisation;
+      },
+      findBySlug: async () => {
+        return organisation;
+      },
+      save: async (organisation) => {
         return organisation;
       },
     });
@@ -170,6 +181,49 @@ describe('OrganisationsController', () => {
   describe('edit', () => {
     it('should return the organisation', async () => {
       expect(await controller.edit('slug')).toEqual(organisation);
+    });
+  });
+
+  describe('confirm', () => {
+    it('saves the organisation', async () => {
+      const slug = 'some-slug';
+      const organisationDto: OrganisationDto = {
+        name: 'Organisation',
+        alternateName: '',
+        email: 'email@example.com',
+        url: 'http://example.com',
+        contactUrl: 'http://example.com',
+        address: '123 Fake Street',
+        telephone: '122356',
+        fax: '',
+      };
+
+      const result = await controller.confirm(slug, organisationDto);
+      const newOrganisation = {
+        ...organisation,
+        ...organisationDto,
+      };
+
+      expect(organisationsService.save).toHaveBeenCalledWith(
+        expect.objectContaining(newOrganisation),
+      );
+
+      expect(OrganisationPresenter).toHaveBeenCalledWith(
+        newOrganisation,
+        i18nService,
+      );
+
+      expect(organisationPresenter.summaryList).toHaveBeenCalledWith({
+        classes: 'govuk-summary-list',
+        removeBlank: false,
+        includeName: true,
+        includeActions: true,
+      });
+
+      expect(result).toEqual({
+        ...newOrganisation,
+        summaryList: mockSummaryList(),
+      });
     });
   });
 });

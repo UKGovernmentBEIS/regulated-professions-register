@@ -37,7 +37,8 @@
     },
     "button": {
       "edit": "Edit this regulatory authority",
-      "delete": "Delete this regulatory authority"
+      "delete": "Delete this regulatory authority",
+      "amend": "Amend regulatory authority"
     }
   },
   "search": {

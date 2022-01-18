@@ -111,3 +111,17 @@ Cypress.Commands.add('checkTextareaValue', (label: string, value: string) => {
       });
   });
 });
+
+Cypress.Commands.add(
+  'checkSummaryListRowValue',
+  (key: string, value: string) => {
+    return cy.translate(key).then((label) => {
+      cy.get('.govuk-summary-list__key')
+        .contains(label)
+        .siblings('.govuk-summary-list__value')
+        .then(($summaryListValue) => {
+          cy.wrap($summaryListValue).should('contain', value);
+        });
+    });
+  },
+);

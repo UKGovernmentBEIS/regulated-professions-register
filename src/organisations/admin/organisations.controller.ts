@@ -7,6 +7,7 @@ import {
   Post,
   Body,
   UseFilters,
+  Put,
 } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
 
@@ -18,6 +19,7 @@ import { OrganisationPresenter } from '../presenters/organisation.presenter';
 import { OrganisationsPresenter } from '../presenters/organisations.presenter';
 import { ProfessionPresenter } from '../../professions/presenters/profession.presenter';
 
+import { ConfirmTemplate } from './interfaces/confirm-template.interface';
 import { ShowTemplate } from './interfaces/show-template.interface';
 import { OrganisationDto } from './dto/organisation.dto';
 
@@ -88,9 +90,38 @@ export class OrganisationsController {
   async confirm(
     @Param('slug') slug: string,
     @Body() organisationDto: OrganisationDto,
-  ): Promise<Organisation> {
+  ): Promise<ConfirmTemplate> {
+    const organisation = await this.organisationsService.findBySlug(slug);
+    const newOrganisation = {
+      ...organisation,
+      ...(organisationDto as Organisation),
+    };
+
+    const updatedOrganisation = await this.organisationsService.save(
+      newOrganisation,
+    );
+
+    const organisationPresenter = new OrganisationPresenter(
+      updatedOrganisation,
+      this.i18nService,
+    );
+
+    return {
+      ...updatedOrganisation,
+      summaryList: await organisationPresenter.summaryList({
+        classes: 'govuk-summary-list',
+        removeBlank: false,
+        includeName: true,
+        includeActions: true,
+      }),
+    };
+  }
+
+  @Put('/:slug')
+  @Render('admin/organisations/confirmation')
+  async create(@Param('slug') slug: string): Promise<Organisation> {
     const organisation = await this.organisationsService.findBySlug(slug);
 
-    return { ...organisation, ...organisationDto };
+    return organisation;
   }
 }

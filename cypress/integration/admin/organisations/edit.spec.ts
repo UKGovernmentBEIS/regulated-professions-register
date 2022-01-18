@@ -94,5 +94,47 @@ describe('Editing organisations', () => {
         },
       );
     });
+
+    it('allows me to update an organisation', () => {
+      cy.get('input[name="name"]').invoke('val', 'New Name');
+
+      cy.get('input[name="alternateName"]')
+        .invoke('val', '')
+        .type('New Alternate Name');
+
+      cy.get('input[name="contactUrl"]')
+        .invoke('val', '')
+        .type('http://example.com');
+
+      cy.get('textarea[name="address"]')
+        .invoke('val', '')
+        .type('123 Fake Street');
+
+      cy.get('input[name="email"]').invoke('val', '').type('foo@example.com');
+      cy.get('input[name="telephone"]').invoke('val', '').type('1234');
+
+      cy.translate('app.continue').then((buttonText) => {
+        cy.get('button').contains(buttonText).click();
+      });
+
+      cy.checkSummaryListRowValue('organisations.label.name', 'New Name');
+      cy.checkSummaryListRowValue(
+        'organisations.label.alternateName',
+        'New Alternate Name',
+      );
+      cy.checkSummaryListRowValue(
+        'organisations.label.contactUrl',
+        'http://example.com',
+      );
+      cy.checkSummaryListRowValue(
+        'organisations.label.address',
+        '123 Fake Street',
+      );
+      cy.checkSummaryListRowValue(
+        'organisations.label.email',
+        'foo@example.com',
+      );
+      cy.checkSummaryListRowValue('organisations.label.telephone', '1234');
+    });
   });
 });
