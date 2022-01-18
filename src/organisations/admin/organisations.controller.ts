@@ -58,7 +58,9 @@ export class OrganisationsController {
 
     return {
       organisation,
-      summaryList: await organisationPresenter.summaryList(),
+      summaryList: await organisationPresenter.summaryList({
+        removeBlank: true,
+      }),
       professions: await Promise.all(
         professionPresenters.map(async (presenter) => {
           return {

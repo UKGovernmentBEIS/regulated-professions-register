@@ -2,6 +2,14 @@ import { I18nService } from 'nestjs-i18n';
 import { Organisation } from './../organisation.entity';
 import { TableRow } from '../../common/interfaces/table-row';
 import { SummaryList } from '../../common/interfaces/summary-list';
+
+interface OrganisationSummaryListOptions {
+  classes?: string;
+  removeBlank?: boolean;
+  includeName?: boolean;
+  includeActions?: boolean;
+}
+
 export class OrganisationPresenter {
   constructor(
     private readonly organisation: Organisation,
@@ -30,61 +38,102 @@ export class OrganisationPresenter {
     ];
   }
 
-  public async summaryList(): Promise<SummaryList> {
+  public async summaryList(
+    options: OrganisationSummaryListOptions = {},
+  ): Promise<SummaryList> {
+    const classes = options.classes || 'govuk-summary-list--no-border';
+    const removeBlank = options.removeBlank || false;
+    const includeName = options.includeName || false;
+    const includeActions = options.includeActions || false;
+
+    let rows = [
+      {
+        key: {
+          text: await this.i18nService.translate(
+            'organisations.label.alternateName',
+          ),
+        },
+        value: {
+          text: this.organisation.alternateName,
+        },
+      },
+      {
+        key: {
+          text: await this.i18nService.translate(
+            'organisations.label.contactUrl',
+          ),
+        },
+        value: {
+          html: this.contactUrl(),
+        },
+      },
+      {
+        key: {
+          text: await this.i18nService.translate('organisations.label.address'),
+        },
+        value: {
+          html: this.address(),
+        },
+      },
+      {
+        key: {
+          text: await this.i18nService.translate('organisations.label.email'),
+        },
+        value: {
+          html: this.email(),
+        },
+      },
+      {
+        key: {
+          text: await this.i18nService.translate(
+            'organisations.label.telephone',
+          ),
+        },
+        value: {
+          text: this.organisation.telephone,
+        },
+      },
+    ];
+
+    rows = removeBlank
+      ? rows.filter((item) => {
+          return item.value.text !== '' && item.value.html !== '';
+        })
+      : rows;
+
+    if (includeName) {
+      rows.unshift({
+        key: {
+          text: await this.i18nService.translate('organisations.label.name'),
+        },
+        value: {
+          text: this.organisation.name,
+        },
+      });
+    }
+
+    if (includeActions) {
+      rows = await Promise.all(
+        rows.map(async (row) => {
+          return {
+            ...row,
+            actions: {
+              items: [
+                {
+                  href: `/admin/organisations/${this.organisation.slug}/edit`,
+                  text: await this.i18nService.translate('app.change'),
+                  visuallyHiddenText: row.key.text,
+                },
+              ],
+            },
+          };
+        }),
+      );
+    }
+
     return {
-      classes: 'govuk-summary-list--no-border',
-      rows: [
-        {
-          key: {
-            text: await this.i18nService.translate(
-              'organisations.label.alternateName',
-            ),
-          },
-          value: {
-            text: this.organisation.alternateName,
-          },
-        },
-        {
-          key: {
-            text: await this.i18nService.translate(
-              'organisations.label.contactUrl',
-            ),
-          },
-          value: {
-            html: this.contactUrl(),
-          },
-        },
-        {
-          key: {
-            text: await this.i18nService.translate(
-              'organisations.label.address',
-            ),
-          },
-          value: {
-            html: this.address(),
-          },
-        },
-        {
-          key: {
-            text: await this.i18nService.translate('organisations.label.email'),
-          },
-          value: {
-            html: this.email(),
-          },
-        },
-        {
-          key: {
-            text: await this.i18nService.translate(
-              'organisations.label.telephone',
-            ),
-          },
-          value: {
-            text: this.organisation.telephone,
-          },
-        },
-      ].filter((item) => {
-        return item.value.text !== '' && item.value.html !== '';
-      }),
+      classes: classes,
+      rows: rows,
     };
   }
 
