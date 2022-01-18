@@ -3,6 +3,7 @@ import { I18nService } from 'nestjs-i18n';
 
 import { AuthenticationGuard } from '../../common/authentication.guard';
 import { OrganisationsService } from '../organisations.service';
+import { Organisation } from '../organisation.entity';
 import { OrganisationPresenter } from '../presenters/organisation.presenter';
 import { OrganisationsPresenter } from '../presenters/organisations.presenter';
 import { ProfessionPresenter } from '../../professions/presenters/profession.presenter';
@@ -57,5 +58,13 @@ export class OrganisationsController {
       ),
       backLink: '/admin/organisations',
     };
+  }
+
+  @Get('/:slug/edit')
+  @Render('admin/organisations/edit')
+  async edit(@Param('slug') slug: string): Promise<Organisation> {
+    const organisation = await this.organisationsService.findBySlug(slug);
+
+    return organisation;
   }
 }

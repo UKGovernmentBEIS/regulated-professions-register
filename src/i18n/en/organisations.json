@@ -1,6 +1,9 @@
 {
   "admin": {
     "heading": "Regulatory authorities",
+    "edit": {
+      "heading": "Amending a regulatory authority"
+    },
     "tableHeading": {
       "name": "Name",
       "alternateName": "Alternate name",
@@ -9,9 +12,10 @@
     },
     "form": {
       "label": {
-        "name": "Name",
+        "name": "Name of the regulatory authority",
         "alternateName": "Alternate name",
-        "contactUrl": "Website",
+        "url": "Website",
+        "contactUrl": "Contact details URL",
         "address": "Address",
         "email": "Email",
         "telephone": "Phone number"
@@ -51,5 +55,13 @@
   },
   "headings": {
     "professions": "Regulated professions"
+  },
+  "label": {
+    "name": "Name",
+    "alternateName": "Alternate name",
+    "contactUrl": "Website",
+    "address": "Address",
+    "email": "Email",
+    "telephone": "Phone number"
   }
 }

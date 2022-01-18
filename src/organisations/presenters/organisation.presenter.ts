@@ -37,7 +37,7 @@ export class OrganisationPresenter {
         {
           key: {
             text: await this.i18nService.translate(
-              'organisations.admin.form.label.alternateName',
+              'organisations.label.alternateName',
             ),
           },
           value: {
@@ -47,7 +47,7 @@ export class OrganisationPresenter {
         {
           key: {
             text: await this.i18nService.translate(
-              'organisations.admin.form.label.contactUrl',
+              'organisations.label.contactUrl',
             ),
           },
           value: {
@@ -57,7 +57,7 @@ export class OrganisationPresenter {
         {
           key: {
             text: await this.i18nService.translate(
-              'organisations.admin.form.label.address',
+              'organisations.label.address',
             ),
           },
           value: {
@@ -66,9 +66,7 @@ export class OrganisationPresenter {
         },
         {
           key: {
-            text: await this.i18nService.translate(
-              'organisations.admin.form.label.email',
-            ),
+            text: await this.i18nService.translate('organisations.label.email'),
           },
           value: {
             html: this.email(),
@@ -77,7 +75,7 @@ export class OrganisationPresenter {
         {
           key: {
             text: await this.i18nService.translate(
-              'organisations.admin.form.label.telephone',
+              'organisations.label.telephone',
             ),
           },
           value: {

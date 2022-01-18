@@ -143,7 +143,7 @@ describe('OrganisationPresenter', () => {
           rows: [
             {
               key: {
-                text: 'Translation of `organisations.admin.form.label.alternateName`',
+                text: 'Translation of `organisations.label.alternateName`',
               },
               value: {
                 text: organisation.alternateName,
@@ -151,7 +151,7 @@ describe('OrganisationPresenter', () => {
             },
             {
               key: {
-                text: 'Translation of `organisations.admin.form.label.contactUrl`',
+                text: 'Translation of `organisations.label.contactUrl`',
               },
               value: {
                 html: presenter.contactUrl(),
@@ -159,7 +159,7 @@ describe('OrganisationPresenter', () => {
             },
             {
               key: {
-                text: 'Translation of `organisations.admin.form.label.address`',
+                text: 'Translation of `organisations.label.address`',
               },
               value: {
                 html: presenter.address(),
@@ -167,7 +167,7 @@ describe('OrganisationPresenter', () => {
             },
             {
               key: {
-                text: 'Translation of `organisations.admin.form.label.email`',
+                text: 'Translation of `organisations.label.email`',
               },
               value: {
                 html: presenter.email(),
@@ -175,7 +175,7 @@ describe('OrganisationPresenter', () => {
             },
             {
               key: {
-                text: 'Translation of `organisations.admin.form.label.telephone`',
+                text: 'Translation of `organisations.label.telephone`',
               },
               value: {
                 text: organisation.telephone,
@@ -196,8 +196,7 @@ describe('OrganisationPresenter', () => {
         expect(
           list.rows.filter(
             (item) =>
-              item.key ===
-              { text: 'organisations.admin.form.label.alternateName' },
+              item.key === { text: 'organisations.label.alternateName' },
           ).length,
         ).toEqual(0);
       });

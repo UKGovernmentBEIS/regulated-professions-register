@@ -166,4 +166,10 @@ describe('OrganisationsController', () => {
       );
     });
   });
+
+  describe('edit', () => {
+    it('should return the organisation', async () => {
+      expect(await controller.edit('slug')).toEqual(organisation);
+    });
+  });
 });

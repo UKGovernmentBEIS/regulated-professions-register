@@ -1,0 +1,120 @@
+{% extends "base.njk" %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set bodyClasses = "rpr-internal__page" %}
+
+{% block content %}
+
+  {% if backLink %}
+    {{ govukBackLink({
+      text: ( "app.back" | t ),
+      href: backLink
+    }) }}
+  {% endif %}
+
+  <h1 class="govuk-heading-xl">
+    {{ "organisations.admin.edit.heading" | t }}
+  </h1>
+
+  <div class="govuk-grid-row">
+
+    <div class="govuk-grid-column-two-thirds">
+      <form method="post" action="/admin/organisations/{{ slug }}/confirm">
+        {{
+          govukInput({
+            label: {
+              text: ("organisations.admin.form.label.name" | t),
+              classes: "govuk-label--m"
+            },
+            id: "name",
+            name: "name",
+            value: name
+          })
+        }}
+
+        {{
+          govukInput({
+            label: {
+              text: ("organisations.admin.form.label.alternateName" | t),
+              classes: "govuk-label--m"
+            },
+            id: "alternateName",
+            name: "alternateName",
+            value: alternateName
+          })
+        }}
+
+        {{
+          govukInput({
+            label: {
+              text: ("organisations.admin.form.label.url" | t),
+              classes: "govuk-label--m"
+            },
+            id: "url",
+            name: "url",
+            value: url
+          })
+        }}
+
+        {{
+          govukInput({
+            label: {
+              text: ("organisations.admin.form.label.contactUrl" | t),
+              classes: "govuk-label--m"
+            },
+            id: "contactUrl",
+            name: "contactUrl",
+            value: contactUrl
+          })
+        }}
+
+        {{
+          govukTextarea({
+            label: {
+              text: ("organisations.admin.form.label.address" | t),
+              classes: "govuk-label--m"
+            },
+            id: "address",
+            name: "address",
+            value: address
+          })
+        }}
+
+        {{
+          govukInput({
+            label: {
+              text: ("organisations.admin.form.label.email" | t),
+              classes: "govuk-label--m"
+            },
+            id: "email",
+            name: "email",
+            value: email
+          })
+        }}
+
+        {{
+          govukInput({
+            label: {
+              text: ("organisations.admin.form.label.telephone" | t),
+              classes: "govuk-label--m"
+            },
+            id: "telephone",
+            name: "telephone",
+            value: telephone
+          })
+        }}
+
+        {{
+          govukButton({
+            text: "app.continue" | t
+          })
+        }}
+
+      </form>
+    </div>
+
+  </div>
+
+{% endblock %}
