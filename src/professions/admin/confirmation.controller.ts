@@ -3,6 +3,7 @@ import {
   Get,
   Param,
   Post,
+  Query,
   Render,
   Res,
   UseGuards,
@@ -23,6 +24,10 @@ export class ConfirmationController {
   async create(@Res() res: Response, @Param('id') id: string): Promise<void> {
     const profession = await this.professionsService.find(id);
 
+    if (profession.confirmed) {
+      return res.redirect(`/admin/professions/${id}/confirmation?amended=true`);
+    }
+
     await this.professionsService.confirm(profession);
 
     res.redirect(`/admin/professions/${id}/confirmation`);
@@ -31,9 +36,12 @@ export class ConfirmationController {
   @Get('/:id/confirmation')
   @Permissions(UserPermission.CreateProfession)
   @Render('admin/professions/confirmation')
-  async new(@Param('id') id: string): Promise<ConfirmationTemplate> {
+  async new(
+    @Param('id') id: string,
+    @Query('amended') amended: boolean,
+  ): Promise<ConfirmationTemplate> {
     const profession = await this.professionsService.find(id);
 
-    return { name: profession.name };
+    return { name: profession.name, amended: Boolean(amended) };
   }
 }

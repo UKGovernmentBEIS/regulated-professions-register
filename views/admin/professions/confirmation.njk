@@ -9,12 +9,21 @@
 
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-          {{
-            govukPanel({
-              titleText: ("professions.form.headings.confirmation" | t),
-              html: ("professions.form.body.confirmation.panel" | t({name: name}) | safe)
-            })
-          }}
+          {% if amended %}
+            {{
+              govukPanel({
+                titleText: ("professions.form.headings.amended" | t),
+                html: ("professions.form.body.confirmation.panel" | t({name: name, action: "updated"}) | safe)
+              })
+            }}
+          {% else %}
+            {{
+              govukPanel({
+                titleText: ("professions.form.headings.confirmation" | t),
+                html: ("professions.form.body.confirmation.panel" | t({name: name, action: "added"}) | safe)
+              })
+            }}
+          {% endif %}
 
           <p class="govuk-body">{{ ("professions.form.body.confirmation.emailNotification" | t) }}</p>
 
