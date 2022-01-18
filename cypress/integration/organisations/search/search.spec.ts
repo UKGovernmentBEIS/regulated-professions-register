@@ -34,6 +34,7 @@ describe('Searching an organisation', () => {
       'contain',
       'regulatory-authorities/general-medical-council',
     );
+    cy.get('body').should('contain', 'General Medical Council');
   });
 
   it('I can filter by nation', () => {

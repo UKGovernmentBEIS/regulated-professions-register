@@ -4,12 +4,17 @@ import { IndustriesService } from '../industries/industries.service';
 import { Industry } from '../industries/industry.entity';
 import { Organisation } from './organisation.entity';
 import { OrganisationsService } from './organisations.service';
-import { OrganisationsController } from './admin/organisations.controller';
+import { OrganisationsController as AdminOrganisationsController } from './admin/organisations.controller';
 import { SearchController } from './search/search.controller';
+import { OrganisationsController } from './organisations.controller';
 
 @Module({
   providers: [OrganisationsService, IndustriesService],
-  controllers: [OrganisationsController, SearchController],
+  controllers: [
+    AdminOrganisationsController,
+    SearchController,
+    OrganisationsController,
+  ],
   imports: [
     TypeOrmModule.forFeature([Organisation]),
     TypeOrmModule.forFeature([Industry]),
