@@ -7,7 +7,7 @@ import { OrganisationPresenter } from '../presenters/organisation.presenter';
 import { OrganisationsPresenter } from '../presenters/organisations.presenter';
 import { ProfessionPresenter } from '../../professions/presenters/profession.presenter';
 
-import { EditTemplate } from './interfaces/edit-template.interface';
+import { ShowTemplate } from './interfaces/show-template.interface';
 @UseGuards(AuthenticationGuard)
 @Controller('/admin/organisations')
 export class OrganisationsController {
@@ -32,7 +32,7 @@ export class OrganisationsController {
 
   @Get('/:slug')
   @Render('admin/organisations/show')
-  async show(@Param('slug') slug: string): Promise<EditTemplate> {
+  async show(@Param('slug') slug: string): Promise<ShowTemplate> {
     const organisation =
       await this.organisationsService.findBySlugWithProfessions(slug);
     const organisationPresenter = new OrganisationPresenter(
