@@ -25,6 +25,12 @@ export class OrganisationsService {
     return this.repository.findOne(id);
   }
 
+  findBySlug(slug: string): Promise<Organisation> {
+    return this.repository.findOne({
+      where: { slug },
+    });
+  }
+
   findBySlugWithProfessions(slug: string): Promise<Organisation> {
     return this.repository.findOne({
       where: { slug },
