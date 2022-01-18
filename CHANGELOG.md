@@ -15,7 +15,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Add page for adding a new qualification to a profession
 - Show Regulatory Authorities to an admin
 - Add page for setting legislation information on a profession
-- Add a public-facing organisations search page that allows for filtering professions by keywords, nations, and industries
+- Add a public-facing Regulatory Authorities search page that allows for filtering professions by keywords, nations, and industries
+- Add public-facing Regulatory Authority pages
 
 ### Changed
 
