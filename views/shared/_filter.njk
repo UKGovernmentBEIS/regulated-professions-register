@@ -1,0 +1,58 @@
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+<div class="rpr-listing__filters-container">
+  <form action="" method="post" class="form">
+    {{ govukInput({
+      label: {
+        text: (filterTextPrefix + ".form.nameFilter.label") | t,
+        classes: "govuk-label--s",
+        isPageHeading: true
+      },
+      classes: "govuk-input--width-10",
+      hint: {
+        text: (filterTextPrefix + ".form.nameFilter.hint") | t
+      },
+      name: "keywords",
+      value: filters.keywords
+    }) }}
+
+    {{ govukCheckboxes({
+      name: "nations[]",
+      classes: ("govuk-checkboxes--small rpr-listing__filter"),
+      fieldset: {
+        legend: {
+        text: (filterTextPrefix + ".form.nations.label") | t,
+        isPageHeading: true,
+        classes: "govuk-fieldset__legend--s"
+        }
+      },
+      hint: {
+        text: (filterTextPrefix + ".form.nations.hint") | t
+      },
+      items: nationsCheckboxArgs
+    }) }}
+
+    {{ govukCheckboxes({
+      name: "industries[]",
+      classes: "govuk-checkboxes--small rpr-listing__filter",
+      fieldset: {
+        legend: {
+        text: (filterTextPrefix + ".form.industries.label") | t,
+        isPageHeading: true,
+        classes: "govuk-fieldset__legend--s"
+        }
+      },
+      hint: {
+        text: (filterTextPrefix + ".form.industries.hint") | t
+      },
+      items: industriesCheckboxArgs
+    }) }}
+
+    {{ govukButton({
+      text: (filterTextPrefix + ".form.button.filter") | t
+    }) }}
+  </form>
+</div>
+<div class="govuk-!-padding-bottom-9"></div>

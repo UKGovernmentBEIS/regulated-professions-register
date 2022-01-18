@@ -88,7 +88,7 @@ describe('OrganisationsController', () => {
       all: async () => {
         return organisations;
       },
-      findBySlug: async () => {
+      findBySlugWithProfessions: async () => {
         return organisation;
       },
     });
@@ -117,9 +117,7 @@ describe('OrganisationsController', () => {
         organisationsTable: mockTable(),
       });
 
-      expect(organisationsService.all).toHaveBeenCalledWith({
-        relations: ['professions', 'professions.industries'],
-      });
+      expect(organisationsService.allWithProfessions).toHaveBeenCalled();
 
       expect(OrganisationsPresenter).toHaveBeenCalledWith(
         organisations,
@@ -148,9 +146,9 @@ describe('OrganisationsController', () => {
         ],
       });
 
-      expect(organisationsService.findBySlug).toHaveBeenCalledWith('slug', {
-        relations: ['professions'],
-      });
+      expect(
+        organisationsService.findBySlugWithProfessions,
+      ).toHaveBeenCalledWith('slug');
 
       expect(OrganisationPresenter).toHaveBeenCalledWith(
         organisation,

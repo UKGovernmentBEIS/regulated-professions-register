@@ -1,14 +1,18 @@
-import { Organisation } from './organisation.entity';
 import { OrganisationsCheckboxPresenter } from './organisations-checkbox-presenter';
+import organisationFactory from '../testutils/factories/organisation';
 
-const organisation1 = new Organisation('Example Organisation 1');
-organisation1.id = 'example-organisation-1';
-
-const organisation2 = new Organisation('Example Organisation 2');
-organisation2.id = 'example-organisation-2';
-
-const organisation3 = new Organisation('Example Organisation 3');
-organisation3.id = 'example-organisation-3';
+const organisation1 = organisationFactory.build({
+  id: 'example-organisation-1',
+  name: 'Example Organisation 1',
+});
+const organisation2 = organisationFactory.build({
+  id: 'example-organisation-2',
+  name: 'Example Organisation 2',
+});
+const organisation3 = organisationFactory.build({
+  id: 'example-organisation-3',
+  name: 'Example Organisation 3',
+});
 
 const organisations = [organisation1, organisation2, organisation3];
 

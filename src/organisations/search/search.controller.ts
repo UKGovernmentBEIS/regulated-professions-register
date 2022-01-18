@@ -1,31 +1,32 @@
 import { Body, Controller, Get, Post, Render } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
-import { Industry } from '../../industries/industry.entity';
 import { IndustriesService } from '../../industries/industries.service';
-import { Nation } from '../../nations/nation';
-import { ProfessionsService } from '../professions.service';
-import { FilterDto } from './dto/filter.dto';
-import { ProfessionsFilterHelper } from '../helpers/professions-filter.helper';
+import { Industry } from '../../industries/industry.entity';
 import { FilterInput } from '../../common/interfaces/filter-input.interface';
+import { Nation } from '../../nations/nation';
+import { OrganisationsFilterHelper } from '../helpers/organisations-filter.helper';
+import { OrganisationsService } from '../organisations.service';
+import { FilterDto } from './dto/filter.dto';
+
 import { IndexTemplate } from './interfaces/index-template.interface';
 import { SearchPresenter } from './search.presenter';
 
-@Controller('professions/search')
+@Controller('regulatory-authorities/search')
 export class SearchController {
   constructor(
-    private readonly professionsService: ProfessionsService,
+    private readonly organisationsService: OrganisationsService,
     private readonly industriesService: IndustriesService,
     private readonly i18nService: I18nService,
   ) {}
 
   @Get()
-  @Render('professions/search/index')
+  @Render('organisations/search/index')
   async index(): Promise<IndexTemplate> {
     return this.createSearchResults(new FilterDto());
   }
 
   @Post()
-  @Render('professions/search/index')
+  @Render('organisations/search/index')
   async create(@Body() filter: FilterDto): Promise<IndexTemplate> {
     return this.createSearchResults(filter);
   }
@@ -34,19 +35,20 @@ export class SearchController {
     const allNations = Nation.all();
     const allIndustries = await this.industriesService.all();
 
-    const allProfessions = await this.professionsService.allConfirmed();
+    const allOrganisations =
+      await this.organisationsService.allWithProfessions();
 
     const filterInput = this.getFilterInput(filter, allNations, allIndustries);
 
-    const filteredProfessions = new ProfessionsFilterHelper(
-      allProfessions,
+    const filteredOrganisations = new OrganisationsFilterHelper(
+      allOrganisations,
     ).filter(filterInput);
 
     return new SearchPresenter(
       filterInput,
       allNations,
       allIndustries,
-      filteredProfessions,
+      filteredOrganisations,
       this.i18nService,
       '/select-service',
     ).present();

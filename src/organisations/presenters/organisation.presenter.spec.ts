@@ -109,7 +109,7 @@ describe('OrganisationPresenter', () => {
         expect(async () => {
           await presenter.tableRow();
         }).rejects.toThrowError(
-          "You must eagerly load professions to show industries. Try adding `{ relations: ['professions'] }` to your finder in the `OrganisationsService` class",
+          'You must eagerly load professions to show industries. Try calling a "WithProfessions" method on the `OrganisationsService` class',
         );
       });
     });
@@ -127,7 +127,7 @@ describe('OrganisationPresenter', () => {
         expect(async () => {
           await presenter.tableRow();
         }).rejects.toThrowError(
-          "You must eagerly load industries to show industries. Try adding `{ relations: ['professions.industries'] }` to your finder in the `OrganisationsService` class",
+          'You must eagerly load industries to show industries. Try calling a "WithProfessions" method on the `OrganisationsService` class',
         );
       });
     });

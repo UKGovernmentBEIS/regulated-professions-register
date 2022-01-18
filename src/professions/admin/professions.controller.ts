@@ -14,8 +14,8 @@ import { Industry } from '../../industries/industry.entity';
 import { IndustriesService } from '../../industries/industries.service';
 import { Nation } from '../../nations/nation';
 import { ProfessionsService } from '../professions.service';
-import { FilterHelper } from '../helpers/filter.helper';
-import { FilterInput } from '../interfaces/filter-input.interface';
+import { ProfessionsFilterHelper } from '../helpers/professions-filter.helper';
+import { FilterInput } from '../../common/interfaces/filter-input.interface';
 import { IndexTemplate } from './interfaces/index-template.interface';
 import {
   ProfessionsPresenter,
@@ -75,8 +75,12 @@ export class ProfessionsController {
       : 'single-organisation';
 
     // Once the user has an organisation, we will want to use that here for
-    // non-admin users
-    const userOrganisation = showAllOrgs ? null : allOrganisations[0];
+    // non-admin users. Until then, select a default organisation
+    const userOrganisation = showAllOrgs
+      ? null
+      : allOrganisations.find(
+          (organisation) => organisation.name === 'Department for Education',
+        ) || allOrganisations[0];
 
     const filterInput = this.getFilterInput(
       filter,
@@ -85,13 +89,13 @@ export class ProfessionsController {
       allIndustries,
     );
 
-    if (userOrganisation !== null) {
+    if (userOrganisation) {
       filterInput.organisations = [userOrganisation];
     }
 
-    const filteredProfessions = new FilterHelper(allProfessions).filter(
-      filterInput,
-    );
+    const filteredProfessions = new ProfessionsFilterHelper(
+      allProfessions,
+    ).filter(filterInput);
 
     return new ProfessionsPresenter(
       filterInput,

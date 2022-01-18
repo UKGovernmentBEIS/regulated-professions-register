@@ -17,6 +17,13 @@ describe('Listing professions', () => {
       );
     });
 
+    it('Professions are sorted alphabetically', () => {
+      cy.get('tbody tr th').then((elements) => {
+        const names = elements.map((_, element) => element.innerText).toArray();
+        cy.wrap(names).should('deep.equal', names.sort());
+      });
+    });
+
     it('The list page does not show draft professions', () => {
       cy.get('body').should('not.contain', 'Draft Profession');
     });

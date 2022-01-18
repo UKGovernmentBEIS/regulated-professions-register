@@ -14,12 +14,19 @@ describe('Searching a profession', () => {
     );
   });
 
-  it('I can view an unfiltered list of profession', () => {
+  it('I can view an unfiltered list of professions', () => {
     cy.get('body').should('contain', 'Registered Trademark Attorney');
     cy.get('body').should(
       'contain',
       'Secondary School Teacher in State maintained schools (England)',
     );
+  });
+
+  it('Organisations are sorted alphabetically', () => {
+    cy.get('h2').then((elements) => {
+      const names = elements.map((_, element) => element.innerText).toArray();
+      cy.wrap(names).should('deep.equal', names.sort());
+    });
   });
 
   it('The search page does not show draft professions', () => {

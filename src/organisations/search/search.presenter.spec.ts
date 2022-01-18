@@ -5,11 +5,21 @@ import { FilterInput } from '../../common/interfaces/filter-input.interface';
 import { SearchPresenter } from './search.presenter';
 import { IndustriesCheckboxPresenter } from '../../industries/industries-checkbox.presenter';
 import { NationsCheckboxPresenter } from '../../nations/nations-checkbox.presenter';
-import { ProfessionSearchResultPresenter } from './profession-search-result.presenter';
-import industryFactory from '../../testutils/factories/industry';
-import professionFactory from '../../testutils/factories/profession';
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 import { IndexTemplate } from './interfaces/index-template.interface';
+import { OrganisationSearchResultPresenter } from './organisation-search-result.presenter';
+import organisationFactory from '../../testutils/factories/organisation';
+import industryFactory from '../../testutils/factories/industry';
+
+const organisation1 = organisationFactory.build({
+  name: 'Example Organisation 1',
+});
+const organisation2 = organisationFactory.build({
+  name: 'Example Organisation 2',
+});
+const organisation3 = organisationFactory.build({
+  name: 'Example Organisation 3',
+});
 
 const industry1 = industryFactory.build({
   name: 'industries.example1',
@@ -22,22 +32,6 @@ const industry2 = industryFactory.build({
 const industry3 = industryFactory.build({
   name: 'industries.example3',
   id: 'example-industry-3',
-});
-
-const profession1 = professionFactory.build({
-  name: 'Example Profession 1',
-  occupationLocations: ['GB-ENG'],
-  industries: [industry1],
-});
-const profession2 = professionFactory.build({
-  name: 'Example Profession 1',
-  occupationLocations: ['GB-SCT', 'GB-WLS'],
-  industries: [industry2, industry3],
-});
-const profession3 = professionFactory.build({
-  name: 'Example Profession 3',
-  occupationLocations: ['GB-NIR'],
-  industries: [industry2, industry3],
 });
 
 const industries = [industry1, industry2, industry3];
@@ -64,7 +58,7 @@ describe('SearchPresenter', () => {
         filterInput,
         nations,
         industries,
-        [profession1, profession2, profession3],
+        [organisation1, organisation2, organisation3],
         i18nService,
         'back-link',
       );
@@ -91,19 +85,10 @@ describe('SearchPresenter', () => {
         },
         industriesCheckboxArgs,
         nationsCheckboxArgs,
-        professions: [
-          await new ProfessionSearchResultPresenter(
-            profession1,
-            i18nService,
-          ).present(),
-          await new ProfessionSearchResultPresenter(
-            profession2,
-            i18nService,
-          ).present(),
-          await new ProfessionSearchResultPresenter(
-            profession3,
-            i18nService,
-          ).present(),
+        organisations: [
+          await new OrganisationSearchResultPresenter(organisation1).present(),
+          await new OrganisationSearchResultPresenter(organisation2).present(),
+          await new OrganisationSearchResultPresenter(organisation3).present(),
         ],
         backLink: 'back-link',
       };

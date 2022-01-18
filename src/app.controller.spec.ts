@@ -60,7 +60,7 @@ describe('AppController', () => {
         appController.selectService(response, 'regulatory-authorities');
 
         expect(response.redirect).toHaveBeenCalledWith(
-          '/regulatory-authorities',
+          '/regulatory-authorities/search',
         );
       });
 

@@ -6,7 +6,7 @@ import { IndustriesCheckboxPresenter } from '../../industries/industries-checkbo
 import { Nation } from '../../nations/nation';
 import { NationsCheckboxPresenter } from '../../nations/nations-checkbox.presenter';
 import { OrganisationsCheckboxPresenter } from '../../organisations/organisations-checkbox-presenter';
-import { FilterInput } from '../interfaces/filter-input.interface';
+import { FilterInput } from '../../common/interfaces/filter-input.interface';
 import { IndexTemplate } from './interfaces/index-template.interface';
 import { ProfessionsPresenter as ProfessionsPresenter } from './professions.presenter';
 import { ListEntryPresenter } from './list-entry.presenter';
@@ -36,22 +36,22 @@ const organisation2 = organisationFactory.build({
 
 const organisations = [organisation1, organisation2];
 
-const professionA = professionFactory.build({
-  name: 'Example Profession A',
+const profession1 = professionFactory.build({
+  name: 'Example Profession 1',
   occupationLocations: ['GB-ENG'],
   industries: [transportIndustry],
   organisation: organisation1,
   updated_at: new Date(2011, 11, 1),
 });
-const professionB = professionFactory.build({
-  name: 'Example Profession B',
+const profession2 = professionFactory.build({
+  name: 'Example Profession 2',
   occupationLocations: ['GB-SCT', 'GB-NIR'],
   industries: [educationIndustry],
   organisation: organisation1,
   updated_at: new Date(2023, 1, 4),
 });
-const professionC = professionFactory.build({
-  name: 'Example Profession C',
+const profession3 = professionFactory.build({
+  name: 'Example Profession 3',
   occupationLocations: ['GB-WLS'],
   industries: [educationIndustry, transportIndustry],
   organisation: organisation2,
@@ -85,7 +85,7 @@ describe('ProfessionsPresenter', () => {
       Nation.all(),
       organisations,
       industries,
-      [professionC, professionA, professionB],
+      [profession1, profession2, profession3],
       request,
       i18nService,
     );
@@ -103,7 +103,7 @@ describe('ProfessionsPresenter', () => {
         headings: await ListEntryPresenter.headings(i18nService, 'overview'),
 
         professions: await Promise.all(
-          [professionA, professionB, professionC].map((profession) =>
+          [profession1, profession2, profession3].map((profession) =>
             new ListEntryPresenter(profession, i18nService).tableRow(
               'overview',
             ),
@@ -154,7 +154,7 @@ describe('ProfessionsPresenter', () => {
         ),
 
         professions: await Promise.all(
-          [professionA, professionB, professionC].map((profession) =>
+          [profession1, profession2, profession3].map((profession) =>
             new ListEntryPresenter(profession, i18nService).tableRow(
               'single-organisation',
             ),

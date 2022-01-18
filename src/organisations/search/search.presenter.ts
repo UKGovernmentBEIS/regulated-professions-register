@@ -3,17 +3,17 @@ import { IndustriesCheckboxPresenter } from '../../industries/industries-checkbo
 import { Industry } from '../../industries/industry.entity';
 import { Nation } from '../../nations/nation';
 import { NationsCheckboxPresenter } from '../../nations/nations-checkbox.presenter';
-import { Profession } from '../profession.entity';
 import { FilterInput } from '../../common/interfaces/filter-input.interface';
 import { IndexTemplate } from './interfaces/index-template.interface';
-import { ProfessionSearchResultPresenter } from './profession-search-result.presenter';
+import { OrganisationSearchResultPresenter } from './organisation-search-result.presenter';
+import { Organisation } from '../organisation.entity';
 
 export class SearchPresenter {
   constructor(
     private readonly filterInput: FilterInput,
     private readonly allNations: Nation[],
     private readonly allIndustries: Industry[],
-    private readonly filteredProfessions: Profession[],
+    private readonly filteredOrganisations: Organisation[],
     private readonly i18nService: I18nService,
     private readonly backLink: string,
   ) {}
@@ -31,17 +31,14 @@ export class SearchPresenter {
       this.i18nService,
     ).checkboxArgs();
 
-    const displayProfessions = await Promise.all(
-      this.filteredProfessions.map(async (profession) =>
-        new ProfessionSearchResultPresenter(
-          profession,
-          this.i18nService,
-        ).present(),
+    const displayOrganisations = await Promise.all(
+      this.filteredOrganisations.map(async (organisation) =>
+        new OrganisationSearchResultPresenter(organisation).present(),
       ),
     );
 
     return {
-      professions: displayProfessions,
+      organisations: displayOrganisations,
       nationsCheckboxArgs,
       industriesCheckboxArgs,
       filters: {
