@@ -42,6 +42,22 @@ describe('IneligibleExceptionFilter', () => {
       });
     });
 
+    describe('when the object name is not specified', () => {
+      beforeEach(async () => {
+        service = new ValidationExceptionFilter('blog-post/new');
+      });
+
+      it('spreads the object into the base object', () => {
+        service.catch(exception, host);
+
+        expect(reponse.render).toHaveBeenCalledWith('blog-post/new', {
+          ...exception.target,
+          errors: exception.fullMessages(),
+          url: request.url,
+        });
+      });
+    });
+
     describe('when additional variables are provided', () => {
       beforeEach(async () => {
         service = new ValidationExceptionFilter('blog-post/new', 'blogPost', {

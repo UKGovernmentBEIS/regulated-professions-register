@@ -30,6 +30,10 @@ declare global {
         translation: string,
         personalisations?: object,
       ): Chainable<string>;
+
+      checkInputValue(label: string, value: string): Chainable<string>;
+      checkTextareaValue(label: string, value: string): Chainable<string>;
+      checkSummaryListRowValue(key: string, value: string): Chainable<string>;
     }
   }
 }

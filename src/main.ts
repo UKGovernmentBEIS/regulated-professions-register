@@ -14,7 +14,7 @@ import { AuthenticationMidleware } from './middleware/authentication.middleware'
 import { nunjucksConfig } from './config/nunjucks.config';
 import { globalLocals } from './common/global-locals';
 
-import { ValidationFailedError } from './validation/validation-failed.error';
+import { ValidationFailedError } from './common/validation/validation-failed.error';
 import { HttpExceptionFilter } from './common/http-exception.filter';
 
 async function bootstrap() {

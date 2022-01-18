@@ -18,7 +18,7 @@ import { UsersService } from '../users.service';
 import { UserPermission } from '../user.entity';
 import { PermissionsDto } from './dto/permissions.dto';
 import { Permissions } from '../../common/permissions.decorator';
-import { ValidationExceptionFilter } from '../../validation/validation-exception.filter';
+import { ValidationExceptionFilter } from '../../common/validation/validation-exception.filter';
 import { backLink } from '../../common/utils';
 import { EditTemplate } from './interfaces/edit-template';
 @UseGuards(AuthenticationGuard)

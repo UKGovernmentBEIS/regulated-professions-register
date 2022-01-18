@@ -143,7 +143,7 @@ describe('OrganisationPresenter', () => {
           rows: [
             {
               key: {
-                text: 'Translation of `organisations.admin.form.label.alternateName`',
+                text: 'Translation of `organisations.label.alternateName`',
               },
               value: {
                 text: organisation.alternateName,
@@ -151,7 +151,7 @@ describe('OrganisationPresenter', () => {
             },
             {
               key: {
-                text: 'Translation of `organisations.admin.form.label.contactUrl`',
+                text: 'Translation of `organisations.label.contactUrl`',
               },
               value: {
                 html: presenter.contactUrl(),
@@ -159,7 +159,7 @@ describe('OrganisationPresenter', () => {
             },
             {
               key: {
-                text: 'Translation of `organisations.admin.form.label.address`',
+                text: 'Translation of `organisations.label.address`',
               },
               value: {
                 html: presenter.address(),
@@ -167,7 +167,7 @@ describe('OrganisationPresenter', () => {
             },
             {
               key: {
-                text: 'Translation of `organisations.admin.form.label.email`',
+                text: 'Translation of `organisations.label.email`',
               },
               value: {
                 html: presenter.email(),
@@ -175,7 +175,7 @@ describe('OrganisationPresenter', () => {
             },
             {
               key: {
-                text: 'Translation of `organisations.admin.form.label.telephone`',
+                text: 'Translation of `organisations.label.telephone`',
               },
               value: {
                 text: organisation.telephone,
@@ -187,19 +187,97 @@ describe('OrganisationPresenter', () => {
     });
 
     describe('when a field is missing', () => {
-      it('should filter out empty fields', async () => {
-        organisation = organisationFactory.build({ alternateName: '' });
-        const presenter = new OrganisationPresenter(organisation, i18nService);
-        const list = await presenter.summaryList();
+      describe('when removeBlank is true', () => {
+        it('should filter out empty fields', async () => {
+          organisation = organisationFactory.build({ alternateName: '' });
+          const presenter = new OrganisationPresenter(
+            organisation,
+            i18nService,
+          );
+          const list = await presenter.summaryList({ removeBlank: true });
 
-        expect(list.rows.length).toEqual(4);
-        expect(
-          list.rows.filter(
-            (item) =>
-              item.key ===
-              { text: 'organisations.admin.form.label.alternateName' },
-          ).length,
-        ).toEqual(0);
+          expect(list.rows.length).toEqual(4);
+          expect(
+            list.rows.filter(
+              (item) =>
+                item.key ===
+                { text: 'Translation of `organisations.label.alternateName`' },
+            ).length,
+          ).toEqual(0);
+        });
+      });
+
+      describe('when removeBlank is false', () => {
+        it('keeps empty rows intact', async () => {
+          organisation = organisationFactory.build({ alternateName: '' });
+          const presenter = new OrganisationPresenter(
+            organisation,
+            i18nService,
+          );
+          const list = await presenter.summaryList({ removeBlank: false });
+
+          expect(list.rows.length).toEqual(5);
+
+          expect(
+            list.rows.filter(
+              (item) =>
+                'text' in item.key &&
+                item.key.text ===
+                  'Translation of `organisations.label.alternateName`',
+            ).length,
+          ).toEqual(1);
+        });
+      });
+    });
+
+    describe('when includeName is true', () => {
+      it('should include the name of the organisation', async () => {
+        organisation = organisationFactory.build({ name: 'My Organisation' });
+        const presenter = new OrganisationPresenter(organisation, i18nService);
+        const list = await presenter.summaryList({ includeName: true });
+
+        expect(list.rows.length).toEqual(6);
+
+        expect(list.rows[0]).toEqual({
+          key: {
+            text: 'Translation of `organisations.label.name`',
+          },
+          value: {
+            text: 'My Organisation',
+          },
+        });
+      });
+    });
+
+    describe('when includeActions is true', () => {
+      it('should include an actions column', async () => {
+        organisation = organisationFactory.build({ name: 'My Organisation' });
+        const presenter = new OrganisationPresenter(organisation, i18nService);
+        const list = await presenter.summaryList({ includeActions: true });
+
+        for (const row of list.rows) {
+          const visuallyHiddenText =
+            'text' in row.key ? row.key.text : row.key.html;
+
+          expect(row.actions).toEqual({
+            items: [
+              {
+                href: `/admin/organisations/${organisation.slug}/edit`,
+                text: 'Translation of `app.change`',
+                visuallyHiddenText: visuallyHiddenText,
+              },
+            ],
+          });
+        }
+      });
+    });
+
+    describe('when classes are specified', () => {
+      it('should return the specified class', async () => {
+        const presenter = new OrganisationPresenter(organisation, i18nService);
+        const list = await presenter.summaryList({ classes: 'foo' });
+
+        expect(list.classes).toEqual('foo');
       });
     });
   });

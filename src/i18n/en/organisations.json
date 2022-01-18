@@ -1,6 +1,9 @@
 {
   "admin": {
     "heading": "Regulatory authorities",
+    "edit": {
+      "heading": "Amending a regulatory authority"
+    },
     "tableHeading": {
       "name": "Name",
       "alternateName": "Alternate name",
@@ -9,13 +12,42 @@
     },
     "form": {
       "label": {
-        "name": "Name",
+        "name": "Name of the regulatory authority",
         "alternateName": "Alternate name",
-        "contactUrl": "Website",
+        "url": "Website",
+        "contactUrl": "Contact details URL",
         "address": "Address",
         "email": "Email",
         "telephone": "Phone number"
+      },
+      "errors": {
+        "name": {
+          "empty": "Enter the name of the regulated profession"
+        },
+        "email": {
+          "invalid": "Please enter a valid email address"
+        },
+        "url": {
+          "invalid": "Please enter a valid website address"
+        },
+        "contactUrl": {
+          "invalid": "Please enter a valid contact details web address"
+        }
+      },
+      "headings": {
+        "confirmation": "Regulatory authority amended"
+      },
+      "body": {
+        "confirmation": {
+          "panel": "{name} has been updated",
+          "next": "What happens next?"
+        }
       }
+    },
+    "button": {
+      "edit": "Edit this regulatory authority",
+      "delete": "Delete this regulatory authority",
+      "amend": "Amend regulatory authority"
     }
   },
   "search": {
@@ -47,5 +79,13 @@
   },
   "headings": {
     "professions": "Regulated professions"
+  },
+  "label": {
+    "name": "Name",
+    "alternateName": "Alternate name",
+    "contactUrl": "Website",
+    "address": "Address",
+    "email": "Email",
+    "telephone": "Phone number"
   }
 }

@@ -83,3 +83,45 @@ Cypress.Commands.add(
     return translate(translation, personalisations);
   },
 );
+
+/**
+ * Check a form element's value
+ */
+
+Cypress.Commands.add('checkInputValue', (label: string, value: string) => {
+  return cy.translate(label).then((formLabel) => {
+    cy.get('body').should('contain', formLabel);
+    cy.get('label')
+      .contains(formLabel)
+      .siblings('input')
+      .then(($input) => {
+        cy.wrap($input).should('have.value', value);
+      });
+  });
+});
+
+Cypress.Commands.add('checkTextareaValue', (label: string, value: string) => {
+  return cy.translate(label).then((formLabel) => {
+    cy.get('body').should('contain', formLabel);
+    cy.get('label')
+      .contains(formLabel)
+      .siblings('textarea')
+      .then(($textarea) => {
+        cy.wrap($textarea).should('contain', value);
+      });
+  });
+});
+
+Cypress.Commands.add(
+  'checkSummaryListRowValue',
+  (key: string, value: string) => {
+    return cy.translate(key).then((label) => {
+      cy.get('.govuk-summary-list__key')
+        .contains(label)
+        .siblings('.govuk-summary-list__value')
+        .then(($summaryListValue) => {
+          cy.wrap($summaryListValue).should('contain', value);
+        });
+    });
+  },
+);

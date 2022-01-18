@@ -16,7 +16,9 @@ describe('globalLocals', () => {
   let next: DeepMocked<NextFunction>;
 
   beforeEach(() => {
-    request = createMock<RequestWithAppSession>();
+    request = createMock<RequestWithAppSession>({
+      originalUrl: 'http://localhost/foo',
+    });
     response = createMock<Response>({
       app: createMock<Application>({}),
     });
@@ -37,6 +39,7 @@ describe('globalLocals', () => {
 
       expect(response.app.locals.isLoggedin).toEqual(true);
       expect(response.app.locals.user).toEqual(user);
+      expect(response.app.locals.currentUrl).toEqual('http://localhost/foo');
     });
   });
 
@@ -46,6 +49,7 @@ describe('globalLocals', () => {
 
       expect(response.app.locals.isLoggedin).toEqual(false);
       expect(response.app.locals.user).toEqual(undefined);
+      expect(response.app.locals.currentUrl).toEqual('http://localhost/foo');
     });
   });
 });

@@ -24,6 +24,9 @@ describe('OrganisationsService', () => {
             findOne: () => {
               return organisation;
             },
+            save: () => {
+              return organisation;
+            },
           },
         },
       ],
@@ -95,6 +98,18 @@ describe('OrganisationsService', () => {
     });
   });
 
+  describe('findBySlug', () => {
+    it('should return an Organisation', async () => {
+      const repoSpy = jest.spyOn(repo, 'findOne');
+      const organisation = await service.findBySlug('some-slug');
+
+      expect(organisation).toEqual(organisation);
+      expect(repoSpy).toHaveBeenCalledWith({
+        where: { slug: 'some-slug' },
+      });
+    });
+  });
+
   describe('findBySlugWithProfessions', () => {
     it('should return an Organisation, populated with Professions', async () => {
       const repoSpy = jest.spyOn(repo, 'findOne');
@@ -105,6 +120,17 @@ describe('OrganisationsService', () => {
         where: { slug: 'some-slug' },
         relations: ['professions'],
       });
+    });
+  });
+
+  describe('save', () => {
+    it('should save an Organisation', async () => {
+      const organisation = organisationFactory.build();
+      const repoSpy = jest.spyOn(repo, 'save');
+
+      await service.save(organisation);
+
+      expect(repoSpy).toHaveBeenCalledWith(organisation);
     });
   });
 });

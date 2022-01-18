@@ -12,6 +12,9 @@
   "errors": {
     "heading": "There is a problem"
   },
+  "headings": {
+    "checkAnswers": "Check your answers"
+  },
   "backToDashboard": "Back to the dashboard",
   "yes": "Yes",
   "no": "No",
