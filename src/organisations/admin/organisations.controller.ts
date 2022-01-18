@@ -3,11 +3,11 @@ import { I18nService } from 'nestjs-i18n';
 
 import { AuthenticationGuard } from '../../common/authentication.guard';
 import { OrganisationsService } from '../organisations.service';
-import { OrganisationPresenter } from '../presenters/organisation.presenter';
 import { OrganisationsPresenter } from '../presenters/organisations.presenter';
-import { ProfessionPresenter } from '../../professions/presenters/profession.presenter';
 
 import { EditTemplate } from './interfaces/edit-template.interface';
+import { OrganisationSummaryPresenter } from '../presenters/organisation-summary.presenter';
+
 @UseGuards(AuthenticationGuard)
 @Controller('/admin/organisations')
 export class OrganisationsController {
@@ -35,27 +35,13 @@ export class OrganisationsController {
   async show(@Param('slug') slug: string): Promise<EditTemplate> {
     const organisation =
       await this.organisationsService.findBySlugWithProfessions(slug);
-    const organisationPresenter = new OrganisationPresenter(
+
+    const organisationSummaryPresenter = new OrganisationSummaryPresenter(
       organisation,
+      '/admin/organisations',
       this.i18nService,
     );
-    const professionPresenters = organisation.professions.map(
-      (profession) => new ProfessionPresenter(profession, this.i18nService),
-    );
 
-    return {
-      organisation,
-      summaryList: await organisationPresenter.summaryList(),
-      professions: await Promise.all(
-        professionPresenters.map(async (presenter) => {
-          return {
-            name: presenter.profession.name,
-            slug: presenter.profession.slug,
-            summaryList: await presenter.summaryList(),
-          };
-        }),
-      ),
-      backLink: '/admin/organisations',
-    };
+    return organisationSummaryPresenter.present();
   }
 }

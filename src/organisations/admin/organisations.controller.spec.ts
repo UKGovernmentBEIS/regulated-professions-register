@@ -6,27 +6,19 @@ import { OrganisationsController } from './organisations.controller';
 import { OrganisationsService } from '../organisations.service';
 import { Organisation } from '../organisation.entity';
 import { Table } from '../../common/interfaces/table';
-import { SummaryList } from '../../common/interfaces/summary-list';
 
 import { OrganisationsPresenter } from '../presenters/organisations.presenter';
-import { OrganisationPresenter } from '../presenters/organisation.presenter';
-import { ProfessionPresenter } from '../../professions/presenters/profession.presenter';
 
 import organisationFactory from '../../testutils/factories/organisation';
 import professionFactory from '../../testutils/factories/profession';
+import { OrganisationSummaryPresenter } from '../presenters/organisation-summary.presenter';
+import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 
 const mockTable = (): Table => {
   return {
     firstCellIsHeader: true,
     head: [{ text: 'Headers' }],
     rows: [[{ text: 'Row 1' }], [{ text: 'Row 2' }], [{ text: 'Row 3' }]],
-  };
-};
-
-const mockSummaryList = (): SummaryList => {
-  return {
-    classes: 'govuk-summary-list--no-border',
-    rows: [],
   };
 };
 
@@ -42,26 +34,7 @@ jest.mock('../presenters/organisations.presenter', () => {
   };
 });
 
-jest.mock('../presenters/organisation.presenter', () => {
-  return {
-    OrganisationPresenter: jest.fn().mockImplementation(() => {
-      return {
-        summaryList: mockSummaryList,
-      };
-    }),
-  };
-});
-
-jest.mock('../../professions/presenters/profession.presenter', () => {
-  return {
-    ProfessionPresenter: jest.fn().mockImplementation((profession) => {
-      return {
-        profession: profession,
-        summaryList: mockSummaryList,
-      };
-    }),
-  };
-});
+jest.mock('../presenters/organisation-summary.presenter');
 
 describe('OrganisationsController', () => {
   let controller: OrganisationsController;
@@ -69,11 +42,7 @@ describe('OrganisationsController', () => {
   let organisations: Organisation[];
   let organisation: Organisation;
 
-  const i18nService: DeepMocked<I18nService> = createMock<I18nService>({
-    translate: async (key: string) => {
-      return key;
-    },
-  });
+  const i18nService = createMockI18nService();
 
   beforeEach(async () => {
     organisations = organisationFactory.buildList(5, {
@@ -128,40 +97,22 @@ describe('OrganisationsController', () => {
 
   describe('show', () => {
     it('should return variables for the show template', async () => {
-      expect(await controller.show('slug')).toEqual({
-        backLink: '/admin/organisations',
-        organisation: organisation,
-        summaryList: mockSummaryList(),
-        professions: [
-          {
-            name: organisation.professions[0].name,
-            slug: organisation.professions[0].slug,
-            summaryList: mockSummaryList(),
-          },
-          {
-            name: organisation.professions[1].name,
-            slug: organisation.professions[1].slug,
-            summaryList: mockSummaryList(),
-          },
-        ],
-      });
+      const expected = await new OrganisationSummaryPresenter(
+        organisation,
+        '/admin/organisations',
+        i18nService,
+      ).present();
+
+      expect(await controller.show('slug')).toEqual(expected);
 
       expect(
         organisationsService.findBySlugWithProfessions,
       ).toHaveBeenCalledWith('slug');
 
-      expect(OrganisationPresenter).toHaveBeenCalledWith(
+      expect(OrganisationSummaryPresenter).toHaveBeenNthCalledWith(
+        2,
         organisation,
-        i18nService,
-      );
-
-      expect(ProfessionPresenter).toHaveBeenCalledWith(
-        organisation.professions[0],
-        i18nService,
-      );
-
-      expect(ProfessionPresenter).toHaveBeenCalledWith(
-        organisation.professions[1],
+        '/admin/organisations',
         i18nService,
       );
     });
