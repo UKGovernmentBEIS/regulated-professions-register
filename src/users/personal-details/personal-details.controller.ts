@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 
-import { ValidationFailedError } from '../../validation/validation-failed.error';
+import { ValidationFailedError } from '../../common/validation/validation-failed.error';
 import { Validator } from '../../helpers/validator';
 import { UsersService } from '../users.service';
 import { UserPermission } from './../user.entity';

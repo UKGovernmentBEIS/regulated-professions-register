@@ -14,7 +14,7 @@ import { NationsCheckboxPresenter } from '../../../nations/nations-checkbox.pres
 import { Validator } from '../../../helpers/validator';
 import { IndustriesService } from '../../../industries/industries.service';
 import { Nation } from '../../../nations/nation';
-import { ValidationFailedError } from '../../../validation/validation-failed.error';
+import { ValidationFailedError } from '../../../common/validation/validation-failed.error';
 import { Profession } from '../../profession.entity';
 import { ProfessionsService } from '../../professions.service';
 import { TopLevelDetailsDto } from './dto/top-level-details.dto';

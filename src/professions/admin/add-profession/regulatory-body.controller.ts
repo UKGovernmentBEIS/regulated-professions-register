@@ -20,7 +20,7 @@ import { Organisation } from '../../../organisations/organisation.entity';
 import { MandatoryRegistrationRadioButtonsPresenter } from '../mandatory-registration-radio-buttons-presenter';
 import { Validator } from '../../../helpers/validator';
 import { RegulatoryBodyDto } from './dto/regulatory-body.dto';
-import { ValidationFailedError } from '../../../validation/validation-failed.error';
+import { ValidationFailedError } from '../../../common/validation/validation-failed.error';
 import { Permissions } from '../../../common/permissions.decorator';
 import { UserPermission } from '../../../users/user.entity';
 @UseGuards(AuthenticationGuard)
