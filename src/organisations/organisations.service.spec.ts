@@ -91,9 +91,9 @@ describe('OrganisationsService', () => {
   describe('find', () => {
     it('returns an Organisation', async () => {
       const repoSpy = jest.spyOn(repo, 'findOne');
-      const organisations = await service.find('some-uuid');
+      const foundOrganisation = await service.find('some-uuid');
 
-      expect(organisations).toEqual(organisation);
+      expect(foundOrganisation).toEqual(organisation);
       expect(repoSpy).toHaveBeenCalled();
     });
   });
@@ -101,9 +101,9 @@ describe('OrganisationsService', () => {
   describe('findBySlug', () => {
     it('should return an Organisation', async () => {
       const repoSpy = jest.spyOn(repo, 'findOne');
-      const organisation = await service.findBySlug('some-slug');
+      const foundOrganisation = await service.findBySlug('some-slug');
 
-      expect(organisation).toEqual(organisation);
+      expect(foundOrganisation).toEqual(organisation);
       expect(repoSpy).toHaveBeenCalledWith({
         where: { slug: 'some-slug' },
       });
@@ -113,9 +113,9 @@ describe('OrganisationsService', () => {
   describe('findBySlugWithProfessions', () => {
     it('should return an Organisation, populated with Professions', async () => {
       const repoSpy = jest.spyOn(repo, 'findOne');
-      const organisation = await service.findBySlugWithProfessions('some-slug');
+      const foundOrganisation = await service.findBySlugWithProfessions('some-slug');
 
-      expect(organisation).toEqual(organisation);
+      expect(foundOrganisation).toEqual(organisation);
       expect(repoSpy).toHaveBeenCalledWith({
         where: { slug: 'some-slug' },
         relations: ['professions'],
