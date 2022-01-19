@@ -3,6 +3,8 @@
 {% from "govuk/components/textarea/macro.njk" import govukTextarea %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 
+{% set bodyClasses = "rpr-internal__page" %}
+
 {% block content %}
 
   <a href="{{backLink}}" class="govuk-back-link">{{ ('app.back' | t) }}</a>
