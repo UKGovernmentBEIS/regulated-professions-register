@@ -90,7 +90,7 @@ describe('SearchController', () => {
         industries,
         [profession1, profession2],
         i18nService,
-        '/select-service',
+        '/',
       ).present();
 
       expect(result).toEqual(expected);
@@ -126,7 +126,7 @@ describe('SearchController', () => {
         industries,
         [],
         i18nService,
-        '/select-service',
+        '/',
       ).present();
 
       expect(result).toEqual(expected);
@@ -149,7 +149,7 @@ describe('SearchController', () => {
         industries,
         [profession2],
         i18nService,
-        '/select-service',
+        '/',
       ).present();
 
       expect(result).toEqual(expected);
@@ -172,7 +172,7 @@ describe('SearchController', () => {
         industries,
         [profession1],
         i18nService,
-        '/select-service',
+        '/',
       ).present();
 
       expect(result).toEqual(expected);
@@ -195,7 +195,7 @@ describe('SearchController', () => {
         industries,
         [profession2],
         i18nService,
-        '/select-service',
+        '/',
       ).present();
 
       expect(result).toEqual(expected);
@@ -218,7 +218,7 @@ describe('SearchController', () => {
         industries,
         [profession1, profession2],
         i18nService,
-        '/select-service',
+        '/',
       ).present();
 
       expect(result).toEqual(expected);
