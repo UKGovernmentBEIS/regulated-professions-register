@@ -4,6 +4,8 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 
+{% set bodyClasses = "rpr-internal__page" %}
+
 {% block content %}
 
   <a href="{{backLink}}" class="govuk-back-link">{{ ('app.back' | t) }}</a>
