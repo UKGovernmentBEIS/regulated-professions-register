@@ -59,8 +59,8 @@
     },
     "foundSingular": "authority found.",
     "foundPlural": "authorities found.",
-    "form": {
-      "nameFilter": {
+    "filter": {
+      "keywords": {
         "label": "Authority that you are looking for",
         "hint": "For example, education"
       },
@@ -72,9 +72,7 @@
         "label": "Industry / sector",
         "hint": "Select all that apply."
       },
-      "button": {
-        "filter": "Filter results"
-      }
+      "button": "Filter results"
     }
   },
   "headings": {

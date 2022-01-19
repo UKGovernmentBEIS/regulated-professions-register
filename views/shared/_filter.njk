@@ -2,58 +2,108 @@
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
-<div class="rpr-listing__filters-container">
-  <form action="" method="post" class="form">
-    {{ govukInput({
-      label: {
-        text: (filterTextPrefix + ".form.nameFilter.label") | t,
-        classes: "govuk-label--s",
-        isPageHeading: true
-      },
-      classes: "govuk-input--width-10",
-      hint: {
-        text: (filterTextPrefix + ".form.nameFilter.hint") | t
-      },
-      id: "nameFilter",
-      name: "keywords",
-      value: filters.keywords
-    }) }}
+<form action="" method="{{ filterFormMethod }}" class="form">
+  <div class="{{ filterRowClass }}">
+     <div class="{{ filterColumnClass }}">
+      {{ govukInput({
+        label: {
+          text: (filterTextPrefix + ".filter.keywords.label") | t,
+          classes: "govuk-label--s"
+        },
+        classes: filterKeywordsWidthClass,
+        hint: {
+          text: (filterTextPrefix + ".filter.keywords.hint") | t
+        },
+        id: "keywordsFilter",
+        name: "keywords",
+        value: filters.keywords
+      }) }}
+    </div>
 
-    {{ govukCheckboxes({
-      name: "nations[]",
-      classes: ("govuk-checkboxes--small rpr-listing__filter"),
-      fieldset: {
-        legend: {
-        text: (filterTextPrefix + ".form.nations.label") | t,
-        isPageHeading: true,
-        classes: "govuk-fieldset__legend--s"
-        }
-      },
-      hint: {
-        text: (filterTextPrefix + ".form.nations.hint") | t
-      },
-      items: nationsCheckboxArgs
-    }) }}
+    {% if nationsCheckboxArgs %}
+      <div class="{{ filterColumnClass }}">
+        {{ govukCheckboxes({
+          name: "nations[]",
+          classes: filterCheckboxClasses,
+          fieldset: {
+            legend: {
+            text: (filterTextPrefix + ".filter.nations.label") | t,
+            classes: "govuk-fieldset__legend--s"
+            }
+          },
+          hint: {
+            text: (filterTextPrefix + ".filter.nations.hint") | t
+          },
+          items: nationsCheckboxArgs
+        }) }}
+      </div>
+    {% endif %}
 
-    {{ govukCheckboxes({
-      name: "industries[]",
-      classes: "govuk-checkboxes--small rpr-listing__filter",
-      fieldset: {
-        legend: {
-        text: (filterTextPrefix + ".form.industries.label") | t,
-        isPageHeading: true,
-        classes: "govuk-fieldset__legend--s"
-        }
-      },
-      hint: {
-        text: (filterTextPrefix + ".form.industries.hint") | t
-      },
-      items: industriesCheckboxArgs
-    }) }}
+    {% if organisationsCheckboxArgs %}
+      <div class="{{ filterColumnClass }}">
+        {{ govukCheckboxes({
+          name: "organisations[]",
+          classes: filterCheckboxClasses,
+          fieldset: {
+            legend: {
+            text: (filterTextPrefix + ".filter.organisations.label") | t,
+            classes: "govuk-fieldset__legend--s"
+            }
+          },
+          hint: {
+            text: (filterTextPrefix + ".filter.organisations.hint") | t
+          },
+          items: organisationsCheckboxArgs
+        }) }}
+      </div>
+    {% endif %}
+      
+    {% if industriesCheckboxArgs %}
+      <div class="{{ filterColumnClass }}">
+        {{ govukCheckboxes({
+          name: "industries[]",
+          classes: filterCheckboxClasses,
+          fieldset: {
+            legend: {
+            text: (filterTextPrefix + ".filter.industries.label") | t,
+            classes: "govuk-fieldset__legend--s"
+            }
+          },
+          hint: {
+            text: (filterTextPrefix + ".filter.industries.hint") | t
+          },
+          items: industriesCheckboxArgs
+        }) }}
+      </div>
+    {% endif %}
 
-    {{ govukButton({
-      text: (filterTextPrefix + ".form.button.filter") | t
-    }) }}
-  </form>
-</div>
-<div class="govuk-!-padding-bottom-9"></div>
+    {% if changedByCheckboxArgs %}
+      <div class="{{ filterColumnClass }}">
+        {{ govukCheckboxes({
+          name: "changedBy[]",
+          classes: filterCheckboxClasses,
+          fieldset: {
+            legend: {
+            text: (filterTextPrefix + ".filter.changedBy.label") | t,
+            classes: "govuk-fieldset__legend--s"
+            }
+          },
+          hint: {
+            text: (filterTextPrefix + ".filter.changedBy.hint") | t
+          },
+          items: changedByCheckboxArgs
+        }) }}
+      </div>
+    {% endif %}
+
+  </div>
+
+  <div class="{{ filterRowClass }}">
+    <div class="{{ filterButtonColumnClass }}">
+      {{ govukButton({
+        text: (filterTextPrefix + ".filter.button") | t,
+        classes: filterButtonClasses
+      }) }}
+    </div>
+  </div>
+</form>
