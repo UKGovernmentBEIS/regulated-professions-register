@@ -1,6 +1,6 @@
 import { I18nService } from 'nestjs-i18n';
 import { ProfessionPresenter } from '../../professions/presenters/profession.presenter';
-import { ShowTemplate } from '../admin/interfaces/show-template.interface';
+import { ShowTemplate } from '../interfaces/show-template.interface';
 import { Organisation } from '../organisation.entity';
 import { OrganisationPresenter } from './organisation.presenter';
 

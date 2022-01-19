@@ -19,7 +19,7 @@ import { OrganisationPresenter } from '../presenters/organisation.presenter';
 import { OrganisationsPresenter } from '../presenters/organisations.presenter';
 
 import { ConfirmTemplate } from './interfaces/confirm-template.interface';
-import { ShowTemplate } from './interfaces/show-template.interface';
+import { ShowTemplate } from '../interfaces/show-template.interface';
 import { OrganisationDto } from './dto/organisation.dto';
 import { OrganisationSummaryPresenter } from '../presenters/organisation-summary.presenter';
 
