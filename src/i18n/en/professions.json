@@ -13,6 +13,10 @@
       "legislation": "Legislation",
       "edit": "Are you sure you want to amend {professionName}?"
     },
+    "captions": {
+      "add": "Adding a new profession",
+      "edit": "Amending a profession"
+    },
     "editProfession": "Use this section of the site to add a new profession",
     "label": {
       "topLevelInformation": {
