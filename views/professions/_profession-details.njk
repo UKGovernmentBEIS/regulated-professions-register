@@ -1,6 +1,6 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-<span class="govuk-caption-l">Placeholder Authority</span>
+<span class="govuk-caption-l">{{ profession.organisation.name }}</span>
 
 <h1 class="govuk-heading-xl">{{ profession.name }}</h1>
 
@@ -53,7 +53,7 @@
         text: ("professions.show.bodies.regulatedAuthority" | t)
       },
       value: {
-        text: "Placeholder authority"
+        text: profession.organisation.name
       }
     },
     {
@@ -61,7 +61,7 @@
         text: ("professions.show.bodies.address" | t)
       },
       value: {
-        html: 'Placeholder address'
+        html: profession.organisation.address
       }
     },
     {
@@ -69,7 +69,7 @@
         text: ("professions.show.bodies.emailAddress" | t)
       },
       value: {
-        text: "Placeholder email"
+        text: profession.organisation.email
       }
     },
     {
@@ -77,7 +77,7 @@
         text: ("professions.show.bodies.url" | t)
       },
       value: {
-        text: "Placeholder url"
+        text: profession.organisation.url
       }
     },
     {
@@ -85,15 +85,7 @@
         text: ("professions.show.bodies.phoneNumber" | t)
       },
       value: {
-        text: "Placeholder phone numer"
-      }
-    },
-    {
-      key: {
-        text: ("professions.show.bodies.mandatoryRegistration" | t)
-      },
-      value: {
-        text: "Placeholder response"
+        text: profession.organisation.telephone
       }
     }
   ]

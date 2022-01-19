@@ -158,8 +158,7 @@
       "address": "Address",
       "emailAddress": "Email address",
       "url": "URL",
-      "phoneNumber": "Phone number",
-      "mandatoryRegistration": "Mandatory registration with professional bodies"
+      "phoneNumber": "Phone number"
     },
     "regulatedActivities": {
       "heading": "Regulated activities",
