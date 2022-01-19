@@ -148,7 +148,7 @@ describe('Adding a new profession', () => {
       cy.get('body').should('contain', 'An example Qualification level');
       cy.get('body').should('contain', 'Another method');
       cy.translate(
-        'professions.form.radioButtons.methodsToObtainQualification.generalSecondaryEducation',
+        'professions.methodsToObtainQualification.generalSecondaryEducation',
       ).then((method) => {
         cy.get('body').should('contain', method);
       });

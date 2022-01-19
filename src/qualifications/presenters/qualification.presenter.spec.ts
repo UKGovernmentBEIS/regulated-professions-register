@@ -27,7 +27,7 @@ describe(QualificationPresenter, () => {
         const presenter = new QualificationPresenter(qualification);
 
         expect(presenter.methodToObtainQualification).toEqual(
-          'professions.form.radioButtons.methodsToObtainQualification.degreeLevel',
+          'professions.methodsToObtainQualification.degreeLevel',
         );
       });
     });
@@ -59,7 +59,7 @@ describe(QualificationPresenter, () => {
         const presenter = new QualificationPresenter(qualification);
 
         expect(presenter.mostCommonPathToObtainQualification).toEqual(
-          'professions.form.radioButtons.methodsToObtainQualification.degreeLevel',
+          'professions.methodsToObtainQualification.degreeLevel',
         );
       });
     });

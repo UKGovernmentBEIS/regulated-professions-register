@@ -24,42 +24,42 @@ describe(MethodToObtainQualificationRadioButtonsPresenter, () => {
         presenter.radioButtonArgs('methodToObtainQualification'),
       ).resolves.toEqual([
         {
-          text: 'Translation of `professions.form.radioButtons.methodsToObtainQualification.generalSecondaryEducation`',
+          text: 'Translation of `professions.methodsToObtainQualification.generalSecondaryEducation`',
           value: MethodToObtain.GeneralSecondaryEducation,
           checked: false,
           conditional: null,
         },
         {
-          text: 'Translation of `professions.form.radioButtons.methodsToObtainQualification.generalOrVocationalPostSecondaryEducation`',
+          text: 'Translation of `professions.methodsToObtainQualification.generalOrVocationalPostSecondaryEducation`',
           value: MethodToObtain.GeneralOrVocationalPostSecondaryEducation,
           checked: false,
           conditional: null,
         },
         {
-          text: 'Translation of `professions.form.radioButtons.methodsToObtainQualification.generalPostSecondaryEducationMandatoryVocational`',
+          text: 'Translation of `professions.methodsToObtainQualification.generalPostSecondaryEducationMandatoryVocational`',
           value:
             MethodToObtain.GeneralPostSecondaryEducationMandatoryVocational,
           checked: false,
           conditional: null,
         },
         {
-          text: 'Translation of `professions.form.radioButtons.methodsToObtainQualification.vocationalPostSecondaryEducation`',
+          text: 'Translation of `professions.methodsToObtainQualification.vocationalPostSecondaryEducation`',
           value: MethodToObtain.VocationalPostSecondaryEducation,
           checked: false,
           conditional: null,
         },
         {
-          text: 'Translation of `professions.form.radioButtons.methodsToObtainQualification.degreeLevel`',
+          text: 'Translation of `professions.methodsToObtainQualification.degreeLevel`',
           value: MethodToObtain.DegreeLevel,
           checked: false,
           conditional: null,
         },
         {
-          text: 'Translation of `professions.form.radioButtons.methodsToObtainQualification.others`',
+          text: 'Translation of `professions.methodsToObtainQualification.others`',
           value: MethodToObtain.Others,
           checked: false,
           conditional: {
-            html: `<div class="govuk-form-group"><div id="methodToObtainQualification-hint" class="govuk-hint">Translation of \`professions.form.radioButtons.methodsToObtainQualification.otherHint\`</div><textarea class="govuk-textarea" id="otherMethodToObtainQualification" rows="5" name="otherMethodToObtainQualification"></textarea></div>`,
+            html: `<div class="govuk-form-group"><div id="methodToObtainQualification-hint" class="govuk-hint">Translation of \`professions.methodsToObtainQualification.otherHint\`</div><textarea class="govuk-textarea" id="otherMethodToObtainQualification" rows="5" name="otherMethodToObtainQualification"></textarea></div>`,
           },
         },
       ]);
@@ -77,42 +77,42 @@ describe(MethodToObtainQualificationRadioButtonsPresenter, () => {
         presenter.radioButtonArgs('methodToObtainQualification'),
       ).resolves.toEqual([
         {
-          text: 'Translation of `professions.form.radioButtons.methodsToObtainQualification.generalSecondaryEducation`',
+          text: 'Translation of `professions.methodsToObtainQualification.generalSecondaryEducation`',
           value: MethodToObtain.GeneralSecondaryEducation,
           checked: false,
           conditional: null,
         },
         {
-          text: 'Translation of `professions.form.radioButtons.methodsToObtainQualification.generalOrVocationalPostSecondaryEducation`',
+          text: 'Translation of `professions.methodsToObtainQualification.generalOrVocationalPostSecondaryEducation`',
           value: MethodToObtain.GeneralOrVocationalPostSecondaryEducation,
           checked: false,
           conditional: null,
         },
         {
-          text: 'Translation of `professions.form.radioButtons.methodsToObtainQualification.generalPostSecondaryEducationMandatoryVocational`',
+          text: 'Translation of `professions.methodsToObtainQualification.generalPostSecondaryEducationMandatoryVocational`',
           value:
             MethodToObtain.GeneralPostSecondaryEducationMandatoryVocational,
           checked: false,
           conditional: null,
         },
         {
-          text: 'Translation of `professions.form.radioButtons.methodsToObtainQualification.vocationalPostSecondaryEducation`',
+          text: 'Translation of `professions.methodsToObtainQualification.vocationalPostSecondaryEducation`',
           value: MethodToObtain.VocationalPostSecondaryEducation,
           checked: false,
           conditional: null,
         },
         {
-          text: 'Translation of `professions.form.radioButtons.methodsToObtainQualification.degreeLevel`',
+          text: 'Translation of `professions.methodsToObtainQualification.degreeLevel`',
           value: MethodToObtain.DegreeLevel,
           checked: true,
           conditional: null,
         },
         {
-          text: 'Translation of `professions.form.radioButtons.methodsToObtainQualification.others`',
+          text: 'Translation of `professions.methodsToObtainQualification.others`',
           value: MethodToObtain.Others,
           checked: false,
           conditional: {
-            html: `<div class="govuk-form-group"><div id="methodToObtainQualification-hint" class="govuk-hint">Translation of \`professions.form.radioButtons.methodsToObtainQualification.otherHint\`</div><textarea class="govuk-textarea" id="otherMethodToObtainQualification" rows="5" name="otherMethodToObtainQualification"></textarea></div>`,
+            html: `<div class="govuk-form-group"><div id="methodToObtainQualification-hint" class="govuk-hint">Translation of \`professions.methodsToObtainQualification.otherHint\`</div><textarea class="govuk-textarea" id="otherMethodToObtainQualification" rows="5" name="otherMethodToObtainQualification"></textarea></div>`,
           },
         },
       ]);
@@ -133,10 +133,10 @@ describe(MethodToObtainQualificationRadioButtonsPresenter, () => {
             presenter.radioButtonArgs('methodToObtainQualification'),
           ).resolves.toContainEqual({
             value: MethodToObtain.Others,
-            text: 'Translation of `professions.form.radioButtons.methodsToObtainQualification.others`',
+            text: 'Translation of `professions.methodsToObtainQualification.others`',
             checked: true,
             conditional: {
-              html: `<div class="govuk-form-group"><div id="methodToObtainQualification-hint" class="govuk-hint">Translation of \`professions.form.radioButtons.methodsToObtainQualification.otherHint\`</div><textarea class="govuk-textarea" id="otherMethodToObtainQualification" rows="5" name="otherMethodToObtainQualification">Another method for obtaining the qualification</textarea></div>`,
+              html: `<div class="govuk-form-group"><div id="methodToObtainQualification-hint" class="govuk-hint">Translation of \`professions.methodsToObtainQualification.otherHint\`</div><textarea class="govuk-textarea" id="otherMethodToObtainQualification" rows="5" name="otherMethodToObtainQualification">Another method for obtaining the qualification</textarea></div>`,
             },
           });
         });
@@ -167,10 +167,10 @@ describe(MethodToObtainQualificationRadioButtonsPresenter, () => {
             presenter.radioButtonArgs('methodToObtainQualification'),
           ).resolves.toContainEqual({
             value: MethodToObtain.Others,
-            text: 'Translation of `professions.form.radioButtons.methodsToObtainQualification.others`',
+            text: 'Translation of `professions.methodsToObtainQualification.others`',
             checked: true,
             conditional: {
-              html: `<div class="govuk-form-group ${expectedErrorFormClass}"><div id="methodToObtainQualification-hint" class="govuk-hint">Translation of \`professions.form.radioButtons.methodsToObtainQualification.otherHint\`</div>${expectedErrorParagraph}<textarea class="govuk-textarea" id="otherMethodToObtainQualification" rows="5" name="otherMethodToObtainQualification"></textarea></div>`,
+              html: `<div class="govuk-form-group ${expectedErrorFormClass}"><div id="methodToObtainQualification-hint" class="govuk-hint">Translation of \`professions.methodsToObtainQualification.otherHint\`</div>${expectedErrorParagraph}<textarea class="govuk-textarea" id="otherMethodToObtainQualification" rows="5" name="otherMethodToObtainQualification"></textarea></div>`,
             },
           });
         });

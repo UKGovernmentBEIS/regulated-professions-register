@@ -8,12 +8,12 @@ export default class QualificationPresenter {
   readonly methodToObtainQualification: string =
     this.qualification.methodToObtain === MethodToObtain.Others
       ? this.qualification.otherMethodToObtain
-      : `professions.form.radioButtons.methodsToObtainQualification.${this.qualification.methodToObtain}`;
+      : `professions.methodsToObtainQualification.${this.qualification.methodToObtain}`;
 
   readonly mostCommonPathToObtainQualification: string =
     this.qualification.commonPathToObtain === MethodToObtain.Others
       ? this.qualification.otherCommonPathToObtain
-      : `professions.form.radioButtons.methodsToObtainQualification.${this.qualification.commonPathToObtain}`;
+      : `professions.methodsToObtainQualification.${this.qualification.commonPathToObtain}`;
 
   readonly duration = this.qualification.educationDuration;
 
