@@ -1,0 +1,23 @@
+@startuml flow
+(*) --> "New entity gets created"
+--> "Form is completed"
+--> "Entity is confirmed"
+--> "New Version is created as a draft"
+
+(*) --> "Entity is edited"
+--> if "A draft exists" then
+  -->[Yes] "Edit existing draft"
+else
+  -->[No] "Copy existing Entity"
+  --> "Create a new draft Version"
+endif
+--> "Draft Entity form is completed"
+--> "Draft Entity is confirmed"
+
+(*) --> "Publishing an entity"
+--> "User clicks to view entity"
+--> "User clicks publish"
+--> "Current draft version is promoted to live"
+--> "Published version is archived"
+
+@enduml
