@@ -96,7 +96,7 @@ describe('OrganisationPresenter', () => {
       });
     });
 
-    describe('when the profession relation is not loaded', () => {
+    describe('when the professions relation is not loaded', () => {
       beforeEach(() => {
         organisation = organisationFactory.build({
           professions: undefined,

@@ -38,6 +38,10 @@ describe('Searching a profession', () => {
       'contain',
       'professions/secondary-school-teacher-in-state-maintained-schools-england',
     );
+    cy.get('body').should(
+      'contain',
+      'Secondary School Teacher in State maintained schools (England)',
+    );
   });
 
   it('I can filter by nation', () => {

@@ -17,11 +17,11 @@ import { OrganisationsService } from '../organisations.service';
 import { Organisation } from '../organisation.entity';
 import { OrganisationPresenter } from '../presenters/organisation.presenter';
 import { OrganisationsPresenter } from '../presenters/organisations.presenter';
-import { ProfessionPresenter } from '../../professions/presenters/profession.presenter';
 
 import { ConfirmTemplate } from './interfaces/confirm-template.interface';
-import { ShowTemplate } from './interfaces/show-template.interface';
+import { ShowTemplate } from '../interfaces/show-template.interface';
 import { OrganisationDto } from './dto/organisation.dto';
+import { OrganisationSummaryPresenter } from '../presenters/organisation-summary.presenter';
 
 @UseGuards(AuthenticationGuard)
 @Controller('/admin/organisations')
@@ -50,30 +50,14 @@ export class OrganisationsController {
   async show(@Param('slug') slug: string): Promise<ShowTemplate> {
     const organisation =
       await this.organisationsService.findBySlugWithProfessions(slug);
-    const organisationPresenter = new OrganisationPresenter(
+
+    const organisationSummaryPresenter = new OrganisationSummaryPresenter(
       organisation,
+      '/admin/organisations',
       this.i18nService,
     );
-    const professionPresenters = organisation.professions.map(
-      (profession) => new ProfessionPresenter(profession, this.i18nService),
-    );
 
-    return {
-      organisation,
-      summaryList: await organisationPresenter.summaryList({
-        removeBlank: true,
-      }),
-      professions: await Promise.all(
-        professionPresenters.map(async (presenter) => {
-          return {
-            name: presenter.profession.name,
-            slug: presenter.profession.slug,
-            summaryList: await presenter.summaryList(),
-          };
-        }),
-      ),
-      backLink: '/admin/organisations',
-    };
+    return organisationSummaryPresenter.present();
   }
 
   @Get('/:slug/edit')

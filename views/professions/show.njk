@@ -12,10 +12,12 @@
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
 
-        {{ govukBackLink({
-          text: ("app.back" | t),
-          href: backUrl
-        }) }}
+        {% if backLink %}
+          {{ govukBackLink({
+            text: ( "app.back" | t ),
+            href: backLink
+          }) }}
+        {% endif %}
 
         <span class="govuk-caption-l">Placeholder Authority</span>
 

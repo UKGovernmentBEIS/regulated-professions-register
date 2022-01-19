@@ -1,0 +1,20 @@
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+<h1 class="govuk-heading-xl">{{ organisation.name }}</h1>
+
+{{ govukSummaryList(summaryList) }}
+
+<hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible"/>
+
+<h2 class="govuk-heading-l">{{ "organisations.headings.professions" | t }}</h2>
+
+{% for profession in professions %}
+  <div class="rpr-listing__ra-container">
+    <h3>
+      <a class="govuk-link govuk-heading-m rpr-listing__profession-title" class="govuk-link" href="/professions/{{ profession.slug }}">
+        {{ profession.name }}
+      </a>
+    </h3>
+    {{ govukSummaryList(profession.summaryList) }}
+  </div>
+{% endfor %}
