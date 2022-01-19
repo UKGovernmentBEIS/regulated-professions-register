@@ -32,6 +32,7 @@ import { Profession } from '../profession.entity';
 import { ShowTemplate } from '../interfaces/show-template.interface';
 import { EditTemplate } from './interfaces/edit-template.interface';
 import { Permissions } from '../../common/permissions.decorator';
+import QualificationPresenter from '../../qualifications/presenters/qualification.presenter';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
@@ -84,7 +85,13 @@ export class ProfessionsController {
       ),
     );
 
-    return { profession, nations, industries, backLink: '' };
+    return {
+      profession,
+      qualification: new QualificationPresenter(profession.qualification),
+      nations,
+      industries,
+      backLink: '',
+    };
   }
 
   @Get('/:slug/edit')

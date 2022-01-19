@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
 import { Nation } from '../nations/nation';
+import QualificationPresenter from '../qualifications/presenters/qualification.presenter';
 import { ShowTemplate } from './interfaces/show-template.interface';
 import { ProfessionsService } from './professions.service';
 
@@ -40,6 +41,12 @@ export class ProfessionsController {
       ),
     );
 
-    return { profession, nations, industries, backLink: '/professions/search' };
+    return {
+      profession,
+      qualification: new QualificationPresenter(profession.qualification),
+      nations,
+      industries,
+      backLink: '/professions/search',
+    };
   }
 }

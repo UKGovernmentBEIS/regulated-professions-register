@@ -18,6 +18,7 @@ import industryFactory from '../../testutils/factories/industry';
 import organisationFactory from '../../testutils/factories/organisation';
 import professionFactory from '../../testutils/factories/profession';
 import { NotFoundException } from '@nestjs/common';
+import QualificationPresenter from '../../qualifications/presenters/qualification.presenter';
 
 const referrer = 'http://example.com/some/path';
 const host = 'example.com';
@@ -340,6 +341,7 @@ describe('ProfessionsController', () => {
 
       expect(result).toEqual({
         profession: profession,
+        qualification: new QualificationPresenter(profession.qualification),
         nations: ['Translation of `nations.england`'],
         industries: ['Translation of `industries.example`'],
         backLink: '',

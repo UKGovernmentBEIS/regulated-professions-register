@@ -49,6 +49,35 @@ describe('Showing a profession', () => {
       'professions.show.qualification.level',
       'DSE - Diploma (post-secondary education), including Annex II (ex 92/51, Annex C,D) , Art. 11 c',
     );
+    cy.translate(
+      'professions.form.radioButtons.methodsToObtainQualification.generalSecondaryEducation',
+    ).then((method) => {
+      cy.checkSummaryListRowValue(
+        'professions.show.qualification.methods',
+        method,
+      );
+    });
+
+    cy.translate(
+      'professions.form.radioButtons.methodsToObtainQualification.generalSecondaryEducation',
+    ).then((method) => {
+      cy.checkSummaryListRowValue(
+        'professions.show.qualification.commonPath',
+        method,
+      );
+    });
+
+    cy.checkSummaryListRowValue(
+      'professions.show.qualification.duration',
+      '5.0 Year',
+    );
+
+    cy.translate('app.yes').then((value) => {
+      cy.checkSummaryListRowValue(
+        'professions.show.qualification.mandatoryExperience',
+        value,
+      );
+    });
 
     cy.translate('professions.show.legislation.heading').then((heading) => {
       cy.get('body').should('contain', heading);

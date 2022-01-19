@@ -129,7 +129,7 @@
         text: ("professions.show.qualification.level" | t)
       },
       value: {
-        text: profession.qualification.level
+        text: qualification.level
       }
     },
     {
@@ -137,7 +137,7 @@
         text: ("professions.show.qualification.methods" | t)
       },
       value: {
-        text: profession.qualification.methodToObtain
+        text: qualification.methodToObtainQualification | t
       }
     },
     {
@@ -145,7 +145,7 @@
         text: ("professions.show.qualification.commonPath" | t)
       },
       value: {
-        text: profession.qualification.commonPathToObtain
+        text: qualification.mostCommonPathToObtainQualification | t
       }
     },
     {
@@ -153,7 +153,7 @@
         text: ("professions.show.qualification.duration" | t)
       },
       value: {
-        text: profession.qualification.educationDuration
+        text: qualification.duration
       }
     },
     {
@@ -161,7 +161,7 @@
         text: ("professions.show.qualification.mandatoryExperience" | t)
       },
       value: {
-        text: ("app.yes" | t) if profession.qualification.mandatoryProfessionalExperience else ("app.no" | t)
+        text: qualification.mandatoryProfessionalExperience | t
       }
     }
   ]
