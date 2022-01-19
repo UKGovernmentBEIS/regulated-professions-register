@@ -18,6 +18,7 @@ import { RegulatedActivitiesDto } from './dto/regulated-activities.dto';
 import { RegulatedActivitiesTemplate } from './interfaces/regulated-activities.template';
 import { Permissions } from '../../common/permissions.decorator';
 import { UserPermission } from '../../users/user.entity';
+import ViewUtils from './viewUtils';
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
 export class RegulatedActivitiesController {
@@ -36,6 +37,7 @@ export class RegulatedActivitiesController {
       res,
       profession.reservedActivities,
       profession.description,
+      profession.confirmed,
       change,
       this.backLink(change, id),
     );
@@ -65,6 +67,7 @@ export class RegulatedActivitiesController {
         submittedValues.activities,
         submittedValues.description,
         submittedValues.change,
+        profession.confirmed,
         this.backLink(submittedValues.change, id),
         errors,
       );
@@ -93,6 +96,7 @@ export class RegulatedActivitiesController {
     res: Response,
     reservedActivities: string | null,
     regulationDescription: string | null,
+    isEditing: boolean,
     change: boolean,
     backLink: string,
     errors: object | undefined = undefined,
@@ -100,6 +104,7 @@ export class RegulatedActivitiesController {
     const templateArgs: RegulatedActivitiesTemplate = {
       reservedActivities,
       regulationDescription,
+      captionText: ViewUtils.captionText(isEditing),
       change,
       backLink,
       errors,

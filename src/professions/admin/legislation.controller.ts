@@ -20,6 +20,7 @@ import { ValidationFailedError } from '../../common/validation/validation-failed
 import { ProfessionsService } from '../professions.service';
 import LegislationDto from './dto/legislation.dto';
 import { LegislationTemplate } from './interfaces/legislation.template';
+import ViewUtils from './viewUtils';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
@@ -35,7 +36,12 @@ export class LegislationController {
   ): Promise<void> {
     const profession = await this.professionsService.find(id);
 
-    this.renderForm(res, profession.legislation, this.backLink(change, id));
+    this.renderForm(
+      res,
+      profession.legislation,
+      profession.confirmed,
+      this.backLink(change, id),
+    );
   }
 
   @Post('/:id/legislation')
@@ -72,6 +78,7 @@ export class LegislationController {
       return this.renderForm(
         res,
         updatedLegislation,
+        profession.confirmed,
         this.backLink(change, id),
         errors,
       );
@@ -87,11 +94,13 @@ export class LegislationController {
   private async renderForm(
     res: Response,
     legislation: Legislation,
+    isEditing: boolean,
     backLink: string,
     errors: object | undefined = undefined,
   ): Promise<void> {
     const templateArgs: LegislationTemplate = {
       legislation,
+      captionText: ViewUtils.captionText(isEditing),
       backLink,
       errors,
     };

@@ -21,6 +21,7 @@ import { MethodToObtainQualificationRadioButtonsPresenter } from './method-to-ob
 import { YesNoRadioButtonArgsPresenter } from './yes-no-radio-buttons-presenter';
 import { QualificationInformationDto } from './dto/qualification-information.dto';
 import { QualificationInformationTemplate } from './interfaces/qualification-information.template';
+import ViewUtils from './viewUtils';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
@@ -42,6 +43,7 @@ export class QualificationInformationController {
     return this.renderForm(
       res,
       profession.qualification,
+      profession.confirmed,
       change,
       this.backLink(change, profession.id),
     );
@@ -89,6 +91,7 @@ export class QualificationInformationController {
       return this.renderForm(
         res,
         updatedQualification,
+        profession.confirmed,
         submittedValues.change,
         this.backLink(submittedValues.change, profession.id),
         errors,
@@ -109,6 +112,7 @@ export class QualificationInformationController {
   private async renderForm(
     res: Response,
     qualification: Qualification | null,
+    isEditing: boolean,
     change: boolean,
     backLink: string,
     errors: object | undefined = undefined,
@@ -141,6 +145,7 @@ export class QualificationInformationController {
       mostCommonPathToObtainQualificationRadioButtonArgs,
       mandatoryProfessionalExperienceRadioButtonArgs,
       duration: qualification?.educationDuration,
+      captionText: ViewUtils.captionText(isEditing),
       change,
       backLink,
       errors,

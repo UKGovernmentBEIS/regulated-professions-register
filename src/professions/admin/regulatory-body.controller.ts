@@ -23,6 +23,7 @@ import { RegulatoryBodyDto } from './dto/regulatory-body.dto';
 import { ValidationFailedError } from '../../common/validation/validation-failed.error';
 import { Permissions } from '../../common/permissions.decorator';
 import { UserPermission } from '../../users/user.entity';
+import ViewUtils from './viewUtils';
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
 export class RegulatoryBodyController {
@@ -48,6 +49,7 @@ export class RegulatoryBodyController {
       res,
       profession.organisation,
       selectedMandatoryRegistration,
+      profession.confirmed,
       change,
       this.backLink(change, id),
       errors,
@@ -82,6 +84,7 @@ export class RegulatoryBodyController {
         res,
         selectedOrganisation,
         selectedMandatoryRegistration,
+        profession.confirmed,
         regulatoryBodyDto.change,
         this.backLink(regulatoryBodyDto.change, id),
         errors,
@@ -109,6 +112,7 @@ export class RegulatoryBodyController {
     res: Response,
     selectedRegulatoryAuthority: Organisation | null,
     mandatoryRegistration: MandatoryRegistration | null,
+    isEditing: boolean,
     change: boolean,
     backLink: string,
     errors: object | undefined = undefined,
@@ -130,6 +134,7 @@ export class RegulatoryBodyController {
     const templateArgs: RegulatoryBodyTemplate = {
       regulatedAuthoritiesSelectArgs,
       mandatoryRegistrationRadioButtonArgs,
+      captionText: ViewUtils.captionText(isEditing),
       change,
       backLink,
       errors,

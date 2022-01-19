@@ -37,7 +37,9 @@ describe('Adding a new profession', () => {
           cy.get('body').should('contain', heading);
         },
       );
-
+      cy.translate('professions.form.captions.add').then((addCaption) => {
+        cy.get('body').contains(addCaption);
+      });
       cy.get('input[name="name"]').type('Example Profession');
       cy.get('[type="checkbox"]').check('GB-ENG');
       cy.translate('industries.constructionAndEngineering').then(
@@ -45,7 +47,6 @@ describe('Adding a new profession', () => {
           cy.contains(constructionAndEngineering).click();
         },
       );
-
       cy.translate('app.continue').then((buttonText) => {
         cy.get('button').contains(buttonText).click();
       });
@@ -55,6 +56,9 @@ describe('Adding a new profession', () => {
           cy.get('body').should('contain', heading);
         },
       );
+      cy.translate('professions.form.captions.add').then((addCaption) => {
+        cy.get('body').contains(addCaption);
+      });
       cy.get('select[name="regulatoryBody"]').select(
         'Department for Education',
       );
@@ -68,7 +72,9 @@ describe('Adding a new profession', () => {
           cy.get('body').should('contain', heading);
         },
       );
-
+      cy.translate('professions.form.captions.add').then((addCaption) => {
+        cy.get('body').contains(addCaption);
+      });
       cy.get('textarea[name="activities"]').type('An example activity');
       cy.get('textarea[name="description"]').type(
         'A description of the regulation',
@@ -83,7 +89,9 @@ describe('Adding a new profession', () => {
           cy.get('body').should('contain', heading);
         },
       );
-
+      cy.translate('professions.form.captions.add').then((addCaption) => {
+        cy.get('body').contains(addCaption);
+      });
       cy.get('textarea[name="level"]').type('An example Qualification level');
       cy.get(
         'input[name="methodToObtainQualification"][value="others"]',
@@ -98,7 +106,6 @@ describe('Adding a new profession', () => {
       cy.get(
         'input[name="mandatoryProfessionalExperience"][value="1"]',
       ).check();
-
       cy.translate('app.continue').then((buttonText) => {
         cy.get('button').contains(buttonText).click();
       });
@@ -106,7 +113,9 @@ describe('Adding a new profession', () => {
       cy.translate('professions.form.headings.legislation').then((heading) => {
         cy.get('body').should('contain', heading);
       });
-
+      cy.translate('professions.form.captions.add').then((addCaption) => {
+        cy.get('body').contains(addCaption);
+      });
       cy.get('textarea[name="nationalLegislation"]').type(
         'National legislation description',
       );
@@ -119,7 +128,9 @@ describe('Adding a new profession', () => {
       cy.translate('professions.form.headings.checkAnswers').then((heading) => {
         cy.get('body').should('contain', heading);
       });
-
+      cy.translate('professions.form.captions.add').then((addCaption) => {
+        cy.get('body').contains(addCaption);
+      });
       cy.get('body').should('contain', 'Example Profession');
       cy.translate('nations.england').then((england) => {
         cy.get('body').should('contain', england);

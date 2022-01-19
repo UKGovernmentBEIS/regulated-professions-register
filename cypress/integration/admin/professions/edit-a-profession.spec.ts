@@ -38,6 +38,10 @@ describe('Editing an existing profession', () => {
         cy.contains(buttonText).click();
       });
 
+      cy.translate('professions.form.captions.edit').then((editCaption) => {
+        cy.get('body').contains(editCaption);
+      });
+
       cy.translate('professions.form.headings.edit', {
         professionName: 'Registered Trademark Attorney',
       }).then((heading) => {
@@ -87,6 +91,9 @@ describe('Editing an existing profession', () => {
         'professions.form.label.topLevelInformation.name',
         'Change',
       );
+      cy.translate('professions.form.captions.edit').then((editCaption) => {
+        cy.get('body').contains(editCaption);
+      });
       cy.get('input[name="name"]').clear().type('Updated name');
       cy.translate('app.continue').then((buttonText) => {
         cy.get('button').contains(buttonText).click();
@@ -100,6 +107,9 @@ describe('Editing an existing profession', () => {
         'professions.form.label.regulatoryBody.regulatedAuthority',
         'Change',
       );
+      cy.translate('professions.form.captions.edit').then((editCaption) => {
+        cy.get('body').contains(editCaption);
+      });
       cy.get('select[name="regulatoryBody"]').select(
         'Department for Education',
       );
@@ -115,6 +125,9 @@ describe('Editing an existing profession', () => {
         'professions.form.label.regulatedActivities.description',
         'Change',
       );
+      cy.translate('professions.form.captions.edit').then((editCaption) => {
+        cy.get('body').contains(editCaption);
+      });
       cy.get('textarea[name="description"]')
         .clear()
         .type('Updated description of the regulation');
@@ -130,6 +143,9 @@ describe('Editing an existing profession', () => {
         'professions.form.label.qualificationInformation.qualificationLevel',
         'Change',
       );
+      cy.translate('professions.form.captions.edit').then((editCaption) => {
+        cy.get('body').contains(editCaption);
+      });
       cy.get('textarea[name="level"]')
         .clear()
         .type('Updated qualification level');
@@ -145,6 +161,9 @@ describe('Editing an existing profession', () => {
         'professions.form.label.legislation.nationalLegislation',
         'Change',
       );
+      cy.translate('professions.form.captions.edit').then((editCaption) => {
+        cy.get('body').contains(editCaption);
+      });
       cy.get('textarea[name="nationalLegislation"]')
         .clear()
         .type('Updated legislation');

@@ -24,6 +24,7 @@ import { TopLevelDetailsTemplate } from './interfaces/top-level-details.template
 import { AuthenticationGuard } from '../../common/authentication.guard';
 import { Permissions } from '../../common/permissions.decorator';
 import { UserPermission } from '../../users/user.entity';
+import ViewUtils from './viewUtils';
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
 export class TopLevelInformationController {
@@ -48,6 +49,7 @@ export class TopLevelInformationController {
       profession.name,
       profession.industries || [],
       profession.occupationLocations || [],
+      profession.confirmed,
       change,
       this.backLink(change, id),
       errors,
@@ -82,6 +84,7 @@ export class TopLevelInformationController {
         submittedIndustries,
         submittedValues.nations || [],
         submittedValues.change,
+        profession.confirmed,
         this.backLink(submittedValues.change, id),
         errors,
       );
@@ -110,6 +113,7 @@ export class TopLevelInformationController {
     name: string,
     selectedIndustries: Industry[],
     selectedNations: string[],
+    isEditing: boolean,
     change: boolean,
     backLink: string,
     errors: object | undefined = undefined,
@@ -132,6 +136,7 @@ export class TopLevelInformationController {
       name,
       industriesCheckboxArgs,
       nationsCheckboxArgs,
+      captionText: ViewUtils.captionText(isEditing),
       change,
       backLink,
       errors,

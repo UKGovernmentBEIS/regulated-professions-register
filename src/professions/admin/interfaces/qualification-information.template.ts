@@ -6,6 +6,7 @@ export interface QualificationInformationTemplate {
   mostCommonPathToObtainQualificationRadioButtonArgs: RadioButtonArgs[];
   duration: string;
   mandatoryProfessionalExperienceRadioButtonArgs: RadioButtonArgs[];
+  captionText: string;
   change: boolean;
   backLink: string;
   errors: object | undefined;

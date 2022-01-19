@@ -18,6 +18,7 @@ import QualificationPresenter from '../../qualifications/presenters/qualificatio
 import { CheckYourAnswersTemplate } from './interfaces/check-your-answers.template';
 import { Permissions } from '../../common/permissions.decorator';
 import { UserPermission } from '../../users/user.entity';
+import ViewUtils from './viewUtils';
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
 export class CheckYourAnswersController {
@@ -64,6 +65,7 @@ export class CheckYourAnswersController {
       qualification: new QualificationPresenter(draftProfession.qualification),
       legislation: draftProfession.legislation,
       confirmed: Boolean(draftProfession.confirmed),
+      captionText: ViewUtils.captionText(draftProfession.confirmed),
       edit: Boolean(edit),
       backLink: backLink(req),
     };
