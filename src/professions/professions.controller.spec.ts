@@ -2,6 +2,7 @@ import { createMock, DeepMocked } from '@golevelup/ts-jest';
 import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { I18nService } from 'nestjs-i18n';
+import QualificationPresenter from '../qualifications/presenters/qualification.presenter';
 import industryFactory from '../testutils/factories/industry';
 import professionFactory from '../testutils/factories/profession';
 
@@ -68,6 +69,9 @@ describe('ProfessionsController', () => {
 
       expect(result).toEqual({
         profession: exampleProfession,
+        qualification: new QualificationPresenter(
+          exampleProfession.qualification,
+        ),
         nations: ['England'],
         industries: ['Example industry'],
         backLink: '/professions/search',

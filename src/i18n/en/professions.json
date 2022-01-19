@@ -158,8 +158,7 @@
       "address": "Address",
       "emailAddress": "Email address",
       "url": "URL",
-      "phoneNumber": "Phone number",
-      "mandatoryRegistration": "Mandatory registration with professional bodies"
+      "phoneNumber": "Phone number"
     },
     "regulatedActivities": {
       "heading": "Regulated activities",
@@ -168,7 +167,7 @@
     },
     "qualification": {
       "heading": "Qualification information",
-      "level": "Qualificiation level",
+      "level": "Qualification level",
       "methods": "Method to obtain qualification",
       "commonPath": "Most common path to obtain qualification",
       "duration": "Duration of qualification",
