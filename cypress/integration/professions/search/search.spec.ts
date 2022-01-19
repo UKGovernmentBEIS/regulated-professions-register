@@ -2,14 +2,9 @@ describe('Searching a profession', () => {
   beforeEach(() => {
     cy.visit('/');
 
-    cy.translate('app.startButton').then((startButton) => {
-      cy.contains(startButton).click();
-    });
-
-    cy.translate('app.pages.selectService.options.checkRequirements').then(
-      (checkRequirementsOption) => {
-        cy.get('label').contains(checkRequirementsOption).click();
-        cy.get('button').click();
+    cy.translate('app.pages.index.useThisService.checkProfessions.text').then(
+      (linkText) => {
+        cy.contains(linkText).click();
       },
     );
   });
