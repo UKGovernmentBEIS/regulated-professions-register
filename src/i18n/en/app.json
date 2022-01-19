@@ -34,16 +34,30 @@
   },
   "pages": {
     "index": {
-      "intro": "Some professions in the UK are regulated. If you want to work in a regulated profession, you need to contact the regulatory authority who will recognise your qualification and register you.",
-      "useThisService": "Use this service to:",
-      "servicePurposes": [
-        "Check if your profession is regulated and what qualifications are required",
-        "Find regulatory authority contact details for your profession",
-        "View annual figures regarding applications to work in regulated professions in the UK"
+      "heading": "Work in a regulated profession in the UK",
+      "intro": [
+        "Some professions, jobs and trades in the UK are ‘regulated’. This means you must have certain qualifications or experience to work in them.",
+        "If you want to work in a regulated profession in the UK, you need to contact the regulatory authority for it.",
+        "The regulatory authority sets the requirements for qualifying for your profession, so it will check your experience and qualifications. If they’re recognised, the regulatory authority will register you."
       ],
-      "otherWays": {
-        "heading": "Other ways to find information",
-        "body": "If you need support checking a regulated profession you can contact The UK Centre for Professional Qualifications (UK CPQ)."
+      "useThisService": {
+        "heading": "Use this service to:",
+        "checkProfessions": {
+          "text": "check if your profession is regulated and the qualifications and experience needed",
+          "link": "/professions/search"
+        },
+        "findContactDetails": {
+          "text": "find contact details for your profession’s regulatory authority",
+          "link": "/regulatory-authorities/search"
+        },
+        "viewFigures": {
+          "text": "view annual figures for applications to work in regulated professions in the UK",
+          "link": "#"
+        }
+      },
+      "help": {
+        "heading": "Get help checking a regulated profession",
+        "body": "Contact the <a class='govuk-link' href='#'>UK Centre for Professional Qualifications (UK CPQ)</a> If you need support checking a regulated profession."
       }
     },
     "selectService": {

@@ -50,7 +50,7 @@ export class SearchController {
       allIndustries,
       filteredOrganisations,
       this.i18nService,
-      '/select-service',
+      '/',
     ).present();
   }
 

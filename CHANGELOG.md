@@ -17,6 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Add page for setting legislation information on a profession
 - Add a public-facing organisations search page that allows for filtering professions by keywords, nations, and industries
 - Allow Regulatory Authorities to be edited
+- Update start page
 
 ### Changed
 

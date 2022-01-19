@@ -48,7 +48,7 @@ export class SearchController {
       allIndustries,
       filteredProfessions,
       this.i18nService,
-      '/select-service',
+      '/',
     ).present();
   }
 

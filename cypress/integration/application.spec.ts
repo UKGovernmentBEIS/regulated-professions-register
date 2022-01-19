@@ -2,8 +2,8 @@ describe('/', () => {
   it('Shows a landing page', () => {
     cy.visit('/');
 
-    cy.translate('app.service.name').then((serviceName) => {
-      cy.get('body').should('contain', serviceName);
+    cy.translate('app.pages.index.heading').then((heading) => {
+      cy.get('body').should('contain', heading);
     });
   });
 
