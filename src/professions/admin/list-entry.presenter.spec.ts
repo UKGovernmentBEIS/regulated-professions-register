@@ -30,7 +30,6 @@ describe('ListEntryPresenter', () => {
 
       const expected: TableRow = [
         { text: 'Example Profession' },
-        { text: 'PLCH0LD3R' },
         {
           text: `${translationOf('nations.scotland')}, ${translationOf(
             'nations.northernIreland',
@@ -76,7 +75,6 @@ describe('ListEntryPresenter', () => {
 
       const expected: TableRow = [
         { text: 'Example Profession' },
-        { text: 'PLCH0LD3R' },
         {
           text: `${translationOf('nations.scotland')}, ${translationOf(
             'nations.northernIreland',
@@ -102,7 +100,6 @@ describe('ListEntryPresenter', () => {
     it('returns a table row of headings when called with `overview`', () => {
       const expected = [
         { text: translationOf('professions.admin.tableHeading.profession') },
-        { text: translationOf('professions.admin.tableHeading.id') },
         { text: translationOf('professions.admin.tableHeading.nations') },
         { text: translationOf('professions.admin.tableHeading.lastModified') },
         { text: translationOf('professions.admin.tableHeading.organisation') },
@@ -119,7 +116,6 @@ describe('ListEntryPresenter', () => {
     it('returns a table row of headings when called with `single-organisation`', () => {
       const expected = [
         { text: translationOf('professions.admin.tableHeading.profession') },
-        { text: translationOf('professions.admin.tableHeading.id') },
         { text: translationOf('professions.admin.tableHeading.nations') },
         { text: translationOf('professions.admin.tableHeading.lastModified') },
         { text: translationOf('professions.admin.tableHeading.changedBy') },

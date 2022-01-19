@@ -9,7 +9,6 @@ import { ProfessionsPresenterView } from './professions.presenter';
 
 type Field =
   | 'profession'
-  | 'id'
   | 'nations'
   | 'lastModified'
   | 'changedBy'
@@ -21,7 +20,6 @@ type Field =
 const fields = {
   overview: [
     'profession',
-    'id',
     'nations',
     'lastModified',
     'organisation',
@@ -31,7 +29,6 @@ const fields = {
   ],
   'single-organisation': [
     'profession',
-    'id',
     'nations',
     'lastModified',
     'changedBy',
@@ -85,7 +82,6 @@ export class ListEntryPresenter {
 
     const entries: { [K in Field]: TableCell } = {
       profession: { text: this.profession.name },
-      id: { text: 'PLCH0LD3R' },
       nations: { text: nations },
       lastModified: { text: formatDate(this.profession.updated_at) },
       changedBy: { text: 'Placeholder name' },
