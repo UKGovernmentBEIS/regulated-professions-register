@@ -14,11 +14,15 @@ export class OrganisationsService {
     return this.repository.find({ order: { name: 'ASC' } });
   }
 
-  allWithProfessions(): Promise<Organisation[]> {
-    return this.repository.find({
+  async allWithProfessions(): Promise<Organisation[]> {
+    const organisations = await this.repository.find({
       order: { name: 'ASC' },
       relations: ['professions'],
     });
+
+    return organisations.map((organisation) =>
+      this.filterConfirmedProfessions(organisation),
+    );
   }
 
   find(id: string): Promise<Organisation> {
@@ -31,14 +35,24 @@ export class OrganisationsService {
     });
   }
 
-  findBySlugWithProfessions(slug: string): Promise<Organisation> {
-    return this.repository.findOne({
+  async findBySlugWithProfessions(slug: string): Promise<Organisation> {
+    const organisation = await this.repository.findOne({
       where: { slug },
       relations: ['professions'],
     });
+
+    return this.filterConfirmedProfessions(organisation);
   }
 
   async save(organisation: Organisation): Promise<Organisation> {
     return this.repository.save(organisation);
+  }
+
+  private filterConfirmedProfessions(organisation: Organisation): Organisation {
+    organisation.professions = organisation.professions.filter(
+      (profession) => profession.confirmed,
+    );
+
+    return organisation;
   }
 }
