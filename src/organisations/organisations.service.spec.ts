@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import organisationFactory from '../testutils/factories/organisation';
+import professionFactory from '../testutils/factories/profession';
 import { Organisation } from './organisation.entity';
 import { OrganisationsService } from './organisations.service';
 
@@ -9,23 +10,30 @@ describe('OrganisationsService', () => {
   let service: OrganisationsService;
   let repo: Repository<Organisation>;
 
-  const organisation = organisationFactory.build();
+  const confirmedProfession = professionFactory.build({ confirmed: true });
+  const unconfirmedProfession = professionFactory.build({ confirmed: false });
+
+  const organisation = organisationFactory.build({
+    professions: [confirmedProfession, unconfirmedProfession],
+  });
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
+        // Rebuild organisations on each call to our mock repository, as they
+        // are potentially mutated by OrganisationsService
         OrganisationsService,
         {
           provide: getRepositoryToken(Organisation),
           useValue: {
             find: () => {
-              return [organisation];
+              return [organisationFactory.build(organisation)];
             },
             findOne: () => {
-              return organisation;
+              return organisationFactory.build(organisation);
             },
             save: () => {
-              return organisation;
+              return organisationFactory.build(organisation);
             },
           },
         },
@@ -70,8 +78,15 @@ describe('OrganisationsService', () => {
       organisations = await service.allWithProfessions();
     });
 
-    it('returns all Organisations, populated with Professions', async () => {
-      expect(organisations).toEqual([organisation]);
+    it('returns all Organisations, populated with confirmed Professions', async () => {
+      const expected = [
+        organisationFactory.build({
+          ...organisation,
+          professions: [confirmedProfession],
+        }),
+      ];
+
+      expect(organisations).toEqual(expected);
       expect(repoSpy).toHaveBeenCalledWith(
         expect.objectContaining({
           relations: ['professions'],
@@ -91,9 +106,9 @@ describe('OrganisationsService', () => {
   describe('find', () => {
     it('returns an Organisation', async () => {
       const repoSpy = jest.spyOn(repo, 'findOne');
-      const organisations = await service.find('some-uuid');
+      const foundOrganisation = await service.find('some-uuid');
 
-      expect(organisations).toEqual(organisation);
+      expect(foundOrganisation).toEqual(organisation);
       expect(repoSpy).toHaveBeenCalled();
     });
   });
@@ -101,9 +116,9 @@ describe('OrganisationsService', () => {
   describe('findBySlug', () => {
     it('should return an Organisation', async () => {
       const repoSpy = jest.spyOn(repo, 'findOne');
-      const organisation = await service.findBySlug('some-slug');
+      const foundOrganisation = await service.findBySlug('some-slug');
 
-      expect(organisation).toEqual(organisation);
+      expect(foundOrganisation).toEqual(organisation);
       expect(repoSpy).toHaveBeenCalledWith({
         where: { slug: 'some-slug' },
       });
@@ -111,11 +126,18 @@ describe('OrganisationsService', () => {
   });
 
   describe('findBySlugWithProfessions', () => {
-    it('should return an Organisation, populated with Professions', async () => {
-      const repoSpy = jest.spyOn(repo, 'findOne');
-      const organisation = await service.findBySlugWithProfessions('some-slug');
+    it('should return an Organisation, populated with confirmed Professions', async () => {
+      const expected = organisationFactory.build({
+        ...organisation,
+        professions: [confirmedProfession],
+      });
 
-      expect(organisation).toEqual(organisation);
+      const repoSpy = jest.spyOn(repo, 'findOne');
+      const foundOrganisation = await service.findBySlugWithProfessions(
+        'some-slug',
+      );
+
+      expect(foundOrganisation).toEqual(expected);
       expect(repoSpy).toHaveBeenCalledWith({
         where: { slug: 'some-slug' },
         relations: ['professions'],
