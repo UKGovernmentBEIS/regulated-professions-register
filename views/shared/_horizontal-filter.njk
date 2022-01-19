@@ -1,0 +1,39 @@
+{% set filterCheckboxClasses = 'govuk-checkboxes--small rpr-listing__filter'%}
+{% set filterButtonClasses = 'govuk-button--secondary rpr-internal-listing__filter-button'%}
+{% set filterRowClass = 'govuk-grid-row' %}
+{% set filterButtonColumnClass = 'govuk-grid-column-full' %}
+{% set filterFormMethod = 'get' %}
+
+{% set filterColumns = 1 %}
+  {% if nationsCheckboxArgs %}
+  {% set filterColumns = filterColumns + 1 %}
+{% endif %}
+  {% if organisationsCheckboxArgs %}
+  {% set filterColumns = filterColumns + 1 %}
+{% endif %}
+  {% if industriesCheckboxArgs %}
+  {% set filterColumns = filterColumns + 1 %}
+{% endif %}
+  {% if nationsCheckboxArgs %}
+  {% set filterColumns = filterColumns + 1 %}
+{% endif %}
+
+{% if filterColumns <= 3 %}
+  {% set filterColumnClass = 'govuk-grid-column-one-third' %}
+  {% set filterKeywordsWidthClass = '' %}
+{% else %}
+  {% set filterColumnClass = 'govuk-grid-column-one-quarter' %}
+  {% set filterKeywordsWidthClass = 'govuk-input--width-10' %}
+{% endif %}
+
+<div class="rpr-internal-listing__filters-container">
+  <details class="govuk-details" data-module="govuk-details">
+    <summary class="govuk-details__summary">
+      <span class="govuk-details__summary-text">{{ "professions.admin.showFilters" | t }}</span>
+    </summary>
+    <div class="govuk-details__text">
+        {% include "./_filter.njk" %}
+    </div>
+  </details>
+</div>
+<div class="govuk-!-padding-bottom-6"></div>
