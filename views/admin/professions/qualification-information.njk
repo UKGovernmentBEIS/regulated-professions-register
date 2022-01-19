@@ -1,0 +1,118 @@
+{% extends "base.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+
+{% block content %}
+
+  <a href="{{backLink}}" class="govuk-back-link">{{ ('app.back' | t) }}</a>
+
+  {% include "../../shared/_errors.njk" %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      <span class="govuk-caption-l">{{ captionText | t }}</span>
+      <h1 class="govuk-heading-l">{{ ("professions.form.headings.qualificationInformation" | t) }}</h1>
+
+      <form method="post" action="./">
+        <input type="hidden" name="change" value="{{ change }}" />
+        {{
+          govukTextarea({
+            label: {
+              text: ("professions.form.label.qualificationInformation.qualificationLevel" | t),
+              classes: "govuk-label--m",
+              isPageHeading: false
+            },
+            id: "level",
+            name: "level",
+            rows: "7",
+            value: level,
+            errorMessage: errors.level | tError
+          })
+        }}
+
+        {{
+          govukRadios({
+            idPrefix: "methodToObtainQualification",
+            name: "methodToObtainQualification",
+            fieldset: {
+              legend: {
+                text: ("professions.form.label.qualificationInformation.methodsToObtainQualification" | t),
+                isPageHeading: false,
+                classes: "govuk-fieldset__legend--m"
+              }
+            },
+            hint: {
+              text: ("professions.form.radioButtons.hint" | t)
+            },
+            items: methodToObtainQualificationRadioButtonArgs,
+            errorMessage: errors.methodToObtainQualification | tError
+          })
+        }}
+
+        {{
+          govukRadios({
+            idPrefix: "mostCommonPathToObtainQualification",
+            name: "mostCommonPathToObtainQualification",
+            fieldset: {
+              legend: {
+                text: ("professions.form.label.qualificationInformation.mostCommonPathToObtainQualification" | t),
+                isPageHeading: false,
+                classes: "govuk-fieldset__legend--m"
+              }
+            },
+            hint: {
+              text: ("professions.form.radioButtons.hint" | t)
+            },
+            items: mostCommonPathToObtainQualificationRadioButtonArgs,
+            errorMessage: errors.mostCommonPathToObtainQualification | tError
+          })
+        }}
+
+        {{
+          govukInput({
+            label: {
+              text: ("professions.form.label.qualificationInformation.duration" | t),
+              classes: "govuk-label--m"
+            },
+            id: "duration",
+            name: "duration",
+            value: duration,
+            errorMessage: errors.duration | tError
+          })
+        }}
+
+        {{
+          govukRadios({
+            id: "mandatoryProfessionalExperience",
+            name: "mandatoryProfessionalExperience",
+            fieldset: {
+              legend: {
+                text: ("professions.form.label.qualificationInformation.mandatoryProfessionalExperience" | t),
+                isPageHeading: false,
+                classes: "govuk-fieldset__legend--m"
+              }
+            },
+            hint: {
+              text: ("professions.form.radioButtons.hint" | t)
+            },
+            items: mandatoryProfessionalExperienceRadioButtonArgs,
+            errorMessage: errors.mandatoryProfessionalExperience | tError
+          })
+        }}
+
+        {{
+          govukButton({
+            id: "submit-button",
+            type: "Submit",
+            text: ("app.continue" | t)
+          })
+        }}
+      </form>
+
+    </div>
+  </div>
+
+{% endblock %}

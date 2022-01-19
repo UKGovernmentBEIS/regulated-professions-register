@@ -1,0 +1,66 @@
+{% extends "base.njk" %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block content %}
+
+  <a href="{{backLink}}" class="govuk-back-link">{{ ('app.back' | t) }}</a>
+
+  {% include "../../shared/_errors.njk" %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      <span class="govuk-caption-l">{{ captionText | t }}</span>
+      <h1 class="govuk-heading-l">{{ ("professions.form.headings.regulatoryBody" | t) }}</h1>
+
+      <form method="post" action="./">
+        <input type="hidden" name="change" value="{{ change }}" />
+
+        {{
+          govukSelect({
+            label: {
+              text: ("professions.form.label.regulatoryBody.regulatedAuthority" | t),
+              classes: "govuk-label--m",
+              isPageHeading: false
+            },
+            id: "regulatoryBody",
+            name: "regulatoryBody",
+            items: regulatedAuthoritiesSelectArgs
+          })
+        }}
+
+        {{
+          govukRadios({
+            id: "mandatoryRegistration",
+            name: "mandatoryRegistration",
+            fieldset: {
+              legend: {
+                text: ("professions.form.label.regulatoryBody.mandatoryRegistration" | t),
+                isPageHeading: false,
+                classes: "govuk-fieldset__legend--m"
+              }
+            },
+            hint: {
+              text: ("professions.form.radioButtons.hint" | t)
+            },
+            items: mandatoryRegistrationRadioButtonArgs,
+            errorMessage: errors.mandatoryRegistration | tError
+          })
+        }}
+
+        {{
+          govukButton({
+            id: "submit-button",
+            type: "Submit",
+            text: ("app.continue" | t)
+          })
+        }}
+      </form>
+
+    </div>
+  </div>
+
+{% endblock %}

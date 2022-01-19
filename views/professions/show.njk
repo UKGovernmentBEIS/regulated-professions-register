@@ -1,230 +1,23 @@
 {% extends "base.njk" %}
-{% from "govuk/components/panel/macro.njk" import govukPanel %}
-{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 
 {% block content %}
 
 <div class="govuk-width-container">
+  {% if backLink %}
+    {{ govukBackLink({
+      text: ( "app.back" | t ),
+      href: backLink
+    }) }}
+  {% endif %}
 
   <main class="govuk-main-wrapper">
-
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
-
-        {% if backLink %}
-          {{ govukBackLink({
-            text: ( "app.back" | t ),
-            href: backLink
-          }) }}
-        {% endif %}
-
-        <span class="govuk-caption-l">Placeholder Authority</span>
-
-        <h1 class="govuk-heading-xl">{{ profession.name }}</h1>
-
-        <h2 class="govuk-heading-m rpr-details__section-title">{{ "professions.show.overview.heading" | t }}</h2>
-
-        {% set nationsHtml %}
-            {% for nation in nations %}
-              <p class="govuk-body-m"> {{ nation }}
-            {% endfor %}
-        {% endset %}
-
-        {% set industriesHtml %}
-          {% for industry in industries %}
-            <p class="govuk-body-m"> {{ industry }}
-          {% endfor %}
-        {% endset %}
-
-        {{
-          govukSummaryList({
-          classes: 'govuk-summary-list--no-border',
-          rows: [
-            {
-              key: {
-                text: ("professions.show.overview.nations" | t)
-              },
-              value: {
-                html: nationsHtml | safe
-              }
-            },
-            {
-              key: {
-                text: ("professions.show.overview.industry" | t)
-              },
-              value: {
-                html: industriesHtml | safe
-              }
-            }
-          ]
-        }) }}
-
-        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
-
-        <h2 class="govuk-heading-m rpr-details__section-title">{{ "professions.show.bodies.heading" | t }}</h2>
-
-        {{ govukSummaryList({
-          classes: 'govuk-summary-list--no-border',
-          rows: [
-            {
-              key: {
-                text: ("professions.show.bodies.regulatedAuthority" | t)
-              },
-              value: {
-                text: "Placeholder authority"
-              }
-            },
-            {
-              key: {
-                text: ("professions.show.bodies.address" | t)
-              },
-              value: {
-                html: 'Placeholder address'
-              }
-            },
-            {
-              key: {
-                text: ("professions.show.bodies.emailAddress" | t)
-              },
-              value: {
-                text: "Placeholder email"
-              }
-            },
-            {
-              key: {
-                text: ("professions.show.bodies.url" | t)
-              },
-              value: {
-                text: "Placeholder url"
-              }
-            },          
-            {
-              key: {
-                text: ("professions.show.bodies.phoneNumber" | t)
-              },
-              value: {
-                text: "Placeholder phone numer"
-              }
-            },
-            {
-              key: {
-                text: ("professions.show.bodies.mandatoryRegistration" | t)
-              },
-              value: {
-                text: "Placeholder response"
-              }
-            }
-          ]
-        }) }}
-
-        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
-
-        <h2 class="govuk-heading-m rpr-details__section-title">{{ "professions.show.regulatedActivities.heading" | t }}</h2>
-        
-        {{ govukSummaryList({
-          classes: 'govuk-summary-list--no-border',
-          rows: [
-            {
-              key: {
-                text: ("professions.show.regulatedActivities.reservedActivities" | t)
-              },
-              value: {
-                text: profession.reservedActivities
-              }
-            },
-            {
-              key: {
-                text: ("professions.show.regulatedActivities.description" | t)
-              },
-              value: {
-                text: profession.description
-              }
-            }
-          ]
-        }) }}
-
-        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
-
-        <h2 class="govuk-heading-m rpr-details__section-title">{{ "professions.show.qualification.heading" | t}}</h2>
-
-        {{ govukSummaryList({
-          classes: 'govuk-summary-list--no-border',
-          rows: [
-            {
-              key: {
-                text: ("professions.show.qualification.level" | t)
-              },
-              value: {
-                text: profession.qualification.level
-              }
-            },
-            {
-              key: {
-                text: ("professions.show.qualification.methods" | t)
-              },
-              value: {
-                text: profession.qualification.methodToObtain
-              }
-            },
-            {
-              key: {
-                text: ("professions.show.qualification.commonPath" | t)
-              },
-              value: {
-                text: profession.qualification.commonPathToObtain
-              }
-            },
-            {
-              key: {
-                text: ("professions.show.qualification.duration" | t)
-              },
-              value: {
-                text: profession.qualification.educationDuration
-              }
-            },
-            {
-              key: {
-                text: ("professions.show.qualification.mandatoryExperience" | t)
-              },
-              value: {
-                text: ("app.yes" | t) if profession.qualification.mandatoryProfessionalExperience else ("app.no" | t)
-              }
-            }
-          ]
-        }) }}
-
-        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
-
-        <h2 class="govuk-heading-m rpr-details__section-title">{{ "professions.show.legislation.heading" | t}}</h2>
-
-        {{ govukSummaryList({
-        classes: 'govuk-summary-list--no-border',
-        rows: [
-          {
-            key: {
-              text: ( "professions.show.legislation.nationalLegislation" | t)
-            },
-            value: {
-              text: profession.legislation.name
-            }
-          },
-          {
-            key: {
-              text: ( "professions.show.legislation.legislationLink" | t)
-            },
-            value: {
-              html: ["<a class=\"govuk-link\" href=\"", (profession.legislation.url | escape), "\">", (profession.legislation.url | escape),  "</a>" ] | join
-            }
-          }
-        ]
-        }) }}
+        {% include "./_profession-details.njk" %}
       </div>
-
       <div class="govuk-grid-column-one-third">
-        
       </div>
-
     </div>
   </main>
 </div>

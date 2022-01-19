@@ -125,3 +125,19 @@ Cypress.Commands.add(
     });
   },
 );
+
+Cypress.Commands.add(
+  'clickSummaryListRowAction',
+  (key: string, action: string) => {
+    return cy.translate(key).then((label) => {
+      cy.get('.govuk-summary-list__key')
+        .contains(label)
+        .siblings('.govuk-summary-list__actions')
+        .then(($summaryListValue) => {
+          cy.wrap($summaryListValue).within(() => {
+            cy.contains(action).click();
+          });
+        });
+    });
+  },
+);

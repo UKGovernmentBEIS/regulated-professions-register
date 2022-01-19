@@ -1,0 +1,350 @@
+{% extends "base.njk" %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block content %}
+
+  <div class="govuk-width-container">
+    <a href="{{backLink}}" class="govuk-back-link">{{ ("app.back" | t) }}</a>
+
+    <main class="govuk-main-wrapper">
+
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+          <span class="govuk-caption-l">{{ captionText | t }}</span>
+          {% if edit %}
+            <h1 class="govuk-heading-l">{{ ("professions.form.headings.originalAnswers" | t) }}</h1>
+          {% else %}
+            <h1 class="govuk-heading-l">{{ ("professions.form.headings.checkAnswers" | t) }}</h1>
+          {% endif %}
+
+          <form method="post" action="confirmation">
+            <h2 class="govuk-heading-m">{{ ("professions.form.headings.topLevelInformation" | t) }}</h2>
+
+            {% set selectedNationsSummaryListHtml %}
+              <ul>
+                {% for nation in nations %}
+                  <li class='govuk-body-m'>{{ nation }}</li>
+                {% endfor %}
+              </ul>
+            {% endset %}
+
+            {% set selectedIndustriesSummaryListHtml %}
+              <ul>
+                {% for industry in industries %}
+                  <li class='govuk-body-m'>{{ industry }}</li>
+                {% endfor %}
+              </ul>
+            {% endset %}
+            {{
+              govukSummaryList({
+                rows: [
+                  {
+                    key: {
+                      text: ("professions.form.label.topLevelInformation.name" | t)
+                    },
+                    value: {
+                      text: name
+                    },
+                    actions: {
+                      items: [
+                        {
+                          href: "/admin/professions/" + professionId +"/top-level-information/edit?change=true",
+                          text: ("app.change" | t),
+                          visuallyHiddenText: ("professions.form.label.topLevelInformation.name" | t)
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    key: {
+                      text: ("professions.form.label.topLevelInformation.nations" | t)
+                    },
+                    value: {
+                      html: selectedNationsSummaryListHtml | safe
+                    },
+                    actions: {
+                      items: [
+                        {
+                          href: "/admin/professions/" + professionId +"/top-level-information/edit?change=true",
+                          text: ("app.change" | t),
+                          visuallyHiddenText: ("professions.form.label.topLevelInformation.nation" | t)
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    key: {
+                      text: ("professions.form.label.topLevelInformation.industry" | t)
+                    },
+                    value: {
+                      html: selectedIndustriesSummaryListHtml | safe
+                    },
+                    actions: {
+                      items: [
+                        {
+                          href: "/admin/professions/" + professionId +"/top-level-information/edit?change=true",
+                          text: ("app.change" | t),
+                          visuallyHiddenText: ("professions.form.label.topLevelInformation.industry" | t)
+                        }
+                      ]
+                    }
+                  }
+                ]
+              })
+            }}
+
+            <h2 class="govuk-heading-m">{{ ("professions.form.headings.regulatoryBody" | t) }}</h2>
+
+            {{
+              govukSummaryList({
+                rows: [
+                  {
+                    key: {
+                      text: ("professions.form.label.regulatoryBody.regulatedAuthority" | t)
+                    },
+                    value: {
+                      text: organisation
+                    },
+                    actions: {
+                      items: [
+                        {
+                          href: "/admin/professions/" + professionId +"/regulatory-body/edit?change=true",
+                          text: ("app.change" | t),
+                          visuallyHiddenText: ("professions.form.label.regulatoryBody.regulatedAuthority" | t)
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    key: {
+                      text: ("professions.form.label.regulatoryBody.mandatoryRegistration" | t)
+                    },
+                    value: {
+                      text: ("professions.mandatoryRegistration." + mandatoryRegistration) | t
+                    },
+                    actions: {
+                      items: [
+                        {
+                          href: "/admin/professions/" + professionId + "/regulatory-body/edit?change=true",
+                          text: ("app.change" | t),
+                          visuallyHiddenText: ("professions.form.label.regulatoryBody.mandatoryRegistration" | t)
+                        }
+                      ]
+                    }
+                  }
+                ]
+              })
+            }}
+
+            <h2 class="govuk-heading-m">{{ ("professions.form.headings.regulatedActivities" | t) }}</h2>
+
+            {{
+              govukSummaryList({
+                rows: [
+                  {
+                    key: {
+                      text: ("professions.form.label.regulatedActivities.activities" | t)
+                    },
+                    value: {
+                      text: reservedActivities
+                    },
+                    actions: {
+                      items: [
+                        {
+                          href: "/admin/professions/" + professionId + "/regulated-activities/edit?change=true",
+                          text: ("app.change" | t),
+                          visuallyHiddenText: ("professions.form.label.regulatedActivities.activities" | t)
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    key: {
+                      text: ("professions.form.label.regulatedActivities.description" | t)
+                    },
+                    value: {
+                      text: description
+                    },
+                    actions: {
+                      items: [
+                        {
+                          href: "/admin/professions/" + professionId + "/regulated-activities/edit?change=true",
+                          text: ("app.change" | t),
+                          visuallyHiddenText: ("professions.form.label.regulatedActivities.description" | t)
+                        }
+                      ]
+                    }
+                  }
+                ]
+              })
+            }}
+
+            <h2 class="govuk-heading-m">{{ ("professions.form.headings.qualificationInformation" | t) }}</h2>
+
+            {{
+              govukSummaryList({
+                rows: [
+                  {
+                    key: {
+                      text: ("professions.form.label.qualificationInformation.qualificationLevel" | t)
+                    },
+                    value: {
+                      text: qualification.level
+                    },
+                    actions: {
+                      items: [
+                        {
+                          href: "/admin/professions/" + professionId + "/qualification-information/edit?change=true",
+                          text: ("app.change" | t),
+                          visuallyHiddenText: ("professions.form.label.qualificationInformation.qualificationLevel" | t)
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    key: {
+                      text: ("professions.form.label.qualificationInformation.methodsToObtainQualification" | t)
+                    },
+                    value: {
+                      text: (qualification.methodToObtainQualification | t)
+                    },
+                    actions: {
+                      items: [
+                        {
+                          href: "/admin/professions/" + professionId + "/qualification-information/edit?change=true",
+                          text: ("app.change" | t),
+                          visuallyHiddenText: ("professions.form.label.qualificationInformation.methodsToObtainQualification" | t)
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    key: {
+                      text: ("professions.form.label.qualificationInformation.mostCommonPathToObtainQualification" | t)
+                    },
+                    value: {
+                      text: (qualification.mostCommonPathToObtainQualification | t)
+                    },
+                    actions: {
+                      items: [
+                        {
+                          href: "/admin/professions/" + professionId + "/qualification-information/edit?change=true",
+                          text: ("app.change" | t),
+                          visuallyHiddenText: ("professions.form.label.qualificationInformation.mostCommonPathToObtainQualification" | t)
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    key: {
+                      text: ("professions.form.label.qualificationInformation.duration" | t)
+                    },
+                    value: {
+                      text: qualification.duration
+                    },
+                    actions: {
+                      items: [
+                        {
+                          href: "/admin/professions/" + professionId + "/qualification-information/edit?change=true",
+                          text: ("app.change" | t),
+                          visuallyHiddenText: ("professions.form.label.qualificationInformation.mostCommonPathToObtainQualification" | t)
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    key: {
+                      text: ("professions.form.label.qualificationInformation.mandatoryProfessionalExperience" | t)
+                    },
+                    value: {
+                      text: qualification.mandatoryProfessionalExperience | t
+                    },
+                    actions: {
+                      items: [
+                        {
+                          href: "/admin/professions/" + professionId + "/qualification-information/edit?change=true",
+                          text: ("app.change" | t),
+                          visuallyHiddenText: ("professions.form.label.qualificationInformation.mandatoryProfessionalExperience" | t)
+                        }
+                      ]
+                    }
+                  }
+                ]
+              })
+            }}
+
+            <h2 class="govuk-heading-m">{{ ("professions.form.headings.legislation" | t) }}</h2>
+
+            {{
+              govukSummaryList({
+                rows: [
+                  {
+                    key: {
+                      text: ("professions.form.label.legislation.nationalLegislation" | t)
+                    },
+                    value: {
+                      text: legislation.name
+                    },
+                    actions: {
+                      items: [
+                        {
+                          href: "/admin/professions/" + professionId + "/legislation/edit?change=true",
+                          text: ("app.change" | t),
+                          visuallyHiddenText: ("professions.form.label.legislation.nationalLegislation" | t)
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    key: {
+                      text: ("professions.form.label.legislation.link" | t)
+                    },
+                    value: {
+                      html: "<a class='govuk-link' href='" + legislation.url | escape + "'>" + legislation.url | escape + "</a>"
+                    },
+                    actions: {
+                      items: [
+                        {
+                          href: "/admin/professions/" + professionId + "/legislation/edit?change=true",
+                          text: ("app.change" | t),
+                          visuallyHiddenText: ("professions.form.label.legislation.nationalLegislation" | t)
+                        }
+                      ]
+                    }
+                  }
+                ]
+              })
+            }}
+
+            {% if edit %}
+            {% elif confirmed %}
+              {{
+                govukButton({
+                  id: "submit-button",
+                  type: "Submit",
+                  preventDoubleClick: true,
+                  text: ("professions.form.button.publishNow" | t)
+                })
+              }}
+            {% else %}
+              {{
+                govukButton({
+                  id: "submit-button",
+                  type: "Submit",
+                  preventDoubleClick: true,
+                  text: ("professions.form.button.create" | t)
+                })
+              }}
+            {% endif %}
+          </form>
+
+        </div>
+
+        <div class="govuk-grid-column-one-third"></div>
+      </div>
+
+    </main>
+  </div>
+
+{% endblock %}

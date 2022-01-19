@@ -19,6 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Allow Regulatory Authorities to be edited
 - Update start page
 - Add public-facing Regulatory Authority pages
+- Allow Professions to be edited
 
 ### Changed
 
