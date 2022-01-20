@@ -59,7 +59,7 @@
     "express-openid-connect": "^2.5.2",
     "express-session": "^1.17.2",
     "file-loader": "^6.2.0",
-    "govuk-frontend": "^3.14.0",
+    "govuk-frontend": "^4.0.0",
     "jwt-decode": "^3.1.2",
     "method-override": "^3.0.0",
     "nestjs-i18n": "^8.2.2",
