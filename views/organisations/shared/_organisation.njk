@@ -11,7 +11,7 @@
 {% for profession in professions %}
   <div class="rpr-listing__ra-container">
     <h3>
-      <a class="govuk-link govuk-heading-m rpr-listing__profession-title" class="govuk-link" href="/professions/{{ profession.slug }}">
+      <a class="govuk-link govuk-heading-m rpr-listing__profession-title" class="govuk-link" href="/{{professionPagePrefix}}/{{ profession.slug }}">
         {{ profession.name }}
       </a>
     </h3>

@@ -21,6 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Add public-facing Regulatory Authority pages
 - Allow Professions to be edited
 - Display real data on "view profession" pages
+- Add back link from internal professions page to index page
 
 ### Changed
 
@@ -29,6 +30,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Require users to be logged in to be able to add a profession
 - Change roles to permissions
 - Update entities on seed, rather than replacing them
+- Take users from internal organisations page to internal profession page via link, rather than to public-facing page
 
 ## [release-001] - 2022-01-10
 
