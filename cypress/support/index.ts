@@ -37,6 +37,7 @@ declare global {
       checkTextareaValue(label: string, value: string): Chainable<string>;
       checkSummaryListRowValue(key: string, value: string): Chainable<string>;
       clickSummaryListRowAction(key: string, action: string): Chainable<string>;
+      visitAndCheckAccessibility(url: string): void;
     }
   }
 }

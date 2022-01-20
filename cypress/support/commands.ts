@@ -141,3 +141,9 @@ Cypress.Commands.add(
     });
   },
 );
+
+Cypress.Commands.add('visitAndCheckAccessibility', (url: string) => {
+  cy.visit(url);
+  cy.injectAxe();
+  cy.checkA11y();
+});
