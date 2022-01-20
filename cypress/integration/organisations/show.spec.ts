@@ -9,7 +9,7 @@ describe('Showing organisations', () => {
     );
   });
 
-  it('Shows the detail of an organisation', () => {
+  it('Shows the detail of an organisation, with its professions and a link to the public-facing profession page', () => {
     cy.readFile('./seeds/test/professions.json').then((professions) => {
       cy.readFile('./seeds/test/organisations.json').then((organisations) => {
         const organisation = organisations[0];
@@ -29,6 +29,9 @@ describe('Showing organisations', () => {
         professionsForOrganisation.forEach((profession: any) => {
           cy.should('contain', profession.name);
         });
+
+        cy.contains(professionsForOrganisation[0].name).click();
+        cy.get('body').should('not.contain', 'Edit this profession');
       });
     });
   });

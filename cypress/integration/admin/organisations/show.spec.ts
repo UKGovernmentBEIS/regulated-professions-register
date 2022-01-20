@@ -5,7 +5,7 @@ describe('Showing organisations', () => {
       cy.visit('/admin');
     });
 
-    it('Shows the detail of an organisation', () => {
+    it('Shows the detail of an organisation, with its professions and a link to the admin profession page', () => {
       cy.get('a').contains('Regulatory authorities').click();
 
       cy.readFile('./seeds/test/professions.json').then((professions) => {
@@ -31,6 +31,9 @@ describe('Showing organisations', () => {
               professionsForOrganisation.forEach((profession: any) => {
                 cy.should('contain', profession.name);
               });
+
+              cy.contains(professionsForOrganisation[0].name).click();
+              cy.get('body').should('contain', 'Edit this profession');
             });
         });
       });
