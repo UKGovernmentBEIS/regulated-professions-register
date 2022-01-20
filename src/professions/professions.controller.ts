@@ -41,9 +41,13 @@ export class ProfessionsController {
       ),
     );
 
+    const qualification = profession.qualification
+      ? new QualificationPresenter(profession.qualification)
+      : null;
+
     return {
       profession,
-      qualification: new QualificationPresenter(profession.qualification),
+      qualification: qualification,
       nations,
       industries,
       backLink: '/professions/search',
