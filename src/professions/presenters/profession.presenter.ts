@@ -41,7 +41,9 @@ export class ProfessionPresenter {
             ),
           },
           value: {
-            text: this.profession.qualification.level,
+            text: this.profession.qualification
+              ? this.profession.qualification.level
+              : null,
           },
         },
       ],
