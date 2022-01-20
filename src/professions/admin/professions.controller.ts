@@ -32,6 +32,7 @@ import { Profession } from '../profession.entity';
 import { ShowTemplate } from '../interfaces/show-template.interface';
 import { EditTemplate } from './interfaces/edit-template.interface';
 import { Permissions } from '../../common/permissions.decorator';
+import { BackLink } from '../../common/decorators/back-link.decorator';
 import QualificationPresenter from '../../qualifications/presenters/qualification.presenter';
 
 @UseGuards(AuthenticationGuard)
@@ -55,6 +56,7 @@ export class ProfessionsController {
 
   @Get()
   @Render('admin/professions/index')
+  @BackLink('/admin')
   async index(
     @Req() request: Request,
     @Query() query: FilterDto = null,
@@ -64,6 +66,7 @@ export class ProfessionsController {
 
   @Get('/:slug')
   @Render('admin/professions/show')
+  @BackLink('/admin/professions')
   async show(@Param('slug') slug: string): Promise<ShowTemplate> {
     const profession = await this.professionsService.findBySlug(slug);
 
@@ -90,13 +93,13 @@ export class ProfessionsController {
       qualification: new QualificationPresenter(profession.qualification),
       nations,
       industries,
-      backLink: '/admin/professions',
     };
   }
 
   @Get('/:slug/edit')
   @Permissions(UserPermission.CreateProfession)
   @Render('admin/professions/edit')
+  @BackLink('/admin/professions/:slug')
   async edit(@Param('slug') slug: string): Promise<EditTemplate> {
     const profession = await this.professionsService.findBySlug(slug);
 

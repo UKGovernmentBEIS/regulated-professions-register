@@ -10,6 +10,7 @@ import { FilterDto } from './dto/filter.dto';
 
 import { IndexTemplate } from './interfaces/index-template.interface';
 import { SearchPresenter } from './search.presenter';
+import { BackLink } from '../../common/decorators/back-link.decorator';
 
 @Controller('regulatory-authorities/search')
 export class SearchController {
@@ -21,12 +22,14 @@ export class SearchController {
 
   @Get()
   @Render('organisations/search/index')
+  @BackLink('/')
   async index(): Promise<IndexTemplate> {
     return this.createSearchResults(new FilterDto());
   }
 
   @Post()
   @Render('organisations/search/index')
+  @BackLink('/')
   async create(@Body() filter: FilterDto): Promise<IndexTemplate> {
     return this.createSearchResults(filter);
   }
@@ -50,7 +53,6 @@ export class SearchController {
       allIndustries,
       filteredOrganisations,
       this.i18nService,
-      '/',
     ).present();
   }
 

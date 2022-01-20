@@ -13,6 +13,4 @@ export interface IndexTemplate {
   nationsCheckboxArgs: CheckboxArgs[];
 
   industriesCheckboxArgs: CheckboxArgs[];
-
-  backLink: string;
 }

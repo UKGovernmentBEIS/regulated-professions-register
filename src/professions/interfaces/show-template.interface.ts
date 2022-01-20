@@ -6,5 +6,4 @@ export interface ShowTemplate {
   qualification: QualificationPresenter;
   nations: string[];
   industries: string[];
-  backLink: string;
 }

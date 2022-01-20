@@ -15,7 +15,6 @@ export class SearchPresenter {
     private readonly allIndustries: Industry[],
     private readonly filteredOrganisations: Organisation[],
     private readonly i18nService: I18nService,
-    private readonly backLink: string,
   ) {}
 
   async present(): Promise<IndexTemplate> {
@@ -48,7 +47,6 @@ export class SearchPresenter {
           (industry) => industry.name,
         ),
       },
-      backLink: this.backLink,
     };
   }
 }

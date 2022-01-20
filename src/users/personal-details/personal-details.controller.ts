@@ -19,8 +19,8 @@ import { UserPermission } from './../user.entity';
 import { PersonalDetailsDto } from './dto/personal-details.dto';
 import { AuthenticationGuard } from '../../common/authentication.guard';
 import { Permissions } from '../../common/permissions.decorator';
-import { backLink } from '../../common/utils';
 import { EditTemplate } from './interfaces/edit-template';
+import { BackLink } from '../../common/decorators/back-link.decorator';
 @Controller('/admin/users')
 @UseGuards(AuthenticationGuard)
 export class PersonalDetailsController {
@@ -29,6 +29,7 @@ export class PersonalDetailsController {
   @Get(':id/personal-details/edit')
   @Permissions(UserPermission.CreateUser, UserPermission.EditUser)
   @Render('admin/users/personal-details/edit')
+  @BackLink('/admin/users')
   async edit(
     @Req() req: Request,
     @Param('id') id,
@@ -38,7 +39,6 @@ export class PersonalDetailsController {
 
     return {
       ...user,
-      backLink: backLink(req),
       change: change,
     };
   }
