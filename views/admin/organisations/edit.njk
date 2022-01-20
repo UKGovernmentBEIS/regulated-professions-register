@@ -6,14 +6,6 @@
 {% set bodyClasses = "rpr-internal__page" %}
 
 {% block content %}
-
-  {% if backLink %}
-    {{ govukBackLink({
-      text: ( "app.back" | t ),
-      href: backLink
-    }) }}
-  {% endif %}
-
   <h1 class="govuk-heading-xl">
     {{ "organisations.admin.edit.heading" | t }}
   </h1>

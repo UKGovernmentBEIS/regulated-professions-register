@@ -4,14 +4,6 @@
 {% set bodyClasses = "rpr-internal__listing rpr-internal__page" %}
 
 {% block content %}
-
-  {% if backLink %}
-    {{ govukBackLink({
-      text: ( "app.back" | t ),
-      href: backLink
-    }) }}
-  {% endif %}
-
   <h1 class="govuk-heading-xl">
     {{ "organisations.admin.heading" | t }}
   </h1>
