@@ -56,10 +56,20 @@ export class ProfessionsSeeder implements Seeder {
           where: { level: profession.qualification },
         });
 
-        const legislation: Legislation =
+        let legislation: Legislation =
           await this.legislationsRepository.findOne({
             where: { name: profession.legislation },
           });
+
+        if (legislation) {
+          // Currently the Legislation relation has a unique constraint
+          // on the legislationID, so we need to create a new Legislation
+          // each time. We need to fix this, but in the interests of getting
+          // seed data in, we'll just create a new entry each time
+          legislation = await this.legislationsRepository.save(
+            new Legislation(legislation.name, legislation.url),
+          );
+        }
 
         const organisation = await this.organisationRepository.findOne({
           where: { name: profession.organisation },
