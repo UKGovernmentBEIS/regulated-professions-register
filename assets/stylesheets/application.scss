@@ -107,3 +107,13 @@ $govuk-assets-path: '~govuk-frontend/govuk/assets/';
     }
   }
 }
+
+@media print {
+  .rpr-details__page {
+    .govuk-back-link,
+    .govuk-phase-banner,
+    .govuk-button {
+      display: none;
+    }
+  }
+}
