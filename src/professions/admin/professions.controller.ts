@@ -90,7 +90,7 @@ export class ProfessionsController {
       qualification: new QualificationPresenter(profession.qualification),
       nations,
       industries,
-      backLink: '',
+      backLink: '/admin/professions',
     };
   }
 
