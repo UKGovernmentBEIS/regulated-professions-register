@@ -12,12 +12,10 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { I18nService } from 'nestjs-i18n';
-import { Industry } from '../../industries/industry.entity';
 import { IndustriesService } from '../../industries/industries.service';
 import { Nation } from '../../nations/nation';
 import { ProfessionsService } from '../professions.service';
 import { ProfessionsFilterHelper } from '../helpers/professions-filter.helper';
-import { FilterInput } from '../../common/interfaces/filter-input.interface';
 import { IndexTemplate } from './interfaces/index-template.interface';
 import {
   ProfessionsPresenter,
@@ -27,13 +25,13 @@ import { AuthenticationGuard } from '../../common/authentication.guard';
 import { User, UserPermission } from '../../users/user.entity';
 import { FilterDto } from './dto/filter.dto';
 import { OrganisationsService } from '../../organisations/organisations.service';
-import { Organisation } from '../../organisations/organisation.entity';
 import { Profession } from '../profession.entity';
 import { ShowTemplate } from '../interfaces/show-template.interface';
 import { EditTemplate } from './interfaces/edit-template.interface';
 import { Permissions } from '../../common/permissions.decorator';
 import { BackLink } from '../../common/decorators/back-link.decorator';
 import QualificationPresenter from '../../qualifications/presenters/qualification.presenter';
+import { createFilterInput } from '../../helpers/create-filter-input.helper';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
@@ -147,12 +145,12 @@ export class ProfessionsController {
           (organisation) => organisation.name === 'Department for Education',
         ) || allOrganisations[0];
 
-    const filterInput = this.getFilterInput(
-      filter,
+    const filterInput = createFilterInput({
+      ...filter,
       allNations,
       allOrganisations,
       allIndustries,
-    );
+    });
 
     if (userOrganisation) {
       filterInput.organisations = [userOrganisation];
@@ -171,26 +169,5 @@ export class ProfessionsController {
       filteredProfessions,
       this.i18Service,
     ).present(view);
-  }
-
-  private getFilterInput(
-    filter: FilterDto,
-    allNations: Nation[],
-    allOrganisations: Organisation[],
-    allIndustries: Industry[],
-  ): FilterInput {
-    const nations = allNations.filter((nation) =>
-      filter.nations.includes(nation.code),
-    );
-
-    const organisations = allOrganisations.filter((organisation) =>
-      (filter.organisations || []).includes(organisation.id),
-    );
-
-    const industries = allIndustries.filter((industry) =>
-      (filter.industries || []).includes(industry.id),
-    );
-
-    return { nations, organisations, industries, keywords: filter.keywords };
   }
 }
