@@ -4,6 +4,7 @@ import { I18nService } from 'nestjs-i18n';
 import organisationFactory from '../../../testutils/factories/organisation';
 import { OrganisationsPresenter } from './organisations.presenter';
 import { createMockI18nService } from '../../../testutils/create-mock-i18n-service';
+import { translationOf } from '../../../testutils/translation-of';
 
 const mockTableRow = () => {
   return [
@@ -34,14 +35,14 @@ describe('OrganisationsPresenter', () => {
 
       expect(table.firstCellIsHeader).toEqual(true);
       expect(table.head).toEqual([
-        { text: 'Translation of `organisations.admin.tableHeading.name`' },
+        { text: translationOf('organisations.admin.tableHeading.name') },
         {
-          text: 'Translation of `organisations.admin.tableHeading.alternateName`',
+          text: translationOf('organisations.admin.tableHeading.alternateName'),
         },
         {
-          text: 'Translation of `organisations.admin.tableHeading.industries`',
+          text: translationOf('organisations.admin.tableHeading.industries'),
         },
-        { text: 'Translation of `organisations.admin.tableHeading.actions`' },
+        { text: translationOf('organisations.admin.tableHeading.actions') },
       ]);
       expect(table.rows).toEqual([
         mockTableRow(),
