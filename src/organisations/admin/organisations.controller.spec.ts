@@ -7,7 +7,7 @@ import { OrganisationsService } from '../organisations.service';
 import { Organisation } from '../organisation.entity';
 import { Table } from '../../common/interfaces/table';
 
-import { OrganisationsPresenter } from '../presenters/organisations.presenter';
+import { OrganisationsPresenter } from './presenters/organisations.presenter';
 import { OrganisationPresenter } from '../presenters/organisation.presenter';
 import { OrganisationDto } from './dto/organisation.dto';
 
@@ -42,7 +42,7 @@ const organisationPresenter = {
   }),
 };
 
-jest.mock('../presenters/organisations.presenter', () => {
+jest.mock('./presenters/organisations.presenter', () => {
   return {
     OrganisationsPresenter: jest.fn().mockImplementation(() => {
       return organisationsPresenter;

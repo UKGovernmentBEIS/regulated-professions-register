@@ -16,7 +16,7 @@ import { ValidationExceptionFilter } from '../../common/validation/validation-ex
 import { OrganisationsService } from '../organisations.service';
 import { Organisation } from '../organisation.entity';
 import { OrganisationPresenter } from '../presenters/organisation.presenter';
-import { OrganisationsPresenter } from '../presenters/organisations.presenter';
+import { OrganisationsPresenter } from './presenters/organisations.presenter';
 
 import { ConfirmTemplate } from './interfaces/confirm-template.interface';
 import { ShowTemplate } from '../interfaces/show-template.interface';
