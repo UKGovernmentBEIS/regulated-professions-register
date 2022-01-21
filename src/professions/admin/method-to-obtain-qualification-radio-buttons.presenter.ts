@@ -15,7 +15,7 @@ export class MethodToObtainQualificationRadioButtonsPresenter {
       Object.values(MethodToObtain).map(async (method) => ({
         value: method,
         text: await this.i18nService.translate(
-          `professions.form.radioButtons.methodsToObtainQualification.${method}`,
+          `professions.methodsToObtainQualification.${method}`,
         ),
         checked: this.methodToObtain === method,
         conditional: await this.otherMethodTextAreaHTML(
@@ -43,7 +43,7 @@ export class MethodToObtainQualificationRadioButtonsPresenter {
     }`;
 
     const hintHTML = `<div id="${name}-hint" class="govuk-hint">${await this.i18nService.translate(
-      'professions.form.radioButtons.methodsToObtainQualification.otherHint',
+      'professions.methodsToObtainQualification.otherHint',
     )}</div>`;
 
     const errorMessageHTML = await this.errorMessageHTML(

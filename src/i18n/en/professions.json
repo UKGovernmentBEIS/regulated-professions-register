@@ -56,15 +56,6 @@
         "mandatory": "Mandatory",
         "voluntary": "Voluntary",
         "unknown": "Unknown"
-      },
-      "methodsToObtainQualification": {
-        "generalSecondaryEducation": "General secondary education",
-        "generalOrVocationalPostSecondaryEducation": "General or vocational post-secondary education",
-        "generalPostSecondaryEducationMandatoryVocational": "General post-secondary education incorporating mandatory vocational content",
-        "vocationalPostSecondaryEducation": "Vocational post-secondary education level",
-        "degreeLevel": "Degree level education in an approved education institution",
-        "others": "Others",
-        "otherHint": "Please provide the methods to obtain the qualification"
       }
     },
     "checkboxes": {
@@ -178,6 +169,15 @@
       "nationalLegislation": "National legislation",
       "legislationLink": "Legislation link"
     }
+  },
+  "methodsToObtainQualification": {
+    "generalSecondaryEducation": "General secondary education",
+    "generalOrVocationalPostSecondaryEducation": "General or vocational post-secondary education",
+    "generalPostSecondaryEducationMandatoryVocational": "General post-secondary education incorporating mandatory vocational content",
+    "vocationalPostSecondaryEducation": "Vocational post-secondary education level",
+    "degreeLevel": "Degree level education in an approved education institution",
+    "others": "Others",
+    "otherHint": "Please provide the methods to obtain the qualification"
   },
   "mandatoryRegistration": {
     "mandatory": "Mandatory",
