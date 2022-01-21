@@ -8,86 +8,80 @@
 
 {% block content %}
 
-  <div class="govuk-width-container">
-    {% include "../../shared/_errors.njk" %}
+{% include "../../shared/_errors.njk" %}
 
-    <main class="govuk-main-wrapper">
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
 
-      <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
+    <span class="govuk-caption-l">{{ captionText | t }}</span>
+    <h1 class="govuk-heading-l">{{ ("professions.form.headings.topLevelInformation" | t) }}</h1>
 
-          <span class="govuk-caption-l">{{ captionText | t }}</span>
-          <h1 class="govuk-heading-l">{{ ("professions.form.headings.topLevelInformation" | t) }}</h1>
+    <form method="post" action="./">
+      <input type="hidden" name="change" value="{{ change }}" />
 
-          <form method="post" action="./">
-            <input type="hidden" name="change" value="{{ change }}" />
+      {{
+        govukInput({
+          label: {
+            text: ("professions.form.label.topLevelInformation.name" | t),
+            classes: "govuk-label--m",
+            isPageHeading: false
+          },
+          id: "name",
+          name: "name",
+          value: name,
+          errorMessage: errors.name | tError
+        })
+      }}
 
-            {{
-              govukInput({
-                label: {
-                  text: ("professions.form.label.topLevelInformation.name" | t),
-                  classes: "govuk-label--m",
-                  isPageHeading: false
-                },
-                id: "name",
-                name: "name",
-                value: name,
-                errorMessage: errors.name | tError
-              })
-            }}
+      {{
+        govukCheckboxes({
+          idPrefix: "nations",
+          name: "nations[]",
+          fieldset: {
+            legend: {
+              text: ("professions.form.label.topLevelInformation.nations" | t),
+              isPageHeading: false,
+              classes: "govuk-fieldset__legend--m"
+            }
+          },
+          hint: {
+            text: ("professions.form.checkboxes.hint" | t)
+          },
+          items: nationsCheckboxArgs,
+          errorMessage: errors.nations | tError
+        })
+      }}
 
-            {{
-              govukCheckboxes({
-                idPrefix: "nations",
-                name: "nations[]",
-                fieldset: {
-                  legend: {
-                    text: ("professions.form.label.topLevelInformation.nations" | t),
-                    isPageHeading: false,
-                    classes: "govuk-fieldset__legend--m"
-                  }
-                },
-                hint: {
-                  text: ("professions.form.checkboxes.hint" | t)
-                },
-                items: nationsCheckboxArgs,
-                errorMessage: errors.nations | tError
-              })
-            }}
+      {{
+        govukCheckboxes({
+          idPrefix: "industries",
+          name: "industries[]",
+          fieldset: {
+            legend: {
+            text: ("professions.form.label.topLevelInformation.industry" | t),
+              isPageHeading: false,
+              classes: "govuk-fieldset__legend--m"
+            }
+          },
+          hint: {
+            text: ("professions.form.checkboxes.hint" | t)
+          },
+          items: industriesCheckboxArgs,
+          errorMessage: errors.industries | tError
+        })
+      }}
 
-            {{
-              govukCheckboxes({
-                idPrefix: "industries",
-                name: "industries[]",
-                fieldset: {
-                  legend: {
-                  text: ("professions.form.label.topLevelInformation.industry" | t),
-                    isPageHeading: false,
-                    classes: "govuk-fieldset__legend--m"
-                  }
-                },
-                hint: {
-                  text: ("professions.form.checkboxes.hint" | t)
-                },
-                items: industriesCheckboxArgs,
-                errorMessage: errors.industries | tError
-              })
-            }}
+      {{
+        govukButton({
+          id: "submit-button",
+          type: "Submit",
+          text: ("app.continue" | t)
 
-            {{
-              govukButton({
-                id: "submit-button",
-                type: "Submit",
-                text: ("app.continue" | t)
+        })
+      }}
+    </form>
 
-              })
-            }}
-          </form>
-
-        </div>
-      </div>
-
-    </main>
   </div>
+</div>
 
 {% endblock %}
