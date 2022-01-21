@@ -6,6 +6,5 @@ export interface TopLevelDetailsTemplate {
   nationsCheckboxArgs: CheckboxArgs[];
   captionText: string;
   change: boolean;
-  backLink: string;
   errors: object | undefined;
 }

@@ -8,7 +8,7 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { Response } from 'express';
+import { Response, Request } from 'express';
 import { I18nService } from 'nestjs-i18n';
 import { AuthenticationGuard } from '../../common/authentication.guard';
 import { Permissions } from '../../common/permissions.decorator';
@@ -21,6 +21,7 @@ import { MethodToObtainQualificationRadioButtonsPresenter } from './method-to-ob
 import { YesNoRadioButtonArgsPresenter } from './yes-no-radio-buttons-presenter';
 import { QualificationInformationDto } from './dto/qualification-information.dto';
 import { QualificationInformationTemplate } from './interfaces/qualification-information.template';
+import { BackLink } from '../../common/decorators/back-link.decorator';
 import ViewUtils from './viewUtils';
 
 @UseGuards(AuthenticationGuard)
@@ -33,6 +34,11 @@ export class QualificationInformationController {
 
   @Get('/:id/qualification-information/edit')
   @Permissions(UserPermission.CreateProfession)
+  @BackLink((request: Request) =>
+    request.query.change === 'true'
+      ? '/admin/professions/:id/check-your-answers'
+      : '/admin/professions/:id/regulated-activities/edit',
+  )
   async edit(
     @Res() res: Response,
     @Param('id') id: string,
@@ -45,12 +51,16 @@ export class QualificationInformationController {
       profession.qualification,
       profession.confirmed,
       change,
-      this.backLink(change, profession.id),
     );
   }
 
   @Post('/:id/qualification-information')
   @Permissions(UserPermission.CreateProfession)
+  @BackLink((request: Request) =>
+    request.query.change === 'true'
+      ? '/admin/professions/:id/check-your-answers'
+      : '/admin/professions/:id/regulated-activities/edit',
+  )
   async update(
     @Res() res: Response,
     @Param('id') id: string,
@@ -93,7 +103,6 @@ export class QualificationInformationController {
         updatedQualification,
         profession.confirmed,
         submittedValues.change,
-        this.backLink(submittedValues.change, profession.id),
         errors,
       );
     }
@@ -114,7 +123,6 @@ export class QualificationInformationController {
     qualification: Qualification | null,
     isEditing: boolean,
     change: boolean,
-    backLink: string,
     errors: object | undefined = undefined,
   ) {
     const mostCommonPathToObtainQualificationRadioButtonArgs =
@@ -147,7 +155,6 @@ export class QualificationInformationController {
       duration: qualification?.educationDuration,
       captionText: ViewUtils.captionText(isEditing),
       change,
-      backLink,
       errors,
     };
 
@@ -155,11 +162,5 @@ export class QualificationInformationController {
       'admin/professions/qualification-information',
       templateArgs,
     );
-  }
-
-  private backLink(change: boolean, id: string) {
-    return change
-      ? `/admin/professions/${id}/check-your-answers`
-      : `/admin/professions/${id}/regulated-activities/edit`;
   }
 }

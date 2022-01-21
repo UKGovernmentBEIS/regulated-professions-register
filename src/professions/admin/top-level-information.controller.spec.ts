@@ -288,23 +288,6 @@ describe('TopLevelInformationController', () => {
             '/admin/professions/profession-id/check-your-answers',
           );
         });
-
-        it('sets the back link to point to check your answers', async () => {
-          const profession = professionFactory.build({
-            id: 'profession-id',
-          });
-
-          professionsService.find.mockImplementation(async () => profession);
-
-          await controller.edit(response, 'profession-id', true);
-
-          expect(response.render).toHaveBeenCalledWith(
-            'admin/professions/top-level-information',
-            expect.objectContaining({
-              backLink: '/admin/professions/profession-id/check-your-answers',
-            }),
-          );
-        });
       });
 
       describe('when set to false', () => {
@@ -333,23 +316,6 @@ describe('TopLevelInformationController', () => {
             '/admin/professions/profession-id/regulatory-body/edit',
           );
         });
-      });
-
-      it('sets the back link to point to the previous page in the journey', async () => {
-        const profession = professionFactory.build({
-          id: 'profession-id',
-        });
-
-        professionsService.find.mockImplementation(async () => profession);
-
-        await controller.edit(response, 'profession-id', false);
-
-        expect(response.render).toHaveBeenCalledWith(
-          'admin/professions/top-level-information',
-          expect.objectContaining({
-            backLink: '/admin/professions',
-          }),
-        );
       });
     });
   });

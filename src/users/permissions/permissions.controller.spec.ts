@@ -60,7 +60,6 @@ describe('PermissionsController', () => {
           'downloadDecisionData',
           'viewDecisionData',
         ],
-        backLink: referrer,
         change: false,
       });
     });
@@ -82,7 +81,6 @@ describe('PermissionsController', () => {
           'downloadDecisionData',
           'viewDecisionData',
         ],
-        backLink: referrer,
         change: true,
       });
     });

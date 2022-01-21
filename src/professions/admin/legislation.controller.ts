@@ -4,12 +4,11 @@ import {
   Get,
   Param,
   Post,
-  Query,
   Res,
   UseFilters,
   UseGuards,
 } from '@nestjs/common';
-import { Response } from 'express';
+import { Response, Request } from 'express';
 import { AuthenticationGuard } from '../../common/authentication.guard';
 import { Permissions } from '../../common/permissions.decorator';
 import { Validator } from '../../helpers/validator';
@@ -21,6 +20,7 @@ import { ProfessionsService } from '../professions.service';
 import LegislationDto from './dto/legislation.dto';
 import { LegislationTemplate } from './interfaces/legislation.template';
 import ViewUtils from './viewUtils';
+import { BackLink } from '../../common/decorators/back-link.decorator';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
@@ -29,19 +29,15 @@ export class LegislationController {
 
   @Get('/:id/legislation/edit')
   @Permissions(UserPermission.CreateProfession)
-  async edit(
-    @Res() res: Response,
-    @Param('id') id: string,
-    @Query('change') change: boolean,
-  ): Promise<void> {
+  @BackLink((request: Request) =>
+    request.query.change === 'true'
+      ? '/admin/professions/:id/check-your-answers'
+      : '/admin/professions/:id/qualification-information/edit',
+  )
+  async edit(@Res() res: Response, @Param('id') id: string): Promise<void> {
     const profession = await this.professionsService.find(id);
 
-    this.renderForm(
-      res,
-      profession.legislation,
-      profession.confirmed,
-      this.backLink(change, id),
-    );
+    this.renderForm(res, profession.legislation, profession.confirmed);
   }
 
   @Post('/:id/legislation')
@@ -52,11 +48,15 @@ export class LegislationController {
       'legislation',
     ),
   )
+  @BackLink((request: Request) =>
+    request.query.change === 'true'
+      ? '/admin/professions/:id/check-your-answers'
+      : '/admin/professions/:id/qualification-information/edit',
+  )
   async update(
     @Res() res: Response,
     @Param('id') id: string,
     @Body() legislationDto,
-    @Query() change: boolean,
   ): Promise<void> {
     const validator = await Validator.validate(LegislationDto, legislationDto);
 
@@ -79,7 +79,6 @@ export class LegislationController {
         res,
         updatedLegislation,
         profession.confirmed,
-        this.backLink(change, id),
         errors,
       );
     }
@@ -95,22 +94,14 @@ export class LegislationController {
     res: Response,
     legislation: Legislation,
     isEditing: boolean,
-    backLink: string,
     errors: object | undefined = undefined,
   ): Promise<void> {
     const templateArgs: LegislationTemplate = {
       legislation,
       captionText: ViewUtils.captionText(isEditing),
-      backLink,
       errors,
     };
 
     return res.render('admin/professions/legislation', templateArgs);
-  }
-
-  private backLink(change: boolean, id: string) {
-    return change
-      ? `/admin/professions/${id}/check-your-answers`
-      : `/admin/professions/${id}/qualification-information/edit`;
   }
 }

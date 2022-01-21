@@ -169,7 +169,6 @@ export class ProfessionsController {
       allOrganisations,
       allIndustries,
       filteredProfessions,
-      request,
       this.i18Service,
     ).present(view);
   }

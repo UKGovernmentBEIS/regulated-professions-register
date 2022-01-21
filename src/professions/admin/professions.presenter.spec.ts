@@ -1,7 +1,6 @@
 import { DeepMocked } from '@golevelup/ts-jest';
 import { I18nService } from 'nestjs-i18n';
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
-import { createMockRequest } from '../../testutils/create-mock-request';
 import { IndustriesCheckboxPresenter } from '../../industries/industries-checkbox.presenter';
 import { Nation } from '../../nations/nation';
 import { NationsCheckboxPresenter } from '../../nations/nations-checkbox.presenter';
@@ -74,11 +73,6 @@ describe('ProfessionsPresenter', () => {
       industries: [transportIndustry],
     };
 
-    const request = createMockRequest(
-      'http://example.com/some/path',
-      'example.com',
-    );
-
     professionsPresenter = new ProfessionsPresenter(
       filterInput,
       organisation1,
@@ -86,7 +80,6 @@ describe('ProfessionsPresenter', () => {
       organisations,
       industries,
       [profession1, profession2, profession3],
-      request,
       i18nService,
     );
   });
@@ -133,8 +126,6 @@ describe('ProfessionsPresenter', () => {
           i18nService,
         ).checkboxArgs(),
         changedByCheckboxArgs: [],
-
-        backLink: 'http://example.com/some/path',
       };
 
       expect(result).toEqual(expected);
@@ -184,8 +175,6 @@ describe('ProfessionsPresenter', () => {
           i18nService,
         ).checkboxArgs(),
         changedByCheckboxArgs: [],
-
-        backLink: 'http://example.com/some/path',
       };
 
       expect(result).toEqual(expected);

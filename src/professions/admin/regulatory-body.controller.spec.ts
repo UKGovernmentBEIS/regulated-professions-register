@@ -256,23 +256,6 @@ describe(RegulatoryBodyController, () => {
             '/admin/professions/profession-id/check-your-answers',
           );
         });
-
-        it('sets the back link to point to check your answers', async () => {
-          const profession = professionFactory.build({
-            id: 'profession-id',
-          });
-
-          professionsService.find.mockImplementation(async () => profession);
-
-          await controller.edit(response, 'profession-id', true);
-
-          expect(response.render).toHaveBeenCalledWith(
-            'admin/professions/regulatory-body',
-            expect.objectContaining({
-              backLink: '/admin/professions/profession-id/check-your-answers',
-            }),
-          );
-        });
       });
 
       describe('when false or missing', () => {
@@ -311,24 +294,6 @@ describe(RegulatoryBodyController, () => {
 
           expect(response.redirect).toHaveBeenCalledWith(
             '/admin/professions/profession-id/regulated-activities/edit',
-          );
-        });
-
-        it('sets the back link to point to the previous step in the journey', async () => {
-          const profession = professionFactory.build({
-            id: 'profession-id',
-          });
-
-          professionsService.find.mockImplementation(async () => profession);
-
-          await controller.edit(response, 'profession-id', false);
-
-          expect(response.render).toHaveBeenCalledWith(
-            'admin/professions/regulatory-body',
-            expect.objectContaining({
-              backLink:
-                '/admin/professions/profession-id/top-level-information/edit',
-            }),
           );
         });
       });

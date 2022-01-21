@@ -416,7 +416,6 @@ function createPresenter(
     organisations,
     industries,
     professions,
-    request,
     i18nService,
   );
 }

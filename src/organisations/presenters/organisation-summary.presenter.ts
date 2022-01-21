@@ -7,7 +7,6 @@ import { OrganisationPresenter } from './organisation.presenter';
 export class OrganisationSummaryPresenter {
   constructor(
     private readonly organisation: Organisation,
-    private readonly backLink: string,
     private readonly i18nService: I18nService,
   ) {}
 
@@ -41,7 +40,6 @@ export class OrganisationSummaryPresenter {
           };
         }),
       ),
-      backLink: this.backLink,
     };
   }
 }

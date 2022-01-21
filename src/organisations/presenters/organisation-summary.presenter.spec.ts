@@ -56,12 +56,10 @@ describe('OrganisationSummaryPresenter', () => {
       it("should return tempalate variables contraining an organisation's summary", async () => {
         const presenter = new OrganisationSummaryPresenter(
           organisation,
-          'back-link',
           i18nService,
         );
 
         expect(await presenter.present()).toEqual({
-          backLink: 'back-link',
           organisation: organisation,
           summaryList: mockSummaryList(),
           professions: [
@@ -107,7 +105,6 @@ describe('OrganisationSummaryPresenter', () => {
       it('should raise an error', async () => {
         const presenter = new OrganisationSummaryPresenter(
           organisation,
-          'back-link',
           i18nService,
         );
         expect(async () => {

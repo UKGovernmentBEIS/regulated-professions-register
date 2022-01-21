@@ -56,7 +56,6 @@ export class OrganisationsController {
 
     const organisationSummaryPresenter = new OrganisationSummaryPresenter(
       organisation,
-      '/admin/organisations',
       this.i18nService,
     );
 

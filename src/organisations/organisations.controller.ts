@@ -21,7 +21,6 @@ export class OrganisationsController {
 
     const organisationSummaryPresenter = new OrganisationSummaryPresenter(
       organisation,
-      '/regulatory-authorities/search',
       this.i18nService,
     );
 

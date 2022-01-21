@@ -9,5 +9,4 @@ export interface ShowTemplate {
     slug: string;
     summaryList: SummaryList;
   }[];
-  backLink: string;
 }

@@ -3,6 +3,5 @@ export interface RegulatedActivitiesTemplate {
   regulationDescription: string;
   captionText: string;
   change: boolean;
-  backLink: string;
   errors: object | undefined;
 }

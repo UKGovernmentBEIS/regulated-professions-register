@@ -19,8 +19,8 @@ import { UserPermission } from '../user.entity';
 import { PermissionsDto } from './dto/permissions.dto';
 import { Permissions } from '../../common/permissions.decorator';
 import { ValidationExceptionFilter } from '../../common/validation/validation-exception.filter';
-import { backLink } from '../../common/utils';
 import { EditTemplate } from './interfaces/edit-template';
+import { BackLink } from '../../common/decorators/back-link.decorator';
 @UseGuards(AuthenticationGuard)
 @Controller('/admin/users')
 export class PermissionsController {
@@ -29,6 +29,11 @@ export class PermissionsController {
   @Get(':id/permissions/edit')
   @Permissions(UserPermission.CreateUser, UserPermission.EditUser)
   @Render('admin/users/permissions/edit')
+  @BackLink((request: Request) =>
+    request.query.change === 'true'
+      ? '/admin/users/:id/check-your-answers'
+      : '/admin/users/:id/personal-details/edit',
+  )
   async edit(
     @Req() req: Request,
     @Param('id') id,
@@ -40,7 +45,6 @@ export class PermissionsController {
     return {
       ...user,
       permissions,
-      backLink: backLink(req),
       change: change,
     };
   }

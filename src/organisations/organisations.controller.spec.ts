@@ -53,7 +53,6 @@ describe('OrganisationsController', () => {
     it('should return variables for the show template', async () => {
       const expected = await new OrganisationSummaryPresenter(
         organisation,
-        '/regulatory-authorities/search',
         i18nService,
       ).present();
 
@@ -66,7 +65,6 @@ describe('OrganisationsController', () => {
       expect(OrganisationSummaryPresenter).toHaveBeenNthCalledWith(
         2,
         organisation,
-        '/regulatory-authorities/search',
         i18nService,
       );
     });
