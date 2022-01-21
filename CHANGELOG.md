@@ -31,6 +31,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Change roles to permissions
 - Update entities on seed, rather than replacing them
 - Take users from internal organisations page to internal profession page via link, rather than to public-facing page
+- Move back link to under phase banner
 
 ## [release-001] - 2022-01-10
 

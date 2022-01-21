@@ -6,6 +6,5 @@ export interface RegulatoryBodyTemplate {
   mandatoryRegistrationRadioButtonArgs: RadioButtonArgs[];
   change: boolean;
   captionText: string;
-  backLink: string;
   errors: object | undefined;
 }

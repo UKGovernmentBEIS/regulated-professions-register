@@ -1,20 +1,11 @@
 {% extends "base.njk" %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 
 {% block content %}
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-
-    {% if backLink %}
-      {{ govukBackLink({
-        text: ( "app.back" | t ),
-        href: backLink
-      }) }}
-    {% endif %}
-
     {% include "../../../shared/_errors.njk" %}
 
     <span class="govuk-caption-xl">{{ "users.form.headings.main" | t }}</span>

@@ -9,6 +9,7 @@ import { ProfessionsFilterHelper } from '../helpers/professions-filter.helper';
 import { FilterInput } from '../../common/interfaces/filter-input.interface';
 import { IndexTemplate } from './interfaces/index-template.interface';
 import { SearchPresenter } from './search.presenter';
+import { BackLink } from '../../common/decorators/back-link.decorator';
 
 @Controller('professions/search')
 export class SearchController {
@@ -20,12 +21,14 @@ export class SearchController {
 
   @Get()
   @Render('professions/search/index')
+  @BackLink('/')
   async index(): Promise<IndexTemplate> {
     return this.createSearchResults(new FilterDto());
   }
 
   @Post()
   @Render('professions/search/index')
+  @BackLink('/')
   async create(@Body() filter: FilterDto): Promise<IndexTemplate> {
     return this.createSearchResults(filter);
   }
@@ -48,7 +51,6 @@ export class SearchController {
       allIndustries,
       filteredProfessions,
       this.i18nService,
-      '/',
     ).present();
   }
 

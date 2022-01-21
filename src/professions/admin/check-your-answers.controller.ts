@@ -10,7 +10,7 @@ import {
 import { Request } from 'express';
 import { I18nService } from 'nestjs-i18n';
 import { AuthenticationGuard } from '../../common/authentication.guard';
-import { backLink } from '../../common/utils';
+import { getReferrer } from '../../common/utils';
 
 import { Nation } from '../../nations/nation';
 import { ProfessionsService } from '../professions.service';
@@ -19,6 +19,7 @@ import { CheckYourAnswersTemplate } from './interfaces/check-your-answers.templa
 import { Permissions } from '../../common/permissions.decorator';
 import { UserPermission } from '../../users/user.entity';
 import ViewUtils from './viewUtils';
+import { BackLink } from '../../common/decorators/back-link.decorator';
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
 export class CheckYourAnswersController {
@@ -30,6 +31,7 @@ export class CheckYourAnswersController {
   @Get(':id/check-your-answers')
   @Permissions(UserPermission.CreateProfession)
   @Render('admin/professions/check-your-answers')
+  @BackLink((request: Request) => getReferrer(request))
   async show(
     @Req() req: Request,
     @Param('id') id: string,
@@ -67,7 +69,6 @@ export class CheckYourAnswersController {
       confirmed: Boolean(draftProfession.confirmed),
       captionText: ViewUtils.captionText(draftProfession.confirmed),
       edit: Boolean(edit),
-      backLink: backLink(req),
     };
   }
 }

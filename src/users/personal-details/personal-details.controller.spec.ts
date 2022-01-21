@@ -5,7 +5,6 @@ import { UsersService } from '../users.service';
 import { User } from '../user.entity';
 import { PersonalDetailsController } from './personal-details.controller';
 import { createMock, DeepMocked } from '@golevelup/ts-jest';
-import { createMockRequest } from '../../testutils/create-mock-request';
 
 const name = 'Example Name';
 const email = 'name@example.com';
@@ -49,15 +48,13 @@ describe('PersonalDetailsController', () => {
   });
 
   describe('edit', () => {
-    const referrer = 'http://example.com/some/path';
-    const request: Request = createMockRequest(referrer, 'example.com');
+    const request: Request = createMock<Request>();
 
     it('should get and return the user from an id', async () => {
       const result = await controller.edit(request, 'user-uuid', false);
 
       expect(result).toEqual({
         ...user,
-        backLink: referrer,
         change: false,
       });
     });
@@ -67,7 +64,6 @@ describe('PersonalDetailsController', () => {
 
       expect(result).toEqual({
         ...user,
-        backLink: referrer,
         change: true,
       });
     });

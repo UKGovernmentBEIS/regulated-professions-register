@@ -1,10 +1,10 @@
 import { DeepMocked } from '@golevelup/ts-jest';
 import { Request } from 'express';
-import { backLink, formatDate } from './utils';
+import { getReferrer, formatDate } from './utils';
 import { createMockRequest } from '../testutils/create-mock-request';
 
 describe('utils', () => {
-  describe('backLink', () => {
+  describe('getReferrer', () => {
     let req: DeepMocked<Request>;
     let referrer: string;
     let host: string;
@@ -21,7 +21,7 @@ describe('utils', () => {
         });
 
         it('returns the referrer', () => {
-          expect(backLink(req)).toEqual(referrer);
+          expect(getReferrer(req)).toEqual(referrer);
         });
       });
 
@@ -32,7 +32,7 @@ describe('utils', () => {
         });
 
         it('returns undefined', () => {
-          expect(backLink(req)).toBeUndefined();
+          expect(getReferrer(req)).toBeUndefined();
         });
       });
     });
@@ -44,7 +44,7 @@ describe('utils', () => {
       });
 
       it('returns undefined', () => {
-        expect(backLink(req)).toBeUndefined();
+        expect(getReferrer(req)).toBeUndefined();
       });
     });
   });

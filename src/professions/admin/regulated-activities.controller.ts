@@ -8,7 +8,7 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { Response } from 'express';
+import { Response, Request } from 'express';
 import { AuthenticationGuard } from '../../common/authentication.guard';
 import { Validator } from '../../helpers/validator';
 import { ValidationFailedError } from '../../common/validation/validation-failed.error';
@@ -18,6 +18,8 @@ import { RegulatedActivitiesDto } from './dto/regulated-activities.dto';
 import { RegulatedActivitiesTemplate } from './interfaces/regulated-activities.template';
 import { Permissions } from '../../common/permissions.decorator';
 import { UserPermission } from '../../users/user.entity';
+import { BackLink } from '../../common/decorators/back-link.decorator';
+
 import ViewUtils from './viewUtils';
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
@@ -26,6 +28,11 @@ export class RegulatedActivitiesController {
 
   @Get('/:id/regulated-activities/edit')
   @Permissions(UserPermission.CreateProfession)
+  @BackLink((request: Request) =>
+    request.query.change === 'true'
+      ? '/admin/professions/:id/check-your-answers'
+      : '/admin/professions/:id/regulatory-body/edit',
+  )
   async edit(
     @Res() res: Response,
     @Param('id') id: string,
@@ -39,12 +46,16 @@ export class RegulatedActivitiesController {
       profession.description,
       profession.confirmed,
       change,
-      this.backLink(change, id),
     );
   }
 
   @Post('/:id/regulated-activities')
   @Permissions(UserPermission.CreateProfession)
+  @BackLink((request: Request) =>
+    request.query.change === 'true'
+      ? '/admin/professions/:id/check-your-answers'
+      : '/admin/professions/:id/regulatory-body/edit',
+  )
   async update(
     @Res() res: Response,
     @Param('id') id: string,
@@ -66,9 +77,8 @@ export class RegulatedActivitiesController {
         res,
         submittedValues.activities,
         submittedValues.description,
-        submittedValues.change,
         profession.confirmed,
-        this.backLink(submittedValues.change, id),
+        submittedValues.change,
         errors,
       );
     }
@@ -98,7 +108,6 @@ export class RegulatedActivitiesController {
     regulationDescription: string | null,
     isEditing: boolean,
     change: boolean,
-    backLink: string,
     errors: object | undefined = undefined,
   ): Promise<void> {
     const templateArgs: RegulatedActivitiesTemplate = {
@@ -106,16 +115,9 @@ export class RegulatedActivitiesController {
       regulationDescription,
       captionText: ViewUtils.captionText(isEditing),
       change,
-      backLink,
       errors,
     };
 
     return res.render('admin/professions/regulated-activities', templateArgs);
-  }
-
-  private backLink(change: boolean, id: string) {
-    return change
-      ? `/admin/professions/${id}/check-your-answers`
-      : `/admin/professions/${id}/regulatory-body/edit`;
   }
 }

@@ -22,6 +22,7 @@ import { ConfirmTemplate } from './interfaces/confirm-template.interface';
 import { ShowTemplate } from '../interfaces/show-template.interface';
 import { OrganisationDto } from './dto/organisation.dto';
 import { OrganisationSummaryPresenter } from '../presenters/organisation-summary.presenter';
+import { BackLink } from '../../common/decorators/back-link.decorator';
 
 @UseGuards(AuthenticationGuard)
 @Controller('/admin/organisations')
@@ -33,6 +34,7 @@ export class OrganisationsController {
 
   @Get()
   @Render('admin/organisations/index')
+  @BackLink('/admin')
   async index() {
     const organisations = await this.organisationsService.allWithProfessions();
     const presenter = new OrganisationsPresenter(
@@ -47,13 +49,13 @@ export class OrganisationsController {
 
   @Get('/:slug')
   @Render('admin/organisations/show')
+  @BackLink('/admin/organisations')
   async show(@Param('slug') slug: string): Promise<ShowTemplate> {
     const organisation =
       await this.organisationsService.findBySlugWithProfessions(slug);
 
     const organisationSummaryPresenter = new OrganisationSummaryPresenter(
       organisation,
-      '/admin/organisations',
       this.i18nService,
     );
 
@@ -62,6 +64,7 @@ export class OrganisationsController {
 
   @Get('/:slug/edit')
   @Render('admin/organisations/edit')
+  @BackLink('/admin/organisations/:slug')
   async edit(@Param('slug') slug: string): Promise<Organisation> {
     const organisation = await this.organisationsService.findBySlug(slug);
 
@@ -70,6 +73,7 @@ export class OrganisationsController {
 
   @Post('/:slug/confirm')
   @Render('admin/organisations/confirm')
+  @BackLink('/admin/organisations/:slug/edit')
   @UseFilters(new ValidationExceptionFilter('admin/organisations/edit'))
   async confirm(
     @Param('slug') slug: string,

@@ -1,7 +1,7 @@
 import { format } from 'date-fns';
 import { Request } from 'express';
 
-export function backLink(req: Request): string {
+export function getReferrer(req: Request): string {
   const referrer = req.get('Referrer') || '';
   const host = req.get('host');
 

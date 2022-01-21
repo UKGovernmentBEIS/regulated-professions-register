@@ -1,6 +1,4 @@
-import { Request } from 'express';
 import { I18nService } from 'nestjs-i18n';
-import { backLink } from '../../common/utils';
 import { IndustriesCheckboxPresenter } from '../../industries/industries-checkbox.presenter';
 import { Industry } from '../../industries/industry.entity';
 import { Nation } from '../../nations/nation';
@@ -22,7 +20,6 @@ export class ProfessionsPresenter {
     private readonly allOrganisations: Organisation[],
     private readonly allIndustries: Industry[],
     private readonly filteredProfessions: Profession[],
-    private readonly request: Request,
     private readonly i18nService: I18nService,
   ) {}
 
@@ -77,7 +74,6 @@ export class ProfessionsPresenter {
         ),
         changedBy: [],
       },
-      backLink: backLink(this.request),
     };
   }
 }

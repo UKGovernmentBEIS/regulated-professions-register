@@ -1,18 +1,9 @@
 {% extends "base.njk" %}
-{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% set bodyClasses = "rpr-internal__page rpr-details__page" %}
 
 {% block content %}
-
-  {% if backLink %}
-    {{ govukBackLink({
-      text: ( "app.back" | t ),
-      href: backLink
-    }) }}
-  {% endif %}
-
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       {% set professionPagePrefix = "admin/professions"%}

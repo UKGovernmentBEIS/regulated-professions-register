@@ -22,6 +22,4 @@ export interface IndexTemplate {
   organisationsCheckboxArgs: CheckboxArgs[];
   industriesCheckboxArgs: CheckboxArgs[];
   changedByCheckboxArgs: CheckboxArgs[];
-
-  backLink: string;
 }

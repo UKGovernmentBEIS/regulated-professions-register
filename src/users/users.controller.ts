@@ -11,6 +11,7 @@ import {
   Redirect,
 } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
+import { Request } from 'express';
 
 import { AuthenticationGuard } from '../common/authentication.guard';
 import { Auth0Service } from './auth0.service';
@@ -20,9 +21,11 @@ import { UsersService } from './users.service';
 import { IndexTemplate } from './interfaces/index-template';
 import { ShowTemplate } from './interfaces/show-template';
 import { Permissions } from '../common/permissions.decorator';
+import { getReferrer } from '../common/utils';
 
 import { UserPresenter } from './user.presenter';
 import { UserMailer } from './user.mailer';
+import { BackLink } from '../common/decorators/back-link.decorator';
 @Controller()
 @UseGuards(AuthenticationGuard)
 export class UsersController {
@@ -36,6 +39,7 @@ export class UsersController {
   @Get('/admin/users')
   @Permissions(UserPermission.CreateUser, UserPermission.EditUser)
   @Render('admin/users/index')
+  @BackLink('/admin')
   async index(@Req() req): Promise<IndexTemplate> {
     const users = await this.usersService.where({ confirmed: true });
     const usersPresenter = new UsersPresenter(users, this.i18nService);
@@ -50,6 +54,7 @@ export class UsersController {
   @Get('/admin/users/new')
   @Permissions(UserPermission.CreateUser, UserPermission.EditUser)
   @Render('admin/users/new')
+  @BackLink('/admin/users')
   new(): object {
     return {};
   }
@@ -78,6 +83,7 @@ export class UsersController {
   @Get('/admin/users/:id/confirm')
   @Permissions(UserPermission.CreateUser)
   @Render('admin/users/confirm')
+  @BackLink((request: Request) => getReferrer(request))
   async confirm(@Param('id') id): Promise<ShowTemplate> {
     const user = await this.usersService.find(id);
     const userPresenter = new UserPresenter(user, this.i18nService);

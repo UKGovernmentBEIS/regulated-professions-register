@@ -1,16 +1,7 @@
 {% extends "base.njk" %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
-{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 
 {% block content %}
-
-{% if backLink %}
-  {{ govukBackLink({
-    text: ( "app.back" | t ),
-    href: backLink
-  }) }}
-{% endif %}
-
 <h1 class="govuk-heading-xl">{{ "professions.search.heading" | t }}</h1>
 
   <div class="govuk-grid-row">
@@ -26,7 +17,7 @@
 
       {% set filterCriteriaTextPrefix = "professions.search" %}
       {% include "../../shared/_filter-criteria.njk" %}
-      
+
       <p class="govuk-body-m">
         <span class="govuk-!-font-size-36 govuk-!-font-weight-bold">{{ professions.length }}</span> {{ ("professions.search.foundSingular" | t) if (professions.length === 1) else ("professions.search.foundPlural" | t) }}
       </p>
@@ -46,7 +37,7 @@
             <a class="govuk-link govuk-heading-l rpr-listing__profession-title" href="/professions/{{ profession.slug }}">{{ profession.name }}<br>
               <span class="govuk-caption-l">{{ profession.nations }}</span></a>
           </h2>
-      
+
             {{ govukSummaryList({
               classes: 'govuk-summary-list--no-border rpr-listing__profession-summary-list',
               rows: [

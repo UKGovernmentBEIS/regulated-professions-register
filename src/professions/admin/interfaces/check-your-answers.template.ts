@@ -15,5 +15,4 @@ export interface CheckYourAnswersTemplate {
   captionText: string;
   confirmed: boolean;
   edit: boolean;
-  backLink: string;
 }

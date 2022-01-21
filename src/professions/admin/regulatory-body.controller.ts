@@ -8,7 +8,7 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { Response } from 'express';
+import { Response, Request } from 'express';
 import { AuthenticationGuard } from '../../common/authentication.guard';
 import { ProfessionsService } from '../professions.service';
 import { I18nService } from 'nestjs-i18n';
@@ -23,6 +23,8 @@ import { RegulatoryBodyDto } from './dto/regulatory-body.dto';
 import { ValidationFailedError } from '../../common/validation/validation-failed.error';
 import { Permissions } from '../../common/permissions.decorator';
 import { UserPermission } from '../../users/user.entity';
+import { BackLink } from '../../common/decorators/back-link.decorator';
+
 import ViewUtils from './viewUtils';
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
@@ -35,6 +37,11 @@ export class RegulatoryBodyController {
 
   @Get('/:id/regulatory-body/edit')
   @Permissions(UserPermission.CreateProfession)
+  @BackLink((request: Request) =>
+    request.query.change === 'true'
+      ? '/admin/professions/:id/check-your-answers'
+      : '/admin/professions/:id/top-level-information/edit',
+  )
   async edit(
     @Res() res: Response,
     @Param('id') id: string,
@@ -51,13 +58,17 @@ export class RegulatoryBodyController {
       selectedMandatoryRegistration,
       profession.confirmed,
       change,
-      this.backLink(change, id),
       errors,
     );
   }
 
   @Post('/:id/regulatory-body')
   @Permissions(UserPermission.CreateProfession)
+  @BackLink((request: Request) =>
+    request.query.change === 'true'
+      ? '/admin/professions/:id/check-your-answers'
+      : '/admin/professions/:id/top-level-information/edit',
+  )
   async update(
     @Res() res: Response,
     @Param('id') id: string,
@@ -86,7 +97,6 @@ export class RegulatoryBodyController {
         selectedMandatoryRegistration,
         profession.confirmed,
         regulatoryBodyDto.change,
-        this.backLink(regulatoryBodyDto.change, id),
         errors,
       );
     }
@@ -114,7 +124,6 @@ export class RegulatoryBodyController {
     mandatoryRegistration: MandatoryRegistration | null,
     isEditing: boolean,
     change: boolean,
-    backLink: string,
     errors: object | undefined = undefined,
   ): Promise<void> {
     const regulatedAuthorities = await this.organisationsService.all();
@@ -136,16 +145,9 @@ export class RegulatoryBodyController {
       mandatoryRegistrationRadioButtonArgs,
       captionText: ViewUtils.captionText(isEditing),
       change,
-      backLink,
       errors,
     };
 
     return res.render('admin/professions/regulatory-body', templateArgs);
-  }
-
-  private backLink(change: boolean, id: string) {
-    return change
-      ? `/admin/professions/${id}/check-your-answers`
-      : `/admin/professions/${id}/top-level-information/edit`;
   }
 }

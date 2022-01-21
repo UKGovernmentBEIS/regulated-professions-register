@@ -10,6 +10,7 @@ import { Nation } from '../nations/nation';
 import QualificationPresenter from '../qualifications/presenters/qualification.presenter';
 import { ShowTemplate } from './interfaces/show-template.interface';
 import { ProfessionsService } from './professions.service';
+import { BackLink } from '../common/decorators/back-link.decorator';
 
 @Controller()
 export class ProfessionsController {
@@ -20,6 +21,7 @@ export class ProfessionsController {
 
   @Get('/professions/:slug')
   @Render('professions/show')
+  @BackLink('/professions/search')
   async show(@Param('slug') slug: string): Promise<ShowTemplate> {
     const profession = await this.professionsService.findBySlug(slug);
 
@@ -50,7 +52,6 @@ export class ProfessionsController {
       qualification: qualification,
       nations,
       industries,
-      backLink: '/professions/search',
     };
   }
 }

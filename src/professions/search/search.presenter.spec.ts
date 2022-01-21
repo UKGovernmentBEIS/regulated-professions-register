@@ -66,7 +66,6 @@ describe('SearchPresenter', () => {
         industries,
         [profession1, profession2, profession3],
         i18nService,
-        'back-link',
       );
 
       const result = await presenter.present();
@@ -105,7 +104,6 @@ describe('SearchPresenter', () => {
             i18nService,
           ).present(),
         ],
-        backLink: 'back-link',
       };
 
       expect(result).toEqual(expected);

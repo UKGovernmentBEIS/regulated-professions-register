@@ -8,7 +8,7 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { Response } from 'express';
+import { Response, Request } from 'express';
 import { IndustriesCheckboxPresenter } from '../../industries/industries-checkbox.presenter';
 import { NationsCheckboxPresenter } from '../../nations/nations-checkbox.presenter';
 import { Validator } from '../../helpers/validator';
@@ -24,6 +24,8 @@ import { TopLevelDetailsTemplate } from './interfaces/top-level-details.template
 import { AuthenticationGuard } from '../../common/authentication.guard';
 import { Permissions } from '../../common/permissions.decorator';
 import { UserPermission } from '../../users/user.entity';
+import { BackLink } from '../../common/decorators/back-link.decorator';
+
 import ViewUtils from './viewUtils';
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
@@ -36,6 +38,11 @@ export class TopLevelInformationController {
 
   @Get('/:id/top-level-information/edit')
   @Permissions(UserPermission.CreateProfession)
+  @BackLink((request: Request) =>
+    request.query.change === 'true'
+      ? '/admin/professions/:id/check-your-answers'
+      : '/admin/professions',
+  )
   async edit(
     @Res() res: Response,
     @Param('id') id: string,
@@ -51,13 +58,17 @@ export class TopLevelInformationController {
       profession.occupationLocations || [],
       profession.confirmed,
       change,
-      this.backLink(change, id),
       errors,
     );
   }
 
   @Post('/:id/top-level-information')
   @Permissions(UserPermission.CreateProfession)
+  @BackLink((request: Request) =>
+    request.query.change === 'true'
+      ? '/admin/professions/:id/check-your-answers'
+      : '/admin/professions',
+  )
   async update(
     @Body() topLevelDetailsDto, // unfortunately we can't type this here without a validation error being thrown outside of this
     @Res() res: Response,
@@ -85,7 +96,6 @@ export class TopLevelInformationController {
         submittedValues.nations || [],
         submittedValues.change,
         profession.confirmed,
-        this.backLink(submittedValues.change, id),
         errors,
       );
     }
@@ -115,7 +125,6 @@ export class TopLevelInformationController {
     selectedNations: string[],
     isEditing: boolean,
     change: boolean,
-    backLink: string,
     errors: object | undefined = undefined,
   ): Promise<void> {
     const industries = await this.industriesService.all();
@@ -138,16 +147,9 @@ export class TopLevelInformationController {
       nationsCheckboxArgs,
       captionText: ViewUtils.captionText(isEditing),
       change,
-      backLink,
       errors,
     };
 
     return res.render('admin/professions/top-level-information', templateArgs);
-  }
-
-  private backLink(change: boolean, id: string) {
-    return change
-      ? `/admin/professions/${id}/check-your-answers`
-      : '/admin/professions';
   }
 }

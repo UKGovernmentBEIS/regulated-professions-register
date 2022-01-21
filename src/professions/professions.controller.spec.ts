@@ -74,7 +74,6 @@ describe('ProfessionsController', () => {
         ),
         nations: ['England'],
         industries: ['Example industry'],
-        backLink: '/professions/search',
       });
 
       expect(professionsService.findBySlug).toBeCalledWith('example-slug');

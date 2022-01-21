@@ -344,7 +344,6 @@ describe('ProfessionsController', () => {
         qualification: new QualificationPresenter(profession.qualification),
         nations: ['Translation of `nations.england`'],
         industries: ['Translation of `industries.example`'],
-        backLink: '/admin/professions',
       });
 
       expect(professionsService.findBySlug).toHaveBeenCalledWith(
@@ -417,7 +416,6 @@ function createPresenter(
     organisations,
     industries,
     professions,
-    request,
     i18nService,
   );
 }
