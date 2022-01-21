@@ -2,6 +2,7 @@ import { getUnixTime } from 'date-fns';
 import { translate } from '../plugins/i18n';
 
 import puppeteer from 'puppeteer';
+import { AxeRules } from '.';
 
 /*
  * Get a username and password from their role
@@ -144,6 +145,11 @@ Cypress.Commands.add(
 
 Cypress.Commands.add('visitAndCheckAccessibility', (url: string) => {
   cy.visit(url);
+  cy.checkAccessibility();
+});
+
+Cypress.Commands.add('checkAccessibility', (rules: AxeRules = undefined) => {
   cy.injectAxe();
-  cy.checkA11y({ exclude: [['#phase-banner-container']] });
+
+  cy.checkA11y({ exclude: [['#phase-banner-container']] }, { rules: rules });
 });
