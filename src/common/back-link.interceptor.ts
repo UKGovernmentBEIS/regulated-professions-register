@@ -5,35 +5,44 @@ import {
   CallHandler,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { Request } from 'express';
 
 export interface Response<T> {
   data: T;
 }
 
+export type Generator = (request: Request) => string;
 @Injectable()
 export class BackLinkInterceptor<T> implements NestInterceptor<T, Response<T>> {
-  constructor(private readonly backLink: string) {}
+  private readonly backLink: string;
+  private readonly generator: Generator;
+
+  constructor(arg: string | Generator) {
+    if (typeof arg === 'string') {
+      this.backLink = arg;
+    } else {
+      this.generator = arg;
+    }
+  }
 
   intercept(
     context: ExecutionContext,
     next: CallHandler,
   ): Observable<Response<T>> {
     const request = context.switchToHttp().getRequest();
+    const response = context.switchToHttp().getResponse();
 
-    return next
-      .handle()
-      .pipe(
-        map((data) => ({ ...data, backLink: this.generateBackLink(request) })),
-      );
+    response.locals.backLink = this.generateBackLink(request);
+
+    return next.handle();
   }
 
   private generateBackLink(request: Request) {
     const regexp = new RegExp(':([a-z]+)', 'g');
-    const matches = [...this.backLink.matchAll(regexp)];
 
-    let backLink = this.backLink;
+    let backLink = this.backLink ? this.backLink : this.generator(request);
+
+    const matches = [...backLink.matchAll(regexp)];
 
     matches.forEach((match) => {
       const key = match[1];
