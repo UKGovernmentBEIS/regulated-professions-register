@@ -5,7 +5,9 @@ import {
   Index,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
+import { OrganisationVersion } from '../organisations/organisation-version.entity';
 
 export enum UserPermission {
   CreateUser = 'createUser',
@@ -61,6 +63,12 @@ export class User {
 
   @Column({ default: false })
   confirmed: boolean;
+
+  @OneToMany(
+    () => OrganisationVersion,
+    (organisationVersion) => organisationVersion.user,
+  )
+  organisationVersions: OrganisationVersion[];
 
   constructor(
     email?: string,
