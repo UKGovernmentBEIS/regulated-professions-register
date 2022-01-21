@@ -1,6 +1,6 @@
 describe('/', () => {
   it('Shows a landing page', () => {
-    cy.visit('/');
+    cy.visitAndCheckAccessibility('/');
 
     cy.translate('app.pages.index.heading').then((heading) => {
       cy.get('body').should('contain', heading);
@@ -10,7 +10,7 @@ describe('/', () => {
   context('when I am logged in', () => {
     beforeEach(() => {
       cy.loginAuth0('admin');
-      cy.visit('/admin');
+      cy.visitAndCheckAccessibility('/admin');
     });
 
     it('shows my username', () => {
