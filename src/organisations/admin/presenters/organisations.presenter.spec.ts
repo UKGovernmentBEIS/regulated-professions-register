@@ -1,9 +1,9 @@
 import { DeepMocked } from '@golevelup/ts-jest';
 import { I18nService } from 'nestjs-i18n';
 
-import organisationFactory from '../../testutils/factories/organisation';
+import organisationFactory from '../../../testutils/factories/organisation';
 import { OrganisationsPresenter } from './organisations.presenter';
-import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
+import { createMockI18nService } from '../../../testutils/create-mock-i18n-service';
 
 const mockTableRow = () => {
   return [
@@ -13,7 +13,7 @@ const mockTableRow = () => {
   ];
 };
 
-jest.mock('./organisation.presenter', () => {
+jest.mock('../../presenters/organisation.presenter', () => {
   return {
     OrganisationPresenter: jest.fn().mockImplementation(() => {
       return {

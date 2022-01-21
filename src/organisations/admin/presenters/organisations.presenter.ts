@@ -1,8 +1,8 @@
 import { I18nService } from 'nestjs-i18n';
-import { Organisation } from './../organisation.entity';
-import { OrganisationPresenter } from './organisation.presenter';
-import { TableRow } from '../../common/interfaces/table-row';
-import { Table } from '../../common/interfaces/table';
+import { Organisation } from '../../organisation.entity';
+import { OrganisationPresenter } from '../../presenters/organisation.presenter';
+import { TableRow } from '../../../common/interfaces/table-row';
+import { Table } from '../../../common/interfaces/table';
 
 type Field = 'name' | 'alternateName' | 'industries' | 'actions';
 const fields = ['name', 'alternateName', 'industries', 'actions'] as Field[];

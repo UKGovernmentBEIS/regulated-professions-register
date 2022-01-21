@@ -7,7 +7,7 @@ import { OrganisationsService } from '../organisations.service';
 import { Organisation } from '../organisation.entity';
 import { Table } from '../../common/interfaces/table';
 
-import { OrganisationsPresenter } from '../presenters/organisations.presenter';
+import { OrganisationsPresenter } from './presenters/organisations.presenter';
 import { OrganisationPresenter } from '../presenters/organisation.presenter';
 import { OrganisationDto } from './dto/organisation.dto';
 
@@ -18,7 +18,7 @@ import { createMockI18nService } from '../../testutils/create-mock-i18n-service'
 import { SummaryList } from '../../common/interfaces/summary-list';
 import { ShowTemplate } from '../interfaces/show-template.interface';
 
-jest.mock('../presenters/organisations.presenter');
+jest.mock('./presenters/organisations.presenter');
 jest.mock('../presenters/organisation.presenter');
 jest.mock('../presenters/organisation-summary.presenter');
 
