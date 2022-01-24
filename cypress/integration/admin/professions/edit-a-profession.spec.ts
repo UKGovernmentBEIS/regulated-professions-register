@@ -1,7 +1,7 @@
 describe('Editing an existing profession', () => {
   context('when I am not logged in', () => {
     it('I am prompted to log in', () => {
-      cy.visit('/admin/professions');
+      cy.visitAndCheckAccessibility('/admin/professions');
       cy.location('pathname').should('contain', 'login');
     });
   });
@@ -12,7 +12,7 @@ describe('Editing an existing profession', () => {
     });
 
     it('does not allow me to edit a profession', () => {
-      cy.visit('/admin/professions');
+      cy.visitAndCheckAccessibility('/admin/professions');
 
       cy.translate('professions.admin.addButtonLabel').then((buttonText) => {
         cy.get('body').should('not.contain', buttonText);
@@ -26,7 +26,7 @@ describe('Editing an existing profession', () => {
     });
 
     it('I can edit an existing profession', () => {
-      cy.visit('/admin/professions');
+      cy.visitAndCheckAccessibility('/admin/professions');
 
       cy.get('table')
         .contains('tr', 'Registered Trademark Attorney')
@@ -34,10 +34,12 @@ describe('Editing an existing profession', () => {
           cy.contains('View details').click();
         });
 
+      cy.checkAccessibility();
       cy.translate('professions.admin.editProfession').then((buttonText) => {
         cy.contains(buttonText).click();
       });
 
+      cy.checkAccessibility();
       cy.translate('professions.form.captions.edit').then((editCaption) => {
         cy.get('body').contains(editCaption);
       });
@@ -52,6 +54,7 @@ describe('Editing an existing profession', () => {
         cy.get('button').contains(buttonText).click();
       });
 
+      cy.checkAccessibility();
       cy.translate('professions.form.headings.originalAnswers').then(
         (heading) => {
           cy.get('body').should('contain', heading);
@@ -91,6 +94,7 @@ describe('Editing an existing profession', () => {
         'professions.form.label.topLevelInformation.name',
         'Change',
       );
+      cy.checkAccessibility();
       cy.translate('professions.form.captions.edit').then((editCaption) => {
         cy.get('body').contains(editCaption);
       });
@@ -107,6 +111,7 @@ describe('Editing an existing profession', () => {
         'professions.form.label.regulatoryBody.regulatedAuthority',
         'Change',
       );
+      cy.checkAccessibility();
       cy.translate('professions.form.captions.edit').then((editCaption) => {
         cy.get('body').contains(editCaption);
       });
@@ -125,6 +130,7 @@ describe('Editing an existing profession', () => {
         'professions.form.label.regulatedActivities.description',
         'Change',
       );
+      cy.checkAccessibility();
       cy.translate('professions.form.captions.edit').then((editCaption) => {
         cy.get('body').contains(editCaption);
       });
@@ -143,6 +149,9 @@ describe('Editing an existing profession', () => {
         'professions.form.label.qualificationInformation.qualificationLevel',
         'Change',
       );
+      // Conditional radio buttons add an additional `aria-expanded` field,
+      // so ignore that rule on this page
+      cy.checkAccessibility({ 'aria-allowed-attr': { enabled: false } });
       cy.translate('professions.form.captions.edit').then((editCaption) => {
         cy.get('body').contains(editCaption);
       });
@@ -161,6 +170,7 @@ describe('Editing an existing profession', () => {
         'professions.form.label.legislation.nationalLegislation',
         'Change',
       );
+      cy.checkAccessibility();
       cy.translate('professions.form.captions.edit').then((editCaption) => {
         cy.get('body').contains(editCaption);
       });
@@ -179,6 +189,7 @@ describe('Editing an existing profession', () => {
         cy.get('button').contains(buttonText).click();
       });
 
+      cy.checkAccessibility();
       cy.translate('professions.form.headings.amended').then((heading) => {
         cy.get('body')
           .should('contain', heading)
