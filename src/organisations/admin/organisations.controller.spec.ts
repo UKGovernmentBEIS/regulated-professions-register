@@ -16,6 +16,7 @@ import professionFactory from '../../testutils/factories/profession';
 import { OrganisationSummaryPresenter } from '../presenters/organisation-summary.presenter';
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 import { SummaryList } from '../../common/interfaces/summary-list';
+import { ShowTemplate } from '../interfaces/show-template.interface';
 
 jest.mock('../presenters/organisations.presenter');
 jest.mock('../presenters/organisation.presenter');
@@ -85,19 +86,26 @@ describe('OrganisationsController', () => {
         organisation,
       );
 
-      const expected = await new OrganisationSummaryPresenter(
+      const showTemplate: ShowTemplate = {
         organisation,
-        i18nService,
-      ).present();
+        summaryList: {
+          classes: 'govuk-summary-list--no-border',
+          rows: [],
+        },
+        professions: [],
+      };
 
-      expect(await controller.show('slug')).toEqual(expected);
+      (
+        OrganisationSummaryPresenter.prototype as DeepMocked<OrganisationSummaryPresenter>
+      ).present.mockResolvedValue(showTemplate);
+
+      expect(await controller.show('slug')).toEqual(showTemplate);
 
       expect(
         organisationsService.findBySlugWithProfessions,
       ).toHaveBeenCalledWith('slug');
 
-      expect(OrganisationSummaryPresenter).toHaveBeenNthCalledWith(
-        2,
+      expect(OrganisationSummaryPresenter).toHaveBeenCalledWith(
         organisation,
         i18nService,
       );
