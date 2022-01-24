@@ -3,10 +3,6 @@ describe('Listing professions', () => {
     beforeEach(() => {
       cy.loginAuth0('admin');
       cy.visit('/admin/professions');
-
-      cy.translate('professions.admin.showFilters').then((showFilters) => {
-        cy.get('span').contains(showFilters).click();
-      });
     });
 
     it('I can view an unfiltered list of profession', () => {
@@ -65,6 +61,8 @@ describe('Listing professions', () => {
     });
 
     it('I can filter by keyword', () => {
+      expandFilters();
+
       cy.get('input[name="keywords"]').type('Attorney');
 
       clickFilterButton();
@@ -79,6 +77,8 @@ describe('Listing professions', () => {
     });
 
     it('I can filter by nation', () => {
+      expandFilters();
+
       cy.get('input[name="nations[]"][value="GB-WLS"]').check();
 
       clickFilterButton();
@@ -93,6 +93,8 @@ describe('Listing professions', () => {
     });
 
     it('I can filter by organisation', () => {
+      expandFilters();
+
       cy.get('label')
         .contains('Law Society of England and Wales')
         .parent()
@@ -115,6 +117,8 @@ describe('Listing professions', () => {
     });
 
     it('I can filter by industry', () => {
+      expandFilters();
+
       cy.translate('industries.education').then((nameLabel) => {
         cy.get('label').contains(nameLabel).parent().find('input').check();
       });
@@ -175,10 +179,16 @@ describe('Listing professions', () => {
       cy.get('body').should('not.contain', 'Registered Trademark Attorney');
     });
   });
-});
 
-function clickFilterButton(): void {
-  cy.translate('professions.admin.form.button.filter').then((buttonLabel) => {
-    cy.get('button').contains(buttonLabel).click();
-  });
-}
+  function clickFilterButton(): void {
+    cy.translate('professions.admin.filter.button').then((buttonLabel) => {
+      cy.get('button').contains(buttonLabel).click();
+    });
+  }
+
+  function expandFilters(): void {
+    cy.translate('professions.admin.showFilters').then((showFilters) => {
+      cy.get('span').contains(showFilters).click();
+    });
+  }
+});
