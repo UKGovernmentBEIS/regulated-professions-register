@@ -5,13 +5,14 @@ describe('Deleting a user', () => {
     });
 
     it('I can delete a user', () => {
-      cy.visit('/admin/users');
+      cy.visitAndCheckAccessibility('/admin/users');
       cy.contains('View Editor').click();
 
       cy.translate('users.form.button.delete').then((deleteButton) => {
         cy.contains(deleteButton).click();
       });
 
+      cy.checkAccessibility();
       cy.translate('users.form.delete.successMessage').then(
         (successMessage) => {
           cy.get('body').should('contain', successMessage);
