@@ -26,7 +26,7 @@
       {% for organisation in organisations %}
         <div>
           <h2>
-            <a class="govuk-link govuk-heading-m rpr-listing__ra-title" href="/regulatory-authorities/{{ organisation.slug }}">{{ organisation.name }}<br>
+            <a class="govuk-link govuk-heading-m rpr-listing__ra-title" href="/regulatory-authorities/{{ organisation.slug }}">{{ organisation.name }}</a><br>
           </h2>
 
           {% if not loop.last %}
