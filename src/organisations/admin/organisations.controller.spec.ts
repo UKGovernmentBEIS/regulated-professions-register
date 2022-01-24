@@ -63,34 +63,13 @@ jest.mock('../presenters/organisation-summary.presenter');
 describe('OrganisationsController', () => {
   let controller: OrganisationsController;
   let organisationsService: DeepMocked<OrganisationsService>;
-  let organisations: Organisation[];
-  let organisation: Organisation;
 
-  const i18nService = createMockI18nService();
+  let i18nService;
 
   beforeEach(async () => {
-    organisations = organisationFactory.buildList(5, {
-      professions: professionFactory.buildList(2),
-    });
+    i18nService = createMockI18nService();
 
-    organisation = organisationFactory.build({
-      professions: professionFactory.buildList(2),
-    });
-
-    organisationsService = createMock<OrganisationsService>({
-      all: async () => {
-        return organisations;
-      },
-      findBySlugWithProfessions: async () => {
-        return organisation;
-      },
-      findBySlug: async () => {
-        return organisation;
-      },
-      save: async (organisation) => {
-        return organisation;
-      },
-    });
+    organisationsService = createMock<OrganisationsService>();
 
     const module: TestingModule = await Test.createTestingModule({
       controllers: [OrganisationsController],
@@ -112,6 +91,9 @@ describe('OrganisationsController', () => {
 
   describe('index', () => {
     it('should return a table view of organisations', async () => {
+      const organisations = createOrganisations();
+      organisationsService.allWithProfessions.mockResolvedValue(organisations);
+
       expect(await controller.index()).toEqual({
         organisationsTable: mockTable(),
       });
@@ -127,6 +109,11 @@ describe('OrganisationsController', () => {
 
   describe('show', () => {
     it('should return variables for the show template', async () => {
+      const organisation = createOrganisation();
+      organisationsService.findBySlugWithProfessions.mockResolvedValue(
+        organisation,
+      );
+
       const expected = await new OrganisationSummaryPresenter(
         organisation,
         i18nService,
@@ -148,6 +135,9 @@ describe('OrganisationsController', () => {
 
   describe('edit', () => {
     it('should return the organisation', async () => {
+      const organisation = createOrganisation();
+      organisationsService.findBySlug.mockResolvedValue(organisation);
+
       expect(await controller.edit('slug')).toEqual(organisation);
     });
   });
@@ -166,11 +156,21 @@ describe('OrganisationsController', () => {
         fax: '',
       };
 
-      const result = await controller.confirm(slug, organisationDto);
+      const organisation = createOrganisation();
+
       const newOrganisation = {
         ...organisation,
         ...organisationDto,
       };
+
+      organisationsService.findBySlug.mockResolvedValue(organisation);
+      organisationsService.findBySlugWithProfessions.mockResolvedValue(
+        organisation,
+      );
+      organisationsService.find.mockResolvedValue(organisation);
+      organisationsService.save.mockResolvedValue(newOrganisation);
+
+      const result = await controller.confirm(slug, organisationDto);
 
       expect(organisationsService.save).toHaveBeenCalledWith(
         expect.objectContaining(newOrganisation),
@@ -195,3 +195,15 @@ describe('OrganisationsController', () => {
     });
   });
 });
+
+function createOrganisations(): Organisation[] {
+  return organisationFactory.buildList(5, {
+    professions: professionFactory.buildList(2),
+  });
+}
+
+function createOrganisation(): Organisation {
+  return organisationFactory.build({
+    professions: professionFactory.buildList(2),
+  });
+}
