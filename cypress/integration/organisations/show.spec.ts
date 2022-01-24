@@ -1,12 +1,13 @@
 describe('Showing organisations', () => {
   beforeEach(() => {
-    cy.visit('/');
+    cy.visitAndCheckAccessibility('/');
 
     cy.translate('app.pages.index.useThisService.findContactDetails.text').then(
       (linkText) => {
         cy.contains(linkText).click();
       },
     );
+    cy.checkAccessibility();
   });
 
   it('Shows the detail of an organisation, with its professions and a link to the public-facing profession page', () => {
@@ -31,6 +32,7 @@ describe('Showing organisations', () => {
         });
 
         cy.contains(professionsForOrganisation[0].name).click();
+        cy.checkAccessibility();
         cy.get('body').should('not.contain', 'Edit this profession');
       });
     });
