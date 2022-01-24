@@ -17,53 +17,14 @@ import { OrganisationSummaryPresenter } from '../presenters/organisation-summary
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 import { SummaryList } from '../../common/interfaces/summary-list';
 
-const mockTable = (): Table => {
-  return {
-    firstCellIsHeader: true,
-    head: [{ text: 'Headers' }],
-    rows: [[{ text: 'Row 1' }], [{ text: 'Row 2' }], [{ text: 'Row 3' }]],
-  };
-};
-
-const mockSummaryList = (): SummaryList => {
-  return {
-    classes: 'govuk-summary-list--no-border',
-    rows: [],
-  };
-};
-
-const organisationsPresenter = {
-  table: mockTable,
-};
-
-const organisationPresenter = {
-  summaryList: jest.fn(() => {
-    return mockSummaryList();
-  }),
-};
-
-jest.mock('../presenters/organisations.presenter', () => {
-  return {
-    OrganisationsPresenter: jest.fn().mockImplementation(() => {
-      return organisationsPresenter;
-    }),
-  };
-});
-
-jest.mock('../presenters/organisation.presenter', () => {
-  return {
-    OrganisationPresenter: jest.fn().mockImplementation(() => {
-      return organisationPresenter;
-    }),
-  };
-});
-
+jest.mock('../presenters/organisations.presenter');
+jest.mock('../presenters/organisation.presenter');
 jest.mock('../presenters/organisation-summary.presenter');
 
 describe('OrganisationsController', () => {
   let controller: OrganisationsController;
-  let organisationsService: DeepMocked<OrganisationsService>;
 
+  let organisationsService: DeepMocked<OrganisationsService>;
   let i18nService;
 
   beforeEach(async () => {
@@ -91,11 +52,21 @@ describe('OrganisationsController', () => {
 
   describe('index', () => {
     it('should return a table view of organisations', async () => {
+      const table: Table = {
+        firstCellIsHeader: true,
+        head: [{ text: 'Headers' }],
+        rows: [[{ text: 'Row 1' }], [{ text: 'Row 2' }], [{ text: 'Row 3' }]],
+      };
+
+      (
+        OrganisationsPresenter.prototype as DeepMocked<OrganisationsPresenter>
+      ).table.mockResolvedValue(table);
+
       const organisations = createOrganisations();
       organisationsService.allWithProfessions.mockResolvedValue(organisations);
 
       expect(await controller.index()).toEqual({
-        organisationsTable: mockTable(),
+        organisationsTable: table,
       });
 
       expect(organisationsService.allWithProfessions).toHaveBeenCalled();
@@ -144,6 +115,15 @@ describe('OrganisationsController', () => {
 
   describe('confirm', () => {
     it('saves the organisation', async () => {
+      const summaryList: SummaryList = {
+        classes: 'govuk-summary-list--no-border',
+        rows: [],
+      };
+
+      (
+        OrganisationPresenter.prototype as DeepMocked<OrganisationPresenter>
+      ).summaryList.mockResolvedValue(summaryList);
+
       const slug = 'some-slug';
       const organisationDto: OrganisationDto = {
         name: 'Organisation',
@@ -164,10 +144,6 @@ describe('OrganisationsController', () => {
       };
 
       organisationsService.findBySlug.mockResolvedValue(organisation);
-      organisationsService.findBySlugWithProfessions.mockResolvedValue(
-        organisation,
-      );
-      organisationsService.find.mockResolvedValue(organisation);
       organisationsService.save.mockResolvedValue(newOrganisation);
 
       const result = await controller.confirm(slug, organisationDto);
@@ -181,7 +157,7 @@ describe('OrganisationsController', () => {
         i18nService,
       );
 
-      expect(organisationPresenter.summaryList).toHaveBeenCalledWith({
+      expect(OrganisationPresenter.prototype.summaryList).toHaveBeenCalledWith({
         classes: 'govuk-summary-list',
         removeBlank: false,
         includeName: true,
@@ -190,7 +166,7 @@ describe('OrganisationsController', () => {
 
       expect(result).toEqual({
         ...newOrganisation,
-        summaryList: mockSummaryList(),
+        summaryList: summaryList,
       });
     });
   });
