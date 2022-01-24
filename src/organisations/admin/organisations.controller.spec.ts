@@ -5,7 +5,6 @@ import { I18nService } from 'nestjs-i18n';
 import { OrganisationsController } from './organisations.controller';
 import { OrganisationsService } from '../organisations.service';
 import { Organisation } from '../organisation.entity';
-import { Table } from '../../common/interfaces/table';
 
 import { OrganisationsPresenter } from './presenters/organisations.presenter';
 import { OrganisationPresenter } from '../presenters/organisation.presenter';
@@ -16,12 +15,26 @@ import professionFactory from '../../testutils/factories/profession';
 import { OrganisationSummaryPresenter } from '../presenters/organisation-summary.presenter';
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 import { SummaryList } from '../../common/interfaces/summary-list';
+import { IndustriesService } from '../../industries/industries.service';
+import industryFactory from '../../testutils/factories/industry';
+import { Industry } from '../../industries/industry.entity';
+import { FilterDto } from './dto/filter.dto';
+import { OrganisationsFilterHelper } from '../helpers/organisations-filter.helper';
+import { FilterInput } from '../../common/interfaces/filter-input.interface';
+import { IndexTemplate } from './interfaces/index-template.interface';
 
-const mockTable = (): Table => {
+const mockParams = (): IndexTemplate => {
   return {
-    firstCellIsHeader: true,
-    head: [{ text: 'Headers' }],
-    rows: [[{ text: 'Row 1' }], [{ text: 'Row 2' }], [{ text: 'Row 3' }]],
+    organisationsTable: {
+      firstCellIsHeader: true,
+      head: [{ text: 'Headers' }],
+      rows: [[{ text: 'Row 1' }], [{ text: 'Row 2' }], [{ text: 'Row 3' }]],
+    },
+    filters: {
+      keywords: '',
+      industries: [],
+    },
+    industriesCheckboxArgs: [],
   };
 };
 
@@ -33,7 +46,11 @@ const mockSummaryList = (): SummaryList => {
 };
 
 const organisationsPresenter = {
-  table: mockTable,
+  present: mockParams,
+};
+
+const filterHelper = {
+  filter: jest.fn(),
 };
 
 const organisationPresenter = {
@@ -60,11 +77,21 @@ jest.mock('../presenters/organisation.presenter', () => {
 
 jest.mock('../presenters/organisation-summary.presenter');
 
+jest.mock('../helpers/organisations-filter.helper', () => {
+  return {
+    OrganisationsFilterHelper: jest.fn().mockImplementation(() => {
+      return filterHelper;
+    }),
+  };
+});
+
 describe('OrganisationsController', () => {
   let controller: OrganisationsController;
   let organisationsService: DeepMocked<OrganisationsService>;
+  let industriesService: DeepMocked<IndustriesService>;
   let organisations: Organisation[];
   let organisation: Organisation;
+  let industries: Industry[];
 
   const i18nService = createMockI18nService();
 
@@ -76,6 +103,8 @@ describe('OrganisationsController', () => {
     organisation = organisationFactory.build({
       professions: professionFactory.buildList(2),
     });
+
+    industries = industryFactory.buildList(3);
 
     organisationsService = createMock<OrganisationsService>({
       all: async () => {
@@ -92,12 +121,22 @@ describe('OrganisationsController', () => {
       },
     });
 
+    industriesService = createMock<IndustriesService>({
+      all: async () => {
+        return industries;
+      },
+    });
+
     const module: TestingModule = await Test.createTestingModule({
       controllers: [OrganisationsController],
       providers: [
         {
           provide: OrganisationsService,
           useValue: organisationsService,
+        },
+        {
+          provide: IndustriesService,
+          useValue: industriesService,
         },
         { provide: I18nService, useValue: i18nService },
       ],
@@ -111,17 +150,65 @@ describe('OrganisationsController', () => {
   });
 
   describe('index', () => {
-    it('should return a table view of organisations', async () => {
-      expect(await controller.index()).toEqual({
-        organisationsTable: mockTable(),
+    describe('when no filter is provided', () => {
+      it('should return template params for all organisations', async () => {
+        filterHelper.filter.mockImplementation(() => {
+          return organisations;
+        });
+
+        expect(await controller.index()).toEqual(mockParams());
+
+        expect(organisationsService.allWithProfessions).toHaveBeenCalled();
+
+        expect(OrganisationsFilterHelper).toBeCalledWith(organisations);
+        expect(filterHelper.filter).toBeCalledWith({
+          keywords: '',
+          industries: [],
+        });
+
+        expect(OrganisationsPresenter).toHaveBeenCalledWith(
+          industries,
+          {
+            keywords: '',
+            industries: [],
+          },
+          organisations,
+          i18nService,
+        );
       });
+    });
 
-      expect(organisationsService.allWithProfessions).toHaveBeenCalled();
+    describe('when a filter is provided', () => {
+      it('should return template params for filtered organisations', async () => {
+        filterHelper.filter.mockImplementation(() => {
+          return [organisations[1], organisations[3]];
+        });
 
-      expect(OrganisationsPresenter).toHaveBeenCalledWith(
-        organisations,
-        i18nService,
-      );
+        expect(
+          await controller.index({
+            keywords: 'example keywords',
+            industries: [industries[1].id],
+          } as FilterDto),
+        ).toEqual(mockParams());
+
+        expect(organisationsService.allWithProfessions).toHaveBeenCalled();
+
+        expect(OrganisationsFilterHelper).toBeCalledWith(organisations);
+        expect(filterHelper.filter).toBeCalledWith({
+          keywords: 'example keywords',
+          industries: [industries[1]],
+        } as FilterInput);
+
+        expect(OrganisationsPresenter).toHaveBeenCalledWith(
+          industries,
+          {
+            keywords: 'example keywords',
+            industries: [industries[1]],
+          },
+          [organisations[1], organisations[3]],
+          i18nService,
+        );
+      });
     });
   });
 

@@ -9,8 +9,24 @@
   </h1>
 
   <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <h2 class="govuk-heading-l">{{ "organisations.admin.manageHeading" | t }} </h2>
+
+      {% set filterTextPrefix = "organisations.admin" %}
+      {% include "../../shared/_horizontal-filter.njk" %}
+    </div>
+  </div>
+
+  <div class="govuk-grid-row">
 
     <div class="govuk-grid-column-full">
+      {% set filterCriteriaTextPrefix = "organisations.admin" %}
+      {% include "../../shared/_filter-criteria.njk" %}
+
+      <p class="govuk-body-m">
+        <span class="govuk-!-font-size-36 govuk-!-font-weight-bold">{{ organisationsTable.rows.length }}</span> {{ ("organisations.admin.foundSingular" | t) if (organisationsTable.rows.length === 1) else ("organisations.admin.foundPlural" | t) }}
+      </p>
+
       {{ govukTable(organisationsTable) }}
     </div>
 
