@@ -87,8 +87,9 @@ describe('Adding a new profession', () => {
       cy.translate('app.continue').then((buttonText) => {
         cy.get('button').contains(buttonText).click();
       });
-
-      cy.checkAccessibility();
+      // Conditional radio buttons add an additional `aria-expanded` field,
+      // so ignore that rule on this page
+      cy.checkAccessibility({ 'aria-allowed-attr': { enabled: false } });
       cy.translate('professions.form.headings.qualificationInformation').then(
         (heading) => {
           cy.get('body').should('contain', heading);
