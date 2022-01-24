@@ -1,6 +1,37 @@
 {
   "admin": {
     "heading": "Regulatory authorities",
+    "manageHeading": "Manage existing regulatory authorities",
+    "showFilters": "Show filters",
+    "labels": {
+      "keywords": "Keywords:",
+      "industries": "Industries:"
+    },
+    "foundSingular": "regulatory authorities found.",
+    "foundPlural": "regulatory authorities found.",
+    "filter": {
+      "keywords": {
+        "label": "Keyword",
+        "hint": "For example, technology"
+      },
+      "nations": {
+        "label": "Nations",
+        "hint": "Select all that apply."
+      },
+      "organisations": {
+        "label": "Regulators",
+        "hint": "Select all that apply."
+      },
+      "industries": {
+        "label": "Industry / sector",
+        "hint": "Select all that apply."
+      },
+      "changedBy": {
+        "label": "Changed by",
+        "hint": "Select all that apply."
+      },
+      "button": "Filter results"
+    },
     "edit": {
       "heading": "Amending a regulatory authority"
     },
