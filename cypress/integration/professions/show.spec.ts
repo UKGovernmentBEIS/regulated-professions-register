@@ -1,6 +1,6 @@
 describe('Showing a profession', () => {
   it('I can view a profession', () => {
-    cy.visit('/professions/registered-trademark-attorney');
+    cy.visitAndCheckAccessibility('/professions/registered-trademark-attorney');
 
     cy.get('body').should('contain', 'Registered Trademark Attorney');
 
