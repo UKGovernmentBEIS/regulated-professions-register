@@ -7,6 +7,7 @@ export default Factory.define<User>(({ sequence }) => ({
   name: 'Example User',
   permissions: [UserPermission.CreateUser],
   externalIdentifier: 'extid|1234567',
+  organisationVersions: [],
   serviceOwner: false,
   confirmed: false,
   created_at: new Date(),

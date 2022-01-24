@@ -1,4 +1,6 @@
 import { Profession } from '../professions/profession.entity';
+import { OrganisationVersion } from './organisation-version.entity';
+
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -7,6 +9,7 @@ import {
   UpdateDateColumn,
   OneToMany,
   Index,
+  OneToOne,
 } from 'typeorm';
 
 @Entity({ name: 'organisations' })
@@ -44,6 +47,12 @@ export class Organisation {
 
   @OneToMany(() => Profession, (profession) => profession.organisation)
   professions: Profession[];
+
+  @OneToOne(
+    () => OrganisationVersion,
+    (organisationVersion) => organisationVersion.organisation,
+  )
+  version: OrganisationVersion;
 
   @CreateDateColumn({
     type: 'timestamp',

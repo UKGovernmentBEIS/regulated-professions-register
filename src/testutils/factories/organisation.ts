@@ -13,6 +13,7 @@ export default Factory.define<Organisation>(({ sequence }) => ({
   telephone: '+441234567890',
   fax: '+441234567891',
   professions: undefined,
+  version: undefined,
   created_at: new Date(),
   updated_at: new Date(),
 }));
