@@ -25,7 +25,7 @@ describe('Editing an existing profession', () => {
       cy.loginAuth0();
     });
 
-    it('I can add a new profession', () => {
+    it('I can edit an existing profession', () => {
       cy.visit('/admin/professions');
 
       cy.get('table')
