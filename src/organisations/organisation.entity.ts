@@ -81,7 +81,7 @@ export class Organisation {
   ) {
     this.name = name || '';
     this.alternateName = alternateName || '';
-    this.slug = slug || '';
+    this.slug = slug || null;
     this.address = address || '';
     this.url = url || '';
     this.email = email || '';
