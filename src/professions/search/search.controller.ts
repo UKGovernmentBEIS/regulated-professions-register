@@ -1,15 +1,14 @@
 import { Body, Controller, Get, Post, Render } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
-import { Industry } from '../../industries/industry.entity';
 import { IndustriesService } from '../../industries/industries.service';
 import { Nation } from '../../nations/nation';
 import { ProfessionsService } from '../professions.service';
 import { FilterDto } from './dto/filter.dto';
 import { ProfessionsFilterHelper } from '../helpers/professions-filter.helper';
-import { FilterInput } from '../../common/interfaces/filter-input.interface';
 import { IndexTemplate } from './interfaces/index-template.interface';
 import { SearchPresenter } from './search.presenter';
 import { BackLink } from '../../common/decorators/back-link.decorator';
+import { createFilterInput } from '../../helpers/create-filter-input.helper';
 
 @Controller('professions/search')
 export class SearchController {
@@ -39,7 +38,11 @@ export class SearchController {
 
     const allProfessions = await this.professionsService.allConfirmed();
 
-    const filterInput = this.getFilterInput(filter, allNations, allIndustries);
+    const filterInput = createFilterInput({
+      ...filter,
+      allNations,
+      allIndustries,
+    });
 
     const filteredProfessions = new ProfessionsFilterHelper(
       allProfessions,
@@ -52,20 +55,5 @@ export class SearchController {
       filteredProfessions,
       this.i18nService,
     ).present();
-  }
-
-  private getFilterInput(
-    filter: FilterDto,
-    allNations: Nation[],
-    allIndustries: Industry[],
-  ): FilterInput {
-    const nations = allNations.filter((nation) =>
-      filter.nations.includes(nation.code),
-    );
-    const industries = allIndustries.filter((industry) =>
-      filter.industries.includes(industry.id),
-    );
-
-    return { nations, industries, keywords: filter.keywords };
   }
 }

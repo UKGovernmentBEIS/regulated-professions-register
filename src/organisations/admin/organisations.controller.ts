@@ -8,6 +8,7 @@ import {
   Body,
   UseFilters,
   Put,
+  Query,
 } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
 
@@ -16,35 +17,51 @@ import { ValidationExceptionFilter } from '../../common/validation/validation-ex
 import { OrganisationsService } from '../organisations.service';
 import { Organisation } from '../organisation.entity';
 import { OrganisationPresenter } from '../presenters/organisation.presenter';
-import { OrganisationsPresenter } from '../presenters/organisations.presenter';
+import { OrganisationsPresenter } from './presenters/organisations.presenter';
 
 import { ConfirmTemplate } from './interfaces/confirm-template.interface';
 import { ShowTemplate } from '../interfaces/show-template.interface';
-import { OrganisationDto } from './dto/organisation.dto';
 import { OrganisationSummaryPresenter } from '../presenters/organisation-summary.presenter';
 import { BackLink } from '../../common/decorators/back-link.decorator';
+import { IndexTemplate } from './interfaces/index-template.interface';
+import { OrganisationDto } from './dto/organisation.dto';
+import { FilterDto } from './dto/filter.dto';
+import { OrganisationsFilterHelper } from '../helpers/organisations-filter.helper';
+import { IndustriesService } from '../../industries/industries.service';
+import { createFilterInput } from '../../helpers/create-filter-input.helper';
 
 @UseGuards(AuthenticationGuard)
 @Controller('/admin/organisations')
 export class OrganisationsController {
   constructor(
     private readonly organisationsService: OrganisationsService,
+    private readonly industriesService: IndustriesService,
     private readonly i18nService: I18nService,
   ) {}
 
   @Get()
   @Render('admin/organisations/index')
   @BackLink('/admin')
-  async index() {
-    const organisations = await this.organisationsService.allWithProfessions();
+  async index(@Query() query: FilterDto = null): Promise<IndexTemplate> {
+    const allOrganisations =
+      await this.organisationsService.allWithProfessions();
+    const allIndustries = await this.industriesService.all();
+
+    const filter = query || new FilterDto();
+    const filterInput = createFilterInput({ ...filter, allIndustries });
+
+    const filteredOrganisations = new OrganisationsFilterHelper(
+      allOrganisations,
+    ).filter(filterInput);
+
     const presenter = new OrganisationsPresenter(
-      organisations,
+      allIndustries,
+      filterInput,
+      filteredOrganisations,
       this.i18nService,
     );
 
-    return {
-      organisationsTable: await presenter.table(),
-    };
+    return presenter.present();
   }
 
   @Get('/:slug')

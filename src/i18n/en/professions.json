@@ -201,8 +201,8 @@
     },
     "foundSingular": "profession found.",
     "foundPlural": "professions found.",
-    "form": {
-      "nameFilter": {
+    "filter": {
+      "keywords": {
         "label": "Keyword",
         "hint": "For example, RP155, nuclear"
       },
@@ -222,9 +222,7 @@
         "label": "Changed by",
         "hint": "Select all that apply."
       },
-      "button": {
-        "filter": "Filter results"
-      }
+      "button": "Filter results"
     },
     "tableHeading": {
       "profession": "Profession",
@@ -254,8 +252,8 @@
     },
     "foundSingular": "profession found.",
     "foundPlural": "professions found.",
-    "form": {
-      "nameFilter": {
+    "filter": {
+      "keywords": {
         "label": "Profession that you are looking for",
         "hint": "For example, technology"
       },
@@ -267,9 +265,7 @@
         "label": "Industry / sector",
         "hint": "Select all that apply."
       },
-      "button": {
-        "filter": "Filter results"
-      }
+      "button": "Filter results"
     }
   }
 }

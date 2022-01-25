@@ -43,5 +43,61 @@ describe('Listing organisations', () => {
         cy.wrap(names).should('deep.equal', names.sort());
       });
     });
+
+    it('I can filter by keyword', () => {
+      expandFilters();
+
+      cy.get('input[name="keywords"]').type('Medical');
+
+      clickFilterButtonAndCheckAccessibility();
+
+      cy.get('tbody tr').each(($tr) => {
+        cy.wrap($tr).should('contain', 'Medical');
+      });
+
+      cy.get('tbody tr').should('have.length.at.least', 1);
+    });
+
+    it('I can filter by industry', () => {
+      expandFilters();
+
+      cy.translate('industries.law').then((lawText) => {
+        cy.get('label')
+          .contains(lawText)
+          .parent()
+          .within(() => {
+            cy.get('input[name="industries[]"]').check();
+          });
+
+        clickFilterButtonAndCheckAccessibility();
+
+        cy.get('label')
+          .contains(lawText)
+          .parent()
+          .within(() => {
+            cy.get('input[name="industries[]"]').should('be.checked');
+          });
+
+        cy.get('tbody tr').each(($tr) => {
+          cy.wrap($tr).should('contain', lawText);
+        });
+
+        cy.get('tbody tr').should('have.length.at.least', 1);
+      });
+    });
   });
+
+  function clickFilterButtonAndCheckAccessibility(): void {
+    cy.translate('organisations.admin.filter.button').then((buttonLabel) => {
+      cy.get('button').contains(buttonLabel).click();
+    });
+
+    cy.checkAccessibility();
+  }
+
+  function expandFilters(): void {
+    cy.translate('organisations.admin.showFilters').then((showFilters) => {
+      cy.get('span').contains(showFilters).click();
+    });
+  }
 });

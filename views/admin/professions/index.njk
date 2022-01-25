@@ -31,133 +31,14 @@
 
       <h2 class="govuk-heading-l">{{ "professions.admin.manageHeading" | t }} </h2>
 
-      <div class="rpr-internal-listing__filters-container">
-
-      <details class="govuk-details" data-module="govuk-details">
-        <summary class="govuk-details__summary">
-          <span class="govuk-details__summary-text">{{ "professions.admin.showFilters" | t }}</span>
-        </summary>
-        <div class="govuk-details__text">
-          <form action="" method="get" class="form">
-
-            {% if view === 'overview' %}
-              {% set filterGridClass = 'govuk-grid-column-one-quarter' %}
-              {% set keywordsWidthClass = 'govuk-input--width-10' %}
-            {% else %}
-              {% set filterGridClass = 'govuk-grid-column-one-third' %}
-              {% set keywordsWidthClass = '' %}
-            {% endif %}
-
-            <div class="govuk-grid-row">
-              <div class="{{ filterGridClass }}">
-                {{ govukInput({
-                    label: {
-                      text: "professions.admin.form.nameFilter.label" | t,
-                      classes: "govuk-label--s",
-                      isPageHeading: false
-                    },
-                    classes: "{{ keywordsWidthClass }}",
-                    hint: {
-                        text: "professions.admin.form.nameFilter.hint" | t
-                    },
-                    name: "keywords",
-                    id: "nameFilter",
-                    value: filters.keywords
-                }) }}
-              </div>
-
-              <div class="{{ filterGridClass }}">
-
-                {{ govukCheckboxes({
-                    name: "nations[]",
-                    classes: "govuk-checkboxes--small rpr-internal-listing__filter",
-                    fieldset: {
-                    legend: {
-                        text: "professions.admin.form.nations.label" | t,
-                        isPageHeading: true,
-                        classes: "govuk-fieldset__legend--s"
-                    }
-                    },
-                    hint: {
-                    text: "professions.admin.form.nations.hint" | t
-                    },
-                    items: nationsCheckboxArgs
-                }) }}
-              </div>
-
-              {% if view === 'overview' %}
-                <div class="{{ filterGridClass }}">
-                  {{ govukCheckboxes({
-                      name: "organisations[]",
-                      classes: "govuk-checkboxes--small rpr-internal-listing__filter",
-                      fieldset: {
-                      legend: {
-                          text: "professions.admin.form.organisations.label" | t,
-                          isPageHeading: true,
-                          classes: "govuk-fieldset__legend--s"
-                      }
-                      },
-                      hint: {
-                          text: "professions.admin.form.organisations.hint" | t
-                      },
-                      items: organisationsCheckboxArgs
-                  }) }}
-                </div>
-
-                <div class="{{ filterGridClass }}">
-                  {{ govukCheckboxes({
-                      name: "industries[]",
-                      classes: "govuk-checkboxes--small rpr-internal-listing__filter",
-                      fieldset: {
-                      legend: {
-                          text: "professions.admin.form.industries.label" | t,
-                          isPageHeading: true,
-                          classes: "govuk-fieldset__legend--s"
-                      }
-                      },
-                      hint: {
-                          text: "professions.admin.form.industries.hint" | t
-                      },
-                      items: industriesCheckboxArgs
-                  }) }}
-                </div>
-              {% else %}
-                <div class="{{ filterGridClass }}">
-                  {{ govukCheckboxes({
-                      name: "changedBy[]",
-                      classes: "govuk-checkboxes--small rpr-internal-listing__filter",
-                      fieldset: {
-                      legend: {
-                          text: "professions.admin.form.changedBy.label" | t,
-                          isPageHeading: true,
-                          classes: "govuk-fieldset__legend--s"
-                      }
-                      },
-                      hint: {
-                          text: "professions.admin.form.changedBy.hint" | t
-                      },
-                      items: changedByCheckboxArgs
-                  }) }}
-                </div>
-              {% endif %}
-
-            </div>
-
-            <div class="govuk-grid-row">
-              <div class="govuk-grid-column-full">
-                {{ govukButton({
-                  text: "Filter results",
-                  classes: "govuk-button--secondary rpr-internal-listing__filter-button"
-                }) }}
-              </div>
-            </div>
-
-          </form>
-        </div>
-      </details>
-      </div>
-
-      <div class="govuk-!-padding-bottom-6"></div>
+      {% if view === 'overview' %}
+        {% set changedByCheckboxArgs = false %}
+      {% else %}
+        {% set organisationsCheckboxArgs = false %}
+        {% set industriesCheckboxArgs = false %}
+      {% endif %}
+      {% set filterTextPrefix = "professions.admin" %}
+      {% include "../../shared/_horizontal-filter.njk" %}
     </div>
   </div>
 
