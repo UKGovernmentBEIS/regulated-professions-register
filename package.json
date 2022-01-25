@@ -72,7 +72,7 @@
     "rollbar": "^2.24.0",
     "rxjs": "^7.5.2",
     "sass": "^1.43.4",
-    "sass-loader": "^12.3.0",
+    "sass-loader": "^12.4.0",
     "slugify": "^1.6.5",
     "typeorm": "^0.2.40"
   },
