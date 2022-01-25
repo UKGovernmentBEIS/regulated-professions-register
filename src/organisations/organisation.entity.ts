@@ -9,7 +9,6 @@ import {
   UpdateDateColumn,
   OneToMany,
   Index,
-  OneToOne,
 } from 'typeorm';
 
 @Entity({ name: 'organisations' })
@@ -20,12 +19,18 @@ export class Organisation {
   @Column()
   name: string;
 
-  @Column({ nullable: true })
-  alternateName: string;
-
   @Index({ unique: true, where: '"slug" IS NOT NULL' })
   @Column({ nullable: true })
   slug: string;
+
+  @OneToMany(
+    () => OrganisationVersion,
+    (organisationVersion) => organisationVersion.organisation,
+  )
+  versions: OrganisationVersion[];
+
+  @Column({ nullable: true })
+  alternateName: string;
 
   @Column()
   address: string;
@@ -47,12 +52,6 @@ export class Organisation {
 
   @OneToMany(() => Profession, (profession) => profession.organisation)
   professions: Profession[];
-
-  @OneToOne(
-    () => OrganisationVersion,
-    (organisationVersion) => organisationVersion.organisation,
-  )
-  version: OrganisationVersion;
 
   @CreateDateColumn({
     type: 'timestamp',
