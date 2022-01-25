@@ -14,7 +14,7 @@
       {{ govukSummaryList(summaryList) }}
 
       <form action="/admin/organisations/{{ id }}?_method=PUT" method="post">
-        <input type="hidden" name="_method" value="PUT" />
+        <input type="hidden" name="confirm" value="true" />
 
         {{
           govukButton({

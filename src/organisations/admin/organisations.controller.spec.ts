@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { createMock, DeepMocked } from '@golevelup/ts-jest';
 import { I18nService } from 'nestjs-i18n';
+import { Response } from 'express';
 
 import { OrganisationsController } from './organisations.controller';
 import { OrganisationsService } from '../organisations.service';
@@ -219,74 +220,93 @@ describe('OrganisationsController', () => {
     });
   });
 
-  describe('confirm', () => {
-    it('saves the organisation', async () => {
-      const summaryList: SummaryList = {
-        classes: 'govuk-summary-list--no-border',
-        rows: [],
-      };
-
-      (
-        OrganisationPresenter.prototype as DeepMocked<OrganisationPresenter>
-      ).summaryList.mockResolvedValue(summaryList);
-
-      const id = 'some-uuid';
-
-      const organisationDto: OrganisationDto = {
-        name: 'Organisation',
-        alternateName: '',
-        email: 'email@example.com',
-        url: 'http://example.com',
-        contactUrl: 'http://example.com',
-        address: '123 Fake Street',
-        telephone: '122356',
-        fax: '',
-      };
-
-      const organisation = organisationFactory.build();
-
-      const newOrganisation = {
-        ...organisation,
-        ...organisationDto,
-      };
-
-      organisationsService.find.mockResolvedValue(organisation);
-      organisationsService.save.mockResolvedValue(newOrganisation);
-
-      const result = await controller.confirm(id, organisationDto);
-
-      expect(organisationsService.save).toHaveBeenCalledWith(
-        expect.objectContaining(newOrganisation),
-      );
-
-      expect(OrganisationPresenter).toHaveBeenCalledWith(
-        newOrganisation,
-        i18nService,
-      );
-
-      expect(OrganisationPresenter.prototype.summaryList).toHaveBeenCalledWith({
-        classes: 'govuk-summary-list',
-        removeBlank: false,
-        includeName: true,
-        includeActions: true,
-      });
-
-      expect(result).toEqual({
-        ...newOrganisation,
-        summaryList: summaryList,
-      });
-    });
-  });
-
   describe('update', () => {
-    it('should update the organisation', async () => {
-      const organisation = createOrganisation();
-      organisationsService.find.mockResolvedValue(organisation);
+    describe('when confirm is not set', () => {
+      it('saves the organisation', async () => {
+        const summaryList: SummaryList = {
+          classes: 'govuk-summary-list--no-border',
+          rows: [],
+        };
 
-      expect(await controller.update('some-uuid')).toEqual(organisation);
+        (
+          OrganisationPresenter.prototype as DeepMocked<OrganisationPresenter>
+        ).summaryList.mockResolvedValue(summaryList);
 
-      expect(organisationsService.find).toHaveBeenCalledWith('some-uuid');
-      expect(organisationsService.save).toHaveBeenCalledWith(organisation);
+        const id = 'some-uuid';
+        const response = createMock<Response>();
+
+        const organisationDto: OrganisationDto = {
+          name: 'Organisation',
+          alternateName: '',
+          email: 'email@example.com',
+          url: 'http://example.com',
+          contactUrl: 'http://example.com',
+          address: '123 Fake Street',
+          telephone: '122356',
+          fax: '',
+        };
+
+        const organisation = organisationFactory.build();
+
+        const newOrganisation = {
+          ...organisation,
+          ...organisationDto,
+        };
+
+        organisationsService.find.mockResolvedValue(organisation);
+        organisationsService.save.mockResolvedValue(newOrganisation);
+
+        await controller.update(id, organisationDto, response);
+
+        expect(organisationsService.save).toHaveBeenCalledWith(
+          expect.objectContaining(newOrganisation),
+        );
+
+        expect(OrganisationPresenter).toHaveBeenCalledWith(
+          newOrganisation,
+          i18nService,
+        );
+
+        expect(
+          OrganisationPresenter.prototype.summaryList,
+        ).toHaveBeenCalledWith({
+          classes: 'govuk-summary-list',
+          removeBlank: false,
+          includeName: true,
+          includeActions: true,
+        });
+
+        expect(response.render).toHaveBeenCalledWith(
+          'admin/organisations/review',
+          {
+            ...newOrganisation,
+            summaryList: summaryList,
+            backLink: `/admin/organisations/${newOrganisation.id}/edit/`,
+          },
+        );
+      });
+
+      describe('when confirm is set', () => {
+        it('should update the organisation', async () => {
+          const organisation = createOrganisation();
+          const response = createMock<Response>();
+          const organisationDto = createMock<OrganisationDto>({
+            confirm: true,
+          });
+
+          organisationsService.find.mockResolvedValue(organisation);
+
+          await controller.update('some-uuid', organisationDto, response);
+
+          expect(organisationsService.find).toHaveBeenCalledWith('some-uuid');
+          expect(organisationsService.save).toHaveBeenCalledWith(organisation);
+
+          expect(response.render).toHaveBeenCalledWith(
+            'admin/organisations/complete',
+            organisation,
+          );
+        });
+      });
     });
   });
 });

@@ -4,13 +4,14 @@ import {
   Get,
   Render,
   Param,
-  Post,
   Body,
   UseFilters,
   Put,
   Query,
+  Res,
 } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
+import { Response } from 'express';
 
 import { AuthenticationGuard } from '../../common/authentication.guard';
 import { ValidationExceptionFilter } from '../../common/validation/validation-exception.filter';
@@ -19,7 +20,7 @@ import { Organisation } from '../organisation.entity';
 import { OrganisationPresenter } from '../presenters/organisation.presenter';
 import { OrganisationsPresenter } from './presenters/organisations.presenter';
 
-import { ConfirmTemplate } from './interfaces/confirm-template.interface';
+import { ReviewTemplate } from './interfaces/review-template.interface';
 import { ShowTemplate } from '../interfaces/show-template.interface';
 import { OrganisationSummaryPresenter } from '../presenters/organisation-summary.presenter';
 import { BackLink } from '../../common/decorators/back-link.decorator';
@@ -88,49 +89,56 @@ export class OrganisationsController {
     return organisation;
   }
 
-  @Post('/:id/confirm')
-  @Render('admin/organisations/confirm')
-  @BackLink('/admin/organisations/:id/edit')
+  @Put('/:id')
   @UseFilters(new ValidationExceptionFilter('admin/organisations/edit'))
-  async confirm(
+  async update(
     @Param('id') id: string,
-    @Body() organisationDto: OrganisationDto,
-  ): Promise<ConfirmTemplate> {
+    @Body() body: OrganisationDto,
+    @Res() res: Response,
+  ): Promise<void> {
     const organisation = await this.organisationsService.find(id);
-    const newOrganisation = {
-      ...organisation,
-      ...(organisationDto as Organisation),
-    };
 
-    const updatedOrganisation = await this.organisationsService.save(
-      newOrganisation,
-    );
+    if (body.confirm) {
+      return this.confirm(res, organisation);
+    } else {
+      const newOrganisation = {
+        ...organisation,
+        ...(body as Organisation),
+      };
 
-    const organisationPresenter = new OrganisationPresenter(
-      updatedOrganisation,
-      this.i18nService,
-    );
+      const updatedOrganisation = await this.organisationsService.save(
+        newOrganisation,
+      );
 
-    return {
-      ...updatedOrganisation,
-      summaryList: await organisationPresenter.summaryList({
-        classes: 'govuk-summary-list',
-        removeBlank: false,
-        includeName: true,
-        includeActions: true,
-      }),
-    };
+      const organisationPresenter = new OrganisationPresenter(
+        updatedOrganisation,
+        this.i18nService,
+      );
+
+      return this.showReviewPage(res, {
+        ...updatedOrganisation,
+        summaryList: await organisationPresenter.summaryList({
+          classes: 'govuk-summary-list',
+          removeBlank: false,
+          includeName: true,
+          includeActions: true,
+        }),
+      });
+    }
   }
 
-  @Put('/:id')
-  @Render('admin/organisations/complete')
-  async update(@Param('id') id: string): Promise<Organisation> {
-    const organisation = await this.organisationsService.find(id);
-
+  async confirm(res: Response, organisation: Organisation): Promise<void> {
     // This should potentially add a confirmed flag to the object once
     // we have draft functionality in place
     await this.organisationsService.save(organisation);
 
-    return organisation;
+    res.render('admin/organisations/complete', organisation);
+  }
+
+  async showReviewPage(res: Response, template: ReviewTemplate): Promise<void> {
+    return res.render('admin/organisations/review', {
+      ...template,
+      backLink: `/admin/organisations/${template.id}/edit/`,
+    });
   }
 }
