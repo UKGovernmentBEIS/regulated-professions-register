@@ -262,7 +262,7 @@ describe('OrganisationPresenter', () => {
           expect(row.actions).toEqual({
             items: [
               {
-                href: `/admin/organisations/${organisation.slug}/edit`,
+                href: `/admin/organisations/${organisation.id}/edit`,
                 text: 'Translation of `app.change`',
                 visuallyHiddenText: visuallyHiddenText,
               },

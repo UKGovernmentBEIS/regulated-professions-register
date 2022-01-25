@@ -211,9 +211,11 @@ describe('OrganisationsController', () => {
   describe('edit', () => {
     it('should return the organisation', async () => {
       const organisation = createOrganisation();
-      organisationsService.findBySlug.mockResolvedValue(organisation);
 
-      expect(await controller.edit('slug')).toEqual(organisation);
+      organisationsService.find.mockResolvedValue(organisation);
+
+      expect(await controller.edit(organisation.id)).toEqual(organisation);
+      expect(organisationsService.find).toHaveBeenCalledWith(organisation.id);
     });
   });
 
@@ -228,7 +230,8 @@ describe('OrganisationsController', () => {
         OrganisationPresenter.prototype as DeepMocked<OrganisationPresenter>
       ).summaryList.mockResolvedValue(summaryList);
 
-      const slug = 'some-slug';
+      const id = 'some-uuid';
+
       const organisationDto: OrganisationDto = {
         name: 'Organisation',
         alternateName: '',
@@ -240,17 +243,17 @@ describe('OrganisationsController', () => {
         fax: '',
       };
 
-      const organisation = createOrganisation();
+      const organisation = organisationFactory.build();
 
       const newOrganisation = {
         ...organisation,
         ...organisationDto,
       };
 
-      organisationsService.findBySlug.mockResolvedValue(organisation);
+      organisationsService.find.mockResolvedValue(organisation);
       organisationsService.save.mockResolvedValue(newOrganisation);
 
-      const result = await controller.confirm(slug, organisationDto);
+      const result = await controller.confirm(id, organisationDto);
 
       expect(organisationsService.save).toHaveBeenCalledWith(
         expect.objectContaining(newOrganisation),
@@ -272,6 +275,18 @@ describe('OrganisationsController', () => {
         ...newOrganisation,
         summaryList: summaryList,
       });
+    });
+  });
+
+  describe('update', () => {
+    it('should update the organisation', async () => {
+      const organisation = createOrganisation();
+      organisationsService.find.mockResolvedValue(organisation);
+
+      expect(await controller.update('some-uuid')).toEqual(organisation);
+
+      expect(organisationsService.find).toHaveBeenCalledWith('some-uuid');
+      expect(organisationsService.save).toHaveBeenCalledWith(organisation);
     });
   });
 });

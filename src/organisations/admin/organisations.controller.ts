@@ -79,24 +79,24 @@ export class OrganisationsController {
     return organisationSummaryPresenter.present();
   }
 
-  @Get('/:slug/edit')
+  @Get('/:id/edit')
   @Render('admin/organisations/edit')
-  @BackLink('/admin/organisations/:slug')
-  async edit(@Param('slug') slug: string): Promise<Organisation> {
-    const organisation = await this.organisationsService.findBySlug(slug);
+  @BackLink('/admin/organisations/:id')
+  async edit(@Param('id') id: string): Promise<Organisation> {
+    const organisation = await this.organisationsService.find(id);
 
     return organisation;
   }
 
-  @Post('/:slug/confirm')
+  @Post('/:id/confirm')
   @Render('admin/organisations/confirm')
-  @BackLink('/admin/organisations/:slug/edit')
+  @BackLink('/admin/organisations/:id/edit')
   @UseFilters(new ValidationExceptionFilter('admin/organisations/edit'))
   async confirm(
-    @Param('slug') slug: string,
+    @Param('id') id: string,
     @Body() organisationDto: OrganisationDto,
   ): Promise<ConfirmTemplate> {
-    const organisation = await this.organisationsService.findBySlug(slug);
+    const organisation = await this.organisationsService.find(id);
     const newOrganisation = {
       ...organisation,
       ...(organisationDto as Organisation),
@@ -122,10 +122,10 @@ export class OrganisationsController {
     };
   }
 
-  @Put('/:slug')
+  @Put('/:id')
   @Render('admin/organisations/complete')
-  async create(@Param('slug') slug: string): Promise<Organisation> {
-    const organisation = await this.organisationsService.findBySlug(slug);
+  async update(@Param('id') id: string): Promise<Organisation> {
+    const organisation = await this.organisationsService.find(id);
 
     // This should potentially add a confirmed flag to the object once
     // we have draft functionality in place

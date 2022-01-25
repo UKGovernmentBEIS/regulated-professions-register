@@ -15,7 +15,7 @@
     <div class="govuk-grid-column-two-thirds">
       {% include "../../shared/_errors.njk" %}
 
-      {% set targetUrl = ( currentUrl if '/confirm' in currentUrl else "/admin/organisations/"+ slug +"/confirm" ) %}
+      {% set targetUrl = ( currentUrl if '/confirm' in currentUrl else "/admin/organisations/"+ id +"/confirm" ) %}
 
       <form method="post" action="{{ targetUrl }}">
         {{
