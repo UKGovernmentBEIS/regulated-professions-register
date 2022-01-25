@@ -5,6 +5,7 @@ import { I18nService } from 'nestjs-i18n';
 import QualificationPresenter from '../qualifications/presenters/qualification.presenter';
 import industryFactory from '../testutils/factories/industry';
 import professionFactory from '../testutils/factories/profession';
+import { translationOf } from '../testutils/translation-of';
 
 import { ProfessionsController } from './professions.controller';
 import { ProfessionsService } from './professions.service';
@@ -87,6 +88,27 @@ describe('ProfessionsController', () => {
       expect(async () => {
         await controller.show('example-invalid-slug');
       }).rejects.toThrowError(NotFoundException);
+    });
+
+    describe('when the Profession has no qualification set', () => {
+      it('passes a null value for the qualification', async () => {
+        const profession = professionFactory.build({
+          qualification: null,
+          occupationLocations: ['GB-ENG'],
+          industries: [industryFactory.build({ name: 'industries.example' })],
+        });
+
+        professionsService.findBySlug.mockResolvedValue(profession);
+
+        const result = await controller.show('example-slug');
+
+        expect(result).toEqual({
+          profession: profession,
+          qualification: null,
+          nations: [translationOf('nations.england')],
+          industries: [translationOf('industries.example')],
+        });
+      });
     });
   });
 });
