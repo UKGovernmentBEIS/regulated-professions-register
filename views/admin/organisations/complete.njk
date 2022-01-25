@@ -10,7 +10,7 @@
       {{
         govukPanel({
           titleText: ("organisations.admin.form.headings.confirmation" | t),
-          html: ("organisations.admin.form.body.confirmation.panel" | t({name: name}) | safe)
+          html: "organisations.admin.form.body.confirmation.panel" | t({name: (name | escape)})
         })
       }}
 
