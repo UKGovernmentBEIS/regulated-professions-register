@@ -1,0 +1,49 @@
+@startuml versions
+
+entity OrganisationVersion {
+  Represents a version of an Organisation
+  --
+  * id: uuid
+  * status: enum (live/draft/archived/unconfirmed)
+  * last_modified: timestamp
+  * alternateName: string
+  * address: string
+  * etc...
+}
+
+entity ProfessionVersion {
+  Represents a version of a Profession
+  --
+  * id: uuid
+  * status: enum (live/draft/archived)
+  * last_modified: timestamp
+  * alternateName: string
+  * description: string
+  * etc...
+}
+
+entity Organisation {
+  A Regulatory Authority
+  ---
+  * id: uuid
+  * name: string
+  * slug: slug
+}
+
+entity Profession {
+  e.g. Primary School Teacher
+  ---
+  * id: uuid
+  * name: string
+  * slug: slug
+}
+
+entity User {
+  The user who made the last edit
+}
+
+OrganisationVersion }o-- Organisation
+ProfessionVersion }o-- Profession
+Profession }o-- Organisation
+OrganisationVersion -- User
+ProfessionVersion -- User
