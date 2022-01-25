@@ -16,6 +16,7 @@ export enum OrganisationVersionStatus {
   Live = 'live',
   Draft = 'draft',
   Archived = 'archived',
+  Unconfirmed = 'unconfirmed',
 }
 
 @Entity({ name: 'organisationVersions' })
@@ -37,7 +38,7 @@ export class OrganisationVersion {
   @Column({
     type: 'enum',
     enum: OrganisationVersionStatus,
-    default: OrganisationVersionStatus.Draft,
+    default: OrganisationVersionStatus.Unconfirmed,
   })
   status: OrganisationVersionStatus;
 
