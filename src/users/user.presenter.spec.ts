@@ -1,9 +1,13 @@
+import { escape } from '../helpers/escape.helper';
 import { createMockI18nService } from '../testutils/create-mock-i18n-service';
+import { escapeOf } from '../testutils/escape-of';
 import userFactory from '../testutils/factories/user';
 import { translationOf } from '../testutils/translation-of';
 
 import { User, UserPermission } from './user.entity';
 import { UserPresenter } from './user.presenter';
+
+jest.mock('../helpers/escape.helper');
 
 describe('UserPresenter', () => {
   describe('tableRow', () => {
@@ -27,6 +31,8 @@ describe('UserPresenter', () => {
 
   describe('showLink', () => {
     it('should return a link to the user', () => {
+      (escape as jest.Mock).mockImplementation(escapeOf);
+
       const user = createSinglePermissionUser();
       const presenter = new UserPresenter(user, createMockI18nService());
 
@@ -34,11 +40,13 @@ describe('UserPresenter', () => {
       <a href="/admin/users/some-uuid-string" class="govuk-button" data-module="govuk-button">
         View
         <span class="govuk-visually-hidden">
-          name
+          ${escapeOf('name')}
         </span>
       </a>
     `.replace(/(\n)/gm, '');
       expect(presenter.showLink().replace(/(\n)/gm, '')).toEqual(expected);
+
+      expect(escape).toBeCalledWith('name');
     });
   });
 
