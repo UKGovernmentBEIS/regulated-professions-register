@@ -1,5 +1,6 @@
 import { Organisation } from './organisation.entity';
 import { User } from '../users/user.entity';
+
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -7,7 +8,6 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   Index,
-  OneToOne,
   JoinColumn,
   ManyToOne,
 } from 'typeorm';
@@ -28,7 +28,7 @@ export class OrganisationVersion {
   @Column({ nullable: true })
   slug: string;
 
-  @OneToOne(() => Organisation, (organisation) => organisation.version)
+  @ManyToOne(() => Organisation, (organisation) => organisation.versions)
   @JoinColumn()
   organisation: Organisation;
 
@@ -41,6 +41,27 @@ export class OrganisationVersion {
     default: OrganisationVersionStatus.Unconfirmed,
   })
   status: OrganisationVersionStatus;
+
+  @Column({ nullable: true })
+  alternateName: string;
+
+  @Column()
+  address: string;
+
+  @Column()
+  url: string;
+
+  @Column()
+  email: string;
+
+  @Column({ nullable: true })
+  contactUrl: string;
+
+  @Column()
+  telephone: string;
+
+  @Column({ nullable: true })
+  fax: string;
 
   @CreateDateColumn({
     type: 'timestamp',
