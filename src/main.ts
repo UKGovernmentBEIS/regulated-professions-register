@@ -7,7 +7,6 @@ import path from 'path';
 import session from 'express-session';
 import methodOverride from 'method-override';
 import connectFlash from 'connect-flash';
-import Rollbar from 'rollbar';
 
 import { AppModule } from './app.module';
 import { AuthenticationMidleware } from './middleware/authentication.middleware';
@@ -15,7 +14,7 @@ import { nunjucksConfig } from './config/nunjucks.config';
 import { globalLocals } from './common/global-locals';
 
 import { ValidationFailedError } from './common/validation/validation-failed.error';
-import { HttpExceptionFilter } from './common/http-exception.filter';
+import { GlobalExceptionFilter } from './common/global-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -39,7 +38,7 @@ async function bootstrap() {
 
   app.use(authenticationMiddleware.auth());
 
-  app.useGlobalFilters(new HttpExceptionFilter());
+  app.useGlobalFilters(new GlobalExceptionFilter());
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -59,19 +58,6 @@ async function bootstrap() {
 
   // Allow us to redirect with flash messages
   app.use(connectFlash());
-
-  // Send errors to Rollbar in production
-  if (process.env['NODE_ENV'] === 'production') {
-    const rollbar = new Rollbar({
-      accessToken: process.env['ROLLBAR_TOKEN'],
-      captureUncaught: true,
-      captureUnhandledRejections: true,
-      payload: {
-        environment: process.env['ENVIRONMENT'],
-      },
-    });
-    app.use(rollbar.errorHandler());
-  }
 
   // Add global variables to the application to be used in the templates
   app.use(globalLocals);
