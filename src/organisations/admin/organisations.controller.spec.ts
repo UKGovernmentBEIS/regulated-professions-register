@@ -176,6 +176,26 @@ describe('OrganisationsController', () => {
     });
   });
 
+  describe('create', () => {
+    it('should return the organisation', async () => {
+      const response = createMock<Response>();
+      const organisation = organisationFactory.build({
+        id: 'some-uuid',
+      });
+
+      organisationsService.save.mockResolvedValue(organisation);
+
+      await controller.create(response);
+
+      expect(organisationsService.save).toHaveBeenCalledWith(
+        expect.objectContaining(new Organisation()),
+      );
+      expect(response.redirect).toHaveBeenCalledWith(
+        `/admin/organisations/some-uuid/edit`,
+      );
+    });
+  });
+
   describe('show', () => {
     it('should return variables for the show template', async () => {
       const organisation = createOrganisation();
@@ -263,7 +283,7 @@ describe('OrganisationsController', () => {
         );
 
         expect(OrganisationPresenter).toHaveBeenCalledWith(
-          newOrganisation,
+          expect.objectContaining(newOrganisation),
           i18nService,
         );
 

@@ -7,6 +7,7 @@ import {
   Body,
   UseFilters,
   Put,
+  Post,
   Query,
   Res,
 } from '@nestjs/common';
@@ -63,6 +64,23 @@ export class OrganisationsController {
     );
 
     return presenter.present();
+  }
+
+  @Get('/new')
+  @Render('admin/organisations/new')
+  @BackLink('/admin/organisations')
+  async new() {
+    // Do nothing
+  }
+
+  @Post('/')
+  async create(@Res() res: Response): Promise<void> {
+    const blankOrganisation = new Organisation();
+    const organisation = await this.organisationsService.save(
+      blankOrganisation,
+    );
+
+    return res.redirect(`/admin/organisations/${organisation.id}/edit`);
   }
 
   @Get('/:slug')
