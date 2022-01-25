@@ -7,7 +7,7 @@
   <div class="govuk-grid-column-two-thirds">
     {{ govukPanel({
       titleText: ("users.headings.done" | t),
-      html: ("users.body.panel" | t({email: email}) | safe)
+      html: "users.body.panel" | t({email: (email | escape)})
     }) }}
 
     <p class="govuk-body">{{ "users.body.confirmation" | t  }}</p>
