@@ -52,15 +52,16 @@
               <div class="{{ filterGridClass }}">
                 {{ govukInput({
                     label: {
-                    text: "professions.admin.form.nameFilter.label" | t,
-                    classes: "govuk-label--s",
-                    isPageHeading: true
+                      text: "professions.admin.form.nameFilter.label" | t,
+                      classes: "govuk-label--s",
+                      isPageHeading: false
                     },
                     classes: "{{ keywordsWidthClass }}",
                     hint: {
                         text: "professions.admin.form.nameFilter.hint" | t
                     },
                     name: "keywords",
+                    id: "nameFilter",
                     value: filters.keywords
                 }) }}
               </div>

@@ -13,6 +13,16 @@
 // https://on.cypress.io/configuration
 // ***********************************************************
 
+import 'cypress-axe';
+
+interface AxeRule {
+  enabled: boolean;
+}
+
+export interface AxeRules {
+  [ruleId: string]: AxeRule;
+}
+
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Cypress {
@@ -35,6 +45,8 @@ declare global {
       checkTextareaValue(label: string, value: string): Chainable<string>;
       checkSummaryListRowValue(key: string, value: string): Chainable<string>;
       clickSummaryListRowAction(key: string, action: string): Chainable<string>;
+      visitAndCheckAccessibility(url: string): void;
+      checkAccessibility(rules?: AxeRules): void;
     }
   }
 }

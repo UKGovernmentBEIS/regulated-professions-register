@@ -5,29 +5,22 @@
 
 {% block content %}
 
-  <div class="govuk-width-container">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      {{
+        govukPanel({
+          titleText: ("organisations.admin.form.headings.confirmation" | t),
+          html: ("organisations.admin.form.body.confirmation.panel" | t({name: name}) | safe)
+        })
+      }}
 
-    <main class="govuk-main-wrapper">
+      <h2 class="govuk-heading-m">{{ ("organisations.admin.form.body.confirmation.next" | t) }}</h2>
 
-      <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
-          {{
-            govukPanel({
-              titleText: ("organisations.admin.form.headings.confirmation" | t),
-              html: ("organisations.admin.form.body.confirmation.panel" | t({name: name}) | safe)
-            })
-          }}
+      <p class="govuk-body">
+        <a href="/admin">{{ ("app.backToDashboard" | t) }}</a>
+      </p>
 
-          <h2 class="govuk-heading-m">{{ ("organisations.admin.form.body.confirmation.next" | t) }}</h2>
-
-          <p class="govuk-body">
-            <a href="/admin">{{ ("app.backToDashboard" | t) }}</a>
-          </p>
-
-        </div>
-      </div>
-
-    </main>
+    </div>
   </div>
 
 {% endblock %}

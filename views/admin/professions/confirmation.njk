@@ -5,40 +5,33 @@
 
 {% block content %}
 
-  <div class="govuk-width-container">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      {% if amended %}
+        {{
+          govukPanel({
+            titleText: ("professions.form.headings.amended" | t),
+            html: ("professions.form.body.confirmation.panel" | t({name: name, action: "updated"}) | safe)
+          })
+        }}
+      {% else %}
+        {{
+          govukPanel({
+            titleText: ("professions.form.headings.confirmation" | t),
+            html: ("professions.form.body.confirmation.panel" | t({name: name, action: "added"}) | safe)
+          })
+        }}
+      {% endif %}
 
-    <main class="govuk-main-wrapper">
+      <p class="govuk-body">{{ ("professions.form.body.confirmation.emailNotification" | t) }}</p>
 
-      <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
-          {% if amended %}
-            {{
-              govukPanel({
-                titleText: ("professions.form.headings.amended" | t),
-                html: ("professions.form.body.confirmation.panel" | t({name: name, action: "updated"}) | safe)
-              })
-            }}
-          {% else %}
-            {{
-              govukPanel({
-                titleText: ("professions.form.headings.confirmation" | t),
-                html: ("professions.form.body.confirmation.panel" | t({name: name, action: "added"}) | safe)
-              })
-            }}
-          {% endif %}
+      <h2 class="govuk-heading-m">{{ ("professions.form.body.confirmation.next" | t) }}</h2>
 
-          <p class="govuk-body">{{ ("professions.form.body.confirmation.emailNotification" | t) }}</p>
+      <p class="govuk-body">
+        <a href="/admin">{{ ("app.backToDashboard" | t) }}</a>
+      </p>
 
-          <h2 class="govuk-heading-m">{{ ("professions.form.body.confirmation.next" | t) }}</h2>
-
-          <p class="govuk-body">
-            <a href="/admin">{{ ("app.backToDashboard" | t) }}</a>
-          </p>
-
-        </div>
-      </div>
-
-    </main>
+    </div>
   </div>
 
 {% endblock %}

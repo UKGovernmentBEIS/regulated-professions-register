@@ -6,30 +6,24 @@
 
 {% block content %}
 
-  <div class="govuk-width-container">
-    <main class="govuk-main-wrapper">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <span class="govuk-caption-l">{{ 'professions.form.captions.edit' | t }}</span>
+      <h1 class="govuk-heading-l">{{ ('professions.form.headings.edit' | t({professionName: profession.name})) }}</h1>
 
-      <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
-          <span class="govuk-caption-l">{{ 'professions.form.captions.edit' | t }}</span>
-          <h1 class="govuk-heading-l">{{ ('professions.form.headings.edit' | t({professionName: profession.name})) }}</h1>
+      <form method="post" action="/admin/professions/{{ profession.slug }}/edit">
+        {{
+          govukButton({
+            id: "submit-button",
+            type: "Submit",
+            text: ('professions.form.button.edit' | t)
+          })
+        }}
+      </form>
 
-          <form method="post" action="/admin/professions/{{ profession.slug }}/edit">
-            {{
-              govukButton({
-                id: "submit-button",
-                type: "Submit",
-                text: ('professions.form.button.edit' | t)
-              })
-            }}
-          </form>
+    </div>
 
-        </div>
-
-        <div class="govuk-grid-column-one-third"></div>
-      </div>
-
-    </main>
+    <div class="govuk-grid-column-one-third"></div>
   </div>
 
 {% endblock %}

@@ -1,12 +1,13 @@
 describe('Searching a profession', () => {
   beforeEach(() => {
-    cy.visit('/');
+    cy.visitAndCheckAccessibility('/');
 
     cy.translate('app.pages.index.useThisService.checkProfessions.text').then(
       (linkText) => {
         cy.contains(linkText).click();
       },
     );
+    cy.checkAccessibility();
   });
 
   it('I can view an unfiltered list of professions', () => {
@@ -34,6 +35,7 @@ describe('Searching a profession', () => {
         'Secondary School Teacher in State maintained schools (England)',
       )
       .click();
+    cy.checkAccessibility();
     cy.url().should(
       'contain',
       'professions/secondary-school-teacher-in-state-maintained-schools-england',
@@ -49,6 +51,7 @@ describe('Searching a profession', () => {
 
     cy.get('button').click();
 
+    cy.checkAccessibility();
     cy.get('input[name="nations[]"][value="GB-WLS"]').should('be.checked');
 
     cy.get('body').should('contain', 'Registered Trademark Attorney');
@@ -64,6 +67,7 @@ describe('Searching a profession', () => {
     });
 
     cy.get('button').click();
+    cy.checkAccessibility();
 
     cy.translate('industries.education').then((nameLabel) => {
       cy.get('label')
@@ -84,6 +88,7 @@ describe('Searching a profession', () => {
     cy.get('input[name="keywords"]').type('Attorney');
 
     cy.get('button').click();
+    cy.checkAccessibility();
 
     cy.get('input[name="keywords"]').should('have.value', 'Attorney');
 

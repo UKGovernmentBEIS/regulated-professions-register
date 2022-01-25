@@ -1,7 +1,7 @@
 describe('Creating a new user', () => {
   context('when I am not logged in', () => {
     it('I am prompted to log in', () => {
-      cy.visit('/admin/users/new');
+      cy.visitAndCheckAccessibility('/admin/users/new');
       cy.location('pathname').should('contain', 'login');
     });
   });
@@ -12,13 +12,13 @@ describe('Creating a new user', () => {
     });
 
     it('does not allow me to add a user', () => {
-      cy.visit('/admin');
+      cy.visitAndCheckAccessibility('/admin');
 
       cy.translate('users.headings.index').then((userLabel) => {
         cy.get('body').should('not.contain', userLabel);
       });
 
-      cy.visit('/admin/users/new');
+      cy.visitAndCheckAccessibility('/admin/users/new');
 
       cy.translate('errors.forbidden.heading').then((errorMessage) => {
         cy.get('body').should('contain', errorMessage);
@@ -32,7 +32,7 @@ describe('Creating a new user', () => {
     });
 
     it('I can add a new user', () => {
-      cy.visit('/admin/users/new');
+      cy.visitAndCheckAccessibility('/admin/users/new');
       cy.get('button').click();
 
       cy.translate('users.form.label.name').then((nameLabel) => {
@@ -46,11 +46,13 @@ describe('Creating a new user', () => {
       cy.get('input[name="name"]').type('Example Name');
       cy.get('input[name="email"]').type('name@example.com');
       cy.get('button').click();
+      cy.checkAccessibility();
 
       cy.get('input[name="serviceOwner"][value="1"]').check();
       cy.get('[type="checkbox"]').check('createOrganisation');
 
       cy.get('button').click();
+      cy.checkAccessibility();
 
       cy.get('body').should('contain', 'Example Name');
       cy.get('body').should('contain', 'name@example.com');
@@ -62,6 +64,7 @@ describe('Creating a new user', () => {
       });
 
       cy.get('button').click();
+      cy.checkAccessibility();
 
       cy.translate('users.headings.done').then((successMessage) => {
         cy.get('body')
@@ -71,7 +74,7 @@ describe('Creating a new user', () => {
     });
 
     it('I cannot add a user that already exists', () => {
-      cy.visit('/admin/users/new');
+      cy.visitAndCheckAccessibility('/admin/users/new');
       cy.get('button').click();
 
       cy.get('input[name="name"]').type('Example Name');
@@ -86,22 +89,26 @@ describe('Creating a new user', () => {
     });
 
     it('I can revise user details from the confirmation page', () => {
-      cy.visit('/admin/users/new');
+      cy.visitAndCheckAccessibility('/admin/users/new');
       cy.get('button').click();
+      cy.checkAccessibility();
 
       cy.get('input[name="name"]').type('Example Name');
       cy.get('input[name="email"]').type('name2@example.com');
       cy.get('button').click();
+      cy.checkAccessibility();
 
       cy.get('input[name="serviceOwner"][value="1"]').check();
       cy.get('[type="checkbox"]').check('createOrganisation');
 
       cy.get('button').click();
+      cy.checkAccessibility();
 
       cy.get('a[href*="personal-details/edit?change=true"]:first').click();
 
       cy.get('input[name="email"]').clear().type('name3@example.com');
       cy.get('button').click();
+      cy.checkAccessibility();
 
       cy.get('body').should('contain', 'name3@example.com');
 
@@ -111,6 +118,7 @@ describe('Creating a new user', () => {
       cy.get('[type="checkbox"]').check('createUser');
 
       cy.get('button').click();
+      cy.checkAccessibility();
 
       cy.translate('users.form.label.createOrganisation').then((label) => {
         cy.get('body').should('not.contain', label);
@@ -129,6 +137,7 @@ describe('Creating a new user', () => {
       });
 
       cy.get('button').click();
+      cy.checkAccessibility();
 
       cy.translate('users.headings.done').then((successMessage) => {
         cy.get('body')

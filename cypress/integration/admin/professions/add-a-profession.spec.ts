@@ -1,7 +1,8 @@
 describe('Adding a new profession', () => {
   context('when I am not logged in', () => {
     it('I am prompted to log in', () => {
-      cy.visit('/admin/professions');
+      cy.visitAndCheckAccessibility('/admin/professions');
+
       cy.location('pathname').should('contain', 'login');
     });
   });
@@ -12,7 +13,7 @@ describe('Adding a new profession', () => {
     });
 
     it('does not allow me to add a profession', () => {
-      cy.visit('/admin/professions');
+      cy.visitAndCheckAccessibility('/admin/professions');
 
       cy.translate('professions.admin.addButtonLabel').then((buttonText) => {
         cy.get('body').should('not.contain', buttonText);
@@ -26,12 +27,13 @@ describe('Adding a new profession', () => {
     });
 
     it('I can add a new profession', () => {
-      cy.visit('/admin/professions');
+      cy.visitAndCheckAccessibility('/admin/professions');
 
       cy.translate('professions.admin.addButtonLabel').then((buttonText) => {
         cy.get('button').contains(buttonText).click();
       });
 
+      cy.checkAccessibility();
       cy.translate('professions.form.headings.topLevelInformation').then(
         (heading) => {
           cy.get('body').should('contain', heading);
@@ -51,6 +53,7 @@ describe('Adding a new profession', () => {
         cy.get('button').contains(buttonText).click();
       });
 
+      cy.checkAccessibility();
       cy.translate('professions.form.headings.regulatoryBody').then(
         (heading) => {
           cy.get('body').should('contain', heading);
@@ -67,6 +70,7 @@ describe('Adding a new profession', () => {
         cy.get('button').contains(buttonText).click();
       });
 
+      cy.checkAccessibility();
       cy.translate('professions.form.headings.regulatedActivities').then(
         (heading) => {
           cy.get('body').should('contain', heading);
@@ -83,7 +87,9 @@ describe('Adding a new profession', () => {
       cy.translate('app.continue').then((buttonText) => {
         cy.get('button').contains(buttonText).click();
       });
-
+      // Conditional radio buttons add an additional `aria-expanded` field,
+      // so ignore that rule on this page
+      cy.checkAccessibility({ 'aria-allowed-attr': { enabled: false } });
       cy.translate('professions.form.headings.qualificationInformation').then(
         (heading) => {
           cy.get('body').should('contain', heading);
@@ -110,6 +116,7 @@ describe('Adding a new profession', () => {
         cy.get('button').contains(buttonText).click();
       });
 
+      cy.checkAccessibility();
       cy.translate('professions.form.headings.legislation').then((heading) => {
         cy.get('body').should('contain', heading);
       });
@@ -125,6 +132,7 @@ describe('Adding a new profession', () => {
         cy.get('button').contains(buttonText).click();
       });
 
+      cy.checkAccessibility();
       cy.translate('professions.form.headings.checkAnswers').then((heading) => {
         cy.get('body').should('contain', heading);
       });
@@ -164,6 +172,7 @@ describe('Adding a new profession', () => {
         cy.get('button').contains(buttonText).click();
       });
 
+      cy.checkAccessibility();
       cy.translate('professions.form.headings.confirmation').then((heading) => {
         cy.get('body')
           .should('contain', heading)

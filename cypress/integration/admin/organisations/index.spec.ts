@@ -2,9 +2,10 @@ describe('Listing organisations', () => {
   context('When I am logged in as admin', () => {
     beforeEach(() => {
       cy.loginAuth0('admin');
-      cy.visit('/admin');
+      cy.visitAndCheckAccessibility('/admin');
 
       cy.get('a').contains('Regulatory authorities').click();
+      cy.checkAccessibility();
     });
 
     it('Lists all the organisations', () => {

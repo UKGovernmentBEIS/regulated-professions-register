@@ -2,9 +2,10 @@ describe('Editing organisations', () => {
   context('When I am logged in as admin', () => {
     beforeEach(() => {
       cy.loginAuth0('admin');
-      cy.visit('/admin');
+      cy.visitAndCheckAccessibility('/admin');
 
       cy.get('a').contains('Regulatory authorities').click();
+      cy.checkAccessibility();
 
       cy.readFile('./seeds/test/organisations.json').then((organisations) => {
         const organisation = organisations[0];
@@ -16,9 +17,11 @@ describe('Editing organisations', () => {
           .within(() => {
             cy.get('a').contains('View details').click();
           });
+        cy.checkAccessibility();
 
         cy.translate('organisations.admin.button.edit').then((editButton) => {
           cy.get('a').contains(editButton).click();
+          cy.checkAccessibility();
         });
       });
     });
@@ -75,6 +78,7 @@ describe('Editing organisations', () => {
       cy.translate('app.continue').then((buttonText) => {
         cy.get('button').contains(buttonText).click();
       });
+      cy.checkAccessibility();
 
       cy.translate('organisations.admin.form.errors.name.empty').then(
         (error) => {
@@ -116,6 +120,7 @@ describe('Editing organisations', () => {
       cy.translate('app.continue').then((buttonText) => {
         cy.get('button').contains(buttonText).click();
       });
+      cy.checkAccessibility();
 
       cy.checkSummaryListRowValue('organisations.label.name', 'New Name');
       cy.checkSummaryListRowValue(
@@ -139,6 +144,8 @@ describe('Editing organisations', () => {
       cy.translate('organisations.admin.button.amend').then((buttonText) => {
         cy.get('button').contains(buttonText).click();
       });
+
+      cy.checkAccessibility();
 
       cy.translate('organisations.admin.form.headings.confirmation').then(
         (confirmationText) => {

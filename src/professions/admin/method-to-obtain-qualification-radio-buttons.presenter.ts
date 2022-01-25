@@ -42,7 +42,7 @@ export class MethodToObtainQualificationRadioButtonsPresenter {
       name.charAt(0).toUpperCase() + name.slice(1)
     }`;
 
-    const hintHTML = `<div id="${name}-hint" class="govuk-hint">${await this.i18nService.translate(
+    const hintHTML = `<div id="${name}-other-hint" class="govuk-hint">${await this.i18nService.translate(
       'professions.methodsToObtainQualification.otherHint',
     )}</div>`;
 

@@ -1,12 +1,13 @@
 describe('Searching an organisation', () => {
   beforeEach(() => {
-    cy.visit('/');
+    cy.visitAndCheckAccessibility('/');
 
     cy.translate('app.pages.index.useThisService.findContactDetails.text').then(
       (linkText) => {
         cy.contains(linkText).click();
       },
     );
+    cy.checkAccessibility;
   });
 
   it('I can view an unfiltered list of organisations', () => {
@@ -25,6 +26,7 @@ describe('Searching an organisation', () => {
 
   it('I can click an organisation to be taken to its details page', () => {
     cy.get('a').contains('General Medical Council').click();
+    cy.checkAccessibility();
     cy.url().should(
       'contain',
       'regulatory-authorities/general-medical-council',
@@ -36,6 +38,7 @@ describe('Searching an organisation', () => {
     cy.get('input[name="nations[]"][value="GB-SCT"]').check();
 
     cy.get('button').click();
+    cy.checkAccessibility();
 
     cy.get('input[name="nations[]"][value="GB-SCT"]').should('be.checked');
 
@@ -49,6 +52,7 @@ describe('Searching an organisation', () => {
     });
 
     cy.get('button').click();
+    cy.checkAccessibility();
 
     cy.translate('industries.law').then((nameLabel) => {
       cy.get('label')
@@ -66,6 +70,7 @@ describe('Searching an organisation', () => {
     cy.get('input[name="keywords"]').type('Installers');
 
     cy.get('button').click();
+    cy.checkAccessibility();
 
     cy.get('input[name="keywords"]').should('have.value', 'Installers');
 

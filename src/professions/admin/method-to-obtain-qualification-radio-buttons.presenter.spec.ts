@@ -59,7 +59,7 @@ describe(MethodToObtainQualificationRadioButtonsPresenter, () => {
           value: MethodToObtain.Others,
           checked: false,
           conditional: {
-            html: `<div class="govuk-form-group"><div id="methodToObtainQualification-hint" class="govuk-hint">Translation of \`professions.methodsToObtainQualification.otherHint\`</div><textarea class="govuk-textarea" id="otherMethodToObtainQualification" rows="5" name="otherMethodToObtainQualification"></textarea></div>`,
+            html: `<div class="govuk-form-group"><div id="methodToObtainQualification-other-hint" class="govuk-hint">Translation of \`professions.methodsToObtainQualification.otherHint\`</div><textarea class="govuk-textarea" id="otherMethodToObtainQualification" rows="5" name="otherMethodToObtainQualification"></textarea></div>`,
           },
         },
       ]);
@@ -112,7 +112,7 @@ describe(MethodToObtainQualificationRadioButtonsPresenter, () => {
           value: MethodToObtain.Others,
           checked: false,
           conditional: {
-            html: `<div class="govuk-form-group"><div id="methodToObtainQualification-hint" class="govuk-hint">Translation of \`professions.methodsToObtainQualification.otherHint\`</div><textarea class="govuk-textarea" id="otherMethodToObtainQualification" rows="5" name="otherMethodToObtainQualification"></textarea></div>`,
+            html: `<div class="govuk-form-group"><div id="methodToObtainQualification-other-hint" class="govuk-hint">Translation of \`professions.methodsToObtainQualification.otherHint\`</div><textarea class="govuk-textarea" id="otherMethodToObtainQualification" rows="5" name="otherMethodToObtainQualification"></textarea></div>`,
           },
         },
       ]);
@@ -136,7 +136,7 @@ describe(MethodToObtainQualificationRadioButtonsPresenter, () => {
             text: 'Translation of `professions.methodsToObtainQualification.others`',
             checked: true,
             conditional: {
-              html: `<div class="govuk-form-group"><div id="methodToObtainQualification-hint" class="govuk-hint">Translation of \`professions.methodsToObtainQualification.otherHint\`</div><textarea class="govuk-textarea" id="otherMethodToObtainQualification" rows="5" name="otherMethodToObtainQualification">Another method for obtaining the qualification</textarea></div>`,
+              html: `<div class="govuk-form-group"><div id="methodToObtainQualification-other-hint" class="govuk-hint">Translation of \`professions.methodsToObtainQualification.otherHint\`</div><textarea class="govuk-textarea" id="otherMethodToObtainQualification" rows="5" name="otherMethodToObtainQualification">Another method for obtaining the qualification</textarea></div>`,
             },
           });
         });
@@ -170,7 +170,7 @@ describe(MethodToObtainQualificationRadioButtonsPresenter, () => {
             text: 'Translation of `professions.methodsToObtainQualification.others`',
             checked: true,
             conditional: {
-              html: `<div class="govuk-form-group ${expectedErrorFormClass}"><div id="methodToObtainQualification-hint" class="govuk-hint">Translation of \`professions.methodsToObtainQualification.otherHint\`</div>${expectedErrorParagraph}<textarea class="govuk-textarea" id="otherMethodToObtainQualification" rows="5" name="otherMethodToObtainQualification"></textarea></div>`,
+              html: `<div class="govuk-form-group ${expectedErrorFormClass}"><div id="methodToObtainQualification-other-hint" class="govuk-hint">Translation of \`professions.methodsToObtainQualification.otherHint\`</div>${expectedErrorParagraph}<textarea class="govuk-textarea" id="otherMethodToObtainQualification" rows="5" name="otherMethodToObtainQualification"></textarea></div>`,
             },
           });
         });

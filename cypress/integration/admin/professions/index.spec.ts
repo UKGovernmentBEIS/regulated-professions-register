@@ -2,7 +2,7 @@ describe('Listing professions', () => {
   context('When I am logged in as admin', () => {
     beforeEach(() => {
       cy.loginAuth0('admin');
-      cy.visit('/admin/professions');
+      cy.visitAndCheckAccessibility('/admin/professions');
 
       cy.translate('professions.admin.showFilters').then((showFilters) => {
         cy.get('span').contains(showFilters).click();
@@ -58,6 +58,7 @@ describe('Listing professions', () => {
           cy.get('a').contains('View details').click();
         });
 
+      cy.checkAccessibility();
       cy.url().should(
         'contain',
         'professions/secondary-school-teacher-in-state-maintained-schools-england',
@@ -67,7 +68,7 @@ describe('Listing professions', () => {
     it('I can filter by keyword', () => {
       cy.get('input[name="keywords"]').type('Attorney');
 
-      clickFilterButton();
+      clickFilterButtonAndCheckAccessibility();
 
       cy.get('input[name="keywords"]').should('have.value', 'Attorney');
 
@@ -81,7 +82,7 @@ describe('Listing professions', () => {
     it('I can filter by nation', () => {
       cy.get('input[name="nations[]"][value="GB-WLS"]').check();
 
-      clickFilterButton();
+      clickFilterButtonAndCheckAccessibility();
 
       cy.get('input[name="nations[]"][value="GB-WLS"]').should('be.checked');
 
@@ -99,7 +100,7 @@ describe('Listing professions', () => {
         .find('input')
         .check();
 
-      clickFilterButton();
+      clickFilterButtonAndCheckAccessibility();
 
       cy.get('label')
         .contains('Law Society of England and Wales')
@@ -119,7 +120,7 @@ describe('Listing professions', () => {
         cy.get('label').contains(nameLabel).parent().find('input').check();
       });
 
-      clickFilterButton();
+      clickFilterButtonAndCheckAccessibility();
 
       cy.translate('industries.education').then((nameLabel) => {
         cy.get('label')
@@ -140,7 +141,7 @@ describe('Listing professions', () => {
   context('When I am logged in as editor', () => {
     beforeEach(() => {
       cy.loginAuth0('editor');
-      cy.visit('/admin/professions');
+      cy.visitAndCheckAccessibility('/admin/professions');
 
       cy.translate('professions.admin.showFilters').then((showFilters) => {
         cy.get('span').contains(showFilters).click();
@@ -177,8 +178,9 @@ describe('Listing professions', () => {
   });
 });
 
-function clickFilterButton(): void {
+function clickFilterButtonAndCheckAccessibility(): void {
   cy.translate('professions.admin.form.button.filter').then((buttonLabel) => {
     cy.get('button').contains(buttonLabel).click();
   });
+  cy.checkAccessibility();
 }
