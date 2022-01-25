@@ -5,18 +5,27 @@ import { Seeder } from 'nestjs-seeder';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { Organisation } from '../organisations/organisation.entity';
+import {
+  OrganisationVersion,
+  OrganisationVersionStatus,
+} from '../organisations/organisation-version.entity';
 import { InjectData } from '../common/decorators/seeds.decorator';
 
 type SeedOrganisation = {
   name: string;
-  alternateName: string;
   slug: string;
+  versions: SeedOrganisationVersion[];
+};
+
+type SeedOrganisationVersion = {
+  alternateName: string;
   address: string;
   url: string;
   email: string;
   contactUrl: string;
   telephone: string;
   fax: string;
+  status: string;
 };
 
 @Injectable()
@@ -27,6 +36,8 @@ export class OrganisationsSeeder implements Seeder {
   constructor(
     @InjectRepository(Organisation)
     private readonly organisationsRepository: Repository<Organisation>,
+    @InjectRepository(OrganisationVersion)
+    private readonly organisationVersionsRepository: Repository<OrganisationVersion>,
   ) {}
 
   async seed(): Promise<any> {
@@ -38,24 +49,49 @@ export class OrganisationsSeeder implements Seeder {
           },
         );
 
-        const newOrganisation = new Organisation(
-          organisation.name,
-          organisation.alternateName,
-          organisation.slug,
-          organisation.address,
-          organisation.url,
-          organisation.email,
-          organisation.contactUrl,
-          organisation.telephone,
-          organisation.fax,
-          null,
-        );
+        const newOrganisation = {
+          name: organisation.name,
+          slug: organisation.slug,
+        } as Organisation;
 
         return { ...existingOrganisation, ...newOrganisation };
       }),
     );
 
-    return this.organisationsRepository.save(organisations);
+    await this.organisationsRepository.save(organisations);
+
+    const versions = await Promise.all(
+      organisations.map(async (org) => {
+        const organisation = this.data.find((item) => item.slug === org.slug);
+        const versions = await Promise.all(
+          organisation.versions.map(async (item) => {
+            const status = item.status as OrganisationVersionStatus;
+            const existingVersion =
+              await this.organisationVersionsRepository.findOne({
+                organisation: org,
+                status: status,
+              });
+            const newVersion = {
+              alternateName: item.alternateName,
+              address: item.address,
+              url: item.url,
+              email: item.email,
+              contactUrl: item.contactUrl,
+              telephone: item.telephone,
+              fax: item.fax,
+              organisation: org,
+              status: status,
+            } as OrganisationVersion;
+
+            return { ...existingVersion, ...newVersion };
+          }),
+        );
+
+        return versions;
+      }),
+    );
+
+    await this.organisationVersionsRepository.save(versions.flat());
   }
 
   async drop(): Promise<any> {
