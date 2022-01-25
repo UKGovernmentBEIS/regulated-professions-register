@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { createMock, DeepMocked } from '@golevelup/ts-jest';
 import { I18nService } from 'nestjs-i18n';
+import { Response } from 'express';
 
 import { OrganisationsController } from './organisations.controller';
 import { OrganisationsService } from '../organisations.service';
@@ -175,6 +176,26 @@ describe('OrganisationsController', () => {
     });
   });
 
+  describe('create', () => {
+    it('should return the organisation', async () => {
+      const response = createMock<Response>();
+      const organisation = organisationFactory.build({
+        id: 'some-uuid',
+      });
+
+      organisationsService.save.mockResolvedValue(organisation);
+
+      await controller.create(response);
+
+      expect(organisationsService.save).toHaveBeenCalledWith(
+        expect.objectContaining(new Organisation()),
+      );
+      expect(response.redirect).toHaveBeenCalledWith(
+        `/admin/organisations/some-uuid/edit`,
+      );
+    });
+  });
+
   describe('show', () => {
     it('should return variables for the show template', async () => {
       const organisation = createOrganisation();
@@ -211,66 +232,100 @@ describe('OrganisationsController', () => {
   describe('edit', () => {
     it('should return the organisation', async () => {
       const organisation = createOrganisation();
-      organisationsService.findBySlug.mockResolvedValue(organisation);
 
-      expect(await controller.edit('slug')).toEqual(organisation);
+      organisationsService.find.mockResolvedValue(organisation);
+
+      expect(await controller.edit(organisation.id)).toEqual(organisation);
+      expect(organisationsService.find).toHaveBeenCalledWith(organisation.id);
     });
   });
 
-  describe('confirm', () => {
-    it('saves the organisation', async () => {
-      const summaryList: SummaryList = {
-        classes: 'govuk-summary-list--no-border',
-        rows: [],
-      };
+  describe('update', () => {
+    describe('when confirm is not set', () => {
+      it('saves the organisation', async () => {
+        const summaryList: SummaryList = {
+          classes: 'govuk-summary-list--no-border',
+          rows: [],
+        };
 
-      (
-        OrganisationPresenter.prototype as DeepMocked<OrganisationPresenter>
-      ).summaryList.mockResolvedValue(summaryList);
+        (
+          OrganisationPresenter.prototype as DeepMocked<OrganisationPresenter>
+        ).summaryList.mockResolvedValue(summaryList);
 
-      const slug = 'some-slug';
-      const organisationDto: OrganisationDto = {
-        name: 'Organisation',
-        alternateName: '',
-        email: 'email@example.com',
-        url: 'http://example.com',
-        contactUrl: 'http://example.com',
-        address: '123 Fake Street',
-        telephone: '122356',
-        fax: '',
-      };
+        const id = 'some-uuid';
+        const response = createMock<Response>();
 
-      const organisation = createOrganisation();
+        const organisationDto: OrganisationDto = {
+          name: 'Organisation',
+          alternateName: '',
+          email: 'email@example.com',
+          url: 'http://example.com',
+          contactUrl: 'http://example.com',
+          address: '123 Fake Street',
+          telephone: '122356',
+          fax: '',
+        };
 
-      const newOrganisation = {
-        ...organisation,
-        ...organisationDto,
-      };
+        const organisation = organisationFactory.build();
 
-      organisationsService.findBySlug.mockResolvedValue(organisation);
-      organisationsService.save.mockResolvedValue(newOrganisation);
+        const newOrganisation = {
+          ...organisation,
+          ...organisationDto,
+        };
 
-      const result = await controller.confirm(slug, organisationDto);
+        organisationsService.find.mockResolvedValue(organisation);
+        organisationsService.save.mockResolvedValue(newOrganisation);
 
-      expect(organisationsService.save).toHaveBeenCalledWith(
-        expect.objectContaining(newOrganisation),
-      );
+        await controller.update(id, organisationDto, response);
 
-      expect(OrganisationPresenter).toHaveBeenCalledWith(
-        newOrganisation,
-        i18nService,
-      );
+        expect(organisationsService.save).toHaveBeenCalledWith(
+          expect.objectContaining(newOrganisation),
+        );
 
-      expect(OrganisationPresenter.prototype.summaryList).toHaveBeenCalledWith({
-        classes: 'govuk-summary-list',
-        removeBlank: false,
-        includeName: true,
-        includeActions: true,
+        expect(OrganisationPresenter).toHaveBeenCalledWith(
+          expect.objectContaining(newOrganisation),
+          i18nService,
+        );
+
+        expect(
+          OrganisationPresenter.prototype.summaryList,
+        ).toHaveBeenCalledWith({
+          classes: 'govuk-summary-list',
+          removeBlank: false,
+          includeName: true,
+          includeActions: true,
+        });
+
+        expect(response.render).toHaveBeenCalledWith(
+          'admin/organisations/review',
+          {
+            ...newOrganisation,
+            summaryList: summaryList,
+            backLink: `/admin/organisations/${newOrganisation.id}/edit/`,
+          },
+        );
       });
 
-      expect(result).toEqual({
-        ...newOrganisation,
-        summaryList: summaryList,
+      describe('when confirm is set', () => {
+        it('should update the organisation', async () => {
+          const organisation = createOrganisation();
+          const response = createMock<Response>();
+          const organisationDto = createMock<OrganisationDto>({
+            confirm: true,
+          });
+
+          organisationsService.find.mockResolvedValue(organisation);
+
+          await controller.update('some-uuid', organisationDto, response);
+
+          expect(organisationsService.find).toHaveBeenCalledWith('some-uuid');
+          expect(organisationsService.save).toHaveBeenCalledWith(organisation);
+
+          expect(response.render).toHaveBeenCalledWith(
+            'admin/organisations/complete',
+            organisation,
+          );
+        });
       });
     });
   });

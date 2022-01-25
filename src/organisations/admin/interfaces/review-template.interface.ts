@@ -1,6 +1,6 @@
 import { Organisation } from '../../organisation.entity';
 import { SummaryList } from '../../../common/interfaces/summary-list';
 
-export interface ConfirmTemplate extends Organisation {
+export interface ReviewTemplate extends Organisation {
   summaryList: SummaryList;
 }

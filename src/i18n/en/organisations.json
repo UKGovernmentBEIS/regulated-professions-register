@@ -35,6 +35,16 @@
     "edit": {
       "heading": "Amending a regulatory authority"
     },
+    "new": {
+      "heading": "Are you sure you want to create a new regulatory authority?"
+    },
+    "index": {
+      "add": {
+        "heading": "Add a new regulatory authority",
+        "body": "You can add a new regulatory authority here.",
+        "button": "Add a new regulatory authority"
+      }
+    },
     "tableHeading": {
       "name": "Name",
       "alternateName": "Alternate name",

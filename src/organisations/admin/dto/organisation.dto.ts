@@ -37,4 +37,6 @@ export class OrganisationDto {
 
   telephone: string;
   fax: string;
+
+  confirm?: boolean;
 }

@@ -45,6 +45,7 @@ async function bootstrap() {
       exceptionFactory: (validationErrors: ValidationError[] = []) => {
         return new ValidationFailedError(validationErrors);
       },
+      skipUndefinedProperties: true,
     }),
   );
 
