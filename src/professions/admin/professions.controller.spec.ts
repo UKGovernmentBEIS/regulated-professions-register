@@ -19,6 +19,7 @@ import organisationFactory from '../../testutils/factories/organisation';
 import professionFactory from '../../testutils/factories/profession';
 import { NotFoundException } from '@nestjs/common';
 import QualificationPresenter from '../../qualifications/presenters/qualification.presenter';
+import { translationOf } from '../../testutils/translation-of';
 
 const referrer = 'http://example.com/some/path';
 const host = 'example.com';
@@ -357,6 +358,27 @@ describe('ProfessionsController', () => {
       expect(async () => {
         await controller.show('example-invalid-slug');
       }).rejects.toThrowError(NotFoundException);
+    });
+
+    describe('when the Profession has no qualification set', () => {
+      it('passes a null value for the qualification', async () => {
+        const profession = professionFactory.build({
+          qualification: null,
+          occupationLocations: ['GB-ENG'],
+          industries: [industryFactory.build({ name: 'industries.example' })],
+        });
+
+        professionsService.findBySlug.mockResolvedValue(profession);
+
+        const result = await controller.show('example-slug');
+
+        expect(result).toEqual({
+          profession: profession,
+          qualification: null,
+          nations: [translationOf('nations.england')],
+          industries: [translationOf('industries.example')],
+        });
+      });
     });
   });
 
