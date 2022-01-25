@@ -29,27 +29,6 @@ export class Organisation {
   )
   versions: OrganisationVersion[];
 
-  @Column({ nullable: true })
-  alternateName: string;
-
-  @Column()
-  address: string;
-
-  @Column()
-  url: string;
-
-  @Column()
-  email: string;
-
-  @Column({ nullable: true })
-  contactUrl: string;
-
-  @Column()
-  telephone: string;
-
-  @Column({ nullable: true })
-  fax: string;
-
   @OneToMany(() => Profession, (profession) => profession.organisation)
   professions: Profession[];
 
@@ -65,6 +44,14 @@ export class Organisation {
     onUpdate: 'CURRENT_TIMESTAMP(6)',
   })
   updated_at: Date;
+
+  alternateName?: string;
+  address?: string;
+  url?: string;
+  email?: string;
+  contactUrl?: string;
+  telephone?: string;
+  fax?: string;
 
   constructor(
     name?: string,
