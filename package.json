@@ -46,7 +46,7 @@
     "@nestjs/core": "^8.0.0",
     "@nestjs/platform-express": "^8.0.0",
     "@nestjs/typeorm": "^8.0.2",
-    "@symfony/webpack-encore": "^1.6.1",
+    "@symfony/webpack-encore": "^1.8.1",
     "@types/auth0": "^2.34.7",
     "@types/express-session": "^1.17.4",
     "auth0": "^2.37.0",
