@@ -11,14 +11,14 @@
         {{
           govukPanel({
             titleText: ("professions.form.headings.amended" | t),
-            html: ("professions.form.body.confirmation.panel" | t({name: name, action: "updated"}) | safe)
+            html: ("professions.form.body.confirmation.panel" | t({name: (name | escape), action: "updated"}))
           })
         }}
       {% else %}
         {{
           govukPanel({
             titleText: ("professions.form.headings.confirmation" | t),
-            html: ("professions.form.body.confirmation.panel" | t({name: name, action: "added"}) | safe)
+            html: ("professions.form.body.confirmation.panel" | t({name: (name | escape), action: "added"}))
           })
         }}
       {% endif %}
