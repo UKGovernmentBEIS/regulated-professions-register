@@ -1,0 +1,32 @@
+@startuml flow
+(*) --> "Create new Profession"
+--> "Add name and organisation"
+--> "Profession is created with a unique slug"
+--> "Version is created as unconfirmed"
+--> "Form is completed - adding fields to Version"
+--> "Profession is confirmed"
+--> "Version is marked as a draft"
+
+(*) --> "Create new Organisation"
+--> "Complete Organisation form"
+--> "Version is created as unconfirmed"
+--> "Organisation is confirmed"
+--> "Organisation is created with a unique slug"
+--> "Version is marked as a draft"
+
+(*) --> "Entity is edited"
+--> if "A draft exists" then
+  -->[Yes] "Edit existing draft"
+else
+  -->[No] "Copy existing Version as unconfirmed"
+endif
+--> "Draft form is completed"
+--> "Version is marked as a draft"
+
+(*) --> "Publishing an entity"
+--> "User clicks to view entity"
+--> "User clicks publish"
+--> "Current draft version is promoted to live"
+--> "Published version is archived"
+
+@enduml
