@@ -20,6 +20,7 @@ export default Factory.define<Qualification>(({ sequence }) => ({
   methodToObtain:
     MethodToObtain.GeneralPostSecondaryEducationMandatoryVocational,
   otherMethodToObtain: '',
+  professionVersion: undefined,
   created_at: new Date(),
   updated_at: new Date(),
 }));

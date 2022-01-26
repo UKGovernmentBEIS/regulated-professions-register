@@ -49,5 +49,6 @@ export default ProfessionFactory.define(({ sequence }) => ({
   legislation: legislationFactory.build(),
   organisation: undefined,
   reservedActivities: 'Stuff',
+  versions: [],
   updated_at: new Date(),
 }));
