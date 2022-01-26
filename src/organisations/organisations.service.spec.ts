@@ -1,5 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { createMock } from '@golevelup/ts-jest';
+
 import { Repository } from 'typeorm';
 import organisationFactory from '../testutils/factories/organisation';
 import professionFactory from '../testutils/factories/profession';
@@ -20,22 +22,10 @@ describe('OrganisationsService', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        // Rebuild organisations on each call to our mock repository, as they
-        // are potentially mutated by OrganisationsService
         OrganisationsService,
         {
           provide: getRepositoryToken(Organisation),
-          useValue: {
-            find: () => {
-              return [organisationFactory.build(organisation)];
-            },
-            findOne: () => {
-              return organisationFactory.build(organisation);
-            },
-            save: () => {
-              return organisationFactory.build(organisation);
-            },
-          },
+          useValue: createMock<Repository<Organisation>>(),
         },
       ],
     }).compile();
@@ -50,17 +40,18 @@ describe('OrganisationsService', () => {
     let repoSpy: jest.SpyInstance<Promise<Organisation[]>>;
     let organisations: Organisation[];
 
-    beforeEach(async () => {
-      repoSpy = jest.spyOn(repo, 'find');
-      organisations = await service.all();
-    });
-
     it('should return all Organisations', async () => {
+      repoSpy = jest.spyOn(repo, 'find').mockResolvedValue([organisation]);
+      organisations = await service.all();
+
       expect(organisations).toEqual([organisation]);
       expect(repoSpy).toHaveBeenCalled();
     });
 
-    it('Organisations should be sorted', () => {
+    it('Organisations should be sorted', async () => {
+      repoSpy = jest.spyOn(repo, 'find').mockResolvedValue([organisation]);
+      organisations = await service.all();
+
       expect(repoSpy).toHaveBeenCalledWith(
         expect.objectContaining({
           order: { name: 'ASC' },
@@ -73,12 +64,10 @@ describe('OrganisationsService', () => {
     let repoSpy: jest.SpyInstance<Promise<Organisation[]>>;
     let organisations: Organisation[];
 
-    beforeEach(async () => {
-      repoSpy = jest.spyOn(repo, 'find');
-      organisations = await service.allWithProfessions();
-    });
-
     it('returns all Organisations, populated with confirmed Professions', async () => {
+      repoSpy = jest.spyOn(repo, 'find').mockResolvedValue([organisation]);
+      organisations = await service.allWithProfessions();
+
       const expected = [
         organisationFactory.build({
           ...organisation,
@@ -94,7 +83,10 @@ describe('OrganisationsService', () => {
       );
     });
 
-    it('Organisations should be sorted', () => {
+    it('Organisations should be sorted', async () => {
+      repoSpy = jest.spyOn(repo, 'find').mockResolvedValue([organisation]);
+      organisations = await service.allWithProfessions();
+
       expect(repoSpy).toHaveBeenCalledWith(
         expect.objectContaining({
           order: { name: 'ASC' },
@@ -105,7 +97,9 @@ describe('OrganisationsService', () => {
 
   describe('find', () => {
     it('returns an Organisation', async () => {
-      const repoSpy = jest.spyOn(repo, 'findOne');
+      const repoSpy = jest
+        .spyOn(repo, 'findOne')
+        .mockResolvedValue(organisation);
       const foundOrganisation = await service.find('some-uuid');
 
       expect(foundOrganisation).toEqual(organisation);
@@ -115,7 +109,9 @@ describe('OrganisationsService', () => {
 
   describe('findBySlug', () => {
     it('should return an Organisation', async () => {
-      const repoSpy = jest.spyOn(repo, 'findOne');
+      const repoSpy = jest
+        .spyOn(repo, 'findOne')
+        .mockResolvedValue(organisation);
       const foundOrganisation = await service.findBySlug('some-slug');
 
       expect(foundOrganisation).toEqual(organisation);
@@ -132,7 +128,9 @@ describe('OrganisationsService', () => {
         professions: [confirmedProfession],
       });
 
-      const repoSpy = jest.spyOn(repo, 'findOne');
+      const repoSpy = jest
+        .spyOn(repo, 'findOne')
+        .mockResolvedValue(organisation);
       const foundOrganisation = await service.findBySlugWithProfessions(
         'some-slug',
       );
@@ -148,7 +146,7 @@ describe('OrganisationsService', () => {
   describe('save', () => {
     it('should save an Organisation', async () => {
       const organisation = organisationFactory.build();
-      const repoSpy = jest.spyOn(repo, 'save');
+      const repoSpy = jest.spyOn(repo, 'save').mockResolvedValue(organisation);
 
       await service.save(organisation);
 
