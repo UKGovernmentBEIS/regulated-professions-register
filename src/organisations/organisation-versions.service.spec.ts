@@ -1,5 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { createMock } from '@golevelup/ts-jest';
+
 import { Repository } from 'typeorm';
 import organisationVersionFactory from '../testutils/factories/organisation-version';
 import { OrganisationVersion } from './organisation-version.entity';
@@ -15,11 +17,7 @@ describe('OrganisationVersionsService', () => {
         OrganisationVersionsService,
         {
           provide: getRepositoryToken(OrganisationVersion),
-          useValue: {
-            save: () => {
-              return null;
-            },
-          },
+          useValue: createMock<Repository<OrganisationVersion>>(),
         },
       ],
     }).compile();
@@ -35,12 +33,26 @@ describe('OrganisationVersionsService', () => {
   describe('save', () => {
     it('saves the entity', async () => {
       const organisationVersion = organisationVersionFactory.build();
+      const repoSpy = jest
+        .spyOn(repo, 'save')
+        .mockResolvedValue(organisationVersion);
+      const result = await service.save(organisationVersion);
 
-      const repoSpy = jest.spyOn(repo, 'save');
-
-      await service.save(organisationVersion);
-
+      expect(result).toEqual(organisationVersion);
       expect(repoSpy).toHaveBeenCalledWith(organisationVersion);
+    });
+  });
+
+  describe('find', () => {
+    it('returns an OrganisationVersion', async () => {
+      const organisationVersion = organisationVersionFactory.build();
+      const repoSpy = jest
+        .spyOn(repo, 'findOne')
+        .mockResolvedValue(organisationVersion);
+      const result = await service.find('some-uuid');
+
+      expect(result).toEqual(organisationVersion);
+      expect(repoSpy).toHaveBeenCalled();
     });
   });
 });
