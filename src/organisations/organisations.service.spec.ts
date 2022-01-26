@@ -9,7 +9,9 @@ import organisationVersionFactory from '../testutils/factories/organisation-vers
 import professionFactory from '../testutils/factories/profession';
 import { Organisation } from './organisation.entity';
 import { OrganisationsService } from './organisations.service';
-import { OrganisationVersion } from './organisation-version.entity';
+import { SlugGenerator } from '../common/slug-generator';
+
+jest.mock('../common/slug-generator');
 
 describe('OrganisationsService', () => {
   let service: OrganisationsService;
@@ -212,6 +214,29 @@ describe('OrganisationsService', () => {
       await service.save(organisation);
 
       expect(repoSpy).toHaveBeenCalledWith(organisation);
+    });
+  });
+
+  describe('setSlug', () => {
+    it('sets a slug on the organisation', async () => {
+      SlugGenerator.prototype.slug = async () => 'slug';
+
+      const organisation = organisationFactory.build();
+      const repoSpy = jest.spyOn(repo, 'save').mockResolvedValue({
+        ...organisation,
+        slug: 'slug',
+      });
+
+      const result = await service.setSlug(organisation);
+
+      expect(result).toEqual({
+        ...organisation,
+        slug: 'slug',
+      });
+      expect(repoSpy).toHaveBeenCalledWith({
+        ...organisation,
+        slug: 'slug',
+      });
     });
   });
 });

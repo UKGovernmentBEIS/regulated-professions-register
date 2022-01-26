@@ -2,6 +2,8 @@ import { Repository } from 'typeorm';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Organisation } from './organisation.entity';
+import { SlugGenerator } from '../common/slug-generator';
+
 @Injectable()
 export class OrganisationsService {
   constructor(
@@ -62,6 +64,14 @@ export class OrganisationsService {
 
   async save(organisation: Organisation): Promise<Organisation> {
     return this.repository.save(organisation);
+  }
+
+  async setSlug(organisation: Organisation): Promise<Organisation> {
+    const slugGenerator = new SlugGenerator(this, organisation.name);
+
+    organisation.slug = await slugGenerator.slug();
+
+    return await this.repository.save(organisation);
   }
 
   private filterConfirmedProfessions(organisation: Organisation): Organisation {
