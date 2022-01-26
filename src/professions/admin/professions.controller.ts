@@ -98,25 +98,27 @@ export class ProfessionsController {
     };
   }
 
-  @Get('/:slug/edit')
+  @Get('/:professionId/edit')
   @Permissions(UserPermission.CreateProfession)
   @Render('admin/professions/edit')
-  @BackLink('/admin/professions/:slug')
-  async edit(@Param('slug') slug: string): Promise<EditTemplate> {
-    const profession = await this.professionsService.findBySlug(slug);
+  @BackLink('/admin/professions/:professionId')
+  async edit(
+    @Param('professionId') professionId: string,
+  ): Promise<EditTemplate> {
+    const profession = await this.professionsService.find(professionId);
 
     return {
       profession,
     };
   }
 
-  @Post(':slug/edit')
+  @Post('/:professionId/edit')
   @Permissions(UserPermission.CreateProfession)
   async update(
     @Res() res: Response,
-    @Param('slug') slug: string,
+    @Param('professionId') professionId: string,
   ): Promise<void> {
-    const profession = await this.professionsService.findBySlug(slug);
+    const profession = await this.professionsService.find(professionId);
 
     return res.redirect(
       `/admin/professions/${profession.id}/check-your-answers?edit=true`,

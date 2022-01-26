@@ -385,39 +385,34 @@ describe('ProfessionsController', () => {
   describe('edit', () => {
     it('should render the name of the profession passed in', async () => {
       const profession = professionFactory.build({
-        slug: 'example-slug',
+        id: 'profession-id',
       });
 
-      professionsService.findBySlug.mockResolvedValue(profession);
+      professionsService.find.mockResolvedValue(profession);
 
-      const result = await controller.edit('example-slug');
+      const result = await controller.edit('profession-id');
 
       expect(result).toEqual({
         profession: profession,
       });
 
-      expect(professionsService.findBySlug).toHaveBeenCalledWith(
-        'example-slug',
-      );
+      expect(professionsService.find).toHaveBeenCalledWith('profession-id');
     });
   });
 
   describe('update', () => {
-    it('should look up the profession via its slug and redirect to the "Check your answers" page', async () => {
+    it('should look up the profession and redirect to the "Check your answers" page', async () => {
       const profession = professionFactory.build({
         id: 'profession-id',
-        slug: 'example-slug',
       });
 
       const res = createMock<Response>();
 
-      professionsService.findBySlug.mockResolvedValue(profession);
+      professionsService.find.mockResolvedValue(profession);
 
-      await controller.update(res, 'example-slug');
+      await controller.update(res, 'profession-id');
 
-      expect(professionsService.findBySlug).toHaveBeenCalledWith(
-        'example-slug',
-      );
+      expect(professionsService.find).toHaveBeenCalledWith('profession-id');
 
       expect(res.redirect).toHaveBeenCalledWith(
         `/admin/professions/profession-id/check-your-answers?edit=true`,
