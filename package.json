@@ -74,7 +74,7 @@
     "sass": "^1.43.4",
     "sass-loader": "^12.4.0",
     "slugify": "^1.6.5",
-    "typeorm": "^0.2.40"
+    "typeorm": "^0.2.41"
   },
   "devDependencies": {
     "@golevelup/ts-jest": "^0.3.2",
