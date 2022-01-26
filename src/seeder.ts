@@ -19,6 +19,7 @@ import { ProfessionsSeeder } from './professions/professions.seeder';
 import { OrganisationsSeeder } from './organisations/organisations.seeder';
 import { Organisation } from './organisations/organisation.entity';
 import { OrganisationVersion } from './organisations/organisation-version.entity';
+import { ProfessionVersion } from './professions/profession-version.entity';
 
 seeder({
   imports: [
@@ -40,6 +41,7 @@ seeder({
       OrganisationVersion,
       Organisation,
       Profession,
+      ProfessionVersion,
     ]),
   ],
 }).run([
