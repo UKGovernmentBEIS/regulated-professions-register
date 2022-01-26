@@ -31,6 +31,7 @@ import { ShowTemplate } from '../interfaces/show-template.interface';
 import { OrganisationSummaryPresenter } from '../presenters/organisation-summary.presenter';
 import { BackLink } from '../../common/decorators/back-link.decorator';
 import { IndexTemplate } from './interfaces/index-template.interface';
+
 import { OrganisationDto } from './dto/organisation.dto';
 import { FilterDto } from './dto/filter.dto';
 import { OrganisationsFilterHelper } from '../helpers/organisations-filter.helper';
@@ -114,11 +115,17 @@ export class OrganisationsController {
     return organisationSummaryPresenter.present();
   }
 
-  @Get('/:id/edit')
+  @Get('/:organisationId/versions/:versionId/edit')
   @Render('admin/organisations/edit')
   @BackLink('/admin/organisations/:id')
-  async edit(@Param('id') id: string): Promise<Organisation> {
-    const organisation = await this.organisationsService.find(id);
+  async edit(
+    @Param('organisationId') organisationId: string,
+    @Param('versionId') versionId: string,
+  ): Promise<Organisation> {
+    const organisation = await this.organisationsService.findWithVersion(
+      organisationId,
+      versionId,
+    );
 
     return organisation;
   }
