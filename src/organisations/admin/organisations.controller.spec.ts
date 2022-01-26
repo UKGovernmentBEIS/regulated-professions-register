@@ -260,16 +260,21 @@ describe('OrganisationsController', () => {
     });
   });
 
-  // describe('edit', () => {
-  //   it('should return the organisation', async () => {
-  //     const organisation = createOrganisation();
+  describe('edit', () => {
+    it('should return the organisation', async () => {
+      const organisation = createOrganisation();
 
-  //     organisationsService.find.mockResolvedValue(organisation);
+      organisationsService.findWithVersion.mockResolvedValue(organisation);
 
-  //     expect(await controller.edit(organisation.id)).toEqual(organisation);
-  //     expect(organisationsService.find).toHaveBeenCalledWith(organisation.id);
-  //   });
-  // });
+      expect(await controller.edit(organisation.id, 'version-uuid')).toEqual(
+        organisation,
+      );
+      expect(organisationsService.findWithVersion).toHaveBeenCalledWith(
+        organisation.id,
+        'version-uuid',
+      );
+    });
+  });
 
   describe('update', () => {
     describe('when confirm is not set', () => {
