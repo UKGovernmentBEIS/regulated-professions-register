@@ -40,19 +40,19 @@ export class OrganisationVersion {
   @Column({ nullable: true })
   alternateName: string;
 
-  @Column()
+  @Column({ nullable: true })
   address: string;
 
-  @Column()
+  @Column({ nullable: true })
   url: string;
 
-  @Column()
+  @Column({ nullable: true })
   email: string;
 
   @Column({ nullable: true })
   contactUrl: string;
 
-  @Column()
+  @Column({ nullable: true })
   telephone: string;
 
   @Column({ nullable: true })
