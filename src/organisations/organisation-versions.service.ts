@@ -13,4 +13,8 @@ export class OrganisationVersionsService {
   async save(organisation: OrganisationVersion): Promise<OrganisationVersion> {
     return this.repository.save(organisation);
   }
+
+  async find(id: string): Promise<OrganisationVersion> {
+    return this.repository.findOne(id);
+  }
 }
