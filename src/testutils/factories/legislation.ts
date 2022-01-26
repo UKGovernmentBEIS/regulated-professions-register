@@ -5,6 +5,7 @@ export default Factory.define<Legislation>(({ sequence }) => ({
   id: sequence.toString(),
   name: 'Example legislation',
   url: 'https://www.legislation.example.com',
+  professionVersion: undefined,
   created_at: new Date(),
   updated_at: new Date(),
 }));

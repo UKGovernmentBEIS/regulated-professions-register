@@ -4,7 +4,9 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToOne,
 } from 'typeorm';
+import { ProfessionVersion } from '../professions/profession-version.entity';
 
 @Entity({ name: 'legislations' })
 export class Legislation {
@@ -16,6 +18,12 @@ export class Legislation {
 
   @Column()
   url: string;
+
+  @ManyToOne(
+    () => ProfessionVersion,
+    (professionVersion) => professionVersion.legislations,
+  )
+  professionVersion: ProfessionVersion;
 
   @CreateDateColumn({
     type: 'timestamp',

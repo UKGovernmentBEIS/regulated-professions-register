@@ -4,7 +4,9 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToOne,
 } from 'typeorm';
+import { ProfessionVersion } from '../professions/profession-version.entity';
 
 export enum MethodToObtain {
   GeneralSecondaryEducation = 'generalSecondaryEducation',
@@ -52,6 +54,12 @@ export class Qualification {
 
   @Column()
   mandatoryProfessionalExperience: boolean;
+
+  @ManyToOne(
+    () => ProfessionVersion,
+    (professionVersion) => professionVersion.qualifications,
+  )
+  professionVersion: ProfessionVersion;
 
   @CreateDateColumn({
     type: 'timestamp',

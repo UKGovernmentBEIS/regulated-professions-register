@@ -12,9 +12,11 @@ import {
   UpdateDateColumn,
   OneToOne,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
 import { Industry } from '../industries/industry.entity';
 import { Organisation } from '../organisations/organisation.entity';
+import { ProfessionVersion } from './profession-version.entity';
 
 export enum MandatoryRegistration {
   Mandatory = 'mandatory',
@@ -29,6 +31,12 @@ export class Profession {
 
   @Column({ nullable: true })
   name: string;
+
+  @OneToMany(
+    () => ProfessionVersion,
+    (professionVersion) => professionVersion.profession,
+  )
+  versions: ProfessionVersion[];
 
   @Column({ nullable: true })
   alternateName: string;
@@ -112,6 +120,7 @@ export class Profession {
     legislation?: Legislation,
     organisation?: Organisation,
     confirmed?: boolean,
+    versions?: ProfessionVersion[],
   ) {
     this.name = name || null;
     this.alternateName = alternateName || null;
@@ -127,5 +136,6 @@ export class Profession {
     this.legislation = legislation || null;
     this.organisation = organisation || null;
     this.confirmed = confirmed || false;
+    this.versions = versions || null;
   }
 }
