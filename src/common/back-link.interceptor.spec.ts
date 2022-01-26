@@ -36,14 +36,14 @@ describe('BackLinkInterceptor', () => {
       beforeEach(() => {
         request = createMock<Request>({
           params: {
-            baz: 'boo',
+            bazName: 'boo',
             id: '123',
           },
         });
       });
 
       it('should replace placeholders with params', () => {
-        const backLink = '/foo/bar/:baz';
+        const backLink = '/foo/bar/:bazName';
         const interceptor = new BackLinkInterceptor(backLink);
 
         interceptor.intercept(context, next);
@@ -62,7 +62,7 @@ describe('BackLinkInterceptor', () => {
       });
 
       it('should use multiple params', () => {
-        const backLink = '/foo/:id/:baz';
+        const backLink = '/foo/:id/:bazName';
 
         const interceptor = new BackLinkInterceptor(backLink);
 

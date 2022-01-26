@@ -38,7 +38,7 @@ export class BackLinkInterceptor<T> implements NestInterceptor<T, Response<T>> {
   }
 
   private generateBackLink(request: Request) {
-    const regexp = new RegExp(':([a-z]+)', 'g');
+    const regexp = new RegExp(':([a-zA-Z]+)', 'g');
 
     let backLink = this.backLink ? this.backLink : this.generator(request);
 
