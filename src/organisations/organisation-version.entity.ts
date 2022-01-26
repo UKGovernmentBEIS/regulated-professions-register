@@ -1,5 +1,6 @@
 import { Organisation } from './organisation.entity';
 import { User } from '../users/user.entity';
+import { OrganisationDto } from './admin/dto/organisation.dto';
 
 import {
   Entity,
@@ -70,4 +71,16 @@ export class OrganisationVersion {
     onUpdate: 'CURRENT_TIMESTAMP(6)',
   })
   updated_at: Date;
+
+  static fromDto(dto: OrganisationDto): OrganisationVersion {
+    return {
+      alternateName: dto.alternateName,
+      address: dto.address,
+      url: dto.url,
+      email: dto.email,
+      contactUrl: dto.contactUrl,
+      telephone: dto.telephone,
+      fax: dto.fax,
+    } as OrganisationVersion;
+  }
 }
