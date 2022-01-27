@@ -1,4 +1,4 @@
-describe('Showing organisations', () => {
+describe.skip('Showing organisations', () => {
   context('When I am logged in as admin', () => {
     beforeEach(() => {
       cy.loginAuth0('admin');
