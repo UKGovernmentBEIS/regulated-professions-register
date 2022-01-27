@@ -412,10 +412,11 @@ describe('OrganisationsController', () => {
 
       describe('when confirm is set', () => {
         describe('when the slug is not set', () => {
-          it('should set the slug and save and version', async () => {
+          it('should set the slug and confirm the version', async () => {
             const organisation = organisationFactory.build({ slug: '' });
             const version = organisationVersionFactory.build();
             const response = createMock<Response>();
+
             const organisationDto = createMock<OrganisationDto>({
               confirm: true,
             });
@@ -438,7 +439,7 @@ describe('OrganisationsController', () => {
             expect(organisationsService.setSlug).toHaveBeenCalledWith(
               organisation,
             );
-            expect(organisationVersionsService.save).toHaveBeenCalledWith(
+            expect(organisationVersionsService.confirm).toHaveBeenCalledWith(
               version,
             );
 
@@ -455,7 +456,9 @@ describe('OrganisationsController', () => {
               slug: 'some-slug',
             });
             const version = organisationVersionFactory.build();
+
             const response = createMock<Response>();
+
             const organisationDto = createMock<OrganisationDto>({
               confirm: true,
             });
@@ -473,7 +476,7 @@ describe('OrganisationsController', () => {
             expect(organisationsService.setSlug).not.toHaveBeenCalledWith(
               organisation,
             );
-            expect(organisationVersionsService.save).toHaveBeenCalledWith(
+            expect(organisationVersionsService.confirm).toHaveBeenCalledWith(
               version,
             );
 
