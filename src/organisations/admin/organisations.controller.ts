@@ -10,14 +10,19 @@ import {
   Post,
   Query,
   Res,
+  Req,
 } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
 import { Response } from 'express';
+import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
 
 import { AuthenticationGuard } from '../../common/authentication.guard';
 import { ValidationExceptionFilter } from '../../common/validation/validation-exception.filter';
 import { OrganisationsService } from '../organisations.service';
+import { OrganisationVersionsService } from '../organisation-versions.service';
 import { Organisation } from '../organisation.entity';
+import { OrganisationVersion } from '../organisation-version.entity';
+
 import { OrganisationPresenter } from '../presenters/organisation.presenter';
 import { OrganisationsPresenter } from './presenters/organisations.presenter';
 
@@ -37,6 +42,7 @@ import { createFilterInput } from '../../helpers/create-filter-input.helper';
 export class OrganisationsController {
   constructor(
     private readonly organisationsService: OrganisationsService,
+    private readonly organisationsVersionsService: OrganisationVersionsService,
     private readonly industriesService: IndustriesService,
     private readonly i18nService: I18nService,
   ) {}
@@ -74,13 +80,23 @@ export class OrganisationsController {
   }
 
   @Post('/')
-  async create(@Res() res: Response): Promise<void> {
+  async create(
+    @Res() res: Response,
+    @Req() req: RequestWithAppSession,
+  ): Promise<void> {
     const blankOrganisation = new Organisation();
     const organisation = await this.organisationsService.save(
       blankOrganisation,
     );
+    const blankVersion = {
+      organisation: organisation,
+      user: req.appSession.user,
+    } as OrganisationVersion;
+    const version = await this.organisationsVersionsService.save(blankVersion);
 
-    return res.redirect(`/admin/organisations/${organisation.id}/edit`);
+    return res.redirect(
+      `/admin/organisations/${version.organisation.id}/versions/${version.id}/edit`,
+    );
   }
 
   @Get('/:slug')
