@@ -40,7 +40,7 @@ describe(LegislationController, () => {
 
       professionsService.find.mockResolvedValue(profession);
 
-      await controller.edit(response, 'profession-id', false);
+      await controller.edit(response, 'profession-id', 'version-id', false);
 
       expect(response.render).toHaveBeenCalledWith(
         'admin/professions/legislation',
@@ -64,7 +64,7 @@ describe(LegislationController, () => {
 
         professionsService.find.mockResolvedValue(profession);
 
-        await controller.update(response, 'profession-id', dto);
+        await controller.update(response, 'profession-id', 'version-id', dto);
 
         expect(professionsService.save).toHaveBeenCalledWith(
           expect.objectContaining({
@@ -76,7 +76,7 @@ describe(LegislationController, () => {
         );
 
         expect(response.redirect).toHaveBeenCalledWith(
-          '/admin/professions/profession-id/check-your-answers',
+          '/admin/professions/profession-id/versions/version-id/check-your-answers',
         );
       });
     });
@@ -93,7 +93,7 @@ describe(LegislationController, () => {
 
         professionsService.find.mockResolvedValue(profession);
 
-        await controller.update(response, 'profession-id', dto);
+        await controller.update(response, 'profession-id', 'version-id', dto);
 
         expect(professionsService.save).not.toHaveBeenCalled();
 

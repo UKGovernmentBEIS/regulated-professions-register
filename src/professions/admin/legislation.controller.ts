@@ -28,24 +28,26 @@ import { BackLink } from '../../common/decorators/back-link.decorator';
 export class LegislationController {
   constructor(private readonly professionsService: ProfessionsService) {}
 
-  @Get('/:id/legislation/edit')
+  @Get('/:professionId/versions/:versionId/legislation/edit')
   @Permissions(UserPermission.CreateProfession)
   @BackLink((request: Request) =>
     request.query.change === 'true'
-      ? '/admin/professions/:id/check-your-answers'
-      : '/admin/professions/:id/qualification-information/edit',
+      ? '/admin/professions/:professionId/versions/:versionId/check-your-answers'
+      : '/admin/professions/:professionId/versions/:versionId/qualification-information/edit',
   )
   async edit(
     @Res() res: Response,
-    @Param('id') id: string,
+    @Param('professionId') professionId: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    @Param('versionId') versionId: string,
     @Query('change') change: boolean,
   ): Promise<void> {
-    const profession = await this.professionsService.find(id);
+    const profession = await this.professionsService.find(professionId);
 
     this.renderForm(res, profession.legislation, profession.confirmed, change);
   }
 
-  @Post('/:id/legislation')
+  @Post('/:professionId/versions/:versionId/legislation')
   @Permissions(UserPermission.CreateProfession)
   @UseFilters(
     new ValidationExceptionFilter(
@@ -55,17 +57,18 @@ export class LegislationController {
   )
   @BackLink((request: Request) =>
     request.body.change === 'true'
-      ? '/admin/professions/:id/check-your-answers'
-      : '/admin/professions/:id/qualification-information/edit',
+      ? '/admin/professions/:professionId/versions/:versionId/check-your-answers'
+      : '/admin/professions/:professionId/versions/:versionId/qualification-information/edit',
   )
   async update(
     @Res() res: Response,
-    @Param('id') id: string,
+    @Param('professionId') professionId: string,
+    @Param('versionId') versionId: string,
     @Body() legislationDto,
   ): Promise<void> {
     const validator = await Validator.validate(LegislationDto, legislationDto);
 
-    const profession = await this.professionsService.find(id);
+    const profession = await this.professionsService.find(professionId);
 
     const submittedValues: LegislationDto = legislationDto;
 
@@ -93,7 +96,9 @@ export class LegislationController {
 
     await this.professionsService.save(profession);
 
-    res.redirect(`/admin/professions/${id}/check-your-answers`);
+    res.redirect(
+      `/admin/professions/${professionId}/versions/${versionId}/check-your-answers`,
+    );
   }
 
   private async renderForm(

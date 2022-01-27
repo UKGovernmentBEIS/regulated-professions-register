@@ -20,28 +20,37 @@ import { UserPermission } from '../../users/user-permission';
 export class ConfirmationController {
   constructor(private professionsService: ProfessionsService) {}
 
-  @Post('/:id/confirmation')
+  @Post('/:professionId/versions/:versionId/confirmation')
   @Permissions(UserPermission.CreateProfession)
-  async create(@Res() res: Response, @Param('id') id: string): Promise<void> {
-    const profession = await this.professionsService.find(id);
+  async create(
+    @Res() res: Response,
+    @Param('professionId') professionId: string,
+    @Param('versionId') versionId: string,
+  ): Promise<void> {
+    const profession = await this.professionsService.find(professionId);
 
     if (profession.confirmed) {
-      return res.redirect(`/admin/professions/${id}/confirmation?amended=true`);
+      return res.redirect(
+        `/admin/professions/${professionId}/versions/${versionId}/confirmation?amended=true`,
+      );
     }
 
     await this.professionsService.confirm(profession);
 
-    res.redirect(`/admin/professions/${id}/confirmation`);
+    res.redirect(
+      `/admin/professions/${professionId}/versions/${versionId}/confirmation`,
+    );
   }
 
-  @Get('/:id/confirmation')
+  @Get('/:professionId/versions/:versionId/confirmation')
   @Permissions(UserPermission.CreateProfession)
   @Render('admin/professions/confirmation')
   async new(
-    @Param('id') id: string,
+    @Param('professionId') professionId: string,
+    @Param('versionId') versionId: string,
     @Query('amended') amended: boolean,
   ): Promise<ConfirmationTemplate> {
-    const profession = await this.professionsService.find(id);
+    const profession = await this.professionsService.find(professionId);
 
     return { name: profession.name, amended: Boolean(amended) };
   }
