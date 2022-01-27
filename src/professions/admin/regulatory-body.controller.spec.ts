@@ -55,7 +55,7 @@ describe(RegulatoryBodyController, () => {
         const mandatoryRegistrationRadioButtonsPresenter =
           new MandatoryRegistrationRadioButtonsPresenter(null, i18nService);
 
-        await controller.edit(response, 'profession-id', false);
+        await controller.edit(response, 'profession-id', 'version-id', false);
 
         expect(response.render).toHaveBeenCalledWith(
           'admin/professions/regulatory-body',
@@ -97,7 +97,7 @@ describe(RegulatoryBodyController, () => {
             i18nService,
           );
 
-        await controller.edit(response, 'profession-id', false);
+        await controller.edit(response, 'profession-id', 'version-id', false);
 
         expect(response.render).toHaveBeenCalledWith(
           'admin/professions/regulatory-body',
@@ -136,7 +136,12 @@ describe(RegulatoryBodyController, () => {
 
         organisationsService.find.mockResolvedValue(newOrganisation);
 
-        await controller.update(response, 'profession-id', regulatoryBodyDto);
+        await controller.update(
+          response,
+          'profession-id',
+          'version-id',
+          regulatoryBodyDto,
+        );
 
         expect(professionsService.save).toHaveBeenCalledWith(
           expect.objectContaining({
@@ -149,7 +154,7 @@ describe(RegulatoryBodyController, () => {
         );
 
         expect(response.redirect).toHaveBeenCalledWith(
-          '/admin/professions/profession-id/regulated-activities/edit',
+          '/admin/professions/profession-id/versions/version-id/regulated-activities/edit',
         );
       });
     });
@@ -164,6 +169,7 @@ describe(RegulatoryBodyController, () => {
         await controller.update(
           response,
           'profession-id',
+          'version-id',
           regulatoryBodyDtoWithoutMandatoryRegistration,
         );
 
@@ -200,6 +206,7 @@ describe(RegulatoryBodyController, () => {
           await controller.update(
             response,
             'profession-id',
+            'version-id',
             regulatoryBodyDtoWithChangeParam,
           );
 
@@ -214,7 +221,7 @@ describe(RegulatoryBodyController, () => {
           );
 
           expect(response.redirect).toHaveBeenCalledWith(
-            '/admin/professions/profession-id/check-your-answers',
+            '/admin/professions/profession-id/versions/version-id/check-your-answers',
           );
         });
       });
@@ -236,6 +243,7 @@ describe(RegulatoryBodyController, () => {
           await controller.update(
             response,
             'profession-id',
+            'version-id',
             regulatoryBodyDtoWithFalseChangeParam,
           );
 
@@ -250,7 +258,7 @@ describe(RegulatoryBodyController, () => {
           );
 
           expect(response.redirect).toHaveBeenCalledWith(
-            '/admin/professions/profession-id/regulated-activities/edit',
+            '/admin/professions/profession-id/versions/version-id/regulated-activities/edit',
           );
         });
       });

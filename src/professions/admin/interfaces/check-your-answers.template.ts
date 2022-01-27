@@ -6,6 +6,7 @@ export interface CheckYourAnswersTemplate {
   nations: string[];
   industries: string[];
   professionId: string;
+  versionId: string;
   organisation: string;
   mandatoryRegistration: string;
   reservedActivities: string;

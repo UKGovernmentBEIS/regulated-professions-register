@@ -36,7 +36,9 @@ describe('ConfirmationController', () => {
     it('looks up the Profession from the ID in the session, and returns its name and passes in the "amended" status', async () => {
       const amendedQueryParam = false;
 
-      expect(await controller.new('profession-id', amendedQueryParam)).toEqual({
+      expect(
+        await controller.new('profession-id', 'version-id', amendedQueryParam),
+      ).toEqual({
         name: 'Gas Safe Engineer',
         amended: false,
       });
@@ -48,7 +50,7 @@ describe('ConfirmationController', () => {
       it('"Confirms" the Profession', async () => {
         const res = createMock<Response>();
 
-        await controller.create(res, 'profession-id');
+        await controller.create(res, 'profession-id', 'version-id');
 
         expect(professionsService.confirm).toHaveBeenCalledWith(profession);
       });
@@ -65,10 +67,10 @@ describe('ConfirmationController', () => {
 
         const res = createMock<Response>();
 
-        await controller.create(res, 'existing-id');
+        await controller.create(res, 'existing-id', 'version-id');
 
         expect(res.redirect).toHaveBeenCalledWith(
-          `/admin/professions/existing-id/confirmation?amended=true`,
+          `/admin/professions/existing-id/versions/version-id/confirmation?amended=true`,
         );
         expect(professionsService.confirm).not.toHaveBeenCalled;
       });

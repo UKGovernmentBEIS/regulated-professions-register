@@ -32,19 +32,20 @@ export class QualificationInformationController {
     private readonly i18nService: I18nService,
   ) {}
 
-  @Get('/:id/qualification-information/edit')
+  @Get('/:professionId/versions/:versionId/qualification-information/edit')
   @Permissions(UserPermission.CreateProfession)
   @BackLink((request: Request) =>
     request.query.change === 'true'
-      ? '/admin/professions/:id/check-your-answers'
-      : '/admin/professions/:id/regulated-activities/edit',
+      ? '/admin/professions/:professionId/versions/:versionId/check-your-answers'
+      : '/admin/professions/:professionId/versions/:versionId/regulated-activities/edit',
   )
   async edit(
     @Res() res: Response,
-    @Param('id') id: string,
+    @Param('professionId') professionId: string,
+    @Param('versionId') versionId: string,
     @Query('change') change: boolean,
   ): Promise<void> {
-    const profession = await this.professionsService.find(id);
+    const profession = await this.professionsService.find(professionId);
 
     return this.renderForm(
       res,
@@ -54,16 +55,17 @@ export class QualificationInformationController {
     );
   }
 
-  @Post('/:id/qualification-information')
+  @Post('/:professionId/versions/:versionId/qualification-information')
   @Permissions(UserPermission.CreateProfession)
   @BackLink((request: Request) =>
     request.query.change === 'true'
-      ? '/admin/professions/:id/check-your-answers'
-      : '/admin/professions/:id/regulated-activities/edit',
+      ? '/admin/professions/:professionId/versions/:versionId/check-your-answers'
+      : '/admin/professions/:professionId/versions/:versionId/regulated-activities/edit',
   )
   async update(
     @Res() res: Response,
-    @Param('id') id: string,
+    @Param('professionId') professionId: string,
+    @Param('versionId') versionId: string,
     @Body() qualificationInformationDto,
   ): Promise<void> {
     const validator = await Validator.validate(
@@ -71,7 +73,7 @@ export class QualificationInformationController {
       qualificationInformationDto,
     );
 
-    const profession = await this.professionsService.find(id);
+    const profession = await this.professionsService.find(professionId);
 
     const submittedValues: QualificationInformationDto =
       qualificationInformationDto;
@@ -112,10 +114,14 @@ export class QualificationInformationController {
     await this.professionsService.save(profession);
 
     if (submittedValues.change) {
-      return res.redirect(`/admin/professions/${id}/check-your-answers`);
+      return res.redirect(
+        `/admin/professions/${professionId}/versions/${versionId}/check-your-answers`,
+      );
     }
 
-    return res.redirect(`/admin/professions/${id}/legislation/edit`);
+    return res.redirect(
+      `/admin/professions/${professionId}/versions/${versionId}/legislation/edit`,
+    );
   }
 
   private async renderForm(

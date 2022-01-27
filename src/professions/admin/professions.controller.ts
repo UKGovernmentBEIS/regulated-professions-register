@@ -32,12 +32,15 @@ import { Permissions } from '../../common/permissions.decorator';
 import { BackLink } from '../../common/decorators/back-link.decorator';
 import QualificationPresenter from '../../qualifications/presenters/qualification.presenter';
 import { createFilterInput } from '../../helpers/create-filter-input.helper';
+import { ProfessionVersionsService } from '../profession-versions.service';
+import { ProfessionVersion } from '../profession-version.entity';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
 export class ProfessionsController {
   constructor(
     private readonly professionsService: ProfessionsService,
+    private readonly professionVersionsService: ProfessionVersionsService,
     private readonly organisationsService: OrganisationsService,
     private readonly industriesService: IndustriesService,
     private readonly i18Service: I18nService,
@@ -45,10 +48,20 @@ export class ProfessionsController {
 
   @Post()
   async create(@Res() res: Response): Promise<void> {
-    const profession = await this.professionsService.save(new Profession());
+    const blankProfession = await this.professionsService.save(
+      new Profession(),
+    );
+
+    const blankVersion = new ProfessionVersion();
+
+    blankVersion.profession = blankProfession;
+
+    const savedVersion = await this.professionVersionsService.save(
+      blankVersion,
+    );
 
     res.redirect(
-      `/admin/professions/${profession.id}/top-level-information/edit`,
+      `/admin/professions/${blankProfession.id}/versions/${savedVersion.id}/top-level-information/edit`,
     );
   }
 
@@ -120,8 +133,16 @@ export class ProfessionsController {
   ): Promise<void> {
     const profession = await this.professionsService.find(professionId);
 
+    const blankVersion = new ProfessionVersion();
+
+    blankVersion.profession = profession;
+
+    const savedVersion = await this.professionVersionsService.save(
+      blankVersion,
+    );
+
     return res.redirect(
-      `/admin/professions/${profession.id}/check-your-answers?edit=true`,
+      `/admin/professions/${profession.id}/versions/${savedVersion.id}/check-your-answers?edit=true`,
     );
   }
 

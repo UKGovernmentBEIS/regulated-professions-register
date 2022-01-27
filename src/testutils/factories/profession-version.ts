@@ -11,7 +11,28 @@ import professionFactory from './profession';
 import qualificationFactory from './qualification';
 import userFactory from './user';
 
-export default Factory.define<ProfessionVersion>(({ sequence }) => ({
+class ProfessionVersionFactory extends Factory<ProfessionVersion> {
+  justCreated(id: string) {
+    return this.params({
+      id: id,
+      alternateName: undefined,
+      description: undefined,
+      occupationLocations: undefined,
+      regulationType: undefined,
+      mandatoryRegistration: undefined,
+      industries: undefined,
+      qualification: undefined,
+      legislations: undefined,
+      organisation: undefined,
+      reservedActivities: undefined,
+      profession: undefined,
+      user: undefined,
+      status: ProfessionVersionStatus.Unconfirmed,
+    });
+  }
+}
+
+export default ProfessionVersionFactory.define(({ sequence }) => ({
   id: sequence.toString(),
   alternateName: 'Alternate profession name',
   description:
@@ -22,7 +43,8 @@ export default Factory.define<ProfessionVersion>(({ sequence }) => ({
   industries: [
     industryFactory.build({ name: 'Example industry', id: 'example-industry' }),
   ],
-  qualifications: qualificationFactory.buildList(1),
+  qualifications: [],
+  qualification: qualificationFactory.build(),
   legislations: legislationFactory.buildList(1),
   organisation: organisationFactory.build(),
   reservedActivities: 'Stuff',

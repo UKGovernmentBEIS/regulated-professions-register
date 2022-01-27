@@ -60,7 +60,7 @@ describe(QualificationInformationController, () => {
 
       professionsService.find.mockResolvedValue(profession);
 
-      await controller.edit(response, 'profession-id', false);
+      await controller.edit(response, 'profession-id', 'version-id', false);
 
       expect(response.render).toHaveBeenCalledWith(
         'admin/professions/qualification-information',
@@ -96,7 +96,7 @@ describe(QualificationInformationController, () => {
 
           professionsService.find.mockResolvedValue(profession);
 
-          await controller.update(response, 'profession-id', dto);
+          await controller.update(response, 'profession-id', 'version-id', dto);
 
           expect(professionsService.save).toHaveBeenCalledWith(
             expect.objectContaining({
@@ -113,7 +113,7 @@ describe(QualificationInformationController, () => {
           );
 
           expect(response.redirect).toHaveBeenCalledWith(
-            '/admin/professions/profession-id/legislation/edit',
+            '/admin/professions/profession-id/versions/version-id/legislation/edit',
           );
         });
       });
@@ -135,7 +135,7 @@ describe(QualificationInformationController, () => {
 
           professionsService.find.mockResolvedValue(profession);
 
-          await controller.update(response, 'profession-id', dto);
+          await controller.update(response, 'profession-id', 'version-id', dto);
 
           expect(professionsService.save).toHaveBeenCalledWith(
             expect.objectContaining({
@@ -152,7 +152,7 @@ describe(QualificationInformationController, () => {
           );
 
           expect(response.redirect).toHaveBeenCalledWith(
-            '/admin/professions/profession-id/check-your-answers',
+            '/admin/professions/profession-id/versions/version-id/check-your-answers',
           );
         });
       });
@@ -175,7 +175,7 @@ describe(QualificationInformationController, () => {
 
         professionsService.find.mockResolvedValue(profession);
 
-        await controller.update(response, 'profession-id', dto);
+        await controller.update(response, 'profession-id', 'version-id', dto);
 
         expect(response.render).toHaveBeenCalledWith(
           'admin/professions/qualification-information',
