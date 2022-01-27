@@ -187,7 +187,9 @@ export class OrganisationsController {
   ): Promise<void> {
     // This should potentially add a confirmed flag to the object once
     // we have draft functionality in place
-    await this.organisationsService.save(organisation);
+    if (!organisation.slug) {
+      await this.organisationsService.setSlug(organisation);
+    }
     await this.organisationsVersionsService.save(version);
 
     res.render('admin/organisations/complete', organisation);

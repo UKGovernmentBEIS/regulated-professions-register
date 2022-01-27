@@ -411,38 +411,77 @@ describe('OrganisationsController', () => {
       });
 
       describe('when confirm is set', () => {
-        it('should update the organisation and version', async () => {
-          const organisation = createOrganisation();
-          const version = organisationVersionFactory.build();
-          const response = createMock<Response>();
-          const organisationDto = createMock<OrganisationDto>({
-            confirm: true,
+        describe('when the slug is not set', () => {
+          it('should set the slug and save and version', async () => {
+            const organisation = organisationFactory.build({ slug: '' });
+            const version = organisationVersionFactory.build();
+            const response = createMock<Response>();
+            const organisationDto = createMock<OrganisationDto>({
+              confirm: true,
+            });
+
+            organisationsService.find.mockResolvedValue(organisation);
+            organisationVersionsService.find.mockResolvedValue(version);
+
+            await controller.update(
+              'some-uuid',
+              'some-other-uuid',
+              organisationDto,
+              response,
+            );
+
+            expect(organisationsService.find).toHaveBeenCalledWith('some-uuid');
+            expect(organisationVersionsService.find).toHaveBeenCalledWith(
+              'some-other-uuid',
+            );
+
+            expect(organisationsService.setSlug).toHaveBeenCalledWith(
+              organisation,
+            );
+            expect(organisationVersionsService.save).toHaveBeenCalledWith(
+              version,
+            );
+
+            expect(response.render).toHaveBeenCalledWith(
+              'admin/organisations/complete',
+              organisation,
+            );
           });
+        });
 
-          organisationsService.find.mockResolvedValue(organisation);
-          organisationVersionsService.find.mockResolvedValue(version);
+        describe('when the slug is set', () => {
+          it('should save the version and not set the slug again', async () => {
+            const organisation = organisationFactory.build({
+              slug: 'some-slug',
+            });
+            const version = organisationVersionFactory.build();
+            const response = createMock<Response>();
+            const organisationDto = createMock<OrganisationDto>({
+              confirm: true,
+            });
 
-          await controller.update(
-            'some-uuid',
-            'some-other-uuid',
-            organisationDto,
-            response,
-          );
+            organisationsService.find.mockResolvedValue(organisation);
+            organisationVersionsService.find.mockResolvedValue(version);
 
-          expect(organisationsService.find).toHaveBeenCalledWith('some-uuid');
-          expect(organisationVersionsService.find).toHaveBeenCalledWith(
-            'some-other-uuid',
-          );
+            await controller.update(
+              'some-uuid',
+              'some-other-uuid',
+              organisationDto,
+              response,
+            );
 
-          expect(organisationsService.save).toHaveBeenCalledWith(organisation);
-          expect(organisationVersionsService.save).toHaveBeenCalledWith(
-            version,
-          );
+            expect(organisationsService.setSlug).not.toHaveBeenCalledWith(
+              organisation,
+            );
+            expect(organisationVersionsService.save).toHaveBeenCalledWith(
+              version,
+            );
 
-          expect(response.render).toHaveBeenCalledWith(
-            'admin/organisations/complete',
-            organisation,
-          );
+            expect(response.render).toHaveBeenCalledWith(
+              'admin/organisations/complete',
+              organisation,
+            );
+          });
         });
       });
     });
