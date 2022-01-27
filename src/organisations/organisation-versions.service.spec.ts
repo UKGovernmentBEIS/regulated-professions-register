@@ -4,7 +4,10 @@ import { createMock } from '@golevelup/ts-jest';
 
 import { Repository } from 'typeorm';
 import organisationVersionFactory from '../testutils/factories/organisation-version';
-import { OrganisationVersion } from './organisation-version.entity';
+import {
+  OrganisationVersion,
+  OrganisationVersionStatus,
+} from './organisation-version.entity';
 import { OrganisationVersionsService } from './organisation-versions.service';
 
 describe('OrganisationVersionsService', () => {
@@ -53,6 +56,24 @@ describe('OrganisationVersionsService', () => {
 
       expect(result).toEqual(organisationVersion);
       expect(repoSpy).toHaveBeenCalled();
+    });
+  });
+
+  describe('confirm', () => {
+    it('sets a status and a user on the version', async () => {
+      const organisationVersion = organisationVersionFactory.build();
+      const updatedVersion = {
+        ...organisationVersion,
+        status: OrganisationVersionStatus.Draft,
+      };
+
+      const repoSpy = jest
+        .spyOn(repo, 'save')
+        .mockResolvedValue(updatedVersion);
+      const result = await service.confirm(organisationVersion);
+
+      expect(result).toEqual(updatedVersion);
+      expect(repoSpy).toHaveBeenCalledWith(updatedVersion);
     });
   });
 });
