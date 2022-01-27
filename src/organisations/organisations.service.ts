@@ -1,8 +1,7 @@
 import { Repository } from 'typeorm';
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Organisation } from './organisation.entity';
-
 @Injectable()
 export class OrganisationsService {
   constructor(
@@ -27,6 +26,23 @@ export class OrganisationsService {
 
   find(id: string): Promise<Organisation> {
     return this.repository.findOne(id);
+  }
+
+  async findWithVersion(id: string, versionId: string): Promise<Organisation> {
+    const organisation = await this.repository.findOne({
+      where: { id },
+      relations: ['versions'],
+    });
+
+    if (organisation === undefined) throw new NotFoundException();
+
+    const version = organisation.versions.find(
+      (version) => version.id == versionId,
+    );
+
+    if (version === undefined) throw new NotFoundException();
+
+    return Organisation.withVersion(organisation, version);
   }
 
   findBySlug(slug: string): Promise<Organisation> {
