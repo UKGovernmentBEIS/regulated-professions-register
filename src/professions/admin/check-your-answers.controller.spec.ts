@@ -108,6 +108,30 @@ describe('CheckYourAnswersController', () => {
         expect(professionsService.find).toHaveBeenCalledWith('profession-id');
       });
     });
+
+    describe('when the profession has no qualification', () => {
+      it('passes a `null` qualification value to the template', async () => {
+        const profession = professionFactory.build({
+          qualification: undefined,
+          organisation: organisationFactory.build(),
+        });
+
+        professionsService.find.mockResolvedValue(profession);
+
+        const request: Request = createMockRequest(
+          'http://example.com/some/path',
+          'example.com',
+        );
+
+        const templateParams = await controller.show(
+          request,
+          'profession-id',
+          false,
+        );
+
+        expect(templateParams.qualification).toEqual(null);
+      });
+    });
   });
 
   afterEach(() => {

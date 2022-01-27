@@ -55,6 +55,10 @@ export class CheckYourAnswersController {
       ),
     );
 
+    const qualification = draftProfession.qualification
+      ? new QualificationPresenter(draftProfession.qualification)
+      : null;
+
     return {
       professionId: id,
       name: draftProfession.name,
@@ -64,7 +68,7 @@ export class CheckYourAnswersController {
       mandatoryRegistration: draftProfession.mandatoryRegistration,
       description: draftProfession.description,
       reservedActivities: draftProfession.reservedActivities,
-      qualification: new QualificationPresenter(draftProfession.qualification),
+      qualification: qualification,
       legislation: draftProfession.legislation,
       confirmed: Boolean(draftProfession.confirmed),
       captionText: ViewUtils.captionText(draftProfession.confirmed),

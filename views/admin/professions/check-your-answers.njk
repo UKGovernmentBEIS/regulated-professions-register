@@ -177,6 +177,7 @@
           })
         }}
 
+        {% if qualification %}
         <h2 class="govuk-heading-m">{{ ("professions.form.headings.qualificationInformation" | t) }}</h2>
 
         {{
@@ -270,6 +271,7 @@
             ]
           })
         }}
+        {% endif %}
 
         <h2 class="govuk-heading-m">{{ ("professions.form.headings.legislation" | t) }}</h2>
 
