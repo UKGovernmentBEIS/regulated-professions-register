@@ -28,6 +28,10 @@ export class ProfessionsService {
     return this.repository.findOne(id);
   }
 
+  findWithVersions(id: string): Promise<Profession> {
+    return this.repository.findOne(id, { relations: ['versions'] });
+  }
+
   findBySlug(slug: string): Promise<Profession> {
     return this.repository.findOne({ where: { slug } });
   }
