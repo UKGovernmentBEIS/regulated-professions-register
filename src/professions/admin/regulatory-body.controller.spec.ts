@@ -3,6 +3,7 @@ import { TestingModule, Test } from '@nestjs/testing';
 import { Response } from 'express';
 import { I18nService } from 'nestjs-i18n';
 import { OrganisationsService } from '../../organisations/organisations.service';
+import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 import organisationFactory from '../../testutils/factories/organisation';
 import professionFactory from '../../testutils/factories/profession';
 import { MandatoryRegistration } from '../profession.entity';
@@ -18,44 +19,10 @@ describe(RegulatoryBodyController, () => {
   let response: DeepMocked<Response>;
   let i18nService: DeepMocked<I18nService>;
 
-  const organisation1 = organisationFactory.build({
-    name: 'Organisation 1',
-    id: 'org-1-id',
-  });
-  const organisation2 = organisationFactory.build({
-    name: 'Organisation 2',
-    id: 'org-2-id',
-  });
-
   beforeEach(async () => {
-    const profession = professionFactory.build({
-      id: 'profession-id',
-      industries: null,
-      occupationLocations: null,
-    });
-
-    professionsService = createMock<ProfessionsService>({
-      find: async () => profession,
-    });
-
-    organisationsService = createMock<OrganisationsService>({
-      find: async () => organisation1,
-    });
-
-    i18nService = createMock<I18nService>();
-
-    i18nService.translate.mockImplementation(async (text) => {
-      switch (text) {
-        case 'professions.form.radioButtons.mandatoryRegistration.mandatory':
-          return 'Mandatory';
-        case 'professions.form.radioButtons.mandatoryRegistration.voluntary':
-          return 'Voluntary';
-        case 'professions.form.radioButtons.mandatoryRegistration.unknown':
-          return 'Unknown';
-        default:
-          return text;
-      }
-    });
+    i18nService = createMockI18nService();
+    professionsService = createMock<ProfessionsService>();
+    organisationsService = createMock<OrganisationsService>();
 
     const module: TestingModule = await Test.createTestingModule({
       controllers: [RegulatoryBodyController],
@@ -66,10 +33,6 @@ describe(RegulatoryBodyController, () => {
       ],
     }).compile();
 
-    organisationsService.all.mockImplementation(async () => [
-      organisation1,
-      organisation2,
-    ]);
     response = createMock<Response>();
 
     controller = module.get<RegulatoryBodyController>(RegulatoryBodyController);
@@ -81,14 +44,13 @@ describe(RegulatoryBodyController, () => {
         const profession = professionFactory
           .justCreated('profession-id')
           .build();
+        professionsService.find.mockResolvedValue(profession);
 
-        professionsService.find.mockImplementation(async () => profession);
+        const organisations = organisationFactory.buildList(2);
+        organisationsService.all.mockResolvedValue(organisations);
 
         const regulatedAuthoritiesSelectPresenter =
-          new RegulatedAuthoritiesSelectPresenter(
-            [organisation1, organisation2],
-            null,
-          );
+          new RegulatedAuthoritiesSelectPresenter(organisations, null);
 
         const mandatoryRegistrationRadioButtonsPresenter =
           new MandatoryRegistrationRadioButtonsPresenter(null, i18nService);
@@ -110,19 +72,24 @@ describe(RegulatoryBodyController, () => {
 
     describe('when an existing Profession is found', () => {
       it('should pre-select the Organisation from the Select and the mandatory registration in the radio buttons', async () => {
+        const organisation = organisationFactory.build({
+          name: 'Example org',
+          id: 'example-org-id',
+        });
+
         const profession = professionFactory.build({
           id: 'profession-id',
-          organisation: organisation1,
+          organisation: organisation,
           mandatoryRegistration: MandatoryRegistration.Mandatory,
         });
 
-        professionsService.find.mockImplementation(async () => profession);
+        professionsService.find.mockResolvedValue(profession);
+
+        const organisations = [organisation, organisationFactory.build()];
+        organisationsService.all.mockResolvedValue(organisations);
 
         const regulatedAuthoritiesSelectPresenterWithSelectedOrganisation =
-          new RegulatedAuthoritiesSelectPresenter(
-            [organisation1, organisation2],
-            organisation1,
-          );
+          new RegulatedAuthoritiesSelectPresenter(organisations, organisation);
 
         const mandatoryRegistrationRadioButtonsPresenterWithSelectedValue =
           new MandatoryRegistrationRadioButtonsPresenter(
@@ -152,31 +119,29 @@ describe(RegulatoryBodyController, () => {
       it('updates the Profession and redirects to the next page in the journey', async () => {
         const profession = professionFactory.build({
           id: 'profession-id',
-          organisation: organisation1,
+          organisation: organisationFactory.build(),
           mandatoryRegistration: MandatoryRegistration.Mandatory,
         });
 
-        professionsService.find.mockImplementation(async () => profession);
+        professionsService.find.mockResolvedValue(profession);
 
         const regulatoryBodyDto = {
           regulatoryBody: 'example-org-id',
           mandatoryRegistration: MandatoryRegistration.Voluntary,
         };
 
-        const organisation = organisationFactory.build({
+        const newOrganisation = organisationFactory.build({
           name: 'Council of Gas Safe Engineers',
         });
 
-        organisationsService.find.mockImplementationOnce(
-          async () => organisation,
-        );
+        organisationsService.find.mockResolvedValue(newOrganisation);
 
         await controller.update(response, 'profession-id', regulatoryBodyDto);
 
         expect(professionsService.save).toHaveBeenCalledWith(
           expect.objectContaining({
             id: 'profession-id',
-            organisation: organisation,
+            organisation: newOrganisation,
             mandatoryRegistration: MandatoryRegistration.Voluntary,
             occupationLocations: profession.occupationLocations,
             industries: profession.industries,
@@ -221,8 +186,7 @@ describe(RegulatoryBodyController, () => {
       describe('when set to true', () => {
         it('redirects to check your answers on submit', async () => {
           const profession = professionFactory.build({ id: 'profession-id' });
-
-          professionsService.find.mockImplementation(async () => profession);
+          professionsService.find.mockResolvedValue(profession);
 
           const regulatoryBodyDtoWithChangeParam = {
             regulatoryBody: 'example-org-id',
@@ -231,10 +195,7 @@ describe(RegulatoryBodyController, () => {
           };
 
           const organisation = organisationFactory.build();
-
-          organisationsService.find.mockImplementationOnce(
-            async () => organisation,
-          );
+          organisationsService.find.mockResolvedValue(organisation);
 
           await controller.update(
             response,
@@ -261,8 +222,7 @@ describe(RegulatoryBodyController, () => {
       describe('when false or missing', () => {
         it('continues to the next step in the journey', async () => {
           const profession = professionFactory.build({ id: 'profession-id' });
-
-          professionsService.find.mockImplementation(async () => profession);
+          professionsService.find.mockResolvedValue(profession);
 
           const regulatoryBodyDtoWithFalseChangeParam = {
             regulatoryBody: 'example-org-id',
@@ -271,10 +231,7 @@ describe(RegulatoryBodyController, () => {
           };
 
           const organisation = organisationFactory.build();
-
-          organisationsService.find.mockImplementationOnce(
-            async () => organisation,
-          );
+          organisationsService.find.mockResolvedValue(organisation);
 
           await controller.update(
             response,
