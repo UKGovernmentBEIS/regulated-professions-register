@@ -4,6 +4,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { Connection, EntityManager, QueryRunner, Repository } from 'typeorm';
 
 import professionFactory from '../testutils/factories/profession';
+import professionVersionFactory from '../testutils/factories/profession-version';
 import { Profession } from './profession.entity';
 import { ProfessionsService } from './professions.service';
 
@@ -84,6 +85,23 @@ describe('Profession', () => {
 
       expect(service.findBySlug('some-slug')).resolves.toEqual(profession);
       expect(repoSpy).toHaveBeenCalledWith({ where: { slug: 'some-slug' } });
+    });
+  });
+
+  describe('findWithVersions', () => {
+    it('should return a profession with its versions', async () => {
+      const profession = professionFactory.build({
+        id: 'profession-id',
+        versions: professionVersionFactory.buildList(2),
+      });
+      const repoSpy = jest.spyOn(repo, 'findOne').mockResolvedValue(profession);
+
+      expect(service.findWithVersions('profession-id')).resolves.toEqual(
+        profession,
+      );
+      expect(repoSpy).toHaveBeenCalledWith('profession-id', {
+        relations: ['versions'],
+      });
     });
   });
 
