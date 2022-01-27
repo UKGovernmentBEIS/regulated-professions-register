@@ -7,15 +7,6 @@ import professionFactory from '../testutils/factories/profession';
 import { Profession } from './profession.entity';
 import { ProfessionsService } from './professions.service';
 
-const gasSafeEngineer = professionFactory.build({
-  name: 'Registered Gas Engineer',
-});
-
-const professionArray = [
-  gasSafeEngineer,
-  professionFactory.build({ name: 'Social worker' }),
-];
-
 describe('Profession', () => {
   let service: ProfessionsService;
   let repo: Repository<Profession>;
@@ -34,17 +25,7 @@ describe('Profession', () => {
         ProfessionsService,
         {
           provide: getRepositoryToken(Profession),
-          useValue: {
-            find: () => {
-              return professionArray;
-            },
-            findOne: () => {
-              return gasSafeEngineer;
-            },
-            save: () => {
-              return gasSafeEngineer;
-            },
-          },
+          useValue: createMock<Repository<Profession>>(),
         },
         {
           provide: Connection,
@@ -58,20 +39,11 @@ describe('Profession', () => {
   });
 
   describe('all', () => {
-    let repoSpy: jest.SpyInstance<Promise<Profession[]>>;
-    let professions: Profession[];
+    it('should return all Professions, sorted by name', async () => {
+      const professions = professionFactory.buildList(2);
+      const repoSpy = jest.spyOn(repo, 'find').mockResolvedValue(professions);
 
-    beforeEach(async () => {
-      repoSpy = jest.spyOn(repo, 'find');
-      professions = await service.all();
-    });
-
-    it('should return all Professions', async () => {
-      expect(professions).toEqual(professionArray);
-      expect(repoSpy).toHaveBeenCalled();
-    });
-
-    it('Professions should be sorted', () => {
+      expect(service.all()).resolves.toEqual(professions);
       expect(repoSpy).toHaveBeenCalledWith(
         expect.objectContaining({
           order: { name: 'ASC' },
@@ -81,26 +53,14 @@ describe('Profession', () => {
   });
 
   describe('allConfirmed', () => {
-    let repoSpy: jest.SpyInstance<Promise<Profession[]>>;
-    let professions: Profession[];
+    it('should return all confirmed Professions, sorted by name', async () => {
+      const professions = professionFactory.buildList(2);
+      const repoSpy = jest.spyOn(repo, 'find').mockResolvedValue(professions);
 
-    beforeEach(async () => {
-      repoSpy = jest.spyOn(repo, 'find');
-      professions = await service.allConfirmed();
-    });
-
-    it('should return all confirmed Professions', async () => {
-      expect(professions).toEqual(professionArray);
+      expect(service.allConfirmed()).resolves.toEqual(professions);
       expect(repoSpy).toHaveBeenCalledWith(
         expect.objectContaining({
           where: { confirmed: true },
-        }),
-      );
-    });
-
-    it('Professions should be sorted', () => {
-      expect(repoSpy).toHaveBeenCalledWith(
-        expect.objectContaining({
           order: { name: 'ASC' },
         }),
       );
@@ -109,20 +69,20 @@ describe('Profession', () => {
 
   describe('find', () => {
     it('should return a Profession', async () => {
-      const repoSpy = jest.spyOn(repo, 'findOne');
-      const profession = await service.find('some-uuid');
+      const profession = professionFactory.build({ id: 'some-uuid' });
+      const repoSpy = jest.spyOn(repo, 'findOne').mockResolvedValue(profession);
 
-      expect(profession).toEqual(profession);
+      expect(service.find('some-uuid')).resolves.toEqual(profession);
       expect(repoSpy).toHaveBeenCalledWith('some-uuid');
     });
   });
 
   describe('findBySlug', () => {
     it('should return a profession', async () => {
-      const repoSpy = jest.spyOn(repo, 'findOne');
-      const profession = await service.findBySlug('some-slug');
+      const profession = professionFactory.build({ slug: 'some-slug' });
+      const repoSpy = jest.spyOn(repo, 'findOne').mockResolvedValue(profession);
 
-      expect(profession).toEqual(profession);
+      expect(service.findBySlug('some-slug')).resolves.toEqual(profession);
       expect(repoSpy).toHaveBeenCalledWith({ where: { slug: 'some-slug' } });
     });
   });
