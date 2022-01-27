@@ -1,9 +1,6 @@
-import { Request, Response, NextFunction } from 'express';
+import { Response, NextFunction } from 'express';
+import { RequestWithAppSession } from './interfaces/request-with-app-session.interface';
 import { User } from './../users/user.entity';
-
-export interface RequestWithAppSession extends Request {
-  appSession: any;
-}
 
 export function globalLocals(
   req: RequestWithAppSession,
