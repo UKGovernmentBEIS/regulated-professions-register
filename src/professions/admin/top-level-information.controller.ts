@@ -36,20 +36,21 @@ export class TopLevelInformationController {
     private readonly i18nService: I18nService,
   ) {}
 
-  @Get('/:id/top-level-information/edit')
+  @Get('/:professionId/versions/:versionId/top-level-information/edit')
   @Permissions(UserPermission.CreateProfession)
   @BackLink((request: Request) =>
     request.query.change === 'true'
-      ? '/admin/professions/:id/check-your-answers'
+      ? '/admin/professions/:professionId/versions/:versionId/check-your-answers'
       : '/admin/professions',
   )
   async edit(
     @Res() res: Response,
-    @Param('id') id: string,
+    @Param('professionId') professionId: string,
+    @Param('versionId') versionId: string,
     @Query('change') change: boolean,
     errors: object | undefined = undefined,
   ): Promise<void> {
-    const profession = await this.professionsService.find(id);
+    const profession = await this.professionsService.find(professionId);
 
     return this.renderForm(
       res,
@@ -62,17 +63,18 @@ export class TopLevelInformationController {
     );
   }
 
-  @Post('/:id/top-level-information')
+  @Post('/:professionId/versions/:versionId/top-level-information')
   @Permissions(UserPermission.CreateProfession)
   @BackLink((request: Request) =>
     request.query.change === 'true'
-      ? '/admin/professions/:id/check-your-answers'
+      ? '/admin/professions/:professionId/check-your-answers'
       : '/admin/professions',
   )
   async update(
     @Body() topLevelDetailsDto, // unfortunately we can't type this here without a validation error being thrown outside of this
     @Res() res: Response,
-    @Param('id') id: string,
+    @Param('professionId') professionId: string,
+    @Param('versionId') versionId: string,
   ): Promise<void> {
     const validator = await Validator.validate(
       TopLevelDetailsDto,
@@ -81,7 +83,7 @@ export class TopLevelInformationController {
 
     const submittedValues: TopLevelDetailsDto = topLevelDetailsDto;
 
-    const profession = await this.professionsService.find(id);
+    const profession = await this.professionsService.find(professionId);
 
     const submittedIndustries = await this.industriesService.findByIds(
       submittedValues.industries || [],
@@ -112,10 +114,14 @@ export class TopLevelInformationController {
     await this.professionsService.save(updated);
 
     if (submittedValues.change) {
-      return res.redirect(`/admin/professions/${id}/check-your-answers`);
+      return res.redirect(
+        `/admin/professions/${professionId}/versions/${versionId}/check-your-answers`,
+      );
     }
 
-    return res.redirect(`/admin/professions/${id}/regulatory-body/edit`);
+    return res.redirect(
+      `/admin/professions/${professionId}/versions/${versionId}/regulatory-body/edit`,
+    );
   }
 
   private async renderForm(

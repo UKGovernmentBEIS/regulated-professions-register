@@ -35,20 +35,21 @@ export class RegulatoryBodyController {
     private readonly i18nService: I18nService,
   ) {}
 
-  @Get('/:id/regulatory-body/edit')
+  @Get('/:professionId/versions/:versionId/regulatory-body/edit')
   @Permissions(UserPermission.CreateProfession)
   @BackLink((request: Request) =>
     request.query.change === 'true'
-      ? '/admin/professions/:id/check-your-answers'
-      : '/admin/professions/:id/top-level-information/edit',
+      ? '/admin/professions/:professionId/versions/:versionId/check-your-answers'
+      : '/admin/professions/:professionId/versions/:versionId/top-level-information/edit',
   )
   async edit(
     @Res() res: Response,
-    @Param('id') id: string,
+    @Param('professionId') professionId: string,
+    @Param('versionId') versionId: string,
     @Query('change') change: boolean,
     errors: object | undefined = undefined,
   ): Promise<void> {
-    const profession = await this.professionsService.find(id);
+    const profession = await this.professionsService.find(professionId);
 
     const selectedMandatoryRegistration = profession.mandatoryRegistration;
 
@@ -62,16 +63,17 @@ export class RegulatoryBodyController {
     );
   }
 
-  @Post('/:id/regulatory-body')
+  @Post('/:professionId/versions/:versionId/regulatory-body')
   @Permissions(UserPermission.CreateProfession)
   @BackLink((request: Request) =>
     request.query.change === 'true'
-      ? '/admin/professions/:id/check-your-answers'
-      : '/admin/professions/:id/top-level-information/edit',
+      ? '/admin/professions/:professionId/versions/:versionId/check-your-answers'
+      : '/admin/professions/:professionId/versions/:versionId/top-level-information/edit',
   )
   async update(
     @Res() res: Response,
-    @Param('id') id: string,
+    @Param('professionId') professionId: string,
+    @Param('versionId') versionId: string,
     @Body() regulatoryBodyDto,
   ): Promise<void> {
     const validator = await Validator.validate(
@@ -79,7 +81,7 @@ export class RegulatoryBodyController {
       regulatoryBodyDto,
     );
 
-    const profession = await this.professionsService.find(id);
+    const profession = await this.professionsService.find(professionId);
 
     const submittedValues: RegulatoryBodyDto = regulatoryBodyDto;
 
@@ -112,10 +114,14 @@ export class RegulatoryBodyController {
     await this.professionsService.save(updated);
 
     if (regulatoryBodyDto.change) {
-      return res.redirect(`/admin/professions/${id}/check-your-answers`);
+      return res.redirect(
+        `/admin/professions/${professionId}/versions/${versionId}/check-your-answers`,
+      );
     }
 
-    return res.redirect(`/admin/professions/${id}/regulated-activities/edit`);
+    return res.redirect(
+      `/admin/professions/${professionId}/versions/${versionId}/regulated-activities/edit`,
+    );
   }
 
   private async renderForm(

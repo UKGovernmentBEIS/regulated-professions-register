@@ -28,16 +28,17 @@ export class CheckYourAnswersController {
     private readonly i18nService: I18nService,
   ) {}
 
-  @Get(':id/check-your-answers')
+  @Get(':professionId/versions/:versionId/check-your-answers')
   @Permissions(UserPermission.CreateProfession)
   @Render('admin/professions/check-your-answers')
   @BackLink((request: Request) => getReferrer(request))
   async show(
     @Req() req: Request,
-    @Param('id') id: string,
+    @Param('professionId') professionId: string,
+    @Param('versionId') versionId: string,
     @Query('edit') edit: boolean,
   ): Promise<CheckYourAnswersTemplate> {
-    const draftProfession = await this.professionsService.find(id);
+    const draftProfession = await this.professionsService.find(professionId);
 
     if (!draftProfession) {
       throw new Error('Draft profession not found');
@@ -60,7 +61,8 @@ export class CheckYourAnswersController {
       : null;
 
     return {
-      professionId: id,
+      professionId: professionId,
+      versionId: versionId,
       name: draftProfession.name,
       nations: selectedNations,
       industries: industryNames,

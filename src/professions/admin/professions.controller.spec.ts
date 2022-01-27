@@ -20,6 +20,8 @@ import professionFactory from '../../testutils/factories/profession';
 import { NotFoundException } from '@nestjs/common';
 import QualificationPresenter from '../../qualifications/presenters/qualification.presenter';
 import { translationOf } from '../../testutils/translation-of';
+import { ProfessionVersionsService } from '../profession-versions.service';
+import professionVersion from '../../testutils/factories/profession-version';
 
 const referrer = 'http://example.com/some/path';
 const host = 'example.com';
@@ -80,6 +82,7 @@ jest.mock('../../organisations/organisation.entity');
 describe('ProfessionsController', () => {
   let controller: ProfessionsController;
   let professionsService: DeepMocked<ProfessionsService>;
+  let professionVersionsService: DeepMocked<ProfessionVersionsService>;
   let industriesService: DeepMocked<IndustriesService>;
   let organisationsService: DeepMocked<OrganisationsService>;
 
@@ -87,6 +90,7 @@ describe('ProfessionsController', () => {
     request = createMockRequest(referrer, host);
 
     professionsService = createMock<ProfessionsService>();
+    professionVersionsService = createMock<ProfessionVersionsService>();
     organisationsService = createMock<OrganisationsService>();
     industriesService = createMock<IndustriesService>();
     i18nService = createMockI18nService();
@@ -108,6 +112,10 @@ describe('ProfessionsController', () => {
         {
           provide: ProfessionsService,
           useValue: professionsService,
+        },
+        {
+          provide: ProfessionVersionsService,
+          useValue: professionVersionsService,
         },
         {
           provide: OrganisationsService,
@@ -134,16 +142,43 @@ describe('ProfessionsController', () => {
   });
 
   describe('create', () => {
-    it('should create a Profession and redirect', async () => {
-      const res = createMock<Response>();
+    it('should create a blank Profession, create a blank ProfessionVersion and redirect', async () => {
+      const blankProfession = professionFactory
+        .justCreated('profession-id')
+        .build();
 
-      professionsService.save.mockResolvedValue(profession1);
+      const versionFields = {
+        alternateName: undefined,
+        description: undefined,
+        occupationLocations: undefined,
+        regulationType: undefined,
+        mandatoryRegistration: undefined,
+        industries: undefined,
+        qualifications: undefined,
+        legislations: undefined,
+        organisation: undefined,
+        reservedActivities: undefined,
+        profession: blankProfession,
+        user: undefined,
+      };
+
+      const version = professionVersion
+        .justCreated('version-id')
+        .build(versionFields);
+
+      professionsService.save.mockResolvedValue(blankProfession);
+      professionVersionsService.save.mockResolvedValue(version);
+
+      const res = createMock<Response>();
 
       await controller.create(res);
 
       expect(professionsService.save).toHaveBeenCalled();
+      expect(professionVersionsService.save).toHaveBeenCalledWith(
+        versionFields,
+      );
       expect(res.redirect).toHaveBeenCalledWith(
-        `/admin/professions/${profession1.id}/top-level-information/edit`,
+        `/admin/professions/profession-id/versions/version-id/top-level-information/edit`,
       );
     });
   });
@@ -413,21 +448,44 @@ describe('ProfessionsController', () => {
   });
 
   describe('update', () => {
-    it('should look up the profession and redirect to the "Check your answers" page', async () => {
+    it('should look up the Profession, create a new ProfessionVersion, and redirect to the "Check your answers" page', async () => {
       const profession = professionFactory.build({
         id: 'profession-id',
       });
 
+      const versionFields = {
+        alternateName: undefined,
+        description: undefined,
+        occupationLocations: undefined,
+        regulationType: undefined,
+        mandatoryRegistration: undefined,
+        industries: undefined,
+        qualifications: undefined,
+        legislations: undefined,
+        organisation: undefined,
+        reservedActivities: undefined,
+        profession: profession,
+        user: undefined,
+      };
+
+      const version = professionVersion
+        .justCreated('version-id')
+        .build(versionFields);
+
       const res = createMock<Response>();
 
       professionsService.find.mockResolvedValue(profession);
+      professionVersionsService.save.mockResolvedValue(version);
 
       await controller.update(res, 'profession-id');
 
       expect(professionsService.find).toHaveBeenCalledWith('profession-id');
+      expect(professionVersionsService.save).toHaveBeenCalledWith(
+        versionFields,
+      );
 
       expect(res.redirect).toHaveBeenCalledWith(
-        `/admin/professions/profession-id/check-your-answers?edit=true`,
+        `/admin/professions/profession-id/versions/version-id/check-your-answers?edit=true`,
       );
     });
   });

@@ -62,7 +62,7 @@ describe('TopLevelInformationController', () => {
 
         professionsService.find.mockResolvedValue(blankProfession);
 
-        await controller.edit(response, 'profession-id', false);
+        await controller.edit(response, 'profession-id', 'version-id', false);
 
         expect(response.render).toHaveBeenCalledWith(
           'admin/professions/top-level-information',
@@ -131,7 +131,7 @@ describe('TopLevelInformationController', () => {
           }),
         ]);
 
-        await controller.edit(response, 'profession-id', false);
+        await controller.edit(response, 'profession-id', 'version-id', false);
 
         expect(response.render).toHaveBeenCalledWith(
           'admin/professions/top-level-information',
@@ -200,7 +200,12 @@ describe('TopLevelInformationController', () => {
 
         industriesService.findByIds.mockResolvedValue([constructionIndustry]);
 
-        await controller.update(topLevelDetailsDto, response, 'profession-id');
+        await controller.update(
+          topLevelDetailsDto,
+          response,
+          'profession-id',
+          'version-id',
+        );
 
         expect(professionsService.save).toHaveBeenCalledWith(
           expect.objectContaining({
@@ -212,7 +217,7 @@ describe('TopLevelInformationController', () => {
         );
 
         expect(response.redirect).toHaveBeenCalledWith(
-          '/admin/professions/profession-id/regulatory-body/edit',
+          '/admin/professions/profession-id/versions/version-id/regulatory-body/edit',
         );
       });
     });
@@ -229,6 +234,7 @@ describe('TopLevelInformationController', () => {
           topLevelDetailsDtoWithNoAnswers,
           response,
           'profession-id',
+          'version-id',
         );
 
         expect(response.render).toHaveBeenCalledWith(
@@ -277,10 +283,11 @@ describe('TopLevelInformationController', () => {
             topLevelDetailsDtoWithChangeParam,
             response,
             'profession-id',
+            'version-id',
           );
 
           expect(response.redirect).toHaveBeenCalledWith(
-            '/admin/professions/profession-id/check-your-answers',
+            '/admin/professions/profession-id/versions/version-id/check-your-answers',
           );
         });
       });
@@ -307,10 +314,11 @@ describe('TopLevelInformationController', () => {
             topLevelDetailsDtoWithoutChangeParam,
             response,
             'profession-id',
+            'version-id',
           );
 
           expect(response.redirect).toHaveBeenCalledWith(
-            '/admin/professions/profession-id/regulatory-body/edit',
+            '/admin/professions/profession-id/versions/version-id/regulatory-body/edit',
           );
         });
       });
