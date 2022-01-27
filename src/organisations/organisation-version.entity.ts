@@ -7,7 +7,6 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
-  Index,
   JoinColumn,
   ManyToOne,
 } from 'typeorm';
@@ -23,10 +22,6 @@ export enum OrganisationVersionStatus {
 export class OrganisationVersion {
   @PrimaryGeneratedColumn('uuid')
   id: string;
-
-  @Index({ unique: true, where: '"slug" IS NOT NULL' })
-  @Column({ nullable: true })
-  slug: string;
 
   @ManyToOne(() => Organisation, (organisation) => organisation.versions)
   @JoinColumn()
