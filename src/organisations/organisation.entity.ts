@@ -52,6 +52,24 @@ export class Organisation {
   contactUrl?: string;
   telephone?: string;
   fax?: string;
+  versionId?: string;
+
+  public static withVersion(
+    organisation: Organisation,
+    organisationVersion: OrganisationVersion,
+  ): Organisation {
+    return {
+      ...organisation,
+      alternateName: organisationVersion.alternateName,
+      address: organisationVersion.address,
+      url: organisationVersion.url,
+      email: organisationVersion.email,
+      contactUrl: organisationVersion.contactUrl,
+      telephone: organisationVersion.telephone,
+      fax: organisationVersion.fax,
+      versionId: organisationVersion.id,
+    } as Organisation;
+  }
 
   constructor(
     name?: string,
