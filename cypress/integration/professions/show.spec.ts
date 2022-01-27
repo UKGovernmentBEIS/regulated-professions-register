@@ -1,4 +1,4 @@
-describe('Showing a profession', () => {
+describe.skip('Showing a profession', () => {
   it('I can view a profession', () => {
     cy.visitAndCheckAccessibility('/professions/registered-trademark-attorney');
 
