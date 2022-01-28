@@ -2,10 +2,14 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { createMock } from '@golevelup/ts-jest';
 
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { ProfessionVersionsService } from './profession-versions.service';
 import professionVersionFactory from '../testutils/factories/profession-version';
-import { ProfessionVersion } from './profession-version.entity';
+import {
+  ProfessionVersion,
+  ProfessionVersionStatus,
+} from './profession-version.entity';
+import professionFactory from '../testutils/factories/profession';
 
 describe('ProfessionVersionsService', () => {
   let service: ProfessionVersionsService;
@@ -51,6 +55,31 @@ describe('ProfessionVersionsService', () => {
 
       expect(result).toEqual(professionVersion);
       expect(repoSpy).toHaveBeenCalled();
+    });
+  });
+
+  describe('findLatestForProfessionId', () => {
+    it('searches for the latest Profession with an active status', async () => {
+      const profession = professionFactory.build();
+      const version = professionVersionFactory.build();
+
+      const repoSpy = jest.spyOn(repo, 'findOne').mockResolvedValue(version);
+
+      const result = await service.findLatestForProfessionId(profession.id);
+
+      expect(result).toEqual(version);
+
+      expect(repoSpy).toHaveBeenCalledWith({
+        where: {
+          profession: { id: profession.id },
+          status: In([
+            ProfessionVersionStatus.Draft,
+            ProfessionVersionStatus.Live,
+          ]),
+        },
+        order: { created_at: 'DESC' },
+        relations: ['profession'],
+      });
     });
   });
 });
