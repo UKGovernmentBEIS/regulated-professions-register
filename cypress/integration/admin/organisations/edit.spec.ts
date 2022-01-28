@@ -145,9 +145,9 @@ describe('Editing organisations', () => {
 
       cy.checkAccessibility();
 
-      cy.translate('organisations.admin.form.headings.confirmation').then(
+      cy.translate('organisations.admin.edit.confirmation.heading').then(
         (confirmationText) => {
-          cy.get('html').contains(confirmationText).click();
+          cy.get('html').should('contain', confirmationText);
         },
       );
     });
