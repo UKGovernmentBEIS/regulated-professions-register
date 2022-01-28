@@ -39,7 +39,9 @@ export class RegulatedActivitiesController {
     @Param('versionId') versionId: string,
     @Query('change') change: boolean,
   ): Promise<void> {
-    const profession = await this.professionsService.find(professionId);
+    const profession = await this.professionsService.findWithVersions(
+      professionId,
+    );
 
     this.renderForm(
       res,
@@ -68,7 +70,9 @@ export class RegulatedActivitiesController {
       regulatedActivitiesDto,
     );
 
-    const profession = await this.professionsService.find(professionId);
+    const profession = await this.professionsService.findWithVersions(
+      professionId,
+    );
 
     const submittedValues: RegulatedActivitiesDto = regulatedActivitiesDto;
 

@@ -26,7 +26,9 @@ export class ConfirmationController {
     @Param('professionId') professionId: string,
     @Param('versionId') versionId: string,
   ): Promise<void> {
-    const profession = await this.professionsService.find(professionId);
+    const profession = await this.professionsService.findWithVersions(
+      professionId,
+    );
 
     if (profession.confirmed) {
       return res.redirect(
