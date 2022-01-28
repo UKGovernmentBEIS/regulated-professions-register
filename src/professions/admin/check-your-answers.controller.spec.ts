@@ -9,8 +9,10 @@ import industryFactory from '../../testutils/factories/industry';
 import legislationFactory from '../../testutils/factories/legislation';
 import organisationFactory from '../../testutils/factories/organisation';
 import professionFactory from '../../testutils/factories/profession';
+import professionVersionFactory from '../../testutils/factories/profession-version';
 import qualificationFactory from '../../testutils/factories/qualification';
 import { translationOf } from '../../testutils/translation-of';
+import { ProfessionVersionsService } from '../profession-versions.service';
 import { MandatoryRegistration } from '../profession.entity';
 import { ProfessionsService } from '../professions.service';
 import { CheckYourAnswersController } from './check-your-answers.controller';
@@ -18,16 +20,22 @@ import { CheckYourAnswersController } from './check-your-answers.controller';
 describe('CheckYourAnswersController', () => {
   let controller: CheckYourAnswersController;
   let professionsService: DeepMocked<ProfessionsService>;
+  let professionVersionsService: DeepMocked<ProfessionVersionsService>;
   let i18nService: DeepMocked<I18nService>;
 
   beforeEach(async () => {
     professionsService = createMock<ProfessionsService>();
+    professionVersionsService = createMock<ProfessionVersionsService>();
     i18nService = createMockI18nService();
 
     const module: TestingModule = await Test.createTestingModule({
       controllers: [CheckYourAnswersController],
       providers: [
         { provide: ProfessionsService, useValue: professionsService },
+        {
+          provide: ProfessionVersionsService,
+          useValue: professionVersionsService,
+        },
         { provide: I18nService, useValue: i18nService },
       ],
     }).compile();
@@ -49,10 +57,6 @@ describe('CheckYourAnswersController', () => {
         const profession = professionFactory.build({
           id: 'profession-id',
           name: 'Gas Safe Engineer',
-          occupationLocations: ['GB-ENG'],
-          industries: [
-            industryFactory.build({ name: 'industries.construction' }),
-          ],
           organisation: organisationFactory.build({
             name: 'Council of Gas Registered Engineers',
           }),
@@ -64,6 +68,16 @@ describe('CheckYourAnswersController', () => {
           confirmed: false,
         });
         professionsService.findWithVersions.mockResolvedValue(profession);
+
+        const version = professionVersionFactory.build({
+          occupationLocations: ['GB-ENG'],
+          industries: [
+            industryFactory.build({ name: 'industries.construction' }),
+          ],
+          profession: profession,
+        });
+
+        professionVersionsService.findWithProfession.mockResolvedValue(version);
 
         const request: Request = createMockRequest(
           'http://example.com/some/path',
@@ -119,7 +133,12 @@ describe('CheckYourAnswersController', () => {
           organisation: organisationFactory.build(),
         });
 
+        const version = professionVersionFactory.build({
+          profession: profession,
+        });
+
         professionsService.findWithVersions.mockResolvedValue(profession);
+        professionVersionsService.findWithProfession.mockResolvedValue(version);
 
         const request: Request = createMockRequest(
           'http://example.com/some/path',
