@@ -18,17 +18,19 @@
       {% set targetUrl = ( currentUrl if errors else "/admin/organisations/"+ id +"/versions/" + versionId + "?_method=PUT" ) %}
 
       <form method="post" action="{{ targetUrl }}">
-        {{
-          govukInput({
-            label: {
-              text: ("organisations.admin.form.label.name" | t),
-              classes: "govuk-label--m"
-            },
-            id: "name",
-            name: "name",
-            value: name
-          })
-        }}
+        {% if slug|length == 0 %}
+          {{
+            govukInput({
+              label: {
+                text: ("organisations.admin.form.label.name" | t),
+                classes: "govuk-label--m"
+              },
+              id: "name",
+              name: "name",
+              value: name
+            })
+          }}
+        {% endif %}
 
         {{
           govukInput({
