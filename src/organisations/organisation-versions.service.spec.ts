@@ -2,8 +2,10 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { createMock } from '@golevelup/ts-jest';
 
-import { Repository } from 'typeorm';
+import { Repository, In } from 'typeorm';
 import organisationVersionFactory from '../testutils/factories/organisation-version';
+import organisationFactory from '../testutils/factories/organisation';
+
 import {
   OrganisationVersion,
   OrganisationVersionStatus,
@@ -74,6 +76,31 @@ describe('OrganisationVersionsService', () => {
 
       expect(result).toEqual(updatedVersion);
       expect(repoSpy).toHaveBeenCalledWith(updatedVersion);
+    });
+  });
+
+  describe('findLatestForOrganisationId', () => {
+    it('searches for the latest organisation with an active status', async () => {
+      const organisation = organisationFactory.build();
+      const version = organisationVersionFactory.build();
+
+      const repoSpy = jest.spyOn(repo, 'findOne').mockResolvedValue(version);
+
+      const result = await service.findLatestForOrganisationId(organisation.id);
+
+      expect(result).toEqual(version);
+
+      expect(repoSpy).toHaveBeenCalledWith({
+        where: {
+          organisation: { id: organisation.id },
+          status: In([
+            OrganisationVersionStatus.Draft,
+            OrganisationVersionStatus.Live,
+          ]),
+        },
+        order: { created_at: 'DESC' },
+        relations: ['organisation'],
+      });
     });
   });
 });

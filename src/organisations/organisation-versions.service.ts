@@ -1,4 +1,4 @@
-import { Repository } from 'typeorm';
+import { Repository, In } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
@@ -19,6 +19,22 @@ export class OrganisationVersionsService {
 
   async find(id: string): Promise<OrganisationVersion> {
     return this.repository.findOne(id);
+  }
+
+  async findLatestForOrganisationId(
+    organisationId: string,
+  ): Promise<OrganisationVersion> {
+    return this.repository.findOne({
+      where: {
+        organisation: { id: organisationId },
+        status: In([
+          OrganisationVersionStatus.Draft,
+          OrganisationVersionStatus.Live,
+        ]),
+      },
+      order: { created_at: 'DESC' },
+      relations: ['organisation'],
+    });
   }
 
   async confirm(version: OrganisationVersion): Promise<OrganisationVersion> {
