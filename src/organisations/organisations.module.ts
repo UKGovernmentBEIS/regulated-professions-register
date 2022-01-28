@@ -7,6 +7,8 @@ import { OrganisationVersion } from './organisation-version.entity';
 import { OrganisationsService } from './organisations.service';
 import { OrganisationVersionsService } from './organisation-versions.service';
 import { OrganisationsController as AdminOrganisationsController } from './admin/organisations.controller';
+import { OrganisationVersionsController as AdminOrganisationVersionsController } from './admin/organisation-versions.controller';
+
 import { SearchController } from './search/search.controller';
 import { OrganisationsController } from './organisations.controller';
 
@@ -18,6 +20,7 @@ import { OrganisationsController } from './organisations.controller';
   ],
   controllers: [
     AdminOrganisationsController,
+    AdminOrganisationVersionsController,
     SearchController,
     OrganisationsController,
   ],
