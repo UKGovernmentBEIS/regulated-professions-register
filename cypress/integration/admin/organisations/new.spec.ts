@@ -54,6 +54,10 @@ describe('Creating organisations', () => {
     });
 
     it('allows me to create an organisation', () => {
+      cy.translate('organisations.admin.create.heading').then((heading) => {
+        cy.get('html').should('contain', heading);
+      });
+
       cy.get('input[name="name"]').invoke('val', 'New Organisation');
 
       cy.get('input[name="alternateName"]').type('Alternate Name');
