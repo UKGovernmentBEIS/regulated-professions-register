@@ -36,7 +36,7 @@ describe(RegulatedActivitiesController, () => {
         description: 'A description of the profession',
       });
 
-      professionsService.find.mockResolvedValue(profession);
+      professionsService.findWithVersions.mockResolvedValue(profession);
 
       await controller.edit(response, 'profession-id', 'version-id', false);
 
@@ -56,7 +56,7 @@ describe(RegulatedActivitiesController, () => {
         it('updates the Profession and redirects to the next page in the journey', async () => {
           const profession = professionFactory.build({ id: 'profession-id' });
 
-          professionsService.find.mockResolvedValue(profession);
+          professionsService.findWithVersions.mockResolvedValue(profession);
 
           const regulatedActivitiesDto: RegulatedActivitiesDto = {
             activities: 'Example reserved activities',
@@ -89,7 +89,7 @@ describe(RegulatedActivitiesController, () => {
         it('updates the Profession and redirects to the Check your answers page', async () => {
           const profession = professionFactory.build({ id: 'profession-id' });
 
-          professionsService.find.mockResolvedValue(profession);
+          professionsService.findWithVersions.mockResolvedValue(profession);
 
           const regulatedActivitiesDto: RegulatedActivitiesDto = {
             activities: 'Example reserved activities',
@@ -123,7 +123,7 @@ describe(RegulatedActivitiesController, () => {
       it('does not update the profession, and re-renders the regulated activities form page with errors', async () => {
         const profession = professionFactory.build();
 
-        professionsService.find.mockResolvedValue(profession);
+        professionsService.findWithVersions.mockResolvedValue(profession);
 
         const regulatedActivitiesDto: RegulatedActivitiesDto = {
           activities: undefined,

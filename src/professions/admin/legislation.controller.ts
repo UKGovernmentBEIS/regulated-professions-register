@@ -40,7 +40,9 @@ export class LegislationController {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     @Param('versionId') versionId: string,
   ): Promise<void> {
-    const profession = await this.professionsService.find(professionId);
+    const profession = await this.professionsService.findWithVersions(
+      professionId,
+    );
 
     this.renderForm(res, profession.legislation, profession.confirmed);
   }
@@ -66,7 +68,9 @@ export class LegislationController {
   ): Promise<void> {
     const validator = await Validator.validate(LegislationDto, legislationDto);
 
-    const profession = await this.professionsService.find(professionId);
+    const profession = await this.professionsService.findWithVersions(
+      professionId,
+    );
 
     const submittedValues: LegislationDto = legislationDto;
 

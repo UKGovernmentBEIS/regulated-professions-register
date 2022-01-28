@@ -2,25 +2,15 @@ import { DeepMocked, createMock } from '@golevelup/ts-jest';
 import { TestingModule, Test } from '@nestjs/testing';
 import { Response } from 'express';
 import professionFactory from '../../testutils/factories/profession';
-import { Profession } from '../profession.entity';
 import { ProfessionsService } from '../professions.service';
 import { ConfirmationController } from './confirmation.controller';
 
 describe('ConfirmationController', () => {
   let controller: ConfirmationController;
   let professionsService: DeepMocked<ProfessionsService>;
-  let profession: Profession;
 
   beforeEach(async () => {
-    profession = professionFactory.build({
-      id: 'profession-id',
-      name: 'Gas Safe Engineer',
-    });
-
-    professionsService = createMock<ProfessionsService>({
-      find: async () => profession,
-      save: async () => profession,
-    });
+    professionsService = createMock<ProfessionsService>();
 
     const module: TestingModule = await Test.createTestingModule({
       controllers: [ConfirmationController],
@@ -35,6 +25,13 @@ describe('ConfirmationController', () => {
   describe('viewConfirmation', () => {
     it('looks up the Profession from the ID in the session, and returns its name and passes in the "amended" status', async () => {
       const amendedQueryParam = false;
+      const profession = professionFactory.build({
+        name: 'Gas Safe Engineer',
+        id: 'profession-id',
+        confirmed: true,
+      });
+
+      professionsService.find.mockResolvedValue(profession);
 
       expect(
         await controller.new('profession-id', 'version-id', amendedQueryParam),
@@ -50,6 +47,13 @@ describe('ConfirmationController', () => {
       it('"Confirms" the Profession', async () => {
         const res = createMock<Response>();
 
+        const profession = professionFactory.build({
+          id: 'profession-id',
+          confirmed: false,
+        });
+
+        professionsService.findWithVersions.mockResolvedValue(profession);
+
         await controller.create(res, 'profession-id', 'version-id');
 
         expect(professionsService.confirm).toHaveBeenCalledWith(profession);
@@ -63,7 +67,9 @@ describe('ConfirmationController', () => {
           confirmed: true,
         });
 
-        professionsService.find.mockResolvedValue(existingProfession);
+        professionsService.findWithVersions.mockResolvedValue(
+          existingProfession,
+        );
 
         const res = createMock<Response>();
 

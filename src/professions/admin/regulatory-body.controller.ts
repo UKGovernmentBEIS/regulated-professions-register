@@ -49,7 +49,9 @@ export class RegulatoryBodyController {
     @Query('change') change: boolean,
     errors: object | undefined = undefined,
   ): Promise<void> {
-    const profession = await this.professionsService.find(professionId);
+    const profession = await this.professionsService.findWithVersions(
+      professionId,
+    );
 
     const selectedMandatoryRegistration = profession.mandatoryRegistration;
 
@@ -81,7 +83,9 @@ export class RegulatoryBodyController {
       regulatoryBodyDto,
     );
 
-    const profession = await this.professionsService.find(professionId);
+    const profession = await this.professionsService.findWithVersions(
+      professionId,
+    );
 
     const submittedValues: RegulatoryBodyDto = regulatoryBodyDto;
 

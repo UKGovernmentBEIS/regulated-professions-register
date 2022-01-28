@@ -38,7 +38,7 @@ describe(LegislationController, () => {
         legislation,
       });
 
-      professionsService.find.mockResolvedValue(profession);
+      professionsService.findWithVersions.mockResolvedValue(profession);
 
       await controller.edit(response, 'profession-id', 'version-id');
 
@@ -61,7 +61,7 @@ describe(LegislationController, () => {
           nationalLegislation: 'Legal Services Act 2008',
         };
 
-        professionsService.find.mockResolvedValue(profession);
+        professionsService.findWithVersions.mockResolvedValue(profession);
 
         await controller.update(response, 'profession-id', 'version-id', dto);
 
@@ -89,7 +89,7 @@ describe(LegislationController, () => {
           nationalLegislation: undefined,
         };
 
-        professionsService.find.mockResolvedValue(profession);
+        professionsService.findWithVersions.mockResolvedValue(profession);
 
         await controller.update(response, 'profession-id', 'version-id', dto);
 

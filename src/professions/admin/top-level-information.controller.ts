@@ -50,7 +50,9 @@ export class TopLevelInformationController {
     @Query('change') change: boolean,
     errors: object | undefined = undefined,
   ): Promise<void> {
-    const profession = await this.professionsService.find(professionId);
+    const profession = await this.professionsService.findWithVersions(
+      professionId,
+    );
 
     return this.renderForm(
       res,
@@ -83,7 +85,9 @@ export class TopLevelInformationController {
 
     const submittedValues: TopLevelDetailsDto = topLevelDetailsDto;
 
-    const profession = await this.professionsService.find(professionId);
+    const profession = await this.professionsService.findWithVersions(
+      professionId,
+    );
 
     const submittedIndustries = await this.industriesService.findByIds(
       submittedValues.industries || [],

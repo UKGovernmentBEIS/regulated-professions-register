@@ -58,7 +58,7 @@ describe(QualificationInformationController, () => {
           i18nService,
         ).radioButtonArgs('mostCommonPathToObtainQualification');
 
-      professionsService.find.mockResolvedValue(profession);
+      professionsService.findWithVersions.mockResolvedValue(profession);
 
       await controller.edit(response, 'profession-id', 'version-id', false);
 
@@ -94,7 +94,7 @@ describe(QualificationInformationController, () => {
             change: false,
           };
 
-          professionsService.find.mockResolvedValue(profession);
+          professionsService.findWithVersions.mockResolvedValue(profession);
 
           await controller.update(response, 'profession-id', 'version-id', dto);
 
@@ -133,7 +133,7 @@ describe(QualificationInformationController, () => {
             change: true,
           };
 
-          professionsService.find.mockResolvedValue(profession);
+          professionsService.findWithVersions.mockResolvedValue(profession);
 
           await controller.update(response, 'profession-id', 'version-id', dto);
 
@@ -173,7 +173,7 @@ describe(QualificationInformationController, () => {
           change: false,
         };
 
-        professionsService.find.mockResolvedValue(profession);
+        professionsService.findWithVersions.mockResolvedValue(profession);
 
         await controller.update(response, 'profession-id', 'version-id', dto);
 
