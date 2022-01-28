@@ -81,7 +81,7 @@ export class ProfessionVersion {
   @OneToMany(
     () => Legislation,
     (legislation) => legislation.professionVersion,
-    { eager: true },
+    { eager: true, cascade: true },
   )
   legislations: Legislation[];
 

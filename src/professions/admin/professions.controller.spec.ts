@@ -416,67 +416,6 @@ describe('ProfessionsController', () => {
       });
     });
   });
-
-  describe('edit', () => {
-    it('should render the name of the profession passed in', async () => {
-      const profession = professionFactory.build({
-        id: 'profession-id',
-      });
-
-      professionsService.find.mockResolvedValue(profession);
-
-      const result = await controller.edit('profession-id');
-
-      expect(result).toEqual({
-        profession: profession,
-      });
-
-      expect(professionsService.find).toHaveBeenCalledWith('profession-id');
-    });
-  });
-
-  describe('update', () => {
-    it('should look up the Profession, create a new ProfessionVersion, and redirect to the "Check your answers" page', async () => {
-      const profession = professionFactory.build({
-        id: 'profession-id',
-      });
-
-      const versionFields = {
-        alternateName: undefined,
-        description: undefined,
-        occupationLocations: undefined,
-        regulationType: undefined,
-        mandatoryRegistration: undefined,
-        industries: undefined,
-        qualifications: undefined,
-        legislations: undefined,
-        organisation: undefined,
-        reservedActivities: undefined,
-        profession: profession,
-        user: undefined,
-      };
-
-      const version = professionVersion
-        .justCreated('version-id')
-        .build(versionFields);
-
-      const res = createMock<Response>();
-
-      professionsService.find.mockResolvedValue(profession);
-      professionVersionsService.save.mockResolvedValue(version);
-
-      await controller.update(res, 'profession-id');
-
-      expect(professionsService.find).toHaveBeenCalledWith('profession-id');
-      expect(professionVersionsService.save).toHaveBeenCalledWith(
-        versionFields,
-      );
-
-      expect(res.redirect).toHaveBeenCalledWith(
-        `/admin/professions/profession-id/versions/version-id/check-your-answers?edit=true`,
-      );
-    });
-  });
 });
 
 function createPresenter(
