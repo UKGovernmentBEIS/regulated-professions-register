@@ -18,6 +18,7 @@ import { QualificationInformationController } from './admin/qualification-inform
 import { LegislationController } from './admin/legislation.controller';
 import { ProfessionVersionsService } from './profession-versions.service';
 import { ProfessionVersion } from './profession-version.entity';
+import { ProfessionVersionsController } from './profession-versions.controller';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { ProfessionVersion } from './profession-version.entity';
   controllers: [
     SearchController,
     ProfessionsController,
+    ProfessionVersionsController,
     TopLevelInformationController,
     RegulatoryBodyController,
     RegulatedActivitiesController,

@@ -23,13 +23,10 @@ import {
 } from './professions.presenter';
 import { AuthenticationGuard } from '../../common/authentication.guard';
 import { User } from '../../users/user.entity';
-import { UserPermission } from '../../users/user-permission';
 import { FilterDto } from './dto/filter.dto';
 import { OrganisationsService } from '../../organisations/organisations.service';
 import { Profession } from '../profession.entity';
 import { ShowTemplate } from '../interfaces/show-template.interface';
-import { EditTemplate } from './interfaces/edit-template.interface';
-import { Permissions } from '../../common/permissions.decorator';
 import { BackLink } from '../../common/decorators/back-link.decorator';
 import QualificationPresenter from '../../qualifications/presenters/qualification.presenter';
 import { createFilterInput } from '../../helpers/create-filter-input.helper';
@@ -116,41 +113,6 @@ export class ProfessionsController {
       industries,
       organisation,
     };
-  }
-
-  @Get('/:professionId/edit')
-  @Permissions(UserPermission.CreateProfession)
-  @Render('admin/professions/edit')
-  @BackLink('/admin/professions/:professionId')
-  async edit(
-    @Param('professionId') professionId: string,
-  ): Promise<EditTemplate> {
-    const profession = await this.professionsService.find(professionId);
-
-    return {
-      profession,
-    };
-  }
-
-  @Post('/:professionId/edit')
-  @Permissions(UserPermission.CreateProfession)
-  async update(
-    @Res() res: Response,
-    @Param('professionId') professionId: string,
-  ): Promise<void> {
-    const profession = await this.professionsService.find(professionId);
-
-    const blankVersion = new ProfessionVersion();
-
-    blankVersion.profession = profession;
-
-    const savedVersion = await this.professionVersionsService.save(
-      blankVersion,
-    );
-
-    return res.redirect(
-      `/admin/professions/${profession.id}/versions/${savedVersion.id}/check-your-answers?edit=true`,
-    );
   }
 
   private async createListEntries(
