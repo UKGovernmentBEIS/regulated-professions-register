@@ -1,4 +1,6 @@
-import { globalLocals, RequestWithAppSession } from './global-locals';
+import { globalLocals } from './global-locals';
+import { RequestWithAppSession } from './interfaces/request-with-app-session.interface';
+
 import { Response, NextFunction, Application } from 'express';
 import userFactory from '../testutils/factories/user';
 
