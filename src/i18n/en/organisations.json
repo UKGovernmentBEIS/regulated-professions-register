@@ -35,6 +35,9 @@
     "edit": {
       "heading": "Amending a regulatory authority"
     },
+    "create": {
+      "heading": "Adding a regulatory authority",
+    },
     "new": {
       "heading": "Are you sure you want to create a new regulatory authority?"
     },
