@@ -27,11 +27,14 @@ import { UserPermission } from '../../users/user-permission';
 import { BackLink } from '../../common/decorators/back-link.decorator';
 
 import ViewUtils from './viewUtils';
+import { ProfessionVersionsService } from '../profession-versions.service';
+import { ProfessionVersion } from '../profession-version.entity';
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
 export class TopLevelInformationController {
   constructor(
     private readonly professionsService: ProfessionsService,
+    private readonly professionVersionsService: ProfessionVersionsService,
     private readonly industriesService: IndustriesService,
     private readonly i18nService: I18nService,
   ) {}
@@ -54,11 +57,15 @@ export class TopLevelInformationController {
       professionId,
     );
 
+    const version = await this.professionVersionsService.findWithProfession(
+      versionId,
+    );
+
     return this.renderForm(
       res,
       profession.name,
-      profession.industries || [],
-      profession.occupationLocations || [],
+      version.industries || [],
+      version.occupationLocations || [],
       profession.confirmed,
       change,
       errors,
@@ -89,6 +96,10 @@ export class TopLevelInformationController {
       professionId,
     );
 
+    const version = await this.professionVersionsService.findWithProfession(
+      versionId,
+    );
+
     const submittedIndustries = await this.industriesService.findByIds(
       submittedValues.industries || [],
     );
@@ -106,16 +117,23 @@ export class TopLevelInformationController {
       );
     }
 
-    const updated: Profession = {
+    const updatedProfession: Profession = {
       ...profession,
       ...{
         name: submittedValues.name,
+      },
+    };
+
+    const updatedVersion: ProfessionVersion = {
+      ...version,
+      ...{
         occupationLocations: submittedValues.nations,
         industries: submittedIndustries,
       },
     };
 
-    await this.professionsService.save(updated);
+    await this.professionsService.save(updatedProfession);
+    await this.professionVersionsService.save(updatedVersion);
 
     if (submittedValues.change) {
       return res.redirect(
