@@ -15,7 +15,7 @@
     <div class="govuk-grid-column-two-thirds">
       {% include "../../shared/_errors.njk" %}
 
-      {% set targetUrl = ( currentUrl if errors else "/admin/organisations/"+ id +"/versions/"+ versionId +"?_method=PUT" ) %}
+      {% set targetUrl = ( currentUrl if errors else "/admin/organisations/"+ id +"/versions/" + versionId + "?_method=PUT" ) %}
 
       <form method="post" action="{{ targetUrl }}">
         {{
