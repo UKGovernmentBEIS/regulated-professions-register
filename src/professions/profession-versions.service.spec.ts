@@ -58,6 +58,25 @@ describe('ProfessionVersionsService', () => {
     });
   });
 
+  describe('findWithProfession', () => {
+    it('searches for a ProfessionVersion with its Profession', async () => {
+      const version = professionVersionFactory.build();
+      const profession = professionFactory.build({ versions: [version] });
+
+      version.profession = profession;
+
+      const repoSpy = jest.spyOn(repo, 'findOne').mockResolvedValue(version);
+
+      const result = await service.findWithProfession(version.id);
+
+      expect(result).toEqual(version);
+
+      expect(repoSpy).toHaveBeenCalledWith(version.id, {
+        relations: ['profession'],
+      });
+    });
+  });
+
   describe('findLatestForProfessionId', () => {
     it('searches for the latest Profession with an active status', async () => {
       const profession = professionFactory.build();
