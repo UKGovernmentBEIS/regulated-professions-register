@@ -63,7 +63,7 @@ describe('CheckYourAnswersController', () => {
           legislation,
           confirmed: false,
         });
-        professionsService.find.mockResolvedValue(profession);
+        professionsService.findWithVersions.mockResolvedValue(profession);
 
         const request: Request = createMockRequest(
           'http://example.com/some/path',
@@ -106,7 +106,9 @@ describe('CheckYourAnswersController', () => {
         );
         expect(templateParams.confirmed).toEqual(false);
 
-        expect(professionsService.find).toHaveBeenCalledWith('profession-id');
+        expect(professionsService.findWithVersions).toHaveBeenCalledWith(
+          'profession-id',
+        );
       });
     });
 
@@ -117,7 +119,7 @@ describe('CheckYourAnswersController', () => {
           organisation: organisationFactory.build(),
         });
 
-        professionsService.find.mockResolvedValue(profession);
+        professionsService.findWithVersions.mockResolvedValue(profession);
 
         const request: Request = createMockRequest(
           'http://example.com/some/path',

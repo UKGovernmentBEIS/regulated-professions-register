@@ -60,7 +60,7 @@ describe('TopLevelInformationController', () => {
 
         industriesService.all.mockResolvedValue(industries);
 
-        professionsService.find.mockResolvedValue(blankProfession);
+        professionsService.findWithVersions.mockResolvedValue(blankProfession);
 
         await controller.edit(response, 'profession-id', 'version-id', false);
 
@@ -121,7 +121,7 @@ describe('TopLevelInformationController', () => {
           industries: [healthIndustry],
         });
 
-        professionsService.find.mockResolvedValue(profession);
+        professionsService.findWithVersions.mockResolvedValue(profession);
 
         industriesService.all.mockResolvedValue([
           healthIndustry,
@@ -185,7 +185,7 @@ describe('TopLevelInformationController', () => {
           .justCreated('profession-id')
           .build();
 
-        professionsService.find.mockResolvedValue(profession);
+        professionsService.findWithVersions.mockResolvedValue(profession);
 
         const topLevelDetailsDto = {
           name: 'Gas Safe Engineer',
@@ -268,7 +268,7 @@ describe('TopLevelInformationController', () => {
 
           const industry = industryFactory.build({ id: 'construction-uuid' });
 
-          professionsService.find.mockResolvedValue(profession);
+          professionsService.findWithVersions.mockResolvedValue(profession);
 
           const topLevelDetailsDtoWithChangeParam = {
             name: 'A new profession',
@@ -300,7 +300,7 @@ describe('TopLevelInformationController', () => {
 
           const industry = industryFactory.build({ id: 'construction-uuid' });
 
-          professionsService.find.mockResolvedValue(profession);
+          professionsService.findWithVersions.mockResolvedValue(profession);
 
           const topLevelDetailsDtoWithoutChangeParam = {
             name: 'A new profession',

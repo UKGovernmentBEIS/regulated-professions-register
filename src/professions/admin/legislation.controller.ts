@@ -42,7 +42,9 @@ export class LegislationController {
     @Param('versionId') versionId: string,
     @Query('change') change: boolean,
   ): Promise<void> {
-    const profession = await this.professionsService.find(professionId);
+    const profession = await this.professionsService.findWithVersions(
+      professionId,
+    );
 
     this.renderForm(res, profession.legislation, profession.confirmed, change);
   }
@@ -68,7 +70,9 @@ export class LegislationController {
   ): Promise<void> {
     const validator = await Validator.validate(LegislationDto, legislationDto);
 
-    const profession = await this.professionsService.find(professionId);
+    const profession = await this.professionsService.findWithVersions(
+      professionId,
+    );
 
     const submittedValues: LegislationDto = legislationDto;
 

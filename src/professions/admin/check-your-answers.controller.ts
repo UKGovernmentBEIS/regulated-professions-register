@@ -39,7 +39,9 @@ export class CheckYourAnswersController {
     @Param('versionId') versionId: string,
     @Query('edit') edit: boolean,
   ): Promise<CheckYourAnswersTemplate> {
-    const draftProfession = await this.professionsService.find(professionId);
+    const draftProfession = await this.professionsService.findWithVersions(
+      professionId,
+    );
 
     if (!draftProfession) {
       throw new Error('Draft profession not found');

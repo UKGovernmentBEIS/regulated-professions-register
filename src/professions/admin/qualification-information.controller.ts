@@ -45,7 +45,9 @@ export class QualificationInformationController {
     @Param('versionId') versionId: string,
     @Query('change') change: boolean,
   ): Promise<void> {
-    const profession = await this.professionsService.find(professionId);
+    const profession = await this.professionsService.findWithVersions(
+      professionId,
+    );
 
     return this.renderForm(
       res,
@@ -73,7 +75,9 @@ export class QualificationInformationController {
       qualificationInformationDto,
     );
 
-    const profession = await this.professionsService.find(professionId);
+    const profession = await this.professionsService.findWithVersions(
+      professionId,
+    );
 
     const submittedValues: QualificationInformationDto =
       qualificationInformationDto;

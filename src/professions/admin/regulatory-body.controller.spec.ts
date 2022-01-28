@@ -44,7 +44,7 @@ describe(RegulatoryBodyController, () => {
         const profession = professionFactory
           .justCreated('profession-id')
           .build();
-        professionsService.find.mockResolvedValue(profession);
+        professionsService.findWithVersions.mockResolvedValue(profession);
 
         const organisations = organisationFactory.buildList(2);
         organisationsService.all.mockResolvedValue(organisations);
@@ -83,7 +83,7 @@ describe(RegulatoryBodyController, () => {
           mandatoryRegistration: MandatoryRegistration.Mandatory,
         });
 
-        professionsService.find.mockResolvedValue(profession);
+        professionsService.findWithVersions.mockResolvedValue(profession);
 
         const organisations = [organisation, organisationFactory.build()];
         organisationsService.all.mockResolvedValue(organisations);
@@ -123,7 +123,7 @@ describe(RegulatoryBodyController, () => {
           mandatoryRegistration: MandatoryRegistration.Mandatory,
         });
 
-        professionsService.find.mockResolvedValue(profession);
+        professionsService.findWithVersions.mockResolvedValue(profession);
 
         const regulatoryBodyDto = {
           regulatoryBody: 'example-org-id',
@@ -192,7 +192,7 @@ describe(RegulatoryBodyController, () => {
       describe('when set to true', () => {
         it('redirects to check your answers on submit', async () => {
           const profession = professionFactory.build({ id: 'profession-id' });
-          professionsService.find.mockResolvedValue(profession);
+          professionsService.findWithVersions.mockResolvedValue(profession);
 
           const regulatoryBodyDtoWithChangeParam = {
             regulatoryBody: 'example-org-id',
@@ -229,7 +229,7 @@ describe(RegulatoryBodyController, () => {
       describe('when false or missing', () => {
         it('continues to the next step in the journey', async () => {
           const profession = professionFactory.build({ id: 'profession-id' });
-          professionsService.find.mockResolvedValue(profession);
+          professionsService.findWithVersions.mockResolvedValue(profession);
 
           const regulatoryBodyDtoWithFalseChangeParam = {
             regulatoryBody: 'example-org-id',

@@ -38,7 +38,7 @@ describe(LegislationController, () => {
         legislation,
       });
 
-      professionsService.find.mockResolvedValue(profession);
+      professionsService.findWithVersions.mockResolvedValue(profession);
 
       await controller.edit(response, 'profession-id', 'version-id', false);
 
@@ -62,7 +62,7 @@ describe(LegislationController, () => {
           change: false,
         };
 
-        professionsService.find.mockResolvedValue(profession);
+        professionsService.findWithVersions.mockResolvedValue(profession);
 
         await controller.update(response, 'profession-id', 'version-id', dto);
 
@@ -91,7 +91,7 @@ describe(LegislationController, () => {
           change: false,
         };
 
-        professionsService.find.mockResolvedValue(profession);
+        professionsService.findWithVersions.mockResolvedValue(profession);
 
         await controller.update(response, 'profession-id', 'version-id', dto);
 
