@@ -20,11 +20,13 @@ import { Permissions } from '../../common/permissions.decorator';
 import { UserPermission } from '../../users/user.entity';
 import ViewUtils from './viewUtils';
 import { BackLink } from '../../common/decorators/back-link.decorator';
+import { ProfessionVersionsService } from '../profession-versions.service';
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
 export class CheckYourAnswersController {
   constructor(
     private readonly professionsService: ProfessionsService,
+    private readonly professionVersionsService: ProfessionVersionsService,
     private readonly i18nService: I18nService,
   ) {}
 
@@ -46,14 +48,22 @@ export class CheckYourAnswersController {
       throw new Error('Draft profession not found');
     }
 
+    const version = await this.professionVersionsService.findWithProfession(
+      versionId,
+    );
+
+    if (!version) {
+      throw new Error('Version not found');
+    }
+
     const industryNames = await Promise.all(
-      draftProfession.industries.map(
+      version.industries.map(
         async (industry) => await this.i18nService.translate(industry.name),
       ),
     );
 
     const selectedNations: string[] = await Promise.all(
-      draftProfession.occupationLocations.map(async (nationCode) =>
+      version.occupationLocations.map(async (nationCode) =>
         Nation.find(nationCode).translatedName(this.i18nService),
       ),
     );
