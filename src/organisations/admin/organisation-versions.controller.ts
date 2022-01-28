@@ -37,4 +37,30 @@ export class OrganisationVersionsController {
 
     return organisation;
   }
+
+  @Post('/:organisationID/versions')
+  async create(
+    @Res() res: Response,
+    @Req() req: RequestWithAppSession,
+    @Param('organisationID') organisationID: string,
+  ): Promise<void> {
+    const latestVersion =
+      await this.organisationsVersionsService.findLatestForOrganisationId(
+        organisationID,
+      );
+
+    const newVersion = {
+      ...latestVersion,
+      id: undefined,
+      user: req.appSession.user,
+      created_at: undefined,
+      updated_at: undefined,
+    } as OrganisationVersion;
+
+    const version = await this.organisationsVersionsService.save(newVersion);
+
+    return res.redirect(
+      `/admin/organisations/${version.organisation.id}/versions/${version.id}/edit`,
+    );
+  }
 }
