@@ -2,6 +2,8 @@ import { createMock, DeepMocked } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Response } from 'express';
 import professionFactory from '../../testutils/factories/profession';
+import professionVersionFactory from '../../testutils/factories/profession-version';
+import { ProfessionVersionsService } from '../profession-versions.service';
 import { ProfessionsService } from '../professions.service';
 import { RegulatedActivitiesDto } from './dto/regulated-activities.dto';
 import { RegulatedActivitiesController } from './regulated-activities.controller';
@@ -9,15 +11,21 @@ import { RegulatedActivitiesController } from './regulated-activities.controller
 describe(RegulatedActivitiesController, () => {
   let controller: RegulatedActivitiesController;
   let professionsService: DeepMocked<ProfessionsService>;
+  let professionVersionsService: DeepMocked<ProfessionVersionsService>;
   let response: DeepMocked<Response>;
 
   beforeEach(async () => {
     professionsService = createMock<ProfessionsService>();
+    professionVersionsService = createMock<ProfessionVersionsService>();
 
     const module: TestingModule = await Test.createTestingModule({
       controllers: [RegulatedActivitiesController],
       providers: [
         { provide: ProfessionsService, useValue: professionsService },
+        {
+          provide: ProfessionVersionsService,
+          useValue: professionVersionsService,
+        },
       ],
     }).compile();
 
@@ -32,11 +40,17 @@ describe(RegulatedActivitiesController, () => {
     it('should render the regulated activities page, passing in any values on the Profession that have already been set', async () => {
       const profession = professionFactory.build({
         id: 'profession-id',
+      });
+
+      const version = professionVersionFactory.build({
+        id: 'version-id',
+        profession: profession,
         reservedActivities: 'Example reserved activities',
         description: 'A description of the profession',
       });
 
       professionsService.findWithVersions.mockResolvedValue(profession);
+      professionVersionsService.findWithProfession.mockResolvedValue(version);
 
       await controller.edit(response, 'profession-id', 'version-id', false);
 
@@ -55,8 +69,17 @@ describe(RegulatedActivitiesController, () => {
       describe('when the "Change" query param is false', () => {
         it('updates the Profession and redirects to the next page in the journey', async () => {
           const profession = professionFactory.build({ id: 'profession-id' });
+          const version = professionVersionFactory.build({
+            id: 'version-id',
+            profession: profession,
+            reservedActivities: 'Example reserved activities',
+            description: 'A description of the profession',
+          });
 
           professionsService.findWithVersions.mockResolvedValue(profession);
+          professionVersionsService.findWithProfession.mockResolvedValue(
+            version,
+          );
 
           const regulatedActivitiesDto: RegulatedActivitiesDto = {
             activities: 'Example reserved activities',
@@ -71,9 +94,9 @@ describe(RegulatedActivitiesController, () => {
             regulatedActivitiesDto,
           );
 
-          expect(professionsService.save).toHaveBeenCalledWith(
+          expect(professionVersionsService.save).toHaveBeenCalledWith(
             expect.objectContaining({
-              id: 'profession-id',
+              id: 'version-id',
               description: 'A description of the profession',
               reservedActivities: 'Example reserved activities',
             }),
@@ -88,8 +111,17 @@ describe(RegulatedActivitiesController, () => {
       describe('when the "Change" query param is true', () => {
         it('updates the Profession and redirects to the Check your answers page', async () => {
           const profession = professionFactory.build({ id: 'profession-id' });
+          const version = professionVersionFactory.build({
+            id: 'version-id',
+            profession: profession,
+            reservedActivities: 'Example reserved activities',
+            description: 'A description of the profession',
+          });
 
           professionsService.findWithVersions.mockResolvedValue(profession);
+          professionVersionsService.findWithProfession.mockResolvedValue(
+            version,
+          );
 
           const regulatedActivitiesDto: RegulatedActivitiesDto = {
             activities: 'Example reserved activities',
@@ -104,9 +136,9 @@ describe(RegulatedActivitiesController, () => {
             regulatedActivitiesDto,
           );
 
-          expect(professionsService.save).toHaveBeenCalledWith(
+          expect(professionVersionsService.save).toHaveBeenCalledWith(
             expect.objectContaining({
-              id: 'profession-id',
+              id: 'version-id',
               description: 'A description of the profession',
               reservedActivities: 'Example reserved activities',
             }),
@@ -123,7 +155,15 @@ describe(RegulatedActivitiesController, () => {
       it('does not update the profession, and re-renders the regulated activities form page with errors', async () => {
         const profession = professionFactory.build();
 
+        const version = professionVersionFactory.build({
+          id: 'version-id',
+          profession: profession,
+          reservedActivities: 'Example reserved activities',
+          description: 'A description of the profession',
+        });
+
         professionsService.findWithVersions.mockResolvedValue(profession);
+        professionVersionsService.findWithProfession.mockResolvedValue(version);
 
         const regulatedActivitiesDto: RegulatedActivitiesDto = {
           activities: undefined,
@@ -138,7 +178,7 @@ describe(RegulatedActivitiesController, () => {
           regulatedActivitiesDto,
         );
 
-        expect(professionsService.save).not.toHaveBeenCalled();
+        expect(professionVersionsService.save).not.toHaveBeenCalled();
 
         expect(response.render).toHaveBeenCalledWith(
           'admin/professions/regulated-activities',

@@ -57,8 +57,6 @@ describe('CheckYourAnswersController', () => {
         const profession = professionFactory.build({
           id: 'profession-id',
           name: 'Gas Safe Engineer',
-          description: 'A description of the regulation',
-          reservedActivities: 'Some reserved activities',
           qualification,
           legislation,
           confirmed: false,
@@ -74,6 +72,8 @@ describe('CheckYourAnswersController', () => {
             name: 'Council of Gas Registered Engineers',
           }),
           mandatoryRegistration: MandatoryRegistration.Voluntary,
+          description: 'A description of the regulation',
+          reservedActivities: 'Some reserved activities',
           profession: profession,
         });
 

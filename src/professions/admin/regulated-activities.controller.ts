@@ -12,7 +12,6 @@ import { Response, Request } from 'express';
 import { AuthenticationGuard } from '../../common/authentication.guard';
 import { Validator } from '../../helpers/validator';
 import { ValidationFailedError } from '../../common/validation/validation-failed.error';
-import { Profession } from '../profession.entity';
 import { ProfessionsService } from '../professions.service';
 import { RegulatedActivitiesDto } from './dto/regulated-activities.dto';
 import { RegulatedActivitiesTemplate } from './interfaces/regulated-activities.template';
@@ -21,10 +20,15 @@ import { UserPermission } from '../../users/user.entity';
 import { BackLink } from '../../common/decorators/back-link.decorator';
 
 import ViewUtils from './viewUtils';
+import { ProfessionVersionsService } from '../profession-versions.service';
+import { ProfessionVersion } from '../profession-version.entity';
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
 export class RegulatedActivitiesController {
-  constructor(private readonly professionsService: ProfessionsService) {}
+  constructor(
+    private readonly professionsService: ProfessionsService,
+    private readonly professionVersionsService: ProfessionVersionsService,
+  ) {}
 
   @Get('/:professionId/versions/:versionId/regulated-activities/edit')
   @Permissions(UserPermission.CreateProfession)
@@ -43,10 +47,14 @@ export class RegulatedActivitiesController {
       professionId,
     );
 
+    const version = await this.professionVersionsService.findWithProfession(
+      versionId,
+    );
+
     this.renderForm(
       res,
-      profession.reservedActivities,
-      profession.description,
+      version.reservedActivities,
+      version.description,
       profession.confirmed,
       change,
     );
@@ -74,6 +82,10 @@ export class RegulatedActivitiesController {
       professionId,
     );
 
+    const version = await this.professionVersionsService.findWithProfession(
+      versionId,
+    );
+
     const submittedValues: RegulatedActivitiesDto = regulatedActivitiesDto;
 
     if (!validator.valid()) {
@@ -89,15 +101,15 @@ export class RegulatedActivitiesController {
       );
     }
 
-    const updated: Profession = {
-      ...profession,
+    const updatedVersion: ProfessionVersion = {
+      ...version,
       ...{
         reservedActivities: submittedValues.activities,
         description: submittedValues.description,
       },
     };
 
-    await this.professionsService.save(updated);
+    await this.professionVersionsService.save(updatedVersion);
 
     if (submittedValues.change) {
       return res.redirect(
