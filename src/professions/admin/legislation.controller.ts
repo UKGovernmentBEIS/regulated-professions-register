@@ -22,11 +22,15 @@ import LegislationDto from './dto/legislation.dto';
 import { LegislationTemplate } from './interfaces/legislation.template';
 import ViewUtils from './viewUtils';
 import { BackLink } from '../../common/decorators/back-link.decorator';
+import { ProfessionVersionsService } from '../profession-versions.service';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
 export class LegislationController {
-  constructor(private readonly professionsService: ProfessionsService) {}
+  constructor(
+    private readonly professionsService: ProfessionsService,
+    private readonly professionVersionsService: ProfessionVersionsService,
+  ) {}
 
   @Get('/:professionId/versions/:versionId/legislation/edit')
   @Permissions(UserPermission.CreateProfession)
@@ -46,7 +50,12 @@ export class LegislationController {
       professionId,
     );
 
-    this.renderForm(res, profession.legislation, profession.confirmed, change);
+    const version = await this.professionVersionsService.findWithProfession(
+      versionId,
+    );
+
+    // We currently only show one legislation here, but we'll be showing multiple in future
+    this.renderForm(res, version.legislations[0], profession.confirmed, change);
   }
 
   @Post('/:professionId/versions/:versionId/legislation')
@@ -74,10 +83,15 @@ export class LegislationController {
       professionId,
     );
 
+    const version = await this.professionVersionsService.findWithProfession(
+      versionId,
+    );
+
     const submittedValues: LegislationDto = legislationDto;
 
     const updatedLegislation: Legislation = {
-      ...profession.legislation,
+      // We currently need to update one legislation here, but will update multiple in future
+      ...version.legislations[0],
       ...{
         name: submittedValues.nationalLegislation,
         url: submittedValues.link,
@@ -96,9 +110,9 @@ export class LegislationController {
       );
     }
 
-    profession.legislation = updatedLegislation;
+    version.legislations = [updatedLegislation];
 
-    await this.professionsService.save(profession);
+    await this.professionVersionsService.save(version);
 
     res.redirect(
       `/admin/professions/${professionId}/versions/${versionId}/check-your-answers`,
