@@ -83,7 +83,7 @@ export class CheckYourAnswersController {
       description: version.description,
       reservedActivities: version.reservedActivities,
       qualification: qualification,
-      legislation: draftProfession.legislation,
+      legislation: version.legislations[0],
       confirmed: Boolean(draftProfession.confirmed),
       captionText: ViewUtils.captionText(draftProfession.confirmed),
       edit: Boolean(edit),
