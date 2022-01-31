@@ -50,7 +50,7 @@
     "@types/auth0": "^2.34.11",
     "@types/express-session": "^1.17.4",
     "auth0": "^2.39.0",
-    "bull": "^4.2.1",
+    "bull": "^4.4.0",
     "bull-repl": "^0.26.3",
     "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",
