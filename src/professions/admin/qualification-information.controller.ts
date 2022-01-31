@@ -58,7 +58,7 @@ export class QualificationInformationController {
     return this.renderForm(
       res,
       version.qualification,
-      profession.confirmed,
+      profession.slug !== null,
       change,
     );
   }
@@ -117,7 +117,7 @@ export class QualificationInformationController {
       return this.renderForm(
         res,
         updatedQualification,
-        profession.confirmed,
+        profession.slug !== null,
         submittedValues.change,
         errors,
       );

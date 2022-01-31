@@ -67,7 +67,7 @@ export class RegulatoryBodyController {
       res,
       version.organisation,
       selectedMandatoryRegistration,
-      profession.confirmed,
+      profession.slug !== null,
       change,
     );
   }
@@ -112,7 +112,7 @@ export class RegulatoryBodyController {
         res,
         selectedOrganisation,
         selectedMandatoryRegistration,
-        profession.confirmed,
+        profession.slug !== null,
         regulatoryBodyDto.change,
         errors,
       );
