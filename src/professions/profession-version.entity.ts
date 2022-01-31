@@ -78,14 +78,11 @@ export class ProfessionVersion {
   @JoinColumn()
   qualification: Qualification;
 
-  // deprecated
   @OneToMany(
-    () => Qualification,
-    (qualification) => qualification.professionVersion,
+    () => Legislation,
+    (legislation) => legislation.professionVersion,
+    { eager: true },
   )
-  qualifications: Qualification[];
-
-  @OneToMany(() => Legislation, (legislation) => legislation.professionVersion)
   legislations: Legislation[];
 
   @ManyToOne(() => Organisation, (organisation) => organisation.professions, {
