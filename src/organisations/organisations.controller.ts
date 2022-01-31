@@ -1,14 +1,14 @@
 import { Controller, Get, Render, Param } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
 
-import { OrganisationsService } from './organisations.service';
+import { OrganisationVersionsService } from './organisation-versions.service';
 import { ShowTemplate } from './interfaces/show-template.interface';
 import { OrganisationSummaryPresenter } from './presenters/organisation-summary.presenter';
 import { BackLink } from '../common/decorators/back-link.decorator';
 @Controller()
 export class OrganisationsController {
   constructor(
-    private readonly organisationsService: OrganisationsService,
+    private readonly organisationVersionsService: OrganisationVersionsService,
     private readonly i18nService: I18nService,
   ) {}
 
@@ -16,8 +16,9 @@ export class OrganisationsController {
   @Render('organisations/show')
   @BackLink('/regulatory-authorities/search')
   async show(@Param('slug') slug: string): Promise<ShowTemplate> {
-    const organisation =
-      await this.organisationsService.findBySlugWithProfessions(slug);
+    const organisation = await this.organisationVersionsService.findLiveBySlug(
+      slug,
+    );
 
     const organisationSummaryPresenter = new OrganisationSummaryPresenter(
       organisation,

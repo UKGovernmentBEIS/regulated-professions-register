@@ -24,7 +24,7 @@ describe('Searching an organisation', () => {
     });
   });
 
-  it.skip('I can click an organisation to be taken to its details page', () => {
+  it('I can click an organisation to be taken to its details page', () => {
     cy.get('a').contains('General Medical Council').click();
     cy.checkAccessibility();
     cy.url().should(
