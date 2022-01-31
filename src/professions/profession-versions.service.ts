@@ -5,6 +5,7 @@ import {
   ProfessionVersion,
   ProfessionVersionStatus,
 } from './profession-version.entity';
+import { Profession } from './profession.entity';
 
 @Injectable()
 export class ProfessionVersionsService {
@@ -45,5 +46,23 @@ export class ProfessionVersionsService {
       order: { created_at: 'DESC' },
       relations: ['profession'],
     });
+  }
+
+  async allLive(): Promise<Profession[]> {
+    const versions = await this.repository
+      .createQueryBuilder('professionVersion')
+      .leftJoinAndSelect('professionVersion.profession', 'profession')
+      .leftJoinAndSelect('professionVersion.organisation', 'organisation')
+      .leftJoinAndSelect('professionVersion.industries', 'industries')
+      .leftJoinAndSelect('professionVersion.qualification', 'qualification')
+      .leftJoinAndSelect('professionVersion.legislations', 'legislations')
+      .where('professionVersion.status = :status', {
+        status: ProfessionVersionStatus.Live,
+      })
+      .getMany();
+
+    return versions.map((version) =>
+      Profession.withVersion(version.profession, version),
+    );
   }
 }
