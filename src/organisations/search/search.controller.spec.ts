@@ -8,7 +8,8 @@ import organisationFactory from '../../testutils/factories/organisation';
 import professionFactory from '../../testutils/factories/profession';
 import { I18nService } from 'nestjs-i18n';
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
-import { OrganisationsService } from '../organisations.service';
+import { OrganisationVersionsService } from '../organisation-versions.service';
+
 import { IndustriesService } from '../../industries/industries.service';
 
 const industry1 = industryFactory.build({
@@ -46,15 +47,15 @@ const organisation2 = organisationFactory.build({
 const industries = [industry1, industry2, industry3];
 
 describe('SearchController', () => {
-  let organisationsService: DeepMocked<OrganisationsService>;
+  let organisationVersionsService: DeepMocked<OrganisationVersionsService>;
   let industriesService: DeepMocked<IndustriesService>;
   let i18nService: DeepMocked<I18nService>;
 
   let controller: SearchController;
 
   beforeEach(async () => {
-    organisationsService = createMock<OrganisationsService>();
-    organisationsService.allWithProfessions.mockResolvedValue([
+    organisationVersionsService = createMock<OrganisationVersionsService>();
+    organisationVersionsService.allLive.mockResolvedValue([
       organisation1,
       organisation2,
     ]);
@@ -67,8 +68,8 @@ describe('SearchController', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         {
-          provide: OrganisationsService,
-          useValue: organisationsService,
+          provide: OrganisationVersionsService,
+          useValue: organisationVersionsService,
         },
         {
           provide: IndustriesService,
@@ -105,15 +106,14 @@ describe('SearchController', () => {
       expect(result).toEqual(expected);
     });
 
-    it('should request organisations populated with professions from `OrganisationsService`', async () => {
+    it('should request organisations populated with professions from `OrganisationVersionsService`', async () => {
       await controller.create({
         keywords: '',
         industries: [],
         nations: [],
       });
 
-      expect(organisationsService.allWithProfessions).toHaveBeenCalled();
-      expect(organisationsService.all).not.toHaveBeenCalled();
+      expect(organisationVersionsService.allLive).toHaveBeenCalled();
     });
   });
 
