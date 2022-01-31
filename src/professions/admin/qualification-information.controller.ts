@@ -23,12 +23,14 @@ import { QualificationInformationDto } from './dto/qualification-information.dto
 import { QualificationInformationTemplate } from './interfaces/qualification-information.template';
 import { BackLink } from '../../common/decorators/back-link.decorator';
 import ViewUtils from './viewUtils';
+import { ProfessionVersionsService } from '../profession-versions.service';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
 export class QualificationInformationController {
   constructor(
     private readonly professionsService: ProfessionsService,
+    private readonly professionVersionsService: ProfessionVersionsService,
     private readonly i18nService: I18nService,
   ) {}
 
@@ -49,9 +51,13 @@ export class QualificationInformationController {
       professionId,
     );
 
+    const version = await this.professionVersionsService.findWithProfession(
+      versionId,
+    );
+
     return this.renderForm(
       res,
-      profession.qualification,
+      version.qualification,
       profession.confirmed,
       change,
     );
@@ -79,6 +85,10 @@ export class QualificationInformationController {
       professionId,
     );
 
+    const version = await this.professionVersionsService.findWithProfession(
+      versionId,
+    );
+
     const submittedValues: QualificationInformationDto =
       qualificationInformationDto;
 
@@ -88,7 +98,7 @@ export class QualificationInformationController {
         : Boolean(Number(submittedValues.mandatoryProfessionalExperience));
 
     const updatedQualification: Qualification = {
-      ...profession.qualification,
+      ...version.qualification,
       ...{
         level: submittedValues.level,
         methodToObtain: submittedValues.methodToObtainQualification,
@@ -113,9 +123,9 @@ export class QualificationInformationController {
       );
     }
 
-    profession.qualification = updatedQualification;
+    version.qualification = updatedQualification;
 
-    await this.professionsService.save(profession);
+    await this.professionVersionsService.save(version);
 
     if (submittedValues.change) {
       return res.redirect(

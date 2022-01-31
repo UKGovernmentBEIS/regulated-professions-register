@@ -68,8 +68,8 @@ export class CheckYourAnswersController {
       ),
     );
 
-    const qualification = draftProfession.qualification
-      ? new QualificationPresenter(draftProfession.qualification)
+    const qualification = version.qualification
+      ? new QualificationPresenter(version.qualification)
       : null;
 
     return {
