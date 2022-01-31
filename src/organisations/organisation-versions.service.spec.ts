@@ -149,4 +149,50 @@ describe('OrganisationVersionsService', () => {
       );
     });
   });
+
+  describe('findLiveBySlug', () => {
+    it('fetches a live organisation by its slug', async () => {
+      const version = organisationVersionFactory.build();
+      const queryBuilder = createMock<SelectQueryBuilder<OrganisationVersion>>({
+        leftJoinAndSelect: () => queryBuilder,
+        where: () => queryBuilder,
+        getOne: async () => version,
+      });
+
+      jest
+        .spyOn(repo, 'createQueryBuilder')
+        .mockImplementation(() => queryBuilder);
+
+      const result = await service.findLiveBySlug('some-slug');
+      const expectedVersion = Organisation.withVersion(
+        version.organisation,
+        version,
+      );
+
+      expect(result).toEqual(expectedVersion);
+
+      expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
+        'organisationVersion.organisation',
+        'organisation',
+      );
+
+      expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
+        'organisation.professions',
+        'professions',
+      );
+
+      expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
+        'professions.industries',
+        'industries',
+      );
+
+      expect(queryBuilder.where).toHaveBeenCalledWith(
+        'organisationVersion.status = :status AND organisation.slug = :slug',
+        {
+          status: OrganisationVersionStatus.Live,
+          slug: 'some-slug',
+        },
+      );
+    });
+  });
 });
