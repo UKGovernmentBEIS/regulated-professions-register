@@ -1,4 +1,4 @@
-describe.skip('Searching an organisation', () => {
+describe('Searching an organisation', () => {
   beforeEach(() => {
     cy.visitAndCheckAccessibility('/');
 
@@ -24,7 +24,7 @@ describe.skip('Searching an organisation', () => {
     });
   });
 
-  it('I can click an organisation to be taken to its details page', () => {
+  it.skip('I can click an organisation to be taken to its details page', () => {
     cy.get('a').contains('General Medical Council').click();
     cy.checkAccessibility();
     cy.url().should(
