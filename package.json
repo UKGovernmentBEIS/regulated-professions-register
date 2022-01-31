@@ -64,7 +64,7 @@
     "method-override": "^3.0.0",
     "nestjs-i18n": "^8.2.2",
     "nestjs-seeder": "^0.2.0",
-    "notifications-node-client": "^5.1.0",
+    "notifications-node-client": "^5.1.1",
     "nunjucks": "^3.2.3",
     "pg": "^8.7.1",
     "reflect-metadata": "^0.1.13",
