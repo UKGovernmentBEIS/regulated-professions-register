@@ -16,13 +16,13 @@
         tag: {
           text: ("app.phase.beta.label" | t)
         },
-        html: ("app.phase.beta.html" | t | safe)
+        html: ("app.phase.beta.html" | t)
       })
     }}
 
     {% if backLink %}
       {{ govukBackLink({
-        text: ( "app.back" | t ),
+        text: ("app.back" | t),
         href: backLink
       }) }}
     {% endif %}

@@ -10,6 +10,10 @@ import { createMockI18nService } from '../../testutils/create-mock-i18n-service'
 import organisationFactory from '../../testutils/factories/organisation';
 import professionFactory from '../../testutils/factories/profession';
 import industryFactory from '../../testutils/factories/industry';
+import { escape } from '../../helpers/escape.helper';
+import { escapeOf } from '../../testutils/escape-of';
+
+jest.mock('../../helpers/escape.helper');
 
 describe('OrganisationPresenter', () => {
   let organisation: Organisation;
@@ -34,6 +38,8 @@ describe('OrganisationPresenter', () => {
         });
 
         it('returns the table row data', async () => {
+          (escape as jest.Mock).mockImplementation(escapeOf);
+
           const presenter = new OrganisationPresenter(
             organisation,
             i18nService,
@@ -51,8 +57,12 @@ describe('OrganisationPresenter', () => {
             ),
           });
           expect(tableRow[3]).toEqual({
-            html: expect.stringContaining(`about ${organisation.name}`),
+            html: expect.stringContaining(
+              `about ${escapeOf(organisation.name)}`,
+            ),
           });
+
+          expect(escape).toBeCalledWith(organisation.name);
         });
       });
 
@@ -77,6 +87,8 @@ describe('OrganisationPresenter', () => {
         });
 
         it('returns the table row data', async () => {
+          (escape as jest.Mock).mockImplementation(escapeOf);
+
           const presenter = new OrganisationPresenter(
             organisation,
             i18nService,
@@ -136,6 +148,8 @@ describe('OrganisationPresenter', () => {
   describe('summaryList', () => {
     describe('when all fields are present', () => {
       it('should return all fields', async () => {
+        (escape as jest.Mock).mockImplementation(escapeOf);
+
         const presenter = new OrganisationPresenter(organisation, i18nService);
 
         expect(await presenter.summaryList()).toEqual({
@@ -189,6 +203,8 @@ describe('OrganisationPresenter', () => {
     describe('when a field is missing', () => {
       describe('when removeBlank is true', () => {
         it('should filter out empty fields', async () => {
+          (escape as jest.Mock).mockImplementation(escapeOf);
+
           organisation = organisationFactory.build({ alternateName: '' });
           const presenter = new OrganisationPresenter(
             organisation,
@@ -209,6 +225,8 @@ describe('OrganisationPresenter', () => {
 
       describe('when removeBlank is false', () => {
         it('keeps empty rows intact', async () => {
+          (escape as jest.Mock).mockImplementation(escapeOf);
+
           organisation = organisationFactory.build({ alternateName: '' });
           const presenter = new OrganisationPresenter(
             organisation,
@@ -232,6 +250,8 @@ describe('OrganisationPresenter', () => {
 
     describe('when includeName is true', () => {
       it('should include the name of the organisation', async () => {
+        (escape as jest.Mock).mockImplementation(escapeOf);
+
         organisation = organisationFactory.build({ name: 'My Organisation' });
         const presenter = new OrganisationPresenter(organisation, i18nService);
         const list = await presenter.summaryList({ includeName: true });
@@ -251,6 +271,8 @@ describe('OrganisationPresenter', () => {
 
     describe('when includeActions is true', () => {
       it('should include an actions column', async () => {
+        (escape as jest.Mock).mockImplementation(escapeOf);
+
         organisation = organisationFactory.build({ name: 'My Organisation' });
         const presenter = new OrganisationPresenter(organisation, i18nService);
         const list = await presenter.summaryList({ includeActions: true });
@@ -274,6 +296,8 @@ describe('OrganisationPresenter', () => {
 
     describe('when classes are specified', () => {
       it('should return the specified class', async () => {
+        (escape as jest.Mock).mockImplementation(escapeOf);
+
         const presenter = new OrganisationPresenter(organisation, i18nService);
         const list = await presenter.summaryList({ classes: 'foo' });
 
@@ -284,6 +308,8 @@ describe('OrganisationPresenter', () => {
 
   describe('address', () => {
     it('breaks the address into lines', () => {
+      (escape as jest.Mock).mockImplementation(escapeOf);
+
       organisation = organisationFactory.build({
         address: '123 Fake Street, London, SW1A 1AA',
       });
@@ -291,13 +317,17 @@ describe('OrganisationPresenter', () => {
       const presenter = new OrganisationPresenter(organisation, i18nService);
 
       expect(presenter.address()).toEqual(
-        '123 Fake Street<br /> London<br /> SW1A 1AA',
+        `${escapeOf('123 Fake Street<br /> London<br /> SW1A 1AA')}`,
       );
+
+      expect(escape).toBeCalledWith('123 Fake Street, London, SW1A 1AA');
     });
   });
 
   describe('email', () => {
     it('makes the email into a link', () => {
+      (escape as jest.Mock).mockImplementation(escapeOf);
+
       organisation = organisationFactory.build({
         email: 'foo@example.com',
       });
@@ -305,13 +335,19 @@ describe('OrganisationPresenter', () => {
       const presenter = new OrganisationPresenter(organisation, i18nService);
 
       expect(presenter.email()).toEqual(
-        '<a href="mailto:foo@example.com" class="govuk-link">foo@example.com</a>',
+        `<a href="mailto:${escapeOf(
+          'foo@example.com',
+        )}" class="govuk-link">${escapeOf('foo@example.com')}</a>`,
       );
+
+      expect(escape).toBeCalledWith('foo@example.com');
     });
   });
 
   describe('contactUrl', () => {
     it('makes the url into a link', () => {
+      (escape as jest.Mock).mockImplementation(escapeOf);
+
       organisation = organisationFactory.build({
         contactUrl: 'http://www.example.com',
       });
@@ -319,8 +355,12 @@ describe('OrganisationPresenter', () => {
       const presenter = new OrganisationPresenter(organisation, i18nService);
 
       expect(presenter.contactUrl()).toEqual(
-        '<a href="http://www.example.com" class="govuk-link">http://www.example.com</a>',
+        `<a href="${escapeOf(
+          'http://www.example.com',
+        )}" class="govuk-link">${escapeOf('http://www.example.com')}</a>`,
       );
+
+      expect(escape).toBeCalledWith('http://www.example.com');
     });
   });
 });

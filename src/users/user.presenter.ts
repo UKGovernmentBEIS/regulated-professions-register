@@ -1,6 +1,7 @@
 import { User } from './user.entity';
 import { TableRow } from '../common/interfaces/table-row';
 import { I18nService } from 'nestjs-i18n';
+import { escape } from '../helpers/escape.helper';
 
 export class UserPresenter extends User {
   constructor(private user: User, private i18n: I18nService) {
@@ -29,10 +30,12 @@ export class UserPresenter extends User {
 
   public showLink(): string {
     return `
-      <a href="/admin/users/${this.user.id}" class="govuk-button" data-module="govuk-button">
+      <a href="/admin/users/${
+        this.user.id
+      }" class="govuk-button" data-module="govuk-button">
         View
         <span class="govuk-visually-hidden">
-          ${this.name}
+          ${escape(this.name)}
         </span>
       </a>
     `;

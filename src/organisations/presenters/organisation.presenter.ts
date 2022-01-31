@@ -2,6 +2,7 @@ import { I18nService } from 'nestjs-i18n';
 import { Organisation } from './../organisation.entity';
 import { TableRow } from '../../common/interfaces/table-row';
 import { SummaryList } from '../../common/interfaces/summary-list';
+import { escape } from '../../helpers/escape.helper';
 
 interface OrganisationSummaryListOptions {
   classes?: string;
@@ -28,10 +29,12 @@ export class OrganisationPresenter {
         html: await this.industries(),
       },
       {
-        html: `<a class="govuk-link" href="/admin/organisations/${this.organisation.slug}">
+        html: `<a class="govuk-link" href="/admin/organisations/${
+          this.organisation.slug
+        }">
           View details
           <span class="govuk-visually-hidden">
-            about ${this.organisation.name}
+            about ${escape(this.organisation.name)}
           </span>
         </a>`,
       },
@@ -138,15 +141,19 @@ export class OrganisationPresenter {
   }
 
   public address(): string {
-    return this.organisation.address.split(',').join('<br />');
+    return escape(this.organisation.address).split(',').join('<br />');
   }
 
   public email(): string {
-    return `<a href="mailto:${this.organisation.email}" class="govuk-link">${this.organisation.email}</a>`;
+    return `<a href="mailto:${escape(
+      this.organisation.email,
+    )}" class="govuk-link">${escape(this.organisation.email)}</a>`;
   }
 
   public contactUrl(): string {
-    return `<a href="${this.organisation.contactUrl}" class="govuk-link">${this.organisation.contactUrl}</a>`;
+    return `<a href="${escape(
+      this.organisation.contactUrl,
+    )}" class="govuk-link">${escape(this.organisation.contactUrl)}</a>`;
   }
 
   private async industries(): Promise<string> {

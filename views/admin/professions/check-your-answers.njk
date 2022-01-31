@@ -46,7 +46,7 @@
                 actions: {
                   items: [
                     {
-                      href: "/admin/professions/" + professionId +"/top-level-information/edit?change=true",
+                      href: "/admin/professions/" + professionId + "/top-level-information/edit?change=true",
                       text: ("app.change" | t),
                       visuallyHiddenText: ("professions.form.label.topLevelInformation.name" | t)
                     }
@@ -58,7 +58,7 @@
                   text: ("professions.form.label.topLevelInformation.nations" | t)
                 },
                 value: {
-                  html: selectedNationsSummaryListHtml | safe
+                  html: selectedNationsSummaryListHtml
                 },
                 actions: {
                   items: [
@@ -75,7 +75,7 @@
                   text: ("professions.form.label.topLevelInformation.industry" | t)
                 },
                 value: {
-                  html: selectedIndustriesSummaryListHtml | safe
+                  html: selectedIndustriesSummaryListHtml
                 },
                 actions: {
                   items: [
@@ -106,7 +106,7 @@
                 actions: {
                   items: [
                     {
-                      href: "/admin/professions/" + professionId +"/regulatory-body/edit?change=true",
+                      href: "/admin/professions/" + professionId + "/regulatory-body/edit?change=true",
                       text: ("app.change" | t),
                       visuallyHiddenText: ("professions.form.label.regulatoryBody.regulatedAuthority" | t)
                     }
@@ -300,7 +300,7 @@
                   text: ("professions.form.label.legislation.link" | t)
                 },
                 value: {
-                  html: "<a class='govuk-link' href='" + legislation.url | escape + "'>" + legislation.url | escape + "</a>"
+                  html: "<a class='govuk-link' href='" + (legislation.url | escape) + "'>" + (legislation.url | escape) + "</a>"
                 },
                 actions: {
                   items: [

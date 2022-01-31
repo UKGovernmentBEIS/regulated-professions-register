@@ -145,7 +145,10 @@ export class OrganisationsController {
     }
   }
 
-  async confirm(res: Response, organisation: Organisation): Promise<void> {
+  private async confirm(
+    res: Response,
+    organisation: Organisation,
+  ): Promise<void> {
     // This should potentially add a confirmed flag to the object once
     // we have draft functionality in place
     await this.organisationsService.save(organisation);
@@ -153,7 +156,10 @@ export class OrganisationsController {
     res.render('admin/organisations/complete', organisation);
   }
 
-  async showReviewPage(res: Response, template: ReviewTemplate): Promise<void> {
+  private async showReviewPage(
+    res: Response,
+    template: ReviewTemplate,
+  ): Promise<void> {
     return res.render('admin/organisations/review', {
       ...template,
       backLink: `/admin/organisations/${template.id}/edit/`,
