@@ -6,7 +6,9 @@ import { OrganisationsService } from '../../organisations/organisations.service'
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 import organisationFactory from '../../testutils/factories/organisation';
 import professionFactory from '../../testutils/factories/profession';
-import { MandatoryRegistration } from '../profession.entity';
+import professionVersionFactory from '../../testutils/factories/profession-version';
+import { MandatoryRegistration } from '../profession-version.entity';
+import { ProfessionVersionsService } from '../profession-versions.service';
 import { ProfessionsService } from '../professions.service';
 import { MandatoryRegistrationRadioButtonsPresenter } from './mandatory-registration-radio-buttons-presenter';
 import { RegulatedAuthoritiesSelectPresenter } from './regulated-authorities-select-presenter';
@@ -15,6 +17,7 @@ import { RegulatoryBodyController } from './regulatory-body.controller';
 describe(RegulatoryBodyController, () => {
   let controller: RegulatoryBodyController;
   let professionsService: DeepMocked<ProfessionsService>;
+  let professionVersionsService: DeepMocked<ProfessionVersionsService>;
   let organisationsService: DeepMocked<OrganisationsService>;
   let response: DeepMocked<Response>;
   let i18nService: DeepMocked<I18nService>;
@@ -22,12 +25,17 @@ describe(RegulatoryBodyController, () => {
   beforeEach(async () => {
     i18nService = createMockI18nService();
     professionsService = createMock<ProfessionsService>();
+    professionVersionsService = createMock<ProfessionVersionsService>();
     organisationsService = createMock<OrganisationsService>();
 
     const module: TestingModule = await Test.createTestingModule({
       controllers: [RegulatoryBodyController],
       providers: [
         { provide: ProfessionsService, useValue: professionsService },
+        {
+          provide: ProfessionVersionsService,
+          useValue: professionVersionsService,
+        },
         { provide: OrganisationsService, useValue: organisationsService },
         { provide: I18nService, useValue: i18nService },
       ],
@@ -44,7 +52,12 @@ describe(RegulatoryBodyController, () => {
         const profession = professionFactory
           .justCreated('profession-id')
           .build();
+        const version = professionVersionFactory
+          .justCreated('version-id')
+          .build({ profession: profession });
+
         professionsService.findWithVersions.mockResolvedValue(profession);
+        professionVersionsService.findWithProfession.mockResolvedValue(version);
 
         const organisations = organisationFactory.buildList(2);
         organisationsService.all.mockResolvedValue(organisations);
@@ -76,14 +89,17 @@ describe(RegulatoryBodyController, () => {
           name: 'Example org',
           id: 'example-org-id',
         });
-
         const profession = professionFactory.build({
           id: 'profession-id',
+        });
+        const version = professionVersionFactory.build({
+          profession: profession,
           organisation: organisation,
           mandatoryRegistration: MandatoryRegistration.Mandatory,
         });
 
         professionsService.findWithVersions.mockResolvedValue(profession);
+        professionVersionsService.findWithProfession.mockResolvedValue(version);
 
         const organisations = [organisation, organisationFactory.build()];
         organisationsService.all.mockResolvedValue(organisations);
@@ -119,11 +135,16 @@ describe(RegulatoryBodyController, () => {
       it('updates the Profession and redirects to the next page in the journey', async () => {
         const profession = professionFactory.build({
           id: 'profession-id',
+        });
+        const version = professionVersionFactory.build({
+          id: 'version-id',
+          profession: profession,
           organisation: organisationFactory.build(),
           mandatoryRegistration: MandatoryRegistration.Mandatory,
         });
 
         professionsService.findWithVersions.mockResolvedValue(profession);
+        professionVersionsService.findWithProfession.mockResolvedValue(version);
 
         const regulatoryBodyDto = {
           regulatoryBody: 'example-org-id',
@@ -143,13 +164,12 @@ describe(RegulatoryBodyController, () => {
           regulatoryBodyDto,
         );
 
-        expect(professionsService.save).toHaveBeenCalledWith(
+        expect(professionVersionsService.save).toHaveBeenCalledWith(
           expect.objectContaining({
-            id: 'profession-id',
+            id: 'version-id',
             organisation: newOrganisation,
             mandatoryRegistration: MandatoryRegistration.Voluntary,
-            occupationLocations: profession.occupationLocations,
-            industries: profession.industries,
+            profession: profession,
           }),
         );
 
@@ -173,7 +193,7 @@ describe(RegulatoryBodyController, () => {
           regulatoryBodyDtoWithoutMandatoryRegistration,
         );
 
-        expect(professionsService.save).not.toHaveBeenCalled();
+        expect(professionVersionsService.save).not.toHaveBeenCalled();
 
         expect(response.render).toHaveBeenCalledWith(
           'admin/professions/regulatory-body',
@@ -191,8 +211,20 @@ describe(RegulatoryBodyController, () => {
     describe('the "change" query param', () => {
       describe('when set to true', () => {
         it('redirects to check your answers on submit', async () => {
-          const profession = professionFactory.build({ id: 'profession-id' });
+          const profession = professionFactory.build({
+            id: 'profession-id',
+          });
+          const version = professionVersionFactory.build({
+            id: 'version-id',
+            profession: profession,
+            organisation: organisationFactory.build(),
+            mandatoryRegistration: MandatoryRegistration.Mandatory,
+          });
+
           professionsService.findWithVersions.mockResolvedValue(profession);
+          professionVersionsService.findWithProfession.mockResolvedValue(
+            version,
+          );
 
           const regulatoryBodyDtoWithChangeParam = {
             regulatoryBody: 'example-org-id',
@@ -210,13 +242,12 @@ describe(RegulatoryBodyController, () => {
             regulatoryBodyDtoWithChangeParam,
           );
 
-          expect(professionsService.save).toHaveBeenCalledWith(
+          expect(professionVersionsService.save).toHaveBeenCalledWith(
             expect.objectContaining({
-              id: 'profession-id',
+              id: 'version-id',
               organisation: organisation,
               mandatoryRegistration: MandatoryRegistration.Voluntary,
-              occupationLocations: profession.occupationLocations,
-              industries: profession.industries,
+              profession: profession,
             }),
           );
 
@@ -229,7 +260,17 @@ describe(RegulatoryBodyController, () => {
       describe('when false or missing', () => {
         it('continues to the next step in the journey', async () => {
           const profession = professionFactory.build({ id: 'profession-id' });
+          const version = professionVersionFactory.build({
+            id: 'version-id',
+            profession: profession,
+            organisation: organisationFactory.build(),
+            mandatoryRegistration: MandatoryRegistration.Mandatory,
+          });
+
           professionsService.findWithVersions.mockResolvedValue(profession);
+          professionVersionsService.findWithProfession.mockResolvedValue(
+            version,
+          );
 
           const regulatoryBodyDtoWithFalseChangeParam = {
             regulatoryBody: 'example-org-id',
@@ -247,13 +288,12 @@ describe(RegulatoryBodyController, () => {
             regulatoryBodyDtoWithFalseChangeParam,
           );
 
-          expect(professionsService.save).toHaveBeenCalledWith(
+          expect(professionVersionsService.save).toHaveBeenCalledWith(
             expect.objectContaining({
-              id: 'profession-id',
+              id: 'version-id',
               organisation: organisation,
               mandatoryRegistration: MandatoryRegistration.Voluntary,
-              occupationLocations: profession.occupationLocations,
-              industries: profession.industries,
+              profession: profession,
             }),
           );
 

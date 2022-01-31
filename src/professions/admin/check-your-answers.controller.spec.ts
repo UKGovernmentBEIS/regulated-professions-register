@@ -13,7 +13,7 @@ import professionVersionFactory from '../../testutils/factories/profession-versi
 import qualificationFactory from '../../testutils/factories/qualification';
 import { translationOf } from '../../testutils/translation-of';
 import { ProfessionVersionsService } from '../profession-versions.service';
-import { MandatoryRegistration } from '../profession.entity';
+import { MandatoryRegistration } from '../profession-version.entity';
 import { ProfessionsService } from '../professions.service';
 import { CheckYourAnswersController } from './check-your-answers.controller';
 
@@ -57,10 +57,6 @@ describe('CheckYourAnswersController', () => {
         const profession = professionFactory.build({
           id: 'profession-id',
           name: 'Gas Safe Engineer',
-          organisation: organisationFactory.build({
-            name: 'Council of Gas Registered Engineers',
-          }),
-          mandatoryRegistration: MandatoryRegistration.Voluntary,
           description: 'A description of the regulation',
           reservedActivities: 'Some reserved activities',
           qualification,
@@ -74,6 +70,10 @@ describe('CheckYourAnswersController', () => {
           industries: [
             industryFactory.build({ name: 'industries.construction' }),
           ],
+          organisation: organisationFactory.build({
+            name: 'Council of Gas Registered Engineers',
+          }),
+          mandatoryRegistration: MandatoryRegistration.Voluntary,
           profession: profession,
         });
 
