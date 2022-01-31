@@ -15,7 +15,6 @@ import { I18nService } from 'nestjs-i18n';
 import { OrganisationsService } from '../../organisations/organisations.service';
 import { RegulatoryBodyTemplate } from './interfaces/regulatory-body.template';
 import { RegulatedAuthoritiesSelectPresenter } from './regulated-authorities-select-presenter';
-import { MandatoryRegistration, Profession } from '../profession.entity';
 import { Organisation } from '../../organisations/organisation.entity';
 import { MandatoryRegistrationRadioButtonsPresenter } from './mandatory-registration-radio-buttons-presenter';
 import { Validator } from '../../helpers/validator';
@@ -26,12 +25,18 @@ import { UserPermission } from '../../users/user-permission';
 import { BackLink } from '../../common/decorators/back-link.decorator';
 
 import ViewUtils from './viewUtils';
+import { ProfessionVersionsService } from '../profession-versions.service';
+import {
+  MandatoryRegistration,
+  ProfessionVersion,
+} from '../profession-version.entity';
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
 export class RegulatoryBodyController {
   constructor(
     private readonly organisationsService: OrganisationsService,
     private readonly professionsService: ProfessionsService,
+    private readonly professionVersionsService: ProfessionVersionsService,
     private readonly i18nService: I18nService,
   ) {}
 
@@ -52,11 +57,15 @@ export class RegulatoryBodyController {
       professionId,
     );
 
-    const selectedMandatoryRegistration = profession.mandatoryRegistration;
+    const version = await this.professionVersionsService.findWithProfession(
+      versionId,
+    );
+
+    const selectedMandatoryRegistration = version.mandatoryRegistration;
 
     return this.renderForm(
       res,
-      profession.organisation,
+      version.organisation,
       selectedMandatoryRegistration,
       profession.confirmed,
       change,
@@ -81,8 +90,8 @@ export class RegulatoryBodyController {
       regulatoryBodyDto,
     );
 
-    const profession = await this.professionsService.findWithVersions(
-      professionId,
+    const version = await this.professionVersionsService.findWithProfession(
+      versionId,
     );
 
     const submittedValues: RegulatoryBodyDto = regulatoryBodyDto;
@@ -92,6 +101,10 @@ export class RegulatoryBodyController {
     );
 
     const selectedMandatoryRegistration = submittedValues.mandatoryRegistration;
+
+    const profession = await this.professionsService.findWithVersions(
+      professionId,
+    );
 
     if (!validator.valid()) {
       const errors = new ValidationFailedError(validator.errors).fullMessages();
@@ -105,24 +118,24 @@ export class RegulatoryBodyController {
       );
     }
 
-    const updated: Profession = {
-      ...profession,
+    const updatedVersion: ProfessionVersion = {
+      ...version,
       ...{
         organisation: selectedOrganisation,
         mandatoryRegistration: selectedMandatoryRegistration,
       },
     };
 
-    await this.professionsService.save(updated);
+    await this.professionVersionsService.save(updatedVersion);
 
     if (regulatoryBodyDto.change) {
       return res.redirect(
-        `/admin/professions/${professionId}/versions/${versionId}/check-your-answers`,
+        `/admin/professions/${version.profession.id}/versions/${versionId}/check-your-answers`,
       );
     }
 
     return res.redirect(
-      `/admin/professions/${professionId}/versions/${versionId}/regulated-activities/edit`,
+      `/admin/professions/${version.profession.id}/versions/${versionId}/regulated-activities/edit`,
     );
   }
 
