@@ -5,6 +5,7 @@ import {
   OrganisationVersion,
   OrganisationVersionStatus,
 } from './organisation-version.entity';
+import { Organisation } from './organisation.entity';
 
 @Injectable()
 export class OrganisationVersionsService {
@@ -37,6 +38,21 @@ export class OrganisationVersionsService {
     });
   }
 
+  async allLive(): Promise<Organisation[]> {
+    const versions = await this.repository
+      .createQueryBuilder('organisationVersion')
+      .leftJoinAndSelect('organisationVersion.organisation', 'organisation')
+      .leftJoinAndSelect('organisation.professions', 'professions')
+      .leftJoinAndSelect('professions.industries', 'industries')
+      .where('organisationVersion.status = :status', {
+        status: OrganisationVersionStatus.Live,
+      })
+      .getMany();
+
+    return versions.map((version) =>
+      Organisation.withVersion(version.organisation, version),
+    );
+  }
   async confirm(version: OrganisationVersion): Promise<OrganisationVersion> {
     version.status = OrganisationVersionStatus.Draft;
 

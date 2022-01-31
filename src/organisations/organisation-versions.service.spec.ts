@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { createMock } from '@golevelup/ts-jest';
 
-import { Repository, In } from 'typeorm';
+import { Repository, In, SelectQueryBuilder } from 'typeorm';
 import organisationVersionFactory from '../testutils/factories/organisation-version';
 import organisationFactory from '../testutils/factories/organisation';
 
@@ -10,6 +10,7 @@ import {
   OrganisationVersion,
   OrganisationVersionStatus,
 } from './organisation-version.entity';
+import { Organisation } from './organisation.entity';
 import { OrganisationVersionsService } from './organisation-versions.service';
 
 describe('OrganisationVersionsService', () => {
@@ -101,6 +102,51 @@ describe('OrganisationVersionsService', () => {
         order: { created_at: 'DESC' },
         relations: ['organisation'],
       });
+    });
+  });
+
+  describe('allLive', () => {
+    it('fetches all of currently live organisations', async () => {
+      const versions = organisationVersionFactory.buildList(5);
+      const queryBuilder = createMock<SelectQueryBuilder<OrganisationVersion>>({
+        leftJoinAndSelect: () => queryBuilder,
+        where: () => queryBuilder,
+        getMany: async () => versions,
+      });
+
+      jest
+        .spyOn(repo, 'createQueryBuilder')
+        .mockImplementation(() => queryBuilder);
+
+      const result = await service.allLive();
+
+      const expectedOrganisations = versions.map((version) =>
+        Organisation.withVersion(version.organisation, version),
+      );
+
+      expect(result).toEqual(expectedOrganisations);
+
+      expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
+        'organisationVersion.organisation',
+        'organisation',
+      );
+
+      expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
+        'organisation.professions',
+        'professions',
+      );
+
+      expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
+        'professions.industries',
+        'industries',
+      );
+
+      expect(queryBuilder.where).toHaveBeenCalledWith(
+        'organisationVersion.status = :status',
+        {
+          status: OrganisationVersionStatus.Live,
+        },
+      );
     });
   });
 });
