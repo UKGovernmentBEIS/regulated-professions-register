@@ -57,7 +57,6 @@ describe('CheckYourAnswersController', () => {
         const profession = professionFactory.build({
           id: 'profession-id',
           name: 'Gas Safe Engineer',
-          legislation,
           confirmed: false,
         });
         professionsService.findWithVersions.mockResolvedValue(profession);
@@ -74,6 +73,7 @@ describe('CheckYourAnswersController', () => {
           description: 'A description of the regulation',
           reservedActivities: 'Some reserved activities',
           profession: profession,
+          legislations: [legislation],
           qualification: qualification,
         });
 

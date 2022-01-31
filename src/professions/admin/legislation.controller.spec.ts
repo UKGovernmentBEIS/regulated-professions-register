@@ -3,6 +3,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { Response } from 'express';
 import legislationFactory from '../../testutils/factories/legislation';
 import professionFactory from '../../testutils/factories/profession';
+import professionVersionFactory from '../../testutils/factories/profession-version';
+import { ProfessionVersionsService } from '../profession-versions.service';
 import { ProfessionsService } from '../professions.service';
 import LegislationDto from './dto/legislation.dto';
 import { LegislationController } from './legislation.controller';
@@ -10,15 +12,21 @@ import { LegislationController } from './legislation.controller';
 describe(LegislationController, () => {
   let controller: LegislationController;
   let professionsService: DeepMocked<ProfessionsService>;
+  let professionVersionsService: DeepMocked<ProfessionVersionsService>;
   let response: DeepMocked<Response>;
 
   beforeEach(async () => {
     professionsService = createMock<ProfessionsService>();
+    professionVersionsService = createMock<ProfessionVersionsService>();
 
     const module: TestingModule = await Test.createTestingModule({
       controllers: [LegislationController],
       providers: [
         { provide: ProfessionsService, useValue: professionsService },
+        {
+          provide: ProfessionVersionsService,
+          useValue: professionVersionsService,
+        },
       ],
     }).compile();
 
@@ -35,10 +43,15 @@ describe(LegislationController, () => {
       });
       const profession = professionFactory.build({
         id: 'profession-id',
-        legislation,
+      });
+
+      const version = professionVersionFactory.build({
+        id: 'version-id',
+        legislations: [legislation],
       });
 
       professionsService.findWithVersions.mockResolvedValue(profession);
+      professionVersionsService.findWithProfession.mockResolvedValue(version);
 
       await controller.edit(response, 'profession-id', 'version-id');
 
@@ -55,6 +68,10 @@ describe(LegislationController, () => {
     describe('when all required parameters are entered', () => {
       it('creates a new Legislation on the Profession and redirects to Check your answers', async () => {
         const profession = professionFactory.build({ id: 'profession-id' });
+        const version = professionVersionFactory.build({
+          id: 'version-id',
+          profession: profession,
+        });
 
         const dto: LegislationDto = {
           link: 'www.legal-legislation.com',
@@ -62,15 +79,19 @@ describe(LegislationController, () => {
         };
 
         professionsService.findWithVersions.mockResolvedValue(profession);
+        professionVersionsService.findWithProfession.mockResolvedValue(version);
 
         await controller.update(response, 'profession-id', 'version-id', dto);
 
-        expect(professionsService.save).toHaveBeenCalledWith(
+        expect(professionVersionsService.save).toHaveBeenCalledWith(
           expect.objectContaining({
-            legislation: expect.objectContaining({
-              url: 'www.legal-legislation.com',
-              name: 'Legal Services Act 2008',
-            }),
+            legislations: [
+              expect.objectContaining({
+                url: 'www.legal-legislation.com',
+                name: 'Legal Services Act 2008',
+              }),
+            ],
+            profession: profession,
           }),
         );
 
@@ -83,6 +104,10 @@ describe(LegislationController, () => {
     describe('when required parameters are not entered', () => {
       it('renders the edit page with errors and does not update the Profession', async () => {
         const profession = professionFactory.build({ id: 'profession-id' });
+        const version = professionVersionFactory.build({
+          id: 'version-id',
+          profession: profession,
+        });
 
         const dto: LegislationDto = {
           link: undefined,
@@ -90,10 +115,11 @@ describe(LegislationController, () => {
         };
 
         professionsService.findWithVersions.mockResolvedValue(profession);
+        professionVersionsService.findWithProfession.mockResolvedValue(version);
 
         await controller.update(response, 'profession-id', 'version-id', dto);
 
-        expect(professionsService.save).not.toHaveBeenCalled();
+        expect(professionVersionsService.save).not.toHaveBeenCalled();
 
         expect(response.render).toHaveBeenCalledWith(
           'admin/professions/legislation',
