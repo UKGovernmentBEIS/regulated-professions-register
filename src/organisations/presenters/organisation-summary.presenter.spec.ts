@@ -49,7 +49,11 @@ describe('OrganisationSummaryPresenter', () => {
 
       beforeEach(() => {
         organisation = organisationFactory.build({
-          professions: professionsFactory.buildList(2),
+          professions: [
+            professionsFactory.build({ confirmed: true }),
+            professionsFactory.build({ confirmed: true }),
+            professionsFactory.build({ confirmed: false }),
+          ],
         });
       });
 
