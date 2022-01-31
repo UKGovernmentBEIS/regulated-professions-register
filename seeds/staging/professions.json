@@ -25,7 +25,7 @@
         "legislations": ["The Trade Marks Act 1994"],
         "organisation": "Law Society of England and Wales",
         "mandatoryRegistration": "voluntary",
-        "status": "draft"
+        "status": "live"
       }
     ]
   },
@@ -50,14 +50,44 @@
         "occupationLocations": ["GB-ENG"],
         "regulationType": "N/A",
         "industries": ["industries.education"],
-        "qualifications": "PS3 - Diploma of post-secondary level (3-4 years) , Art. 11 d",
+        "qualification": "PS3 - Diploma of post-secondary level (3-4 years) , Art. 11 d",
         "reservedActivities": "No information submitted",
         "legislations": [
           "The Education (School Teachers' Qualifications) (England) Regulations 2003/1662 (as amended)"
         ],
         "organisation": "Department for Education",
         "mandatoryRegistration": "mandatory",
-        "status": "unconfirmed"
+        "status": "live"
+      }
+    ]
+  },
+  {
+    "name": "Gas Safe Engineer",
+    "slug": "gas-safe-engineer",
+    "confirmed": true,
+    "alternateName": "Registered Gas Engineer",
+    "description": "Gas Safe Register is the official list of gas engineers in the UK, Isle of Man and Guernsey. Gas installers work on gas appliances and installations.",
+    "occupationLocations": ["GB-ENG", "GB-WLS", "GB-NIR"],
+    "regulationType": "N/A",
+    "industries": ["industries.constructionAndEngineering"],
+    "qualification": "ATT - Attestation of competence , Art. 11 a",
+    "reservedActivities": "Gas Safe Register is the official list of gas engineers in the UK, Isle of Man and Guernsey. To work on gas appliances and installations you must be on the gas safe register. The register exists to protect the public from unsafe gas work (EN)",
+    "legislation": "Gas Safety (Installation and Use) Regulations 1998",
+    "organisation": "Council of Registered Gas Installers",
+    "mandatoryRegistration": "voluntary",
+    "versions": [
+      {
+        "alternateName": "Registered Gas Engineer",
+        "description": "Gas Safe Register is the official list of gas engineers in the UK, Isle of Man and Guernsey. Gas installers work on gas appliances and installations.",
+        "occupationLocations": ["GB-ENG", "GB-WLS", "GB-NIR"],
+        "regulationType": "N/A",
+        "industries": ["industries.constructionAndEngineering"],
+        "qualification": "ATT - Attestation of competence , Art. 11 a",
+        "reservedActivities": "Gas Safe Register is the official list of gas engineers in the UK, Isle of Man and Guernsey. To work on gas appliances and installations you must be on the gas safe register. The register exists to protect the public from unsafe gas work (EN)",
+        "legislations": ["Gas Safety (Installation and Use) Regulations 1998"],
+        "organisation": "Council of Registered Gas Installers",
+        "mandatoryRegistration": "voluntary",
+        "status": "draft"
       }
     ]
   },

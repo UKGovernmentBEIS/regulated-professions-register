@@ -24,5 +24,18 @@
     "educationDurationDays": 0,
     "educationDurationHours": 0,
     "mandatoryProfessionalExperience": true
+  },
+  {
+    "level": "ATT - Attestation of competence , Art. 11 a",
+    "methodToObtain": "generalOrVocationalPostSecondaryEducation",
+    "otherMethodToObtain": "",
+    "commonPathToObtain": "generalOrVocationalPostSecondaryEducation",
+    "otherCommonPathToObtain": "",
+    "educationDuration": "3 Year",
+    "educationDurationYears": 3,
+    "educationDurationMonths": 6,
+    "educationDurationDays": 0,
+    "educationDurationHours": 0,
+    "mandatoryProfessionalExperience": false
   }
 ]
