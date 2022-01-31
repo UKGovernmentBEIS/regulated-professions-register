@@ -53,7 +53,7 @@ export class LegislationController {
     );
 
     // We currently only show one legislation here, but we'll be showing multiple in future
-    this.renderForm(res, version.legislations[0], profession.confirmed);
+    this.renderForm(res, version.legislations[0], profession.slug !== null);
   }
 
   @Post('/:professionId/versions/:versionId/legislation')
@@ -102,7 +102,7 @@ export class LegislationController {
       return this.renderForm(
         res,
         updatedLegislation,
-        profession.confirmed,
+        profession.slug !== null,
         errors,
       );
     }

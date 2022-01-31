@@ -84,8 +84,8 @@ export class CheckYourAnswersController {
       reservedActivities: version.reservedActivities,
       qualification: qualification,
       legislation: version.legislations[0],
-      confirmed: Boolean(draftProfession.confirmed),
-      captionText: ViewUtils.captionText(draftProfession.confirmed),
+      confirmed: draftProfession.slug !== null,
+      captionText: ViewUtils.captionText(draftProfession.slug !== null),
       edit: Boolean(edit),
     };
   }

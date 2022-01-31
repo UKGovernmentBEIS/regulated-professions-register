@@ -57,7 +57,7 @@ describe('CheckYourAnswersController', () => {
         const profession = professionFactory.build({
           id: 'profession-id',
           name: 'Gas Safe Engineer',
-          confirmed: false,
+          slug: null,
         });
         professionsService.findWithVersions.mockResolvedValue(profession);
 
