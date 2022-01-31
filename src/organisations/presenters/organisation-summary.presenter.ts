@@ -22,9 +22,11 @@ export class OrganisationSummaryPresenter {
       );
     }
 
-    const professionPresenters = this.organisation.professions.map(
-      (profession) => new ProfessionPresenter(profession, this.i18nService),
-    );
+    const professionPresenters = this.organisation.professions
+      .filter((profession) => profession.confirmed)
+      .map(
+        (profession) => new ProfessionPresenter(profession, this.i18nService),
+      );
 
     return {
       organisation: this.organisation,
