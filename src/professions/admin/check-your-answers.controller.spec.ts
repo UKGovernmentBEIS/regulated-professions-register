@@ -57,7 +57,6 @@ describe('CheckYourAnswersController', () => {
         const profession = professionFactory.build({
           id: 'profession-id',
           name: 'Gas Safe Engineer',
-          qualification,
           legislation,
           confirmed: false,
         });
@@ -75,6 +74,7 @@ describe('CheckYourAnswersController', () => {
           description: 'A description of the regulation',
           reservedActivities: 'Some reserved activities',
           profession: profession,
+          qualification: qualification,
         });
 
         professionVersionsService.findWithProfession.mockResolvedValue(version);
@@ -129,11 +129,11 @@ describe('CheckYourAnswersController', () => {
     describe('when the profession has no qualification', () => {
       it('passes a `null` qualification value to the template', async () => {
         const profession = professionFactory.build({
-          qualification: undefined,
           organisation: organisationFactory.build(),
         });
 
         const version = professionVersionFactory.build({
+          qualification: undefined,
           profession: profession,
         });
 
