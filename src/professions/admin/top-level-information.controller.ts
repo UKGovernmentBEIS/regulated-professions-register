@@ -66,7 +66,7 @@ export class TopLevelInformationController {
       profession.name,
       version.industries || [],
       version.occupationLocations || [],
-      profession.confirmed,
+      profession.slug !== null,
       change,
       errors,
     );
@@ -111,8 +111,8 @@ export class TopLevelInformationController {
         submittedValues.name,
         submittedIndustries,
         submittedValues.nations || [],
+        profession.slug !== null,
         submittedValues.change,
-        profession.confirmed,
         errors,
       );
     }

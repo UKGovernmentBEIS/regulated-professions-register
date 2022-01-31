@@ -55,7 +55,7 @@ export class RegulatedActivitiesController {
       res,
       version.reservedActivities,
       version.description,
-      profession.confirmed,
+      profession.slug !== null,
       change,
     );
   }
@@ -95,7 +95,7 @@ export class RegulatedActivitiesController {
         res,
         submittedValues.activities,
         submittedValues.description,
-        profession.confirmed,
+        profession.slug !== null,
         submittedValues.change,
         errors,
       );
