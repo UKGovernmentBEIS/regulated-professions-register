@@ -7,14 +7,18 @@
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
+      {% set titleTranslation = "organisations.admin."+ action +".confirmation.heading" %}
+      {% set panelTranslation = "organisations.admin."+ action +".confirmation.body.panel" %}
+      {% set nextTranslation = "organisations.admin."+ action +".confirmation.body.next" %}
+
       {{
         govukPanel({
-          titleText: ("organisations.admin.form.headings.confirmation" | t),
-          html: ("organisations.admin.form.body.confirmation.panel" | t({name: name}) | safe)
+          titleText: (titleTranslation | t),
+          html: (panelTranslation | t({name: name}) | safe)
         })
       }}
 
-      <h2 class="govuk-heading-m">{{ ("organisations.admin.form.body.confirmation.next" | t) }}</h2>
+      <h2 class="govuk-heading-m">{{ (nextTranslation | t) }}</h2>
 
       <p class="govuk-body">
         <a href="/admin">{{ ("app.backToDashboard" | t) }}</a>

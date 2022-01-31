@@ -26,6 +26,7 @@ type SeedOrganisationVersion = {
   telephone: string;
   fax: string;
   status: string;
+  created_at: string;
 };
 
 @Injectable()
@@ -82,6 +83,10 @@ export class OrganisationsSeeder implements Seeder {
               organisation: org,
               status: status,
             } as OrganisationVersion;
+
+            if (item.created_at) {
+              newVersion.created_at = new Date(item.created_at);
+            }
 
             return { ...existingVersion, ...newVersion };
           }),

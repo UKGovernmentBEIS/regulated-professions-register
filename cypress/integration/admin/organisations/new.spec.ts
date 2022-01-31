@@ -54,6 +54,10 @@ describe('Creating organisations', () => {
     });
 
     it('allows me to create an organisation', () => {
+      cy.translate('organisations.admin.create.heading').then((heading) => {
+        cy.get('html').should('contain', heading);
+      });
+
       cy.get('input[name="name"]').invoke('val', 'New Organisation');
 
       cy.get('input[name="alternateName"]').type('Alternate Name');
@@ -96,7 +100,7 @@ describe('Creating organisations', () => {
         cy.get('button').contains(buttonText).click();
       });
 
-      cy.translate('organisations.admin.form.headings.confirmation').then(
+      cy.translate('organisations.admin.create.confirmation.heading').then(
         (confirmationText) => {
           cy.get('html').should('contain', confirmationText);
         },

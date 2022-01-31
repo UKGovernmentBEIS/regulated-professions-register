@@ -33,7 +33,24 @@
       "button": "Filter results"
     },
     "edit": {
-      "heading": "Amending a regulatory authority"
+      "heading": "Amending a regulatory authority",
+      "confirmation": {
+        "heading": "Regulatory authority amended",
+        "body": {
+          "panel": "{name} has been updated",
+          "next": "What happens next?"
+        }
+      }
+    },
+    "create": {
+      "heading": "Adding a regulatory authority",
+      "confirmation": {
+        "heading": "Regulatory authority created",
+        "body": {
+          "panel": "{name} has been created",
+          "next": "What happens next?"
+        }
+      }
     },
     "new": {
       "heading": "Are you sure you want to create a new regulatory authority?"
@@ -73,15 +90,6 @@
         },
         "contactUrl": {
           "invalid": "Please enter a valid contact details web address"
-        }
-      },
-      "headings": {
-        "confirmation": "Regulatory authority amended"
-      },
-      "body": {
-        "confirmation": {
-          "panel": "{name} has been updated",
-          "next": "What happens next?"
         }
       }
     },

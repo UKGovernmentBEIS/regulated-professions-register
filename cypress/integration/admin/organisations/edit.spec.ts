@@ -1,4 +1,4 @@
-describe.skip('Editing organisations', () => {
+describe('Editing organisations', () => {
   context('When I am logged in as admin', () => {
     beforeEach(() => {
       cy.loginAuth0('admin');
@@ -9,20 +9,34 @@ describe.skip('Editing organisations', () => {
 
       cy.readFile('./seeds/test/organisations.json').then((organisations) => {
         const organisation = organisations[0];
+        const version = organisation.versions[1];
 
-        cy.wrap(organisation).as('organisation');
+        cy.wrap({
+          ...organisation,
+          ...version,
+        }).as('organisation');
 
         cy.contains(organisation.name)
           .parent('tr')
           .within(() => {
             cy.get('a').contains('View details').click();
           });
-        cy.checkAccessibility();
+        cy.checkAccessibility({ 'link-name': { enabled: false } });
 
         cy.translate('organisations.admin.button.edit').then((editButton) => {
           cy.get('a').contains(editButton).click();
           cy.checkAccessibility();
         });
+
+        cy.translate('organisation-versions.admin.new.heading').then(
+          (heading) => {
+            cy.get('body').should('contain', heading);
+
+            cy.translate('app.start').then((startButton) => {
+              cy.get('button').contains(startButton).click();
+            });
+          },
+        );
       });
     });
 
@@ -30,11 +44,6 @@ describe.skip('Editing organisations', () => {
       cy.get('@organisation').then((organisation: any) => {
         cy.translate('organisations.admin.edit.heading').then((editHeading) => {
           cy.get('body').should('contain', editHeading);
-
-          cy.checkInputValue(
-            'organisations.admin.form.label.name',
-            organisation.name,
-          );
 
           cy.checkInputValue(
             'organisations.admin.form.label.alternateName',
@@ -65,8 +74,6 @@ describe.skip('Editing organisations', () => {
     });
 
     it('Shows errors when I input data incorrectly', () => {
-      cy.get('input[name="name"]').invoke('val', '');
-
       cy.get('input[name="contactUrl"]')
         .invoke('val', '')
         .type('this is not a url');
@@ -79,12 +86,6 @@ describe.skip('Editing organisations', () => {
         cy.get('button').contains(buttonText).click();
       });
       cy.checkAccessibility();
-
-      cy.translate('organisations.admin.form.errors.name.empty').then(
-        (error) => {
-          cy.get('body').should('contain', error);
-        },
-      );
 
       cy.translate('organisations.admin.form.errors.email.invalid').then(
         (error) => {
@@ -100,8 +101,6 @@ describe.skip('Editing organisations', () => {
     });
 
     it('allows me to update an organisation', () => {
-      cy.get('input[name="name"]').invoke('val', 'New Name');
-
       cy.get('input[name="alternateName"]')
         .invoke('val', '')
         .type('New Alternate Name');
@@ -122,7 +121,6 @@ describe.skip('Editing organisations', () => {
       });
       cy.checkAccessibility();
 
-      cy.checkSummaryListRowValue('organisations.label.name', 'New Name');
       cy.checkSummaryListRowValue(
         'organisations.label.alternateName',
         'New Alternate Name',
@@ -147,9 +145,9 @@ describe.skip('Editing organisations', () => {
 
       cy.checkAccessibility();
 
-      cy.translate('organisations.admin.form.headings.confirmation').then(
+      cy.translate('organisations.admin.edit.confirmation.heading').then(
         (confirmationText) => {
-          cy.get('html').contains(confirmationText).click();
+          cy.get('html').should('contain', confirmationText);
         },
       );
     });

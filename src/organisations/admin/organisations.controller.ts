@@ -185,12 +185,17 @@ export class OrganisationsController {
     organisation: Organisation,
     version: OrganisationVersion,
   ): Promise<void> {
+    let action: string;
+
     if (!organisation.slug) {
+      action = 'create';
       await this.organisationsService.setSlug(organisation);
+    } else {
+      action = 'edit';
     }
     await this.organisationsVersionsService.confirm(version);
 
-    res.render('admin/organisations/complete', organisation);
+    res.render('admin/organisations/complete', { ...organisation, action });
   }
 
   async showReviewPage(
