@@ -58,6 +58,25 @@ describe('ProfessionVersionsService', () => {
     });
   });
 
+  describe('confirm', () => {
+    it('confirms a Profession', async () => {
+      const professionVersion = professionVersionFactory.build();
+
+      const updatedVersion = {
+        ...professionVersion,
+        status: ProfessionVersionStatus.Draft,
+      };
+
+      const repoSpy = jest
+        .spyOn(repo, 'save')
+        .mockResolvedValue(professionVersion);
+      const result = await service.confirm(professionVersion);
+
+      expect(result).toEqual(updatedVersion);
+      expect(repoSpy).toHaveBeenCalledWith(updatedVersion);
+    });
+  });
+
   describe('findWithProfession', () => {
     it('searches for a ProfessionVersion with its Profession', async () => {
       const version = professionVersionFactory.build();

@@ -25,6 +25,12 @@ export class ProfessionVersionsService {
     return this.repository.findOne(id, { relations: ['profession'] });
   }
 
+  async confirm(version: ProfessionVersion): Promise<ProfessionVersion> {
+    version.status = ProfessionVersionStatus.Draft;
+
+    return this.repository.save(version);
+  }
+
   async findLatestForProfessionId(
     professionId: string,
   ): Promise<ProfessionVersion> {

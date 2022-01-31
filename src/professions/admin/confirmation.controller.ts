@@ -14,10 +14,14 @@ import { ProfessionsService } from '../professions.service';
 import { ConfirmationTemplate } from './interfaces/confirmation.template';
 import { Permissions } from '../../common/permissions.decorator';
 import { UserPermission } from '../../users/user.entity';
+import { ProfessionVersionsService } from '../profession-versions.service';
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
 export class ConfirmationController {
-  constructor(private professionsService: ProfessionsService) {}
+  constructor(
+    private professionsService: ProfessionsService,
+    private professionVersionsService: ProfessionVersionsService,
+  ) {}
 
   @Post('/:professionId/versions/:versionId/confirmation')
   @Permissions(UserPermission.CreateProfession)
@@ -30,13 +34,20 @@ export class ConfirmationController {
       professionId,
     );
 
+    const version = await this.professionVersionsService.findWithProfession(
+      versionId,
+    );
+
     if (profession.confirmed) {
+      await this.professionVersionsService.confirm(version);
+
       return res.redirect(
         `/admin/professions/${professionId}/versions/${versionId}/confirmation?amended=true`,
       );
     }
 
     await this.professionsService.confirm(profession);
+    await this.professionVersionsService.confirm(version);
 
     res.redirect(
       `/admin/professions/${professionId}/versions/${versionId}/confirmation`,
