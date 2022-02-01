@@ -111,7 +111,7 @@ describe('OrganisationsController', () => {
 
         expect(await controller.index()).toEqual(templateParams);
 
-        expect(organisationsService.allWithProfessions).toHaveBeenCalled();
+        expect(organisationVersionsService.allDraftOrLive).toHaveBeenCalled();
 
         expect(OrganisationsFilterHelper).toBeCalledWith(organisations);
         expect(OrganisationsFilterHelper.prototype.filter).toBeCalledWith({
@@ -168,7 +168,7 @@ describe('OrganisationsController', () => {
           } as FilterDto),
         ).toEqual(templateParams);
 
-        expect(organisationsService.allWithProfessions).toHaveBeenCalled();
+        expect(organisationVersionsService.allDraftOrLive).toHaveBeenCalled();
 
         expect(OrganisationsFilterHelper).toBeCalledWith(organisations);
         expect(OrganisationsFilterHelper.prototype.filter).toBeCalledWith({
