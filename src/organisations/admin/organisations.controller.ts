@@ -43,7 +43,7 @@ import { createFilterInput } from '../../helpers/create-filter-input.helper';
 export class OrganisationsController {
   constructor(
     private readonly organisationsService: OrganisationsService,
-    private readonly organisationsVersionsService: OrganisationVersionsService,
+    private readonly organisationVersionsService: OrganisationVersionsService,
     private readonly industriesService: IndustriesService,
     private readonly i18nService: I18nService,
   ) {}
@@ -53,7 +53,7 @@ export class OrganisationsController {
   @BackLink('/admin')
   async index(@Query() query: FilterDto = null): Promise<IndexTemplate> {
     const allOrganisations =
-      await this.organisationsService.allWithProfessions();
+      await this.organisationVersionsService.allDraftOrLive();
     const allIndustries = await this.industriesService.all();
 
     const filter = query || new FilterDto();
@@ -93,7 +93,7 @@ export class OrganisationsController {
       organisation: organisation,
       user: req.appSession.user,
     } as OrganisationVersion;
-    const version = await this.organisationsVersionsService.save(blankVersion);
+    const version = await this.organisationVersionsService.save(blankVersion);
 
     return res.redirect(
       `/admin/organisations/${version.organisation.id}/versions/${version.id}/edit`,
@@ -139,7 +139,7 @@ export class OrganisationsController {
     @Res() res: Response,
   ): Promise<void> {
     const organisation = await this.organisationsService.find(organisationId);
-    const version = await this.organisationsVersionsService.find(versionId);
+    const version = await this.organisationVersionsService.find(versionId);
 
     if (body.confirm) {
       return this.confirm(res, organisation, version);
@@ -154,7 +154,7 @@ export class OrganisationsController {
         ...OrganisationVersion.fromDto(body),
       };
 
-      const updatedVersion = await this.organisationsVersionsService.save(
+      const updatedVersion = await this.organisationVersionsService.save(
         newVersion,
       );
 
@@ -193,7 +193,7 @@ export class OrganisationsController {
     } else {
       action = 'edit';
     }
-    await this.organisationsVersionsService.confirm(version);
+    await this.organisationVersionsService.confirm(version);
 
     res.render('admin/organisations/complete', { ...organisation, action });
   }
