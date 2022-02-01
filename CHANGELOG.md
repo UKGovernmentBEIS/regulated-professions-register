@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [release-002] - 2022-02-01
+
 ### Added
 
 - Add more granular database fields for storing the duration of a qualification
@@ -60,4 +62,5 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Make validation errors more human readable
 
 [unreleased]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-001...HEAD
+[release-002]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release001...release-002
 [release-001]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release...release-001
