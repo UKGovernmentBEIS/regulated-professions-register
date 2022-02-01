@@ -51,6 +51,26 @@ export class OrganisationVersionsService {
     );
   }
 
+  async allDraftOrLive(): Promise<Organisation[]> {
+    const versions = await this.versionsWithJoins()
+      .distinctOn(['organisationVersion.organisation'])
+      .where('organisationVersion.status IN(:...status)', {
+        status: [
+          OrganisationVersionStatus.Live,
+          OrganisationVersionStatus.Draft,
+        ],
+      })
+      .orderBy(
+        'organisationVersion.organisation, organisationVersion.created_at',
+        'DESC',
+      )
+      .getMany();
+
+    return versions.map((version) =>
+      Organisation.withVersion(version.organisation, version),
+    );
+  }
+
   async findLiveBySlug(slug: string): Promise<Organisation> {
     const version = await this.versionsWithJoins()
       .where(
