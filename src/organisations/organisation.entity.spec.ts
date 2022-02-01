@@ -26,6 +26,7 @@ describe('Organisation', () => {
         telephone: organisationVersion.telephone,
         fax: organisationVersion.fax,
         versionId: organisationVersion.id,
+        status: organisationVersion.status,
       });
     });
   });
