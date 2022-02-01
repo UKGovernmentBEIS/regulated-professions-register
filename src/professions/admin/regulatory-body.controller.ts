@@ -46,7 +46,6 @@ export class RegulatoryBodyController {
     @Res() res: Response,
     @Param('id') id: string,
     @Query('change') change: boolean,
-    errors: object | undefined = undefined,
   ): Promise<void> {
     const profession = await this.professionsService.find(id);
 
@@ -58,7 +57,6 @@ export class RegulatoryBodyController {
       selectedMandatoryRegistration,
       profession.confirmed,
       change,
-      errors,
     );
   }
 
