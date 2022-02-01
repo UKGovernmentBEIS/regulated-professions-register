@@ -14,6 +14,8 @@ import { translationOf } from '../testutils/translation-of';
 import { createMockI18nService } from '../testutils/create-mock-i18n-service';
 import { TableRow } from '../common/interfaces/table-row';
 import { flashMessage } from '../common/flash-message';
+import { createMockRequest } from '../testutils/create-mock-request';
+import organisationFactory from '../testutils/factories/organisation';
 
 jest.mock('./users.presenter');
 jest.mock('./user.presenter');
@@ -104,19 +106,59 @@ describe('UsersController', () => {
   });
 
   describe('create', () => {
-    it('should create a user and redirect', async () => {
-      const user = userFactory.build();
+    describe('when logged in as a service owner user', () => {
+      it('should create a user and redirect', async () => {
+        const loggedInUser = userFactory.build({ serviceOwner: true });
 
-      usersService.save.mockResolvedValue(user);
+        const user = userFactory.build();
 
-      const res = createMock<Response>();
+        usersService.save.mockResolvedValue(user);
 
-      await controller.create(res);
+        const res = createMock<Response>();
+        const req = createMockRequest(
+          'http://example.com/some/path',
+          'example.com',
+          { user: loggedInUser },
+        );
 
-      expect(usersService.save).toHaveBeenCalled();
-      expect(res.redirect).toHaveBeenCalledWith(
-        `/admin/users/${user.id}/personal-details/edit`,
-      );
+        await controller.create(req, res);
+
+        expect(usersService.save).toHaveBeenCalledWith(
+          expect.objectContaining({ organisation: undefined }),
+        );
+        expect(res.redirect).toHaveBeenCalledWith(
+          `/admin/users/${user.id}/organisation/edit`,
+        );
+      });
+    });
+
+    describe('when logged in as a non-service owner user', () => {
+      it('should create a user and redirect', async () => {
+        const loggedInUser = userFactory.build({
+          serviceOwner: false,
+          organisation: organisationFactory.build(),
+        });
+
+        const user = userFactory.build();
+
+        usersService.save.mockResolvedValue(user);
+
+        const res = createMock<Response>();
+        const req = createMockRequest(
+          'http://example.com/some/path',
+          'example.com',
+          { user: loggedInUser },
+        );
+
+        await controller.create(req, res);
+
+        expect(usersService.save).toHaveBeenCalledWith(
+          expect.objectContaining({ organisation: loggedInUser.organisation }),
+        );
+        expect(res.redirect).toHaveBeenCalledWith(
+          `/admin/users/${user.id}/personal-details/edit`,
+        );
+      });
     });
   });
 
