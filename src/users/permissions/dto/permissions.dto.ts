@@ -1,18 +1,12 @@
-import { IsNotEmpty } from 'class-validator';
-import { Type } from 'class-transformer';
-import { UserPermission } from '../../user-permission';
+import { IsEnum, IsNotEmpty } from 'class-validator';
+import { Role } from '../../role';
 
 export class PermissionsDto {
   @IsNotEmpty({
-    message: 'users.form.errors.roles.empty',
+    message: 'users.form.errors.role.empty',
   })
-  permissions: Array<UserPermission>;
+  @IsEnum(Role)
+  role: Role;
 
-  @Type(() => Boolean)
-  @IsNotEmpty({
-    message: 'users.form.errors.serviceOwner.empty',
-  })
-  serviceOwner: boolean;
-
-  change: boolean;
+  change: string;
 }

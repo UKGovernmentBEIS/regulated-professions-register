@@ -1,7 +1,7 @@
-import { UserPermission } from '../../user-permission';
-import { User } from '../../user.entity';
+import { RadioButtonArgs } from '../../../common/interfaces/radio-button-args.interface';
 
-export interface EditTemplate extends User {
-  permissions: Array<UserPermission>;
+export interface EditTemplate {
+  roleRadioButtonArgs: RadioButtonArgs[];
   change: boolean;
+  errors: object | undefined;
 }
