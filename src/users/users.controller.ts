@@ -25,6 +25,7 @@ import { flashMessage } from '../common/flash-message';
 
 import { UserMailer } from './user.mailer';
 import { BackLink } from '../common/decorators/back-link.decorator';
+import { Request, Response } from 'express';
 
 @Controller()
 @UseGuards(AuthenticationGuard)
@@ -71,10 +72,21 @@ export class UsersController {
 
   @Post('/admin/users')
   @Permissions(UserPermission.CreateUser, UserPermission.EditUser)
-  async create(@Res() res) {
-    const user = await this.usersService.save(new User());
+  async create(@Req() request: Request, @Res() res: Response) {
+    const user = request['appSession'].user as User;
 
-    res.redirect(`/admin/users/${user.id}/personal-details/edit`);
+    const organisation = user.organisation;
+
+    const newUser = await this.usersService.save({
+      ...new User(),
+      organisation,
+    });
+
+    if (user.serviceOwner) {
+      res.redirect(`/admin/users/${newUser.id}/organisation/edit`);
+    } else {
+      res.redirect(`/admin/users/${newUser.id}/personal-details/edit`);
+    }
   }
 
   @Get('/admin/users/:id/confirm')
