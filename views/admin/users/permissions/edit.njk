@@ -10,57 +10,23 @@
     {% include "../../../shared/_errors.njk" %}
 
     <span class="govuk-caption-xl">{{ "users.form.headings.main" | t }}</span>
-    <h1 class="govuk-heading-xl">{{ "users.form.headings.permissions" | t }}</h1>
+    <h1 class="govuk-heading-xl">{{ "users.form.headings.role" | t }}</h1>
 
     <form method="post" action="./">
 
       <input type="hidden" name="change" value="{{ change }}" />
 
       {{ govukRadios({
-        classes: "govuk-radios--inline",
-        name: "serviceOwner",
+        name: "role",
         fieldset: {
           legend: {
-            text: ("users.form.label.serviceOwner" | t),
+            text: ("users.form.hint.role" | t),
             isPageHeading: false,
-            classes: "govuk-fieldset__legend--l"
+            classes: "govuk-fieldset__legend--m"
           }
         },
-        hint: {
-          text: ("users.form.hint.serviceOwner" | t)
-        },
-        items: [
-          {
-            value: 1,
-            text: ("app.yes" | t)
-          },
-          {
-            value: 0,
-            text: ("app.no" | t)
-          }
-        ]
-      }) }}
-
-      {% set roleItems = [] %}
-      {% for role in permissions %}
-        {% set translation = "users.form.label." + role %}
-        {% set roleItems = (roleItems.push({value: role, text: (translation | t)}), roleItems) %}
-      {% endfor %}
-
-      {{ govukCheckboxes({
-        id: "permissions[]",
-        name: "permissions[]",
-        fieldset: {
-          legend: {
-            text: ("users.form.label.permissions" | t),
-            isPageHeading: false,
-            classes: "govuk-fieldset__legend--l"
-          }
-        },
-        hint: {
-          text: "Select all that apply."
-        },
-        items: roleItems
+        items: roleRadioButtonArgs,
+        errorMessage: errors.role | tError
       }) }}
 
       {{ govukButton({

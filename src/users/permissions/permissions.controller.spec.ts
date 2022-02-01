@@ -1,22 +1,33 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersService } from '../users.service';
-import { UserPermission } from '../user-permission';
 import { PermissionsController } from './permissions.controller';
 import { createMock, DeepMocked } from '@golevelup/ts-jest';
 import { Response } from 'express';
-import { createMockRequest } from '../../testutils/create-mock-request';
 import userFactory from '../../testutils/factories/user';
+import { RadioButtonArgs } from '../../common/interfaces/radio-button-args.interface';
+import { RoleRadioButtonsPresenter } from '../role-radio-buttons.preseter';
+import { I18nService } from 'nestjs-i18n';
+import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
+import { Role } from '../role';
+
+jest.mock('../role-radio-buttons.preseter');
 
 describe('PermissionsController', () => {
   let controller: PermissionsController;
   let usersService: DeepMocked<UsersService>;
+  let i18nService: DeepMocked<I18nService>;
 
   beforeEach(async () => {
     usersService = createMock<UsersService>();
+    i18nService = createMockI18nService();
 
     const module: TestingModule = await Test.createTestingModule({
       controllers: [PermissionsController],
       providers: [
+        {
+          provide: I18nService,
+          useValue: i18nService,
+        },
         {
           provide: UsersService,
           useValue: usersService,
@@ -29,65 +40,95 @@ describe('PermissionsController', () => {
 
   describe('edit', () => {
     it('should get and return the user from an id', async () => {
-      const referrer = 'http://example.com/some/path';
-      const request = createMockRequest(referrer, 'example.com');
+      const roleRadioButtonArgs: RadioButtonArgs[] = [
+        {
+          text: 'Administrator',
+          value: 'administrator',
+          checked: false,
+        },
+      ];
 
-      const user = userFactory.build();
+      (
+        RoleRadioButtonsPresenter.prototype as DeepMocked<RoleRadioButtonsPresenter>
+      ).radioButtonArgs.mockResolvedValue(roleRadioButtonArgs);
+
+      const res = createMock<Response>();
+
+      const user = userFactory.build({ role: Role.Registrar });
 
       usersService.find.mockResolvedValue(user);
 
-      const result = await controller.edit(request, user.id, false);
+      await controller.edit(res, user.id, false);
 
-      expect(result).toEqual({
-        ...user,
-        permissions: [
-          'createUser',
-          'editUser',
-          'deleteUser',
-          'createOrganisation',
-          'deleteOrganisation',
-          'createProfession',
-          'deleteProfession',
-          'uploadDecisionData',
-          'downloadDecisionData',
-          'viewDecisionData',
-        ],
-        change: false,
-      });
+      expect(res.render).toBeCalledWith(
+        'admin/users/permissions/edit',
+        expect.objectContaining({
+          roleRadioButtonArgs,
+          change: false,
+        }),
+      );
 
       expect(usersService.find).toHaveBeenCalledWith(user.id);
+
+      expect(RoleRadioButtonsPresenter).toBeCalledWith(
+        expect.anything(),
+        Role.Registrar,
+        i18nService,
+      );
+      expect(RoleRadioButtonsPresenter.prototype.radioButtonArgs).toBeCalled();
     });
 
     it('should set change to true', async () => {
-      const referrer = 'http://example.com/some/path';
-      const request = createMockRequest(referrer, 'example.com');
+      const res = createMock<Response>();
 
       const user = userFactory.build();
 
       usersService.find.mockResolvedValue(user);
 
-      const result = await controller.edit(request, user.id, true);
+      await controller.edit(res, user.id, true);
 
-      expect(result).toEqual({
-        ...user,
-        permissions: [
-          'createUser',
-          'editUser',
-          'deleteUser',
-          'createOrganisation',
-          'deleteOrganisation',
-          'createProfession',
-          'deleteProfession',
-          'uploadDecisionData',
-          'downloadDecisionData',
-          'viewDecisionData',
-        ],
-        change: true,
-      });
+      expect(res.render).toBeCalledWith(
+        'admin/users/permissions/edit',
+        expect.objectContaining({
+          change: true,
+        }),
+      );
+    });
+
+    it('should return the correct roles for a non-service owner user', async () => {
+      const res = createMock<Response>();
+
+      const user = userFactory.build();
+
+      usersService.find.mockResolvedValue(user);
+
+      await controller.edit(res, user.id, false);
+
+      expect(RoleRadioButtonsPresenter).toBeCalledWith(
+        [Role.Administrator, Role.Editor],
+        expect.anything(),
+        i18nService,
+      );
+    });
+
+    it('should return the correct roles for a service owner user', async () => {
+      const res = createMock<Response>();
+
+      const user = userFactory.build({ serviceOwner: true });
+
+      usersService.find.mockResolvedValue(user);
+
+      await controller.edit(res, user.id, false);
+
+      expect(RoleRadioButtonsPresenter).toBeCalledWith(
+        [Role.Administrator, Role.Registrar, Role.Editor],
+        expect.anything(),
+        i18nService,
+      );
     });
   });
 
-  describe('create', () => {
+  describe('update', () => {
     it('should redirect to confirm and update if the DTO is valid', async () => {
       const res = createMock<Response>();
 
@@ -97,11 +138,10 @@ describe('PermissionsController', () => {
       usersService.save.mockResolvedValue(user);
 
       const permissionsDto = {
-        permissions: [UserPermission.CreateUser],
-        serviceOwner: true,
-        change: true,
+        role: Role.Editor,
       };
-      await controller.create(permissionsDto, user.id, res);
+
+      await controller.update(res, user.id, permissionsDto);
 
       expect(usersService.save).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -109,9 +149,98 @@ describe('PermissionsController', () => {
           ...permissionsDto,
         }),
       );
+
       expect(res.redirect).toHaveBeenCalledWith(
         `/admin/users/${user.id}/confirm`,
       );
     });
+
+    it('should render the edit page if the DTO is invalid', async () => {
+      const roleRadioButtonArgs: RadioButtonArgs[] = [
+        {
+          text: 'Administrator',
+          value: 'administrator',
+          checked: false,
+        },
+      ];
+
+      (
+        RoleRadioButtonsPresenter.prototype as DeepMocked<RoleRadioButtonsPresenter>
+      ).radioButtonArgs.mockResolvedValue(roleRadioButtonArgs);
+
+      const res = createMock<Response>();
+
+      const user = userFactory.build();
+
+      usersService.find.mockResolvedValue(user);
+
+      const permissionsDto = {
+        role: undefined,
+      };
+
+      await controller.update(res, user.id, permissionsDto);
+
+      expect(usersService.save).not.toHaveBeenCalled();
+
+      expect(res.render).toHaveBeenCalledWith(
+        'admin/users/permissions/edit',
+        expect.objectContaining({
+          roleRadioButtonArgs,
+        }),
+      );
+
+      expect(RoleRadioButtonsPresenter).toBeCalledWith(
+        [Role.Administrator, Role.Editor],
+        undefined,
+        i18nService,
+      );
+      expect(RoleRadioButtonsPresenter.prototype.radioButtonArgs).toBeCalled();
+    });
+
+    it('should not modify the service owner state of the user', async () => {
+      const res = createMock<Response>();
+
+      const user = userFactory.build({ serviceOwner: false });
+
+      usersService.find.mockResolvedValue(user);
+
+      const permissionsDto = {
+        role: Role.Editor,
+        serviceOwner: true,
+      };
+
+      await controller.update(res, user.id, permissionsDto);
+
+      expect(usersService.save).toHaveBeenCalledWith(
+        expect.objectContaining({
+          id: user.id,
+          serviceOwner: false,
+        }),
+      );
+
+      expect(res.redirect).toHaveBeenCalledWith(
+        `/admin/users/${user.id}/confirm`,
+      );
+    });
+
+    it('should not allow an invalid role for the service owner state', async () => {
+      const res = createMock<Response>();
+
+      const user = userFactory.build({ serviceOwner: false });
+
+      usersService.find.mockResolvedValue(user);
+
+      const permissionsDto = {
+        role: Role.Registrar,
+      };
+
+      await expect(
+        controller.update(res, user.id, permissionsDto),
+      ).rejects.toThrowError();
+    });
+  });
+
+  afterEach(() => {
+    jest.resetAllMocks();
   });
 });

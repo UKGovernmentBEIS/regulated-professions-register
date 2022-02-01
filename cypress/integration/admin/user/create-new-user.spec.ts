@@ -48,8 +48,7 @@ describe('Creating a new user', () => {
       cy.get('button').click();
       cy.checkAccessibility();
 
-      cy.get('input[name="serviceOwner"][value="1"]').check();
-      cy.get('[type="checkbox"]').check('createOrganisation');
+      cy.get('input[name="role"][value="registrar"]').check();
 
       cy.get('button').click();
       cy.checkAccessibility();
@@ -98,8 +97,7 @@ describe('Creating a new user', () => {
       cy.get('button').click();
       cy.checkAccessibility();
 
-      cy.get('input[name="serviceOwner"][value="1"]').check();
-      cy.get('[type="checkbox"]').check('createOrganisation');
+      cy.get('input[name="role"][value="editor"]').check();
 
       cy.get('button').click();
       cy.checkAccessibility();
@@ -114,8 +112,7 @@ describe('Creating a new user', () => {
 
       cy.get('a[href*="permissions/edit?change=true"]').first().click();
 
-      cy.get('input[name="serviceOwner"][value="0"]').check();
-      cy.get('[type="checkbox"]').check('createUser');
+      cy.get('input[name="role"][value="administrator"]').check();
 
       cy.get('button').click();
       cy.checkAccessibility();
