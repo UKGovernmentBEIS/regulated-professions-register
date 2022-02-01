@@ -10,32 +10,6 @@ import industryFactory from '../../testutils/factories/industry';
 import professionFactory from '../../testutils/factories/profession';
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 
-const industry1 = industryFactory.build({
-  name: 'industries.example1',
-  id: 'example-industry-1',
-});
-const industry2 = industryFactory.build({
-  name: 'industries.example2',
-  id: 'example-industry-2',
-});
-const industry3 = industryFactory.build({
-  name: 'industries.example3',
-  id: 'example-industry-3',
-});
-
-const profession1 = professionFactory.build({
-  name: 'Secondary School Teacher',
-  occupationLocations: ['GB-ENG'],
-  industries: [industry1],
-});
-const profession2 = professionFactory.build({
-  name: 'Trademark Attorny',
-  occupationLocations: ['GB-SCT', 'GB-WLS'],
-  industries: [industry2, industry3],
-});
-
-const industries = [industry1, industry2, industry3];
-
 describe('SearchController', () => {
   let controller: SearchController;
   let professionsService: DeepMocked<ProfessionsService>;
@@ -45,12 +19,6 @@ describe('SearchController', () => {
   beforeEach(async () => {
     professionsService = createMock<ProfessionsService>();
     industriesService = createMock<IndustriesService>();
-
-    professionsService.allConfirmed.mockResolvedValue([
-      profession1,
-      profession2,
-    ]);
-    industriesService.all.mockResolvedValue(industries);
 
     i18nService = createMockI18nService();
 
@@ -72,12 +40,27 @@ describe('SearchController', () => {
     controller = module.get<SearchController>(SearchController);
   });
 
-  it('should be defined', () => {
-    expect(controller).toBeDefined();
-  });
-
   describe('index', () => {
     it('should return populated template params', async () => {
+      const industry1 = industryFactory.build({ id: 'example-industry-1' });
+      const industry2 = industryFactory.build({ id: 'example-industry-2' });
+      const industry3 = industryFactory.build({ id: 'example-industry-3' });
+      const industries = [industry1, industry2, industry3];
+      industriesService.all.mockResolvedValue(industries);
+
+      const schoolTeacher = professionFactory.build({
+        name: 'Secondary School Teacher',
+        industries: [industry1],
+      });
+      const trademarkAttorney = professionFactory.build({
+        name: 'Trademark Attorney',
+        industries: [industry2, industry3],
+      });
+      professionsService.allConfirmed.mockResolvedValue([
+        schoolTeacher,
+        trademarkAttorney,
+      ]);
+
       const result = await controller.index();
 
       const expected = await new SearchPresenter(
@@ -88,7 +71,7 @@ describe('SearchController', () => {
         },
         Nation.all(),
         industries,
-        [profession1, profession2],
+        [schoolTeacher, trademarkAttorney],
         i18nService,
       ).present();
 
@@ -109,6 +92,25 @@ describe('SearchController', () => {
 
   describe('create', () => {
     it('should return template params populated with provided search filters', async () => {
+      const industry1 = industryFactory.build();
+      const industry2 = industryFactory.build();
+      const industry3 = industryFactory.build();
+      const industries = [industry1, industry2, industry3];
+      industriesService.all.mockResolvedValue(industries);
+
+      const schoolTeacher = professionFactory.build({
+        name: 'Secondary School Teacher',
+        industries: [industry1],
+      });
+      const trademarkAttorney = professionFactory.build({
+        name: 'Trademark Attorney',
+        industries: [industry2, industry3],
+      });
+      professionsService.allConfirmed.mockResolvedValue([
+        schoolTeacher,
+        trademarkAttorney,
+      ]);
+
       const result = await controller.create({
         keywords: 'example search',
         industries: [industry1.id, industry2.id],
@@ -131,6 +133,27 @@ describe('SearchController', () => {
     });
 
     it('should return filtered professions when searching by nation', async () => {
+      const industry1 = industryFactory.build();
+      const industry2 = industryFactory.build();
+      const industry3 = industryFactory.build();
+      const industries = [industry1, industry2, industry3];
+      industriesService.all.mockResolvedValue(industries);
+
+      const professionRegulatedInEngland = professionFactory.build({
+        name: 'Secondary School Teacher',
+        industries: [industry1],
+        occupationLocations: ['GB-ENG'],
+      });
+      const professionRegulatedInWales = professionFactory.build({
+        name: 'Trademark Attorney',
+        industries: [industry2, industry3],
+        occupationLocations: ['GB-WLS'],
+      });
+      professionsService.allConfirmed.mockResolvedValue([
+        professionRegulatedInEngland,
+        professionRegulatedInWales,
+      ]);
+
       const result = await controller.create({
         keywords: '',
         industries: [],
@@ -145,7 +168,7 @@ describe('SearchController', () => {
         },
         Nation.all(),
         industries,
-        [profession2],
+        [professionRegulatedInWales],
         i18nService,
       ).present();
 
@@ -153,21 +176,41 @@ describe('SearchController', () => {
     });
 
     it('should return filtered professions when searching by industry', async () => {
+      const educationIndustry = industryFactory.build({
+        name: 'industries.education',
+      });
+      const lawIndustry = industryFactory.build({ name: 'industries.law' });
+      const industries = [educationIndustry, lawIndustry];
+      industriesService.all.mockResolvedValue(industries);
+
+      const schoolTeacher = professionFactory.build({
+        name: 'Secondary School Teacher',
+        industries: [educationIndustry],
+      });
+      const trademarkAttorney = professionFactory.build({
+        name: 'Trademark Attorney',
+        industries: [lawIndustry],
+      });
+      professionsService.allConfirmed.mockResolvedValue([
+        schoolTeacher,
+        trademarkAttorney,
+      ]);
+
       const result = await controller.create({
         keywords: '',
-        industries: [industry1.id],
+        industries: [educationIndustry.id],
         nations: [],
       });
 
       const expected = await new SearchPresenter(
         {
           keywords: '',
-          industries: [industry1],
+          industries: [educationIndustry],
           nations: [],
         },
         Nation.all(),
         industries,
-        [profession1],
+        [schoolTeacher],
         i18nService,
       ).present();
 
@@ -175,6 +218,25 @@ describe('SearchController', () => {
     });
 
     it('should return filtered professions when searching by keyword', async () => {
+      const industry1 = industryFactory.build();
+      const industry2 = industryFactory.build();
+      const industry3 = industryFactory.build();
+      const industries = [industry1, industry2, industry3];
+      industriesService.all.mockResolvedValue(industries);
+
+      const schoolTeacher = professionFactory.build({
+        name: 'Secondary School Teacher',
+        industries: [industry1],
+      });
+      const trademarkAttorney = professionFactory.build({
+        name: 'Trademark Attorney',
+        industries: [industry2, industry3],
+      });
+      professionsService.allConfirmed.mockResolvedValue([
+        schoolTeacher,
+        trademarkAttorney,
+      ]);
+
       const result = await controller.create({
         keywords: 'Trademark',
         industries: [],
@@ -189,7 +251,7 @@ describe('SearchController', () => {
         },
         Nation.all(),
         industries,
-        [profession2],
+        [trademarkAttorney],
         i18nService,
       ).present();
 
@@ -197,6 +259,25 @@ describe('SearchController', () => {
     });
 
     it('should return unfiltered professions when no search parameters are specified', async () => {
+      const industry1 = industryFactory.build();
+      const industry2 = industryFactory.build();
+      const industries = [industry1, industry2];
+      industriesService.all.mockResolvedValue(industries);
+
+      const schoolTeacher = professionFactory.build({
+        name: 'Secondary School Teacher',
+        industries: [industry1],
+      });
+      const trademarkAttorney = professionFactory.build({
+        name: 'Trademark Attorney',
+        industries: [industry2],
+      });
+
+      professionsService.allConfirmed.mockResolvedValue([
+        schoolTeacher,
+        trademarkAttorney,
+      ]);
+
       const result = await controller.create({
         keywords: '',
         industries: [],
@@ -211,7 +292,7 @@ describe('SearchController', () => {
         },
         Nation.all(),
         industries,
-        [profession1, profession2],
+        [schoolTeacher, trademarkAttorney],
         i18nService,
       ).present();
 
