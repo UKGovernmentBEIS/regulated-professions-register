@@ -48,11 +48,14 @@ describe('OrganisationPresenter', () => {
             html: `Translation of \`${industries[0].name}\``,
           });
           expect(tableRow[3]).toEqual({
+            html: `Translation of \`organisations.status.${organisation.status}\``,
+          });
+          expect(tableRow[4]).toEqual({
             html: expect.stringContaining(
               `<a class="govuk-link" href="/admin/organisations/${organisation.slug}">`,
             ),
           });
-          expect(tableRow[3]).toEqual({
+          expect(tableRow[4]).toEqual({
             html: expect.stringContaining(`about ${organisation.name}`),
           });
         });
@@ -93,6 +96,9 @@ describe('OrganisationPresenter', () => {
               `Translation of \`${industries[1].name}\``,
               `Translation of \`${industries[2].name}\``,
             ].join('<br />'),
+          });
+          expect(tableRow[3]).toEqual({
+            html: `Translation of \`organisations.status.${organisation.status}\``,
           });
         });
       });
