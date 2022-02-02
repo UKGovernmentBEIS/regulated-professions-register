@@ -77,6 +77,7 @@ export class User {
     permissions?: UserPermission[],
     serviceOwner?: boolean,
     confirmed?: boolean,
+    organisationVersions?: OrganisationVersion[],
   ) {
     this.email = email || '';
     this.name = name || '';
@@ -84,5 +85,6 @@ export class User {
     this.permissions = permissions || [];
     this.serviceOwner = serviceOwner || false;
     this.confirmed = confirmed || false;
+    this.organisationVersions = organisationVersions || null;
   }
 }
