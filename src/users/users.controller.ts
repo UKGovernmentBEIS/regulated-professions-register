@@ -27,6 +27,7 @@ import { flashMessage } from '../common/flash-message';
 import { UserPresenter } from './user.presenter';
 import { UserMailer } from './user.mailer';
 import { BackLink } from '../common/decorators/back-link.decorator';
+
 @Controller()
 @UseGuards(AuthenticationGuard)
 export class UsersController {
