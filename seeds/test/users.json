@@ -29,7 +29,8 @@
     "externalIdentifier": "auth0|620143d74de528007139273a",
     "role": "administrator",
     "confirmed": true,
-    "serviceOwner": false
+    "serviceOwner": false,
+    "organisation": "Department for Education"
   },
   {
     "email": "beis-rpr+orgeditor@dxw.com",
@@ -37,6 +38,7 @@
     "externalIdentifier": "auth0|620144210c2d4d00717d7b8a",
     "role": "editor",
     "confirmed": true,
-    "serviceOwner": false
+    "serviceOwner": false,
+    "organisation": "Department for Education"
   }
 ]

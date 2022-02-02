@@ -8,6 +8,7 @@ import { InjectData } from '../common/decorators/seeds.decorator';
 
 import { User } from './user.entity';
 import { Role } from './role';
+import { Organisation } from '../organisations/organisation.entity';
 
 type SeedUser = {
   email: string;
@@ -16,6 +17,7 @@ type SeedUser = {
   role: Role;
   serviceOwner: boolean;
   confirmed: boolean;
+  organisation: boolean;
 };
 
 @Injectable()
@@ -26,12 +28,21 @@ export class UsersSeeder implements Seeder {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    @InjectRepository(Organisation)
+    private readonly organisationRepository: Repository<Organisation>,
   ) {}
 
   async seed(): Promise<any> {
     const users = await Promise.all(
       this.data.map(async (user) => {
         const role = user.role as Role;
+
+        const organisation =
+          user.organisation &&
+          (await this.organisationRepository.findOne({
+            where: { name: user.organisation },
+          }));
+
         const existingUser = await this.userRepository.findOne({
           email: user.email,
         });
@@ -43,6 +54,8 @@ export class UsersSeeder implements Seeder {
           role,
           user.serviceOwner,
           user.confirmed,
+          [],
+          organisation,
         );
 
         return { ...existingUser, ...newUser };
