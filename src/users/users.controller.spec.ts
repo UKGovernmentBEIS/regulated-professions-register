@@ -171,7 +171,7 @@ describe('UsersController', () => {
           name: user.name,
           email: user.email,
           externalIdentifier: user.externalIdentifier,
-          permissions: user.permissions,
+          role: user.role,
           confirmed: true,
         }),
       );
@@ -227,7 +227,7 @@ describe('UsersController', () => {
           name: user.name,
           email: user.email,
           externalIdentifier: user.externalIdentifier,
-          permissions: user.permissions,
+          role: user.role,
           confirmed: true,
         }),
       );

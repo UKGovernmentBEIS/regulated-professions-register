@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersService } from '../users.service';
-import { UserPermission } from '../user.entity';
+import { UserPermission } from '../user-permission';
 import { PermissionsController } from './permissions.controller';
 import { createMock, DeepMocked } from '@golevelup/ts-jest';
 import { Response } from 'express';

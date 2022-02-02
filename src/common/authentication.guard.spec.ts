@@ -3,8 +3,16 @@ import { Reflector } from '@nestjs/core';
 
 import { createMock } from '@golevelup/ts-jest';
 import { AuthenticationGuard } from './authentication.guard';
-import { UserPermission, User } from '../users/user.entity';
+import { User } from '../users/user.entity';
 import userFactory from '../testutils/factories/user';
+import { UserPermission } from '../users/user-permission';
+import { getPermissionsFromUser } from '../users/helpers/get-permissions-from-user.helper';
+
+jest.mock('../users/helpers/get-permissions-from-user.helper');
+
+beforeEach(() => {
+  (getPermissionsFromUser as jest.Mock).mockReset();
+});
 
 let host: ExecutionContext;
 let reflector: Reflector;
@@ -21,43 +29,43 @@ describe('AuthenticationGuard', () => {
 
     describe('when permissions are specified', () => {
       it('should return true when the user has the appropriate permission', () => {
-        createEnvironment(
-          createOidc(true),
-          [UserPermission.CreateUser],
-          userFactory.build({
-            permissions: [UserPermission.CreateUser],
-          }),
-        );
+        const user = userFactory.build();
+        (getPermissionsFromUser as jest.Mock).mockReturnValue([
+          UserPermission.CreateUser,
+        ]);
+
+        createEnvironment(createOidc(true), [UserPermission.CreateUser], user);
 
         const guard = new AuthenticationGuard(reflector);
 
         expect(guard.canActivate(host)).toStrictEqual(true);
+        expect(getPermissionsFromUser).toHaveBeenCalledWith(user);
       });
 
       it('should return false when the user does not have the appropriate permission', () => {
-        createEnvironment(
-          createOidc(true),
-          [UserPermission.CreateUser],
-          userFactory.build({
-            permissions: [UserPermission.CreateOrganisation],
-          }),
-        );
+        const user = userFactory.build();
+        (getPermissionsFromUser as jest.Mock).mockReturnValue([
+          UserPermission.CreateOrganisation,
+        ]);
+
+        createEnvironment(createOidc(true), [UserPermission.CreateUser], user);
 
         const guard = new AuthenticationGuard(reflector);
 
         expect(guard.canActivate(host)).toStrictEqual(false);
+        expect(getPermissionsFromUser).toHaveBeenCalledWith(user);
       });
 
       it('should return false when the user has no permissions', () => {
-        createEnvironment(
-          createOidc(true),
-          [UserPermission.CreateUser],
-          userFactory.build({ permissions: [] }),
-        );
+        const user = userFactory.build();
+        (getPermissionsFromUser as jest.Mock).mockReturnValue([]);
+
+        createEnvironment(createOidc(true), [UserPermission.CreateUser], user);
 
         const guard = new AuthenticationGuard(reflector);
 
         expect(guard.canActivate(host)).toStrictEqual(false);
+        expect(getPermissionsFromUser).toHaveBeenCalledWith(user);
       });
     });
   });

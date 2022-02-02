@@ -1,11 +1,12 @@
 import { Factory } from 'fishery';
-import { User, UserPermission } from '../../users/user.entity';
+import { Role } from '../../users/role';
+import { User } from '../../users/user.entity';
 
 export default Factory.define<User>(({ sequence }) => ({
   id: sequence.toString(),
   email: 'user@example.com',
   name: 'Example User',
-  permissions: [UserPermission.CreateUser],
+  role: Role.Editor,
   externalIdentifier: 'extid|1234567',
   organisationVersions: [],
   serviceOwner: false,

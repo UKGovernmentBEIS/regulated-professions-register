@@ -13,7 +13,7 @@ import { AuthenticationGuard } from '../../common/authentication.guard';
 import { ProfessionsService } from '../professions.service';
 import { ConfirmationTemplate } from './interfaces/confirmation.template';
 import { Permissions } from '../../common/permissions.decorator';
-import { UserPermission } from '../../users/user.entity';
+import { UserPermission } from '../../users/user-permission';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')

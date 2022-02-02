@@ -13,7 +13,7 @@ import { AuthenticationGuard } from '../../common/authentication.guard';
 import { Permissions } from '../../common/permissions.decorator';
 import { Validator } from '../../helpers/validator';
 import { Legislation } from '../../legislations/legislation.entity';
-import { UserPermission } from '../../users/user.entity';
+import { UserPermission } from '../../users/user-permission';
 import { ValidationExceptionFilter } from '../../common/validation/validation-exception.filter';
 import { ValidationFailedError } from '../../common/validation/validation-failed.error';
 import { ProfessionsService } from '../professions.service';
