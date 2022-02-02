@@ -57,7 +57,7 @@ export class QualificationInformationController {
   @Post('/:id/qualification-information')
   @Permissions(UserPermission.CreateProfession)
   @BackLink((request: Request) =>
-    request.query.change === 'true'
+    request.body.change === 'true'
       ? '/admin/professions/:id/check-your-answers'
       : '/admin/professions/:id/regulated-activities/edit',
   )

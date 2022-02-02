@@ -52,7 +52,7 @@ export class RegulatedActivitiesController {
   @Post('/:id/regulated-activities')
   @Permissions(UserPermission.CreateProfession)
   @BackLink((request: Request) =>
-    request.query.change === 'true'
+    request.body.change === 'true'
       ? '/admin/professions/:id/check-your-answers'
       : '/admin/professions/:id/regulatory-body/edit',
   )

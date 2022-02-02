@@ -65,7 +65,7 @@ export class TopLevelInformationController {
   @Post('/:id/top-level-information')
   @Permissions(UserPermission.CreateProfession)
   @BackLink((request: Request) =>
-    request.query.change === 'true'
+    request.body.change === 'true'
       ? '/admin/professions/:id/check-your-answers'
       : '/admin/professions',
   )
