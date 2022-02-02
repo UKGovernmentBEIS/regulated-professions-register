@@ -4,10 +4,13 @@ import { escapeOf } from '../testutils/escape-of';
 import userFactory from '../testutils/factories/user';
 import { translationOf } from '../testutils/translation-of';
 
-import { User, UserPermission } from './user.entity';
+import { User } from './user.entity';
+import { UserPermission } from './user-permission';
 import { UserPresenter } from './user.presenter';
+import { getPermissionsFromUser } from './helpers/get-permissions-from-user.helper';
 
 jest.mock('../helpers/escape.helper');
+jest.mock('./helpers/get-permissions-from-user.helper');
 
 describe('UserPresenter', () => {
   describe('tableRow', () => {
@@ -81,13 +84,15 @@ describe('UserPresenter', () => {
 
 function createSinglePermissionUser(): User {
   const permissions: UserPermission[] = [UserPermission.CreateUser];
+
   const user = userFactory.build({
     id: 'some-uuid-string',
     email: 'email@example.com',
     name: 'name',
     externalIdentifier: '212121',
-    permissions: permissions,
   });
+
+  (getPermissionsFromUser as jest.Mock).mockReturnValue(permissions);
 
   return user;
 }
@@ -97,13 +102,15 @@ function createMultiPermissionUser(): User {
     UserPermission.CreateUser,
     UserPermission.DeleteUser,
   ];
+
   const user = userFactory.build({
     id: 'some-uuid-string',
     name: 'name',
     email: 'email@example.com',
     externalIdentifier: '212121',
-    permissions: permissions,
   });
+
+  (getPermissionsFromUser as jest.Mock).mockReturnValue(permissions);
 
   return user;
 }

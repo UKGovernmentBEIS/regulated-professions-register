@@ -8,19 +8,7 @@ import {
   OneToMany,
 } from 'typeorm';
 import { OrganisationVersion } from '../organisations/organisation-version.entity';
-
-export enum UserPermission {
-  CreateUser = 'createUser',
-  EditUser = 'editUser',
-  DeleteUser = 'deleteUser',
-  CreateOrganisation = 'createOrganisation',
-  DeleteOrganisation = 'deleteOrganisation',
-  CreateProfession = 'createProfession',
-  DeleteProfession = 'deleteprofession',
-  UploadDecisionData = 'uploadDecisionData',
-  DownloadDecisionData = 'downloadDecisionData',
-  ViewDecisionData = 'viewDecisionData',
-}
+import { Role } from './role';
 
 @Entity({ name: 'users' })
 export class User {
@@ -39,11 +27,10 @@ export class User {
 
   @Column({
     type: 'enum',
-    enum: UserPermission,
-    array: true,
-    default: [],
+    enum: Role,
+    default: Role.Editor,
   })
-  permissions: UserPermission[];
+  role: Role;
 
   @CreateDateColumn({
     type: 'timestamp',
@@ -74,7 +61,7 @@ export class User {
     email?: string,
     name?: string,
     externalIdentifier?: string,
-    permissions?: UserPermission[],
+    role?: Role,
     serviceOwner?: boolean,
     confirmed?: boolean,
     organisationVersions?: OrganisationVersion[],
@@ -82,7 +69,7 @@ export class User {
     this.email = email || '';
     this.name = name || '';
     this.externalIdentifier = externalIdentifier || null;
-    this.permissions = permissions || [];
+    this.role = role || Role.Editor;
     this.serviceOwner = serviceOwner || false;
     this.confirmed = confirmed || false;
     this.organisationVersions = organisationVersions || null;

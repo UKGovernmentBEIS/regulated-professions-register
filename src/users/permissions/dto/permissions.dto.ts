@@ -1,6 +1,6 @@
 import { IsNotEmpty } from 'class-validator';
 import { Type } from 'class-transformer';
-import { UserPermission } from '../../user.entity';
+import { UserPermission } from '../../user-permission';
 
 export class PermissionsDto {
   @IsNotEmpty({

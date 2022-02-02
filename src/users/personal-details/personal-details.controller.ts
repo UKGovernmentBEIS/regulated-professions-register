@@ -15,7 +15,7 @@ import { Request } from 'express';
 import { ValidationFailedError } from '../../common/validation/validation-failed.error';
 import { Validator } from '../../helpers/validator';
 import { UsersService } from '../users.service';
-import { UserPermission } from './../user.entity';
+import { UserPermission } from './../user-permission';
 import { PersonalDetailsDto } from './dto/personal-details.dto';
 import { AuthenticationGuard } from '../../common/authentication.guard';
 import { Permissions } from '../../common/permissions.decorator';

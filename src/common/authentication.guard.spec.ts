@@ -3,8 +3,11 @@ import { Reflector } from '@nestjs/core';
 
 import { createMock } from '@golevelup/ts-jest';
 import { AuthenticationGuard } from './authentication.guard';
-import { UserPermission } from '../users/user.entity';
 import userFactory from '../testutils/factories/user';
+import { UserPermission } from '../users/user-permission';
+import { getPermissionsFromUser } from '../users/helpers/get-permissions-from-user.helper';
+
+jest.mock('../users/helpers/get-permissions-from-user.helper');
 
 describe('AuthenticationGuard', () => {
   describe('when isAuthenticated() is true', () => {
@@ -34,6 +37,8 @@ describe('AuthenticationGuard', () => {
 
     describe('when permissions are specified', () => {
       it('should return true when the user has the appropriate permission', () => {
+        const user = userFactory.build();
+
         const host = createMock<ExecutionContext>({
           switchToHttp: () => ({
             getRequest: () => {
@@ -41,11 +46,7 @@ describe('AuthenticationGuard', () => {
                 oidc: createMock<any>({
                   isAuthenticated: () => true,
                 }),
-                appSession: {
-                  user: userFactory.build({
-                    permissions: [UserPermission.CreateUser],
-                  }),
-                },
+                appSession: { user },
               };
             },
           }),
@@ -57,12 +58,19 @@ describe('AuthenticationGuard', () => {
           },
         });
 
+        (getPermissionsFromUser as jest.Mock).mockReturnValue([
+          UserPermission.CreateUser,
+        ]);
+
         const guard = new AuthenticationGuard(reflector);
 
         expect(guard.canActivate(host)).toStrictEqual(true);
+        expect(getPermissionsFromUser).toHaveBeenCalledWith(user);
       });
 
       it('should return false when the user does not have the appropriate permission', () => {
+        const user = userFactory.build();
+
         const host = createMock<ExecutionContext>({
           switchToHttp: () => ({
             getRequest: () => {
@@ -70,11 +78,7 @@ describe('AuthenticationGuard', () => {
                 oidc: createMock<any>({
                   isAuthenticated: () => true,
                 }),
-                appSession: {
-                  user: userFactory.build({
-                    permissions: [UserPermission.CreateUser],
-                  }),
-                },
+                appSession: { user },
               };
             },
           }),
@@ -86,12 +90,19 @@ describe('AuthenticationGuard', () => {
           },
         });
 
+        (getPermissionsFromUser as jest.Mock).mockReturnValue([
+          UserPermission.CreateUser,
+        ]);
+
         const guard = new AuthenticationGuard(reflector);
 
         expect(guard.canActivate(host)).toStrictEqual(false);
+        expect(getPermissionsFromUser).toHaveBeenCalledWith(user);
       });
 
       it('should return false when the user has no permissions', () => {
+        const user = userFactory.build();
+
         const host = createMock<ExecutionContext>({
           switchToHttp: () => ({
             getRequest: () => {
@@ -99,11 +110,7 @@ describe('AuthenticationGuard', () => {
                 oidc: createMock<any>({
                   isAuthenticated: () => true,
                 }),
-                appSession: {
-                  user: userFactory.build({
-                    permissions: [UserPermission.CreateUser],
-                  }),
-                },
+                appSession: { user },
               };
             },
           }),
@@ -115,9 +122,12 @@ describe('AuthenticationGuard', () => {
           },
         });
 
+        (getPermissionsFromUser as jest.Mock).mockReturnValue([]);
+
         const guard = new AuthenticationGuard(reflector);
 
         expect(guard.canActivate(host)).toStrictEqual(false);
+        expect(getPermissionsFromUser).toHaveBeenCalledWith(user);
       });
     });
   });
@@ -200,5 +210,9 @@ describe('AuthenticationGuard', () => {
         guard.canActivate(host);
       }).toThrow(UnauthorizedException);
     });
+  });
+
+  afterEach(() => {
+    jest.resetAllMocks();
   });
 });

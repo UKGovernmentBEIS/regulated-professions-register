@@ -23,7 +23,7 @@ import { Industry } from '../../industries/industry.entity';
 import { TopLevelDetailsTemplate } from './interfaces/top-level-details.template';
 import { AuthenticationGuard } from '../../common/authentication.guard';
 import { Permissions } from '../../common/permissions.decorator';
-import { UserPermission } from '../../users/user.entity';
+import { UserPermission } from '../../users/user-permission';
 import { BackLink } from '../../common/decorators/back-link.decorator';
 
 import ViewUtils from './viewUtils';

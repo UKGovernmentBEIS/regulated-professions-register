@@ -15,12 +15,13 @@ import { Request } from 'express';
 
 import { AuthenticationGuard } from '../../common/authentication.guard';
 import { UsersService } from '../users.service';
-import { UserPermission } from '../user.entity';
+import { UserPermission } from '../user-permission';
 import { PermissionsDto } from './dto/permissions.dto';
 import { Permissions } from '../../common/permissions.decorator';
 import { ValidationExceptionFilter } from '../../common/validation/validation-exception.filter';
 import { EditTemplate } from './interfaces/edit-template';
 import { BackLink } from '../../common/decorators/back-link.decorator';
+
 @UseGuards(AuthenticationGuard)
 @Controller('/admin/users')
 export class PermissionsController {

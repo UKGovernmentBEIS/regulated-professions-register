@@ -1,5 +1,6 @@
 import { Response, NextFunction } from 'express';
 import { RequestWithAppSession } from './interfaces/request-with-app-session.interface';
+import { getPermissionsFromUser } from '../users/helpers/get-permissions-from-user.helper';
 import { User } from './../users/user.entity';
 
 export function globalLocals(
@@ -11,6 +12,7 @@ export function globalLocals(
 
   res.app.locals.isLoggedin = user !== undefined;
   res.app.locals.user = user;
+  res.app.locals.permissions = user && getPermissionsFromUser(user);
   res.app.locals.currentUrl = req.originalUrl;
   res.app.locals.infoMessages = req.flash('info');
   res.app.locals.successMessages = req.flash('success');

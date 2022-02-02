@@ -6,13 +6,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 import { InjectData } from '../common/decorators/seeds.decorator';
 
-import { UserPermission, User } from './user.entity';
+import { User } from './user.entity';
+import { Role } from './role';
 
 type SeedUser = {
   email: string;
   name: string;
   externalIdentifier: string;
-  permissions: string[];
+  role: Role;
   serviceOwner: boolean;
   confirmed: boolean;
 };
@@ -30,7 +31,7 @@ export class UsersSeeder implements Seeder {
   async seed(): Promise<any> {
     const users = await Promise.all(
       this.data.map(async (user) => {
-        const permissions = user.permissions as UserPermission[];
+        const role = user.role as Role;
         const existingUser = await this.userRepository.findOne({
           email: user.email,
         });
@@ -39,7 +40,7 @@ export class UsersSeeder implements Seeder {
           user.email,
           user.name,
           user.externalIdentifier,
-          permissions,
+          role,
           user.serviceOwner,
           user.confirmed,
         );

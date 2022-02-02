@@ -14,7 +14,8 @@ import { I18nService } from 'nestjs-i18n';
 
 import { AuthenticationGuard } from '../common/authentication.guard';
 import { Auth0Service } from './auth0.service';
-import { User, UserPermission } from './user.entity';
+import { User } from './user.entity';
+import { UserPermission } from './user-permission';
 import { UsersPresenter } from './users.presenter';
 import { UsersService } from './users.service';
 import { IndexTemplate } from './interfaces/index-template';
