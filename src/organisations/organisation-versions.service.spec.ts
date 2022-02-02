@@ -111,6 +111,7 @@ describe('OrganisationVersionsService', () => {
       const queryBuilder = createMock<SelectQueryBuilder<OrganisationVersion>>({
         leftJoinAndSelect: () => queryBuilder,
         where: () => queryBuilder,
+        orderBy: () => queryBuilder,
         getMany: async () => versions,
       });
 
@@ -147,6 +148,8 @@ describe('OrganisationVersionsService', () => {
           status: OrganisationVersionStatus.Live,
         },
       );
+
+      expect(queryBuilder.orderBy).toHaveBeenCalledWith('organisation.name');
     });
   });
 

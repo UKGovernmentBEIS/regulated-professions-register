@@ -43,6 +43,7 @@ export class OrganisationVersionsService {
       .where('organisationVersion.status = :status', {
         status: OrganisationVersionStatus.Live,
       })
+      .orderBy('organisation.name')
       .getMany();
 
     return versions.map((version) =>
