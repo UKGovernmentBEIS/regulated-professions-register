@@ -43,10 +43,10 @@ seeder({
     ]),
   ],
 }).run([
-  UsersSeeder,
   IndustriesSeeder,
   QualificationsSeeder,
   LegislationsSeeder,
   OrganisationsSeeder,
   ProfessionsSeeder,
+  UsersSeeder,
 ]);
