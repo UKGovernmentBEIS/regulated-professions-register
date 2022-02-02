@@ -1,4 +1,4 @@
-describe.skip('Searching an organisation', () => {
+describe('Searching an organisation', () => {
   beforeEach(() => {
     cy.visitAndCheckAccessibility('/');
 

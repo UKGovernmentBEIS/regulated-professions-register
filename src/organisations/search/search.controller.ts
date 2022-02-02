@@ -3,7 +3,8 @@ import { I18nService } from 'nestjs-i18n';
 import { IndustriesService } from '../../industries/industries.service';
 import { Nation } from '../../nations/nation';
 import { OrganisationsFilterHelper } from '../helpers/organisations-filter.helper';
-import { OrganisationsService } from '../organisations.service';
+import { OrganisationVersionsService } from '../organisation-versions.service';
+
 import { FilterDto } from './dto/filter.dto';
 
 import { IndexTemplate } from './interfaces/index-template.interface';
@@ -14,7 +15,7 @@ import { createFilterInput } from '../../helpers/create-filter-input.helper';
 @Controller('regulatory-authorities/search')
 export class SearchController {
   constructor(
-    private readonly organisationsService: OrganisationsService,
+    private readonly organisationVersionsService: OrganisationVersionsService,
     private readonly industriesService: IndustriesService,
     private readonly i18nService: I18nService,
   ) {}
@@ -37,8 +38,7 @@ export class SearchController {
     const allNations = Nation.all();
     const allIndustries = await this.industriesService.all();
 
-    const allOrganisations =
-      await this.organisationsService.allWithProfessions();
+    const allOrganisations = await this.organisationVersionsService.allLive();
 
     const filterInput = createFilterInput({
       ...filter,

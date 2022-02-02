@@ -3,7 +3,7 @@ import { createMock, DeepMocked } from '@golevelup/ts-jest';
 import { I18nService } from 'nestjs-i18n';
 
 import { OrganisationsController } from './organisations.controller';
-import { OrganisationsService } from './organisations.service';
+import { OrganisationVersionsService } from './organisation-versions.service';
 import { Organisation } from './organisation.entity';
 
 import organisationFactory from '../testutils/factories/organisation';
@@ -15,28 +15,20 @@ jest.mock('./presenters/organisation-summary.presenter');
 
 describe('OrganisationsController', () => {
   let controller: OrganisationsController;
-  let organisationsService: DeepMocked<OrganisationsService>;
+  let organisationVersionsService: DeepMocked<OrganisationVersionsService>;
   let organisation: Organisation;
 
   const i18nService = createMockI18nService();
 
   beforeEach(async () => {
-    organisation = organisationFactory.build({
-      professions: professionFactory.buildList(2),
-    });
-
-    organisationsService = createMock<OrganisationsService>({
-      findBySlugWithProfessions: async () => {
-        return organisation;
-      },
-    });
+    organisationVersionsService = createMock<OrganisationVersionsService>();
 
     const module: TestingModule = await Test.createTestingModule({
       controllers: [OrganisationsController],
       providers: [
         {
-          provide: OrganisationsService,
-          useValue: organisationsService,
+          provide: OrganisationVersionsService,
+          useValue: organisationVersionsService,
         },
         { provide: I18nService, useValue: i18nService },
       ],
@@ -51,6 +43,14 @@ describe('OrganisationsController', () => {
 
   describe('show', () => {
     it('should return variables for the show template', async () => {
+      organisation = organisationFactory.build({
+        professions: professionFactory.buildList(2),
+      });
+
+      organisationVersionsService.findLiveBySlug.mockResolvedValue(
+        organisation,
+      );
+
       const expected = await new OrganisationSummaryPresenter(
         organisation,
         i18nService,
@@ -58,9 +58,9 @@ describe('OrganisationsController', () => {
 
       expect(await controller.show('slug')).toEqual(expected);
 
-      expect(
-        organisationsService.findBySlugWithProfessions,
-      ).toHaveBeenCalledWith('slug');
+      expect(organisationVersionsService.findLiveBySlug).toHaveBeenCalledWith(
+        'slug',
+      );
 
       expect(OrganisationSummaryPresenter).toHaveBeenNthCalledWith(
         2,
