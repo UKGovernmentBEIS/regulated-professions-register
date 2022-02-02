@@ -54,7 +54,7 @@ export class LegislationController {
     ),
   )
   @BackLink((request: Request) =>
-    request.query.change === 'true'
+    request.body.change === 'true'
       ? '/admin/professions/:id/check-your-answers'
       : '/admin/professions/:id/qualification-information/edit',
   )

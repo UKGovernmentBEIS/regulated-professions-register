@@ -65,7 +65,7 @@ export class RegulatoryBodyController {
   @Post('/:id/regulatory-body')
   @Permissions(UserPermission.CreateProfession)
   @BackLink((request: Request) =>
-    request.query.change === 'true'
+    request.body.change === 'true'
       ? '/admin/professions/:id/check-your-answers'
       : '/admin/professions/:id/top-level-information/edit',
   )
