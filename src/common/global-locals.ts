@@ -12,6 +12,8 @@ export function globalLocals(
   res.app.locals.isLoggedin = user !== undefined;
   res.app.locals.user = user;
   res.app.locals.currentUrl = req.originalUrl;
+  res.app.locals.infoMessages = req.flash('info');
+  res.app.locals.successMessages = req.flash('success');
 
   next();
 }
