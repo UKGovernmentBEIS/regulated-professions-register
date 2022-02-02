@@ -33,7 +33,7 @@ export class OrganisationPresenter {
         ),
       },
       {
-        html: `<a class="govuk-link" href="/admin/organisations/${this.organisation.slug}">
+        html: `<a class="govuk-link" href="/admin/organisations/${this.organisation.id}/versions/${this.organisation.versionId}">
           View details
           <span class="govuk-visually-hidden">
             about ${this.organisation.name}

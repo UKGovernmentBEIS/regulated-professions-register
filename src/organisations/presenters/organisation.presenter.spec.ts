@@ -52,7 +52,7 @@ describe('OrganisationPresenter', () => {
           });
           expect(tableRow[4]).toEqual({
             html: expect.stringContaining(
-              `<a class="govuk-link" href="/admin/organisations/${organisation.slug}">`,
+              `<a class="govuk-link" href="/admin/organisations/${organisation.id}/versions/${organisation.versionId}">`,
             ),
           });
           expect(tableRow[4]).toEqual({
