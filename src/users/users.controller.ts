@@ -22,6 +22,7 @@ import { IndexTemplate } from './interfaces/index-template';
 import { ShowTemplate } from './interfaces/show-template';
 import { Permissions } from '../common/permissions.decorator';
 import { getReferrer } from '../common/utils';
+import { flashMessage } from '../common/flash-message';
 
 import { UserPresenter } from './user.presenter';
 import { UserMailer } from './user.mailer';
@@ -40,13 +41,12 @@ export class UsersController {
   @Permissions(UserPermission.CreateUser, UserPermission.EditUser)
   @Render('admin/users/index')
   @BackLink('/admin')
-  async index(@Req() req): Promise<IndexTemplate> {
+  async index(): Promise<IndexTemplate> {
     const users = await this.usersService.where({ confirmed: true });
     const usersPresenter = new UsersPresenter(users, this.i18nService);
 
     return {
       ...users,
-      messages: req.flash('info'),
       rows: usersPresenter.tableRows(),
     };
   }
@@ -143,11 +143,13 @@ export class UsersController {
   @Permissions(UserPermission.DeleteUser)
   @Redirect('/admin/users')
   async delete(@Req() req, @Param('id') id): Promise<void> {
-    req.flash(
-      'info',
-      await this.i18nService.translate('users.form.delete.successMessage'),
+    const messageTitle = await this.i18nService.translate(
+      'users.form.delete.successMessage',
     );
     const user = await this.usersService.find(id);
+    const successMessage = flashMessage(messageTitle);
+
+    req.flash('success', successMessage);
 
     await this.auth0Service.deleteUser(user.externalIdentifier).performLater();
 

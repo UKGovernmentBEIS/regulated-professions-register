@@ -11,6 +11,7 @@ import { UsersPresenter } from './users.presenter';
 import { UserPresenter } from './user.presenter';
 import { UserMailer } from './user.mailer';
 import { PerformNowOrLater } from '../common/interfaces/perform-now-or-later';
+import { flashMessage } from '../common/flash-message';
 
 import userFactory from '../testutils/factories/user';
 
@@ -18,6 +19,8 @@ const name = 'Example Name';
 const email = 'name@example.com';
 const externalIdentifier = 'example-external-identifier';
 const permissions = new Array<UserPermission>();
+
+jest.mock('../common/flash-message');
 
 describe('UsersController', () => {
   let controller: UsersController;
@@ -111,9 +114,8 @@ describe('UsersController', () => {
       const users = [user];
       const usersPresenter = new UsersPresenter(users, i18nService);
 
-      expect(await controller.index(request)).toEqual({
+      expect(await controller.index()).toEqual({
         ...users,
-        messages: request.flash('info'),
         rows: usersPresenter.tableRows(),
       });
 
@@ -239,11 +241,20 @@ describe('UsersController', () => {
 
   describe('delete', () => {
     it('should delete a user', async () => {
+      const message = await i18nService.translate(
+        'users.form.delete.successMessage',
+      );
+      const flashMock = flashMessage as jest.Mock;
+
+      flashMock.mockImplementation(() => 'Stub Deletion Message');
+
       await controller.delete(request, 'some-uuid');
 
+      expect(flashMock).toHaveBeenCalledWith(message);
+
       expect(request.flash).toHaveBeenCalledWith(
-        'info',
-        await i18nService.translate('users.form.delete.successMessage'),
+        'success',
+        'Stub Deletion Message',
       );
 
       expect(auth0Service.deleteUser).toHaveBeenCalledWith(
