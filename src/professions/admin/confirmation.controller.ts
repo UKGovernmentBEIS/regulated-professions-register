@@ -14,6 +14,7 @@ import { ProfessionsService } from '../professions.service';
 import { ConfirmationTemplate } from './interfaces/confirmation.template';
 import { Permissions } from '../../common/permissions.decorator';
 import { UserPermission } from '../../users/user.entity';
+
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
 export class ConfirmationController {
