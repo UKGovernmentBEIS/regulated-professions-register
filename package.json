@@ -53,7 +53,7 @@
     "bull": "^4.5.0",
     "bull-repl": "^0.26.3",
     "class-transformer": "^0.5.1",
-    "class-validator": "^0.13.1",
+    "class-validator": "^0.13.2",
     "connect-flash": "^0.1.1",
     "date-fns": "^2.28.0",
     "express-openid-connect": "^2.5.2",
