@@ -62,6 +62,44 @@ describe('OrganisationVersionsService', () => {
     });
   });
 
+  describe('findByIdWithOrganisation', () => {
+    it('returns an Organisation witha version', async () => {
+      const organisationVersion = organisationVersionFactory.build();
+      const queryBuilder = createMock<SelectQueryBuilder<OrganisationVersion>>({
+        leftJoinAndSelect: () => queryBuilder,
+        where: () => queryBuilder,
+        getOne: async () => organisationVersion,
+      });
+
+      jest
+        .spyOn(repo, 'createQueryBuilder')
+        .mockImplementation(() => queryBuilder);
+
+      const result = await service.findByIdWithOrganisation(
+        'org-uuid',
+        'version-uuid',
+      );
+
+      expect(result).toEqual(
+        Organisation.withVersion(
+          organisationVersion.organisation,
+          organisationVersion,
+        ),
+      );
+
+      expect(queryBuilder).toHaveJoined([
+        'organisationVersion.organisation',
+        'organisation.professions',
+        'professions.industries',
+      ]);
+
+      expect(queryBuilder.where).toHaveBeenCalledWith({
+        organisation: { id: 'org-uuid' },
+        id: 'version-uuid',
+      });
+    });
+  });
+
   describe('confirm', () => {
     it('sets a status and a user on the version', async () => {
       const organisationVersion = organisationVersionFactory.build();
@@ -127,20 +165,11 @@ describe('OrganisationVersionsService', () => {
 
       expect(result).toEqual(expectedOrganisations);
 
-      expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
+      expect(queryBuilder).toHaveJoined([
         'organisationVersion.organisation',
-        'organisation',
-      );
-
-      expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
         'organisation.professions',
-        'professions',
-      );
-
-      expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
         'professions.industries',
-        'industries',
-      );
+      ]);
 
       expect(queryBuilder.where).toHaveBeenCalledWith(
         'organisationVersion.status = :status',
@@ -176,25 +205,11 @@ describe('OrganisationVersionsService', () => {
 
       expect(result).toEqual(expectedOrganisations);
 
-      expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
+      expect(queryBuilder).toHaveJoined([
         'organisationVersion.organisation',
-        'organisation',
-      );
-
-      expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
-        'organisationVersion.organisation',
-        'organisation',
-      );
-
-      expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
         'organisation.professions',
-        'professions',
-      );
-
-      expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
         'professions.industries',
-        'industries',
-      );
+      ]);
 
       expect(queryBuilder.distinctOn).toHaveBeenCalledWith([
         'organisationVersion.organisation',
@@ -238,20 +253,11 @@ describe('OrganisationVersionsService', () => {
 
       expect(result).toEqual(expectedVersion);
 
-      expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
+      expect(queryBuilder).toHaveJoined([
         'organisationVersion.organisation',
-        'organisation',
-      );
-
-      expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
         'organisation.professions',
-        'professions',
-      );
-
-      expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
         'professions.industries',
-        'industries',
-      );
+      ]);
 
       expect(queryBuilder.where).toHaveBeenCalledWith(
         'organisationVersion.status = :status AND organisation.slug = :slug',
@@ -263,3 +269,43 @@ describe('OrganisationVersionsService', () => {
     });
   });
 });
+
+expect.extend({
+  toHaveJoined(queryBuilder: any, relations: Array<string>) {
+    const calls = queryBuilder.leftJoinAndSelect.mock.calls;
+    let table: string;
+
+    const result = relations.filter((relation: string) => {
+      table = relation.split('.')[1];
+
+      return calls.some((i: string) => i[0] === relation && i[1] === table);
+    });
+
+    if (result.length == relations.length) {
+      return {
+        message: () =>
+          `exepected queryBuilder to have received the relations \`${relations.join(
+            ', ',
+          )}\``,
+        pass: true,
+      };
+    } else {
+      return {
+        message: () =>
+          `exepected queryBuilder to have received the relations \`${relations.join(
+            ', ',
+          )}\`, but got \`${calls.join(', ')}\``,
+        pass: false,
+      };
+    }
+  },
+});
+
+declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
+  namespace jest {
+    interface Matchers<R> {
+      toHaveJoined(tables: Array<string>): R;
+    }
+  }
+}
