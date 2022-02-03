@@ -10,33 +10,40 @@ import {
   Post,
   Query,
   Res,
+  Req,
 } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
-import { Response } from 'express';
+import { Response, Request } from 'express';
+import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
 
 import { AuthenticationGuard } from '../../common/authentication.guard';
 import { ValidationExceptionFilter } from '../../common/validation/validation-exception.filter';
 import { OrganisationsService } from '../organisations.service';
+import { OrganisationVersionsService } from '../organisation-versions.service';
 import { Organisation } from '../organisation.entity';
+import { OrganisationVersion } from '../organisation-version.entity';
+
 import { OrganisationPresenter } from '../presenters/organisation.presenter';
 import { OrganisationsPresenter } from './presenters/organisations.presenter';
 
 import { ReviewTemplate } from './interfaces/review-template.interface';
-import { ShowTemplate } from '../interfaces/show-template.interface';
-import { OrganisationSummaryPresenter } from '../presenters/organisation-summary.presenter';
 import { BackLink } from '../../common/decorators/back-link.decorator';
 import { IndexTemplate } from './interfaces/index-template.interface';
+
 import { OrganisationDto } from './dto/organisation.dto';
 import { FilterDto } from './dto/filter.dto';
 import { OrganisationsFilterHelper } from '../helpers/organisations-filter.helper';
 import { IndustriesService } from '../../industries/industries.service';
 import { createFilterInput } from '../../helpers/create-filter-input.helper';
 
+import { flashMessage } from '../../common/flash-message';
+
 @UseGuards(AuthenticationGuard)
 @Controller('/admin/organisations')
 export class OrganisationsController {
   constructor(
     private readonly organisationsService: OrganisationsService,
+    private readonly organisationVersionsService: OrganisationVersionsService,
     private readonly industriesService: IndustriesService,
     private readonly i18nService: I18nService,
   ) {}
@@ -46,7 +53,7 @@ export class OrganisationsController {
   @BackLink('/admin')
   async index(@Query() query: FilterDto = null): Promise<IndexTemplate> {
     const allOrganisations =
-      await this.organisationsService.allWithProfessions();
+      await this.organisationVersionsService.allDraftOrLive();
     const allIndustries = await this.industriesService.all();
 
     const filter = query || new FilterDto();
@@ -74,58 +81,72 @@ export class OrganisationsController {
   }
 
   @Post('/')
-  async create(@Res() res: Response): Promise<void> {
+  async create(
+    @Res() res: Response,
+    @Req() req: RequestWithAppSession,
+  ): Promise<void> {
     const blankOrganisation = new Organisation();
     const organisation = await this.organisationsService.save(
       blankOrganisation,
     );
+    const blankVersion = {
+      organisation: organisation,
+      user: req.appSession.user,
+    } as OrganisationVersion;
+    const version = await this.organisationVersionsService.save(blankVersion);
 
-    return res.redirect(`/admin/organisations/${organisation.id}/edit`);
-  }
-
-  @Get('/:slug')
-  @Render('admin/organisations/show')
-  @BackLink('/admin/organisations')
-  async show(@Param('slug') slug: string): Promise<ShowTemplate> {
-    const organisation =
-      await this.organisationsService.findBySlugWithProfessions(slug);
-
-    const organisationSummaryPresenter = new OrganisationSummaryPresenter(
-      organisation,
-      this.i18nService,
+    return res.redirect(
+      `/admin/organisations/${version.organisation.id}/versions/${version.id}/edit`,
     );
-
-    return organisationSummaryPresenter.present();
   }
 
-  @Get('/:id/edit')
+  @Get('/:organisationId/versions/:versionId/edit')
   @Render('admin/organisations/edit')
   @BackLink('/admin/organisations/:id')
-  async edit(@Param('id') id: string): Promise<Organisation> {
-    const organisation = await this.organisationsService.find(id);
+  async edit(
+    @Param('organisationId') organisationId: string,
+    @Param('versionId') versionId: string,
+  ): Promise<Organisation> {
+    const organisation = await this.organisationsService.findWithVersion(
+      organisationId,
+      versionId,
+    );
 
     return organisation;
   }
 
-  @Put('/:id')
+  @Put('/:organisationId/versions/:versionId')
   @UseFilters(new ValidationExceptionFilter('admin/organisations/edit'))
   async update(
-    @Param('id') id: string,
+    @Param('organisationId') organisationId: string,
+    @Param('versionId') versionId: string,
     @Body() body: OrganisationDto,
     @Res() res: Response,
+    @Req() req: Request,
   ): Promise<void> {
-    const organisation = await this.organisationsService.find(id);
+    const organisation = await this.organisationsService.find(organisationId);
+    const version = await this.organisationVersionsService.find(versionId);
 
     if (body.confirm) {
-      return this.confirm(res, organisation);
+      return this.confirm(res, req, organisation, version);
     } else {
-      const newOrganisation = {
-        ...organisation,
-        ...(body as Organisation),
+      if (!organisation.slug) {
+        organisation.name = body.name;
+        await this.organisationsService.save(organisation);
+      }
+
+      const newVersion = {
+        ...version,
+        ...OrganisationVersion.fromDto(body),
       };
 
-      const updatedOrganisation = await this.organisationsService.save(
-        newOrganisation,
+      const updatedVersion = await this.organisationVersionsService.save(
+        newVersion,
+      );
+
+      const updatedOrganisation = Organisation.withVersion(
+        organisation,
+        updatedVersion,
       );
 
       const organisationPresenter = new OrganisationPresenter(
@@ -133,7 +154,7 @@ export class OrganisationsController {
         this.i18nService,
       );
 
-      return this.showReviewPage(res, {
+      return this.showReviewPage(res, organisation, version, {
         ...updatedOrganisation,
         summaryList: await organisationPresenter.summaryList({
           classes: 'govuk-summary-list',
@@ -147,22 +168,43 @@ export class OrganisationsController {
 
   private async confirm(
     res: Response,
+    req: Request,
     organisation: Organisation,
+    version: OrganisationVersion,
   ): Promise<void> {
-    // This should potentially add a confirmed flag to the object once
-    // we have draft functionality in place
-    await this.organisationsService.save(organisation);
+    let action: string;
 
-    res.render('admin/organisations/complete', organisation);
+    if (!organisation.slug) {
+      action = 'create';
+      await this.organisationsService.setSlug(organisation);
+    } else {
+      action = 'edit';
+    }
+    await this.organisationVersionsService.confirm(version);
+
+    const messageTitle = await this.i18nService.translate(
+      `organisations.admin.${action}.confirmation.heading`,
+    );
+
+    const messageBody = await this.i18nService.translate(
+      `organisations.admin.${action}.confirmation.body`,
+      { args: { name: organisation.name } },
+    );
+
+    req.flash('info', flashMessage(messageTitle, messageBody));
+
+    res.redirect('/admin/organisations');
   }
 
   private async showReviewPage(
     res: Response,
+    organisation: Organisation,
+    version: OrganisationVersion,
     template: ReviewTemplate,
   ): Promise<void> {
     return res.render('admin/organisations/review', {
       ...template,
-      backLink: `/admin/organisations/${template.id}/edit/`,
+      backLink: `/admin/organisations/${organisation.id}/versions/${version.id}/edit/`,
     });
   }
 }

@@ -9,6 +9,8 @@
     {{ "organisations.admin.heading" | t }}
   </h1>
 
+  {% include "../../_messages.njk" %}
+
   {% if 'createOrganisation' in user.permissions %}
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-full">

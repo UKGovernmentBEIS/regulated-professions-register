@@ -29,9 +29,14 @@ export class OrganisationPresenter {
         html: await this.industries(),
       },
       {
+        html: await this.i18nService.translate(
+          `organisations.status.${this.organisation.status}`,
+        ),
+      },
+      {
         html: `<a class="govuk-link" href="/admin/organisations/${
-          this.organisation.slug
-        }">
+          this.organisation.id
+        }/versions/${this.organisation.versionId}">
           View details
           <span class="govuk-visually-hidden">
             about ${escape(this.organisation.name)}
@@ -123,7 +128,7 @@ export class OrganisationPresenter {
             actions: {
               items: [
                 {
-                  href: `/admin/organisations/${this.organisation.id}/edit`,
+                  href: `/admin/organisations/${this.organisation.id}/versions/${this.organisation.versionId}/edit`,
                   text: await this.i18nService.translate('app.change'),
                   visuallyHiddenText: row.key.text,
                 },

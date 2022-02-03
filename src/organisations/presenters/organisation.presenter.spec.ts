@@ -8,6 +8,8 @@ import { Profession } from '../../professions/profession.entity';
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 
 import organisationFactory from '../../testutils/factories/organisation';
+import organisationVersionFactory from '../../testutils/factories/organisation-version';
+
 import professionFactory from '../../testutils/factories/profession';
 import industryFactory from '../../testutils/factories/industry';
 import { escape } from '../../helpers/escape.helper';
@@ -52,11 +54,14 @@ describe('OrganisationPresenter', () => {
             html: `Translation of \`${industries[0].name}\``,
           });
           expect(tableRow[3]).toEqual({
+            html: `Translation of \`organisations.status.${organisation.status}\``,
+          });
+          expect(tableRow[4]).toEqual({
             html: expect.stringContaining(
-              `<a class="govuk-link" href="/admin/organisations/${organisation.slug}">`,
+              `<a class="govuk-link" href="/admin/organisations/${organisation.id}/versions/${organisation.versionId}">`,
             ),
           });
-          expect(tableRow[3]).toEqual({
+          expect(tableRow[4]).toEqual({
             html: expect.stringContaining(
               `about ${escapeOf(organisation.name)}`,
             ),
@@ -104,6 +109,9 @@ describe('OrganisationPresenter', () => {
               `Translation of \`${industries[2].name}\``,
             ].join('<br />'),
           });
+          expect(tableRow[3]).toEqual({
+            html: `Translation of \`organisations.status.${organisation.status}\``,
+          });
         });
       });
     });
@@ -149,6 +157,7 @@ describe('OrganisationPresenter', () => {
     describe('when all fields are present', () => {
       it('should return all fields', async () => {
         (escape as jest.Mock).mockImplementation(escapeOf);
+        organisation = organisationFactory.withVersion().build();
 
         const presenter = new OrganisationPresenter(organisation, i18nService);
 
@@ -205,7 +214,10 @@ describe('OrganisationPresenter', () => {
         it('should filter out empty fields', async () => {
           (escape as jest.Mock).mockImplementation(escapeOf);
 
-          organisation = organisationFactory.build({ alternateName: '' });
+          organisation = organisationFactory
+            .withVersion()
+            .build({ alternateName: '' });
+
           const presenter = new OrganisationPresenter(
             organisation,
             i18nService,
@@ -227,7 +239,10 @@ describe('OrganisationPresenter', () => {
         it('keeps empty rows intact', async () => {
           (escape as jest.Mock).mockImplementation(escapeOf);
 
-          organisation = organisationFactory.build({ alternateName: '' });
+          organisation = organisationFactory
+            .withVersion()
+            .build({ alternateName: '' });
+
           const presenter = new OrganisationPresenter(
             organisation,
             i18nService,
@@ -252,7 +267,10 @@ describe('OrganisationPresenter', () => {
       it('should include the name of the organisation', async () => {
         (escape as jest.Mock).mockImplementation(escapeOf);
 
-        organisation = organisationFactory.build({ name: 'My Organisation' });
+        organisation = organisationFactory
+          .withVersion()
+          .build({ name: 'My Organisation' });
+
         const presenter = new OrganisationPresenter(organisation, i18nService);
         const list = await presenter.summaryList({ includeName: true });
 
@@ -273,7 +291,12 @@ describe('OrganisationPresenter', () => {
       it('should include an actions column', async () => {
         (escape as jest.Mock).mockImplementation(escapeOf);
 
-        organisation = organisationFactory.build({ name: 'My Organisation' });
+        const version = organisationVersionFactory.build();
+
+        organisation = organisationFactory
+          .withVersion(version)
+          .build({ name: 'My Organisation' });
+
         const presenter = new OrganisationPresenter(organisation, i18nService);
         const list = await presenter.summaryList({ includeActions: true });
 
@@ -284,7 +307,7 @@ describe('OrganisationPresenter', () => {
           expect(row.actions).toEqual({
             items: [
               {
-                href: `/admin/organisations/${organisation.id}/edit`,
+                href: `/admin/organisations/${organisation.id}/versions/${version.id}/edit`,
                 text: 'Translation of `app.change`',
                 visuallyHiddenText: visuallyHiddenText,
               },

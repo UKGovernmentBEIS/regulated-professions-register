@@ -1,7 +1,8 @@
 import { Repository } from 'typeorm';
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Organisation } from './organisation.entity';
+import { SlugGenerator } from '../common/slug-generator';
 
 @Injectable()
 export class OrganisationsService {
@@ -29,6 +30,23 @@ export class OrganisationsService {
     return this.repository.findOne(id);
   }
 
+  async findWithVersion(id: string, versionId: string): Promise<Organisation> {
+    const organisation = await this.repository.findOne({
+      where: { id },
+      relations: ['versions'],
+    });
+
+    if (organisation === undefined) throw new NotFoundException();
+
+    const version = organisation.versions.find(
+      (version) => version.id == versionId,
+    );
+
+    if (version === undefined) throw new NotFoundException();
+
+    return Organisation.withVersion(organisation, version);
+  }
+
   findBySlug(slug: string): Promise<Organisation> {
     return this.repository.findOne({
       where: { slug },
@@ -46,6 +64,14 @@ export class OrganisationsService {
 
   async save(organisation: Organisation): Promise<Organisation> {
     return this.repository.save(organisation);
+  }
+
+  async setSlug(organisation: Organisation): Promise<Organisation> {
+    const slugGenerator = new SlugGenerator(this, organisation.name);
+
+    organisation.slug = await slugGenerator.slug();
+
+    return await this.repository.save(organisation);
   }
 
   private filterConfirmedProfessions(organisation: Organisation): Organisation {

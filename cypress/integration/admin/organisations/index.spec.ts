@@ -12,11 +12,24 @@ describe('Listing organisations', () => {
       cy.readFile('./seeds/test/professions.json').then((professions) => {
         cy.readFile('./seeds/test/organisations.json').then((organisations) => {
           organisations.forEach((organisation) => {
+            const latestVersion =
+              organisation.versions[organisation.versions.length - 1];
+
             cy.get('tr')
               .contains(organisation.name)
-              .then(($row) => {
+              .then(($header) => {
+                const $row = $header.parent();
+
+                console.log($row);
+
                 cy.wrap($row).should('contain', organisation.name);
-                cy.wrap($row).should('contain', organisation.alternateName);
+                cy.wrap($row).should('contain', latestVersion.alternateName);
+
+                cy.translate(
+                  `organisations.status.${latestVersion.status}`,
+                ).then((status) => {
+                  cy.wrap($row).should('contain', status);
+                });
 
                 const professionsForOrganisation = professions.filter(
                   (profession: any) =>

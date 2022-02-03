@@ -1,9 +1,6 @@
-import { Request, Response, NextFunction } from 'express';
+import { Response, NextFunction } from 'express';
+import { RequestWithAppSession } from './interfaces/request-with-app-session.interface';
 import { User } from './../users/user.entity';
-
-export interface RequestWithAppSession extends Request {
-  appSession: any;
-}
 
 export function globalLocals(
   req: RequestWithAppSession,
@@ -15,6 +12,8 @@ export function globalLocals(
   res.app.locals.isLoggedin = user !== undefined;
   res.app.locals.user = user;
   res.app.locals.currentUrl = req.originalUrl;
+  res.app.locals.infoMessages = req.flash('info');
+  res.app.locals.successMessages = req.flash('success');
 
   next();
 }

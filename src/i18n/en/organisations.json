@@ -33,7 +33,18 @@
       "button": "Filter results"
     },
     "edit": {
-      "heading": "Amending a regulatory authority"
+      "heading": "Amending a regulatory authority",
+      "confirmation": {
+        "heading": "Regulatory authority amended",
+        "body": "The changes to <strong>{name}</strong> are not published yet."
+      }
+    },
+    "create": {
+      "heading": "Adding a regulatory authority",
+      "confirmation": {
+        "heading": "Regulatory authority created",
+        "body": "The new regulator <strong>{name}</strong> is not published yet."
+      }
     },
     "new": {
       "heading": "Are you sure you want to create a new regulatory authority?"
@@ -49,6 +60,7 @@
       "name": "Name",
       "alternateName": "Alternate name",
       "industries": "Industry/Sector(s)",
+      "status": "Status",
       "actions": "Actions"
     },
     "form": {
@@ -73,15 +85,6 @@
         },
         "contactUrl": {
           "invalid": "Please enter a valid contact details web address"
-        }
-      },
-      "headings": {
-        "confirmation": "Regulatory authority amended"
-      },
-      "body": {
-        "confirmation": {
-          "panel": "{name} has been updated",
-          "next": "What happens next?"
         }
       }
     },
@@ -126,5 +129,9 @@
     "address": "Address",
     "email": "Email",
     "telephone": "Phone number"
+  },
+  "status": {
+    "live": "Live",
+    "draft": "Draft"
   }
 }

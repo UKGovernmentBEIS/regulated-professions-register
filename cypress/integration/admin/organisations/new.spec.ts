@@ -54,6 +54,10 @@ describe('Creating organisations', () => {
     });
 
     it('allows me to create an organisation', () => {
+      cy.translate('organisations.admin.create.heading').then((heading) => {
+        cy.get('html').should('contain', heading);
+      });
+
       cy.get('input[name="name"]').invoke('val', 'New Organisation');
 
       cy.get('input[name="alternateName"]').type('Alternate Name');
@@ -96,15 +100,29 @@ describe('Creating organisations', () => {
         cy.get('button').contains(buttonText).click();
       });
 
-      cy.translate('organisations.admin.form.headings.confirmation').then(
-        (confirmationText) => {
-          cy.get('html').should('contain', confirmationText);
+      cy.translate('organisations.admin.create.confirmation.heading').then(
+        (confirmationHeading) => {
+          cy.get('html').should('contain', confirmationHeading);
         },
       );
 
-      cy.visit('/admin/organisations');
+      cy.translate('organisations.admin.create.confirmation.body', {
+        name: 'New Organisation',
+      }).then((confirmationBody) => {
+        cy.get('html').should('contain.html', confirmationBody);
+      });
 
-      cy.get('body').should('contain', 'New Organisation');
+      cy.get('tr')
+        .contains('New Organisation')
+        .then(($header) => {
+          const $row = $header.parent();
+
+          cy.wrap($row).should('contain', 'Alternate Name');
+
+          cy.translate(`organisations.status.draft`).then((status) => {
+            cy.wrap($row).should('contain', status);
+          });
+        });
     });
   });
 });

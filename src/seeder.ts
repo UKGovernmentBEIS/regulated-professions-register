@@ -18,6 +18,7 @@ import { LegislationsSeeder } from './legislations/legislations.seeder';
 import { ProfessionsSeeder } from './professions/professions.seeder';
 import { OrganisationsSeeder } from './organisations/organisations.seeder';
 import { Organisation } from './organisations/organisation.entity';
+import { OrganisationVersion } from './organisations/organisation-version.entity';
 
 seeder({
   imports: [
@@ -36,6 +37,7 @@ seeder({
       Industry,
       Qualification,
       Legislation,
+      OrganisationVersion,
       Organisation,
       Profession,
     ]),

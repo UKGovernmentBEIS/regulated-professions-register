@@ -75,6 +75,8 @@ const profession3 = professionFactory.build({
 let request: DeepMocked<Request>;
 let i18nService: DeepMocked<I18nService>;
 
+jest.mock('../../organisations/organisation.entity');
+
 describe('ProfessionsController', () => {
   let controller: ProfessionsController;
   let professionsService: DeepMocked<ProfessionsService>;
@@ -338,6 +340,10 @@ describe('ProfessionsController', () => {
 
       professionsService.findBySlug.mockResolvedValue(profession);
 
+      (Organisation.withLatestLiveVersion as jest.Mock).mockImplementation(
+        () => profession.organisation,
+      );
+
       const result = await controller.show('example-slug');
 
       expect(result).toEqual({
@@ -345,6 +351,7 @@ describe('ProfessionsController', () => {
         qualification: new QualificationPresenter(profession.qualification),
         nations: ['Translation of `nations.england`'],
         industries: ['Translation of `industries.example`'],
+        organisation: profession.organisation,
       });
 
       expect(professionsService.findBySlug).toHaveBeenCalledWith(
@@ -370,6 +377,10 @@ describe('ProfessionsController', () => {
 
         professionsService.findBySlug.mockResolvedValue(profession);
 
+        (Organisation.withLatestLiveVersion as jest.Mock).mockImplementation(
+          () => profession.organisation,
+        );
+
         const result = await controller.show('example-slug');
 
         expect(result).toEqual({
@@ -377,6 +388,7 @@ describe('ProfessionsController', () => {
           qualification: null,
           nations: [translationOf('nations.england')],
           industries: [translationOf('industries.example')],
+          organisation: profession.organisation,
         });
       });
     });

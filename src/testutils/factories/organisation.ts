@@ -1,19 +1,31 @@
 import { Factory } from 'fishery';
 import { Organisation } from '../../organisations/organisation.entity';
+import { OrganisationVersion } from '../../organisations/organisation-version.entity';
 
-export default Factory.define<Organisation>(({ sequence }) => ({
+import organisationVersionFactory from './organisation-version';
+class OrganisationFactory extends Factory<Organisation> {
+  withVersion(
+    organisationVersion: OrganisationVersion = organisationVersionFactory.build(),
+  ) {
+    return this.params({
+      alternateName: organisationVersion.alternateName,
+      address: organisationVersion.address,
+      url: organisationVersion.url,
+      email: organisationVersion.email,
+      contactUrl: organisationVersion.contactUrl,
+      telephone: organisationVersion.telephone,
+      fax: organisationVersion.fax,
+      versionId: organisationVersion.id,
+    });
+  }
+}
+
+export default OrganisationFactory.define(({ sequence }) => ({
   id: sequence.toString(),
   name: 'Example Organisation',
-  alternateName: 'Alternate Organisation Name',
   slug: 'example-slug',
-  address: '123 Fake Street, London, AB1 2AB, England',
-  url: 'https://www.example-org.com',
-  email: 'hello@example-org.com',
-  contactUrl: 'https://www.example-org.com/contact-us',
-  telephone: '+441234567890',
-  fax: '+441234567891',
   professions: undefined,
-  version: undefined,
+  versions: [],
   created_at: new Date(),
   updated_at: new Date(),
 }));

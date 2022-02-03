@@ -32,6 +32,7 @@ import { Permissions } from '../../common/permissions.decorator';
 import { BackLink } from '../../common/decorators/back-link.decorator';
 import QualificationPresenter from '../../qualifications/presenters/qualification.presenter';
 import { createFilterInput } from '../../helpers/create-filter-input.helper';
+import { Organisation } from '../../organisations/organisation.entity';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
@@ -74,6 +75,10 @@ export class ProfessionsController {
       );
     }
 
+    const organisation = Organisation.withLatestLiveVersion(
+      profession.organisation,
+    );
+
     const nations = await Promise.all(
       profession.occupationLocations.map(async (code) =>
         Nation.find(code).translatedName(this.i18Service),
@@ -95,6 +100,7 @@ export class ProfessionsController {
       qualification: qualification,
       nations,
       industries,
+      organisation,
     };
   }
 
