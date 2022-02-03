@@ -35,8 +35,8 @@ export class OrganisationPresenter {
       },
       {
         html: `<a class="govuk-link" href="/admin/organisations/${
-          this.organisation.slug
-        }">
+          this.organisation.id
+        }/versions/${this.organisation.versionId}">
           View details
           <span class="govuk-visually-hidden">
             about ${escape(this.organisation.name)}
