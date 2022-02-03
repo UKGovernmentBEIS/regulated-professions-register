@@ -130,25 +130,37 @@ export class OrganisationsController {
     return organisation;
   }
 
-  @Put('/:id')
+  @Put('/:organisationId/versions/:versionId')
   @UseFilters(new ValidationExceptionFilter('admin/organisations/edit'))
   async update(
-    @Param('id') id: string,
+    @Param('organisationId') organisationId: string,
+    @Param('versionId') versionId: string,
     @Body() body: OrganisationDto,
     @Res() res: Response,
   ): Promise<void> {
-    const organisation = await this.organisationsService.find(id);
+    const organisation = await this.organisationsService.find(organisationId);
+    const version = await this.organisationsVersionsService.find(versionId);
 
     if (body.confirm) {
-      return this.confirm(res, organisation);
+      return this.confirm(res, organisation, version);
     } else {
-      const newOrganisation = {
-        ...organisation,
-        ...(body as Organisation),
+      if (!organisation.slug) {
+        organisation.name = body.name;
+        await this.organisationsService.save(organisation);
+      }
+
+      const newVersion = {
+        ...version,
+        ...OrganisationVersion.fromDto(body),
       };
 
-      const updatedOrganisation = await this.organisationsService.save(
-        newOrganisation,
+      const updatedVersion = await this.organisationsVersionsService.save(
+        newVersion,
+      );
+
+      const updatedOrganisation = Organisation.withVersion(
+        organisation,
+        updatedVersion,
       );
 
       const organisationPresenter = new OrganisationPresenter(
@@ -156,7 +168,7 @@ export class OrganisationsController {
         this.i18nService,
       );
 
-      return this.showReviewPage(res, {
+      return this.showReviewPage(res, organisation, version, {
         ...updatedOrganisation,
         summaryList: await organisationPresenter.summaryList({
           classes: 'govuk-summary-list',
@@ -171,21 +183,25 @@ export class OrganisationsController {
   private async confirm(
     res: Response,
     organisation: Organisation,
+    version: OrganisationVersion,
   ): Promise<void> {
     // This should potentially add a confirmed flag to the object once
     // we have draft functionality in place
     await this.organisationsService.save(organisation);
+    await this.organisationsVersionsService.save(version);
 
     res.render('admin/organisations/complete', organisation);
   }
 
   private async showReviewPage(
     res: Response,
+    organisation: Organisation,
+    version: OrganisationVersion,
     template: ReviewTemplate,
   ): Promise<void> {
     return res.render('admin/organisations/review', {
       ...template,
-      backLink: `/admin/organisations/${template.id}/edit/`,
+      backLink: `/admin/organisations/${organisation.id}/versions/${version.id}/edit/`,
     });
   }
 }

@@ -278,84 +278,166 @@ describe('OrganisationsController', () => {
 
   describe('update', () => {
     describe('when confirm is not set', () => {
-      it('saves the organisation', async () => {
-        const summaryList: SummaryList = {
-          classes: 'govuk-summary-list--no-border',
-          rows: [],
-        };
+      describe('when the organisation does not have a slug', () => {
+        it('saves the organisation and the name', async () => {
+          const summaryList: SummaryList = {
+            classes: 'govuk-summary-list--no-border',
+            rows: [],
+          };
 
-        (
-          OrganisationPresenter.prototype as DeepMocked<OrganisationPresenter>
-        ).summaryList.mockResolvedValue(summaryList);
+          (
+            OrganisationPresenter.prototype as DeepMocked<OrganisationPresenter>
+          ).summaryList.mockResolvedValue(summaryList);
 
-        const id = 'some-uuid';
-        const response = createMock<Response>();
+          const organisationId = 'some-uuid';
+          const versionId = 'some-other-uuid';
+          const response = createMock<Response>();
 
-        const organisationDto: OrganisationDto = {
-          name: 'Organisation',
-          alternateName: '',
-          email: 'email@example.com',
-          url: 'http://example.com',
-          contactUrl: 'http://example.com',
-          address: '123 Fake Street',
-          telephone: '122356',
-          fax: '',
-        };
+          const organisationDto: OrganisationDto = {
+            name: 'Organisation',
+            alternateName: '',
+            email: 'email@example.com',
+            url: 'http://example.com',
+            contactUrl: 'http://example.com',
+            address: '123 Fake Street',
+            telephone: '122356',
+            fax: '',
+          };
 
-        const organisation = organisationFactory.build();
+          const organisation = organisationFactory.build({ slug: '' });
+          const version = organisationVersionFactory.build({});
 
-        const newOrganisation = {
-          ...organisation,
-          ...organisationDto,
-        };
+          organisationsService.find.mockResolvedValue(organisation);
+          organisationVersionsService.find.mockResolvedValue(version);
 
-        organisationsService.find.mockResolvedValue(organisation);
-        organisationsService.save.mockResolvedValue(newOrganisation);
+          const newOrganisation = {
+            ...organisation,
+            name: 'Organisation',
+          };
 
-        await controller.update(id, organisationDto, response);
+          const newVersion = {
+            ...version,
+            ...OrganisationVersion.fromDto(organisationDto),
+          };
 
-        expect(organisationsService.save).toHaveBeenCalledWith(
-          expect.objectContaining(newOrganisation),
-        );
+          organisationsService.save.mockResolvedValue(newOrganisation);
+          organisationVersionsService.save.mockResolvedValue(newVersion);
 
-        expect(OrganisationPresenter).toHaveBeenCalledWith(
-          expect.objectContaining(newOrganisation),
-          i18nService,
-        );
+          await controller.update(
+            organisationId,
+            versionId,
+            organisationDto,
+            response,
+          );
 
-        expect(
-          OrganisationPresenter.prototype.summaryList,
-        ).toHaveBeenCalledWith({
-          classes: 'govuk-summary-list',
-          removeBlank: false,
-          includeName: true,
-          includeActions: true,
+          expect(organisationsService.save).toHaveBeenCalledWith(
+            newOrganisation,
+          );
+
+          expect(organisationVersionsService.save).toHaveBeenCalledWith(
+            newVersion,
+          );
+
+          const updatedOrganisation = Organisation.withVersion(
+            organisation,
+            newVersion,
+          );
+
+          expect(OrganisationPresenter).toHaveBeenCalledWith(
+            updatedOrganisation,
+            i18nService,
+          );
+
+          expect(
+            OrganisationPresenter.prototype.summaryList,
+          ).toHaveBeenCalledWith({
+            classes: 'govuk-summary-list',
+            removeBlank: false,
+            includeName: true,
+            includeActions: true,
+          });
+
+          expect(response.render).toHaveBeenCalledWith(
+            'admin/organisations/review',
+            {
+              ...updatedOrganisation,
+              summaryList: summaryList,
+              backLink: `/admin/organisations/${organisation.id}/versions/${version.id}/edit/`,
+            },
+          );
         });
 
-        expect(response.render).toHaveBeenCalledWith(
-          'admin/organisations/review',
-          {
-            ...newOrganisation,
-            summaryList: summaryList,
-            backLink: `/admin/organisations/${newOrganisation.id}/edit/`,
-          },
-        );
+        describe('when the organisation already has a slug', () => {
+          it('Does not re set the name', async () => {
+            const organisationDto: OrganisationDto = {
+              name: 'Organisation',
+              alternateName: '',
+              email: 'email@example.com',
+              url: 'http://example.com',
+              contactUrl: 'http://example.com',
+              address: '123 Fake Street',
+              telephone: '122356',
+              fax: '',
+            };
+
+            const organisation = organisationFactory.build({
+              name: 'My awesome organisation',
+              slug: 'my-awesome-organisation',
+            });
+            const version = organisationVersionFactory.build({});
+            const response = createMock<Response>();
+
+            organisationsService.find.mockResolvedValue(organisation);
+            organisationVersionsService.find.mockResolvedValue(version);
+
+            const newVersion = {
+              ...version,
+              ...OrganisationVersion.fromDto(organisationDto),
+            };
+
+            await controller.update(
+              organisation.id,
+              version.id,
+              organisationDto,
+              response,
+            );
+
+            expect(organisationsService.save).not.toHaveBeenCalled();
+            expect(organisationVersionsService.save).toHaveBeenCalledWith(
+              newVersion,
+            );
+          });
+        });
       });
 
       describe('when confirm is set', () => {
-        it('should update the organisation', async () => {
+        it('should update the organisation and version', async () => {
           const organisation = createOrganisation();
+          const version = organisationVersionFactory.build();
           const response = createMock<Response>();
           const organisationDto = createMock<OrganisationDto>({
             confirm: true,
           });
 
           organisationsService.find.mockResolvedValue(organisation);
+          organisationVersionsService.find.mockResolvedValue(version);
 
-          await controller.update('some-uuid', organisationDto, response);
+          await controller.update(
+            'some-uuid',
+            'some-other-uuid',
+            organisationDto,
+            response,
+          );
 
           expect(organisationsService.find).toHaveBeenCalledWith('some-uuid');
+          expect(organisationVersionsService.find).toHaveBeenCalledWith(
+            'some-other-uuid',
+          );
+
           expect(organisationsService.save).toHaveBeenCalledWith(organisation);
+          expect(organisationVersionsService.save).toHaveBeenCalledWith(
+            version,
+          );
 
           expect(response.render).toHaveBeenCalledWith(
             'admin/organisations/complete',
