@@ -8,8 +8,14 @@ import { FilterInput } from '../../../common/interfaces/filter-input.interface';
 import { IndexTemplate } from '../interfaces/index-template.interface';
 import { IndustriesCheckboxPresenter } from '../../../industries/industries-checkbox.presenter';
 
-type Field = 'name' | 'alternateName' | 'industries' | 'actions';
-const fields = ['name', 'alternateName', 'industries', 'actions'] as Field[];
+type Field = 'name' | 'alternateName' | 'industries' | 'status' | 'actions';
+const fields = [
+  'name',
+  'alternateName',
+  'industries',
+  'status',
+  'actions',
+] as Field[];
 
 export class OrganisationsPresenter {
   constructor(
