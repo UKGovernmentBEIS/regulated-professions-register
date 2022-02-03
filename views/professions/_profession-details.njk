@@ -1,6 +1,6 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-<span class="govuk-caption-l">{{ profession.organisation.name }}</span>
+<span class="govuk-caption-l">{{ organisation.name }}</span>
 
 <h1 class="govuk-heading-xl">{{ profession.name }}</h1>
 
@@ -53,7 +53,7 @@
         text: ("professions.show.bodies.regulatedAuthority" | t)
       },
       value: {
-        text: profession.organisation.name
+        text: organisation.name
       }
     },
     {
@@ -61,7 +61,7 @@
         text: ("professions.show.bodies.address" | t)
       },
       value: {
-        text: profession.organisation.address
+        text: organisation.address
       }
     },
     {
@@ -69,7 +69,7 @@
         text: ("professions.show.bodies.emailAddress" | t)
       },
       value: {
-        html: ["<a class=\"govuk-link\" href=\"mailto:", (profession.organisation.email | escape), "\">", (profession.organisation.email | escape),  "</a>" ] | join
+        html: ["<a class=\"govuk-link\" href=\"mailto:", (organisation.email | escape), "\">", (organisation.email | escape),  "</a>" ] | join
       }
     },
     {
@@ -77,7 +77,7 @@
         text: ("professions.show.bodies.url" | t)
       },
       value: {
-        html: ["<a class=\"govuk-link\" href=\"", (profession.organisation.url | escape), "\">", (profession.organisation.url | escape),  "</a>" ] | join
+        html: ["<a class=\"govuk-link\" href=\"", (organisation.url | escape), "\">", (organisation.url | escape),  "</a>" ] | join
       }
     },
     {
@@ -85,7 +85,7 @@
         text: ("professions.show.bodies.phoneNumber" | t)
       },
       value: {
-        text: profession.organisation.telephone
+        text: organisation.telephone
       }
     }
   ]

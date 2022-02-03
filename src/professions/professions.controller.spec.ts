@@ -11,6 +11,10 @@ import { translationOf } from '../testutils/translation-of';
 import { ProfessionsController } from './professions.controller';
 import { ProfessionsService } from './professions.service';
 
+import { Organisation } from '../organisations/organisation.entity';
+
+jest.mock('../organisations/organisation.entity');
+
 describe('ProfessionsController', () => {
   let controller: ProfessionsController;
   let professionsService: DeepMocked<ProfessionsService>;
@@ -46,6 +50,10 @@ describe('ProfessionsController', () => {
 
       professionsService.findBySlug.mockResolvedValue(profession);
 
+      (Organisation.withLatestLiveVersion as jest.Mock).mockImplementation(
+        () => profession.organisation,
+      );
+
       const result = await controller.show('example-slug');
 
       expect(result).toEqual({
@@ -53,6 +61,7 @@ describe('ProfessionsController', () => {
         qualification: new QualificationPresenter(profession.qualification),
         nations: [translationOf('nations.england')],
         industries: [translationOf('industries.example')],
+        organisation: profession.organisation,
       });
 
       expect(professionsService.findBySlug).toBeCalledWith('example-slug');
@@ -76,6 +85,10 @@ describe('ProfessionsController', () => {
 
         professionsService.findBySlug.mockResolvedValue(profession);
 
+        (Organisation.withLatestLiveVersion as jest.Mock).mockImplementation(
+          () => profession.organisation,
+        );
+
         const result = await controller.show('example-slug');
 
         expect(result).toEqual({
@@ -83,6 +96,7 @@ describe('ProfessionsController', () => {
           qualification: null,
           nations: [translationOf('nations.england')],
           industries: [translationOf('industries.example')],
+          organisation: profession.organisation,
         });
       });
     });
