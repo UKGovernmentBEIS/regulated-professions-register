@@ -123,7 +123,7 @@ export class OrganisationPresenter {
             actions: {
               items: [
                 {
-                  href: `/admin/organisations/${this.organisation.id}/edit`,
+                  href: `/admin/organisations/${this.organisation.id}/versions/${this.organisation.versionId}/edit`,
                   text: await this.i18nService.translate('app.change'),
                   visuallyHiddenText: row.key.text,
                 },
