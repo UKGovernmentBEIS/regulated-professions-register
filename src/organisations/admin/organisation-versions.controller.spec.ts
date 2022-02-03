@@ -2,20 +2,31 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { createMock, DeepMocked } from '@golevelup/ts-jest';
 import { Response } from 'express';
 import { DeepPartial } from 'fishery';
+import { I18nService } from 'nestjs-i18n';
 
 import { OrganisationVersionsController } from './organisation-versions.controller';
 
 import { OrganisationVersionsService } from '../organisation-versions.service';
 import { OrganisationsService } from '../organisations.service';
 
+import { OrganisationSummaryPresenter } from '../presenters/organisation-summary.presenter';
+
+import { ShowTemplate } from '../interfaces/show-template.interface';
+
 import organisationFactory from '../../testutils/factories/organisation';
 import organisationVersionFactory from '../../testutils/factories/organisation-version';
 import userFactory from '../../testutils/factories/user';
 
+import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
+
 import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
+
+jest.mock('../presenters/organisation-summary.presenter');
 
 describe('OrganisationVersionsController', () => {
   let controller: OrganisationVersionsController;
+
+  let i18nService: I18nService;
 
   let organisationVersionsService: DeepMocked<OrganisationVersionsService>;
   let organisationsService: DeepMocked<OrganisationsService>;
@@ -23,6 +34,7 @@ describe('OrganisationVersionsController', () => {
   beforeEach(async () => {
     organisationsService = createMock<OrganisationsService>();
     organisationVersionsService = createMock<OrganisationVersionsService>();
+    i18nService = createMockI18nService();
 
     const module: TestingModule = await Test.createTestingModule({
       controllers: [OrganisationVersionsController],
@@ -35,6 +47,7 @@ describe('OrganisationVersionsController', () => {
           provide: OrganisationVersionsService,
           useValue: organisationVersionsService,
         },
+        { provide: I18nService, useValue: i18nService },
       ],
     }).compile();
 
@@ -91,6 +104,41 @@ describe('OrganisationVersionsController', () => {
 
       expect(response.redirect).toHaveBeenCalledWith(
         `/admin/organisations/${organisationVersion.organisation.id}/versions/${organisationVersion.id}/edit`,
+      );
+    });
+  });
+
+  describe('show', () => {
+    it('should return variables for the show template', async () => {
+      const organisation = organisationFactory.build();
+      organisationVersionsService.findByIdWithOrganisation.mockResolvedValue(
+        organisation,
+      );
+
+      const showTemplate: ShowTemplate = {
+        organisation,
+        summaryList: {
+          classes: 'govuk-summary-list--no-border',
+          rows: [],
+        },
+        professions: [],
+      };
+
+      (
+        OrganisationSummaryPresenter.prototype as DeepMocked<OrganisationSummaryPresenter>
+      ).present.mockResolvedValue(showTemplate);
+
+      expect(await controller.show('org-uuid', 'version-uuid')).toEqual(
+        showTemplate,
+      );
+
+      expect(
+        organisationVersionsService.findByIdWithOrganisation,
+      ).toHaveBeenCalledWith('org-uuid', 'version-uuid');
+
+      expect(OrganisationSummaryPresenter).toHaveBeenCalledWith(
+        organisation,
+        i18nService,
       );
     });
   });

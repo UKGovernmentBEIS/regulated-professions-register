@@ -27,8 +27,6 @@ import { OrganisationPresenter } from '../presenters/organisation.presenter';
 import { OrganisationsPresenter } from './presenters/organisations.presenter';
 
 import { ReviewTemplate } from './interfaces/review-template.interface';
-import { ShowTemplate } from '../interfaces/show-template.interface';
-import { OrganisationSummaryPresenter } from '../presenters/organisation-summary.presenter';
 import { BackLink } from '../../common/decorators/back-link.decorator';
 import { IndexTemplate } from './interfaces/index-template.interface';
 
@@ -98,21 +96,6 @@ export class OrganisationsController {
     return res.redirect(
       `/admin/organisations/${version.organisation.id}/versions/${version.id}/edit`,
     );
-  }
-
-  @Get('/:slug')
-  @Render('admin/organisations/show')
-  @BackLink('/admin/organisations')
-  async show(@Param('slug') slug: string): Promise<ShowTemplate> {
-    const organisation =
-      await this.organisationsService.findBySlugWithProfessions(slug);
-
-    const organisationSummaryPresenter = new OrganisationSummaryPresenter(
-      organisation,
-      this.i18nService,
-    );
-
-    return organisationSummaryPresenter.present();
   }
 
   @Get('/:organisationId/versions/:versionId/edit')
