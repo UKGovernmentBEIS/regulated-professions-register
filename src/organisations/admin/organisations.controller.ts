@@ -13,7 +13,7 @@ import {
   Req,
 } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
-import { Response } from 'express';
+import { Response, Request } from 'express';
 import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
 
 import { AuthenticationGuard } from '../../common/authentication.guard';
@@ -35,6 +35,8 @@ import { FilterDto } from './dto/filter.dto';
 import { OrganisationsFilterHelper } from '../helpers/organisations-filter.helper';
 import { IndustriesService } from '../../industries/industries.service';
 import { createFilterInput } from '../../helpers/create-filter-input.helper';
+
+import { flashMessage } from '../../common/flash-message';
 
 @UseGuards(AuthenticationGuard)
 @Controller('/admin/organisations')
@@ -120,12 +122,13 @@ export class OrganisationsController {
     @Param('versionId') versionId: string,
     @Body() body: OrganisationDto,
     @Res() res: Response,
+    @Req() req: Request,
   ): Promise<void> {
     const organisation = await this.organisationsService.find(organisationId);
     const version = await this.organisationVersionsService.find(versionId);
 
     if (body.confirm) {
-      return this.confirm(res, organisation, version);
+      return this.confirm(res, req, organisation, version);
     } else {
       if (!organisation.slug) {
         organisation.name = body.name;
@@ -165,6 +168,7 @@ export class OrganisationsController {
 
   private async confirm(
     res: Response,
+    req: Request,
     organisation: Organisation,
     version: OrganisationVersion,
   ): Promise<void> {
@@ -178,7 +182,18 @@ export class OrganisationsController {
     }
     await this.organisationVersionsService.confirm(version);
 
-    res.render('admin/organisations/complete', { ...organisation, action });
+    const messageTitle = await this.i18nService.translate(
+      `organisations.admin.${action}.confirmation.heading`,
+    );
+
+    const messageBody = await this.i18nService.translate(
+      `organisations.admin.${action}.confirmation.body`,
+      { args: { name: organisation.name } },
+    );
+
+    req.flash('info', flashMessage(messageTitle, messageBody));
+
+    res.redirect('/admin/organisations');
   }
 
   private async showReviewPage(

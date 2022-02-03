@@ -145,11 +145,31 @@ describe('Editing organisations', () => {
 
       cy.checkAccessibility();
 
-      cy.translate('organisations.admin.edit.confirmation.heading').then(
-        (confirmationText) => {
-          cy.get('html').should('contain', confirmationText);
-        },
-      );
+      cy.get('@organisation').then((organisation: any) => {
+        cy.translate('organisations.admin.edit.confirmation.heading').then(
+          (confirmationHeading) => {
+            cy.get('html').should('contain', confirmationHeading);
+          },
+        );
+
+        cy.translate('organisations.admin.edit.confirmation.body', {
+          name: organisation.name,
+        }).then((confirmationBody) => {
+          cy.get('html').should('contain.html', confirmationBody);
+        });
+
+        cy.get('tr')
+          .contains(organisation.name)
+          .then(($header) => {
+            const $row = $header.parent();
+
+            cy.wrap($row).should('contain', 'Alternate Name');
+
+            cy.translate(`organisations.status.draft`).then((status) => {
+              cy.wrap($row).should('contain', status);
+            });
+          });
+      });
     });
   });
 });

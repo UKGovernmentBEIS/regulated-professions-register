@@ -101,14 +101,28 @@ describe('Creating organisations', () => {
       });
 
       cy.translate('organisations.admin.create.confirmation.heading').then(
-        (confirmationText) => {
-          cy.get('html').should('contain', confirmationText);
+        (confirmationHeading) => {
+          cy.get('html').should('contain', confirmationHeading);
         },
       );
 
-      cy.visit('/admin/organisations');
+      cy.translate('organisations.admin.create.confirmation.body', {
+        name: 'New Organisation',
+      }).then((confirmationBody) => {
+        cy.get('html').should('contain.html', confirmationBody);
+      });
 
-      cy.get('body').should('contain', 'New Organisation');
+      cy.get('tr')
+        .contains('New Organisation')
+        .then(($header) => {
+          const $row = $header.parent();
+
+          cy.wrap($row).should('contain', 'Alternate Name');
+
+          cy.translate(`organisations.status.draft`).then((status) => {
+            cy.wrap($row).should('contain', status);
+          });
+        });
     });
   });
 });
