@@ -10,12 +10,13 @@ describe('Searching a profession', () => {
     cy.checkAccessibility();
   });
 
-  it('I can view an unfiltered list of professions', () => {
+  it('I can view an unfiltered list of live professions', () => {
     cy.get('body').should('contain', 'Registered Trademark Attorney');
     cy.get('body').should(
       'contain',
       'Secondary School Teacher in State maintained schools (England)',
     );
+    cy.get('body').should('not.contain', 'Gas Safe Engineer');
   });
 
   it('Organisations are sorted alphabetically', () => {

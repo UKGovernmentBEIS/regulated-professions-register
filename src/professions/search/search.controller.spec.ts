@@ -3,21 +3,21 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { I18nService } from 'nestjs-i18n';
 import { Nation } from '../../nations/nation';
 import { IndustriesService } from '../../industries/industries.service';
-import { ProfessionsService } from '../professions.service';
 import { SearchController } from './search.controller';
 import { SearchPresenter } from './search.presenter';
 import industryFactory from '../../testutils/factories/industry';
 import professionFactory from '../../testutils/factories/profession';
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
+import { ProfessionVersionsService } from '../profession-versions.service';
 
 describe('SearchController', () => {
   let controller: SearchController;
-  let professionsService: DeepMocked<ProfessionsService>;
+  let professionVersionsService: DeepMocked<ProfessionVersionsService>;
   let industriesService: DeepMocked<IndustriesService>;
   let i18nService: DeepMocked<I18nService>;
 
   beforeEach(async () => {
-    professionsService = createMock<ProfessionsService>();
+    professionVersionsService = createMock<ProfessionVersionsService>();
     industriesService = createMock<IndustriesService>();
 
     i18nService = createMockI18nService();
@@ -25,8 +25,8 @@ describe('SearchController', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         {
-          provide: ProfessionsService,
-          useValue: professionsService,
+          provide: ProfessionVersionsService,
+          useValue: professionVersionsService,
         },
         {
           provide: IndustriesService,
@@ -56,7 +56,7 @@ describe('SearchController', () => {
         name: 'Trademark Attorney',
         industries: [industry2, industry3],
       });
-      professionsService.allConfirmed.mockResolvedValue([
+      professionVersionsService.allLive.mockResolvedValue([
         schoolTeacher,
         trademarkAttorney,
       ]);
@@ -85,8 +85,7 @@ describe('SearchController', () => {
         nations: [],
       });
 
-      expect(professionsService.allConfirmed).toHaveBeenCalled();
-      expect(professionsService.all).not.toHaveBeenCalled();
+      expect(professionVersionsService.allLive).toHaveBeenCalled();
     });
   });
 
@@ -106,7 +105,7 @@ describe('SearchController', () => {
         name: 'Trademark Attorney',
         industries: [industry2, industry3],
       });
-      professionsService.allConfirmed.mockResolvedValue([
+      professionVersionsService.allLive.mockResolvedValue([
         schoolTeacher,
         trademarkAttorney,
       ]);
@@ -149,7 +148,7 @@ describe('SearchController', () => {
         industries: [industry2, industry3],
         occupationLocations: ['GB-WLS'],
       });
-      professionsService.allConfirmed.mockResolvedValue([
+      professionVersionsService.allLive.mockResolvedValue([
         professionRegulatedInEngland,
         professionRegulatedInWales,
       ]);
@@ -191,7 +190,7 @@ describe('SearchController', () => {
         name: 'Trademark Attorney',
         industries: [lawIndustry],
       });
-      professionsService.allConfirmed.mockResolvedValue([
+      professionVersionsService.allLive.mockResolvedValue([
         schoolTeacher,
         trademarkAttorney,
       ]);
@@ -232,7 +231,7 @@ describe('SearchController', () => {
         name: 'Trademark Attorney',
         industries: [industry2, industry3],
       });
-      professionsService.allConfirmed.mockResolvedValue([
+      professionVersionsService.allLive.mockResolvedValue([
         schoolTeacher,
         trademarkAttorney,
       ]);
@@ -273,7 +272,7 @@ describe('SearchController', () => {
         industries: [industry2],
       });
 
-      professionsService.allConfirmed.mockResolvedValue([
+      professionVersionsService.allLive.mockResolvedValue([
         schoolTeacher,
         trademarkAttorney,
       ]);
