@@ -11,7 +11,7 @@ import QualificationPresenter from '../qualifications/presenters/qualification.p
 import { ShowTemplate } from './interfaces/show-template.interface';
 import { ProfessionsService } from './professions.service';
 import { BackLink } from '../common/decorators/back-link.decorator';
-
+import { Organisation } from '../organisations/organisation.entity';
 @Controller()
 export class ProfessionsController {
   constructor(
@@ -30,6 +30,10 @@ export class ProfessionsController {
         `A profession with ID ${slug} could not be found`,
       );
     }
+
+    const organisation = Organisation.withLatestLiveVersion(
+      profession.organisation,
+    );
 
     const nations = await Promise.all(
       profession.occupationLocations.map(async (code) =>
@@ -52,6 +56,7 @@ export class ProfessionsController {
       qualification: qualification,
       nations,
       industries,
+      organisation,
     };
   }
 }
