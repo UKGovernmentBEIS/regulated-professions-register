@@ -1,30 +1,18 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersService } from '../users.service';
-import { User, UserPermission } from '../user.entity';
+import { UserPermission } from '../user.entity';
 import { PermissionsController } from './permissions.controller';
 import { createMock, DeepMocked } from '@golevelup/ts-jest';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { createMockRequest } from '../../testutils/create-mock-request';
 import userFactory from '../../testutils/factories/user';
 
 describe('PermissionsController', () => {
   let controller: PermissionsController;
   let usersService: DeepMocked<UsersService>;
-  let user: User;
 
   beforeEach(async () => {
-    user = userFactory.build({
-      id: 'user-uuid',
-    });
-
-    usersService = createMock<UsersService>({
-      find: async () => {
-        return user;
-      },
-      save: async () => {
-        return user;
-      },
-    });
+    usersService = createMock<UsersService>();
 
     const module: TestingModule = await Test.createTestingModule({
       controllers: [PermissionsController],
@@ -40,11 +28,15 @@ describe('PermissionsController', () => {
   });
 
   describe('edit', () => {
-    const referrer = 'http://example.com/some/path';
-    const request: Request = createMockRequest(referrer, 'example.com');
-
     it('should get and return the user from an id', async () => {
-      const result = await controller.edit(request, 'user-uuid', false);
+      const referrer = 'http://example.com/some/path';
+      const request = createMockRequest(referrer, 'example.com');
+
+      const user = userFactory.build();
+
+      usersService.find.mockResolvedValue(user);
+
+      const result = await controller.edit(request, user.id, false);
 
       expect(result).toEqual({
         ...user,
@@ -62,10 +54,19 @@ describe('PermissionsController', () => {
         ],
         change: false,
       });
+
+      expect(usersService.find).toHaveBeenCalledWith(user.id);
     });
 
     it('should set change to true', async () => {
-      const result = await controller.edit(request, 'user-uuid', true);
+      const referrer = 'http://example.com/some/path';
+      const request = createMockRequest(referrer, 'example.com');
+
+      const user = userFactory.build();
+
+      usersService.find.mockResolvedValue(user);
+
+      const result = await controller.edit(request, user.id, true);
 
       expect(result).toEqual({
         ...user,
@@ -87,28 +88,29 @@ describe('PermissionsController', () => {
   });
 
   describe('create', () => {
-    let res: DeepMocked<Response>;
-
-    beforeEach(() => {
-      res = createMock<Response>();
-    });
-
     it('should redirect to confirm and update if the DTO is valid', async () => {
+      const res = createMock<Response>();
+
+      const user = userFactory.build();
+
+      usersService.find.mockResolvedValue(user);
+      usersService.save.mockResolvedValue(user);
+
       const permissionsDto = {
         permissions: [UserPermission.CreateUser],
         serviceOwner: true,
         change: true,
       };
-      await controller.create(permissionsDto, 'user-uuid', res);
+      await controller.create(permissionsDto, user.id, res);
 
       expect(usersService.save).toHaveBeenCalledWith(
         expect.objectContaining({
-          id: 'user-uuid',
+          id: user.id,
           ...permissionsDto,
         }),
       );
       expect(res.redirect).toHaveBeenCalledWith(
-        `/admin/users/user-uuid/confirm`,
+        `/admin/users/${user.id}/confirm`,
       );
     });
   });

@@ -73,6 +73,10 @@ describe('UserPresenter', () => {
       });
     });
   });
+
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
 });
 
 function createSinglePermissionUser(): User {
