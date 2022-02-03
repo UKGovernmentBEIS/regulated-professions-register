@@ -80,6 +80,9 @@ describe('OrganisationsPresenter', () => {
           {
             text: translationOf('organisations.admin.tableHeading.industries'),
           },
+          {
+            text: translationOf('organisations.admin.tableHeading.status'),
+          },
           { text: translationOf('organisations.admin.tableHeading.actions') },
         ]);
         expect(result.organisationsTable.rows).toEqual([

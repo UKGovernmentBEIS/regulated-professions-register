@@ -19,10 +19,8 @@ import professionFactory from '../../testutils/factories/profession';
 import industryFactory from '../../testutils/factories/industry';
 import userFactory from '../../testutils/factories/user';
 
-import { OrganisationSummaryPresenter } from '../presenters/organisation-summary.presenter';
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 import { SummaryList } from '../../common/interfaces/summary-list';
-import { ShowTemplate } from '../interfaces/show-template.interface';
 import { IndustriesService } from '../../industries/industries.service';
 import { IndexTemplate } from './interfaces/index-template.interface';
 import { OrganisationsFilterHelper } from '../helpers/organisations-filter.helper';
@@ -33,7 +31,6 @@ import { DeepPartial } from 'fishery';
 
 jest.mock('./presenters/organisations.presenter');
 jest.mock('../presenters/organisation.presenter');
-jest.mock('../presenters/organisation-summary.presenter');
 jest.mock('../helpers/organisations-filter.helper');
 
 describe('OrganisationsController', () => {
@@ -111,7 +108,7 @@ describe('OrganisationsController', () => {
 
         expect(await controller.index()).toEqual(templateParams);
 
-        expect(organisationsService.allWithProfessions).toHaveBeenCalled();
+        expect(organisationVersionsService.allDraftOrLive).toHaveBeenCalled();
 
         expect(OrganisationsFilterHelper).toBeCalledWith(organisations);
         expect(OrganisationsFilterHelper.prototype.filter).toBeCalledWith({
@@ -168,7 +165,7 @@ describe('OrganisationsController', () => {
           } as FilterDto),
         ).toEqual(templateParams);
 
-        expect(organisationsService.allWithProfessions).toHaveBeenCalled();
+        expect(organisationVersionsService.allDraftOrLive).toHaveBeenCalled();
 
         expect(OrganisationsFilterHelper).toBeCalledWith(organisations);
         expect(OrganisationsFilterHelper.prototype.filter).toBeCalledWith({
@@ -223,39 +220,6 @@ describe('OrganisationsController', () => {
       );
       expect(response.redirect).toHaveBeenCalledWith(
         `/admin/organisations/some-uuid/versions/some-other-uuid/edit`,
-      );
-    });
-  });
-
-  describe('show', () => {
-    it('should return variables for the show template', async () => {
-      const organisation = createOrganisation();
-      organisationsService.findBySlugWithProfessions.mockResolvedValue(
-        organisation,
-      );
-
-      const showTemplate: ShowTemplate = {
-        organisation,
-        summaryList: {
-          classes: 'govuk-summary-list--no-border',
-          rows: [],
-        },
-        professions: [],
-      };
-
-      (
-        OrganisationSummaryPresenter.prototype as DeepMocked<OrganisationSummaryPresenter>
-      ).present.mockResolvedValue(showTemplate);
-
-      expect(await controller.show('slug')).toEqual(showTemplate);
-
-      expect(
-        organisationsService.findBySlugWithProfessions,
-      ).toHaveBeenCalledWith('slug');
-
-      expect(OrganisationSummaryPresenter).toHaveBeenCalledWith(
-        organisation,
-        i18nService,
       );
     });
   });

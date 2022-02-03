@@ -1,5 +1,8 @@
 import { Profession } from '../professions/profession.entity';
-import { OrganisationVersion } from './organisation-version.entity';
+import {
+  OrganisationVersion,
+  OrganisationVersionStatus,
+} from './organisation-version.entity';
 
 import {
   Entity,
@@ -53,6 +56,7 @@ export class Organisation {
   telephone?: string;
   fax?: string;
   versionId?: string;
+  status?: OrganisationVersionStatus;
 
   public static withVersion(
     organisation: Organisation,
@@ -68,6 +72,7 @@ export class Organisation {
       telephone: organisationVersion.telephone,
       fax: organisationVersion.fax,
       versionId: organisationVersion.id,
+      status: organisationVersion.status,
     } as Organisation;
   }
 

@@ -3,15 +3,15 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { createMock } from '@golevelup/ts-jest';
 
 import { Repository, In, SelectQueryBuilder } from 'typeorm';
-import organisationVersionFactory from '../testutils/factories/organisation-version';
-import organisationFactory from '../testutils/factories/organisation';
-
 import {
   OrganisationVersion,
   OrganisationVersionStatus,
 } from './organisation-version.entity';
 import { Organisation } from './organisation.entity';
 import { OrganisationVersionsService } from './organisation-versions.service';
+
+import organisationVersionFactory from '../testutils/factories/organisation-version';
+import organisationFactory from '../testutils/factories/organisation';
 
 describe('OrganisationVersionsService', () => {
   let service: OrganisationVersionsService;
@@ -59,6 +59,44 @@ describe('OrganisationVersionsService', () => {
 
       expect(result).toEqual(organisationVersion);
       expect(repoSpy).toHaveBeenCalled();
+    });
+  });
+
+  describe('findByIdWithOrganisation', () => {
+    it('returns an Organisation witha version', async () => {
+      const organisationVersion = organisationVersionFactory.build();
+      const queryBuilder = createMock<SelectQueryBuilder<OrganisationVersion>>({
+        leftJoinAndSelect: () => queryBuilder,
+        where: () => queryBuilder,
+        getOne: async () => organisationVersion,
+      });
+
+      jest
+        .spyOn(repo, 'createQueryBuilder')
+        .mockImplementation(() => queryBuilder);
+
+      const result = await service.findByIdWithOrganisation(
+        'org-uuid',
+        'version-uuid',
+      );
+
+      expect(result).toEqual(
+        Organisation.withVersion(
+          organisationVersion.organisation,
+          organisationVersion,
+        ),
+      );
+
+      expect(queryBuilder).toHaveJoined([
+        'organisationVersion.organisation',
+        'organisation.professions',
+        'professions.industries',
+      ]);
+
+      expect(queryBuilder.where).toHaveBeenCalledWith({
+        organisation: { id: 'org-uuid' },
+        id: 'version-uuid',
+      });
     });
   });
 
@@ -127,20 +165,11 @@ describe('OrganisationVersionsService', () => {
 
       expect(result).toEqual(expectedOrganisations);
 
-      expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
+      expect(queryBuilder).toHaveJoined([
         'organisationVersion.organisation',
-        'organisation',
-      );
-
-      expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
         'organisation.professions',
-        'professions',
-      );
-
-      expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
         'professions.industries',
-        'industries',
-      );
+      ]);
 
       expect(queryBuilder.where).toHaveBeenCalledWith(
         'organisationVersion.status = :status',
@@ -150,6 +179,56 @@ describe('OrganisationVersionsService', () => {
       );
 
       expect(queryBuilder.orderBy).toHaveBeenCalledWith('organisation.name');
+    });
+  });
+
+  describe('allDraftOrLive', () => {
+    it('gets all organisations and their latest draft or live version', async () => {
+      const versions = organisationVersionFactory.buildList(5);
+      const queryBuilder = createMock<SelectQueryBuilder<OrganisationVersion>>({
+        leftJoinAndSelect: () => queryBuilder,
+        where: () => queryBuilder,
+        distinctOn: () => queryBuilder,
+        orderBy: () => queryBuilder,
+        getMany: async () => versions,
+      });
+
+      jest
+        .spyOn(repo, 'createQueryBuilder')
+        .mockImplementation(() => queryBuilder);
+
+      const result = await service.allDraftOrLive();
+
+      const expectedOrganisations = versions.map((version) =>
+        Organisation.withVersion(version.organisation, version),
+      );
+
+      expect(result).toEqual(expectedOrganisations);
+
+      expect(queryBuilder).toHaveJoined([
+        'organisationVersion.organisation',
+        'organisation.professions',
+        'professions.industries',
+      ]);
+
+      expect(queryBuilder.distinctOn).toHaveBeenCalledWith([
+        'organisationVersion.organisation',
+      ]);
+
+      expect(queryBuilder.where).toHaveBeenCalledWith(
+        'organisationVersion.status IN(:...status)',
+        {
+          status: [
+            OrganisationVersionStatus.Live,
+            OrganisationVersionStatus.Draft,
+          ],
+        },
+      );
+
+      expect(queryBuilder.orderBy).toHaveBeenCalledWith(
+        'organisationVersion.organisation, organisationVersion.created_at',
+        'DESC',
+      );
     });
   });
 
@@ -174,20 +253,11 @@ describe('OrganisationVersionsService', () => {
 
       expect(result).toEqual(expectedVersion);
 
-      expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
+      expect(queryBuilder).toHaveJoined([
         'organisationVersion.organisation',
-        'organisation',
-      );
-
-      expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
         'organisation.professions',
-        'professions',
-      );
-
-      expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
         'professions.industries',
-        'industries',
-      );
+      ]);
 
       expect(queryBuilder.where).toHaveBeenCalledWith(
         'organisationVersion.status = :status AND organisation.slug = :slug',

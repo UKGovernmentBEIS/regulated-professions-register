@@ -22,6 +22,17 @@ export class OrganisationVersionsService {
     return this.repository.findOne(id);
   }
 
+  async findByIdWithOrganisation(
+    organisationId: string,
+    id: string,
+  ): Promise<Organisation> {
+    const version = await this.versionsWithJoins()
+      .where({ organisation: { id: organisationId }, id })
+      .getOne();
+
+    return Organisation.withVersion(version.organisation, version);
+  }
+
   async findLatestForOrganisationId(
     organisationId: string,
   ): Promise<OrganisationVersion> {
@@ -44,6 +55,26 @@ export class OrganisationVersionsService {
         status: OrganisationVersionStatus.Live,
       })
       .orderBy('organisation.name')
+      .getMany();
+
+    return versions.map((version) =>
+      Organisation.withVersion(version.organisation, version),
+    );
+  }
+
+  async allDraftOrLive(): Promise<Organisation[]> {
+    const versions = await this.versionsWithJoins()
+      .distinctOn(['organisationVersion.organisation'])
+      .where('organisationVersion.status IN(:...status)', {
+        status: [
+          OrganisationVersionStatus.Live,
+          OrganisationVersionStatus.Draft,
+        ],
+      })
+      .orderBy(
+        'organisationVersion.organisation, organisationVersion.created_at',
+        'DESC',
+      )
       .getMany();
 
     return versions.map((version) =>
