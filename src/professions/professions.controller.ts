@@ -9,13 +9,14 @@ import { I18nService } from 'nestjs-i18n';
 import { Nation } from '../nations/nation';
 import QualificationPresenter from '../qualifications/presenters/qualification.presenter';
 import { ShowTemplate } from './interfaces/show-template.interface';
-import { ProfessionsService } from './professions.service';
 import { BackLink } from '../common/decorators/back-link.decorator';
 import { Organisation } from '../organisations/organisation.entity';
+import { ProfessionVersionsService } from './profession-versions.service';
+
 @Controller()
 export class ProfessionsController {
   constructor(
-    private professionsService: ProfessionsService,
+    private professionVersionsService: ProfessionVersionsService,
     private readonly i18nService: I18nService,
   ) {}
 
@@ -23,7 +24,9 @@ export class ProfessionsController {
   @Render('professions/show')
   @BackLink('/professions/search')
   async show(@Param('slug') slug: string): Promise<ShowTemplate> {
-    const profession = await this.professionsService.findBySlug(slug);
+    const profession = await this.professionVersionsService.findLiveBySlug(
+      slug,
+    );
 
     if (!profession) {
       throw new NotFoundException(
