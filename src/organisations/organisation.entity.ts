@@ -29,6 +29,7 @@ export class Organisation {
   @OneToMany(
     () => OrganisationVersion,
     (organisationVersion) => organisationVersion.organisation,
+    { eager: true },
   )
   versions: OrganisationVersion[];
 
