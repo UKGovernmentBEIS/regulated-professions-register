@@ -5,7 +5,7 @@ export enum UserPermission {
   CreateOrganisation = 'createOrganisation',
   DeleteOrganisation = 'deleteOrganisation',
   CreateProfession = 'createProfession',
-  DeleteProfession = 'deleteprofession',
+  DeleteProfession = 'deleteProfession',
   UploadDecisionData = 'uploadDecisionData',
   DownloadDecisionData = 'downloadDecisionData',
   ViewDecisionData = 'viewDecisionData',

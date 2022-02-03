@@ -10,7 +10,7 @@
       "createOrganisation": "Create organisation",
       "deleteOrganisation": "Delete organisation",
       "createProfession": "Create profession",
-      "deleteprofession": "Delete profession",
+      "deleteProfession": "Delete profession",
       "uploadDecisionData": "Upload decision data",
       "downloadDecisionData": "Download decision data",
       "viewDecisionData": "View decision data",
