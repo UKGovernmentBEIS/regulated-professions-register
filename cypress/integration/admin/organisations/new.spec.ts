@@ -100,7 +100,7 @@ describe('Creating organisations', () => {
         cy.get('button').contains(buttonText).click();
       });
 
-      cy.translate('organisations.admin.form.headings.confirmation').then(
+      cy.translate('organisations.admin.create.confirmation.heading').then(
         (confirmationText) => {
           cy.get('html').should('contain', confirmationText);
         },

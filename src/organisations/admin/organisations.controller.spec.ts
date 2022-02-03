@@ -445,7 +445,7 @@ describe('OrganisationsController', () => {
 
             expect(response.render).toHaveBeenCalledWith(
               'admin/organisations/complete',
-              organisation,
+              { ...organisation, action: 'create' },
             );
           });
         });
@@ -482,7 +482,7 @@ describe('OrganisationsController', () => {
 
             expect(response.render).toHaveBeenCalledWith(
               'admin/organisations/complete',
-              organisation,
+              { ...organisation, action: 'edit' },
             );
           });
         });
