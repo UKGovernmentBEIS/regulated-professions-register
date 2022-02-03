@@ -172,4 +172,48 @@ describe('ProfessionVersionsService', () => {
       );
     });
   });
+
+  describe('findLiveBySlug', () => {
+    it('fetches a live Profession by its slug', async () => {
+      const version = professionVersionFactory.build();
+      const queryBuilder = createMock<SelectQueryBuilder<ProfessionVersion>>({
+        leftJoinAndSelect: () => queryBuilder,
+        where: () => queryBuilder,
+        getOne: async () => version,
+      });
+
+      jest
+        .spyOn(repo, 'createQueryBuilder')
+        .mockImplementation(() => queryBuilder);
+
+      const result = await service.findLiveBySlug('some-slug');
+      const expectedVersion = Profession.withVersion(
+        version.profession,
+        version,
+      );
+
+      expect(result).toEqual(expectedVersion);
+
+      expect(queryBuilder).toHaveJoined([
+        'professionVersion.profession',
+        'professionVersion.industries',
+        'professionVersion.organisation',
+        'professionVersion.qualification',
+        'professionVersion.legislations',
+      ]);
+
+      expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
+        'organisation.versions',
+        'organisationVersions',
+      );
+
+      expect(queryBuilder.where).toHaveBeenCalledWith(
+        'professionVersion.status = :status AND profession.slug = :slug',
+        {
+          status: ProfessionVersionStatus.Live,
+          slug: 'some-slug',
+        },
+      );
+    });
+  });
 });
