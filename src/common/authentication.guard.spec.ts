@@ -3,71 +3,119 @@ import { Reflector } from '@nestjs/core';
 
 import { createMock } from '@golevelup/ts-jest';
 import { AuthenticationGuard } from './authentication.guard';
-import { UserPermission, User } from '../users/user.entity';
+import { UserPermission } from '../users/user.entity';
+import userFactory from '../testutils/factories/user';
 
 describe('AuthenticationGuard', () => {
-  let host: ExecutionContext;
-  let oidc: any;
-  let guard: AuthenticationGuard;
-  let reflector: Reflector;
-  let permissions: string[];
-  let user: User;
-
-  beforeEach(() => {
-    host = createMock<ExecutionContext>({
-      switchToHttp: () => ({
-        getRequest: () => {
-          return {
-            oidc: oidc,
-            appSession: {
-              user: user,
-            },
-          };
-        },
-      }),
-    });
-    reflector = createMock<Reflector>({
-      get: () => {
-        return permissions;
-      },
-    });
-
-    guard = new AuthenticationGuard(reflector);
-  });
-
   describe('when isAuthenticated() is true', () => {
-    beforeEach(() => {
-      oidc = createMock<any>({
-        isAuthenticated: () => true,
-      });
-    });
-
     it('should return true', () => {
+      const host = createMock<ExecutionContext>({
+        switchToHttp: () => ({
+          getRequest: () => {
+            return {
+              oidc: createMock<any>({
+                isAuthenticated: () => true,
+              }),
+            };
+          },
+        }),
+      });
+
+      const reflector = createMock<Reflector>({
+        get: () => {
+          return undefined;
+        },
+      });
+
+      const guard = new AuthenticationGuard(reflector);
+
       expect(guard.canActivate(host)).toStrictEqual(true);
     });
 
     describe('when permissions are specified', () => {
-      beforeEach(() => {
-        permissions = [UserPermission.CreateUser];
-      });
-
       it('should return true when the user has the appropriate permission', () => {
-        user = new User();
-        user.permissions = [UserPermission.CreateUser];
+        const host = createMock<ExecutionContext>({
+          switchToHttp: () => ({
+            getRequest: () => {
+              return {
+                oidc: createMock<any>({
+                  isAuthenticated: () => true,
+                }),
+                appSession: {
+                  user: userFactory.build({
+                    permissions: [UserPermission.CreateUser],
+                  }),
+                },
+              };
+            },
+          }),
+        });
+
+        const reflector = createMock<Reflector>({
+          get: () => {
+            return [UserPermission.CreateUser];
+          },
+        });
+
+        const guard = new AuthenticationGuard(reflector);
 
         expect(guard.canActivate(host)).toStrictEqual(true);
       });
 
       it('should return false when the user does not have the appropriate permission', () => {
-        user = new User();
-        user.permissions = [UserPermission.CreateOrganisation];
+        const host = createMock<ExecutionContext>({
+          switchToHttp: () => ({
+            getRequest: () => {
+              return {
+                oidc: createMock<any>({
+                  isAuthenticated: () => true,
+                }),
+                appSession: {
+                  user: userFactory.build({
+                    permissions: [UserPermission.CreateUser],
+                  }),
+                },
+              };
+            },
+          }),
+        });
+
+        const reflector = createMock<Reflector>({
+          get: () => {
+            return [UserPermission.CreateOrganisation];
+          },
+        });
+
+        const guard = new AuthenticationGuard(reflector);
 
         expect(guard.canActivate(host)).toStrictEqual(false);
       });
 
       it('should return false when the user has no permissions', () => {
-        user = new User();
-        user.permissions = [];
+        const host = createMock<ExecutionContext>({
+          switchToHttp: () => ({
+            getRequest: () => {
+              return {
+                oidc: createMock<any>({
+                  isAuthenticated: () => true,
+                }),
+                appSession: {
+                  user: userFactory.build({
+                    permissions: [UserPermission.CreateUser],
+                  }),
+                },
+              };
+            },
+          }),
+        });
+
+        const reflector = createMock<Reflector>({
+          get: () => {
+            return [];
+          },
+        });
+
+        const guard = new AuthenticationGuard(reflector);
 
         expect(guard.canActivate(host)).toStrictEqual(false);
       });
@@ -75,13 +123,27 @@ describe('AuthenticationGuard', () => {
   });
 
   describe('when isAuthenticated() is false', () => {
-    beforeEach(() => {
-      oidc = createMock<any>({
-        isAuthenticated: () => false,
-      });
-    });
-
     it('should return raise an UnauthorizedException', () => {
+      const host = createMock<ExecutionContext>({
+        switchToHttp: () => ({
+          getRequest: () => {
+            return {
+              oidc: createMock<any>({
+                isAuthenticated: () => false,
+              }),
+            };
+          },
+        }),
+      });
+
+      const reflector = createMock<Reflector>({
+        get: () => {
+          return undefined;
+        },
+      });
+
+      const guard = new AuthenticationGuard(reflector);
+
       expect(() => {
         guard.canActivate(host);
       }).toThrow(UnauthorizedException);
@@ -89,13 +151,27 @@ describe('AuthenticationGuard', () => {
   });
 
   describe('when isAuthenticated() is not present', () => {
-    beforeEach(() => {
-      oidc = createMock<any>({
-        isAuthenticated: undefined,
-      });
-    });
-
     it('should return raise an UnauthorizedException', () => {
+      const host = createMock<ExecutionContext>({
+        switchToHttp: () => ({
+          getRequest: () => {
+            return {
+              oidc: createMock<any>({
+                isAuthenticated: undefined,
+              }),
+            };
+          },
+        }),
+      });
+
+      const reflector = createMock<Reflector>({
+        get: () => {
+          return undefined;
+        },
+      });
+
+      const guard = new AuthenticationGuard(reflector);
+
       expect(() => {
         guard.canActivate(host);
       }).toThrow(UnauthorizedException);
@@ -103,11 +179,23 @@ describe('AuthenticationGuard', () => {
   });
 
   describe('when oidc is not present', () => {
-    beforeEach(() => {
-      oidc = undefined;
-    });
-
     it('should return raise an UnauthorizedException', () => {
+      const host = createMock<ExecutionContext>({
+        switchToHttp: () => ({
+          getRequest: () => {
+            return {};
+          },
+        }),
+      });
+
+      const reflector = createMock<Reflector>({
+        get: () => {
+          return undefined;
+        },
+      });
+
+      const guard = new AuthenticationGuard(reflector);
+
       expect(() => {
         guard.canActivate(host);
       }).toThrow(UnauthorizedException);
