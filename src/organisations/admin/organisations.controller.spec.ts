@@ -1,7 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { createMock, DeepMocked } from '@golevelup/ts-jest';
 import { I18nService } from 'nestjs-i18n';
-import { Response } from 'express';
+import { Response, Request } from 'express';
+import { DeepPartial } from 'fishery';
 
 import { OrganisationsController } from './organisations.controller';
 import { OrganisationsService } from '../organisations.service';
@@ -27,11 +28,12 @@ import { OrganisationsFilterHelper } from '../helpers/organisations-filter.helpe
 import { FilterDto } from './dto/filter.dto';
 import { FilterInput } from '../../common/interfaces/filter-input.interface';
 import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
-import { DeepPartial } from 'fishery';
+import { flashMessage } from '../../common/flash-message';
 
 jest.mock('./presenters/organisations.presenter');
 jest.mock('../presenters/organisation.presenter');
 jest.mock('../helpers/organisations-filter.helper');
+jest.mock('../../common/flash-message');
 
 describe('OrganisationsController', () => {
   let controller: OrganisationsController;
@@ -256,6 +258,7 @@ describe('OrganisationsController', () => {
           const organisationId = 'some-uuid';
           const versionId = 'some-other-uuid';
           const response = createMock<Response>();
+          const request = createMock<Request>();
 
           const organisationDto: OrganisationDto = {
             name: 'Organisation',
@@ -292,6 +295,7 @@ describe('OrganisationsController', () => {
             versionId,
             organisationDto,
             response,
+            request,
           );
 
           expect(organisationsService.save).toHaveBeenCalledWith(
@@ -350,6 +354,7 @@ describe('OrganisationsController', () => {
             });
             const version = organisationVersionFactory.build({});
             const response = createMock<Response>();
+            const request = createMock<Request>();
 
             organisationsService.find.mockResolvedValue(organisation);
             organisationVersionsService.find.mockResolvedValue(version);
@@ -364,6 +369,7 @@ describe('OrganisationsController', () => {
               version.id,
               organisationDto,
               response,
+              request,
             );
 
             expect(organisationsService.save).not.toHaveBeenCalled();
@@ -375,26 +381,40 @@ describe('OrganisationsController', () => {
       });
 
       describe('when confirm is set', () => {
-        describe('when the slug is not set', () => {
-          it('should set the slug and confirm the version', async () => {
-            const organisation = organisationFactory.build({ slug: '' });
-            const version = organisationVersionFactory.build();
-            const response = createMock<Response>();
+        let organisation: Organisation;
+        let version: OrganisationVersion;
+        let response: DeepMocked<Response>;
+        let request: DeepMocked<Request>;
+        let organisationDto: DeepMocked<OrganisationDto>;
+        let flashMock: jest.Mock;
 
-            const organisationDto = createMock<OrganisationDto>({
+        describe('when the slug is not set', () => {
+          beforeEach(async () => {
+            organisation = organisationFactory.build({ slug: '' });
+            version = organisationVersionFactory.build();
+            response = createMock<Response>();
+            request = createMock<Request>();
+
+            organisationDto = createMock<OrganisationDto>({
               confirm: true,
             });
 
             organisationsService.find.mockResolvedValue(organisation);
             organisationVersionsService.find.mockResolvedValue(version);
 
+            flashMock = flashMessage as jest.Mock;
+            flashMock.mockImplementation(() => 'STUB_FLASH_MESSAGE');
+
             await controller.update(
               'some-uuid',
               'some-other-uuid',
               organisationDto,
               response,
+              request,
             );
+          });
 
+          it('should set the slug and confirm the version', async () => {
             expect(organisationsService.find).toHaveBeenCalledWith('some-uuid');
             expect(organisationVersionsService.find).toHaveBeenCalledWith(
               'some-other-uuid',
@@ -406,24 +426,33 @@ describe('OrganisationsController', () => {
             expect(organisationVersionsService.confirm).toHaveBeenCalledWith(
               version,
             );
+          });
 
-            expect(response.render).toHaveBeenCalledWith(
-              'admin/organisations/complete',
-              { ...organisation, action: 'create' },
+          it('should set a flash message and redirect', () => {
+            expect(flashMock).toHaveBeenCalledWith(
+              'Translation of `organisations.admin.create.confirmation.heading`',
+              'Translation of `organisations.admin.create.confirmation.body`',
+            );
+
+            expect(request.flash).toHaveBeenCalledWith(
+              'info',
+              'STUB_FLASH_MESSAGE',
+            );
+
+            expect(response.redirect).toHaveBeenCalledWith(
+              '/admin/organisations',
             );
           });
         });
 
         describe('when the slug is set', () => {
-          it('should save the version and not set the slug again', async () => {
-            const organisation = organisationFactory.build({
-              slug: 'some-slug',
-            });
-            const version = organisationVersionFactory.build();
+          beforeEach(async () => {
+            organisation = organisationFactory.build({ slug: 'some-slug' });
+            version = organisationVersionFactory.build();
+            response = createMock<Response>();
+            request = createMock<Request>();
 
-            const response = createMock<Response>();
-
-            const organisationDto = createMock<OrganisationDto>({
+            organisationDto = createMock<OrganisationDto>({
               confirm: true,
             });
 
@@ -435,18 +464,32 @@ describe('OrganisationsController', () => {
               'some-other-uuid',
               organisationDto,
               response,
+              request,
             );
+          });
 
+          it('should save the version and not set the slug again', async () => {
             expect(organisationsService.setSlug).not.toHaveBeenCalledWith(
               organisation,
             );
             expect(organisationVersionsService.confirm).toHaveBeenCalledWith(
               version,
             );
+          });
 
-            expect(response.render).toHaveBeenCalledWith(
-              'admin/organisations/complete',
-              { ...organisation, action: 'edit' },
+          it('should set a flash message and redirect', () => {
+            expect(flashMock).toHaveBeenCalledWith(
+              'Translation of `organisations.admin.edit.confirmation.heading`',
+              'Translation of `organisations.admin.edit.confirmation.body`',
+            );
+
+            expect(request.flash).toHaveBeenCalledWith(
+              'info',
+              'STUB_FLASH_MESSAGE',
+            );
+
+            expect(response.redirect).toHaveBeenCalledWith(
+              '/admin/organisations',
             );
           });
         });

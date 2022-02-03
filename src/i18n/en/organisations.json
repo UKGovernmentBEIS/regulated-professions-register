@@ -36,20 +36,14 @@
       "heading": "Amending a regulatory authority",
       "confirmation": {
         "heading": "Regulatory authority amended",
-        "body": {
-          "panel": "{name} has been updated",
-          "next": "What happens next?"
-        }
+        "body": "The changes to <strong>{name}</strong> are not published yet."
       }
     },
     "create": {
       "heading": "Adding a regulatory authority",
       "confirmation": {
         "heading": "Regulatory authority created",
-        "body": {
-          "panel": "{name} has been created",
-          "next": "What happens next?"
-        }
+        "body": "The new regulator <strong>{name}</strong> is not published yet."
       }
     },
     "new": {
