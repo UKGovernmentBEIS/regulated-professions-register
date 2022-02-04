@@ -143,26 +143,13 @@ describe('ProfessionVersionsService', () => {
 
       expect(result).toEqual(expectedProfessions);
 
-      expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
+      expect(queryBuilder).toHaveJoined([
         'professionVersion.profession',
-        'profession',
-      );
-      expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
         'professionVersion.industries',
-        'industries',
-      );
-      expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
         'professionVersion.organisation',
-        'organisation',
-      );
-      expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
         'professionVersion.qualification',
-        'qualification',
-      );
-      expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
         'professionVersion.legislations',
-        'legislations',
-      );
+      ]);
 
       expect(queryBuilder.where).toHaveBeenCalledWith(
         'professionVersion.status = :status',
