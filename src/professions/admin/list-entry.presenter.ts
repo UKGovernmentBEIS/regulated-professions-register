@@ -2,6 +2,7 @@ import { I18nService } from 'nestjs-i18n';
 import { TableCell } from '../../common/interfaces/table-cell';
 import { TableRow } from '../../common/interfaces/table-row';
 import { formatDate } from '../../common/utils';
+import { escape } from '../../helpers/escape.helper';
 import { stringifyNations } from '../../nations/helpers/stringifyNations';
 import { Nation } from '../../nations/nation';
 import { Profession } from '../profession.entity';
@@ -74,9 +75,9 @@ export class ListEntryPresenter {
       )
     ).join(', ');
 
-    const viewDetails = `<a href="/admin/professions/${
-      this.profession.slug
-    }">${await this.i18nService.translate(
+    const viewDetails = `<a href="/admin/professions/${escape(
+      this.profession.slug,
+    )}">${await this.i18nService.translate(
       'professions.admin.viewDetails',
     )}</a>`;
 
@@ -93,7 +94,7 @@ export class ListEntryPresenter {
       industry: { text: instrustries },
       status: {
         text: await this.i18nService.translate(
-          'professions.admin.status.published',
+          `professions.admin.status.${this.profession.status}`,
         ),
       },
       actions: { html: viewDetails },

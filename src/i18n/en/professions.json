@@ -235,7 +235,8 @@
       "actions": "Actions"
     },
     "status": {
-      "published": "Published"
+      "live": "Live",
+      "draft": "Draft"
     },
     "viewDetails": "View details"
   },

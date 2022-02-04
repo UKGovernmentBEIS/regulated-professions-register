@@ -20,6 +20,7 @@ describe('ListEntryPresenter', () => {
           industryFactory.build({ name: 'industries.law' }),
           industryFactory.build({ name: 'industries.finance' }),
         ],
+        status: 'live',
         updated_at: new Date(2003, 7, 12),
       });
 
@@ -42,7 +43,7 @@ describe('ListEntryPresenter', () => {
             'industries.finance',
           )}`,
         },
-        { text: translationOf('professions.admin.status.published') },
+        { text: translationOf('professions.admin.status.live') },
         {
           html: `<a href="/admin/professions/example-profession">${translationOf(
             'professions.admin.viewDetails',
@@ -65,6 +66,7 @@ describe('ListEntryPresenter', () => {
           industryFactory.build({ name: 'industries.law' }),
           industryFactory.build({ name: 'industries.finance' }),
         ],
+        status: 'draft',
         updated_at: new Date(2003, 7, 12),
       });
 
@@ -82,7 +84,7 @@ describe('ListEntryPresenter', () => {
         },
         { text: '12-08-2003' },
         { text: 'Placeholder name' },
-        { text: translationOf('professions.admin.status.published') },
+        { text: translationOf('professions.admin.status.draft') },
         {
           html: `<a href="/admin/professions/example-profession">${translationOf(
             'professions.admin.viewDetails',
