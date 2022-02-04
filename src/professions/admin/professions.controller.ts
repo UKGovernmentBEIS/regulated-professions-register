@@ -123,7 +123,8 @@ export class ProfessionsController {
     const allOrganisations = await this.organisationsService.all();
     const allIndustries = await this.industriesService.all();
 
-    const allProfessions = await this.professionsService.allConfirmed();
+    const allProfessions =
+      await this.professionVersionsService.allDraftOrLive();
 
     const user = request['appSession'].user as User;
 

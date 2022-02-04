@@ -95,9 +95,11 @@ describe('ProfessionsController', () => {
     industriesService = createMock<IndustriesService>();
     i18nService = createMockI18nService();
 
-    professionsService.allConfirmed.mockImplementation(async () => {
-      return [profession1, profession2, profession3];
-    });
+    professionVersionsService.allDraftOrLive.mockResolvedValue([
+      profession1,
+      profession2,
+      profession3,
+    ]);
 
     organisationsService.all.mockImplementation(async () => {
       return organisations;

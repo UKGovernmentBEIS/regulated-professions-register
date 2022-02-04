@@ -106,6 +106,7 @@ export class Profession {
   updated_at: Date;
 
   versionId?: string;
+  status?: string;
 
   constructor(
     name?: string,
@@ -157,6 +158,7 @@ export class Profession {
       reservedActivities: version.reservedActivities,
       legislations: version.legislations,
       organisation: version.organisation,
+      status: version.status,
       versionId: version.id,
     };
   }

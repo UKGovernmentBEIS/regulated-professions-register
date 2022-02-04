@@ -24,6 +24,7 @@ describe('Profession', () => {
         reservedActivities: professionVersion.reservedActivities,
         legislations: professionVersion.legislations,
         organisation: professionVersion.organisation,
+        status: professionVersion.status,
         versionId: professionVersion.id,
       });
     });
