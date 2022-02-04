@@ -89,6 +89,18 @@ export class ProfessionVersionsService {
     return Profession.withVersion(version.profession, version);
   }
 
+  async findByIdWithProfession(
+    professionId: string,
+    id: string,
+  ): Promise<Profession> {
+    const version = await this.versionsWithJoins()
+      .leftJoinAndSelect('organisation.versions', 'organisationVersions')
+      .where({ profession: { id: professionId }, id })
+      .getOne();
+
+    return Profession.withVersion(version.profession, version);
+  }
+
   private versionsWithJoins(): SelectQueryBuilder<ProfessionVersion> {
     return this.repository
       .createQueryBuilder('professionVersion')
