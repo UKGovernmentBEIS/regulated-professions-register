@@ -19,6 +19,9 @@ import organisationFactory from '../../testutils/factories/organisation';
 import professionFactory from '../../testutils/factories/profession';
 import { ProfessionVersionsService } from '../profession-versions.service';
 import professionVersion from '../../testutils/factories/profession-version';
+import userFactory from '../../testutils/factories/user';
+import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
+import { DeepPartial } from 'typeorm';
 
 const referrer = 'http://example.com/some/path';
 const host = 'example.com';
@@ -146,6 +149,8 @@ describe('ProfessionsController', () => {
         .justCreated('profession-id')
         .build();
 
+      const user = userFactory.build();
+
       const versionFields = {
         alternateName: undefined,
         description: undefined,
@@ -158,7 +163,7 @@ describe('ProfessionsController', () => {
         organisation: undefined,
         reservedActivities: undefined,
         profession: blankProfession,
-        user: undefined,
+        user: user,
       };
 
       const version = professionVersion
@@ -169,8 +174,13 @@ describe('ProfessionsController', () => {
       professionVersionsService.save.mockResolvedValue(version);
 
       const res = createMock<Response>();
+      const req = createMock<RequestWithAppSession>({
+        appSession: {
+          user: user as DeepPartial<any>,
+        },
+      });
 
-      await controller.create(res);
+      await controller.create(res, req);
 
       expect(professionsService.save).toHaveBeenCalled();
       expect(professionVersionsService.save).toHaveBeenCalledWith(
