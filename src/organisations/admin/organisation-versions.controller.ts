@@ -4,6 +4,7 @@ import {
   Get,
   Render,
   Param,
+  Put,
   Post,
   Res,
   Req,
@@ -95,5 +96,22 @@ export class OrganisationVersionsController {
     );
 
     return organisationSummaryPresenter.present();
+  }
+
+  @Put(':organisationId/versions/:versionId/publish')
+  @Render('admin/organisations/versions/publish')
+  async publish(
+    @Param('organisationId') organisationId: string,
+    @Param('versionId') versionId: string,
+  ): Promise<Organisation> {
+    const version =
+      await this.organisationVersionsService.findByIdWithOrganisation(
+        organisationId,
+        versionId,
+      );
+
+    await this.organisationVersionsService.publish(version);
+
+    return version.organisation;
   }
 }

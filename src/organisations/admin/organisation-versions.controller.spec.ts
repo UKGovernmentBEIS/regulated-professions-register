@@ -152,4 +152,27 @@ describe('OrganisationVersionsController', () => {
       );
     });
   });
+
+  describe('publish', () => {
+    it('should publish the current version', async () => {
+      const organisation = organisationFactory.build();
+      const version = organisationVersionFactory.build({
+        organisation: organisation,
+      });
+
+      organisationVersionsService.findByIdWithOrganisation.mockResolvedValue(
+        version,
+      );
+
+      const result = await controller.publish(organisation.id, version.id);
+
+      expect(result).toEqual(organisation);
+
+      expect(
+        organisationVersionsService.findByIdWithOrganisation,
+      ).toHaveBeenCalledWith(organisation.id, version.id);
+
+      expect(organisationVersionsService.publish).toHaveBeenCalledWith(version);
+    });
+  });
 });
