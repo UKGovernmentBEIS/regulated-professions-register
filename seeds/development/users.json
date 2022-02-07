@@ -8,11 +8,35 @@
     "serviceOwner": true
   },
   {
+    "email": "beis-rpr+registrar@dxw.com",
+    "name": "Registrar",
+    "externalIdentifier": "auth0|620143840c2d4d00717d7b4a",
+    "role": "registrar",
+    "confirmed": true,
+    "serviceOwner": true
+  },
+  {
     "email": "beis-rpr+editor@dxw.com",
     "name": "Editor",
     "externalIdentifier": "auth0|61e699cb8006ea006a099a15",
     "role": "editor",
     "confirmed": true,
     "serviceOwner": true
+  },
+  {
+    "email": "beis-rpr+orgadmin@dxw.com",
+    "name": "Organisation Admin",
+    "externalIdentifier": "auth0|620143d74de528007139273a",
+    "role": "administrator",
+    "confirmed": true,
+    "serviceOwner": false
+  },
+  {
+    "email": "beis-rpr+orgeditor@dxw.com",
+    "name": "Organisation Editor",
+    "externalIdentifier": "auth0|620144210c2d4d00717d7b8a",
+    "role": "editor",
+    "confirmed": true,
+    "serviceOwner": false
   }
 ]

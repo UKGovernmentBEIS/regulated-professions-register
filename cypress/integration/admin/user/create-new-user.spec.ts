@@ -8,7 +8,7 @@ describe('Creating a new user', () => {
 
   context('when I am logged in without the correct permissions', () => {
     beforeEach(() => {
-      cy.loginAuth0('editor');
+      cy.loginAuth0('orgeditor');
     });
 
     it('does not allow me to add a user', () => {

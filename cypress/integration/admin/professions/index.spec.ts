@@ -142,9 +142,9 @@ describe('Listing professions', () => {
     });
   });
 
-  context('When I am logged in as editor', () => {
+  context('When I am logged in as organisation admin', () => {
     beforeEach(() => {
-      cy.loginAuth0('editor');
+      cy.loginAuth0('orgadmin');
       cy.visitAndCheckAccessibility('/admin/professions');
 
       cy.translate('professions.admin.showFilters').then((showFilters) => {
