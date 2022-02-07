@@ -13,7 +13,7 @@ import { Request, Response } from 'express';
 import { AuthenticationGuard } from '../../common/authentication.guard';
 import { UsersService } from '../users.service';
 import { UserPermission } from '../user-permission';
-import { PermissionsDto } from './dto/permissions.dto';
+import { RoleDto } from './dto/role.dto';
 import { Permissions } from '../../common/permissions.decorator';
 import { EditTemplate } from './interfaces/edit-template';
 import { BackLink } from '../../common/decorators/back-link.decorator';
@@ -27,13 +27,13 @@ import { RoleRadioButtonsPresenter } from '../presenters/role-radio-buttons.pres
 
 @UseGuards(AuthenticationGuard)
 @Controller('/admin/users')
-export class PermissionsController {
+export class RoleController {
   constructor(
     private readonly usersService: UsersService,
     private readonly i18nService: I18nService,
   ) {}
 
-  @Get(':id/permissions/edit')
+  @Get(':id/role/edit')
   @Permissions(UserPermission.CreateUser, UserPermission.EditUser)
   @BackLink((request: Request) =>
     request.query.change === 'true'
@@ -50,7 +50,7 @@ export class PermissionsController {
     return this.renderForm(res, user.serviceOwner, user.role, change);
   }
 
-  @Post(':id/permissions')
+  @Post(':id/role')
   @Permissions(UserPermission.CreateUser, UserPermission.EditUser)
   @BackLink((request: Request) => {
     return request.body.change === 'true'
@@ -64,9 +64,9 @@ export class PermissionsController {
   ): Promise<void> {
     const user = await this.usersService.find(id);
 
-    const validator = await Validator.validate(PermissionsDto, permissionsDto);
+    const validator = await Validator.validate(RoleDto, permissionsDto);
 
-    const submittedValues: PermissionsDto = permissionsDto;
+    const submittedValues: RoleDto = permissionsDto;
 
     const role = submittedValues.role;
 
@@ -116,6 +116,6 @@ export class PermissionsController {
       errors,
     };
 
-    res.render('admin/users/permissions/edit', templateArgs);
+    res.render('admin/users/role/edit', templateArgs);
   }
 }

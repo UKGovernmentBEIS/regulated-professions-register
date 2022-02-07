@@ -126,7 +126,7 @@ describe('Creating a new user', () => {
 
       cy.get('body').should('contain', 'name3@example.com');
 
-      cy.get('a[href*="permissions/edit?change=true"]').first().click();
+      cy.get('a[href*="role/edit?change=true"]').first().click();
 
       cy.get('input[name="role"][value="administrator"]').check();
 

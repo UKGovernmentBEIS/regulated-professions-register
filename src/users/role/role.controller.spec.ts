@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersService } from '../users.service';
-import { PermissionsController } from './permissions.controller';
+import { RoleController as RoleController } from './role.controller';
 import { createMock, DeepMocked } from '@golevelup/ts-jest';
 import { Response } from 'express';
 import userFactory from '../../testutils/factories/user';
@@ -12,15 +12,15 @@ import { Role } from '../role';
 
 jest.mock('../presenters/role-radio-buttons.preseter');
 
-describe('PermissionsController', () => {
-  let controller: PermissionsController;
+describe('RoleController', () => {
+  let controller: RoleController;
   let usersService: DeepMocked<UsersService>;
 
   beforeEach(async () => {
     usersService = createMock<UsersService>();
 
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [PermissionsController],
+      controllers: [RoleController],
       providers: [
         {
           provide: I18nService,
@@ -33,7 +33,7 @@ describe('PermissionsController', () => {
       ],
     }).compile();
 
-    controller = module.get<PermissionsController>(PermissionsController);
+    controller = module.get<RoleController>(RoleController);
   });
 
   describe('edit', () => {
@@ -59,7 +59,7 @@ describe('PermissionsController', () => {
       await controller.edit(res, user.id, false);
 
       expect(res.render).toBeCalledWith(
-        'admin/users/permissions/edit',
+        'admin/users/role/edit',
         expect.objectContaining({
           roleRadioButtonArgs,
           change: false,
@@ -88,7 +88,7 @@ describe('PermissionsController', () => {
       await controller.edit(res, user.id, true);
 
       expect(res.render).toBeCalledWith(
-        'admin/users/permissions/edit',
+        'admin/users/role/edit',
         expect.objectContaining({
           change: true,
         }),
@@ -187,7 +187,7 @@ describe('PermissionsController', () => {
       expect(usersService.save).not.toHaveBeenCalled();
 
       expect(res.render).toHaveBeenCalledWith(
-        'admin/users/permissions/edit',
+        'admin/users/role/edit',
         expect.objectContaining({
           roleRadioButtonArgs,
         }),

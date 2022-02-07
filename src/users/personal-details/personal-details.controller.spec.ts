@@ -74,7 +74,7 @@ describe('PersonalDetailsController', () => {
       res = createMock<Response>();
     });
 
-    it('should redirect to permissions and update the user the email address is not already in use and the body is populated', async () => {
+    it('should redirect to role and update the user the email address is not already in use and the body is populated', async () => {
       usersService.findByEmail.mockImplementationOnce(() => {
         return null;
       });
@@ -87,7 +87,7 @@ describe('PersonalDetailsController', () => {
         email: email,
       });
       expect(res.redirect).toHaveBeenCalledWith(
-        `/admin/users/user-uuid/permissions/edit`,
+        `/admin/users/user-uuid/role/edit`,
       );
     });
 
@@ -166,7 +166,7 @@ describe('PersonalDetailsController', () => {
         email: email,
       });
       expect(res.redirect).toHaveBeenCalledWith(
-        `/admin/users/user-uuid/permissions/edit`,
+        `/admin/users/user-uuid/role/edit`,
       );
     });
   });

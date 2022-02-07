@@ -105,7 +105,7 @@ export class PersonalDetailsController {
     if (submittedValues.change === 'true') {
       res.redirect(`/admin/users/${id}/confirm`);
     } else {
-      res.redirect(`/admin/users/${id}/permissions/edit`);
+      res.redirect(`/admin/users/${id}/role/edit`);
     }
   }
 
