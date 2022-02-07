@@ -1,5 +1,6 @@
 import professionFactory from '../testutils/factories/profession';
 import professionVersionFactory from '../testutils/factories/profession-version';
+import { ProfessionVersionStatus } from './profession-version.entity';
 import { Profession } from './profession.entity';
 
 describe('Profession', () => {
@@ -26,6 +27,94 @@ describe('Profession', () => {
         organisation: professionVersion.organisation,
         status: professionVersion.status,
         versionId: professionVersion.id,
+      });
+    });
+  });
+
+  describe('withLatestLiveVersion', () => {
+    it('should get the latest live version', () => {
+      const professionVersion = professionVersionFactory.build({
+        status: ProfessionVersionStatus.Live,
+        updated_at: new Date(2022, 1, 3),
+      });
+      const profession = professionFactory.build({
+        versions: [
+          professionVersionFactory.build({
+            status: ProfessionVersionStatus.Draft,
+            updated_at: new Date(2022, 1, 1),
+          }),
+          professionVersion,
+          professionVersionFactory.build({
+            status: ProfessionVersionStatus.Live,
+            updated_at: new Date(2022, 1, 2),
+          }),
+        ],
+      });
+
+      expect(Profession.withLatestLiveVersion(profession)).toEqual(
+        Profession.withVersion(profession, professionVersion),
+      );
+    });
+
+    describe('when there is no Live version', () => {
+      it('returns null', () => {
+        const profession = professionFactory.build({
+          versions: [
+            professionVersionFactory.build({
+              status: ProfessionVersionStatus.Draft,
+            }),
+            professionVersionFactory.build({
+              status: ProfessionVersionStatus.Draft,
+            }),
+          ],
+        });
+
+        expect(Profession.withLatestLiveVersion(profession)).toEqual(null);
+      });
+    });
+  });
+
+  describe('withLatestLiveOrDraftVersion', () => {
+    it('should get the latest live or draft version', () => {
+      const professionVersion = professionVersionFactory.build({
+        status: ProfessionVersionStatus.Draft,
+        updated_at: new Date(2022, 1, 3),
+      });
+      const profession = professionFactory.build({
+        versions: [
+          professionVersionFactory.build({
+            status: ProfessionVersionStatus.Live,
+            updated_at: new Date(2022, 1, 1),
+          }),
+          professionVersion,
+          professionVersionFactory.build({
+            status: ProfessionVersionStatus.Draft,
+            updated_at: new Date(2022, 1, 2),
+          }),
+        ],
+      });
+
+      expect(Profession.withLatestLiveOrDraftVersion(profession)).toEqual(
+        Profession.withVersion(profession, professionVersion),
+      );
+    });
+
+    describe('when there are no Live or Draft versions', () => {
+      it('returns null', () => {
+        const profession = professionFactory.build({
+          versions: [
+            professionVersionFactory.build({
+              status: ProfessionVersionStatus.Unconfirmed,
+            }),
+            professionVersionFactory.build({
+              status: ProfessionVersionStatus.Unconfirmed,
+            }),
+          ],
+        });
+
+        expect(Profession.withLatestLiveOrDraftVersion(profession)).toEqual(
+          null,
+        );
       });
     });
   });
