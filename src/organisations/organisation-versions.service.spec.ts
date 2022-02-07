@@ -1,8 +1,14 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { createMock } from '@golevelup/ts-jest';
+import { createMock, DeepMocked } from '@golevelup/ts-jest';
 
-import { Repository, In, SelectQueryBuilder } from 'typeorm';
+import {
+  Repository,
+  In,
+  SelectQueryBuilder,
+  Connection,
+  QueryRunner,
+} from 'typeorm';
 import {
   OrganisationVersion,
   OrganisationVersionStatus,
@@ -16,14 +22,21 @@ import organisationFactory from '../testutils/factories/organisation';
 describe('OrganisationVersionsService', () => {
   let service: OrganisationVersionsService;
   let repo: Repository<OrganisationVersion>;
+  let connection: DeepMocked<Connection>;
 
   beforeEach(async () => {
+    connection = createMock<Connection>();
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         OrganisationVersionsService,
         {
           provide: getRepositoryToken(OrganisationVersion),
           useValue: createMock<Repository<OrganisationVersion>>(),
+        },
+        {
+          provide: Connection,
+          useValue: connection,
         },
       ],
     }).compile();
@@ -266,6 +279,103 @@ describe('OrganisationVersionsService', () => {
           slug: 'some-slug',
         },
       );
+    });
+  });
+
+  describe('publish', () => {
+    let queryRunner: DeepMocked<QueryRunner>;
+
+    beforeEach(() => {
+      queryRunner = createMock<QueryRunner>();
+
+      jest
+        .spyOn(connection, 'createQueryRunner')
+        .mockImplementation(() => queryRunner);
+    });
+
+    it('publishes the draft version', async () => {
+      const version = organisationVersionFactory.build({
+        status: OrganisationVersionStatus.Draft,
+      });
+
+      const findSpy = jest
+        .spyOn(repo, 'findOne')
+        .mockImplementation(() => undefined);
+      const saveSpy = jest.spyOn(repo, 'save').mockResolvedValue(version);
+
+      const result = await service.publish(version);
+
+      expect(result.status).toBe(OrganisationVersionStatus.Live);
+
+      expect(findSpy).toHaveBeenCalledWith({
+        organisation: version.organisation,
+        status: OrganisationVersionStatus.Live,
+      });
+
+      expect(saveSpy).toHaveBeenCalledWith({
+        ...version,
+        status: OrganisationVersionStatus.Live,
+      });
+
+      expect(queryRunner.commitTransaction).toHaveBeenCalled();
+      expect(queryRunner.release).toHaveBeenCalled();
+    });
+
+    it('demotes the latest live version', async () => {
+      const liveVersion = organisationVersionFactory.build({
+        status: OrganisationVersionStatus.Live,
+      });
+
+      const organisation = organisationFactory.build({
+        versions: [liveVersion],
+      });
+
+      const draftVersion = organisationVersionFactory.build({
+        status: OrganisationVersionStatus.Draft,
+        organisation: organisation,
+      });
+
+      const saveSpy = jest.spyOn(repo, 'save');
+      const findSpy = jest
+        .spyOn(repo, 'findOne')
+        .mockImplementation(async () => liveVersion);
+
+      const result = await service.publish(draftVersion);
+
+      expect(result.status).toBe(OrganisationVersionStatus.Live);
+
+      expect(findSpy).toHaveBeenCalledWith({
+        organisation: organisation,
+        status: OrganisationVersionStatus.Live,
+      });
+
+      expect(saveSpy).toHaveBeenCalledWith({
+        ...liveVersion,
+        status: OrganisationVersionStatus.Archived,
+      });
+
+      expect(saveSpy).toHaveBeenCalledWith({
+        ...draftVersion,
+        status: OrganisationVersionStatus.Live,
+      });
+
+      expect(queryRunner.commitTransaction).toHaveBeenCalled();
+      expect(queryRunner.release).toHaveBeenCalled();
+    });
+
+    it('rolls back the transaction if an error occurs', async () => {
+      const version = organisationVersionFactory.build({
+        status: OrganisationVersionStatus.Draft,
+      });
+
+      jest.spyOn(repo, 'save').mockImplementation(() => {
+        throw Error;
+      });
+
+      await service.publish(version);
+
+      expect(queryRunner.rollbackTransaction).toHaveBeenCalled();
+      expect(queryRunner.commitTransaction).not.toHaveBeenCalled();
     });
   });
 });
