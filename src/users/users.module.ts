@@ -11,10 +11,14 @@ import { UsersService } from './users.service';
 import { UserMailer } from './user.mailer';
 import { BullModule } from '@nestjs/bull';
 import { Auth0Consumer } from './auth0.consumer';
+import { OrganisationController } from './organisation/organisation.controller';
+import { OrganisationsService } from '../organisations/organisations.service';
+import { Organisation } from '../organisations/organisation.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([Organisation]),
     BullModule.registerQueue({
       name: 'default',
     }),
@@ -22,9 +26,16 @@ import { Auth0Consumer } from './auth0.consumer';
       name: 'auth0',
     }),
   ],
-  providers: [UsersService, UserMailer, Auth0Service, Auth0Consumer],
+  providers: [
+    UsersService,
+    OrganisationsService,
+    UserMailer,
+    Auth0Service,
+    Auth0Consumer,
+  ],
   controllers: [
     UsersController,
+    OrganisationController,
     PersonalDetailsController,
     PermissionsController,
   ],

@@ -4,8 +4,9 @@ import { Request } from 'express';
 export function createMockRequest(
   referrer: string,
   host: string,
+  appSession?: any,
 ): DeepMocked<Request> {
-  return createMock<Request>({
+  const mock = createMock<Request>({
     get: (header) => {
       if (header === 'Referrer') {
         return referrer;
@@ -14,4 +15,10 @@ export function createMockRequest(
       }
     },
   });
+
+  if (appSession !== undefined) {
+    mock['appSession'] = appSession;
+  }
+
+  return mock;
 }

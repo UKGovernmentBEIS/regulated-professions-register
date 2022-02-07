@@ -4,9 +4,14 @@
       "name": "Name",
       "email": "Email address",
       "organisation": "Organisation",
+      "serviceOwner": {
+        "yes": "Regulatory Professions Register",
+        "no": "A regulatory authority"
+      },
       "role": "Role"
     },
     "hint": {
+      "organisation": "What organisation does this user belong to?",
       "name": "For example, Clare Jones.",
       "email": "For example, clarejones@beis.gov.uk.",
       "role": "What is the role of the user within the Regulated Professions Register?"
@@ -20,8 +25,11 @@
       "email": {
         "alreadyExists": "A user with this email address already exists"
       },
+      "organisation": {
+        "empty": "You must select an organisation for the user"
+      },
       "serviceOwner": {
-        "empty": "You must select if a user is a service owner"
+        "empty": "You must select if the user belongs to the Regulatory Professions Register or a regulatory authority"
       },
       "roles": {
         "empty": "You must select a role"
@@ -30,6 +38,7 @@
     "headings": {
       "main": "Creating RPR user",
       "checkAnswers": "Check your answers before creating this user",
+      "organisation": "Organisation",
       "personalDetails": "Personal details",
       "role": "Role"
     },
