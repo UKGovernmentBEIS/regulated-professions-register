@@ -3,18 +3,8 @@
     "label": {
       "name": "Name",
       "email": "Email address",
-      "permissions": "What permissions apply to this user?",
-      "createUser": "Create User",
-      "editUser": "Edit User",
-      "deleteUser": "Delete User",
-      "createOrganisation": "Create organisation",
-      "deleteOrganisation": "Delete organisation",
-      "createProfession": "Create profession",
-      "deleteProfession": "Delete profession",
-      "uploadDecisionData": "Upload decision data",
-      "downloadDecisionData": "Download decision data",
-      "viewDecisionData": "View decision data",
-      "serviceOwner": "Is this user a service owner?"
+      "organisation": "Organisation",
+      "role": "Role"
     },
     "hint": {
       "name": "For example, Clare Jones.",
@@ -72,5 +62,6 @@
     "managerUsers": "Onboard and manage users",
     "managerProfessionsAndOrganisations": "Create and link regulators and professions",
     "editProfessionsAndOrganisations": "Edit information about regulators and professions"
-  }
+  },
+  "serviceOwnerOrganisation": "Regulatory Professions Register"
 }

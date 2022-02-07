@@ -7,7 +7,6 @@ import { UsersService } from './users.service';
 import { Auth0Service } from './auth0.service';
 import { UsersController } from './users.controller';
 import { UsersPresenter } from './users.presenter';
-import { UserPresenter } from './user.presenter';
 import { UserMailer } from './user.mailer';
 
 import userFactory from '../testutils/factories/user';
@@ -96,18 +95,11 @@ describe('UsersController', () => {
 
       usersService.find.mockResolvedValue(user);
 
-      const permissionList = 'Create User<br />DeleteUser';
-      (
-        UserPresenter.prototype as DeepMocked<UserPresenter>
-      ).permissionList.mockResolvedValue(permissionList);
-
       expect(await controller.show('some-uuid')).toEqual({
         ...user,
-        permissionList,
       });
 
       expect(usersService.find).toHaveBeenCalledWith('some-uuid');
-      expect(UserPresenter.prototype.permissionList).toHaveBeenCalled();
     });
   });
 
@@ -134,18 +126,12 @@ describe('UsersController', () => {
 
       usersService.find.mockResolvedValue(user);
 
-      const permissionList = 'Create User<br />DeleteUser';
-      (
-        UserPresenter.prototype as DeepMocked<UserPresenter>
-      ).permissionList.mockResolvedValue(permissionList);
-
       const result = await controller.confirm(user.id);
 
       expect(usersService.find).toHaveBeenCalledWith(user.id);
 
       expect(result).toEqual({
         ...user,
-        permissionList,
       });
     });
   });

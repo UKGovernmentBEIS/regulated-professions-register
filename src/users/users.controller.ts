@@ -23,7 +23,6 @@ import { ShowTemplate } from './interfaces/show-template';
 import { Permissions } from '../common/permissions.decorator';
 import { flashMessage } from '../common/flash-message';
 
-import { UserPresenter } from './user.presenter';
 import { UserMailer } from './user.mailer';
 import { BackLink } from '../common/decorators/back-link.decorator';
 
@@ -43,7 +42,7 @@ export class UsersController {
   @BackLink('/admin')
   async index(): Promise<IndexTemplate> {
     const users = await this.usersService.where({ confirmed: true });
-    const usersPresenter = new UsersPresenter(users, this.i18nService);
+    const usersPresenter = new UsersPresenter(users);
 
     return {
       ...users,
@@ -64,11 +63,9 @@ export class UsersController {
   @Render('admin/users/show')
   async show(@Param('id') id): Promise<ShowTemplate> {
     const user = await this.usersService.find(id);
-    const userPresenter = new UserPresenter(user, this.i18nService);
 
     return {
       ...user,
-      permissionList: await userPresenter.permissionList(),
     };
   }
 
@@ -86,11 +83,9 @@ export class UsersController {
   @BackLink('/admin/users/:id/permissions/edit')
   async confirm(@Param('id') id): Promise<ShowTemplate> {
     const user = await this.usersService.find(id);
-    const userPresenter = new UserPresenter(user, this.i18nService);
 
     return {
       ...user,
-      permissionList: await userPresenter.permissionList(),
     };
   }
 
