@@ -6,9 +6,25 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 import { OrganisationVersion } from '../organisations/organisation-version.entity';
 import { Role } from './role';
+import { Organisation } from '../organisations/organisation.entity';
+
+export enum UserPermission {
+  CreateUser = 'createUser',
+  EditUser = 'editUser',
+  DeleteUser = 'deleteUser',
+  CreateOrganisation = 'createOrganisation',
+  DeleteOrganisation = 'deleteOrganisation',
+  CreateProfession = 'createProfession',
+  DeleteProfession = 'deleteprofession',
+  UploadDecisionData = 'uploadDecisionData',
+  DownloadDecisionData = 'downloadDecisionData',
+  ViewDecisionData = 'viewDecisionData',
+}
 
 @Entity({ name: 'users' })
 export class User {
@@ -57,6 +73,12 @@ export class User {
   )
   organisationVersions: OrganisationVersion[];
 
+  @ManyToOne(() => Organisation, (organisation) => organisation.users, {
+    eager: true,
+  })
+  @JoinColumn()
+  organisation: Organisation;
+
   constructor(
     email?: string,
     name?: string,
@@ -65,6 +87,7 @@ export class User {
     serviceOwner?: boolean,
     confirmed?: boolean,
     organisationVersions?: OrganisationVersion[],
+    organisation?: Organisation,
   ) {
     this.email = email || '';
     this.name = name || '';
@@ -73,5 +96,6 @@ export class User {
     this.serviceOwner = serviceOwner || false;
     this.confirmed = confirmed || false;
     this.organisationVersions = organisationVersions || null;
+    this.organisation = organisation || null;
   }
 }
