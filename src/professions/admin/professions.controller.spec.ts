@@ -266,6 +266,7 @@ describe('ProfessionsController', () => {
       beforeEach(() => {
         request['appSession'].user = createMock<User>({
           serviceOwner: false,
+          organisation: organisation1,
         });
       });
 
