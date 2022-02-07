@@ -1,0 +1,64 @@
+{% extends "base.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    {% include "../../../shared/_errors.njk" %}
+
+    <span class="govuk-caption-xl">{{ "users.form.headings.main" | t }}</span>
+    <h1 class="govuk-heading-xl">{{ "users.form.headings.organisation" | t }}</h1>
+
+    <form method="post" action="./">
+
+      <input type="hidden" name="change" value="{{ change }}" />
+
+      <fieldset class="govuk-fieldset">
+  
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+          {{"users.form.hint.organisation" | t}}
+        </legend>
+
+        <a name="serviceOwner">
+          {{
+            govukRadios({
+              id: "serviceOwner",
+              name: "serviceOwner",
+              items: serviceOwnerRadioButtonArgs,
+              errorMessage: errors.serviceOwner | tError
+            })
+          }}
+        </a>
+
+        <a name="organisation">
+          {{
+            govukSelect({
+              label: {
+                html: "<span class=\"govuk-visually-hidden\">" + ("users.form.label.organisation" | t) + "Organisation</span>"
+              },
+              id: "organisation",
+              name: "organisation",
+              items: organisationsSelectArgs,
+              errorMessage: errors.organisation | tError
+            })
+          }}
+        </a>
+      </fieldset>
+
+      {{ govukButton({
+        text: ('app.continue' | t),
+        type: "submit",
+        id: "continue-button"
+      }) }}
+    </form>
+
+  </div>
+
+  <div class="govuk-grid-column-one-third">
+  </div>
+</div>
+
+{% endblock %}
