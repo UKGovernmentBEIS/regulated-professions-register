@@ -93,12 +93,7 @@ describe('OrganisationVersionsService', () => {
         'version-uuid',
       );
 
-      expect(result).toEqual(
-        Organisation.withVersion(
-          organisationVersion.organisation,
-          organisationVersion,
-        ),
-      );
+      expect(result).toEqual(organisationVersion);
 
       expect(queryBuilder).toHaveJoined([
         'organisationVersion.organisation',

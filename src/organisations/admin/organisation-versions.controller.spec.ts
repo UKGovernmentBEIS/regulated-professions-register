@@ -9,6 +9,8 @@ import { OrganisationVersionsController } from './organisation-versions.controll
 import { OrganisationVersionsService } from '../organisation-versions.service';
 import { OrganisationsService } from '../organisations.service';
 
+import { Organisation } from '../organisation.entity';
+
 import { OrganisationSummaryPresenter } from '../presenters/organisation-summary.presenter';
 
 import { ShowTemplate } from '../interfaces/show-template.interface';
@@ -111,8 +113,16 @@ describe('OrganisationVersionsController', () => {
   describe('show', () => {
     it('should return variables for the show template', async () => {
       const organisation = organisationFactory.build();
-      organisationVersionsService.findByIdWithOrganisation.mockResolvedValue(
+      const version = organisationVersionFactory.build({
+        organisation: organisation,
+      });
+      const organisationWithVersion = Organisation.withVersion(
         organisation,
+        version,
+      );
+
+      organisationVersionsService.findByIdWithOrganisation.mockResolvedValue(
+        version,
       );
 
       const showTemplate: ShowTemplate = {
@@ -137,7 +147,7 @@ describe('OrganisationVersionsController', () => {
       ).toHaveBeenCalledWith('org-uuid', 'version-uuid');
 
       expect(OrganisationSummaryPresenter).toHaveBeenCalledWith(
-        organisation,
+        organisationWithVersion,
         i18nService,
       );
     });

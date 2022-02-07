@@ -21,6 +21,7 @@ import { OrganisationVersionsService } from '../organisation-versions.service';
 import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
 
 import { OrganisationVersion } from '../organisation-version.entity';
+import { Organisation } from '../organisation.entity';
 
 import { ShowTemplate } from '../interfaces/show-template.interface';
 
@@ -77,11 +78,16 @@ export class OrganisationVersionsController {
     @Param('organisationId') organisationId: string,
     @Param('versionId') versionId: string,
   ): Promise<ShowTemplate> {
-    const organisation =
+    const version =
       await this.organisationVersionsService.findByIdWithOrganisation(
         organisationId,
         versionId,
       );
+
+    const organisation = Organisation.withVersion(
+      version.organisation,
+      version,
+    );
 
     const organisationSummaryPresenter = new OrganisationSummaryPresenter(
       organisation,

@@ -26,12 +26,12 @@ export class OrganisationVersionsService {
   async findByIdWithOrganisation(
     organisationId: string,
     id: string,
-  ): Promise<Organisation> {
+  ): Promise<OrganisationVersion> {
     const version = await this.versionsWithJoins()
       .where({ organisation: { id: organisationId }, id })
       .getOne();
 
-    return Organisation.withVersion(version.organisation, version);
+    return version;
   }
 
   async findLatestForOrganisationId(
