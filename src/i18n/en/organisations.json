@@ -120,7 +120,8 @@
     }
   },
   "headings": {
-    "professions": "Regulated professions"
+    "professions": "Regulated professions",
+    "status": "Status"
   },
   "label": {
     "name": "Name",
