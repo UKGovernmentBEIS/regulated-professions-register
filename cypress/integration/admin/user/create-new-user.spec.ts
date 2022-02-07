@@ -55,11 +55,12 @@ describe('Creating a new user', () => {
 
       cy.get('body').should('contain', 'Example Name');
       cy.get('body').should('contain', 'name@example.com');
-      cy.translate('users.form.label.createOrganisation').then((label) => {
-        cy.get('body').should('contain', label);
+      cy.translate('users.form.label.serviceOwner.yes').then((serviceOwnerLabel) => {
+        cy.get('body').should('contain', serviceOwnerLabel);
       });
-      cy.translate('app.boolean.true').then((isServiceOwner) => {
-        cy.get('body').should('contain', isServiceOwner);
+
+      cy.translate('users.roles.registrar').then((registrarLabel) => {
+        cy.get('body').should('contain', registrarLabel);
       });
 
       cy.get('button').click();
@@ -117,20 +118,12 @@ describe('Creating a new user', () => {
       cy.get('button').click();
       cy.checkAccessibility();
 
-      cy.translate('users.form.label.createOrganisation').then((label) => {
+      cy.translate('users.roles.editor').then((label) => {
         cy.get('body').should('not.contain', label);
       });
 
-      cy.translate('users.form.label.createUser').then((label) => {
+      cy.translate('users.roles.administrator').then((label) => {
         cy.get('body').should('contain', label);
-      });
-
-      cy.translate('app.boolean.false').then((isServiceOwner) => {
-        cy.get('body').should('not.contain', isServiceOwner);
-      });
-
-      cy.translate('app.boolean.true').then((isServiceOwner) => {
-        cy.get('body').should('contain', isServiceOwner);
       });
 
       cy.get('button').click();
