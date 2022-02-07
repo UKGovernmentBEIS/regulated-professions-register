@@ -13,7 +13,7 @@
             <a class="govuk-link" href="/admin/organisations">{{ "organisations.admin.heading" | t }}</a>
           </li>
         {% endif %}
-        {% if user.serviceOwner %}
+        {% if 'createUser' in permissions %}
           <li>
             <a class="govuk-link" href="/admin/users">{{ "users.headings.index" | t }}</a>
           </li>
