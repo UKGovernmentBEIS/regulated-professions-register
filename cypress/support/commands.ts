@@ -13,9 +13,21 @@ function getUser(role: string): { username: string; password: string } {
       username: Cypress.env('ADMIN_USERNAME'),
       password: Cypress.env('ADMIN_PASSWORD'),
     },
+    registrar: {
+      username: Cypress.env('REGISTRAR_USERNAME'),
+      password: Cypress.env('REGISTRAR_PASSWORD'),
+    },
     editor: {
       username: Cypress.env('EDITOR_USERNAME'),
       password: Cypress.env('EDITOR_PASSWORD'),
+    },
+    orgadmin: {
+      username: Cypress.env('ORGADMIN_USERNAME'),
+      password: Cypress.env('ORGADMIN_PASSWORD'),
+    },
+    orgeditor: {
+      username: Cypress.env('ORGEDITOR_USERNAME'),
+      password: Cypress.env('ORGEDITOR_PASSWORD'),
     },
   };
 

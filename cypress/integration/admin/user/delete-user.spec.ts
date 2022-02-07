@@ -18,7 +18,7 @@ describe('Deleting a user', () => {
           cy.get('body').should('contain', successMessage);
         },
       );
-      cy.get('body').should('not.contain', 'Editor');
+      cy.get('body').should('not.contain', 'beis-rpr+editor@dxw.com');
     });
   });
 });
