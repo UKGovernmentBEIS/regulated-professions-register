@@ -7,9 +7,9 @@ import { createMockI18nService } from '../testutils/create-mock-i18n-service';
 import industryFactory from '../testutils/factories/industry';
 import professionFactory from '../testutils/factories/profession';
 import { translationOf } from '../testutils/translation-of';
+import { ProfessionVersionsService } from './profession-versions.service';
 
 import { ProfessionsController } from './professions.controller';
-import { ProfessionsService } from './professions.service';
 
 import { Organisation } from '../organisations/organisation.entity';
 
@@ -17,18 +17,18 @@ jest.mock('../organisations/organisation.entity');
 
 describe('ProfessionsController', () => {
   let controller: ProfessionsController;
-  let professionsService: DeepMocked<ProfessionsService>;
+  let professionVersionsService: DeepMocked<ProfessionVersionsService>;
   let i18nService: DeepMocked<I18nService>;
 
   beforeEach(async () => {
-    professionsService = createMock<ProfessionsService>();
+    professionVersionsService = createMock<ProfessionVersionsService>();
     i18nService = createMockI18nService();
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         {
-          provide: ProfessionsService,
-          useValue: professionsService,
+          provide: ProfessionVersionsService,
+          useValue: professionVersionsService,
         },
         { provide: I18nService, useValue: i18nService },
       ],
@@ -48,7 +48,7 @@ describe('ProfessionsController', () => {
         industries: [industry],
       });
 
-      professionsService.findBySlug.mockResolvedValue(profession);
+      professionVersionsService.findLiveBySlug.mockResolvedValue(profession);
 
       (Organisation.withLatestLiveVersion as jest.Mock).mockImplementation(
         () => profession.organisation,
@@ -64,11 +64,13 @@ describe('ProfessionsController', () => {
         organisation: profession.organisation,
       });
 
-      expect(professionsService.findBySlug).toBeCalledWith('example-slug');
+      expect(professionVersionsService.findLiveBySlug).toBeCalledWith(
+        'example-slug',
+      );
     });
 
     it('should throw an error when the slug does not match a profession', () => {
-      professionsService.findBySlug.mockResolvedValue(null);
+      professionVersionsService.findLiveBySlug.mockResolvedValue(null);
 
       expect(async () => {
         await controller.show('example-invalid-slug');
@@ -83,7 +85,7 @@ describe('ProfessionsController', () => {
           industries: [industryFactory.build({ name: 'industries.example' })],
         });
 
-        professionsService.findBySlug.mockResolvedValue(profession);
+        professionVersionsService.findLiveBySlug.mockResolvedValue(profession);
 
         (Organisation.withLatestLiveVersion as jest.Mock).mockImplementation(
           () => profession.organisation,

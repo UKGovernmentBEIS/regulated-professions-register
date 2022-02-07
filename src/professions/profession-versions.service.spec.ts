@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { createMock } from '@golevelup/ts-jest';
 
-import { In, Repository } from 'typeorm';
+import { In, Repository, SelectQueryBuilder } from 'typeorm';
 import { ProfessionVersionsService } from './profession-versions.service';
 import professionVersionFactory from '../testutils/factories/profession-version';
 import {
@@ -10,6 +10,7 @@ import {
   ProfessionVersionStatus,
 } from './profession-version.entity';
 import professionFactory from '../testutils/factories/profession';
+import { Profession } from './profession.entity';
 
 describe('ProfessionVersionsService', () => {
   let service: ProfessionVersionsService;
@@ -118,6 +119,88 @@ describe('ProfessionVersionsService', () => {
         order: { created_at: 'DESC' },
         relations: ['profession'],
       });
+    });
+  });
+
+  describe('allLive', () => {
+    it('fetches all of currently live professions', async () => {
+      const versions = professionVersionFactory.buildList(5);
+      const queryBuilder = createMock<SelectQueryBuilder<ProfessionVersion>>({
+        leftJoinAndSelect: () => queryBuilder,
+        where: () => queryBuilder,
+        getMany: async () => versions,
+      });
+
+      jest
+        .spyOn(repo, 'createQueryBuilder')
+        .mockImplementation(() => queryBuilder);
+
+      const result = await service.allLive();
+
+      const expectedProfessions = versions.map((version) =>
+        Profession.withVersion(version.profession, version),
+      );
+
+      expect(result).toEqual(expectedProfessions);
+
+      expect(queryBuilder).toHaveJoined([
+        'professionVersion.profession',
+        'professionVersion.industries',
+        'professionVersion.organisation',
+        'professionVersion.qualification',
+        'professionVersion.legislations',
+      ]);
+
+      expect(queryBuilder.where).toHaveBeenCalledWith(
+        'professionVersion.status = :status',
+        {
+          status: ProfessionVersionStatus.Live,
+        },
+      );
+    });
+  });
+
+  describe('findLiveBySlug', () => {
+    it('fetches a live Profession by its slug', async () => {
+      const version = professionVersionFactory.build();
+      const queryBuilder = createMock<SelectQueryBuilder<ProfessionVersion>>({
+        leftJoinAndSelect: () => queryBuilder,
+        where: () => queryBuilder,
+        getOne: async () => version,
+      });
+
+      jest
+        .spyOn(repo, 'createQueryBuilder')
+        .mockImplementation(() => queryBuilder);
+
+      const result = await service.findLiveBySlug('some-slug');
+      const expectedVersion = Profession.withVersion(
+        version.profession,
+        version,
+      );
+
+      expect(result).toEqual(expectedVersion);
+
+      expect(queryBuilder).toHaveJoined([
+        'professionVersion.profession',
+        'professionVersion.industries',
+        'professionVersion.organisation',
+        'professionVersion.qualification',
+        'professionVersion.legislations',
+      ]);
+
+      expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
+        'organisation.versions',
+        'organisationVersions',
+      );
+
+      expect(queryBuilder.where).toHaveBeenCalledWith(
+        'professionVersion.status = :status AND profession.slug = :slug',
+        {
+          status: ProfessionVersionStatus.Live,
+          slug: 'some-slug',
+        },
+      );
     });
   });
 });

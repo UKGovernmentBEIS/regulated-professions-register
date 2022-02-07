@@ -105,6 +105,8 @@ export class Profession {
   })
   updated_at: Date;
 
+  versionId?: string;
+
   constructor(
     name?: string,
     alternateName?: string,
@@ -137,5 +139,25 @@ export class Profession {
     this.organisation = organisation || null;
     this.confirmed = confirmed || false;
     this.versions = versions || null;
+  }
+
+  static withVersion(
+    profession: Profession,
+    version: ProfessionVersion,
+  ): Profession {
+    return {
+      ...profession,
+      alternateName: version.alternateName,
+      description: version.description,
+      occupationLocations: version.occupationLocations,
+      regulationType: version.regulationType,
+      mandatoryRegistration: version.mandatoryRegistration,
+      industries: version.industries,
+      qualification: version.qualification,
+      reservedActivities: version.reservedActivities,
+      legislations: version.legislations,
+      organisation: version.organisation,
+      versionId: version.id,
+    };
   }
 }
