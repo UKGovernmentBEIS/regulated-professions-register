@@ -8,5 +8,5 @@ export class PersonalDetailsDto {
   @IsEmail()
   email: string;
 
-  change: boolean;
+  change: string;
 }

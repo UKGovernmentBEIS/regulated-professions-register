@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 
 import { UsersService } from '../users.service';
 import { User } from '../user.entity';
@@ -48,10 +48,8 @@ describe('PersonalDetailsController', () => {
   });
 
   describe('edit', () => {
-    const request: Request = createMock<Request>();
-
     it('should get and return the user from an id', async () => {
-      const result = await controller.edit(request, 'user-uuid', false);
+      const result = await controller.edit('user-uuid', false);
 
       expect(result).toEqual({
         ...user,
@@ -60,7 +58,7 @@ describe('PersonalDetailsController', () => {
     });
 
     it('should set change to true', async () => {
-      const result = await controller.edit(request, 'user-uuid', true);
+      const result = await controller.edit('user-uuid', true);
 
       expect(result).toEqual({
         ...user,
@@ -69,7 +67,7 @@ describe('PersonalDetailsController', () => {
     });
   });
 
-  describe('create', () => {
+  describe('update', () => {
     let res: DeepMocked<Response>;
 
     beforeEach(() => {
@@ -81,7 +79,7 @@ describe('PersonalDetailsController', () => {
         return null;
       });
 
-      await controller.create({ name: name, email: email }, res, 'user-uuid');
+      await controller.update({ name: name, email: email }, res, 'user-uuid');
 
       expect(usersService.save).toHaveBeenCalledWith({
         id: 'user-uuid',
@@ -94,7 +92,7 @@ describe('PersonalDetailsController', () => {
     });
 
     it('should render an error if the name is empty', async () => {
-      await controller.create({ name: '', email }, res, 'user-uuid');
+      await controller.update({ name: '', email }, res, 'user-uuid');
 
       expect(res.render).toHaveBeenCalledWith(
         'admin/users/personal-details/edit',
@@ -111,7 +109,7 @@ describe('PersonalDetailsController', () => {
     });
 
     it('should render an error if the email is empty', async () => {
-      await controller.create({ name, email: '' }, res, 'user-uuid');
+      await controller.update({ name, email: '' }, res, 'user-uuid');
 
       expect(res.render).toHaveBeenCalledWith(
         'admin/users/personal-details/edit',
@@ -127,12 +125,12 @@ describe('PersonalDetailsController', () => {
       );
     });
 
-    it('should render an error if the email address is already in use', async () => {
+    it('should render an error if the email address is already in use by another user', async () => {
       usersService.findByEmail.mockImplementationOnce(async () => {
         return new User('name@example.com', name);
       });
 
-      await controller.create({ name, email }, res, 'user-uuid');
+      await controller.update({ name, email }, res, 'user-uuid');
 
       expect(usersService.findByEmail).toHaveBeenCalledWith('name@example.com');
 
@@ -147,6 +145,28 @@ describe('PersonalDetailsController', () => {
             },
           },
         },
+      );
+    });
+
+    it('should not render an error if the email address is in use by the user we are currently updating', async () => {
+      usersService.findByEmail.mockImplementationOnce(async () => {
+        const user = new User('name@example.com', name);
+        user.id = 'user-uuid';
+
+        return user;
+      });
+
+      await controller.update({ name, email }, res, 'user-uuid');
+
+      await controller.update({ name: name, email: email }, res, 'user-uuid');
+
+      expect(usersService.save).toHaveBeenCalledWith({
+        id: 'user-uuid',
+        name: name,
+        email: email,
+      });
+      expect(res.redirect).toHaveBeenCalledWith(
+        `/admin/users/user-uuid/permissions/edit`,
       );
     });
   });
