@@ -16,7 +16,7 @@ import { AuthenticationGuard } from '../common/authentication.guard';
 import { Auth0Service } from './auth0.service';
 import { User } from './user.entity';
 import { UserPermission } from './user-permission';
-import { UsersPresenter } from './users.presenter';
+import { UsersPresenter } from './presenters/users.presenter';
 import { UsersService } from './users.service';
 import { IndexTemplate } from './interfaces/index-template';
 import { ShowTemplate } from './interfaces/show-template';

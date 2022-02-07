@@ -23,7 +23,7 @@ import { Validator } from '../../helpers/validator';
 import { ValidationFailedError } from '../../common/validation/validation-failed.error';
 import { getPermissionsFromUser } from '../helpers/get-permissions-from-user.helper';
 import { User } from '../user.entity';
-import { RoleRadioButtonsPresenter } from '../role-radio-buttons.preseter';
+import { RoleRadioButtonsPresenter } from '../presenters/role-radio-buttons.preseter';
 
 @UseGuards(AuthenticationGuard)
 @Controller('/admin/users')

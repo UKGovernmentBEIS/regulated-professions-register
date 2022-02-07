@@ -1,6 +1,6 @@
-import { createMockI18nService } from '../testutils/create-mock-i18n-service';
-import { translationOf } from '../testutils/translation-of';
-import { Role } from './role';
+import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
+import { translationOf } from '../../testutils/translation-of';
+import { Role } from '../role';
 import { RoleRadioButtonsPresenter } from './role-radio-buttons.preseter';
 
 describe('RoleRadioButtonsPresenter', () => {

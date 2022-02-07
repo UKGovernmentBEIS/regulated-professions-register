@@ -25,7 +25,7 @@ import { UserPermission } from '../user-permission';
 import { UsersService } from '../users.service';
 import { OrganisationDto } from './dto/organisation.dto';
 import { EditTemplate } from './interfaces/edit-template';
-import { ServiceOwnerRadioButtonArgsPresenter } from '../service-owner-radio-buttons.presenter';
+import { ServiceOwnerRadioButtonArgsPresenter } from '../presenters/service-owner-radio-buttons.presenter';
 
 @Controller('/admin/users')
 @UseGuards(AuthenticationGuard)

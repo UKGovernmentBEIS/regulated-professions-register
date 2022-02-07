@@ -1,11 +1,11 @@
-import { escape } from '../helpers/escape.helper';
-import { escapeOf } from '../testutils/escape-of';
-import userFactory from '../testutils/factories/user';
+import { escape } from '../../helpers/escape.helper';
+import { escapeOf } from '../../testutils/escape-of';
+import userFactory from '../../testutils/factories/user';
 
 import { UserPresenter } from './user.presenter';
 
-jest.mock('../helpers/escape.helper');
-jest.mock('./helpers/get-permissions-from-user.helper');
+jest.mock('../../helpers/escape.helper');
+jest.mock('../helpers/get-permissions-from-user.helper');
 
 describe('UserPresenter', () => {
   describe('tableRow', () => {

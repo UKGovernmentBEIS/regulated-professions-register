@@ -1,5 +1,5 @@
 import { I18nService } from 'nestjs-i18n';
-import { RadioButtonArgs } from '../common/interfaces/radio-button-args.interface';
+import { RadioButtonArgs } from '../../common/interfaces/radio-button-args.interface';
 
 export class ServiceOwnerRadioButtonArgsPresenter {
   constructor(
