@@ -19,11 +19,23 @@
 
         <nav role="navigation" aria-labelledby="subsection-title">
           <ul class="govuk-list">
+            {% if organisation.status === 'draft' %}
+            <li>
+              <form action="/admin/organisations/{{ organisation.id }}/versions/{{ organisation.versionId }}/publish?_method=PUT" method="post">
+                {{
+                  govukButton({
+                    text: ("organisations.admin.button.publish" | t)
+                  })
+                }}
+              </form>
+            </li>
+            {% endif %}
             <li>
               {{
                 govukButton({
                   text: ("organisations.admin.button.edit" | t),
-                  href: "/admin/organisations/" + organisation.id + "/versions/new"
+                  href: "/admin/organisations/" + organisation.id + "/versions/new",
+                  classes: "govuk-button--secondary"
                 })
               }}
             </li>
