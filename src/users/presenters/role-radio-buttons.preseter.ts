@@ -1,6 +1,6 @@
 import { I18nService } from 'nestjs-i18n';
-import { RadioButtonArgs } from '../common/interfaces/radio-button-args.interface';
-import { Role } from './role';
+import { RadioButtonArgs } from '../../common/interfaces/radio-button-args.interface';
+import { Role } from '../role';
 
 export class RoleRadioButtonsPresenter {
   constructor(

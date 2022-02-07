@@ -6,7 +6,7 @@ import { I18nService } from 'nestjs-i18n';
 import { UsersService } from './users.service';
 import { Auth0Service } from './auth0.service';
 import { UsersController } from './users.controller';
-import { UsersPresenter } from './users.presenter';
+import { UsersPresenter } from './presenters/users.presenter';
 import { UserMailer } from './user.mailer';
 
 import userFactory from '../testutils/factories/user';
@@ -17,8 +17,8 @@ import { flashMessage } from '../common/flash-message';
 import { createMockRequest } from '../testutils/create-mock-request';
 import organisationFactory from '../testutils/factories/organisation';
 
-jest.mock('./users.presenter');
-jest.mock('./user.presenter');
+jest.mock('./presenters/users.presenter');
+jest.mock('./presenters/user.presenter');
 
 jest.mock('../common/flash-message');
 

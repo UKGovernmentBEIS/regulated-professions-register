@@ -1,4 +1,4 @@
-import userFactory from '../testutils/factories/user';
+import userFactory from '../../testutils/factories/user';
 
 import { UsersPresenter } from './users.presenter';
 

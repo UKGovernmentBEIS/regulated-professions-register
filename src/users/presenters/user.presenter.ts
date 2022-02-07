@@ -1,6 +1,6 @@
-import { User } from './user.entity';
-import { TableRow } from '../common/interfaces/table-row';
-import { escape } from '../helpers/escape.helper';
+import { User } from '../user.entity';
+import { TableRow } from '../../common/interfaces/table-row';
+import { escape } from '../../helpers/escape.helper';
 
 export class UserPresenter extends User {
   constructor(private user: User) {

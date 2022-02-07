@@ -5,12 +5,12 @@ import { createMock, DeepMocked } from '@golevelup/ts-jest';
 import { Response } from 'express';
 import userFactory from '../../testutils/factories/user';
 import { RadioButtonArgs } from '../../common/interfaces/radio-button-args.interface';
-import { RoleRadioButtonsPresenter } from '../role-radio-buttons.preseter';
+import { RoleRadioButtonsPresenter } from '../presenters/role-radio-buttons.preseter';
 import { I18nService } from 'nestjs-i18n';
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 import { Role } from '../role';
 
-jest.mock('../role-radio-buttons.preseter');
+jest.mock('../presenters/role-radio-buttons.preseter');
 
 describe('PermissionsController', () => {
   let controller: PermissionsController;

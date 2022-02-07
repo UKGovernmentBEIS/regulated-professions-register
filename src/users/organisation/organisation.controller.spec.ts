@@ -11,13 +11,13 @@ import { createMockI18nService } from '../../testutils/create-mock-i18n-service'
 import { createMockRequest } from '../../testutils/create-mock-request';
 import organisationFactory from '../../testutils/factories/organisation';
 import userFactory from '../../testutils/factories/user';
-import { ServiceOwnerRadioButtonArgsPresenter } from '../service-owner-radio-buttons.presenter';
+import { ServiceOwnerRadioButtonArgsPresenter } from '../presenters/service-owner-radio-buttons.presenter';
 import { UsersService } from '../users.service';
 import { OrganisationDto } from './dto/organisation.dto';
 import { OrganisationController } from './organisation.controller';
 
 jest.mock('../../professions/admin/regulated-authorities-select-presenter');
-jest.mock('../service-owner-radio-buttons.presenter');
+jest.mock('../presenters/service-owner-radio-buttons.presenter');
 
 describe('OrganisationController', () => {
   let controller: OrganisationController;

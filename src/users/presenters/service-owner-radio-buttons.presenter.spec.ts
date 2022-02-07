@@ -1,5 +1,5 @@
-import { createMockI18nService } from '../testutils/create-mock-i18n-service';
-import { translationOf } from '../testutils/translation-of';
+import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
+import { translationOf } from '../../testutils/translation-of';
 import { ServiceOwnerRadioButtonArgsPresenter } from './service-owner-radio-buttons.presenter';
 
 describe('ServiceOwnerRadioButtonsPresenter', () => {

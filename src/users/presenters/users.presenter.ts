@@ -1,6 +1,6 @@
 import { UserPresenter } from './user.presenter';
-import { User } from './user.entity';
-import { TableRow } from '../common/interfaces/table-row';
+import { User } from '../user.entity';
+import { TableRow } from '../../common/interfaces/table-row';
 
 export class UsersPresenter {
   users: UserPresenter[];
