@@ -10,4 +10,6 @@ export default class LegislationDto {
     message: 'professions.form.errors.legislation.link.empty',
   })
   link: string;
+
+  change: boolean;
 }
