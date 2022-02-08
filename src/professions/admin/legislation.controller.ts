@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   Post,
+  Query,
   Res,
   UseFilters,
   UseGuards,
@@ -34,10 +35,14 @@ export class LegislationController {
       ? '/admin/professions/:id/check-your-answers'
       : '/admin/professions/:id/qualification-information/edit',
   )
-  async edit(@Res() res: Response, @Param('id') id: string): Promise<void> {
+  async edit(
+    @Res() res: Response,
+    @Param('id') id: string,
+    @Query('change') change: boolean,
+  ): Promise<void> {
     const profession = await this.professionsService.find(id);
 
-    this.renderForm(res, profession.legislation, profession.confirmed);
+    this.renderForm(res, profession.legislation, profession.confirmed, change);
   }
 
   @Post('/:id/legislation')
@@ -79,6 +84,7 @@ export class LegislationController {
         res,
         updatedLegislation,
         profession.confirmed,
+        submittedValues.change,
         errors,
       );
     }
@@ -94,11 +100,13 @@ export class LegislationController {
     res: Response,
     legislation: Legislation,
     isEditing: boolean,
+    change: boolean,
     errors: object | undefined = undefined,
   ): Promise<void> {
     const templateArgs: LegislationTemplate = {
       legislation,
       captionText: ViewUtils.captionText(isEditing),
+      change,
       errors,
     };
 

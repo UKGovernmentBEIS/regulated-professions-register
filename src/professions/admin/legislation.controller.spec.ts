@@ -40,7 +40,7 @@ describe(LegislationController, () => {
 
       professionsService.find.mockResolvedValue(profession);
 
-      await controller.edit(response, 'profession-id');
+      await controller.edit(response, 'profession-id', false);
 
       expect(response.render).toHaveBeenCalledWith(
         'admin/professions/legislation',
@@ -59,6 +59,7 @@ describe(LegislationController, () => {
         const dto: LegislationDto = {
           link: 'www.legal-legislation.com',
           nationalLegislation: 'Legal Services Act 2008',
+          change: false,
         };
 
         professionsService.find.mockResolvedValue(profession);
@@ -87,6 +88,7 @@ describe(LegislationController, () => {
         const dto: LegislationDto = {
           link: undefined,
           nationalLegislation: undefined,
+          change: false,
         };
 
         professionsService.find.mockResolvedValue(profession);
