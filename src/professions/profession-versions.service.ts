@@ -124,13 +124,13 @@ export class ProfessionVersionsService {
   async findByIdWithProfession(
     professionId: string,
     id: string,
-  ): Promise<Profession> {
+  ): Promise<ProfessionVersion> {
     const version = await this.versionsWithJoins()
       .leftJoinAndSelect('organisation.versions', 'organisationVersions')
       .where({ profession: { id: professionId }, id })
       .getOne();
 
-    return Profession.withVersion(version.profession, version);
+    return version;
   }
 
   private versionsWithJoins(): SelectQueryBuilder<ProfessionVersion> {

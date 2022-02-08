@@ -17,6 +17,8 @@ import userFactory from '../testutils/factories/user';
 import { ProfessionVersionsController } from './profession-versions.controller';
 import { ProfessionVersionsService } from './profession-versions.service';
 import { ProfessionsService } from './professions.service';
+import { Profession } from './profession.entity';
+import qualificationFactory from '../testutils/factories/qualification';
 
 jest.mock('../organisations/organisation.entity');
 
@@ -124,13 +126,18 @@ describe('ProfessionVersionsController', () => {
 
   describe('show', () => {
     it('should return populated template params', async () => {
-      const profession = professionFactory.build({
+      const profession = professionFactory.build();
+
+      const version = professionVersionFactory.build({
+        profession: profession,
         occupationLocations: ['GB-ENG'],
         industries: [industryFactory.build({ name: 'industries.example' })],
       });
 
+      const professionWithVersion = Profession.withVersion(profession, version);
+
       professionVersionsService.findByIdWithProfession.mockResolvedValue(
-        profession,
+        version,
       );
 
       (Organisation.withLatestLiveVersion as jest.Mock).mockImplementation(
@@ -140,8 +147,10 @@ describe('ProfessionVersionsController', () => {
       const result = await controller.show('profession-id', 'version-id');
 
       expect(result).toEqual({
-        profession: profession,
-        qualification: new QualificationPresenter(profession.qualification),
+        profession: professionWithVersion,
+        qualification: new QualificationPresenter(
+          professionWithVersion.qualification,
+        ),
         nations: ['Translation of `nations.england`'],
         industries: ['Translation of `industries.example`'],
         organisation: profession.organisation,
@@ -164,14 +173,22 @@ describe('ProfessionVersionsController', () => {
 
     describe('when the Profession has no qualification set', () => {
       it('passes a null value for the qualification', async () => {
-        const profession = professionFactory.build({
-          qualification: null,
+        const profession = professionFactory.build({});
+
+        const version = professionVersionFactory.build({
+          profession,
           occupationLocations: ['GB-ENG'],
           industries: [industryFactory.build({ name: 'industries.example' })],
+          qualification: null,
         });
 
-        professionVersionsService.findByIdWithProfession.mockResolvedValue(
+        const professionWithVersion = Profession.withVersion(
           profession,
+          version,
+        );
+
+        professionVersionsService.findByIdWithProfession.mockResolvedValue(
+          version,
         );
 
         (Organisation.withLatestLiveVersion as jest.Mock).mockImplementation(
@@ -181,7 +198,7 @@ describe('ProfessionVersionsController', () => {
         const result = await controller.show('profession-id', 'version-id');
 
         expect(result).toEqual({
-          profession: profession,
+          profession: professionWithVersion,
           qualification: null,
           nations: [translationOf('nations.england')],
           industries: [translationOf('industries.example')],
