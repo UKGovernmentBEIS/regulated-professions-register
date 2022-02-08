@@ -1,4 +1,4 @@
-import { Repository, In, SelectQueryBuilder } from 'typeorm';
+import { Repository, In, SelectQueryBuilder, Connection } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
@@ -12,6 +12,7 @@ export class OrganisationVersionsService {
   constructor(
     @InjectRepository(OrganisationVersion)
     private repository: Repository<OrganisationVersion>,
+    private connection: Connection,
   ) {}
 
   async save(organisation: OrganisationVersion): Promise<OrganisationVersion> {
@@ -25,12 +26,12 @@ export class OrganisationVersionsService {
   async findByIdWithOrganisation(
     organisationId: string,
     id: string,
-  ): Promise<Organisation> {
+  ): Promise<OrganisationVersion> {
     const version = await this.versionsWithJoins()
       .where({ organisation: { id: organisationId }, id })
       .getOne();
 
-    return Organisation.withVersion(version.organisation, version);
+    return version;
   }
 
   async findLatestForOrganisationId(
@@ -100,6 +101,37 @@ export class OrganisationVersionsService {
     version.status = OrganisationVersionStatus.Draft;
 
     return this.repository.save(version);
+  }
+
+  async publish(version: OrganisationVersion): Promise<OrganisationVersion> {
+    const queryRunner = this.connection.createQueryRunner();
+    const organisation = version.organisation;
+
+    const liveVersion = await this.repository.findOne({
+      organisation,
+      status: OrganisationVersionStatus.Live,
+    });
+
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      if (liveVersion) {
+        liveVersion.status = OrganisationVersionStatus.Archived;
+        await this.repository.save(liveVersion);
+      }
+
+      version.status = OrganisationVersionStatus.Live;
+      await this.repository.save(version);
+
+      await queryRunner.commitTransaction();
+    } catch (err) {
+      await queryRunner.rollbackTransaction();
+    } finally {
+      await queryRunner.release();
+    }
+
+    return version;
   }
 
   private versionsWithJoins(): SelectQueryBuilder<OrganisationVersion> {

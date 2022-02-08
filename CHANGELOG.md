@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Added
+
+- Allow a draft version to be published
+
 ### Changed
 
 - Creating and editing an organisation creates new draft versions
