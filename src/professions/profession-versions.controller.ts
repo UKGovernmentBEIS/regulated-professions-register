@@ -22,6 +22,7 @@ import { Qualification } from '../qualifications/qualification.entity';
 import { ShowTemplate } from './interfaces/show-template.interface';
 import { ProfessionVersion } from './profession-version.entity';
 import { ProfessionVersionsService } from './profession-versions.service';
+import { Profession } from './profession.entity';
 import { ProfessionsService } from './professions.service';
 
 @UseGuards(AuthenticationGuard)
@@ -49,17 +50,18 @@ export class ProfessionVersionsController {
     @Param('professionId') professionId: string,
     @Param('versionId') versionId: string,
   ): Promise<ShowTemplate> {
-    const profession =
-      await this.professionVersionsService.findByIdWithProfession(
-        professionId,
-        versionId,
-      );
+    const version = await this.professionVersionsService.findByIdWithProfession(
+      professionId,
+      versionId,
+    );
 
-    if (!profession) {
+    if (!version) {
       throw new NotFoundException(
         `A profession with ID ${professionId}, version ${versionId} could not be found`,
       );
     }
+
+    const profession = Profession.withVersion(version.profession, version);
 
     const organisation = Organisation.withLatestLiveVersion(
       profession.organisation,

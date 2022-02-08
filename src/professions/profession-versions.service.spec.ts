@@ -381,9 +381,7 @@ describe('ProfessionVersionsService', () => {
         'version-uuid',
       );
 
-      expect(result).toEqual(
-        Profession.withVersion(version.profession, version),
-      );
+      expect(result).toEqual(version);
 
       expect(queryBuilder).toHaveJoined([
         'professionVersion.profession',
