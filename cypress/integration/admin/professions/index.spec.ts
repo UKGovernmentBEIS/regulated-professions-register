@@ -70,10 +70,6 @@ describe('Listing professions', () => {
         });
 
       cy.checkAccessibility();
-      cy.url().should(
-        'contain',
-        'professions/secondary-school-teacher-in-state-maintained-schools-england',
-      );
     });
 
     it('I can filter by keyword', () => {

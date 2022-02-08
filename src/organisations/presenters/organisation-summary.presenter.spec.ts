@@ -45,19 +45,21 @@ describe('OrganisationSummaryPresenter', () => {
 
   describe('present', () => {
     describe('when all relations are present on the organisation', () => {
-      let organisation: Organisation;
-
-      beforeEach(() => {
-        organisation = organisationFactory.build({
+      it("should return template variables contraining an organisation's summary", async () => {
+        const organisation = organisationFactory.build({
           professions: [
-            professionsFactory.build({ confirmed: true }),
-            professionsFactory.build({ confirmed: true }),
-            professionsFactory.build({ confirmed: false }),
+            professionsFactory.build({
+              confirmed: true,
+            }),
+            professionsFactory.build({
+              confirmed: true,
+            }),
+            professionsFactory.build({
+              confirmed: false,
+            }),
           ],
         });
-      });
 
-      it("should return tempalate variables contraining an organisation's summary", async () => {
         const presenter = new OrganisationSummaryPresenter(
           organisation,
           i18nService,
@@ -69,11 +71,15 @@ describe('OrganisationSummaryPresenter', () => {
           professions: [
             {
               name: organisation.professions[0].name,
+              id: organisation.professions[0].id,
+              versionId: organisation.professions[0].versionId,
               slug: organisation.professions[0].slug,
               summaryList: mockSummaryList(),
             },
             {
               name: organisation.professions[1].name,
+              id: organisation.professions[1].id,
+              versionId: organisation.professions[1].versionId,
               slug: organisation.professions[1].slug,
               summaryList: mockSummaryList(),
             },

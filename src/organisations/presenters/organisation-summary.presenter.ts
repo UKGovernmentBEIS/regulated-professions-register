@@ -38,6 +38,8 @@ export class OrganisationSummaryPresenter {
           return {
             name: presenter.profession.name,
             slug: presenter.profession.slug,
+            id: presenter.profession.id,
+            versionId: presenter.profession.versionId,
             summaryList: await presenter.summaryList(),
           };
         }),
