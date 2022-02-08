@@ -10,6 +10,7 @@ import { Qualification } from 'src/qualifications/qualification.entity';
 import { Legislation } from 'src/legislations/legislation.entity';
 import { InjectData } from '../common/decorators/seeds.decorator';
 import { Organisation } from '../organisations/organisation.entity';
+import { OrganisationVersion } from '../organisations/organisation-version.entity';
 
 type SeedProfession = {
   name: string;
@@ -43,6 +44,8 @@ export class ProfessionsSeeder implements Seeder {
     private readonly legislationsRepository: Repository<Legislation>,
     @InjectRepository(Organisation)
     private readonly organisationRepository: Repository<Organisation>,
+    @InjectRepository(OrganisationVersion)
+    private readonly organisationVersionRepository: Repository<OrganisationVersion>,
   ) {}
 
   async seed(): Promise<any> {
@@ -110,6 +113,7 @@ export class ProfessionsSeeder implements Seeder {
     await this.industriesRepository.delete({});
     await this.qualificationsRepository.delete({});
     await this.legislationsRepository.delete({});
+    await this.organisationVersionRepository.delete({});
     await this.organisationRepository.delete({});
   }
 }
