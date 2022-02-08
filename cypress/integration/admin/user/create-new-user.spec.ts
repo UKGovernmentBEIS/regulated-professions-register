@@ -72,6 +72,17 @@ describe('Creating a new user', () => {
         cy.get('body').should('contain', registrarLabel);
       });
 
+      cy.translate('users.form.label.organisation').then(
+        (organisationLabel) => {
+          cy.translate('app.change').then((changeLink) => {
+            cy.get('body dt')
+              .contains(organisationLabel)
+              .parent()
+              .should('contain', changeLink);
+          });
+        },
+      );
+
       cy.get('button').click();
       cy.checkAccessibility();
 
@@ -184,6 +195,17 @@ describe('Creating a new user', () => {
       cy.translate('users.roles.editor').then((registrarLabel) => {
         cy.get('body').should('contain', registrarLabel);
       });
+
+      cy.translate('users.form.label.organisation').then(
+        (organisationLabel) => {
+          cy.translate('app.change').then((changeLink) => {
+            cy.get('body dt')
+              .contains(organisationLabel)
+              .parent()
+              .should('not.contain', changeLink);
+          });
+        },
+      );
 
       cy.get('button').click();
       cy.checkAccessibility();
