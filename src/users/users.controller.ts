@@ -27,6 +27,8 @@ import { UserMailer } from './user.mailer';
 import { BackLink } from '../common/decorators/back-link.decorator';
 import { Request, Response } from 'express';
 
+class UserAlreadyExistsError extends Error {}
+
 @Controller()
 @UseGuards(AuthenticationGuard)
 export class UsersController {
@@ -110,34 +112,26 @@ export class UsersController {
   @Permissions(UserPermission.CreateUser)
   async complete(@Res() res, @Param('id') id): Promise<void> {
     const user = await this.usersService.find(id);
-    const { email } = user;
 
-    const externalResult = await this.auth0Service.createUser(email);
-    user.externalIdentifier = externalResult.externalIdentifier;
-    user.confirmed = true;
+    if (user.externalIdentifier === undefined) {
+      try {
+        await this.createUserInAuth0(user);
+      } catch (err) {
+        if (err instanceof UserAlreadyExistsError) {
+          return res.render('admin/users/confirm', {
+            ...user,
+            userAlreadyExists: true,
+          });
+        }
 
-    if (externalResult.result == 'user-exists') {
-      // In the case where the user already existed in Auth0, we expect they
-      // *may* exist in our DB, so handle that case
-      const internalResult = await this.usersService.attemptAdd(user);
-
-      if (internalResult == 'user-exists') {
-        res.render('users/confirm', {
-          ...user,
-          userAlreadyExists: true,
-        });
-        return;
+        throw err;
       }
-    } else {
-      // In the case where the user didn't already exist in Auth0, assume they
-      // don't exist already in our DB. If they're in our DB, they have an
-      // identifier from Auth0, so it'd be very weird if they're *not* in Auth0
-      await this.usersService.save(user);
-      await this.userMailer.confirmation(
-        user,
-        externalResult.passwordResetLink,
-      );
     }
+
+    await this.usersService.save({
+      ...user,
+      confirmed: true,
+    });
 
     res.redirect('done');
   }
@@ -166,5 +160,27 @@ export class UsersController {
     await this.auth0Service.deleteUser(user.externalIdentifier).performLater();
 
     await this.usersService.delete(id);
+  }
+
+  async createUserInAuth0(user: User): Promise<void> {
+    const externalResult = await this.auth0Service.createUser(user.email);
+
+    user.externalIdentifier = externalResult.externalIdentifier;
+
+    if (externalResult.result == 'user-exists') {
+      const internalResult = await this.usersService.attemptAdd({
+        ...user,
+        confirmed: true,
+      });
+
+      if (internalResult == 'user-exists') {
+        throw new UserAlreadyExistsError();
+      }
+    } else {
+      await this.userMailer.confirmation(
+        user,
+        externalResult.passwordResetLink,
+      );
+    }
   }
 }
