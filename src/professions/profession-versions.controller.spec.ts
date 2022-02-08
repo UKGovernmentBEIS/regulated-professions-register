@@ -207,4 +207,27 @@ describe('ProfessionVersionsController', () => {
       });
     });
   });
+
+  describe('publish', () => {
+    it('should publish the current version', async () => {
+      const profession = professionFactory.build();
+      const version = professionVersionFactory.build({
+        profession,
+      });
+
+      professionVersionsService.findByIdWithProfession.mockResolvedValue(
+        version,
+      );
+
+      const result = await controller.publish(profession.id, version.id);
+
+      expect(result).toEqual(profession);
+
+      expect(
+        professionVersionsService.findByIdWithProfession,
+      ).toHaveBeenCalledWith(profession.id, version.id);
+
+      expect(professionVersionsService.publish).toHaveBeenCalledWith(version);
+    });
+  });
 });
