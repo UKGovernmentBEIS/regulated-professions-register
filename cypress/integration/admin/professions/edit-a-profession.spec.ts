@@ -190,11 +190,18 @@ describe('Editing an existing profession', () => {
       });
 
       cy.checkAccessibility();
-      cy.translate('professions.form.headings.amended').then((heading) => {
-        cy.get('body')
-          .should('contain', heading)
-          .should('contain', 'Updated name');
-      });
+      cy.translate('professions.admin.update.confirmation.heading').then(
+        (flashHeading) => {
+          cy.translate('professions.admin.update.confirmation.body', {
+            name: 'Updated name',
+          }).then((flashBody) => {
+            cy.get('body')
+              .should('contain', flashHeading)
+              .should('contain.html', flashBody)
+              .should('contain', 'Updated name');
+          });
+        },
+      );
     });
   });
 });

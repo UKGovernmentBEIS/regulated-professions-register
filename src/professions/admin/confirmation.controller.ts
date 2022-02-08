@@ -5,28 +5,33 @@ import {
   Post,
   Query,
   Render,
+  Req,
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { AuthenticationGuard } from '../../common/authentication.guard';
 import { ProfessionsService } from '../professions.service';
 import { ConfirmationTemplate } from './interfaces/confirmation.template';
 import { Permissions } from '../../common/permissions.decorator';
 import { UserPermission } from '../../users/user-permission';
 import { ProfessionVersionsService } from '../profession-versions.service';
+import { I18nService } from 'nestjs-i18n';
+import { flashMessage } from '../../common/flash-message';
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
 export class ConfirmationController {
   constructor(
     private professionsService: ProfessionsService,
     private professionVersionsService: ProfessionVersionsService,
+    private i18nService: I18nService,
   ) {}
 
   @Post('/:professionId/versions/:versionId/confirmation')
   @Permissions(UserPermission.CreateProfession)
   async create(
     @Res() res: Response,
+    @Req() req: Request,
     @Param('professionId') professionId: string,
     @Param('versionId') versionId: string,
   ): Promise<void> {
@@ -38,20 +43,32 @@ export class ConfirmationController {
       versionId,
     );
 
-    if (profession.confirmed) {
-      await this.professionVersionsService.confirm(version);
+    let action: string;
+    let bannerType: 'info' | 'success';
 
-      return res.redirect(
-        `/admin/professions/${professionId}/versions/${versionId}/confirmation?amended=true`,
-      );
+    if (profession.confirmed) {
+      action = 'update';
+      bannerType = 'info';
+      await this.professionVersionsService.confirm(version);
+    } else {
+      action = 'create';
+      bannerType = 'success';
+      await this.professionsService.confirm(profession);
+      await this.professionVersionsService.confirm(version);
     }
 
-    await this.professionsService.confirm(profession);
-    await this.professionVersionsService.confirm(version);
-
-    res.redirect(
-      `/admin/professions/${professionId}/versions/${versionId}/confirmation`,
+    const messageTitle = await this.i18nService.translate(
+      `professions.admin.${action}.confirmation.heading`,
     );
+
+    const messageBody = await this.i18nService.translate(
+      `professions.admin.${action}.confirmation.body`,
+      { args: { name: profession.name } },
+    );
+
+    req.flash(bannerType, flashMessage(messageTitle, messageBody));
+
+    res.redirect(`/admin/professions/${profession.id}/versions/${version.id}`);
   }
 
   @Get('/:professionId/versions/:versionId/confirmation')
