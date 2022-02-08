@@ -139,7 +139,7 @@ export class ProfessionVersionsController {
   }
 
   @Put(':professionId/versions/:versionId/publish')
-  @Render('admin/professions/versions/publish')
+  @Render('admin/professions/publish')
   async publish(
     @Param('professionId') professionId: string,
     @Param('versionId') versionId: string,

@@ -18,7 +18,6 @@ import { ProfessionVersionsController } from './profession-versions.controller';
 import { ProfessionVersionsService } from './profession-versions.service';
 import { ProfessionsService } from './professions.service';
 import { Profession } from './profession.entity';
-import qualificationFactory from '../testutils/factories/qualification';
 
 jest.mock('../organisations/organisation.entity');
 
