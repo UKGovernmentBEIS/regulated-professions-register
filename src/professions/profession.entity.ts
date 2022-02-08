@@ -16,7 +16,10 @@ import {
 } from 'typeorm';
 import { Industry } from '../industries/industry.entity';
 import { Organisation } from '../organisations/organisation.entity';
-import { ProfessionVersion } from './profession-version.entity';
+import {
+  ProfessionVersion,
+  ProfessionVersionStatus,
+} from './profession-version.entity';
 
 export enum MandatoryRegistration {
   Mandatory = 'mandatory',
@@ -106,6 +109,7 @@ export class Profession {
   updated_at: Date;
 
   versionId?: string;
+  status?: string;
 
   constructor(
     name?: string,
@@ -141,6 +145,42 @@ export class Profession {
     this.versions = versions || null;
   }
 
+  public static withLatestLiveVersion(
+    profession: Profession,
+  ): Profession | null {
+    const liveVersions = profession.versions
+      .filter((v) => v.status === ProfessionVersionStatus.Live)
+      .sort((a, b) => b.updated_at.getTime() - a.updated_at.getTime());
+
+    const latestVersion = liveVersions[0];
+
+    if (!latestVersion) {
+      return null;
+    }
+
+    return Profession.withVersion(profession, latestVersion);
+  }
+
+  public static withLatestLiveOrDraftVersion(
+    profession: Profession,
+  ): Profession | null {
+    const draftAndLiveVersions = profession.versions
+      .filter(
+        (v) =>
+          v.status === ProfessionVersionStatus.Live ||
+          v.status === ProfessionVersionStatus.Draft,
+      )
+      .sort((a, b) => b.updated_at.getTime() - a.updated_at.getTime());
+
+    const latestVersion = draftAndLiveVersions[0];
+
+    if (!latestVersion) {
+      return null;
+    }
+
+    return Profession.withVersion(profession, latestVersion);
+  }
+
   static withVersion(
     profession: Profession,
     version: ProfessionVersion,
@@ -157,6 +197,7 @@ export class Profession {
       reservedActivities: version.reservedActivities,
       legislations: version.legislations,
       organisation: version.organisation,
+      status: version.status,
       versionId: version.id,
     };
   }

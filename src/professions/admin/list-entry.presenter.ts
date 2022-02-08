@@ -75,8 +75,8 @@ export class ListEntryPresenter {
     ).join(', ');
 
     const viewDetails = `<a href="/admin/professions/${
-      this.profession.slug
-    }">${await this.i18nService.translate(
+      this.profession.id
+    }/versions/${this.profession.versionId}">${await this.i18nService.translate(
       'professions.admin.viewDetails',
     )}</a>`;
 
@@ -93,7 +93,7 @@ export class ListEntryPresenter {
       industry: { text: instrustries },
       status: {
         text: await this.i18nService.translate(
-          'professions.admin.status.published',
+          `professions.admin.status.${this.profession.status}`,
         ),
       },
       actions: { html: viewDetails },

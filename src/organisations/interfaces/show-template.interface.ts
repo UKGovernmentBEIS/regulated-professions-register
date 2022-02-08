@@ -7,6 +7,8 @@ export interface ShowTemplate {
   professions: {
     name: string;
     slug: string;
+    id: string;
+    versionId: string;
     summaryList: SummaryList;
   }[];
 }

@@ -11,7 +11,7 @@ describe('ListEntryPresenter', () => {
     it('returns a table row when called with `overview`', () => {
       const profession = professionFactory.build({
         name: 'Example Profession',
-        slug: 'example-profession',
+        id: 'profession-id',
         occupationLocations: ['GB-SCT', 'GB-NIR'],
         organisation: organisationFactory.build({
           name: 'Example Organisation',
@@ -20,7 +20,9 @@ describe('ListEntryPresenter', () => {
           industryFactory.build({ name: 'industries.law' }),
           industryFactory.build({ name: 'industries.finance' }),
         ],
+        status: 'live',
         updated_at: new Date(2003, 7, 12),
+        versionId: 'version-id',
       });
 
       const presenter = new ListEntryPresenter(
@@ -42,9 +44,9 @@ describe('ListEntryPresenter', () => {
             'industries.finance',
           )}`,
         },
-        { text: translationOf('professions.admin.status.published') },
+        { text: translationOf('professions.admin.status.live') },
         {
-          html: `<a href="/admin/professions/example-profession">${translationOf(
+          html: `<a href="/admin/professions/profession-id/versions/version-id">${translationOf(
             'professions.admin.viewDetails',
           )}</a>`,
         },
@@ -56,7 +58,7 @@ describe('ListEntryPresenter', () => {
     it('returns a table row when called with `single-organisation`', () => {
       const profession = professionFactory.build({
         name: 'Example Profession',
-        slug: 'example-profession',
+        id: 'profession-id',
         occupationLocations: ['GB-SCT', 'GB-NIR'],
         organisation: organisationFactory.build({
           name: 'Example Organisation',
@@ -65,7 +67,9 @@ describe('ListEntryPresenter', () => {
           industryFactory.build({ name: 'industries.law' }),
           industryFactory.build({ name: 'industries.finance' }),
         ],
+        status: 'draft',
         updated_at: new Date(2003, 7, 12),
+        versionId: 'version-id',
       });
 
       const presenter = new ListEntryPresenter(
@@ -82,9 +86,9 @@ describe('ListEntryPresenter', () => {
         },
         { text: '12-08-2003' },
         { text: 'Placeholder name' },
-        { text: translationOf('professions.admin.status.published') },
+        { text: translationOf('professions.admin.status.draft') },
         {
-          html: `<a href="/admin/professions/example-profession">${translationOf(
+          html: `<a href="/admin/professions/profession-id/versions/version-id">${translationOf(
             'professions.admin.viewDetails',
           )}</a>`,
         },

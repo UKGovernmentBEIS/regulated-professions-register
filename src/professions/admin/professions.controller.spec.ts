@@ -17,9 +17,6 @@ import { ProfessionsPresenter } from './professions.presenter';
 import industryFactory from '../../testutils/factories/industry';
 import organisationFactory from '../../testutils/factories/organisation';
 import professionFactory from '../../testutils/factories/profession';
-import { NotFoundException } from '@nestjs/common';
-import QualificationPresenter from '../../qualifications/presenters/qualification.presenter';
-import { translationOf } from '../../testutils/translation-of';
 import { ProfessionVersionsService } from '../profession-versions.service';
 import professionVersion from '../../testutils/factories/profession-version';
 
@@ -95,9 +92,11 @@ describe('ProfessionsController', () => {
     industriesService = createMock<IndustriesService>();
     i18nService = createMockI18nService();
 
-    professionsService.allConfirmed.mockImplementation(async () => {
-      return [profession1, profession2, profession3];
-    });
+    professionVersionsService.allDraftOrLive.mockResolvedValue([
+      profession1,
+      profession2,
+      profession3,
+    ]);
 
     organisationsService.all.mockImplementation(async () => {
       return organisations;
@@ -362,69 +361,6 @@ describe('ProfessionsController', () => {
         ).present('single-organisation');
 
         expect(result).toEqual(expected);
-      });
-    });
-  });
-
-  describe('show', () => {
-    it('should return populated template params', async () => {
-      const profession = professionFactory.build({
-        occupationLocations: ['GB-ENG'],
-        industries: [industryFactory.build({ name: 'industries.example' })],
-      });
-
-      professionsService.findBySlug.mockResolvedValue(profession);
-
-      (Organisation.withLatestLiveVersion as jest.Mock).mockImplementation(
-        () => profession.organisation,
-      );
-
-      const result = await controller.show('example-slug');
-
-      expect(result).toEqual({
-        profession: profession,
-        qualification: new QualificationPresenter(profession.qualification),
-        nations: ['Translation of `nations.england`'],
-        industries: ['Translation of `industries.example`'],
-        organisation: profession.organisation,
-      });
-
-      expect(professionsService.findBySlug).toHaveBeenCalledWith(
-        'example-slug',
-      );
-    });
-
-    it('should throw an error when the slug does not match a profession', () => {
-      professionsService.findBySlug.mockResolvedValue(undefined);
-
-      expect(async () => {
-        await controller.show('example-invalid-slug');
-      }).rejects.toThrowError(NotFoundException);
-    });
-
-    describe('when the Profession has no qualification set', () => {
-      it('passes a null value for the qualification', async () => {
-        const profession = professionFactory.build({
-          qualification: null,
-          occupationLocations: ['GB-ENG'],
-          industries: [industryFactory.build({ name: 'industries.example' })],
-        });
-
-        professionsService.findBySlug.mockResolvedValue(profession);
-
-        (Organisation.withLatestLiveVersion as jest.Mock).mockImplementation(
-          () => profession.organisation,
-        );
-
-        const result = await controller.show('example-slug');
-
-        expect(result).toEqual({
-          profession: profession,
-          qualification: null,
-          nations: [translationOf('nations.england')],
-          industries: [translationOf('industries.example')],
-          organisation: profession.organisation,
-        });
       });
     });
   });

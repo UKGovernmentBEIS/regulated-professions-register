@@ -60,6 +60,23 @@ export class ProfessionVersionsService {
     );
   }
 
+  async allDraftOrLive(): Promise<Profession[]> {
+    const versions = await this.versionsWithJoins()
+      .distinctOn(['professionVersion.profession'])
+      .where('professionVersion.status IN(:...status)', {
+        status: [ProfessionVersionStatus.Live, ProfessionVersionStatus.Draft],
+      })
+      .orderBy(
+        'professionVersion.profession, professionVersion.created_at',
+        'DESC',
+      )
+      .getMany();
+
+    return versions.map((version) =>
+      Profession.withVersion(version.profession, version),
+    );
+  }
+
   async findLiveBySlug(slug: string): Promise<Profession> {
     const version = await this.versionsWithJoins()
       .leftJoinAndSelect('organisation.versions', 'organisationVersions')
@@ -67,6 +84,18 @@ export class ProfessionVersionsService {
         status: ProfessionVersionStatus.Live,
         slug: slug,
       })
+      .getOne();
+
+    return Profession.withVersion(version.profession, version);
+  }
+
+  async findByIdWithProfession(
+    professionId: string,
+    id: string,
+  ): Promise<Profession> {
+    const version = await this.versionsWithJoins()
+      .leftJoinAndSelect('organisation.versions', 'organisationVersions')
+      .where({ profession: { id: professionId }, id })
       .getOne();
 
     return Profession.withVersion(version.profession, version);

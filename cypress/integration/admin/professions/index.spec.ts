@@ -5,12 +5,27 @@ describe('Listing professions', () => {
       cy.visitAndCheckAccessibility('/admin/professions');
     });
 
-    it('I can view an unfiltered list of profession', () => {
-      cy.get('body').should('contain', 'Registered Trademark Attorney');
-      cy.get('body').should(
-        'contain',
-        'Secondary School Teacher in State maintained schools (England)',
-      );
+    it('I can view an unfiltered list of draft and live Professions', () => {
+      cy.get('tr')
+        .contains('Registered Trademark Attorney')
+        .then(($header) => {
+          const $row = $header.parent();
+          cy.wrap($row).contains('Live');
+        });
+      cy.get('tr')
+        .contains(
+          'Secondary School Teacher in State maintained schools (England)',
+        )
+        .then(($header) => {
+          const $row = $header.parent();
+          cy.wrap($row).contains('Live');
+        });
+      cy.get('tr')
+        .contains('Gas Safe Engineer')
+        .then(($header) => {
+          const $row = $header.parent();
+          cy.wrap($row).contains('Draft');
+        });
     });
 
     it('Professions are sorted alphabetically', () => {
@@ -18,10 +33,6 @@ describe('Listing professions', () => {
         const names = elements.map((_, element) => element.innerText).toArray();
         cy.wrap(names).should('deep.equal', names.sort());
       });
-    });
-
-    it('The list page does not show draft professions', () => {
-      cy.get('body').should('not.contain', 'Draft Profession');
     });
 
     it('The list page contains the expected columns', () => {
@@ -36,6 +47,10 @@ describe('Listing professions', () => {
           cy.get('tr').eq(0).should('contain', industry);
         },
       );
+
+      cy.translate('professions.admin.tableHeading.status').then((status) => {
+        cy.get('tr').eq(0).should('contain', status);
+      });
 
       cy.translate('professions.admin.tableHeading.changedBy').then(
         (changedBy) => {
@@ -55,10 +70,6 @@ describe('Listing professions', () => {
         });
 
       cy.checkAccessibility();
-      cy.url().should(
-        'contain',
-        'professions/secondary-school-teacher-in-state-maintained-schools-england',
-      );
     });
 
     it('I can filter by keyword', () => {
