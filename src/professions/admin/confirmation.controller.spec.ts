@@ -39,30 +39,6 @@ describe('ConfirmationController', () => {
     controller = module.get<ConfirmationController>(ConfirmationController);
   });
 
-  describe('viewConfirmation', () => {
-    it('looks up the Profession from the ID in the session, and returns its name and passes in the "amended" status', async () => {
-      const amendedQueryParam = false;
-      const profession = professionFactory.build({
-        name: 'Gas Safe Engineer',
-        id: 'profession-id',
-        confirmed: true,
-      });
-      const version = professionVersionFactory.build({
-        profession: profession,
-      });
-
-      professionsService.find.mockResolvedValue(profession);
-      professionVersionsService.findWithProfession.mockResolvedValue(version);
-
-      expect(
-        await controller.new('profession-id', 'version-id', amendedQueryParam),
-      ).toEqual({
-        name: 'Gas Safe Engineer',
-        amended: false,
-      });
-    });
-  });
-
   describe('confirm', () => {
     describe('when creating a new profession', () => {
       it('"Confirms" the Profession and the Profession Version, then displays a confirmation flash message on the Profession version page', async () => {
