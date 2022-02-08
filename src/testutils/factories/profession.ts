@@ -51,4 +51,5 @@ export default ProfessionFactory.define(({ sequence }) => ({
   reservedActivities: 'Stuff',
   versions: [],
   updated_at: new Date(),
+  versionId: 'version-id',
 }));

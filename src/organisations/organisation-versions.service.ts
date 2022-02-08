@@ -107,6 +107,7 @@ export class OrganisationVersionsService {
       .createQueryBuilder('organisationVersion')
       .leftJoinAndSelect('organisationVersion.organisation', 'organisation')
       .leftJoinAndSelect('organisation.professions', 'professions')
-      .leftJoinAndSelect('professions.industries', 'industries');
+      .leftJoinAndSelect('professions.versions', 'professionVersions')
+      .leftJoinAndSelect('professionVersions.industries', 'industries');
   }
 }

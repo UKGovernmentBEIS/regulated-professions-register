@@ -1,8 +1,6 @@
 import {
   Controller,
   Get,
-  NotFoundException,
-  Param,
   Post,
   Query,
   Render,
@@ -26,11 +24,8 @@ import { User } from '../../users/user.entity';
 import { FilterDto } from './dto/filter.dto';
 import { OrganisationsService } from '../../organisations/organisations.service';
 import { Profession } from '../profession.entity';
-import { ShowTemplate } from '../interfaces/show-template.interface';
 import { BackLink } from '../../common/decorators/back-link.decorator';
-import QualificationPresenter from '../../qualifications/presenters/qualification.presenter';
 import { createFilterInput } from '../../helpers/create-filter-input.helper';
-import { Organisation } from '../../organisations/organisation.entity';
 import { ProfessionVersionsService } from '../profession-versions.service';
 import { ProfessionVersion } from '../profession-version.entity';
 
@@ -72,47 +67,6 @@ export class ProfessionsController {
     @Query() query: FilterDto = null,
   ): Promise<IndexTemplate> {
     return this.createListEntries(query || new FilterDto(), request);
-  }
-
-  @Get('/:slug')
-  @Render('admin/professions/show')
-  @BackLink('/admin/professions')
-  async show(@Param('slug') slug: string): Promise<ShowTemplate> {
-    const profession = await this.professionsService.findBySlug(slug);
-
-    if (!profession) {
-      throw new NotFoundException(
-        `A profession with ID ${slug} could not be found`,
-      );
-    }
-
-    const organisation = Organisation.withLatestLiveVersion(
-      profession.organisation,
-    );
-
-    const nations = await Promise.all(
-      profession.occupationLocations.map(async (code) =>
-        Nation.find(code).translatedName(this.i18Service),
-      ),
-    );
-
-    const industries = await Promise.all(
-      profession.industries.map(
-        async (industry) => await this.i18Service.translate(industry.name),
-      ),
-    );
-
-    const qualification = profession.qualification
-      ? new QualificationPresenter(profession.qualification)
-      : null;
-
-    return {
-      profession,
-      qualification: qualification,
-      nations,
-      industries,
-      organisation,
-    };
   }
 
   private async createListEntries(

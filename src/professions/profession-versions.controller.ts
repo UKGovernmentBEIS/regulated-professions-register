@@ -1,6 +1,7 @@
 import {
   Controller,
   Get,
+  NotFoundException,
   Param,
   Post,
   Render,
@@ -8,10 +9,15 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { Response } from 'express';
+import { I18nService } from 'nestjs-i18n';
 import { AuthenticationGuard } from '../common/authentication.guard';
 import { BackLink } from '../common/decorators/back-link.decorator';
 import { Legislation } from '../legislations/legislation.entity';
+import { Nation } from '../nations/nation';
+import { Organisation } from '../organisations/organisation.entity';
+import QualificationPresenter from '../qualifications/presenters/qualification.presenter';
 import { Qualification } from '../qualifications/qualification.entity';
+import { ShowTemplate } from './interfaces/show-template.interface';
 import { ProfessionVersion } from './profession-version.entity';
 import { ProfessionVersionsService } from './profession-versions.service';
 import { ProfessionsService } from './professions.service';
@@ -22,6 +28,7 @@ export class ProfessionVersionsController {
   constructor(
     private readonly professionsService: ProfessionsService,
     private readonly professionVersionsService: ProfessionVersionsService,
+    private readonly i18nService: I18nService,
   ) {}
 
   @Get('/:professionId/versions/edit')
@@ -31,6 +38,54 @@ export class ProfessionVersionsController {
     const profession = await this.professionsService.find(professionId);
 
     return { profession };
+  }
+
+  @Get(':professionId/versions/:versionId')
+  @Render('admin/professions/show')
+  @BackLink('/admin/professions')
+  async show(
+    @Param('professionId') professionId: string,
+    @Param('versionId') versionId: string,
+  ): Promise<ShowTemplate> {
+    const profession =
+      await this.professionVersionsService.findByIdWithProfession(
+        professionId,
+        versionId,
+      );
+
+    if (!profession) {
+      throw new NotFoundException(
+        `A profession with ID ${professionId}, version ${versionId} could not be found`,
+      );
+    }
+
+    const organisation = Organisation.withLatestLiveVersion(
+      profession.organisation,
+    );
+
+    const nations = await Promise.all(
+      profession.occupationLocations.map(async (code) =>
+        Nation.find(code).translatedName(this.i18nService),
+      ),
+    );
+
+    const industries = await Promise.all(
+      profession.industries.map(
+        async (industry) => await this.i18nService.translate(industry.name),
+      ),
+    );
+
+    const qualification = profession.qualification
+      ? new QualificationPresenter(profession.qualification)
+      : null;
+
+    return {
+      profession,
+      qualification: qualification,
+      nations,
+      industries,
+      organisation,
+    };
   }
 
   @Post('/:professionId/versions')
