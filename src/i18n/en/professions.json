@@ -234,6 +234,18 @@
       "status": "Status",
       "actions": "Actions"
     },
+    "update": {
+      "confirmation": {
+        "heading": "Profession amended",
+        "body": "The changes to <strong>{name}</strong> are not published yet."
+      }
+    },
+    "create": {
+      "confirmation": {
+        "heading": "Profession created",
+        "body": "The new profession <strong>{name}</strong> is not published yet."
+      }
+    },
     "status": {
       "live": "Live",
       "draft": "Draft"

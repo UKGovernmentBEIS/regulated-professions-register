@@ -173,11 +173,18 @@ describe('Adding a new profession', () => {
       });
 
       cy.checkAccessibility();
-      cy.translate('professions.form.headings.confirmation').then((heading) => {
-        cy.get('body')
-          .should('contain', heading)
-          .should('contain', 'Example Profession');
-      });
+      cy.translate('professions.admin.create.confirmation.heading').then(
+        (flashHeading) => {
+          cy.translate('professions.admin.create.confirmation.body', {
+            name: 'Example Profession',
+          }).then((flashBody) => {
+            cy.get('body')
+              .should('contain', flashHeading)
+              .should('contain.html', flashBody)
+              .should('contain', 'Example Profession');
+          });
+        },
+      );
     });
   });
 });

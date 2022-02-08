@@ -4,6 +4,7 @@
 {% set bodyClasses = "rpr-internal__page rpr-details__page" %}
 
 {% block content %}
+  {% include "../../_messages.njk" %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       {% include "../../professions/_profession-details.njk" %}
