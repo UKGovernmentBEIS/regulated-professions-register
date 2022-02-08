@@ -3,18 +3,15 @@
     "email": "beis-rpr@dxw.com",
     "name": "beis-rpr",
     "externalIdentifier": "auth0|61a0f8d2d6e3f3006b5b722e",
-    "permissions": [
-      "createUser",
-      "editUser",
-      "deleteUser",
-      "createOrganisation",
-      "deleteOrganisation",
-      "createProfession",
-      "deleteprofession",
-      "uploadDecisionData",
-      "downloadDecisionData",
-      "viewDecisionData"
-    ],
+    "role": "administrator",
+    "confirmed": true,
+    "serviceOwner": true
+  },
+  {
+    "email": "beis-rpr+registrar@dxw.com",
+    "name": "Registrar",
+    "externalIdentifier": "auth0|620143840c2d4d00717d7b4a",
+    "role": "registrar",
     "confirmed": true,
     "serviceOwner": true
   },
@@ -22,8 +19,26 @@
     "email": "beis-rpr+editor@dxw.com",
     "name": "Editor",
     "externalIdentifier": "auth0|61e699cb8006ea006a099a15",
-    "permissions": [],
+    "role": "editor",
     "confirmed": true,
-    "serviceOwner": false
+    "serviceOwner": true
+  },
+  {
+    "email": "beis-rpr+orgadmin@dxw.com",
+    "name": "Organisation Admin",
+    "externalIdentifier": "auth0|620143d74de528007139273a",
+    "role": "administrator",
+    "confirmed": true,
+    "serviceOwner": false,
+    "organisation": "Department for Education"
+  },
+  {
+    "email": "beis-rpr+orgeditor@dxw.com",
+    "name": "Organisation Editor",
+    "externalIdentifier": "auth0|620144210c2d4d00717d7b8a",
+    "role": "editor",
+    "confirmed": true,
+    "serviceOwner": false,
+    "organisation": "Department for Education"
   }
 ]

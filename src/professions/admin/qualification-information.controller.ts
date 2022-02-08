@@ -14,7 +14,7 @@ import { AuthenticationGuard } from '../../common/authentication.guard';
 import { Permissions } from '../../common/permissions.decorator';
 import { Validator } from '../../helpers/validator';
 import { Qualification } from '../../qualifications/qualification.entity';
-import { UserPermission } from '../../users/user.entity';
+import { UserPermission } from '../../users/user-permission';
 import { ValidationFailedError } from '../../common/validation/validation-failed.error';
 import { ProfessionsService } from '../professions.service';
 import { MethodToObtainQualificationRadioButtonsPresenter } from './method-to-obtain-qualification-radio-buttons.presenter';
@@ -57,7 +57,7 @@ export class QualificationInformationController {
   @Post('/:id/qualification-information')
   @Permissions(UserPermission.CreateProfession)
   @BackLink((request: Request) =>
-    request.query.change === 'true'
+    request.body.change === 'true'
       ? '/admin/professions/:id/check-your-answers'
       : '/admin/professions/:id/regulated-activities/edit',
   )

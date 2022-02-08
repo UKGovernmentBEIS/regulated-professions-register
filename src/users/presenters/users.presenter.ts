@@ -1,15 +1,13 @@
-import { I18nService } from 'nestjs-i18n';
-
 import { UserPresenter } from './user.presenter';
-import { User } from './user.entity';
-import { TableRow } from '../common/interfaces/table-row';
+import { User } from '../user.entity';
+import { TableRow } from '../../common/interfaces/table-row';
 
 export class UsersPresenter {
   users: UserPresenter[];
 
-  constructor(users: User[], private i18n: I18nService) {
+  constructor(users: User[]) {
     this.users = users.map((user) => {
-      return new UserPresenter(user, i18n);
+      return new UserPresenter(user);
     });
   }
 

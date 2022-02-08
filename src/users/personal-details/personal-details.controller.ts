@@ -7,20 +7,21 @@ import {
   Render,
   Res,
   UseGuards,
-  Req,
   Query,
 } from '@nestjs/common';
-import { Request } from 'express';
 
 import { ValidationFailedError } from '../../common/validation/validation-failed.error';
 import { Validator } from '../../helpers/validator';
 import { UsersService } from '../users.service';
-import { UserPermission } from './../user.entity';
+import { UserPermission } from './../user-permission';
+import { User } from './../user.entity';
 import { PersonalDetailsDto } from './dto/personal-details.dto';
 import { AuthenticationGuard } from '../../common/authentication.guard';
 import { Permissions } from '../../common/permissions.decorator';
 import { EditTemplate } from './interfaces/edit-template';
 import { BackLink } from '../../common/decorators/back-link.decorator';
+import { Request, Response } from 'express';
+
 @Controller('/admin/users')
 @UseGuards(AuthenticationGuard)
 export class PersonalDetailsController {
@@ -29,9 +30,8 @@ export class PersonalDetailsController {
   @Get(':id/personal-details/edit')
   @Permissions(UserPermission.CreateUser, UserPermission.EditUser)
   @Render('admin/users/personal-details/edit')
-  @BackLink('/admin/users')
+  @BackLink((request: Request) => getBackLink(request, request.query))
   async edit(
-    @Req() req: Request,
     @Param('id') id,
     @Query('change') change: boolean,
   ): Promise<EditTemplate> {
@@ -45,7 +45,8 @@ export class PersonalDetailsController {
 
   @Post(':id/personal-details')
   @Permissions(UserPermission.CreateUser, UserPermission.EditUser)
-  async create(
+  @BackLink((request: Request) => getBackLink(request, request.body))
+  async update(
     @Body() personalDetailsDto,
     @Res() res,
     @Param('id') id,
@@ -57,36 +58,47 @@ export class PersonalDetailsController {
       personalDetailsDto,
     );
 
+    const submittedValues: PersonalDetailsDto = personalDetailsDto;
+
     if (!validator.valid()) {
       const errors = new ValidationFailedError(validator.errors).fullMessages();
-      this.renderWithErrors(res, personalDetailsDto, errors);
-      return;
-    }
-
-    // Don't talk to Auth0 yet, but at least check our own DB
-    if (await this.usersService.findByEmail(personalDetailsDto.email)) {
-      const errors = {
-        email: { text: 'A user with this email address already exists' },
-      };
-
-      this.renderWithErrors(res, personalDetailsDto, errors);
+      this.renderWithErrors(res, submittedValues, errors);
       return;
     }
 
     const user = await this.usersService.find(id);
-    const updated = Object.assign(user, personalDetailsDto);
 
-    await this.usersService.save(updated);
+    const { email, name } = submittedValues;
 
-    if (personalDetailsDto.change) {
+    // Don't talk to Auth0 yet, but at least check our own DB
+    const existingUser = await this.usersService.findByEmail(email);
+
+    if (existingUser && existingUser.id !== user.id) {
+      const errors = {
+        email: { text: 'A user with this email address already exists' },
+      };
+
+      this.renderWithErrors(res, submittedValues, errors);
+      return;
+    }
+
+    const updatedUser: User = {
+      ...user,
+      name,
+      email,
+    };
+
+    await this.usersService.save(updatedUser);
+
+    if (submittedValues.change === 'true') {
       res.redirect(`/admin/users/${id}/confirm`);
     } else {
-      res.redirect(`/admin/users/${id}/permissions/edit`);
+      res.redirect(`/admin/users/${id}/role/edit`);
     }
   }
 
   private renderWithErrors(
-    res: any,
+    res: Response,
     personalDetailsDto: PersonalDetailsDto,
     errors: object,
   ): void {
@@ -95,5 +107,18 @@ export class PersonalDetailsController {
       email: personalDetailsDto.email,
       errors,
     });
+  }
+}
+
+function getBackLink(request: Request, values: Record<string, any>): string {
+  const change = values.change === 'true';
+  const serviceOwner = (request['appSession'].user as User).serviceOwner;
+
+  if (change) {
+    return '/admin/users/:id/confirm';
+  } else {
+    return serviceOwner
+      ? '/admin/users/:id/organisation/edit'
+      : '/admin/users/new';
   }
 }

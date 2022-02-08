@@ -22,7 +22,7 @@ import { Validator } from '../../helpers/validator';
 import { RegulatoryBodyDto } from './dto/regulatory-body.dto';
 import { ValidationFailedError } from '../../common/validation/validation-failed.error';
 import { Permissions } from '../../common/permissions.decorator';
-import { UserPermission } from '../../users/user.entity';
+import { UserPermission } from '../../users/user-permission';
 import { BackLink } from '../../common/decorators/back-link.decorator';
 
 import ViewUtils from './viewUtils';
@@ -46,7 +46,6 @@ export class RegulatoryBodyController {
     @Res() res: Response,
     @Param('id') id: string,
     @Query('change') change: boolean,
-    errors: object | undefined = undefined,
   ): Promise<void> {
     const profession = await this.professionsService.find(id);
 
@@ -58,14 +57,13 @@ export class RegulatoryBodyController {
       selectedMandatoryRegistration,
       profession.confirmed,
       change,
-      errors,
     );
   }
 
   @Post('/:id/regulatory-body')
   @Permissions(UserPermission.CreateProfession)
   @BackLink((request: Request) =>
-    request.query.change === 'true'
+    request.body.change === 'true'
       ? '/admin/professions/:id/check-your-answers'
       : '/admin/professions/:id/top-level-information/edit',
   )

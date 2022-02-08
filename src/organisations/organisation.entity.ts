@@ -13,6 +13,7 @@ import {
   OneToMany,
   Index,
 } from 'typeorm';
+import { User } from '../users/user.entity';
 
 @Entity({ name: 'organisations' })
 export class Organisation {
@@ -35,6 +36,9 @@ export class Organisation {
 
   @OneToMany(() => Profession, (profession) => profession.organisation)
   professions: Profession[];
+
+  @OneToMany(() => User, (user) => user.organisation)
+  users: User[];
 
   @CreateDateColumn({
     type: 'timestamp',
@@ -100,6 +104,7 @@ export class Organisation {
     telephone?: string,
     fax?: string,
     professions?: Profession[],
+    users?: User[],
   ) {
     this.name = name || '';
     this.alternateName = alternateName || '';
@@ -111,5 +116,6 @@ export class Organisation {
     this.telephone = telephone || '';
     this.fax = fax;
     this.professions = professions;
+    this.users = users;
   }
 }

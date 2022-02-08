@@ -15,7 +15,7 @@
 
       <input type="hidden" name="change" value="{{ change }}" />
 
-      <a name="name">
+      <div id="name">
         {{ govukInput({
           label: {
             text: ('users.form.label.name' | t),
@@ -29,9 +29,9 @@
           value: name,
           errorMessage: errors.name
         }) }}
-      </a>
+      </div>
 
-      <a name="email">
+      <div id="email">
         {{ govukInput({
           label: {
             text: ('users.form.label.email' | t),
@@ -45,7 +45,7 @@
           value: email,
           errorMessage: errors.email
         }) }}
-      </a>
+      </div>
 
       {{ govukButton({
         text: ('app.continue' | t),

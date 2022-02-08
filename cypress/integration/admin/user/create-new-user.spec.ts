@@ -8,7 +8,7 @@ describe('Creating a new user', () => {
 
   context('when I am logged in without the correct permissions', () => {
     beforeEach(() => {
-      cy.loginAuth0('editor');
+      cy.loginAuth0('orgeditor');
     });
 
     it('does not allow me to add a user', () => {
@@ -26,18 +26,25 @@ describe('Creating a new user', () => {
     });
   });
 
-  context('when I am logged in with the correct permissions', () => {
+  context('when I am logged in as an admin', () => {
     beforeEach(() => {
       cy.loginAuth0();
     });
 
     it('I can add a new user', () => {
       cy.visitAndCheckAccessibility('/admin/users/new');
-      cy.get('button').click();
 
-      cy.translate('users.form.label.name').then((nameLabel) => {
-        cy.get('body').should('contain', nameLabel);
+      cy.get('button').click();
+      cy.checkAccessibility();
+
+      cy.translate('users.form.hint.organisation').then((organisationHint) => {
+        cy.get('body').should('contain', organisationHint);
       });
+
+      cy.get('input[name="serviceOwner"][value="1"]').check();
+
+      cy.get('button').click();
+      cy.checkAccessibility();
 
       cy.translate('users.form.label.email').then((emailLabel) => {
         cy.get('body').should('contain', emailLabel);
@@ -48,20 +55,33 @@ describe('Creating a new user', () => {
       cy.get('button').click();
       cy.checkAccessibility();
 
-      cy.get('input[name="serviceOwner"][value="1"]').check();
-      cy.get('[type="checkbox"]').check('createOrganisation');
+      cy.get('input[name="role"][value="registrar"]').check();
 
       cy.get('button').click();
       cy.checkAccessibility();
 
       cy.get('body').should('contain', 'Example Name');
       cy.get('body').should('contain', 'name@example.com');
-      cy.translate('users.form.label.createOrganisation').then((label) => {
-        cy.get('body').should('contain', label);
+      cy.translate('users.form.label.serviceOwner.yes').then(
+        (serviceOwnerLabel) => {
+          cy.get('body').should('contain', serviceOwnerLabel);
+        },
+      );
+
+      cy.translate('users.roles.registrar').then((registrarLabel) => {
+        cy.get('body').should('contain', registrarLabel);
       });
-      cy.translate('app.boolean.true').then((isServiceOwner) => {
-        cy.get('body').should('contain', isServiceOwner);
-      });
+
+      cy.translate('users.form.label.organisation').then(
+        (organisationLabel) => {
+          cy.translate('app.change').then((changeLink) => {
+            cy.get('body dt')
+              .contains(organisationLabel)
+              .parent()
+              .should('contain', changeLink);
+          });
+        },
+      );
 
       cy.get('button').click();
       cy.checkAccessibility();
@@ -75,6 +95,9 @@ describe('Creating a new user', () => {
 
     it('I cannot add a user that already exists', () => {
       cy.visitAndCheckAccessibility('/admin/users/new');
+      cy.get('button').click();
+
+      cy.get('input[name="serviceOwner"][value="0"]').check();
       cy.get('button').click();
 
       cy.get('input[name="name"]').type('Example Name');
@@ -93,13 +116,15 @@ describe('Creating a new user', () => {
       cy.get('button').click();
       cy.checkAccessibility();
 
+      cy.get('input[name="serviceOwner"][value="0"]').check();
+      cy.get('button').click();
+
       cy.get('input[name="name"]').type('Example Name');
       cy.get('input[name="email"]').type('name2@example.com');
       cy.get('button').click();
       cy.checkAccessibility();
 
-      cy.get('input[name="serviceOwner"][value="1"]').check();
-      cy.get('[type="checkbox"]').check('createOrganisation');
+      cy.get('input[name="role"][value="editor"]').check();
 
       cy.get('button').click();
       cy.checkAccessibility();
@@ -112,28 +137,19 @@ describe('Creating a new user', () => {
 
       cy.get('body').should('contain', 'name3@example.com');
 
-      cy.get('a[href*="permissions/edit?change=true"]').first().click();
+      cy.get('a[href*="role/edit?change=true"]').first().click();
 
-      cy.get('input[name="serviceOwner"][value="0"]').check();
-      cy.get('[type="checkbox"]').check('createUser');
+      cy.get('input[name="role"][value="administrator"]').check();
 
       cy.get('button').click();
       cy.checkAccessibility();
 
-      cy.translate('users.form.label.createOrganisation').then((label) => {
+      cy.translate('users.roles.editor').then((label) => {
         cy.get('body').should('not.contain', label);
       });
 
-      cy.translate('users.form.label.createUser').then((label) => {
+      cy.translate('users.roles.administrator').then((label) => {
         cy.get('body').should('contain', label);
-      });
-
-      cy.translate('app.boolean.false').then((isServiceOwner) => {
-        cy.get('body').should('not.contain', isServiceOwner);
-      });
-
-      cy.translate('app.boolean.true').then((isServiceOwner) => {
-        cy.get('body').should('contain', isServiceOwner);
       });
 
       cy.get('button').click();
@@ -143,6 +159,61 @@ describe('Creating a new user', () => {
         cy.get('body')
           .should('contain', successMessage)
           .should('contain', 'name3@example.com');
+      });
+    });
+  });
+
+  context('when I am logged in as an organisation admin', () => {
+    beforeEach(() => {
+      cy.loginAuth0('orgadmin');
+    });
+
+    it('I can add a new user', () => {
+      cy.visitAndCheckAccessibility('/admin/users/new');
+
+      cy.get('button').click();
+      cy.checkAccessibility();
+
+      cy.translate('users.form.label.email').then((emailLabel) => {
+        cy.get('body').should('contain', emailLabel);
+      });
+
+      cy.get('input[name="name"]').type('Example Name');
+      cy.get('input[name="email"]').type('organisation@example.com');
+      cy.get('button').click();
+      cy.checkAccessibility();
+
+      cy.get('input[name="role"][value="editor"]').check();
+
+      cy.get('button').click();
+      cy.checkAccessibility();
+
+      cy.get('body').should('contain', 'Example Name');
+      cy.get('body').should('contain', 'organisation@example.com');
+      cy.get('body').should('contain', 'Department for Education');
+
+      cy.translate('users.roles.editor').then((registrarLabel) => {
+        cy.get('body').should('contain', registrarLabel);
+      });
+
+      cy.translate('users.form.label.organisation').then(
+        (organisationLabel) => {
+          cy.translate('app.change').then((changeLink) => {
+            cy.get('body dt')
+              .contains(organisationLabel)
+              .parent()
+              .should('not.contain', changeLink);
+          });
+        },
+      );
+
+      cy.get('button').click();
+      cy.checkAccessibility();
+
+      cy.translate('users.headings.done').then((successMessage) => {
+        cy.get('body')
+          .should('contain', successMessage)
+          .should('contain', 'organisation@example.com');
       });
     });
   });

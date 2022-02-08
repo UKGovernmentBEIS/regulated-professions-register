@@ -3,23 +3,18 @@
     "label": {
       "name": "Name",
       "email": "Email address",
-      "permissions": "What permissions apply to this user?",
-      "createUser": "Create User",
-      "editUser": "Edit User",
-      "deleteUser": "Delete User",
-      "createOrganisation": "Create organisation",
-      "deleteOrganisation": "Delete organisation",
-      "createProfession": "Create profession",
-      "deleteprofession": "Delete profession",
-      "uploadDecisionData": "Upload decision data",
-      "downloadDecisionData": "Download decision data",
-      "viewDecisionData": "View decision data",
-      "serviceOwner": "Is this user a service owner?"
+      "organisation": "Organisation",
+      "serviceOwner": {
+        "yes": "Regulatory Professions Register",
+        "no": "A regulatory authority"
+      },
+      "role": "Role"
     },
     "hint": {
+      "organisation": "What organisation does this user belong to?",
       "name": "For example, Clare Jones.",
       "email": "For example, clarejones@beis.gov.uk.",
-      "serviceOwner": "Service owners can access all content across organisations"
+      "role": "What is the role of the user within the Regulated Professions Register?"
     },
     "button": {
       "add": "Add a new user",
@@ -30,18 +25,22 @@
       "email": {
         "alreadyExists": "A user with this email address already exists"
       },
+      "organisation": {
+        "empty": "You must select an organisation for the user"
+      },
       "serviceOwner": {
-        "empty": "You must select if a user is a service owner"
+        "empty": "You must select if the user belongs to the Regulatory Professions Register or a regulatory authority"
       },
       "roles": {
-        "empty": "You must select at least one role"
+        "empty": "You must select a role"
       }
     },
     "headings": {
       "main": "Creating RPR user",
       "checkAnswers": "Check your answers before creating this user",
+      "organisation": "Organisation",
       "personalDetails": "Personal details",
-      "permissions": "Permissions"
+      "role": "Role"
     },
     "delete": {
       "confirmMessage": "Are you sure you want to delete this user?",
@@ -62,5 +61,16 @@
     "panel": "User <strong>{email}</strong> has been added",
     "confirmation": "We have sent the user a confirmation email.",
     "backToDashboard": "Back to the dashboard"
-  }
+  },
+  "roles": {
+    "administrator": "Administrator",
+    "registrar": "Registrar",
+    "editor": "Editor"
+  },
+  "roleDescriptions": {
+    "managerUsers": "Onboard and manage users",
+    "managerProfessionsAndOrganisations": "Create and link regulators and professions",
+    "editProfessionsAndOrganisations": "Edit information about regulators and professions"
+  },
+  "serviceOwnerOrganisation": "Regulatory Professions Register"
 }

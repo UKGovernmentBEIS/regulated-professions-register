@@ -25,6 +25,7 @@ export default OrganisationFactory.define(({ sequence }) => ({
   name: 'Example Organisation',
   slug: 'example-slug',
   professions: undefined,
+  users: undefined,
   versions: [],
   created_at: new Date(),
   updated_at: new Date(),

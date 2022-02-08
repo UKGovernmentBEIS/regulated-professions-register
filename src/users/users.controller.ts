@@ -11,22 +11,22 @@ import {
   Redirect,
 } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
-import { Request } from 'express';
 
 import { AuthenticationGuard } from '../common/authentication.guard';
 import { Auth0Service } from './auth0.service';
-import { User, UserPermission } from './user.entity';
-import { UsersPresenter } from './users.presenter';
+import { User } from './user.entity';
+import { UserPermission } from './user-permission';
+import { UsersPresenter } from './presenters/users.presenter';
 import { UsersService } from './users.service';
 import { IndexTemplate } from './interfaces/index-template';
 import { ShowTemplate } from './interfaces/show-template';
 import { Permissions } from '../common/permissions.decorator';
-import { getReferrer } from '../common/utils';
 import { flashMessage } from '../common/flash-message';
 
-import { UserPresenter } from './user.presenter';
 import { UserMailer } from './user.mailer';
 import { BackLink } from '../common/decorators/back-link.decorator';
+import { Request, Response } from 'express';
+
 @Controller()
 @UseGuards(AuthenticationGuard)
 export class UsersController {
@@ -43,7 +43,7 @@ export class UsersController {
   @BackLink('/admin')
   async index(): Promise<IndexTemplate> {
     const users = await this.usersService.where({ confirmed: true });
-    const usersPresenter = new UsersPresenter(users, this.i18nService);
+    const usersPresenter = new UsersPresenter(users);
 
     return {
       ...users,
@@ -64,33 +64,40 @@ export class UsersController {
   @Render('admin/users/show')
   async show(@Param('id') id): Promise<ShowTemplate> {
     const user = await this.usersService.find(id);
-    const userPresenter = new UserPresenter(user, this.i18nService);
 
     return {
       ...user,
-      permissionList: await userPresenter.permissionList(),
     };
   }
 
   @Post('/admin/users')
   @Permissions(UserPermission.CreateUser, UserPermission.EditUser)
-  async create(@Res() res) {
-    const user = await this.usersService.save(new User());
+  async create(@Req() request: Request, @Res() res: Response) {
+    const actingUser = request['appSession'].user as User;
 
-    res.redirect(`/admin/users/${user.id}/personal-details/edit`);
+    const organisation = actingUser.organisation;
+
+    const newUser = await this.usersService.save({
+      ...new User(),
+      organisation,
+    });
+
+    if (actingUser.serviceOwner) {
+      res.redirect(`/admin/users/${newUser.id}/organisation/edit`);
+    } else {
+      res.redirect(`/admin/users/${newUser.id}/personal-details/edit`);
+    }
   }
 
   @Get('/admin/users/:id/confirm')
   @Permissions(UserPermission.CreateUser)
   @Render('admin/users/confirm')
-  @BackLink((request: Request) => getReferrer(request))
+  @BackLink('/admin/users/:id/permissions/edit')
   async confirm(@Param('id') id): Promise<ShowTemplate> {
     const user = await this.usersService.find(id);
-    const userPresenter = new UserPresenter(user, this.i18nService);
 
     return {
       ...user,
-      permissionList: await userPresenter.permissionList(),
     };
   }
 

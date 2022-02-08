@@ -6,19 +6,19 @@ import { I18nService } from 'nestjs-i18n';
 import { UsersService } from './users.service';
 import { Auth0Service } from './auth0.service';
 import { UsersController } from './users.controller';
-import { User, UserPermission } from './user.entity';
-import { UsersPresenter } from './users.presenter';
-import { UserPresenter } from './user.presenter';
+import { UsersPresenter } from './presenters/users.presenter';
 import { UserMailer } from './user.mailer';
-import { PerformNowOrLater } from '../common/interfaces/perform-now-or-later';
-import { flashMessage } from '../common/flash-message';
 
 import userFactory from '../testutils/factories/user';
+import { translationOf } from '../testutils/translation-of';
+import { createMockI18nService } from '../testutils/create-mock-i18n-service';
+import { TableRow } from '../common/interfaces/table-row';
+import { flashMessage } from '../common/flash-message';
+import { createMockRequest } from '../testutils/create-mock-request';
+import organisationFactory from '../testutils/factories/organisation';
 
-const name = 'Example Name';
-const email = 'name@example.com';
-const externalIdentifier = 'example-external-identifier';
-const permissions = new Array<UserPermission>();
+jest.mock('./presenters/users.presenter');
+jest.mock('./presenters/user.presenter');
 
 jest.mock('../common/flash-message');
 
@@ -26,59 +26,17 @@ describe('UsersController', () => {
   let controller: UsersController;
   let auth0Service: DeepMocked<Auth0Service>;
   let usersService: DeepMocked<UsersService>;
-  let i18nService: DeepMocked<I18nService>;
   let userMailer: DeepMocked<UserMailer>;
   let request: DeepMocked<Request>;
-  let user: User;
-  let deleteUserResponse: jest.Mock<PerformNowOrLater>;
 
   beforeEach(async () => {
-    user = userFactory.build({
-      id: 'user-uuid',
-      name: name,
-      email: email,
-      externalIdentifier: externalIdentifier,
-      permissions: permissions,
-    });
+    const i18nService = createMockI18nService();
 
     request = createMock<Request>();
 
-    deleteUserResponse = jest.fn(() => {
-      return {
-        performNow: async () => {
-          return null;
-        },
-        performLater: async () => {
-          return null;
-        },
-      };
-    });
-
-    auth0Service = createMock<Auth0Service>({
-      createUser: async () => {
-        return {
-          result: 'user-created',
-          externalIdentifier,
-          passwordResetLink: 'http://example.org',
-        };
-      },
-      deleteUser: deleteUserResponse,
-    });
-
-    i18nService = createMock<I18nService>();
+    auth0Service = createMock<Auth0Service>();
     userMailer = createMock<UserMailer>();
-
-    usersService = createMock<UsersService>({
-      save: async () => {
-        return user;
-      },
-      find: async () => {
-        return user;
-      },
-      where: async () => {
-        return [user];
-      },
-    });
+    usersService = createMock<UsersService>();
 
     const module: TestingModule = await Test.createTestingModule({
       controllers: [UsersController],
@@ -111,25 +69,36 @@ describe('UsersController', () => {
 
   describe('index', () => {
     it('should list all confirmed users', async () => {
-      const users = [user];
-      const usersPresenter = new UsersPresenter(users, i18nService);
+      const user = userFactory.build();
+
+      const tableRows: TableRow[] = [
+        [{ text: 'Example Name' }, { text: 'name@example.com' }],
+      ];
+
+      (
+        UsersPresenter.prototype as DeepMocked<UsersPresenter>
+      ).tableRows.mockReturnValue(tableRows);
+
+      usersService.where.mockResolvedValue([user]);
 
       expect(await controller.index()).toEqual({
-        ...users,
-        rows: usersPresenter.tableRows(),
+        ...[user],
+        rows: tableRows,
       });
 
       expect(usersService.where).toHaveBeenCalledWith({ confirmed: true });
+      expect(UsersPresenter.prototype.tableRows).toHaveBeenCalled();
     });
   });
 
   describe('show', () => {
     it('should return a user', async () => {
-      const usersPresenter = new UserPresenter(user, i18nService);
+      const user = userFactory.build();
+
+      usersService.find.mockResolvedValue(user);
 
       expect(await controller.show('some-uuid')).toEqual({
         ...user,
-        permissionList: await usersPresenter.permissionList(),
       });
 
       expect(usersService.find).toHaveBeenCalledWith('some-uuid');
@@ -137,49 +106,100 @@ describe('UsersController', () => {
   });
 
   describe('create', () => {
-    it('should create a user and redirect', async () => {
-      const res = createMock<Response>();
+    describe('when logged in as a service owner user', () => {
+      it('should create a user and redirect', async () => {
+        const loggedInUser = userFactory.build({ serviceOwner: true });
 
-      await controller.create(res);
+        const user = userFactory.build();
 
-      expect(usersService.save).toHaveBeenCalled();
-      expect(res.redirect).toHaveBeenCalledWith(
-        `/admin/users/${user.id}/personal-details/edit`,
-      );
+        usersService.save.mockResolvedValue(user);
+
+        const res = createMock<Response>();
+        const req = createMockRequest(
+          'http://example.com/some/path',
+          'example.com',
+          { user: loggedInUser },
+        );
+
+        await controller.create(req, res);
+
+        expect(usersService.save).toHaveBeenCalledWith(
+          expect.objectContaining({ organisation: undefined }),
+        );
+        expect(res.redirect).toHaveBeenCalledWith(
+          `/admin/users/${user.id}/organisation/edit`,
+        );
+      });
+    });
+
+    describe('when logged in as a non-service owner user', () => {
+      it('should create a user and redirect', async () => {
+        const loggedInUser = userFactory.build({
+          serviceOwner: false,
+          organisation: organisationFactory.build(),
+        });
+
+        const user = userFactory.build();
+
+        usersService.save.mockResolvedValue(user);
+
+        const res = createMock<Response>();
+        const req = createMockRequest(
+          'http://example.com/some/path',
+          'example.com',
+          { user: loggedInUser },
+        );
+
+        await controller.create(req, res);
+
+        expect(usersService.save).toHaveBeenCalledWith(
+          expect.objectContaining({ organisation: loggedInUser.organisation }),
+        );
+        expect(res.redirect).toHaveBeenCalledWith(
+          `/admin/users/${user.id}/personal-details/edit`,
+        );
+      });
     });
   });
 
   describe('confirm', () => {
     it('should return the user given an ID', async () => {
-      const usersPresenter = new UserPresenter(user, i18nService);
+      const user = userFactory.build();
+
+      usersService.find.mockResolvedValue(user);
+
       const result = await controller.confirm(user.id);
 
       expect(usersService.find).toHaveBeenCalledWith(user.id);
 
       expect(result).toEqual({
         ...user,
-        permissionList: await usersPresenter.permissionList(),
       });
     });
   });
 
   describe('complete', () => {
-    let res: DeepMocked<Response>;
-
-    beforeEach(() => {
-      res = createMock<Response>();
-    });
-
     it('should redirect to done when the user is successfully created', async () => {
+      const user = userFactory.build();
+
+      const res = createMock<Response>();
+
+      usersService.find.mockResolvedValue(user);
+      auth0Service.createUser.mockResolvedValue({
+        result: 'user-created',
+        externalIdentifier: user.externalIdentifier,
+        passwordResetLink: 'http://example.org',
+      });
+
       await controller.complete(res, user.id);
 
-      expect(auth0Service.createUser).toBeCalledWith(email);
+      expect(auth0Service.createUser).toBeCalledWith(user.email);
       expect(usersService.save).toBeCalledWith(
         expect.objectContaining({
-          name,
-          email,
-          externalIdentifier,
-          permissions,
+          name: user.name,
+          email: user.email,
+          externalIdentifier: user.externalIdentifier,
+          role: user.role,
           confirmed: true,
         }),
       );
@@ -191,8 +211,16 @@ describe('UsersController', () => {
     });
 
     it('should render an error if the email already exists externally and in our database', async () => {
+      const user = userFactory.build();
+
+      const res = createMock<Response>();
+      usersService.find.mockResolvedValue(user);
+
       auth0Service.createUser.mockImplementationOnce(async () => {
-        return { result: 'user-exists', externalIdentifier };
+        return {
+          result: 'user-exists',
+          externalIdentifier: user.externalIdentifier,
+        };
       });
 
       usersService.attemptAdd.mockImplementationOnce(async () => {
@@ -208,49 +236,68 @@ describe('UsersController', () => {
     });
 
     it('should create a user in our db even if the user already exists externally', async () => {
-      auth0Service.createUser.mockImplementationOnce(async () => {
-        return { result: 'user-exists', externalIdentifier };
+      const user = userFactory.build();
+
+      const res = createMock<Response>();
+      usersService.find.mockResolvedValue(user);
+
+      auth0Service.createUser.mockResolvedValue({
+        result: 'user-exists',
+        externalIdentifier: user.externalIdentifier,
       });
 
-      usersService.attemptAdd.mockImplementationOnce(async () => {
-        return 'user-created';
-      });
+      usersService.attemptAdd.mockResolvedValue('user-created');
 
       await controller.complete(res, user.id);
 
       expect(usersService.attemptAdd).toBeCalledWith(
         expect.objectContaining({
-          name,
-          email,
-          externalIdentifier,
-          permissions,
+          name: user.name,
+          email: user.email,
+          externalIdentifier: user.externalIdentifier,
+          role: user.role,
           confirmed: true,
         }),
       );
       expect(res.redirect).toBeCalledWith('done');
     });
+  });
 
-    describe('done', () => {
-      it('should return populated template params when called with a session where the user has been created', async () => {
-        const result = await controller.done(user.id);
+  describe('done', () => {
+    it('should return populated template params when called with a session where the user has been created', async () => {
+      const user = userFactory.build();
 
-        expect(result).toEqual(user);
-      });
+      usersService.find.mockResolvedValue(user);
+
+      const result = await controller.done(user.id);
+
+      expect(result).toEqual(user);
     });
   });
 
   describe('delete', () => {
     it('should delete a user', async () => {
-      const message = await i18nService.translate(
-        'users.form.delete.successMessage',
-      );
       const flashMock = flashMessage as jest.Mock;
 
       flashMock.mockImplementation(() => 'Stub Deletion Message');
 
+      const user = userFactory.build();
+
+      auth0Service.deleteUser.mockReturnValue({
+        performNow: async () => {
+          return null;
+        },
+        performLater: async () => {
+          return null;
+        },
+      });
+      usersService.find.mockResolvedValue(user);
+
       await controller.delete(request, 'some-uuid');
 
-      expect(flashMock).toHaveBeenCalledWith(message);
+      expect(flashMock).toHaveBeenCalledWith(
+        translationOf('users.form.delete.successMessage'),
+      );
 
       expect(request.flash).toHaveBeenCalledWith(
         'success',
@@ -260,9 +307,12 @@ describe('UsersController', () => {
       expect(auth0Service.deleteUser).toHaveBeenCalledWith(
         user.externalIdentifier,
       );
-      expect(deleteUserResponse).toHaveBeenCalled();
 
       expect(usersService.delete).toHaveBeenCalledWith('some-uuid');
     });
+  });
+
+  afterEach(() => {
+    jest.resetAllMocks();
   });
 });

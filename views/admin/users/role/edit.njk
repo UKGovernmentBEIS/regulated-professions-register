@@ -1,0 +1,45 @@
+{% extends "base.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    {% include "../../../shared/_errors.njk" %}
+
+    <span class="govuk-caption-xl">{{ "users.form.headings.main" | t }}</span>
+    <h1 class="govuk-heading-xl">{{ "users.form.headings.role" | t }}</h1>
+
+    <form method="post" action="./">
+
+      <input type="hidden" name="change" value="{{ change }}" />
+
+      {{ govukRadios({
+        name: "role",
+        fieldset: {
+          legend: {
+            text: ("users.form.hint.role" | t),
+            isPageHeading: false,
+            classes: "govuk-fieldset__legend--m"
+          }
+        },
+        items: roleRadioButtonArgs,
+        errorMessage: errors.role | tError
+      }) }}
+
+      {{ govukButton({
+        text: ('app.continue' | t),
+        type: "submit",
+        id: "continue-button"
+      }) }}
+    </form>
+
+  </div>
+
+  <div class="govuk-grid-column-one-third">
+  </div>
+</div>
+
+{% endblock %}

@@ -11,7 +11,7 @@
 
       <h1 class="govuk-heading-xl">{{ "users.headings.index" | t }}</h1>
 
-      {% if 'createUser' in user.permissions %}
+      {% if 'createUser' in permissions %}
         <h2 class="govuk-heading-l">{{ "users.headings.addNew" | t }}</h2>
         <p class="govuk-body">{{ "users.body.intro" | t }}</p>
 

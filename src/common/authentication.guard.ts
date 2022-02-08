@@ -5,7 +5,9 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { User, UserPermission } from '../users/user.entity';
+import { getPermissionsFromUser } from '../users/helpers/get-permissions-from-user.helper';
+import { UserPermission } from '../users/user-permission';
+import { User } from '../users/user.entity';
 
 /**
  * Checks if a user is authenticated and returns `true` or `false`
@@ -59,7 +61,7 @@ export class AuthenticationGuard implements CanActivate {
   }
 
   matchPermissions(user: User, permissions: UserPermission[]): boolean {
-    return user.permissions.some((permission: UserPermission) =>
+    return getPermissionsFromUser(user).some((permission: UserPermission) =>
       permissions.includes(permission),
     );
   }

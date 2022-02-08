@@ -17,9 +17,10 @@ import { ProfessionsService } from '../professions.service';
 import QualificationPresenter from '../../qualifications/presenters/qualification.presenter';
 import { CheckYourAnswersTemplate } from './interfaces/check-your-answers.template';
 import { Permissions } from '../../common/permissions.decorator';
-import { UserPermission } from '../../users/user.entity';
+import { UserPermission } from '../../users/user-permission';
 import ViewUtils from './viewUtils';
 import { BackLink } from '../../common/decorators/back-link.decorator';
+
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
 export class CheckYourAnswersController {

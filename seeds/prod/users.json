@@ -3,18 +3,15 @@
     "email": "beis-rpr@dxw.com",
     "name": "beis-rpr",
     "externalIdentifier": "auth0|61d42ee720680d00696f52e3",
-    "permissions": [
-      "createUser",
-      "editUser",
-      "deleteUser",
-      "createOrganisation",
-      "deleteOrganisation",
-      "createProfession",
-      "deleteprofession",
-      "uploadDecisionData",
-      "downloadDecisionData",
-      "viewDecisionData"
-    ],
+    "role": "administrator",
+    "confirmed": true,
+    "serviceOwner": true
+  },
+  {
+    "email": "beis-rpr+registrar@dxw.com",
+    "name": "Registrar",
+    "externalIdentifier": "auth0|620144da39254400698b765f",
+    "role": "registrar",
     "confirmed": true,
     "serviceOwner": true
   },
@@ -22,8 +19,8 @@
     "email": "beis-rpr+editor@dxw.com",
     "name": "Editor",
     "externalIdentifier": "auth0|61d42f3e91488b0069f2fe05",
-    "permissions": [],
+    "role": "editor",
     "confirmed": true,
-    "serviceOwner": false
+    "serviceOwner": true
   }
 ]
