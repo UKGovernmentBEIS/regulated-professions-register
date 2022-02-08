@@ -1,8 +1,14 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { createMock } from '@golevelup/ts-jest';
+import { createMock, DeepMocked } from '@golevelup/ts-jest';
 
-import { In, Repository, SelectQueryBuilder } from 'typeorm';
+import {
+  Connection,
+  In,
+  QueryRunner,
+  Repository,
+  SelectQueryBuilder,
+} from 'typeorm';
 import { ProfessionVersionsService } from './profession-versions.service';
 import professionVersionFactory from '../testutils/factories/profession-version';
 import {
@@ -15,14 +21,21 @@ import { Profession } from './profession.entity';
 describe('ProfessionVersionsService', () => {
   let service: ProfessionVersionsService;
   let repo: Repository<ProfessionVersion>;
+  let connection: DeepMocked<Connection>;
 
   beforeEach(async () => {
+    connection = createMock<Connection>();
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         ProfessionVersionsService,
         {
           provide: getRepositoryToken(ProfessionVersion),
           useValue: createMock<Repository<ProfessionVersion>>(),
+        },
+        {
+          provide: Connection,
+          useValue: connection,
         },
       ],
     }).compile();
@@ -75,6 +88,103 @@ describe('ProfessionVersionsService', () => {
 
       expect(result).toEqual(updatedVersion);
       expect(repoSpy).toHaveBeenCalledWith(updatedVersion);
+    });
+  });
+
+  describe('publish', () => {
+    let queryRunner: DeepMocked<QueryRunner>;
+
+    beforeEach(() => {
+      queryRunner = createMock<QueryRunner>();
+
+      jest
+        .spyOn(connection, 'createQueryRunner')
+        .mockImplementation(() => queryRunner);
+    });
+
+    it('publishes the draft version', async () => {
+      const version = professionVersionFactory.build({
+        status: ProfessionVersionStatus.Draft,
+      });
+
+      const findSpy = jest
+        .spyOn(repo, 'findOne')
+        .mockImplementation(() => undefined);
+      const saveSpy = jest.spyOn(repo, 'save').mockResolvedValue(version);
+
+      const result = await service.publish(version);
+
+      expect(result.status).toBe(ProfessionVersionStatus.Live);
+
+      expect(findSpy).toHaveBeenCalledWith({
+        profession: version.profession,
+        status: ProfessionVersionStatus.Live,
+      });
+
+      expect(saveSpy).toHaveBeenCalledWith({
+        ...version,
+        status: ProfessionVersionStatus.Live,
+      });
+
+      expect(queryRunner.commitTransaction).toHaveBeenCalled();
+      expect(queryRunner.release).toHaveBeenCalled();
+    });
+
+    it('demotes the latest live version', async () => {
+      const liveVersion = professionVersionFactory.build({
+        status: ProfessionVersionStatus.Live,
+      });
+
+      const profession = professionFactory.build({
+        versions: [liveVersion],
+      });
+
+      const draftVersion = professionVersionFactory.build({
+        status: ProfessionVersionStatus.Draft,
+        profession,
+      });
+
+      const saveSpy = jest.spyOn(repo, 'save');
+      const findSpy = jest
+        .spyOn(repo, 'findOne')
+        .mockImplementation(async () => liveVersion);
+
+      const result = await service.publish(draftVersion);
+
+      expect(result.status).toBe(ProfessionVersionStatus.Live);
+
+      expect(findSpy).toHaveBeenCalledWith({
+        profession,
+        status: ProfessionVersionStatus.Live,
+      });
+
+      expect(saveSpy).toHaveBeenCalledWith({
+        ...liveVersion,
+        status: ProfessionVersionStatus.Archived,
+      });
+
+      expect(saveSpy).toHaveBeenCalledWith({
+        ...draftVersion,
+        status: ProfessionVersionStatus.Live,
+      });
+
+      expect(queryRunner.commitTransaction).toHaveBeenCalled();
+      expect(queryRunner.release).toHaveBeenCalled();
+    });
+
+    it('rolls back the transaction if an error occurs', async () => {
+      const version = professionVersionFactory.build({
+        status: ProfessionVersionStatus.Draft,
+      });
+
+      jest.spyOn(repo, 'save').mockImplementation(() => {
+        throw Error;
+      });
+
+      await service.publish(version);
+
+      expect(queryRunner.rollbackTransaction).toHaveBeenCalled();
+      expect(queryRunner.commitTransaction).not.toHaveBeenCalled();
     });
   });
 

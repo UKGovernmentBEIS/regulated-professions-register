@@ -1,4 +1,4 @@
-import { In, Repository, SelectQueryBuilder } from 'typeorm';
+import { Connection, In, Repository, SelectQueryBuilder } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
@@ -12,6 +12,7 @@ export class ProfessionVersionsService {
   constructor(
     @InjectRepository(ProfessionVersion)
     private repository: Repository<ProfessionVersion>,
+    private connection: Connection,
   ) {}
 
   async save(professionVersion: ProfessionVersion): Promise<ProfessionVersion> {
@@ -30,6 +31,37 @@ export class ProfessionVersionsService {
     version.status = ProfessionVersionStatus.Draft;
 
     return this.repository.save(version);
+  }
+
+  async publish(version: ProfessionVersion): Promise<ProfessionVersion> {
+    const queryRunner = this.connection.createQueryRunner();
+    const profession = version.profession;
+
+    const liveVersion = await this.repository.findOne({
+      profession,
+      status: ProfessionVersionStatus.Live,
+    });
+
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      if (liveVersion) {
+        liveVersion.status = ProfessionVersionStatus.Archived;
+        await this.repository.save(liveVersion);
+      }
+
+      version.status = ProfessionVersionStatus.Live;
+      await this.repository.save(version);
+
+      await queryRunner.commitTransaction();
+    } catch (err) {
+      await queryRunner.rollbackTransaction();
+    } finally {
+      await queryRunner.release();
+    }
+
+    return version;
   }
 
   async findLatestForProfessionId(
