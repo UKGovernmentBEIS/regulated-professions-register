@@ -18,6 +18,34 @@ describe('Publishing organisations', () => {
       cy.translate('professions.admin.status.draft').then((status) => {
         cy.get('h2[data-status]').should('contain', status);
       });
+
+      cy.translate('professions.form.button.publishNow').then(
+        (publishButton) => {
+          cy.get('button').contains(publishButton).click();
+        },
+      );
+
+      cy.translate('professions.admin.publish.confirmation.heading').then(
+        (confirmation) => {
+          cy.get('html').should('contain', confirmation);
+        },
+      );
+
+      cy.translate(
+        'professions.admin.publish.confirmation.backToDashboard',
+      ).then((backToDashboard) => {
+        cy.get('a').contains(backToDashboard).click();
+      });
+
+      cy.get('tr')
+        .contains('Gas Safe Engineer')
+        .then(($header) => {
+          const $row = $header.parent();
+
+          cy.translate('professions.admin.status.live').then((status) => {
+            cy.wrap($row).should('contain', status);
+          });
+        });
     });
   });
 });

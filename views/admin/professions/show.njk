@@ -15,12 +15,28 @@
           {{ "professions.admin.status.heading" | t }}<br>
           <span class="govuk-body">{{ ("professions.admin.status." + profession.status) | t }}</span>
         </h2>
-        {{ govukButton({
-          text: ('professions.admin.editProfession' | t),
-          classes: "govuk-button",
-          id: "edit-button",
-          href: "/admin/professions/" + profession.id + "/versions/edit"
-        }) }}
+
+        <ul class="govuk-list">
+          {% if profession.status === 'draft' %}
+            <li>
+                <form action="/admin/professions/{{ profession.id }}/versions/{{ profession.versionId }}/publish?_method=PUT" method="post">
+                  {{ govukButton({
+                    text: ('professions.form.button.publishNow' | t),
+                    classes: "govuk-button",
+                    id: "publish-button"
+                  }) }}
+                </form>
+            </li>
+          {% endif %}
+          <li>
+            {{ govukButton({
+              text: ('professions.admin.editProfession' | t),
+              classes: "govuk-button--secondary",
+              id: "edit-button",
+              href: "/admin/professions/" + profession.id + "/versions/edit"
+            }) }}
+          </li>
+        </ul>
       </aside>
     </div>
   </div>
