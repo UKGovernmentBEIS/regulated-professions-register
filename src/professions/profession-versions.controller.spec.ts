@@ -11,6 +11,9 @@ import legislationFactory from '../testutils/factories/legislation';
 import professionFactory from '../testutils/factories/profession';
 import professionVersionFactory from '../testutils/factories/profession-version';
 import { translationOf } from '../testutils/translation-of';
+import { DeepPartial } from 'typeorm';
+import { RequestWithAppSession } from '../common/interfaces/request-with-app-session.interface';
+import userFactory from '../testutils/factories/user';
 import { ProfessionVersionsController } from './profession-versions.controller';
 import { ProfessionVersionsService } from './profession-versions.service';
 import { ProfessionsService } from './professions.service';
@@ -68,6 +71,7 @@ describe('ProfessionVersionsController', () => {
   describe('create', () => {
     it('creates a copy of the latest version of the Profession and its Qualification', async () => {
       const legislation = legislationFactory.build();
+
       const version = professionVersionFactory.build();
 
       const updatedQualification = {
@@ -83,15 +87,21 @@ describe('ProfessionVersionsController', () => {
         created_at: undefined,
         updated_at: undefined,
       };
+      const user = userFactory.build();
 
-      const response = createMock<Response>();
+      const res = createMock<Response>();
+      const req = createMock<RequestWithAppSession>({
+        appSession: {
+          user: user as DeepPartial<any>,
+        },
+      });
 
       professionVersionsService.findLatestForProfessionId.mockResolvedValue(
         version,
       );
       professionVersionsService.save.mockResolvedValue(version);
 
-      await controller.create(response, 'some-uuid');
+      await controller.create(res, req, 'some-uuid');
 
       expect(professionVersionsService.save).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -102,10 +112,11 @@ describe('ProfessionVersionsController', () => {
           qualification: updatedQualification,
           legislations: [updatedLegislation],
           profession: version.profession,
+          user: user,
         }),
       );
 
-      expect(response.redirect).toHaveBeenCalledWith(
+      expect(res.redirect).toHaveBeenCalledWith(
         `/admin/professions/${version.profession.id}/versions/${version.id}/check-your-answers?edit=true`,
       );
     });

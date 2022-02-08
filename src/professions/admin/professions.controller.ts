@@ -28,6 +28,7 @@ import { BackLink } from '../../common/decorators/back-link.decorator';
 import { createFilterInput } from '../../helpers/create-filter-input.helper';
 import { ProfessionVersionsService } from '../profession-versions.service';
 import { ProfessionVersion } from '../profession-version.entity';
+import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
@@ -41,14 +42,18 @@ export class ProfessionsController {
   ) {}
 
   @Post()
-  async create(@Res() res: Response): Promise<void> {
+  async create(
+    @Res() res: Response,
+    @Req() req: RequestWithAppSession,
+  ): Promise<void> {
     const blankProfession = await this.professionsService.save(
       new Profession(),
     );
 
-    const blankVersion = new ProfessionVersion();
-
-    blankVersion.profession = blankProfession;
+    const blankVersion = {
+      profession: blankProfession,
+      user: req.appSession.user,
+    } as ProfessionVersion;
 
     const savedVersion = await this.professionVersionsService.save(
       blankVersion,

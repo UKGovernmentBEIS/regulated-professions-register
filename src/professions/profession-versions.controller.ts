@@ -5,6 +5,7 @@ import {
   Param,
   Post,
   Render,
+  Req,
   Res,
   UseGuards,
 } from '@nestjs/common';
@@ -12,6 +13,7 @@ import { Response } from 'express';
 import { I18nService } from 'nestjs-i18n';
 import { AuthenticationGuard } from '../common/authentication.guard';
 import { BackLink } from '../common/decorators/back-link.decorator';
+import { RequestWithAppSession } from '../common/interfaces/request-with-app-session.interface';
 import { Legislation } from '../legislations/legislation.entity';
 import { Nation } from '../nations/nation';
 import { Organisation } from '../organisations/organisation.entity';
@@ -91,6 +93,7 @@ export class ProfessionVersionsController {
   @Post('/:professionId/versions')
   async create(
     @Res() res: Response,
+    @Req() req: RequestWithAppSession,
     @Param('professionId') professionId: string,
   ): Promise<void> {
     const latestVersion =
@@ -120,6 +123,7 @@ export class ProfessionVersionsController {
       status: undefined,
       created_at: undefined,
       updated_at: undefined,
+      user: req.appSession.user,
       qualification: newQualification,
       legislations: newLegislations,
     } as ProfessionVersion;
