@@ -4,6 +4,7 @@ import {
   NotFoundException,
   Param,
   Post,
+  Put,
   Render,
   Req,
   Res,
@@ -135,5 +136,21 @@ export class ProfessionVersionsController {
     return res.redirect(
       `/admin/professions/${version.profession.id}/versions/${version.id}/check-your-answers?edit=true`,
     );
+  }
+
+  @Put(':professionId/versions/:versionId/publish')
+  @Render('admin/professions/versions/publish')
+  async publish(
+    @Param('professionId') professionId: string,
+    @Param('versionId') versionId: string,
+  ): Promise<Profession> {
+    const version = await this.professionVersionsService.findByIdWithProfession(
+      professionId,
+      versionId,
+    );
+
+    await this.professionVersionsService.publish(version);
+
+    return version.profession;
   }
 }
