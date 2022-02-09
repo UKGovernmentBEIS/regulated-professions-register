@@ -9,7 +9,7 @@
   <div class="govuk-grid-column-two-thirds">
     {% include "../../../shared/_errors.njk" %}
 
-    <span class="govuk-caption-xl">{{ "users.form.headings.main" | t }}</span>
+    <span class="govuk-caption-xl">{{ ("users.form.headings." + action) | t }}</span>
     <h1 class="govuk-heading-xl">{{ "users.form.headings.role" | t }}</h1>
 
     <form method="post" action="./">

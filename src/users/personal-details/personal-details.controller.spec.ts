@@ -5,9 +5,12 @@ import { UsersService } from '../users.service';
 import { User } from '../user.entity';
 import { PersonalDetailsController } from './personal-details.controller';
 import { createMock, DeepMocked } from '@golevelup/ts-jest';
+import { getActionTypeFromUser } from '../helpers/get-action-type-from-user';
 
 const name = 'Example Name';
 const email = 'name@example.com';
+
+jest.mock('../helpers/get-action-type-from-user');
 
 describe('PersonalDetailsController', () => {
   let controller: PersonalDetailsController;
@@ -49,19 +52,25 @@ describe('PersonalDetailsController', () => {
 
   describe('edit', () => {
     it('should get and return the user from an id', async () => {
+      (getActionTypeFromUser as jest.Mock).mockReturnValue('edit');
+
       const result = await controller.edit('user-uuid', false);
 
       expect(result).toEqual({
         ...user,
+        action: 'edit',
         change: false,
       });
     });
 
     it('should set change to true', async () => {
+      (getActionTypeFromUser as jest.Mock).mockReturnValue('edit');
+
       const result = await controller.edit('user-uuid', true);
 
       expect(result).toEqual({
         ...user,
+        action: 'edit',
         change: true,
       });
     });
@@ -92,11 +101,14 @@ describe('PersonalDetailsController', () => {
     });
 
     it('should render an error if the name is empty', async () => {
+      (getActionTypeFromUser as jest.Mock).mockReturnValue('edit');
+
       await controller.update({ name: '', email }, res, 'user-uuid');
 
       expect(res.render).toHaveBeenCalledWith(
         'admin/users/personal-details/edit',
         {
+          action: 'edit',
           name: '',
           email,
           errors: {
@@ -109,11 +121,14 @@ describe('PersonalDetailsController', () => {
     });
 
     it('should render an error if the email is empty', async () => {
+      (getActionTypeFromUser as jest.Mock).mockReturnValue('edit');
+
       await controller.update({ name, email: '' }, res, 'user-uuid');
 
       expect(res.render).toHaveBeenCalledWith(
         'admin/users/personal-details/edit',
         {
+          action: 'edit',
           name,
           email: '',
           errors: {
@@ -126,6 +141,8 @@ describe('PersonalDetailsController', () => {
     });
 
     it('should render an error if the email address is already in use by another user', async () => {
+      (getActionTypeFromUser as jest.Mock).mockReturnValue('edit');
+
       usersService.findByEmail.mockImplementationOnce(async () => {
         return new User('name@example.com', name);
       });
@@ -137,6 +154,7 @@ describe('PersonalDetailsController', () => {
       expect(res.render).toHaveBeenCalledWith(
         'admin/users/personal-details/edit',
         {
+          action: 'edit',
           name,
           email,
           errors: {

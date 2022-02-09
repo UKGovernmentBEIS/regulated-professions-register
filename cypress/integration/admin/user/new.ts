@@ -86,7 +86,7 @@ describe('Creating a new user', () => {
       cy.get('button').click();
       cy.checkAccessibility();
 
-      cy.translate('users.headings.done').then((successMessage) => {
+      cy.translate('users.headings.new.done').then((successMessage) => {
         cy.get('body')
           .should('contain', successMessage)
           .should('contain', 'name@example.com');
@@ -155,7 +155,7 @@ describe('Creating a new user', () => {
       cy.get('button').click();
       cy.checkAccessibility();
 
-      cy.translate('users.headings.done').then((successMessage) => {
+      cy.translate('users.headings.new.done').then((successMessage) => {
         cy.get('body')
           .should('contain', successMessage)
           .should('contain', 'name3@example.com');
@@ -210,7 +210,7 @@ describe('Creating a new user', () => {
       cy.get('button').click();
       cy.checkAccessibility();
 
-      cy.translate('users.headings.done').then((successMessage) => {
+      cy.translate('users.headings.new.done').then((successMessage) => {
         cy.get('body')
           .should('contain', successMessage)
           .should('contain', 'organisation@example.com');

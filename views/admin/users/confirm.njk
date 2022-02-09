@@ -21,7 +21,7 @@
 
     {% endif %}
 
-    <span class="govuk-caption-xl">{{ "users.form.headings.main" | t }}</span>
+    <span class="govuk-caption-xl">{{ ("users.form.headings." + action) | t }}</span>
     <h1 class="govuk-heading-xl">{{ "users.form.headings.checkAnswers" | t }}</h1>
 
     <h2 class="govuk-heading-m">{{ "users.form.headings.personalDetails" | t }}</h2>
@@ -30,7 +30,7 @@
 
     <form method="post" action="confirm">
       {{ govukButton({
-        text: ("users.form.button.create" | t),
+        text: (("users.form.button." + action) | t),
         preventDoubleClick: true,
         type: "submit",
         id: "submit-button"

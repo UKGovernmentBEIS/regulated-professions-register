@@ -24,6 +24,10 @@ import { ValidationFailedError } from '../../common/validation/validation-failed
 import { getPermissionsFromUser } from '../helpers/get-permissions-from-user.helper';
 import { User } from '../user.entity';
 import { RoleRadioButtonsPresenter } from '../presenters/role-radio-buttons.preseter';
+import {
+  getActionTypeFromUser,
+  ActionType,
+} from '../helpers/get-action-type-from-user';
 
 @UseGuards(AuthenticationGuard)
 @Controller('/admin/users')
@@ -47,7 +51,13 @@ export class RoleController {
   ): Promise<void> {
     const user = await this.usersService.find(id);
 
-    return this.renderForm(res, user.serviceOwner, user.role, change);
+    return this.renderForm(
+      res,
+      user.serviceOwner,
+      user.role,
+      change,
+      getActionTypeFromUser(user),
+    );
   }
 
   @Post(':id/role')
@@ -77,6 +87,7 @@ export class RoleController {
         user.serviceOwner,
         role,
         submittedValues.change === 'true',
+        getActionTypeFromUser(user),
         errors,
       );
     }
@@ -100,6 +111,7 @@ export class RoleController {
     serviceOwner: boolean,
     role: Role | null,
     change: boolean,
+    action: ActionType,
     errors: object | undefined = undefined,
   ): Promise<void> {
     const roleRadioButtonArgs = await new RoleRadioButtonsPresenter(
@@ -114,6 +126,7 @@ export class RoleController {
       roleRadioButtonArgs,
       change,
       errors,
+      action,
     };
 
     res.render('admin/users/role/edit', templateArgs);

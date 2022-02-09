@@ -26,7 +26,10 @@ import { UsersService } from '../users.service';
 import { OrganisationDto } from './dto/organisation.dto';
 import { EditTemplate } from './interfaces/edit-template';
 import { ServiceOwnerRadioButtonArgsPresenter } from '../presenters/service-owner-radio-buttons.presenter';
-
+import {
+  getActionTypeFromUser,
+  ActionType,
+} from '../helpers/get-action-type-from-user';
 @Controller('/admin/users')
 @UseGuards(AuthenticationGuard)
 export class OrganisationController {
@@ -51,13 +54,14 @@ export class OrganisationController {
   ): Promise<void> {
     this.checkUserIsServiceOwner(req);
 
-    const newUser = await this.usersService.find(id);
+    const user = await this.usersService.find(id);
 
     return this.renderForm(
       res,
-      newUser.organisation,
-      newUser.serviceOwner,
+      user.organisation,
+      user.serviceOwner,
       change,
+      getActionTypeFromUser(user),
     );
   }
 
@@ -101,6 +105,7 @@ export class OrganisationController {
         organisation,
         serviceOwner,
         submittedValues.change === 'true',
+        getActionTypeFromUser(user),
         errors,
       );
     }
@@ -125,6 +130,7 @@ export class OrganisationController {
     organisation: Organisation | null,
     serviceOwner: boolean | null,
     change: boolean,
+    action: ActionType,
 
     errors: object | undefined = undefined,
   ): Promise<void> {
@@ -146,6 +152,7 @@ export class OrganisationController {
       serviceOwnerRadioButtonArgs,
       change,
       errors,
+      action,
     };
 
     res.render('admin/users/organisation/edit', templateArgs);

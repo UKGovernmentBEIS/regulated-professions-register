@@ -9,8 +9,10 @@ import { RoleRadioButtonsPresenter } from '../presenters/role-radio-buttons.pres
 import { I18nService } from 'nestjs-i18n';
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 import { Role } from '../role';
+import { getActionTypeFromUser } from '../helpers/get-action-type-from-user';
 
 jest.mock('../presenters/role-radio-buttons.preseter');
+jest.mock('../helpers/get-action-type-from-user');
 
 describe('RoleController', () => {
   let controller: RoleController;
@@ -40,6 +42,8 @@ describe('RoleController', () => {
 
   describe('edit', () => {
     it('should get and return the user from an id', async () => {
+      (getActionTypeFromUser as jest.Mock).mockReturnValue('edit');
+
       const roleRadioButtonArgs: RadioButtonArgs[] = [
         {
           text: 'Administrator',
@@ -63,6 +67,7 @@ describe('RoleController', () => {
       expect(res.render).toBeCalledWith(
         'admin/users/role/edit',
         expect.objectContaining({
+          action: 'edit',
           roleRadioButtonArgs,
           change: false,
         }),
@@ -156,6 +161,8 @@ describe('RoleController', () => {
     });
 
     it('should render the edit page if the DTO is invalid', async () => {
+      (getActionTypeFromUser as jest.Mock).mockReturnValue('edit');
+
       const roleRadioButtonArgs: RadioButtonArgs[] = [
         {
           text: 'Administrator',
@@ -185,6 +192,7 @@ describe('RoleController', () => {
       expect(res.render).toHaveBeenCalledWith(
         'admin/users/role/edit',
         expect.objectContaining({
+          action: 'edit',
           roleRadioButtonArgs,
         }),
       );
