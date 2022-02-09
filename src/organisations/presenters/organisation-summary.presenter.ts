@@ -23,7 +23,7 @@ export class OrganisationSummaryPresenter {
     }
 
     const professionPresenters = this.organisation.professions
-      .filter((profession) => profession.confirmed)
+      .filter((profession) => profession.slug)
       .map(
         (profession) => new ProfessionPresenter(profession, this.i18nService),
       );

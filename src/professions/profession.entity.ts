@@ -129,7 +129,6 @@ export class Profession {
     legislations?: Legislation[],
     legislation?: Legislation,
     organisation?: Organisation,
-    confirmed?: boolean,
     versions?: ProfessionVersion[],
   ) {
     this.name = name || null;
@@ -145,7 +144,6 @@ export class Profession {
     this.legislations = legislations || null;
     this.legislation = legislation || null;
     this.organisation = organisation || null;
-    this.confirmed = confirmed || false;
     this.versions = versions || null;
   }
 

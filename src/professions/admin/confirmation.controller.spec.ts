@@ -49,7 +49,7 @@ describe('ConfirmationController', () => {
 
         const profession = professionFactory.build({
           id: 'profession-id',
-          confirmed: false,
+          slug: undefined,
         });
         const version = professionVersionFactory.build({
           id: 'version-id',
@@ -86,7 +86,7 @@ describe('ConfirmationController', () => {
 
         const existingProfession = professionFactory.build({
           id: 'existing-id',
-          confirmed: true,
+          slug: 'profession-slug',
         });
 
         const version = professionVersionFactory.build({

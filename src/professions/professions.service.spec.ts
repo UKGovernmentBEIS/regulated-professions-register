@@ -117,133 +117,93 @@ describe('Profession', () => {
   });
 
   describe('confirm', () => {
-    describe('setting the slug on a Profession', () => {
-      describe('when there are no colliding slugs', () => {
-        it('should save the Profession with the "base" slug', async () => {
-          const profession = professionFactory.build();
+    describe('when there are no colliding slugs', () => {
+      it('should save the Profession with the "base" slug', async () => {
+        const profession = professionFactory.build();
 
-          manager.findOne.mockReturnValue(null);
+        manager.findOne.mockReturnValue(null);
 
-          const result = await service.confirm(profession);
+        const result = await service.confirm(profession);
 
-          expect(manager.findOne).toBeCalledTimes(1);
+        expect(manager.findOne).toBeCalledTimes(1);
 
-          expect(manager.findOne).toBeCalledWith(Profession, {
-            where: { slug: 'example-profession' },
-          });
-
-          expect(result.slug).toEqual('example-profession');
+        expect(manager.findOne).toBeCalledWith(Profession, {
+          where: { slug: 'example-profession' },
         });
-      });
 
-      describe('when there is a single colliding slug', () => {
-        it('should save the Profession with a slug appended with "-1"', async () => {
-          const profession = professionFactory.build();
-
-          manager.findOne
-            .mockImplementationOnce(async () => {
-              return new Profession();
-            })
-            .mockReturnValue(null);
-
-          const result = await service.confirm(profession);
-
-          expect(manager.findOne).toBeCalledTimes(2);
-
-          expect(manager.findOne).toBeCalledWith(Profession, {
-            where: { slug: 'example-profession' },
-          });
-          expect(manager.findOne).toBeCalledWith(Profession, {
-            where: { slug: 'example-profession-1' },
-          });
-
-          expect(manager.save).toHaveBeenCalledWith(
-            expect.objectContaining({
-              slug: 'example-profession-1',
-            }),
-          );
-          expect(result.slug).toEqual('example-profession-1');
-        });
-      });
-
-      describe('when there are multiple colliding slugs', () => {
-        it('should save the Profession with a slug appended with a unique postfix', async () => {
-          const profession = professionFactory.build();
-
-          manager.findOne
-            .mockImplementationOnce(async () => {
-              return new Profession();
-            })
-            .mockImplementationOnce(async () => {
-              return new Profession();
-            })
-            .mockImplementationOnce(async () => {
-              return new Profession();
-            })
-            .mockReturnValue(null);
-
-          const result = await service.confirm(profession);
-
-          expect(manager.findOne).toBeCalledTimes(4);
-
-          expect(manager.findOne).toBeCalledWith(Profession, {
-            where: { slug: 'example-profession' },
-          });
-          expect(manager.findOne).toBeCalledWith(Profession, {
-            where: { slug: 'example-profession-1' },
-          });
-          expect(manager.findOne).toBeCalledWith(Profession, {
-            where: { slug: 'example-profession-2' },
-          });
-          expect(manager.findOne).toBeCalledWith(Profession, {
-            where: { slug: 'example-profession-3' },
-          });
-
-          expect(manager.save).toHaveBeenCalledWith(
-            expect.objectContaining({
-              slug: 'example-profession-3',
-            }),
-          );
-          expect(result.slug).toEqual('example-profession-3');
-        });
+        expect(result.slug).toEqual('example-profession');
       });
     });
 
-    describe('marking the Profession as "Confirmed"', () => {
-      describe('when the Profession has not yet been confirmed', () => {
-        it('confirms the Profession', async () => {
-          const profession = professionFactory.build();
+    describe('when there is a single colliding slug', () => {
+      it('should save the Profession with a slug appended with "-1"', async () => {
+        const profession = professionFactory.build();
 
-          manager.findOne
-            .mockImplementationOnce(async () => {
-              return profession;
-            })
-            .mockResolvedValue(null);
+        manager.findOne
+          .mockImplementationOnce(async () => {
+            return new Profession();
+          })
+          .mockReturnValue(null);
 
-          const result = await service.confirm(profession);
+        const result = await service.confirm(profession);
 
-          expect(result.confirmed).toEqual(true);
+        expect(manager.findOne).toBeCalledTimes(2);
+
+        expect(manager.findOne).toBeCalledWith(Profession, {
+          where: { slug: 'example-profession' },
+        });
+        expect(manager.findOne).toBeCalledWith(Profession, {
+          where: { slug: 'example-profession-1' },
         });
 
-        describe('when the Profession has already been confirmed', () => {
-          it('throws an error', async () => {
-            const existingProfession = professionFactory.build({
-              confirmed: true,
-            });
+        expect(manager.save).toHaveBeenCalledWith(
+          expect.objectContaining({
+            slug: 'example-profession-1',
+          }),
+        );
+        expect(result.slug).toEqual('example-profession-1');
+      });
+    });
 
-            manager.findOne
-              .mockImplementationOnce(async () => {
-                return existingProfession;
-              })
-              .mockResolvedValue(null);
+    describe('when there are multiple colliding slugs', () => {
+      it('should save the Profession with a slug appended with a unique postfix', async () => {
+        const profession = professionFactory.build();
 
-            await expect(async () =>
-              service.confirm(existingProfession),
-            ).rejects.toThrowError('Profession has already been confirmed');
+        manager.findOne
+          .mockImplementationOnce(async () => {
+            return new Profession();
+          })
+          .mockImplementationOnce(async () => {
+            return new Profession();
+          })
+          .mockImplementationOnce(async () => {
+            return new Profession();
+          })
+          .mockReturnValue(null);
 
-            expect(manager.save).not.toHaveBeenCalled();
-          });
+        const result = await service.confirm(profession);
+
+        expect(manager.findOne).toBeCalledTimes(4);
+
+        expect(manager.findOne).toBeCalledWith(Profession, {
+          where: { slug: 'example-profession' },
         });
+        expect(manager.findOne).toBeCalledWith(Profession, {
+          where: { slug: 'example-profession-1' },
+        });
+        expect(manager.findOne).toBeCalledWith(Profession, {
+          where: { slug: 'example-profession-2' },
+        });
+        expect(manager.findOne).toBeCalledWith(Profession, {
+          where: { slug: 'example-profession-3' },
+        });
+
+        expect(manager.save).toHaveBeenCalledWith(
+          expect.objectContaining({
+            slug: 'example-profession-3',
+          }),
+        );
+        expect(result.slug).toEqual('example-profession-3');
       });
     });
   });

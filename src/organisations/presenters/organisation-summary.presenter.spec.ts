@@ -49,13 +49,13 @@ describe('OrganisationSummaryPresenter', () => {
         const organisation = organisationFactory.build({
           professions: [
             professionsFactory.build({
-              confirmed: true,
+              slug: 'slug-1',
             }),
             professionsFactory.build({
-              confirmed: true,
+              slug: 'slug-2',
             }),
             professionsFactory.build({
-              confirmed: false,
+              slug: null,
             }),
           ],
         });

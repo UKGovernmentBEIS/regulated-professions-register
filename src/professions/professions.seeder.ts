@@ -121,7 +121,6 @@ export class ProfessionsSeeder implements Seeder {
           [],
           legislation,
           organisation,
-          profession.confirmed,
         );
 
         return { ...existingProfession, ...newProfession };
