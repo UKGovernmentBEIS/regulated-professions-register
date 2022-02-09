@@ -76,7 +76,7 @@ describe('OrganisationVersionsService', () => {
   });
 
   describe('findByIdWithOrganisation', () => {
-    it('returns an Organisation with a version', async () => {
+    it('returns an Organisation with a version, fetching its draft and live professions', async () => {
       const organisationVersion = organisationVersionFactory.build();
       const queryBuilder = createMock<SelectQueryBuilder<OrganisationVersion>>({
         leftJoinAndSelect: () => queryBuilder,
@@ -209,7 +209,7 @@ describe('OrganisationVersionsService', () => {
   });
 
   describe('allDraftOrLive', () => {
-    it('gets all organisations and their latest draft or live version', async () => {
+    it('gets all organisations and their latest draft or live version with draft or live Professions', async () => {
       const versions = organisationVersionFactory.buildList(5);
       const queryBuilder = createMock<SelectQueryBuilder<OrganisationVersion>>({
         leftJoinAndSelect: () => queryBuilder,
@@ -226,7 +226,7 @@ describe('OrganisationVersionsService', () => {
       const result = await service.allDraftOrLive();
 
       const expectedOrganisations = versions.map((version) =>
-        Organisation.withVersion(version.organisation, version),
+        Organisation.withVersion(version.organisation, version, true),
       );
 
       expect(result).toEqual(expectedOrganisations);

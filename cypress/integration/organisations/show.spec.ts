@@ -38,4 +38,30 @@ describe('Showing organisations', () => {
       });
     });
   });
+
+  it('Shows the detail of an organisation, with no link to a profession if that profession is in a draft state', () => {
+    cy.readFile('./seeds/test/professions.json').then((professions) => {
+      cy.readFile('./seeds/test/organisations.json').then((organisations) => {
+        const councilOfRegisteredGasInstallers = organisations[1];
+        const version = councilOfRegisteredGasInstallers.versions[0];
+
+        cy.get('a').contains(councilOfRegisteredGasInstallers.name).click();
+
+        cy.checkAccessibility();
+
+        cy.get('body').should('contain', councilOfRegisteredGasInstallers.name);
+        cy.get('body').should('contain', version.email);
+        cy.get('body').should('contain', version.contactUrl);
+
+        const draftProfessionsForOrganisation = professions.filter(
+          (profession: any) =>
+            profession.organisation == councilOfRegisteredGasInstallers.name,
+        );
+
+        draftProfessionsForOrganisation.forEach((draftProfession: any) => {
+          cy.should('not.contain', draftProfession.name);
+        });
+      });
+    });
+  });
 });

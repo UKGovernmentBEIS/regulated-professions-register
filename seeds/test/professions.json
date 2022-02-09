@@ -90,10 +90,5 @@
         "status": "draft"
       }
     ]
-  },
-  {
-    "name": "Draft Profession",
-    "organisation": "Department for Education",
-    "confirmed": false
   }
 ]

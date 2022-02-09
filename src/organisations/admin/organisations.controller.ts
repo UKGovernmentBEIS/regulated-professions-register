@@ -147,6 +147,7 @@ export class OrganisationsController {
       const updatedOrganisation = Organisation.withVersion(
         organisation,
         updatedVersion,
+        true,
       );
 
       const organisationPresenter = new OrganisationPresenter(

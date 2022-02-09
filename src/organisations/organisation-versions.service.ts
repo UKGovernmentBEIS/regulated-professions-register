@@ -79,7 +79,7 @@ export class OrganisationVersionsService {
       .getMany();
 
     return versions.map((version) =>
-      Organisation.withVersion(version.organisation, version),
+      Organisation.withVersion(version.organisation, version, true),
     );
   }
 

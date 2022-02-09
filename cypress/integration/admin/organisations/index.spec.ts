@@ -20,8 +20,6 @@ describe('Listing organisations', () => {
               .then(($header) => {
                 const $row = $header.parent();
 
-                console.log($row);
-
                 cy.wrap($row).should('contain', organisation.name);
                 cy.wrap($row).should('contain', latestVersion.alternateName);
 
