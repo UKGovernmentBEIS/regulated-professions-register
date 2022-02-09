@@ -60,17 +60,6 @@ describe('UsersService', () => {
     });
   });
 
-  describe('where', () => {
-    it('should search for a user given a query', async () => {
-      const query = { email: 'foo@bar.com' };
-      const repoSpy = jest.spyOn(repo, 'find');
-      const post = await service.where(query);
-
-      expect(post).toEqual(userArray);
-      expect(repoSpy).toHaveBeenCalledWith({ where: query });
-    });
-  });
-
   describe('allConfirmed', () => {
     it('should return all confirmed users', async () => {
       const repoSpy = jest.spyOn(repo, 'find');

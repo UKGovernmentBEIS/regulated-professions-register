@@ -1,4 +1,4 @@
-import { Connection, Repository, FindConditions, DeleteResult } from 'typeorm';
+import { Connection, Repository, DeleteResult } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
@@ -15,10 +15,6 @@ export class UsersService {
 
   all(): Promise<User[]> {
     return this.repository.find();
-  }
-
-  where(query: FindConditions<User>): Promise<User[]> {
-    return this.repository.find({ where: query });
   }
 
   allConfirmed(): Promise<User[]> {
