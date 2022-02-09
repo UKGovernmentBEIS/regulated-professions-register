@@ -78,9 +78,13 @@ function login(role: string) {
 /**
  * Login with Auth0.
  */
-Cypress.Commands.add('loginAuth0', (role = 'admin') => {
-  return cy.session(`logged in user with ${role} role`, () => {
-    login(role).then(({ cookies, callbackUrl }) => {
+Cypress.Commands.add('loginAuth0', (user = 'admin') => {
+  // For organisation level users, we use a cache-breaker string to prevent
+  // a stale user organisation being used across database refreshes
+  const sessionName = user.startsWith('org') ? crypto.randomUUID() : 'default';
+
+  return cy.session(`logged as user ${user} (${sessionName})`, () => {
+    login(user).then(({ cookies, callbackUrl }) => {
       cookies
         .map(createCookie)
         .forEach((c: any) => cy.setCookie(c.name, c.value, c.options));
