@@ -52,7 +52,12 @@
     "checkAnswers": "Check your answers before creating this user"
   },
   "headings": {
-    "done": "User added",
+    "new": {
+      "done": "User added"
+    },
+    "edit": {
+      "done": "User updated"
+    },
     "next": "What happens next?",
     "index": "Manage users",
     "show": "User details",
@@ -61,7 +66,12 @@
   },
   "body": {
     "intro": "You can add a new user here.",
-    "panel": "User <strong>{email}</strong> has been added",
+    "new": {
+      "panel": "User <strong>{email}</strong> has been added"
+    },
+    "edit": {
+      "panel": "User <strong>{email}</strong> has been edited"
+    },
     "confirmation": "We have sent the user a confirmation email.",
     "backToDashboard": "Back to the dashboard"
   },

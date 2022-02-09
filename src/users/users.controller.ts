@@ -138,16 +138,10 @@ export class UsersController {
       confirmed: true,
     });
 
-    res.redirect('done');
-  }
-
-  @Get('/admin/users/:id/done')
-  @Permissions(UserPermission.CreateUser)
-  @Render('admin/users/done')
-  async done(@Param('id') id): Promise<User> {
-    const user = await this.usersService.find(id);
-
-    return user;
+    res.render('admin/users/complete', {
+      ...user,
+      action,
+    });
   }
 
   @Delete('/admin/users/:id')

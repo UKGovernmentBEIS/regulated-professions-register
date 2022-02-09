@@ -238,7 +238,7 @@ describe('UsersController', () => {
         (getActionTypeFromUser as jest.Mock).mockReturnValue('new');
       });
 
-      it('should redirect to done when the user is successfully created', async () => {
+      it('should render the confirmation when the user is successfully created', async () => {
         const user = userFactory.build();
 
         const res = createMock<Response>();
@@ -266,7 +266,11 @@ describe('UsersController', () => {
           user,
           'http://example.org',
         );
-        expect(res.redirect).toBeCalledWith('done');
+
+        expect(res.render).toBeCalledWith('admin/users/complete', {
+          ...user,
+          action: 'new',
+        });
       });
 
       it('should render an error if the email already exists externally and in our database', async () => {
@@ -318,7 +322,11 @@ describe('UsersController', () => {
             confirmed: true,
           }),
         );
-        expect(res.redirect).toBeCalledWith('done');
+
+        expect(res.render).toBeCalledWith('admin/users/complete', {
+          ...user,
+          action: 'new',
+        });
       });
     });
 
@@ -348,20 +356,11 @@ describe('UsersController', () => {
           }),
         );
 
-        expect(res.redirect).toBeCalledWith('done');
+        expect(res.render).toBeCalledWith('admin/users/complete', {
+          ...user,
+          action: 'edit',
+        });
       });
-    });
-  });
-
-  describe('done', () => {
-    it('should return populated template params when called with a session where the user has been created', async () => {
-      const user = userFactory.build();
-
-      usersService.find.mockResolvedValue(user);
-
-      const result = await controller.done(user.id);
-
-      expect(result).toEqual(user);
     });
   });
 
