@@ -309,6 +309,7 @@ describe('OrganisationsController', () => {
           const updatedOrganisation = Organisation.withVersion(
             organisation,
             newVersion,
+            true,
           );
 
           expect(OrganisationPresenter).toHaveBeenCalledWith(

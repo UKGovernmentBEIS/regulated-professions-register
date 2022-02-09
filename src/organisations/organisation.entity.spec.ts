@@ -10,7 +10,7 @@ jest.mock('../professions/profession.entity');
 
 describe('Organisation', () => {
   describe('withVersion', () => {
-    it('should return an entity with a version', () => {
+    it('should return an entity with a version and all its live Professions', () => {
       const profession = professionFactory.build();
       const organisationVersion = organisationVersionFactory.build();
       const organisation = organisationFactory.build({
@@ -18,7 +18,7 @@ describe('Organisation', () => {
         professions: [profession],
       });
 
-      (Profession.withLatestLiveOrDraftVersion as jest.Mock).mockImplementation(
+      (Profession.withLatestLiveVersion as jest.Mock).mockImplementation(
         () => profession,
       );
 
@@ -39,6 +39,51 @@ describe('Organisation', () => {
         versionId: organisationVersion.id,
         status: organisationVersion.status,
         professions: [profession],
+      });
+
+      expect(
+        Profession.withLatestLiveOrDraftVersion as jest.Mock,
+      ).not.toHaveBeenCalled();
+    });
+
+    describe('when `showDraftProfessions` is `true`', () => {
+      it('should return an entity with a version and all its live and draft Professions', () => {
+        const profession = professionFactory.build();
+        const organisationVersion = organisationVersionFactory.build();
+        const organisation = organisationFactory.build({
+          versions: [organisationVersion, organisationVersionFactory.build()],
+          professions: [profession],
+        });
+
+        (
+          Profession.withLatestLiveOrDraftVersion as jest.Mock
+        ).mockImplementation(() => profession);
+
+        Profession.withLatestLiveVersion = jest.fn();
+
+        const resultWithDraftProfessions = Organisation.withVersion(
+          organisation,
+          organisationVersion,
+          true,
+        );
+
+        expect(resultWithDraftProfessions).toEqual({
+          ...organisation,
+          alternateName: organisationVersion.alternateName,
+          address: organisationVersion.address,
+          url: organisationVersion.url,
+          email: organisationVersion.email,
+          contactUrl: organisationVersion.contactUrl,
+          telephone: organisationVersion.telephone,
+          fax: organisationVersion.fax,
+          versionId: organisationVersion.id,
+          status: organisationVersion.status,
+          professions: [profession],
+        });
+
+        expect(
+          Profession.withLatestLiveVersion as jest.Mock,
+        ).not.toHaveBeenCalled();
       });
     });
 

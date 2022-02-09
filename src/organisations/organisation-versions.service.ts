@@ -30,7 +30,7 @@ export class OrganisationVersionsService {
       .where({ organisation: { id: organisationId }, id })
       .getOne();
 
-    return Organisation.withVersion(version.organisation, version);
+    return Organisation.withVersion(version.organisation, version, true);
   }
 
   async findLatestForOrganisationId(
@@ -78,7 +78,7 @@ export class OrganisationVersionsService {
       .getMany();
 
     return versions.map((version) =>
-      Organisation.withVersion(version.organisation, version),
+      Organisation.withVersion(version.organisation, version, true),
     );
   }
 
