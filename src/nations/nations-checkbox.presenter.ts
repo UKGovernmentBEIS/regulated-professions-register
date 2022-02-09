@@ -1,5 +1,7 @@
 import { I18nService } from 'nestjs-i18n';
 import { CheckboxItems } from '../common/interfaces/checkbox-items.interface';
+import { CheckboxArgs } from '../common/interfaces/checkbox-args.interface';
+
 import { Nation } from './nation';
 
 export class NationsCheckboxPresenter {
@@ -19,5 +21,20 @@ export class NationsCheckboxPresenter {
         ),
       })),
     );
+  }
+
+  async checkboxArgs(
+    idPrefix: string,
+    name: string,
+    hintTranslation: string,
+  ): Promise<CheckboxArgs> {
+    return {
+      idPrefix: idPrefix,
+      name: name,
+      hint: {
+        text: await this.i18nService.translate(hintTranslation),
+      },
+      items: await this.checkboxItems(),
+    };
   }
 }
