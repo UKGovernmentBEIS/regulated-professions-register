@@ -74,6 +74,10 @@ export class Profession {
   @Column({ nullable: true })
   reservedActivities: string;
 
+  protectedTitles: string;
+
+  regulationUrl: string;
+
   @OneToOne(() => Legislation, {
     eager: true,
     cascade: true,
@@ -195,6 +199,8 @@ export class Profession {
       industries: version.industries,
       qualification: version.qualification,
       reservedActivities: version.reservedActivities,
+      protectedTitles: version.protectedTitles,
+      regulationUrl: version.regulationUrl,
       legislations: version.legislations,
       status: version.status,
       versionId: version.id,

@@ -26,6 +26,8 @@ type SeedProfession = {
   industries: string[];
   qualification: string;
   reservedActivities: string;
+  protectedTitles: string;
+  regulationUrl: string;
   legislation: string;
   organisation: string;
   mandatoryRegistration: MandatoryRegistration;
@@ -41,6 +43,8 @@ type SeedVersion = {
   industries: string[];
   qualification: string;
   reservedActivities: string;
+  protectedTitles: string;
+  regulationUrl: string;
   legislations: string[];
   organisation: string;
   mandatoryRegistration: MandatoryRegistration;
@@ -178,6 +182,8 @@ export class ProfessionsSeeder implements Seeder {
               mandatoryRegistration:
                 version.mandatoryRegistration as MandatoryRegistration,
               reservedActivities: version.reservedActivities,
+              protectedTitles: version.protectedTitles,
+              regulationUrl: version.regulationUrl,
               industries: industries,
               legislations: legislations,
               qualification: qualification,
