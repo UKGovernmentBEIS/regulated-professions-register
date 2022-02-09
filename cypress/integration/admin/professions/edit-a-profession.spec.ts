@@ -72,7 +72,7 @@ describe('Editing an existing profession', () => {
       );
 
       cy.checkSummaryListRowValue(
-        'professions.form.label.regulatedActivities.description',
+        'professions.form.label.regulatedActivities.regulationSummary',
         'Registration protection and exploitation of trade marks',
       );
 
@@ -127,22 +127,22 @@ describe('Editing an existing profession', () => {
       );
 
       cy.clickSummaryListRowAction(
-        'professions.form.label.regulatedActivities.description',
+        'professions.form.label.regulatedActivities.regulationSummary',
         'Change',
       );
       cy.checkAccessibility();
       cy.translate('professions.form.captions.edit').then((editCaption) => {
         cy.get('body').contains(editCaption);
       });
-      cy.get('textarea[name="description"]')
+      cy.get('textarea[name="regulationSummary"]')
         .clear()
-        .type('Updated description of the regulation');
+        .type('Updated summary of the regulation');
       cy.translate('app.continue').then((buttonText) => {
         cy.get('button').contains(buttonText).click();
       });
       cy.checkSummaryListRowValue(
-        'professions.form.label.regulatedActivities.description',
-        'Updated description of the regulation',
+        'professions.form.label.regulatedActivities.regulationSummary',
+        'Updated summary of the regulation',
       );
 
       cy.clickSummaryListRowAction(

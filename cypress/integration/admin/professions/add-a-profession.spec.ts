@@ -79,9 +79,15 @@ describe('Adding a new profession', () => {
       cy.translate('professions.form.captions.add').then((addCaption) => {
         cy.get('body').contains(addCaption);
       });
-      cy.get('textarea[name="activities"]').type('An example activity');
-      cy.get('textarea[name="description"]').type(
-        'A description of the regulation',
+      cy.get('textarea[name="regulationSummary"]').type(
+        'A summary of the regulation',
+      );
+      cy.get('textarea[name="reservedActivities"]').type('An example activity');
+      cy.get('textarea[name="protectedTitles"]').type(
+        'An example protected title',
+      );
+      cy.get('input[name="regulationUrl"]').type(
+        'https://example.com/regulation',
       );
 
       cy.translate('app.continue').then((buttonText) => {
@@ -151,7 +157,7 @@ describe('Adding a new profession', () => {
         cy.get('body').should('contain', mandatoryRegistration);
       });
       cy.get('body').should('contain', 'An example activity');
-      cy.get('body').should('contain', 'A description of the regulation');
+      cy.get('body').should('contain', 'A summary of the regulation');
 
       cy.get('body').should('contain', 'An example Qualification level');
       cy.get('body').should('contain', 'Another method');

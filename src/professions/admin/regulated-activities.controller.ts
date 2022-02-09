@@ -53,8 +53,10 @@ export class RegulatedActivitiesController {
 
     this.renderForm(
       res,
-      version.reservedActivities,
       version.description,
+      version.reservedActivities,
+      version.protectedTitles,
+      version.regulationUrl,
       profession.slug !== null,
       change,
     );
@@ -93,8 +95,10 @@ export class RegulatedActivitiesController {
 
       return this.renderForm(
         res,
-        submittedValues.activities,
-        submittedValues.description,
+        submittedValues.regulationSummary,
+        submittedValues.reservedActivities,
+        submittedValues.protectedTitles,
+        submittedValues.regulationUrl,
         profession.slug !== null,
         submittedValues.change,
         errors,
@@ -104,8 +108,10 @@ export class RegulatedActivitiesController {
     const updatedVersion: ProfessionVersion = {
       ...version,
       ...{
-        reservedActivities: submittedValues.activities,
-        description: submittedValues.description,
+        description: submittedValues.regulationSummary,
+        reservedActivities: submittedValues.reservedActivities,
+        protectedTitles: submittedValues.protectedTitles,
+        regulationUrl: submittedValues.regulationUrl,
       },
     };
 
@@ -124,15 +130,19 @@ export class RegulatedActivitiesController {
 
   private async renderForm(
     res: Response,
+    regulationSummary: string | null,
     reservedActivities: string | null,
-    regulationDescription: string | null,
+    protectedTitles: string | null,
+    regulationUrl: string | null,
     isEditing: boolean,
     change: boolean,
     errors: object | undefined = undefined,
   ): Promise<void> {
     const templateArgs: RegulatedActivitiesTemplate = {
+      regulationSummary,
       reservedActivities,
-      regulationDescription,
+      protectedTitles,
+      regulationUrl,
       captionText: ViewUtils.captionText(isEditing),
       change,
       errors,
