@@ -20,7 +20,7 @@
       }) }}
     </div>
 
-    {% if nationsCheckboxArgs %}
+    {% if nationsCheckboxItems %}
       <div class="{{ filterColumnClass }}">
         {{ govukCheckboxes({
           name: "nations[]",
@@ -34,12 +34,12 @@
           hint: {
             text: (filterTextPrefix + ".filter.nations.hint") | t
           },
-          items: nationsCheckboxArgs
+          items: nationsCheckboxItems
         }) }}
       </div>
     {% endif %}
 
-    {% if organisationsCheckboxArgs %}
+    {% if organisationsCheckboxItems %}
       <div class="{{ filterColumnClass }}">
         {{ govukCheckboxes({
           name: "organisations[]",
@@ -53,12 +53,12 @@
           hint: {
             text: (filterTextPrefix + ".filter.organisations.hint") | t
           },
-          items: organisationsCheckboxArgs
+          items: organisationsCheckboxItems
         }) }}
       </div>
     {% endif %}
-      
-    {% if industriesCheckboxArgs %}
+
+    {% if industriesCheckboxItems %}
       <div class="{{ filterColumnClass }}">
         {{ govukCheckboxes({
           name: "industries[]",
@@ -72,12 +72,12 @@
           hint: {
             text: (filterTextPrefix + ".filter.industries.hint") | t
           },
-          items: industriesCheckboxArgs
+          items: industriesCheckboxItems
         }) }}
       </div>
     {% endif %}
 
-    {% if changedByCheckboxArgs %}
+    {% if changedByCheckboxItems %}
       <div class="{{ filterColumnClass }}">
         {{ govukCheckboxes({
           name: "changedBy[]",
@@ -91,7 +91,7 @@
           hint: {
             text: (filterTextPrefix + ".filter.changedBy.hint") | t
           },
-          items: changedByCheckboxArgs
+          items: changedByCheckboxItems
         }) }}
       </div>
     {% endif %}

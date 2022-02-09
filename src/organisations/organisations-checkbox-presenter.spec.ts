@@ -17,11 +17,11 @@ const organisation3 = organisationFactory.build({
 const organisations = [organisation1, organisation2, organisation3];
 
 describe('OrganisationsCheckboxPresenter', () => {
-  describe('checkboxArgs', () => {
+  describe('checkboxItems', () => {
     it('should return unchecked checkbox arguments when called with an empty list of Organisations', () => {
       const presenter = new OrganisationsCheckboxPresenter(organisations, []);
 
-      expect(presenter.checkboxArgs()).toEqual([
+      expect(presenter.checkboxItems()).toEqual([
         {
           text: 'Example Organisation 1',
           value: 'example-organisation-1',
@@ -46,7 +46,7 @@ describe('OrganisationsCheckboxPresenter', () => {
         organisation1,
       ]);
 
-      expect(presenter.checkboxArgs()).toEqual([
+      expect(presenter.checkboxItems()).toEqual([
         {
           text: 'Example Organisation 1',
           value: 'example-organisation-1',

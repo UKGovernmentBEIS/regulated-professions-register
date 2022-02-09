@@ -1,4 +1,4 @@
-import { CheckboxArgs } from '../common/interfaces/checkbox-args.interface';
+import { CheckboxItems } from '../common/interfaces/checkbox-items.interface';
 import { Organisation } from './organisation.entity';
 
 export class OrganisationsCheckboxPresenter {
@@ -7,7 +7,7 @@ export class OrganisationsCheckboxPresenter {
     private readonly checkedOrganisations: Organisation[],
   ) {}
 
-  checkboxArgs(): CheckboxArgs[] {
+  checkboxItems(): CheckboxItems[] {
     return this.allOrganisations.map((organisation) => ({
       text: organisation.name,
       value: organisation.id,

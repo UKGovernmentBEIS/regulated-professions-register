@@ -1,5 +1,5 @@
 import { I18nService } from 'nestjs-i18n';
-import { CheckboxArgs } from '../common/interfaces/checkbox-args.interface';
+import { CheckboxItems } from '../common/interfaces/checkbox-items.interface';
 import { Nation } from './nation';
 
 export class NationsCheckboxPresenter {
@@ -9,7 +9,7 @@ export class NationsCheckboxPresenter {
     private readonly i18nService: I18nService,
   ) {}
 
-  async checkboxArgs(): Promise<CheckboxArgs[]> {
+  async checkboxItems(): Promise<CheckboxItems[]> {
     return Promise.all(
       this.allNations.map(async (nation) => ({
         text: await nation.translatedName(this.i18nService),

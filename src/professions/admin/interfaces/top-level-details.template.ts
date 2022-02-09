@@ -1,9 +1,9 @@
-import { CheckboxArgs } from '../../../common/interfaces/checkbox-args.interface';
+import { CheckboxItems } from '../../../common/interfaces/checkbox-items.interface';
 
 export interface TopLevelDetailsTemplate {
   name: string | null;
-  industriesCheckboxArgs: CheckboxArgs[];
-  nationsCheckboxArgs: CheckboxArgs[];
+  industriesCheckboxItems: CheckboxItems[];
+  nationsCheckboxItems: CheckboxItems[];
   captionText: string;
   change: boolean;
   errors: object | undefined;

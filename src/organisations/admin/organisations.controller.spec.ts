@@ -94,7 +94,7 @@ describe('OrganisationsController', () => {
             keywords: '',
             industries: [],
           },
-          industriesCheckboxArgs: [],
+          industriesCheckboxItems: [],
         };
 
         const organisations = createOrganisations();
@@ -146,7 +146,7 @@ describe('OrganisationsController', () => {
             keywords: '',
             industries: [],
           },
-          industriesCheckboxArgs: [],
+          industriesCheckboxItems: [],
         };
 
         const organisations = createOrganisations();

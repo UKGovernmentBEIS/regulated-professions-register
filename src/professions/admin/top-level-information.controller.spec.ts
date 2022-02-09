@@ -83,7 +83,7 @@ describe('TopLevelInformationController', () => {
           'admin/professions/top-level-information',
           expect.objectContaining({
             name: undefined,
-            industriesCheckboxArgs: [
+            industriesCheckboxItems: [
               {
                 text: translationOf('industries.health'),
                 value: 'health-uuid',
@@ -95,7 +95,7 @@ describe('TopLevelInformationController', () => {
                 checked: false,
               },
             ],
-            nationsCheckboxArgs: [
+            nationsCheckboxItems: [
               {
                 text: translationOf('nations.england'),
                 value: 'GB-ENG',
@@ -158,7 +158,7 @@ describe('TopLevelInformationController', () => {
           'admin/professions/top-level-information',
           expect.objectContaining({
             name: 'Example Profession',
-            industriesCheckboxArgs: [
+            industriesCheckboxItems: [
               {
                 text: translationOf('industries.health'),
                 value: 'health-uuid',
@@ -170,7 +170,7 @@ describe('TopLevelInformationController', () => {
                 checked: false,
               },
             ],
-            nationsCheckboxArgs: [
+            nationsCheckboxItems: [
               {
                 text: translationOf('nations.england'),
                 value: 'GB-ENG',

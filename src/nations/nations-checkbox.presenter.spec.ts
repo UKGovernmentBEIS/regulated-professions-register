@@ -25,7 +25,7 @@ describe('NationsCheckboxPresenter', () => {
     });
   });
 
-  describe('checkboxArgs', () => {
+  describe('checkboxItems', () => {
     it('should return unchecked checkbox arguments when called with an empty list of Nations', async () => {
       const presenter = new NationsCheckboxPresenter(
         Nation.all(),
@@ -33,7 +33,7 @@ describe('NationsCheckboxPresenter', () => {
         i18nService,
       );
 
-      expect(presenter.checkboxArgs()).resolves.toEqual([
+      expect(presenter.checkboxItems()).resolves.toEqual([
         {
           text: 'England',
           value: 'GB-ENG',
@@ -65,7 +65,7 @@ describe('NationsCheckboxPresenter', () => {
         i18nService,
       );
 
-      expect(presenter.checkboxArgs()).resolves.toEqual([
+      expect(presenter.checkboxItems()).resolves.toEqual([
         {
           text: 'England',
           value: 'GB-ENG',

@@ -26,14 +26,14 @@ export class OrganisationsPresenter {
   ) {}
 
   async present(): Promise<IndexTemplate> {
-    const industriesCheckboxArgs = await new IndustriesCheckboxPresenter(
+    const industriesCheckboxItems = await new IndustriesCheckboxPresenter(
       this.allIndustries,
       this.filterInput.industries || [],
       this.i18nService,
-    ).checkboxArgs();
+    ).checkboxItems();
 
     return {
-      industriesCheckboxArgs,
+      industriesCheckboxItems,
       organisationsTable: await this.table(),
       filters: {
         keywords: this.filterInput.keywords || '',

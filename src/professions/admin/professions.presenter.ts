@@ -31,22 +31,22 @@ export class ProfessionsPresenter {
 
     const headings = await ListEntryPresenter.headings(this.i18nService, view);
 
-    const nationsCheckboxArgs = await new NationsCheckboxPresenter(
+    const nationsCheckboxItems = await new NationsCheckboxPresenter(
       this.allNations,
       this.filterInput.nations || [],
       this.i18nService,
-    ).checkboxArgs();
+    ).checkboxItems();
 
-    const organisationsCheckboxArgs = await new OrganisationsCheckboxPresenter(
+    const organisationsCheckboxItems = await new OrganisationsCheckboxPresenter(
       this.allOrganisations,
       this.filterInput.organisations || [],
-    ).checkboxArgs();
+    ).checkboxItems();
 
-    const industriesCheckboxArgs = await new IndustriesCheckboxPresenter(
+    const industriesCheckboxItems = await new IndustriesCheckboxPresenter(
       this.allIndustries,
       this.filterInput.industries || [],
       this.i18nService,
-    ).checkboxArgs();
+    ).checkboxItems();
 
     const displayProfessions = await Promise.all(
       this.filteredProfessions.map(async (profession) =>
@@ -59,10 +59,10 @@ export class ProfessionsPresenter {
       organisation,
       headings,
       professions: displayProfessions,
-      nationsCheckboxArgs,
-      organisationsCheckboxArgs,
-      industriesCheckboxArgs,
-      changedByCheckboxArgs: [],
+      nationsCheckboxItems,
+      organisationsCheckboxItems,
+      industriesCheckboxItems,
+      changedByCheckboxItems: [],
       filters: {
         keywords: this.filterInput.keywords || '',
         nations: (this.filterInput.nations || []).map((nation) => nation.name),

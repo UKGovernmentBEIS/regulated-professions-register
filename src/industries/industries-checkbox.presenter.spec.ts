@@ -38,7 +38,7 @@ describe('IndustriesCheckboxPresenter', () => {
     });
   });
 
-  describe('checkboxArgs', () => {
+  describe('checkboxItems', () => {
     it('should return unchecked checkbox arguments when called with an empty list of checked Indutries', () => {
       const presenter = new IndustriesCheckboxPresenter(
         exampleIndustries,
@@ -46,7 +46,7 @@ describe('IndustriesCheckboxPresenter', () => {
         i18nService,
       );
 
-      expect(presenter.checkboxArgs()).resolves.toEqual([
+      expect(presenter.checkboxItems()).resolves.toEqual([
         {
           text: 'Example Industry 1',
           value: 'example-industry-1',
@@ -72,7 +72,7 @@ describe('IndustriesCheckboxPresenter', () => {
         i18nService,
       );
 
-      expect(presenter.checkboxArgs()).resolves.toEqual([
+      expect(presenter.checkboxItems()).resolves.toEqual([
         {
           text: 'Example Industry 1',
           value: 'example-industry-1',

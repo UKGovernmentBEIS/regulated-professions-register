@@ -32,10 +32,10 @@
       <h2 class="govuk-heading-l">{{ "professions.admin.manageHeading" | t }} </h2>
 
       {% if view === 'overview' %}
-        {% set changedByCheckboxArgs = false %}
+        {% set changedByCheckboxItems = false %}
       {% else %}
-        {% set organisationsCheckboxArgs = false %}
-        {% set industriesCheckboxArgs = false %}
+        {% set organisationsCheckboxItems = false %}
+        {% set industriesCheckboxItems = false %}
       {% endif %}
       {% set filterTextPrefix = "professions.admin" %}
       {% include "../../shared/_horizontal-filter.njk" %}

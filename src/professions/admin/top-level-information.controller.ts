@@ -158,22 +158,22 @@ export class TopLevelInformationController {
   ): Promise<void> {
     const industries = await this.industriesService.all();
 
-    const industriesCheckboxArgs = await new IndustriesCheckboxPresenter(
+    const industriesCheckboxItems = await new IndustriesCheckboxPresenter(
       industries,
       selectedIndustries,
       this.i18nService,
-    ).checkboxArgs();
+    ).checkboxItems();
 
-    const nationsCheckboxArgs = await new NationsCheckboxPresenter(
+    const nationsCheckboxItems = await new NationsCheckboxPresenter(
       Nation.all(),
       selectedNations.map((nationCode) => Nation.find(nationCode)),
       this.i18nService,
-    ).checkboxArgs();
+    ).checkboxItems();
 
     const templateArgs: TopLevelDetailsTemplate = {
       name,
-      industriesCheckboxArgs,
-      nationsCheckboxArgs,
+      industriesCheckboxItems,
+      nationsCheckboxItems,
       captionText: ViewUtils.captionText(isEditing),
       change,
       errors,
