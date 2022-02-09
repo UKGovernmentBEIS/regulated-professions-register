@@ -23,47 +23,57 @@ import { QualificationInformationDto } from './dto/qualification-information.dto
 import { QualificationInformationTemplate } from './interfaces/qualification-information.template';
 import { BackLink } from '../../common/decorators/back-link.decorator';
 import ViewUtils from './viewUtils';
+import { ProfessionVersionsService } from '../profession-versions.service';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
 export class QualificationInformationController {
   constructor(
     private readonly professionsService: ProfessionsService,
+    private readonly professionVersionsService: ProfessionVersionsService,
     private readonly i18nService: I18nService,
   ) {}
 
-  @Get('/:id/qualification-information/edit')
+  @Get('/:professionId/versions/:versionId/qualification-information/edit')
   @Permissions(UserPermission.CreateProfession)
   @BackLink((request: Request) =>
     request.query.change === 'true'
-      ? '/admin/professions/:id/check-your-answers'
-      : '/admin/professions/:id/regulated-activities/edit',
+      ? '/admin/professions/:professionId/versions/:versionId/check-your-answers'
+      : '/admin/professions/:professionId/versions/:versionId/regulated-activities/edit',
   )
   async edit(
     @Res() res: Response,
-    @Param('id') id: string,
+    @Param('professionId') professionId: string,
+    @Param('versionId') versionId: string,
     @Query('change') change: boolean,
   ): Promise<void> {
-    const profession = await this.professionsService.find(id);
+    const profession = await this.professionsService.findWithVersions(
+      professionId,
+    );
+
+    const version = await this.professionVersionsService.findWithProfession(
+      versionId,
+    );
 
     return this.renderForm(
       res,
-      profession.qualification,
-      profession.confirmed,
+      version.qualification,
+      profession.slug !== null,
       change,
     );
   }
 
-  @Post('/:id/qualification-information')
+  @Post('/:professionId/versions/:versionId/qualification-information')
   @Permissions(UserPermission.CreateProfession)
   @BackLink((request: Request) =>
     request.body.change === 'true'
-      ? '/admin/professions/:id/check-your-answers'
-      : '/admin/professions/:id/regulated-activities/edit',
+      ? '/admin/professions/:professionId/versions/:versionId/check-your-answers'
+      : '/admin/professions/:professionId/versions/:versionId/regulated-activities/edit',
   )
   async update(
     @Res() res: Response,
-    @Param('id') id: string,
+    @Param('professionId') professionId: string,
+    @Param('versionId') versionId: string,
     @Body() qualificationInformationDto,
   ): Promise<void> {
     const validator = await Validator.validate(
@@ -71,7 +81,13 @@ export class QualificationInformationController {
       qualificationInformationDto,
     );
 
-    const profession = await this.professionsService.find(id);
+    const profession = await this.professionsService.findWithVersions(
+      professionId,
+    );
+
+    const version = await this.professionVersionsService.findWithProfession(
+      versionId,
+    );
 
     const submittedValues: QualificationInformationDto =
       qualificationInformationDto;
@@ -82,7 +98,7 @@ export class QualificationInformationController {
         : Boolean(Number(submittedValues.mandatoryProfessionalExperience));
 
     const updatedQualification: Qualification = {
-      ...profession.qualification,
+      ...version.qualification,
       ...{
         level: submittedValues.level,
         methodToObtain: submittedValues.methodToObtainQualification,
@@ -101,21 +117,25 @@ export class QualificationInformationController {
       return this.renderForm(
         res,
         updatedQualification,
-        profession.confirmed,
+        profession.slug !== null,
         submittedValues.change,
         errors,
       );
     }
 
-    profession.qualification = updatedQualification;
+    version.qualification = updatedQualification;
 
-    await this.professionsService.save(profession);
+    await this.professionVersionsService.save(version);
 
     if (submittedValues.change) {
-      return res.redirect(`/admin/professions/${id}/check-your-answers`);
+      return res.redirect(
+        `/admin/professions/${professionId}/versions/${versionId}/check-your-answers`,
+      );
     }
 
-    return res.redirect(`/admin/professions/${id}/legislation/edit`);
+    return res.redirect(
+      `/admin/professions/${professionId}/versions/${versionId}/legislation/edit`,
+    );
   }
 
   private async renderForm(

@@ -2,10 +2,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   JoinTable,
   ManyToMany,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -69,13 +71,18 @@ export class ProfessionVersion {
   @JoinTable()
   industries: Industry[];
 
-  @OneToMany(
-    () => Qualification,
-    (qualification) => qualification.professionVersion,
-  )
-  qualifications: Qualification[];
+  @OneToOne(() => Qualification, {
+    eager: true,
+    cascade: true,
+  })
+  @JoinColumn()
+  qualification: Qualification;
 
-  @OneToMany(() => Legislation, (legislation) => legislation.professionVersion)
+  @OneToMany(
+    () => Legislation,
+    (legislation) => legislation.professionVersion,
+    { eager: true, cascade: true },
+  )
   legislations: Legislation[];
 
   @ManyToOne(() => Organisation, (organisation) => organisation.professions, {

@@ -78,7 +78,18 @@ export class Organisation {
   public static withVersion(
     organisation: Organisation,
     organisationVersion: OrganisationVersion,
+    showDraftProfessions = false,
   ): Organisation {
+    const professions = (organisation.professions || [])
+      .map((profession) => {
+        if (showDraftProfessions === true) {
+          return Profession.withLatestLiveOrDraftVersion(profession);
+        } else {
+          return Profession.withLatestLiveVersion(profession);
+        }
+      })
+      .filter(Boolean);
+
     return {
       ...organisation,
       alternateName: organisationVersion.alternateName,
@@ -90,6 +101,7 @@ export class Organisation {
       fax: organisationVersion.fax,
       versionId: organisationVersion.id,
       status: organisationVersion.status,
+      professions: professions,
     } as Organisation;
   }
 

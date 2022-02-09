@@ -17,9 +17,11 @@ import { ProfessionsPresenter } from './professions.presenter';
 import industryFactory from '../../testutils/factories/industry';
 import organisationFactory from '../../testutils/factories/organisation';
 import professionFactory from '../../testutils/factories/profession';
-import { NotFoundException } from '@nestjs/common';
-import QualificationPresenter from '../../qualifications/presenters/qualification.presenter';
-import { translationOf } from '../../testutils/translation-of';
+import { ProfessionVersionsService } from '../profession-versions.service';
+import professionVersion from '../../testutils/factories/profession-version';
+import userFactory from '../../testutils/factories/user';
+import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
+import { DeepPartial } from 'typeorm';
 
 const referrer = 'http://example.com/some/path';
 const host = 'example.com';
@@ -80,6 +82,7 @@ jest.mock('../../organisations/organisation.entity');
 describe('ProfessionsController', () => {
   let controller: ProfessionsController;
   let professionsService: DeepMocked<ProfessionsService>;
+  let professionVersionsService: DeepMocked<ProfessionVersionsService>;
   let industriesService: DeepMocked<IndustriesService>;
   let organisationsService: DeepMocked<OrganisationsService>;
 
@@ -87,13 +90,16 @@ describe('ProfessionsController', () => {
     request = createMockRequest(referrer, host);
 
     professionsService = createMock<ProfessionsService>();
+    professionVersionsService = createMock<ProfessionVersionsService>();
     organisationsService = createMock<OrganisationsService>();
     industriesService = createMock<IndustriesService>();
     i18nService = createMockI18nService();
 
-    professionsService.allConfirmed.mockImplementation(async () => {
-      return [profession1, profession2, profession3];
-    });
+    professionVersionsService.allDraftOrLive.mockResolvedValue([
+      profession1,
+      profession2,
+      profession3,
+    ]);
 
     organisationsService.all.mockImplementation(async () => {
       return organisations;
@@ -108,6 +114,10 @@ describe('ProfessionsController', () => {
         {
           provide: ProfessionsService,
           useValue: professionsService,
+        },
+        {
+          provide: ProfessionVersionsService,
+          useValue: professionVersionsService,
         },
         {
           provide: OrganisationsService,
@@ -134,16 +144,50 @@ describe('ProfessionsController', () => {
   });
 
   describe('create', () => {
-    it('should create a Profession and redirect', async () => {
+    it('should create a blank Profession, create a blank ProfessionVersion and redirect', async () => {
+      const blankProfession = professionFactory
+        .justCreated('profession-id')
+        .build();
+
+      const user = userFactory.build();
+
+      const versionFields = {
+        alternateName: undefined,
+        description: undefined,
+        occupationLocations: undefined,
+        regulationType: undefined,
+        mandatoryRegistration: undefined,
+        industries: undefined,
+        qualifications: undefined,
+        legislations: undefined,
+        organisation: undefined,
+        reservedActivities: undefined,
+        profession: blankProfession,
+        user: user,
+      };
+
+      const version = professionVersion
+        .justCreated('version-id')
+        .build(versionFields);
+
+      professionsService.save.mockResolvedValue(blankProfession);
+      professionVersionsService.save.mockResolvedValue(version);
+
       const res = createMock<Response>();
+      const req = createMock<RequestWithAppSession>({
+        appSession: {
+          user: user as DeepPartial<any>,
+        },
+      });
 
-      professionsService.save.mockResolvedValue(profession1);
-
-      await controller.create(res);
+      await controller.create(res, req);
 
       expect(professionsService.save).toHaveBeenCalled();
+      expect(professionVersionsService.save).toHaveBeenCalledWith(
+        versionFields,
+      );
       expect(res.redirect).toHaveBeenCalledWith(
-        `/admin/professions/${profession1.id}/top-level-information/edit`,
+        `/admin/professions/profession-id/versions/version-id/top-level-information/edit`,
       );
     });
   });
@@ -329,107 +373,6 @@ describe('ProfessionsController', () => {
 
         expect(result).toEqual(expected);
       });
-    });
-  });
-
-  describe('show', () => {
-    it('should return populated template params', async () => {
-      const profession = professionFactory.build({
-        occupationLocations: ['GB-ENG'],
-        industries: [industryFactory.build({ name: 'industries.example' })],
-      });
-
-      professionsService.findBySlug.mockResolvedValue(profession);
-
-      (Organisation.withLatestLiveVersion as jest.Mock).mockImplementation(
-        () => profession.organisation,
-      );
-
-      const result = await controller.show('example-slug');
-
-      expect(result).toEqual({
-        profession: profession,
-        qualification: new QualificationPresenter(profession.qualification),
-        nations: ['Translation of `nations.england`'],
-        industries: ['Translation of `industries.example`'],
-        organisation: profession.organisation,
-      });
-
-      expect(professionsService.findBySlug).toHaveBeenCalledWith(
-        'example-slug',
-      );
-    });
-
-    it('should throw an error when the slug does not match a profession', () => {
-      professionsService.findBySlug.mockResolvedValue(undefined);
-
-      expect(async () => {
-        await controller.show('example-invalid-slug');
-      }).rejects.toThrowError(NotFoundException);
-    });
-
-    describe('when the Profession has no qualification set', () => {
-      it('passes a null value for the qualification', async () => {
-        const profession = professionFactory.build({
-          qualification: null,
-          occupationLocations: ['GB-ENG'],
-          industries: [industryFactory.build({ name: 'industries.example' })],
-        });
-
-        professionsService.findBySlug.mockResolvedValue(profession);
-
-        (Organisation.withLatestLiveVersion as jest.Mock).mockImplementation(
-          () => profession.organisation,
-        );
-
-        const result = await controller.show('example-slug');
-
-        expect(result).toEqual({
-          profession: profession,
-          qualification: null,
-          nations: [translationOf('nations.england')],
-          industries: [translationOf('industries.example')],
-          organisation: profession.organisation,
-        });
-      });
-    });
-  });
-
-  describe('edit', () => {
-    it('should render the name of the profession passed in', async () => {
-      const profession = professionFactory.build({
-        id: 'profession-id',
-      });
-
-      professionsService.find.mockResolvedValue(profession);
-
-      const result = await controller.edit('profession-id');
-
-      expect(result).toEqual({
-        profession: profession,
-      });
-
-      expect(professionsService.find).toHaveBeenCalledWith('profession-id');
-    });
-  });
-
-  describe('update', () => {
-    it('should look up the profession and redirect to the "Check your answers" page', async () => {
-      const profession = professionFactory.build({
-        id: 'profession-id',
-      });
-
-      const res = createMock<Response>();
-
-      professionsService.find.mockResolvedValue(profession);
-
-      await controller.update(res, 'profession-id');
-
-      expect(professionsService.find).toHaveBeenCalledWith('profession-id');
-
-      expect(res.redirect).toHaveBeenCalledWith(
-        `/admin/professions/profession-id/check-your-answers?edit=true`,
-      );
     });
   });
 });

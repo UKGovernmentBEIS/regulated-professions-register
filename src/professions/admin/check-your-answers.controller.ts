@@ -20,59 +20,72 @@ import { Permissions } from '../../common/permissions.decorator';
 import { UserPermission } from '../../users/user-permission';
 import ViewUtils from './viewUtils';
 import { BackLink } from '../../common/decorators/back-link.decorator';
-
+import { ProfessionVersionsService } from '../profession-versions.service';
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
 export class CheckYourAnswersController {
   constructor(
     private readonly professionsService: ProfessionsService,
+    private readonly professionVersionsService: ProfessionVersionsService,
     private readonly i18nService: I18nService,
   ) {}
 
-  @Get(':id/check-your-answers')
+  @Get(':professionId/versions/:versionId/check-your-answers')
   @Permissions(UserPermission.CreateProfession)
   @Render('admin/professions/check-your-answers')
   @BackLink((request: Request) => getReferrer(request))
   async show(
     @Req() req: Request,
-    @Param('id') id: string,
+    @Param('professionId') professionId: string,
+    @Param('versionId') versionId: string,
     @Query('edit') edit: boolean,
   ): Promise<CheckYourAnswersTemplate> {
-    const draftProfession = await this.professionsService.find(id);
+    const draftProfession = await this.professionsService.findWithVersions(
+      professionId,
+    );
 
     if (!draftProfession) {
       throw new Error('Draft profession not found');
     }
 
+    const version = await this.professionVersionsService.findWithProfession(
+      versionId,
+    );
+
+    if (!version) {
+      throw new Error('Version not found');
+    }
+
     const industryNames = await Promise.all(
-      draftProfession.industries.map(
+      version.industries.map(
         async (industry) => await this.i18nService.translate(industry.name),
       ),
     );
 
     const selectedNations: string[] = await Promise.all(
-      draftProfession.occupationLocations.map(async (nationCode) =>
+      version.occupationLocations.map(async (nationCode) =>
         Nation.find(nationCode).translatedName(this.i18nService),
       ),
     );
 
-    const qualification = draftProfession.qualification
-      ? new QualificationPresenter(draftProfession.qualification)
+    const qualification = version.qualification
+      ? new QualificationPresenter(version.qualification)
       : null;
 
     return {
-      professionId: id,
+      professionId: professionId,
+      versionId: versionId,
       name: draftProfession.name,
       nations: selectedNations,
       industries: industryNames,
-      organisation: draftProfession.organisation.name,
-      mandatoryRegistration: draftProfession.mandatoryRegistration,
-      description: draftProfession.description,
-      reservedActivities: draftProfession.reservedActivities,
+      organisation: version.organisation.name,
+      mandatoryRegistration: version.mandatoryRegistration,
+      description: version.description,
+      reservedActivities: version.reservedActivities,
       qualification: qualification,
-      legislation: draftProfession.legislation,
-      confirmed: Boolean(draftProfession.confirmed),
-      captionText: ViewUtils.captionText(draftProfession.confirmed),
+      legislation: version.legislations[0],
+      confirmed: draftProfession.slug !== null,
+      captionText: ViewUtils.captionText(draftProfession.slug !== null),
       edit: Boolean(edit),
     };
   }

@@ -11,7 +11,7 @@
       <span class="govuk-caption-l">{{ 'professions.form.captions.edit' | t }}</span>
       <h1 class="govuk-heading-l">{{ ('professions.form.headings.edit' | t({professionName: profession.name})) }}</h1>
 
-      <form method="post" action="/admin/professions/{{ profession.id }}/edit">
+      <form method="post" action="/admin/professions/{{ profession.id }}/versions">
         {{
           govukButton({
             id: "submit-button",

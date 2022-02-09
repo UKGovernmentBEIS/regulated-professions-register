@@ -1,8 +1,6 @@
 import {
   Controller,
   Get,
-  NotFoundException,
-  Param,
   Post,
   Query,
   Render,
@@ -23,34 +21,46 @@ import {
 } from './professions.presenter';
 import { AuthenticationGuard } from '../../common/authentication.guard';
 import { User } from '../../users/user.entity';
-import { UserPermission } from '../../users/user-permission';
 import { FilterDto } from './dto/filter.dto';
 import { OrganisationsService } from '../../organisations/organisations.service';
 import { Profession } from '../profession.entity';
-import { ShowTemplate } from '../interfaces/show-template.interface';
-import { EditTemplate } from './interfaces/edit-template.interface';
-import { Permissions } from '../../common/permissions.decorator';
 import { BackLink } from '../../common/decorators/back-link.decorator';
-import QualificationPresenter from '../../qualifications/presenters/qualification.presenter';
 import { createFilterInput } from '../../helpers/create-filter-input.helper';
-import { Organisation } from '../../organisations/organisation.entity';
+import { ProfessionVersionsService } from '../profession-versions.service';
+import { ProfessionVersion } from '../profession-version.entity';
+import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
 export class ProfessionsController {
   constructor(
     private readonly professionsService: ProfessionsService,
+    private readonly professionVersionsService: ProfessionVersionsService,
     private readonly organisationsService: OrganisationsService,
     private readonly industriesService: IndustriesService,
     private readonly i18Service: I18nService,
   ) {}
 
   @Post()
-  async create(@Res() res: Response): Promise<void> {
-    const profession = await this.professionsService.save(new Profession());
+  async create(
+    @Res() res: Response,
+    @Req() req: RequestWithAppSession,
+  ): Promise<void> {
+    const blankProfession = await this.professionsService.save(
+      new Profession(),
+    );
+
+    const blankVersion = {
+      profession: blankProfession,
+      user: req.appSession.user,
+    } as ProfessionVersion;
+
+    const savedVersion = await this.professionVersionsService.save(
+      blankVersion,
+    );
 
     res.redirect(
-      `/admin/professions/${profession.id}/top-level-information/edit`,
+      `/admin/professions/${blankProfession.id}/versions/${savedVersion.id}/top-level-information/edit`,
     );
   }
 
@@ -64,74 +74,6 @@ export class ProfessionsController {
     return this.createListEntries(query || new FilterDto(), request);
   }
 
-  @Get('/:slug')
-  @Render('admin/professions/show')
-  @BackLink('/admin/professions')
-  async show(@Param('slug') slug: string): Promise<ShowTemplate> {
-    const profession = await this.professionsService.findBySlug(slug);
-
-    if (!profession) {
-      throw new NotFoundException(
-        `A profession with ID ${slug} could not be found`,
-      );
-    }
-
-    const organisation = Organisation.withLatestLiveVersion(
-      profession.organisation,
-    );
-
-    const nations = await Promise.all(
-      profession.occupationLocations.map(async (code) =>
-        Nation.find(code).translatedName(this.i18Service),
-      ),
-    );
-
-    const industries = await Promise.all(
-      profession.industries.map(
-        async (industry) => await this.i18Service.translate(industry.name),
-      ),
-    );
-
-    const qualification = profession.qualification
-      ? new QualificationPresenter(profession.qualification)
-      : null;
-
-    return {
-      profession,
-      qualification: qualification,
-      nations,
-      industries,
-      organisation,
-    };
-  }
-
-  @Get('/:professionId/edit')
-  @Permissions(UserPermission.CreateProfession)
-  @Render('admin/professions/edit')
-  @BackLink('/admin/professions/:professionId')
-  async edit(
-    @Param('professionId') professionId: string,
-  ): Promise<EditTemplate> {
-    const profession = await this.professionsService.find(professionId);
-
-    return {
-      profession,
-    };
-  }
-
-  @Post('/:professionId/edit')
-  @Permissions(UserPermission.CreateProfession)
-  async update(
-    @Res() res: Response,
-    @Param('professionId') professionId: string,
-  ): Promise<void> {
-    const profession = await this.professionsService.find(professionId);
-
-    return res.redirect(
-      `/admin/professions/${profession.id}/check-your-answers?edit=true`,
-    );
-  }
-
   private async createListEntries(
     filter: FilterDto,
     request: Request,
@@ -140,7 +82,8 @@ export class ProfessionsController {
     const allOrganisations = await this.organisationsService.all();
     const allIndustries = await this.industriesService.all();
 
-    const allProfessions = await this.professionsService.allConfirmed();
+    const allProfessions =
+      await this.professionVersionsService.allDraftOrLive();
 
     const user = request['appSession'].user as User;
 

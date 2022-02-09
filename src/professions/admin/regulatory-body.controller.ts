@@ -15,7 +15,6 @@ import { I18nService } from 'nestjs-i18n';
 import { OrganisationsService } from '../../organisations/organisations.service';
 import { RegulatoryBodyTemplate } from './interfaces/regulatory-body.template';
 import { RegulatedAuthoritiesSelectPresenter } from './regulated-authorities-select-presenter';
-import { MandatoryRegistration, Profession } from '../profession.entity';
 import { Organisation } from '../../organisations/organisation.entity';
 import { MandatoryRegistrationRadioButtonsPresenter } from './mandatory-registration-radio-buttons-presenter';
 import { Validator } from '../../helpers/validator';
@@ -26,50 +25,64 @@ import { UserPermission } from '../../users/user-permission';
 import { BackLink } from '../../common/decorators/back-link.decorator';
 
 import ViewUtils from './viewUtils';
+import { ProfessionVersionsService } from '../profession-versions.service';
+import {
+  MandatoryRegistration,
+  ProfessionVersion,
+} from '../profession-version.entity';
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
 export class RegulatoryBodyController {
   constructor(
     private readonly organisationsService: OrganisationsService,
     private readonly professionsService: ProfessionsService,
+    private readonly professionVersionsService: ProfessionVersionsService,
     private readonly i18nService: I18nService,
   ) {}
 
-  @Get('/:id/regulatory-body/edit')
+  @Get('/:professionId/versions/:versionId/regulatory-body/edit')
   @Permissions(UserPermission.CreateProfession)
   @BackLink((request: Request) =>
     request.query.change === 'true'
-      ? '/admin/professions/:id/check-your-answers'
-      : '/admin/professions/:id/top-level-information/edit',
+      ? '/admin/professions/:professionId/versions/:versionId/check-your-answers'
+      : '/admin/professions/:professionId/versions/:versionId/top-level-information/edit',
   )
   async edit(
     @Res() res: Response,
-    @Param('id') id: string,
+    @Param('professionId') professionId: string,
+    @Param('versionId') versionId: string,
     @Query('change') change: boolean,
   ): Promise<void> {
-    const profession = await this.professionsService.find(id);
+    const profession = await this.professionsService.findWithVersions(
+      professionId,
+    );
 
-    const selectedMandatoryRegistration = profession.mandatoryRegistration;
+    const version = await this.professionVersionsService.findWithProfession(
+      versionId,
+    );
+
+    const selectedMandatoryRegistration = version.mandatoryRegistration;
 
     return this.renderForm(
       res,
-      profession.organisation,
+      version.organisation,
       selectedMandatoryRegistration,
-      profession.confirmed,
+      profession.slug !== null,
       change,
     );
   }
 
-  @Post('/:id/regulatory-body')
+  @Post('/:professionId/versions/:versionId/regulatory-body')
   @Permissions(UserPermission.CreateProfession)
   @BackLink((request: Request) =>
     request.body.change === 'true'
-      ? '/admin/professions/:id/check-your-answers'
-      : '/admin/professions/:id/top-level-information/edit',
+      ? '/admin/professions/:professionId/versions/:versionId/check-your-answers'
+      : '/admin/professions/:professionId/versions/:versionId/top-level-information/edit',
   )
   async update(
     @Res() res: Response,
-    @Param('id') id: string,
+    @Param('professionId') professionId: string,
+    @Param('versionId') versionId: string,
     @Body() regulatoryBodyDto,
   ): Promise<void> {
     const validator = await Validator.validate(
@@ -77,7 +90,9 @@ export class RegulatoryBodyController {
       regulatoryBodyDto,
     );
 
-    const profession = await this.professionsService.find(id);
+    const version = await this.professionVersionsService.findWithProfession(
+      versionId,
+    );
 
     const submittedValues: RegulatoryBodyDto = regulatoryBodyDto;
 
@@ -87,33 +102,41 @@ export class RegulatoryBodyController {
 
     const selectedMandatoryRegistration = submittedValues.mandatoryRegistration;
 
+    const profession = await this.professionsService.findWithVersions(
+      professionId,
+    );
+
     if (!validator.valid()) {
       const errors = new ValidationFailedError(validator.errors).fullMessages();
       return this.renderForm(
         res,
         selectedOrganisation,
         selectedMandatoryRegistration,
-        profession.confirmed,
+        profession.slug !== null,
         regulatoryBodyDto.change,
         errors,
       );
     }
 
-    const updated: Profession = {
-      ...profession,
+    const updatedVersion: ProfessionVersion = {
+      ...version,
       ...{
         organisation: selectedOrganisation,
         mandatoryRegistration: selectedMandatoryRegistration,
       },
     };
 
-    await this.professionsService.save(updated);
+    await this.professionVersionsService.save(updatedVersion);
 
     if (regulatoryBodyDto.change) {
-      return res.redirect(`/admin/professions/${id}/check-your-answers`);
+      return res.redirect(
+        `/admin/professions/${version.profession.id}/versions/${versionId}/check-your-answers`,
+      );
     }
 
-    return res.redirect(`/admin/professions/${id}/regulated-activities/edit`);
+    return res.redirect(
+      `/admin/professions/${version.profession.id}/versions/${versionId}/regulated-activities/edit`,
+    );
   }
 
   private async renderForm(

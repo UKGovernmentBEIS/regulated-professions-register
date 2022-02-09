@@ -10,10 +10,13 @@ import { TopLevelInformationController } from './top-level-information.controlle
 import industryFactory from '../../testutils/factories/industry';
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 import { translationOf } from '../../testutils/translation-of';
+import { ProfessionVersionsService } from '../profession-versions.service';
+import professionVersionFactory from '../../testutils/factories/profession-version';
 
 describe('TopLevelInformationController', () => {
   let controller: TopLevelInformationController;
   let professionsService: DeepMocked<ProfessionsService>;
+  let professionVersionsService: DeepMocked<ProfessionVersionsService>;
   let industriesService: DeepMocked<IndustriesService>;
   let response: DeepMocked<Response>;
   let i18nService: DeepMocked<I18nService>;
@@ -21,6 +24,7 @@ describe('TopLevelInformationController', () => {
   beforeEach(async () => {
     industriesService = createMock<IndustriesService>();
     professionsService = createMock<ProfessionsService>();
+    professionVersionsService = createMock<ProfessionVersionsService>();
 
     i18nService = createMockI18nService();
 
@@ -29,6 +33,10 @@ describe('TopLevelInformationController', () => {
       providers: [
         { provide: IndustriesService, useValue: industriesService },
         { provide: ProfessionsService, useValue: professionsService },
+        {
+          provide: ProfessionVersionsService,
+          useValue: professionVersionsService,
+        },
         { provide: I18nService, useValue: i18nService },
       ],
     }).compile();
@@ -41,11 +49,20 @@ describe('TopLevelInformationController', () => {
   });
 
   describe('edit', () => {
-    describe('when editing a just-created, blank Profession', () => {
+    describe('when editing a just-created, blank Profession and its blank Version', () => {
       it('should fetch all Industries and Nations to be displayed in an option select, with none of them checked', async () => {
         const blankProfession = professionFactory
           .justCreated('profession-id')
           .build();
+
+        const blankVersion = professionVersionFactory
+          .justCreated('version-id')
+          .build({ profession: blankProfession });
+
+        professionsService.findWithVersions.mockResolvedValue(blankProfession);
+        professionVersionsService.findWithProfession.mockResolvedValue(
+          blankVersion,
+        );
 
         const industries = [
           industryFactory.build({
@@ -60,9 +77,7 @@ describe('TopLevelInformationController', () => {
 
         industriesService.all.mockResolvedValue(industries);
 
-        professionsService.find.mockResolvedValue(blankProfession);
-
-        await controller.edit(response, 'profession-id', false);
+        await controller.edit(response, 'profession-id', 'version-id', false);
 
         expect(response.render).toHaveBeenCalledWith(
           'admin/professions/top-level-information',
@@ -108,7 +123,7 @@ describe('TopLevelInformationController', () => {
       });
     });
 
-    describe('when an existing Profession is found', () => {
+    describe('when an existing Profession and Version are found', () => {
       it('should pre-fill the Profession name and pre-select checkboxes for selected Nations and Industries', async () => {
         const healthIndustry = industryFactory.build({
           name: 'industries.health',
@@ -117,11 +132,17 @@ describe('TopLevelInformationController', () => {
 
         const profession = professionFactory.build({
           name: 'Example Profession',
+        });
+
+        const version = professionVersionFactory.build({
+          id: 'version-id',
+          profession: profession,
           occupationLocations: ['GB-ENG', 'GB-SCT'],
           industries: [healthIndustry],
         });
 
-        professionsService.find.mockResolvedValue(profession);
+        professionsService.findWithVersions.mockResolvedValue(profession);
+        professionVersionsService.findWithProfession.mockResolvedValue(version);
 
         industriesService.all.mockResolvedValue([
           healthIndustry,
@@ -131,7 +152,7 @@ describe('TopLevelInformationController', () => {
           }),
         ]);
 
-        await controller.edit(response, 'profession-id', false);
+        await controller.edit(response, 'profession-id', 'version-id', false);
 
         expect(response.render).toHaveBeenCalledWith(
           'admin/professions/top-level-information',
@@ -185,7 +206,13 @@ describe('TopLevelInformationController', () => {
           .justCreated('profession-id')
           .build();
 
-        professionsService.find.mockResolvedValue(profession);
+        const version = professionVersionFactory.build({
+          id: 'version-id',
+          profession: profession,
+        });
+
+        professionsService.findWithVersions.mockResolvedValue(profession);
+        professionVersionsService.findWithProfession.mockResolvedValue(version);
 
         const topLevelDetailsDto = {
           name: 'Gas Safe Engineer',
@@ -200,19 +227,31 @@ describe('TopLevelInformationController', () => {
 
         industriesService.findByIds.mockResolvedValue([constructionIndustry]);
 
-        await controller.update(topLevelDetailsDto, response, 'profession-id');
+        await controller.update(
+          topLevelDetailsDto,
+          response,
+          'profession-id',
+          'version-id',
+        );
 
         expect(professionsService.save).toHaveBeenCalledWith(
           expect.objectContaining({
             id: 'profession-id',
             name: 'Gas Safe Engineer',
+          }),
+        );
+
+        expect(professionVersionsService.save).toHaveBeenCalledWith(
+          expect.objectContaining({
+            id: 'version-id',
             occupationLocations: ['GB-ENG'],
             industries: [constructionIndustry],
+            profession: profession,
           }),
         );
 
         expect(response.redirect).toHaveBeenCalledWith(
-          '/admin/professions/profession-id/regulatory-body/edit',
+          '/admin/professions/profession-id/versions/version-id/regulatory-body/edit',
         );
       });
     });
@@ -229,6 +268,7 @@ describe('TopLevelInformationController', () => {
           topLevelDetailsDtoWithNoAnswers,
           response,
           'profession-id',
+          'version-id',
         );
 
         expect(response.render).toHaveBeenCalledWith(
@@ -260,9 +300,16 @@ describe('TopLevelInformationController', () => {
             id: 'profession-id',
           });
 
+          const version = professionVersionFactory.build({
+            profession: profession,
+          });
+
           const industry = industryFactory.build({ id: 'construction-uuid' });
 
-          professionsService.find.mockResolvedValue(profession);
+          professionsService.findWithVersions.mockResolvedValue(profession);
+          professionVersionsService.findWithProfession.mockResolvedValue(
+            version,
+          );
 
           const topLevelDetailsDtoWithChangeParam = {
             name: 'A new profession',
@@ -277,10 +324,11 @@ describe('TopLevelInformationController', () => {
             topLevelDetailsDtoWithChangeParam,
             response,
             'profession-id',
+            'version-id',
           );
 
           expect(response.redirect).toHaveBeenCalledWith(
-            '/admin/professions/profession-id/check-your-answers',
+            '/admin/professions/profession-id/versions/version-id/check-your-answers',
           );
         });
       });
@@ -291,9 +339,16 @@ describe('TopLevelInformationController', () => {
             id: 'profession-id',
           });
 
-          const industry = industryFactory.build({ id: 'construction-uuid' });
+          const version = professionVersionFactory.build({
+            profession: profession,
+          });
 
-          professionsService.find.mockResolvedValue(profession);
+          professionsService.findWithVersions.mockResolvedValue(profession);
+          professionVersionsService.findWithProfession.mockResolvedValue(
+            version,
+          );
+
+          const industry = industryFactory.build({ id: 'construction-uuid' });
 
           const topLevelDetailsDtoWithoutChangeParam = {
             name: 'A new profession',
@@ -307,10 +362,11 @@ describe('TopLevelInformationController', () => {
             topLevelDetailsDtoWithoutChangeParam,
             response,
             'profession-id',
+            'version-id',
           );
 
           expect(response.redirect).toHaveBeenCalledWith(
-            '/admin/professions/profession-id/regulatory-body/edit',
+            '/admin/professions/profession-id/versions/version-id/regulatory-body/edit',
           );
         });
       });

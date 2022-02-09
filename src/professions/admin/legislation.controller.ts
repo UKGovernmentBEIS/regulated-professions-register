@@ -22,30 +22,48 @@ import LegislationDto from './dto/legislation.dto';
 import { LegislationTemplate } from './interfaces/legislation.template';
 import ViewUtils from './viewUtils';
 import { BackLink } from '../../common/decorators/back-link.decorator';
+import { ProfessionVersionsService } from '../profession-versions.service';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
 export class LegislationController {
-  constructor(private readonly professionsService: ProfessionsService) {}
+  constructor(
+    private readonly professionsService: ProfessionsService,
+    private readonly professionVersionsService: ProfessionVersionsService,
+  ) {}
 
-  @Get('/:id/legislation/edit')
+  @Get('/:professionId/versions/:versionId/legislation/edit')
   @Permissions(UserPermission.CreateProfession)
   @BackLink((request: Request) =>
     request.query.change === 'true'
-      ? '/admin/professions/:id/check-your-answers'
-      : '/admin/professions/:id/qualification-information/edit',
+      ? '/admin/professions/:professionId/versions/:versionId/check-your-answers'
+      : '/admin/professions/:professionId/versions/:versionId/qualification-information/edit',
   )
   async edit(
     @Res() res: Response,
-    @Param('id') id: string,
+    @Param('professionId') professionId: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    @Param('versionId') versionId: string,
     @Query('change') change: boolean,
   ): Promise<void> {
-    const profession = await this.professionsService.find(id);
+    const profession = await this.professionsService.findWithVersions(
+      professionId,
+    );
 
-    this.renderForm(res, profession.legislation, profession.confirmed, change);
+    const version = await this.professionVersionsService.findWithProfession(
+      versionId,
+    );
+
+    // We currently only show one legislation here, but we'll be showing multiple in future
+    this.renderForm(
+      res,
+      version.legislations[0],
+      profession.slug !== null,
+      change,
+    );
   }
 
-  @Post('/:id/legislation')
+  @Post('/:professionId/versions/:versionId/legislation')
   @Permissions(UserPermission.CreateProfession)
   @UseFilters(
     new ValidationExceptionFilter(
@@ -55,22 +73,30 @@ export class LegislationController {
   )
   @BackLink((request: Request) =>
     request.body.change === 'true'
-      ? '/admin/professions/:id/check-your-answers'
-      : '/admin/professions/:id/qualification-information/edit',
+      ? '/admin/professions/:professionId/versions/:versionId/check-your-answers'
+      : '/admin/professions/:professionId/versions/:versionId/qualification-information/edit',
   )
   async update(
     @Res() res: Response,
-    @Param('id') id: string,
+    @Param('professionId') professionId: string,
+    @Param('versionId') versionId: string,
     @Body() legislationDto,
   ): Promise<void> {
     const validator = await Validator.validate(LegislationDto, legislationDto);
 
-    const profession = await this.professionsService.find(id);
+    const profession = await this.professionsService.findWithVersions(
+      professionId,
+    );
+
+    const version = await this.professionVersionsService.findWithProfession(
+      versionId,
+    );
 
     const submittedValues: LegislationDto = legislationDto;
 
     const updatedLegislation: Legislation = {
-      ...profession.legislation,
+      // We currently need to update one legislation here, but will update multiple in future
+      ...version.legislations[0],
       ...{
         name: submittedValues.nationalLegislation,
         url: submittedValues.link,
@@ -83,17 +109,19 @@ export class LegislationController {
       return this.renderForm(
         res,
         updatedLegislation,
-        profession.confirmed,
+        profession.slug !== null,
         submittedValues.change,
         errors,
       );
     }
 
-    profession.legislation = updatedLegislation;
+    version.legislations = [updatedLegislation];
 
-    await this.professionsService.save(profession);
+    await this.professionVersionsService.save(version);
 
-    res.redirect(`/admin/professions/${id}/check-your-answers`);
+    res.redirect(
+      `/admin/professions/${professionId}/versions/${versionId}/check-your-answers`,
+    );
   }
 
   private async renderForm(

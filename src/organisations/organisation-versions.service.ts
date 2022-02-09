@@ -79,7 +79,7 @@ export class OrganisationVersionsService {
       .getMany();
 
     return versions.map((version) =>
-      Organisation.withVersion(version.organisation, version),
+      Organisation.withVersion(version.organisation, version, true),
     );
   }
 
@@ -139,6 +139,7 @@ export class OrganisationVersionsService {
       .createQueryBuilder('organisationVersion')
       .leftJoinAndSelect('organisationVersion.organisation', 'organisation')
       .leftJoinAndSelect('organisation.professions', 'professions')
-      .leftJoinAndSelect('professions.industries', 'industries');
+      .leftJoinAndSelect('professions.versions', 'professionVersions')
+      .leftJoinAndSelect('professionVersions.industries', 'industries');
   }
 }

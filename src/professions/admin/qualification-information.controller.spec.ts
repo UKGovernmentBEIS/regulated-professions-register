@@ -10,21 +10,30 @@ import { MethodToObtainQualificationRadioButtonsPresenter } from './method-to-ob
 import { YesNoRadioButtonArgsPresenter } from './yes-no-radio-buttons-presenter';
 import { QualificationInformationDto } from './dto/qualification-information.dto';
 import { QualificationInformationController } from './qualification-information.controller';
+import { ProfessionVersionsService } from '../profession-versions.service';
+import professionVersionFactory from '../../testutils/factories/profession-version';
+import qualificationFactory from '../../testutils/factories/qualification';
 
 describe(QualificationInformationController, () => {
   let controller: QualificationInformationController;
   let response: DeepMocked<Response>;
   let professionsService: DeepMocked<ProfessionsService>;
+  let professionVersionsService: DeepMocked<ProfessionVersionsService>;
   let i18nService: I18nService;
 
   beforeEach(async () => {
     i18nService = createMockI18nService();
     professionsService = createMock<ProfessionsService>();
+    professionVersionsService = createMock<ProfessionVersionsService>();
 
     const module: TestingModule = await Test.createTestingModule({
       controllers: [QualificationInformationController],
       providers: [
         { provide: ProfessionsService, useValue: professionsService },
+        {
+          provide: ProfessionVersionsService,
+          useValue: professionVersionsService,
+        },
         { provide: I18nService, useValue: i18nService },
       ],
     }).compile();
@@ -42,9 +51,15 @@ describe(QualificationInformationController, () => {
         id: 'profession-id',
       });
 
+      const version = professionVersionFactory.build({
+        id: 'version-id',
+        profession: profession,
+        qualification: qualificationFactory.build(),
+      });
+
       const methodToObtainQualificationRadioButtonArgs =
         await new MethodToObtainQualificationRadioButtonsPresenter(
-          profession.qualification.methodToObtain,
+          version.qualification.methodToObtain,
           undefined,
           undefined,
           i18nService,
@@ -52,15 +67,16 @@ describe(QualificationInformationController, () => {
 
       const mostCommonPathToObtainQualificationRadioButtonArgs =
         await new MethodToObtainQualificationRadioButtonsPresenter(
-          profession.qualification.commonPathToObtain,
+          version.qualification.commonPathToObtain,
           undefined,
           undefined,
           i18nService,
         ).radioButtonArgs('mostCommonPathToObtainQualification');
 
-      professionsService.find.mockResolvedValue(profession);
+      professionsService.findWithVersions.mockResolvedValue(profession);
+      professionVersionsService.findWithProfession.mockResolvedValue(version);
 
-      await controller.edit(response, 'profession-id', false);
+      await controller.edit(response, 'profession-id', 'version-id', false);
 
       expect(response.render).toHaveBeenCalledWith(
         'admin/professions/qualification-information',
@@ -69,7 +85,7 @@ describe(QualificationInformationController, () => {
           mostCommonPathToObtainQualificationRadioButtonArgs,
           mandatoryProfessionalExperienceRadioButtonArgs:
             await new YesNoRadioButtonArgsPresenter(
-              profession.qualification.mandatoryProfessionalExperience,
+              version.qualification.mandatoryProfessionalExperience,
               i18nService,
             ).radioButtonArgs(),
         }),
@@ -83,6 +99,12 @@ describe(QualificationInformationController, () => {
         it('creates a new Qualification on the Profession and redirects to the next page in the journey', async () => {
           const profession = professionFactory.build({ id: 'profession-id' });
 
+          const version = professionVersionFactory.build({
+            id: 'version-id',
+            profession: profession,
+            qualification: qualificationFactory.build(),
+          });
+
           const dto: QualificationInformationDto = {
             level: 'Qualification level',
             methodToObtainQualification: MethodToObtain.DegreeLevel,
@@ -94,11 +116,14 @@ describe(QualificationInformationController, () => {
             change: false,
           };
 
-          professionsService.find.mockResolvedValue(profession);
+          professionsService.findWithVersions.mockResolvedValue(profession);
+          professionVersionsService.findWithProfession.mockResolvedValue(
+            version,
+          );
 
-          await controller.update(response, 'profession-id', dto);
+          await controller.update(response, 'profession-id', 'version-id', dto);
 
-          expect(professionsService.save).toHaveBeenCalledWith(
+          expect(professionVersionsService.save).toHaveBeenCalledWith(
             expect.objectContaining({
               qualification: expect.objectContaining({
                 commonPathToObtain: 'degreeLevel',
@@ -113,7 +138,7 @@ describe(QualificationInformationController, () => {
           );
 
           expect(response.redirect).toHaveBeenCalledWith(
-            '/admin/professions/profession-id/legislation/edit',
+            '/admin/professions/profession-id/versions/version-id/legislation/edit',
           );
         });
       });
@@ -121,6 +146,12 @@ describe(QualificationInformationController, () => {
       describe('when the "Change" query param is true', () => {
         it('creates a new Qualification on the Profession and redirects to "Check your answers"', async () => {
           const profession = professionFactory.build({ id: 'profession-id' });
+
+          const version = professionVersionFactory.build({
+            id: 'version-id',
+            profession: profession,
+            qualification: qualificationFactory.build(),
+          });
 
           const dto: QualificationInformationDto = {
             level: 'Qualification level',
@@ -133,11 +164,14 @@ describe(QualificationInformationController, () => {
             change: true,
           };
 
-          professionsService.find.mockResolvedValue(profession);
+          professionsService.findWithVersions.mockResolvedValue(profession);
+          professionVersionsService.findWithProfession.mockResolvedValue(
+            version,
+          );
 
-          await controller.update(response, 'profession-id', dto);
+          await controller.update(response, 'profession-id', 'version-id', dto);
 
-          expect(professionsService.save).toHaveBeenCalledWith(
+          expect(professionVersionsService.save).toHaveBeenCalledWith(
             expect.objectContaining({
               qualification: expect.objectContaining({
                 commonPathToObtain: 'degreeLevel',
@@ -152,7 +186,7 @@ describe(QualificationInformationController, () => {
           );
 
           expect(response.redirect).toHaveBeenCalledWith(
-            '/admin/professions/profession-id/check-your-answers',
+            '/admin/professions/profession-id/versions/version-id/check-your-answers',
           );
         });
       });
@@ -161,6 +195,12 @@ describe(QualificationInformationController, () => {
     describe('when required parameters are not entered', () => {
       it('does not update the Profession and reloads the form with errors and successfully submitted values', async () => {
         const profession = professionFactory.build({ id: 'profession-id' });
+
+        const version = professionVersionFactory.build({
+          id: 'version-id',
+          profession: profession,
+          qualification: qualificationFactory.build(),
+        });
 
         const dto: QualificationInformationDto = {
           level: undefined,
@@ -173,9 +213,10 @@ describe(QualificationInformationController, () => {
           change: false,
         };
 
-        professionsService.find.mockResolvedValue(profession);
+        professionsService.findWithVersions.mockResolvedValue(profession);
+        professionVersionsService.findWithProfession.mockResolvedValue(version);
 
-        await controller.update(response, 'profession-id', dto);
+        await controller.update(response, 'profession-id', 'version-id', dto);
 
         expect(response.render).toHaveBeenCalledWith(
           'admin/professions/qualification-information',

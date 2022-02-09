@@ -16,17 +16,27 @@ import { RegulatedActivitiesController } from './admin/regulated-activities.cont
 import { ProfessionsController as AdminProfessionsController } from './admin/professions.controller';
 import { QualificationInformationController } from './admin/qualification-information.controller';
 import { LegislationController } from './admin/legislation.controller';
+import { ProfessionVersionsService } from './profession-versions.service';
+import { ProfessionVersion } from './profession-version.entity';
+import { ProfessionVersionsController } from './profession-versions.controller';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Profession]),
+    TypeOrmModule.forFeature([ProfessionVersion]),
     TypeOrmModule.forFeature([Industry]),
     TypeOrmModule.forFeature([Organisation]),
   ],
-  providers: [ProfessionsService, IndustriesService, OrganisationsService],
+  providers: [
+    ProfessionsService,
+    IndustriesService,
+    OrganisationsService,
+    ProfessionVersionsService,
+  ],
   controllers: [
     SearchController,
     ProfessionsController,
+    ProfessionVersionsController,
     TopLevelInformationController,
     RegulatoryBodyController,
     RegulatedActivitiesController,

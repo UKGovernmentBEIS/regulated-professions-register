@@ -4,18 +4,39 @@
 {% set bodyClasses = "rpr-internal__page rpr-details__page" %}
 
 {% block content %}
+  {% include "../../_messages.njk" %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       {% include "../../professions/_profession-details.njk" %}
     </div>
     <div class="govuk-grid-column-one-third">
       <aside class="app-related-items rpr-internal__details-page-sidebar" role="complementary">
-      {{ govukButton({
-        text: ('professions.admin.editProfession' | t),
-        classes: "govuk-button",
-        id: "edit-button",
-        href: "/admin/professions/" + profession.id + "/edit"
-      }) }}
+        <h2 class="govuk-heading-s" data-status>
+          {{ "professions.admin.status.heading" | t }}<br>
+          <span class="govuk-body">{{ ("professions.admin.status." + profession.status) | t }}</span>
+        </h2>
+
+        <ul class="govuk-list">
+          {% if profession.status === 'draft' %}
+            <li>
+                <form action="/admin/professions/{{ profession.id }}/versions/{{ profession.versionId }}/publish?_method=PUT" method="post">
+                  {{ govukButton({
+                    text: ('professions.form.button.publishNow' | t),
+                    classes: "govuk-button",
+                    id: "publish-button"
+                  }) }}
+                </form>
+            </li>
+          {% endif %}
+          <li>
+            {{ govukButton({
+              text: ('professions.admin.editProfession' | t),
+              classes: "govuk-button--secondary",
+              id: "edit-button",
+              href: "/admin/professions/" + profession.id + "/versions/edit"
+            }) }}
+          </li>
+        </ul>
       </aside>
     </div>
   </div>
