@@ -41,8 +41,13 @@ export class UsersController {
   @Permissions(UserPermission.CreateUser, UserPermission.EditUser)
   @Render('admin/users/index')
   @BackLink('/admin')
-  async index(): Promise<IndexTemplate> {
-    const users = await this.usersService.where({ confirmed: true });
+  async index(@Req() req: Request): Promise<IndexTemplate> {
+    const actingUser = req['appSession'].user;
+
+    const users = await (actingUser.serviceOwner
+      ? this.usersService.allConfirmed()
+      : this.usersService.allConfirmedForOrganisation(actingUser.organisation));
+
     const usersPresenter = new UsersPresenter(users);
 
     return {

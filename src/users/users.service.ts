@@ -1,8 +1,9 @@
-import { Connection, Repository, FindConditions, DeleteResult } from 'typeorm';
+import { Connection, Repository, DeleteResult } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { User } from './user.entity';
+import { Organisation } from '../organisations/organisation.entity';
 
 @Injectable()
 export class UsersService {
@@ -16,8 +17,14 @@ export class UsersService {
     return this.repository.find();
   }
 
-  where(query: FindConditions<User>): Promise<User[]> {
-    return this.repository.find({ where: query });
+  allConfirmed(): Promise<User[]> {
+    return this.repository.find({ where: { confirmed: true } });
+  }
+
+  allConfirmedForOrganisation(organisation: Organisation): Promise<User[]> {
+    return this.repository.find({
+      where: { confirmed: true, organisation },
+    });
   }
 
   find(id: string): Promise<User> {
