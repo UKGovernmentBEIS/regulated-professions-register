@@ -116,8 +116,9 @@ export class UsersController {
   @Permissions(UserPermission.CreateUser)
   async complete(@Res() res, @Param('id') id): Promise<void> {
     const user = await this.usersService.find(id);
+    const action = getActionTypeFromUser(user);
 
-    if (user.externalIdentifier === undefined) {
+    if (action == 'new') {
       try {
         await this.createUserInAuth0(user);
       } catch (err) {

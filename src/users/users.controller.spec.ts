@@ -233,114 +233,123 @@ describe('UsersController', () => {
   });
 
   describe('complete', () => {
-    it('should redirect to done when the user is successfully created', async () => {
-      const user = userFactory.build({ externalIdentifier: undefined });
-
-      const res = createMock<Response>();
-
-      usersService.find.mockResolvedValue(user);
-      auth0Service.createUser.mockResolvedValue({
-        result: 'user-created',
-        externalIdentifier: 'extid|1234567',
-        passwordResetLink: 'http://example.org',
+    describe('when creating a new user', () => {
+      beforeEach(() => {
+        (getActionTypeFromUser as jest.Mock).mockReturnValue('new');
       });
 
-      await controller.complete(res, user.id);
+      it('should redirect to done when the user is successfully created', async () => {
+        const user = userFactory.build();
 
-      expect(auth0Service.createUser).toBeCalledWith(user.email);
-      expect(usersService.save).toBeCalledWith(
-        expect.objectContaining({
-          name: user.name,
-          email: user.email,
+        const res = createMock<Response>();
+
+        usersService.find.mockResolvedValue(user);
+        auth0Service.createUser.mockResolvedValue({
+          result: 'user-created',
           externalIdentifier: 'extid|1234567',
-          role: user.role,
-          confirmed: true,
-        }),
-      );
-      expect(userMailer.confirmation).toBeCalledWith(
-        user,
-        'http://example.org',
-      );
-      expect(res.redirect).toBeCalledWith('done');
-    });
+          passwordResetLink: 'http://example.org',
+        });
 
-    it('should render an error if the email already exists externally and in our database', async () => {
-      const user = userFactory.build({ externalIdentifier: undefined });
+        await controller.complete(res, user.id);
 
-      const res = createMock<Response>();
-      usersService.find.mockResolvedValue(user);
+        expect(auth0Service.createUser).toBeCalledWith(user.email);
+        expect(usersService.save).toBeCalledWith(
+          expect.objectContaining({
+            name: user.name,
+            email: user.email,
+            externalIdentifier: 'extid|1234567',
+            role: user.role,
+            confirmed: true,
+          }),
+        );
+        expect(userMailer.confirmation).toBeCalledWith(
+          user,
+          'http://example.org',
+        );
+        expect(res.redirect).toBeCalledWith('done');
+      });
 
-      auth0Service.createUser.mockImplementationOnce(async () => {
-        return {
+      it('should render an error if the email already exists externally and in our database', async () => {
+        const user = userFactory.build();
+
+        const res = createMock<Response>();
+        usersService.find.mockResolvedValue(user);
+
+        auth0Service.createUser.mockImplementationOnce(async () => {
+          return {
+            result: 'user-exists',
+            externalIdentifier: user.externalIdentifier,
+          };
+        });
+
+        usersService.attemptAdd.mockImplementationOnce(async () => {
+          return 'user-exists';
+        });
+
+        await controller.complete(res, user.id);
+
+        expect(res.render).toBeCalledWith('admin/users/confirm', {
+          ...user,
+          userAlreadyExists: true,
+        });
+      });
+
+      it('should create a user in our db even if the user already exists externally', async () => {
+        const user = userFactory.build();
+
+        const res = createMock<Response>();
+        usersService.find.mockResolvedValue(user);
+
+        auth0Service.createUser.mockResolvedValue({
           result: 'user-exists',
-          externalIdentifier: user.externalIdentifier,
-        };
-      });
-
-      usersService.attemptAdd.mockImplementationOnce(async () => {
-        return 'user-exists';
-      });
-
-      await controller.complete(res, user.id);
-
-      expect(res.render).toBeCalledWith('admin/users/confirm', {
-        ...user,
-        userAlreadyExists: true,
-      });
-    });
-
-    it('should create a user in our db even if the user already exists externally', async () => {
-      const user = userFactory.build({ externalIdentifier: undefined });
-
-      const res = createMock<Response>();
-      usersService.find.mockResolvedValue(user);
-
-      auth0Service.createUser.mockResolvedValue({
-        result: 'user-exists',
-        externalIdentifier: 'extid|1234567',
-      });
-
-      usersService.attemptAdd.mockResolvedValue('user-created');
-
-      await controller.complete(res, user.id);
-
-      expect(usersService.attemptAdd).toBeCalledWith(
-        expect.objectContaining({
-          name: user.name,
-          email: user.email,
           externalIdentifier: 'extid|1234567',
-          role: user.role,
-          confirmed: true,
-        }),
-      );
-      expect(res.redirect).toBeCalledWith('done');
+        });
+
+        usersService.attemptAdd.mockResolvedValue('user-created');
+
+        await controller.complete(res, user.id);
+
+        expect(usersService.attemptAdd).toBeCalledWith(
+          expect.objectContaining({
+            name: user.name,
+            email: user.email,
+            externalIdentifier: 'extid|1234567',
+            role: user.role,
+            confirmed: true,
+          }),
+        );
+        expect(res.redirect).toBeCalledWith('done');
+      });
     });
 
-    it('should not attempt to create a user in auth0 if it already has an externalIdentifier', async () => {
-      const user = userFactory.build({ externalIdentifier: 'extid|1234567' });
-      const res = createMock<Response>();
+    describe('when editing an existing user', () => {
+      beforeEach(() => {
+        (getActionTypeFromUser as jest.Mock).mockReturnValue('edit');
+      });
 
-      usersService.find.mockResolvedValue(user);
+      it('should not attempt to create a user in auth0', async () => {
+        const user = userFactory.build();
+        const res = createMock<Response>();
 
-      await controller.complete(res, user.id);
+        usersService.find.mockResolvedValue(user);
 
-      expect(auth0Service.createUser).not.toBeCalled();
-      expect(userMailer.confirmation).not.toBeCalledWith(
-        user,
-        'http://example.org',
-      );
+        await controller.complete(res, user.id);
 
-      expect(usersService.save).toBeCalledWith(
-        expect.objectContaining({
-          name: user.name,
-          email: user.email,
-          externalIdentifier: user.externalIdentifier,
-          role: user.role,
-          confirmed: true,
-        }),
-      );
+        expect(auth0Service.createUser).not.toBeCalled();
+        expect(userMailer.confirmation).not.toBeCalled();
 
-      expect(res.redirect).toBeCalledWith('done');
+        expect(usersService.save).toBeCalledWith(
+          expect.objectContaining({
+            name: user.name,
+            email: user.email,
+            externalIdentifier: user.externalIdentifier,
+            role: user.role,
+            confirmed: true,
+          }),
+        );
+
+        expect(res.redirect).toBeCalledWith('done');
+      });
     });
   });
 
