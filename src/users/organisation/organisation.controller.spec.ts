@@ -15,9 +15,11 @@ import { ServiceOwnerRadioButtonArgsPresenter } from '../presenters/service-owne
 import { UsersService } from '../users.service';
 import { OrganisationDto } from './dto/organisation.dto';
 import { OrganisationController } from './organisation.controller';
+import { getActionTypeFromUser } from '../helpers/get-action-type-from-user';
 
 jest.mock('../../professions/admin/regulated-authorities-select-presenter');
 jest.mock('../presenters/service-owner-radio-buttons.presenter');
+jest.mock('../helpers/get-action-type-from-user');
 
 describe('OrganisationController', () => {
   let controller: OrganisationController;
@@ -72,6 +74,8 @@ describe('OrganisationController', () => {
 
     describe('when logged in as a service owner user', () => {
       it('renders an "edit" template for the user', async () => {
+        (getActionTypeFromUser as jest.Mock).mockReturnValue('edit');
+
         const organisationsSelectArgs: SelectItemArgs[] = [
           {
             value: 'organisation-id',
@@ -121,6 +125,7 @@ describe('OrganisationController', () => {
         expect(response.render).toBeCalledWith(
           'admin/users/organisation/edit',
           expect.objectContaining({
+            action: 'edit',
             organisationsSelectArgs,
             serviceOwnerRadioButtonArgs,
           }),
@@ -204,6 +209,8 @@ describe('OrganisationController', () => {
       });
 
       it('renders the "edit" template if the DTO is invalid', async () => {
+        (getActionTypeFromUser as jest.Mock).mockReturnValue('edit');
+
         const organisationsSelectArgs: SelectItemArgs[] = [
           {
             value: 'organisation-id',
@@ -260,6 +267,7 @@ describe('OrganisationController', () => {
         expect(response.render).toBeCalledWith(
           'admin/users/organisation/edit',
           expect.objectContaining({
+            action: 'edit',
             organisationsSelectArgs,
             serviceOwnerRadioButtonArgs,
           }),

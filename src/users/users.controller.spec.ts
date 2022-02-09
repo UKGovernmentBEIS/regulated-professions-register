@@ -15,12 +15,15 @@ import { createMockI18nService } from '../testutils/create-mock-i18n-service';
 import { TableRow } from '../common/interfaces/table-row';
 import { flashMessage } from '../common/flash-message';
 import { createMockRequest } from '../testutils/create-mock-request';
+import { getActionTypeFromUser } from './helpers/get-action-type-from-user';
+
 import organisationFactory from '../testutils/factories/organisation';
 
 jest.mock('./presenters/users.presenter');
 jest.mock('./presenters/user.presenter');
 
 jest.mock('../common/flash-message');
+jest.mock('./helpers/get-action-type-from-user');
 
 describe('UsersController', () => {
   let controller: UsersController;
@@ -216,6 +219,7 @@ describe('UsersController', () => {
       const user = userFactory.build();
 
       usersService.find.mockResolvedValue(user);
+      (getActionTypeFromUser as jest.Mock).mockReturnValue('edit');
 
       const result = await controller.confirm(user.id);
 
@@ -223,6 +227,7 @@ describe('UsersController', () => {
 
       expect(result).toEqual({
         ...user,
+        action: 'edit',
       });
     });
   });

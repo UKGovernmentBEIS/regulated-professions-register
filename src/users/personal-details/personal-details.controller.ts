@@ -21,6 +21,10 @@ import { Permissions } from '../../common/permissions.decorator';
 import { EditTemplate } from './interfaces/edit-template';
 import { BackLink } from '../../common/decorators/back-link.decorator';
 import { Request, Response } from 'express';
+import {
+  getActionTypeFromUser,
+  ActionType,
+} from '../helpers/get-action-type-from-user';
 
 @Controller('/admin/users')
 @UseGuards(AuthenticationGuard)
@@ -36,10 +40,12 @@ export class PersonalDetailsController {
     @Query('change') change: boolean,
   ): Promise<EditTemplate> {
     const user = await this.usersService.find(id);
+    const action = getActionTypeFromUser(user);
 
     return {
       ...user,
-      change: change,
+      action,
+      change,
     };
   }
 
@@ -60,13 +66,14 @@ export class PersonalDetailsController {
 
     const submittedValues: PersonalDetailsDto = personalDetailsDto;
 
+    const user = await this.usersService.find(id);
+    const action = getActionTypeFromUser(user);
+
     if (!validator.valid()) {
       const errors = new ValidationFailedError(validator.errors).fullMessages();
-      this.renderWithErrors(res, submittedValues, errors);
+      this.renderWithErrors(res, submittedValues, errors, action);
       return;
     }
-
-    const user = await this.usersService.find(id);
 
     const { email, name } = submittedValues;
 
@@ -78,7 +85,7 @@ export class PersonalDetailsController {
         email: { text: 'A user with this email address already exists' },
       };
 
-      this.renderWithErrors(res, submittedValues, errors);
+      this.renderWithErrors(res, submittedValues, errors, action);
       return;
     }
 
@@ -101,11 +108,13 @@ export class PersonalDetailsController {
     res: Response,
     personalDetailsDto: PersonalDetailsDto,
     errors: object,
+    action: ActionType,
   ): void {
     res.render('admin/users/personal-details/edit', {
       name: personalDetailsDto.name,
       email: personalDetailsDto.email,
       errors,
+      action,
     });
   }
 }

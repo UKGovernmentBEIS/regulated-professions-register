@@ -20,8 +20,10 @@ import { UsersPresenter } from './presenters/users.presenter';
 import { UsersService } from './users.service';
 import { IndexTemplate } from './interfaces/index-template';
 import { ShowTemplate } from './interfaces/show-template';
+import { ConfirmTemplate } from './interfaces/confirm-template';
 import { Permissions } from '../common/permissions.decorator';
 import { flashMessage } from '../common/flash-message';
+import { getActionTypeFromUser } from './helpers/get-action-type-from-user';
 
 import { UserMailer } from './user.mailer';
 import { BackLink } from '../common/decorators/back-link.decorator';
@@ -100,11 +102,13 @@ export class UsersController {
   @Permissions(UserPermission.CreateUser)
   @Render('admin/users/confirm')
   @BackLink('/admin/users/:id/permissions/edit')
-  async confirm(@Param('id') id): Promise<ShowTemplate> {
+  async confirm(@Param('id') id): Promise<ConfirmTemplate> {
     const user = await this.usersService.find(id);
+    const action = getActionTypeFromUser(user);
 
     return {
       ...user,
+      action,
     };
   }
 

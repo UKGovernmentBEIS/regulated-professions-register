@@ -18,6 +18,8 @@
     },
     "button": {
       "add": "Add a new user",
+      "new": "Create user",
+      "edit": "Update user",
       "create": "Create user",
       "delete": "Delete user"
     },
@@ -36,7 +38,8 @@
       }
     },
     "headings": {
-      "main": "Creating RPR user",
+      "new": "Creating RPR user",
+      "edit": "Editing RPR user",
       "checkAnswers": "Check your answers before creating this user",
       "organisation": "Organisation",
       "personalDetails": "Personal details",
