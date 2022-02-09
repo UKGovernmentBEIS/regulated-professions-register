@@ -6,6 +6,7 @@ import userFactory from '../testutils/factories/user';
 
 import { User } from './user.entity';
 import { UsersService } from './users.service';
+import organisationFactory from '../testutils/factories/organisation';
 
 const user = userFactory.build();
 const userArray = userFactory.buildList(2);
@@ -67,6 +68,30 @@ describe('UsersService', () => {
 
       expect(post).toEqual(userArray);
       expect(repoSpy).toHaveBeenCalledWith({ where: query });
+    });
+  });
+
+  describe('allConfirmed', () => {
+    it('should return all confirmed users', async () => {
+      const repoSpy = jest.spyOn(repo, 'find');
+      const posts = await service.allConfirmed();
+
+      expect(posts).toEqual(userArray);
+      expect(repoSpy).toHaveBeenCalledWith({ where: { confirmed: true } });
+    });
+  });
+
+  describe('allConfirmedForOrganisation', () => {
+    it('should return all confirmed users', async () => {
+      const organisation = organisationFactory.build();
+
+      const repoSpy = jest.spyOn(repo, 'find');
+      const posts = await service.allConfirmedForOrganisation(organisation);
+
+      expect(posts).toEqual(userArray);
+      expect(repoSpy).toHaveBeenCalledWith({
+        where: { confirmed: true, organisation },
+      });
     });
   });
 
