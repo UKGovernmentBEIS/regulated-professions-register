@@ -29,6 +29,8 @@ import { createFilterInput } from '../../helpers/create-filter-input.helper';
 import { ProfessionVersionsService } from '../profession-versions.service';
 import { ProfessionVersion } from '../profession-version.entity';
 import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
+import { UserPermission } from '../../users/user-permission';
+import { Permissions } from '../../common/permissions.decorator';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
@@ -42,6 +44,7 @@ export class ProfessionsController {
   ) {}
 
   @Post()
+  @Permissions(UserPermission.CreateProfession)
   async create(
     @Res() res: Response,
     @Req() req: RequestWithAppSession,

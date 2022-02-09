@@ -41,7 +41,7 @@ export class RegulatoryBodyController {
   ) {}
 
   @Get('/:professionId/versions/:versionId/regulatory-body/edit')
-  @Permissions(UserPermission.CreateProfession)
+  @Permissions(UserPermission.EditProfession)
   @BackLink((request: Request) =>
     request.query.change === 'true'
       ? '/admin/professions/:professionId/versions/:versionId/check-your-answers'
@@ -73,7 +73,7 @@ export class RegulatoryBodyController {
   }
 
   @Post('/:professionId/versions/:versionId/regulatory-body')
-  @Permissions(UserPermission.CreateProfession)
+  @Permissions(UserPermission.EditProfession)
   @BackLink((request: Request) =>
     request.body.change === 'true'
       ? '/admin/professions/:professionId/versions/:versionId/check-your-answers'

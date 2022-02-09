@@ -15,11 +15,13 @@ import { I18nService } from 'nestjs-i18n';
 import { AuthenticationGuard } from '../common/authentication.guard';
 import { BackLink } from '../common/decorators/back-link.decorator';
 import { RequestWithAppSession } from '../common/interfaces/request-with-app-session.interface';
+import { Permissions } from '../common/permissions.decorator';
 import { Legislation } from '../legislations/legislation.entity';
 import { Nation } from '../nations/nation';
 import { Organisation } from '../organisations/organisation.entity';
 import QualificationPresenter from '../qualifications/presenters/qualification.presenter';
 import { Qualification } from '../qualifications/qualification.entity';
+import { UserPermission } from '../users/user-permission';
 import { ShowTemplate } from './interfaces/show-template.interface';
 import { ProfessionVersion } from './profession-version.entity';
 import { ProfessionVersionsService } from './profession-versions.service';
@@ -94,6 +96,7 @@ export class ProfessionVersionsController {
   }
 
   @Post('/:professionId/versions')
+  @Permissions(UserPermission.EditProfession)
   async create(
     @Res() res: Response,
     @Req() req: RequestWithAppSession,
@@ -139,6 +142,7 @@ export class ProfessionVersionsController {
   }
 
   @Put(':professionId/versions/:versionId/publish')
+  @Permissions(UserPermission.EditProfession)
   @Render('admin/professions/publish')
   async publish(
     @Param('professionId') professionId: string,
