@@ -68,26 +68,75 @@ describe('UsersController', () => {
   });
 
   describe('index', () => {
-    it('should list all confirmed users', async () => {
-      const user = userFactory.build();
+    describe('when the acting user is a service owner', () => {
+      it('should list all confirmed users', async () => {
+        const actingUser = userFactory.build({
+          serviceOwner: true,
+        });
 
-      const tableRows: TableRow[] = [
-        [{ text: 'Example Name' }, { text: 'name@example.com' }],
-      ];
+        const request = createMockRequest(
+          'http://example.com/some/path',
+          'example.com',
+          { user: actingUser },
+        );
 
-      (
-        UsersPresenter.prototype as DeepMocked<UsersPresenter>
-      ).tableRows.mockReturnValue(tableRows);
+        const user = userFactory.build();
 
-      usersService.where.mockResolvedValue([user]);
+        const tableRows: TableRow[] = [
+          [{ text: 'Example Name' }, { text: 'name@example.com' }],
+        ];
 
-      expect(await controller.index()).toEqual({
-        ...[user],
-        rows: tableRows,
+        (
+          UsersPresenter.prototype as DeepMocked<UsersPresenter>
+        ).tableRows.mockReturnValue(tableRows);
+
+        usersService.allConfirmed.mockResolvedValue([user]);
+
+        expect(await controller.index(request)).toEqual({
+          ...[user],
+          rows: tableRows,
+        });
+
+        expect(usersService.allConfirmed).toHaveBeenCalledWith();
+        expect(UsersPresenter.prototype.tableRows).toHaveBeenCalled();
       });
+    });
 
-      expect(usersService.where).toHaveBeenCalledWith({ confirmed: true });
-      expect(UsersPresenter.prototype.tableRows).toHaveBeenCalled();
+    describe('when the acting user not is a service owner', () => {
+      it("should list all confirmed users for the acting user's organisation", async () => {
+        const actingUser = userFactory.build({
+          serviceOwner: false,
+          organisation: organisationFactory.build(),
+        });
+
+        const request = createMockRequest(
+          'http://example.com/some/path',
+          'example.com',
+          { user: actingUser },
+        );
+
+        const user = userFactory.build();
+
+        const tableRows: TableRow[] = [
+          [{ text: 'Example Name' }, { text: 'name@example.com' }],
+        ];
+
+        (
+          UsersPresenter.prototype as DeepMocked<UsersPresenter>
+        ).tableRows.mockReturnValue(tableRows);
+
+        usersService.allConfirmedForOrganisation.mockResolvedValue([user]);
+
+        expect(await controller.index(request)).toEqual({
+          ...[user],
+          rows: tableRows,
+        });
+
+        expect(usersService.allConfirmedForOrganisation).toHaveBeenCalledWith(
+          actingUser.organisation,
+        );
+        expect(UsersPresenter.prototype.tableRows).toHaveBeenCalled();
+      });
     });
   });
 
