@@ -17,7 +17,7 @@ export class ConfirmationController {
   ) {}
 
   @Post('/:professionId/versions/:versionId/confirmation')
-  @Permissions(UserPermission.CreateProfession)
+  @Permissions(UserPermission.EditProfession)
   async create(
     @Res() res: Response,
     @Req() req: Request,

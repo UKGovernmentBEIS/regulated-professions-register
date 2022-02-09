@@ -35,7 +35,7 @@ export class QualificationInformationController {
   ) {}
 
   @Get('/:professionId/versions/:versionId/qualification-information/edit')
-  @Permissions(UserPermission.CreateProfession)
+  @Permissions(UserPermission.EditProfession)
   @BackLink((request: Request) =>
     request.query.change === 'true'
       ? '/admin/professions/:professionId/versions/:versionId/check-your-answers'
@@ -64,7 +64,7 @@ export class QualificationInformationController {
   }
 
   @Post('/:professionId/versions/:versionId/qualification-information')
-  @Permissions(UserPermission.CreateProfession)
+  @Permissions(UserPermission.EditProfession)
   @BackLink((request: Request) =>
     request.body.change === 'true'
       ? '/admin/professions/:professionId/versions/:versionId/check-your-answers'
