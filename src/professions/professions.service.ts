@@ -1,16 +1,15 @@
-import { Connection, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { Profession } from './profession.entity';
-import { generateSlug } from '../helpers/slug.helper';
+import { SlugGenerator } from '../common/slug-generator';
 
 @Injectable()
 export class ProfessionsService {
   constructor(
     @InjectRepository(Profession)
     private repository: Repository<Profession>,
-    private connection: Connection,
   ) {}
 
   all(): Promise<Profession[]> {
@@ -40,50 +39,11 @@ export class ProfessionsService {
     return this.repository.save(profession);
   }
 
-  async confirm(profession: Profession): Promise<Profession> {
-    const queryRunner = this.connection.createQueryRunner();
+  async setSlug(profession: Profession): Promise<Profession> {
+    const slugGenerator = new SlugGenerator(this, profession.name);
 
-    await queryRunner.connect();
-    await queryRunner.startTransaction();
+    profession.slug = await slugGenerator.slug();
 
-    let error;
-
-    try {
-      let retryCount = 0;
-
-      while (true) {
-        if (profession.confirmed) {
-          throw new Error('Profession has already been confirmed');
-        }
-        const slug = generateSlug(profession.name, retryCount);
-        const result = await queryRunner.manager.findOne<Profession>(
-          Profession,
-          {
-            where: { slug },
-          },
-        );
-
-        if (result) {
-          retryCount++;
-        } else {
-          profession.slug = slug;
-          profession.confirmed = true;
-          await queryRunner.manager.save(profession);
-          await queryRunner.commitTransaction();
-          break;
-        }
-      }
-    } catch (e) {
-      await queryRunner.rollbackTransaction();
-      error = e;
-    } finally {
-      await queryRunner.release();
-    }
-
-    if (error) {
-      throw error;
-    }
-
-    return profession;
+    return await this.repository.save(profession);
   }
 }

@@ -35,16 +35,15 @@ export class ConfirmationController {
     let action: string;
     let bannerType: 'info' | 'success';
 
-    if (profession.confirmed) {
+    if (profession.slug) {
       action = 'update';
       bannerType = 'info';
-      await this.professionVersionsService.confirm(version);
     } else {
       action = 'create';
       bannerType = 'success';
-      await this.professionsService.confirm(profession);
-      await this.professionVersionsService.confirm(version);
+      await this.professionsService.setSlug(profession);
     }
+    await this.professionVersionsService.confirm(version);
 
     const messageTitle = await this.i18nService.translate(
       `professions.admin.${action}.confirmation.heading`,

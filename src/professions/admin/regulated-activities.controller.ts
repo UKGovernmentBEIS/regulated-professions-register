@@ -22,6 +22,7 @@ import { BackLink } from '../../common/decorators/back-link.decorator';
 import ViewUtils from './viewUtils';
 import { ProfessionVersionsService } from '../profession-versions.service';
 import { ProfessionVersion } from '../profession-version.entity';
+import { isConfirmed } from '../../helpers/is-confirmed';
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
 export class RegulatedActivitiesController {
@@ -57,7 +58,7 @@ export class RegulatedActivitiesController {
       version.reservedActivities,
       version.protectedTitles,
       version.regulationUrl,
-      profession.slug !== null,
+      isConfirmed(profession),
       change,
     );
   }
@@ -99,7 +100,7 @@ export class RegulatedActivitiesController {
         submittedValues.reservedActivities,
         submittedValues.protectedTitles,
         submittedValues.regulationUrl,
-        profession.slug !== null,
+        isConfirmed(profession),
         submittedValues.change,
         errors,
       );

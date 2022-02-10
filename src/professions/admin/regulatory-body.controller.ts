@@ -31,6 +31,7 @@ import {
   ProfessionVersion,
 } from '../profession-version.entity';
 import { Profession } from '../profession.entity';
+import { isConfirmed } from '../../helpers/is-confirmed';
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
 export class RegulatoryBodyController {
@@ -68,7 +69,7 @@ export class RegulatoryBodyController {
       res,
       profession.organisation,
       selectedMandatoryRegistration,
-      profession.slug !== null,
+      isConfirmed(profession),
       change,
     );
   }
@@ -113,7 +114,7 @@ export class RegulatoryBodyController {
         res,
         selectedOrganisation,
         selectedMandatoryRegistration,
-        profession.slug !== null,
+        isConfirmed(profession),
         regulatoryBodyDto.change,
         errors,
       );

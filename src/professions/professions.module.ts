@@ -18,7 +18,7 @@ import { QualificationInformationController } from './admin/qualification-inform
 import { LegislationController } from './admin/legislation.controller';
 import { ProfessionVersionsService } from './profession-versions.service';
 import { ProfessionVersion } from './profession-version.entity';
-import { ProfessionVersionsController } from './profession-versions.controller';
+import { ProfessionVersionsController } from './admin/profession-versions.controller';
 
 @Module({
   imports: [

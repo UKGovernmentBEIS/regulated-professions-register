@@ -49,7 +49,7 @@ describe('ConfirmationController', () => {
 
         const profession = professionFactory.build({
           id: 'profession-id',
-          confirmed: false,
+          slug: undefined,
         });
         const version = professionVersionFactory.build({
           id: 'version-id',
@@ -61,7 +61,7 @@ describe('ConfirmationController', () => {
 
         await controller.create(res, req, 'profession-id', 'version-id');
 
-        expect(professionsService.confirm).toHaveBeenCalledWith(profession);
+        expect(professionsService.setSlug).toHaveBeenCalledWith(profession);
         expect(professionVersionsService.confirm).toHaveBeenCalledWith(version);
 
         expect(flashMock).toHaveBeenCalledWith(
@@ -86,7 +86,7 @@ describe('ConfirmationController', () => {
 
         const existingProfession = professionFactory.build({
           id: 'existing-id',
-          confirmed: true,
+          slug: 'profession-slug',
         });
 
         const version = professionVersionFactory.build({
@@ -104,7 +104,7 @@ describe('ConfirmationController', () => {
         expect(res.redirect).toHaveBeenCalledWith(
           '/admin/professions/existing-id/versions/version-id',
         );
-        expect(professionsService.confirm).not.toHaveBeenCalled;
+        expect(professionsService.setSlug).not.toHaveBeenCalled;
         expect(professionVersionsService.confirm).toHaveBeenCalledWith(version);
 
         expect(flashMock).toHaveBeenCalledWith(

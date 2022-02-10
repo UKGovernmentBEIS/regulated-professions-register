@@ -73,144 +73,107 @@ export class ProfessionsSeeder implements Seeder {
     private readonly organisationVersionRepository: Repository<OrganisationVersion>,
   ) {}
 
-  async seed(): Promise<any> {
-    const professions = await Promise.all(
-      this.data.map(async (profession) => {
+  async seed(): Promise<void> {
+    await Promise.all(
+      this.data.map(async (seedProfession) => {
+        const organisation = await this.organisationRepository.findOne({
+          where: { name: seedProfession.organisation },
+        });
+
+        const existingProfession = await this.professionsRepository.findOne({
+          slug: seedProfession.slug,
+        });
+
+        const newProfession = {
+          name: seedProfession.name,
+          alternateName: seedProfession.alternateName,
+          slug: seedProfession.slug,
+          organisation: organisation,
+        } as Profession;
+
+        const savedProfession = await this.professionsRepository.save({
+          ...existingProfession,
+          ...newProfession,
+        });
+
+        const seededVersions = (
+          await this.seedVersions(seedProfession, savedProfession)
+        ).filter(Boolean);
+
+        await this.professionVersionsRepository.save(seededVersions);
+      }),
+    );
+  }
+
+  private async seedVersions(
+    seedProfession: SeedProfession,
+    savedProfession: Profession,
+  ): Promise<ProfessionVersion[]> {
+    return Promise.all(
+      seedProfession.versions.map(async (version) => {
+        const existingVersion = await this.professionVersionsRepository.findOne(
+          {
+            status: version.status,
+            profession: savedProfession,
+          },
+        );
+
         const industries = await this.industriesRepository.find({
-          where: { name: In(profession.industries || []) },
+          where: { name: In(version.industries || []) },
         });
 
         const qualification = await this.qualificationsRepository.findOne({
-          where: { level: profession.qualification },
+          where: { level: version.qualification },
         });
 
-        let legislation: Legislation =
-          await this.legislationsRepository.findOne({
-            where: { name: profession.legislation },
+        let legislations: Legislation[] =
+          await this.legislationsRepository.find({
+            where: { name: In(version.legislations) },
           });
 
-        if (legislation) {
+        if (legislations.length > 0) {
           // Currently the Legislation relation has a unique constraint
           // on the legislationID, so we need to create a new Legislation
           // each time. We need to fix this, but in the interests of getting
           // seed data in, we'll just create a new entry each time
-          legislation = await this.legislationsRepository.save(
-            new Legislation(legislation.name, legislation.url),
+          const newLegislations = legislations.map(
+            (leg) => new Legislation(leg.name, leg.url),
+          );
+          legislations = await this.legislationsRepository.save(
+            newLegislations,
           );
         }
 
-        const organisation = await this.organisationRepository.findOne({
-          where: { name: profession.organisation },
-        });
+        const newVersion = {
+          alternateName: version.alternateName,
+          description: version.description,
+          occupationLocations: version.occupationLocations,
+          regulationType: version.regulationType,
+          mandatoryRegistration:
+            version.mandatoryRegistration as MandatoryRegistration,
+          reservedActivities: version.reservedActivities,
+          protectedTitles: version.protectedTitles,
+          regulationUrl: version.regulationUrl,
+          industries: industries,
+          legislations: legislations,
+          qualification: qualification,
+          status: version.status as ProfessionVersionStatus,
+          profession: savedProfession,
+        } as ProfessionVersion;
 
-        const existingProfession = await this.professionsRepository.findOne({
-          slug: profession.slug,
-        });
-
-        const newProfession = new Profession(
-          profession.name,
-          profession.alternateName,
-          profession.slug,
-          profession.description,
-          profession.occupationLocations,
-          profession.regulationType,
-          profession.mandatoryRegistration,
-          industries,
-          qualification,
-          profession.reservedActivities,
-          [],
-          legislation,
-          organisation,
-          profession.confirmed,
-        );
-
-        return { ...existingProfession, ...newProfession };
+        return { ...existingVersion, ...newVersion };
       }),
-    );
-
-    await this.professionsRepository.save(professions);
-
-    const professionVersions: ProfessionVersion[][] = await Promise.all(
-      professions.map(async (profession) => {
-        const professionJson = this.data.find(
-          (item) => item.slug === profession.slug,
-        );
-
-        if (!professionJson) {
-          return;
-        }
-
-        const versions = await Promise.all(
-          professionJson.versions.map(async (version) => {
-            const existingVersion =
-              await this.professionVersionsRepository.findOne({
-                status: version.status,
-                profession: profession,
-              });
-
-            const industries = await this.industriesRepository.find({
-              where: { name: In(version.industries || []) },
-            });
-
-            const qualification = await this.qualificationsRepository.findOne({
-              where: { level: version.qualification },
-            });
-
-            let legislations: Legislation[] =
-              await this.legislationsRepository.find({
-                where: { name: In(version.legislations) },
-              });
-
-            if (legislations.length > 0) {
-              // Currently the Legislation relation has a unique constraint
-              // on the legislationID, so we need to create a new Legislation
-              // each time. We need to fix this, but in the interests of getting
-              // seed data in, we'll just create a new entry each time
-              const newLegislations = legislations.map(
-                (leg) => new Legislation(leg.name, leg.url),
-              );
-              legislations = await this.legislationsRepository.save(
-                newLegislations,
-              );
-            }
-
-            const newVersion = {
-              alternateName: version.alternateName,
-              description: version.description,
-              occupationLocations: version.occupationLocations,
-              regulationType: version.regulationType,
-              mandatoryRegistration:
-                version.mandatoryRegistration as MandatoryRegistration,
-              reservedActivities: version.reservedActivities,
-              protectedTitles: version.protectedTitles,
-              regulationUrl: version.regulationUrl,
-              industries: industries,
-              legislations: legislations,
-              qualification: qualification,
-              status: version.status as ProfessionVersionStatus,
-              profession: profession,
-            } as ProfessionVersion;
-
-            return { ...existingVersion, ...newVersion };
-          }),
-        );
-        return versions;
-      }),
-    );
-
-    return this.professionVersionsRepository.save(
-      professionVersions.flat().filter(Boolean),
     );
   }
 
   async drop(): Promise<any> {
     // Handle deletion of dependent repositories here to prevent violation of
     // foreign key constraints
+    await this.legislationsRepository.delete({});
     await this.professionVersionsRepository.delete({});
-    await this.professionsRepository.delete({});
     await this.industriesRepository.delete({});
     await this.qualificationsRepository.delete({});
-    await this.legislationsRepository.delete({});
+    await this.professionsRepository.delete({});
     await this.organisationVersionRepository.delete({});
     await this.organisationRepository.delete({});
   }

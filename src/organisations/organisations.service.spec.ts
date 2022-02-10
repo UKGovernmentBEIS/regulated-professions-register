@@ -17,8 +17,10 @@ describe('OrganisationsService', () => {
   let service: OrganisationsService;
   let repo: Repository<Organisation>;
 
-  const confirmedProfession = professionFactory.build({ confirmed: true });
-  const unconfirmedProfession = professionFactory.build({ confirmed: false });
+  const confirmedProfession = professionFactory.build({
+    slug: 'profession-slug',
+  });
+  const unconfirmedProfession = professionFactory.build({ slug: undefined });
 
   const organisation = organisationFactory.build({
     professions: [confirmedProfession, unconfirmedProfession],
@@ -56,41 +58,6 @@ describe('OrganisationsService', () => {
     it('Organisations should be sorted', async () => {
       repoSpy = jest.spyOn(repo, 'find').mockResolvedValue([organisation]);
       organisations = await service.all();
-
-      expect(repoSpy).toHaveBeenCalledWith(
-        expect.objectContaining({
-          order: { name: 'ASC' },
-        }),
-      );
-    });
-  });
-
-  describe('allWithProfessions', () => {
-    let repoSpy: jest.SpyInstance<Promise<Organisation[]>>;
-    let organisations: Organisation[];
-
-    it('returns all Organisations, populated with confirmed Professions', async () => {
-      repoSpy = jest.spyOn(repo, 'find').mockResolvedValue([organisation]);
-      organisations = await service.allWithProfessions();
-
-      const expected = [
-        organisationFactory.build({
-          ...organisation,
-          professions: [confirmedProfession],
-        }),
-      ];
-
-      expect(organisations).toEqual(expected);
-      expect(repoSpy).toHaveBeenCalledWith(
-        expect.objectContaining({
-          relations: ['professions'],
-        }),
-      );
-    });
-
-    it('Organisations should be sorted', async () => {
-      repoSpy = jest.spyOn(repo, 'find').mockResolvedValue([organisation]);
-      organisations = await service.allWithProfessions();
 
       expect(repoSpy).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -180,28 +147,6 @@ describe('OrganisationsService', () => {
       expect(foundOrganisation).toEqual(organisation);
       expect(repoSpy).toHaveBeenCalledWith({
         where: { slug: 'some-slug' },
-      });
-    });
-  });
-
-  describe('findBySlugWithProfessions', () => {
-    it('should return an Organisation, populated with confirmed Professions', async () => {
-      const expected = organisationFactory.build({
-        ...organisation,
-        professions: [confirmedProfession],
-      });
-
-      const repoSpy = jest
-        .spyOn(repo, 'findOne')
-        .mockResolvedValue(organisation);
-      const foundOrganisation = await service.findBySlugWithProfessions(
-        'some-slug',
-      );
-
-      expect(foundOrganisation).toEqual(expected);
-      expect(repoSpy).toHaveBeenCalledWith({
-        where: { slug: 'some-slug' },
-        relations: ['professions'],
       });
     });
   });

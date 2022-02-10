@@ -29,6 +29,7 @@ import { BackLink } from '../../common/decorators/back-link.decorator';
 import ViewUtils from './viewUtils';
 import { ProfessionVersionsService } from '../profession-versions.service';
 import { ProfessionVersion } from '../profession-version.entity';
+import { isConfirmed } from '../../helpers/is-confirmed';
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
 export class TopLevelInformationController {
@@ -66,7 +67,7 @@ export class TopLevelInformationController {
       profession.name,
       version.industries || [],
       version.occupationLocations || [],
-      profession.slug !== null,
+      isConfirmed(profession),
       change,
       errors,
     );
@@ -111,7 +112,7 @@ export class TopLevelInformationController {
         submittedValues.name,
         submittedIndustries,
         submittedValues.nations || [],
-        profession.slug !== null,
+        isConfirmed(profession),
         submittedValues.change,
         errors,
       );

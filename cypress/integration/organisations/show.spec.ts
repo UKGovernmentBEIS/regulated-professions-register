@@ -23,9 +23,7 @@ describe('Showing organisations', () => {
         cy.get('body').should('contain', version.contactUrl);
 
         const professionsForOrganisation = professions.filter(
-          (profession: any) =>
-            profession.organisation == organisation.name &&
-            profession.confirmed,
+          (profession: any) => profession.organisation == organisation.name,
         );
 
         professionsForOrganisation.forEach((profession: any) => {
