@@ -2,11 +2,14 @@ import { createMock, DeepMocked } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Connection, EntityManager, QueryRunner, Repository } from 'typeorm';
+import { SlugGenerator } from '../common/slug-generator';
 
 import professionFactory from '../testutils/factories/profession';
 import professionVersionFactory from '../testutils/factories/profession-version';
 import { Profession } from './profession.entity';
 import { ProfessionsService } from './professions.service';
+
+jest.mock('../common/slug-generator');
 
 describe('Profession', () => {
   let service: ProfessionsService;
@@ -116,94 +119,25 @@ describe('Profession', () => {
     });
   });
 
-  describe('confirm', () => {
-    describe('when there are no colliding slugs', () => {
-      it('should save the Profession with the "base" slug', async () => {
-        const profession = professionFactory.build();
+  describe('setSlug', () => {
+    it('sets a slug on the organisation', async () => {
+      SlugGenerator.prototype.slug = async () => 'slug';
 
-        manager.findOne.mockReturnValue(null);
-
-        const result = await service.confirm(profession);
-
-        expect(manager.findOne).toBeCalledTimes(1);
-
-        expect(manager.findOne).toBeCalledWith(Profession, {
-          where: { slug: 'example-profession' },
-        });
-
-        expect(result.slug).toEqual('example-profession');
+      const profession = professionFactory.build();
+      const repoSpy = jest.spyOn(repo, 'save').mockResolvedValue({
+        ...profession,
+        slug: 'slug',
       });
-    });
 
-    describe('when there is a single colliding slug', () => {
-      it('should save the Profession with a slug appended with "-1"', async () => {
-        const profession = professionFactory.build();
+      const result = await service.setSlug(profession);
 
-        manager.findOne
-          .mockImplementationOnce(async () => {
-            return new Profession();
-          })
-          .mockReturnValue(null);
-
-        const result = await service.confirm(profession);
-
-        expect(manager.findOne).toBeCalledTimes(2);
-
-        expect(manager.findOne).toBeCalledWith(Profession, {
-          where: { slug: 'example-profession' },
-        });
-        expect(manager.findOne).toBeCalledWith(Profession, {
-          where: { slug: 'example-profession-1' },
-        });
-
-        expect(manager.save).toHaveBeenCalledWith(
-          expect.objectContaining({
-            slug: 'example-profession-1',
-          }),
-        );
-        expect(result.slug).toEqual('example-profession-1');
+      expect(result).toEqual({
+        ...profession,
+        slug: 'slug',
       });
-    });
-
-    describe('when there are multiple colliding slugs', () => {
-      it('should save the Profession with a slug appended with a unique postfix', async () => {
-        const profession = professionFactory.build();
-
-        manager.findOne
-          .mockImplementationOnce(async () => {
-            return new Profession();
-          })
-          .mockImplementationOnce(async () => {
-            return new Profession();
-          })
-          .mockImplementationOnce(async () => {
-            return new Profession();
-          })
-          .mockReturnValue(null);
-
-        const result = await service.confirm(profession);
-
-        expect(manager.findOne).toBeCalledTimes(4);
-
-        expect(manager.findOne).toBeCalledWith(Profession, {
-          where: { slug: 'example-profession' },
-        });
-        expect(manager.findOne).toBeCalledWith(Profession, {
-          where: { slug: 'example-profession-1' },
-        });
-        expect(manager.findOne).toBeCalledWith(Profession, {
-          where: { slug: 'example-profession-2' },
-        });
-        expect(manager.findOne).toBeCalledWith(Profession, {
-          where: { slug: 'example-profession-3' },
-        });
-
-        expect(manager.save).toHaveBeenCalledWith(
-          expect.objectContaining({
-            slug: 'example-profession-3',
-          }),
-        );
-        expect(result.slug).toEqual('example-profession-3');
+      expect(repoSpy).toHaveBeenCalledWith({
+        ...profession,
+        slug: 'slug',
       });
     });
   });

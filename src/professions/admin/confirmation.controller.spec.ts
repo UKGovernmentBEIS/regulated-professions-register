@@ -61,7 +61,7 @@ describe('ConfirmationController', () => {
 
         await controller.create(res, req, 'profession-id', 'version-id');
 
-        expect(professionsService.confirm).toHaveBeenCalledWith(profession);
+        expect(professionsService.setSlug).toHaveBeenCalledWith(profession);
         expect(professionVersionsService.confirm).toHaveBeenCalledWith(version);
 
         expect(flashMock).toHaveBeenCalledWith(
@@ -104,7 +104,7 @@ describe('ConfirmationController', () => {
         expect(res.redirect).toHaveBeenCalledWith(
           '/admin/professions/existing-id/versions/version-id',
         );
-        expect(professionsService.confirm).not.toHaveBeenCalled;
+        expect(professionsService.setSlug).not.toHaveBeenCalled;
         expect(professionVersionsService.confirm).toHaveBeenCalledWith(version);
 
         expect(flashMock).toHaveBeenCalledWith(

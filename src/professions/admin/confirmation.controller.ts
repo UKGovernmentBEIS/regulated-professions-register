@@ -41,7 +41,7 @@ export class ConfirmationController {
     } else {
       action = 'create';
       bannerType = 'success';
-      await this.professionsService.confirm(profession);
+      await this.professionsService.setSlug(profession);
     }
     await this.professionVersionsService.confirm(version);
 
