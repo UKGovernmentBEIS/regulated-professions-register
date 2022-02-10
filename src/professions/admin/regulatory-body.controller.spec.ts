@@ -91,10 +91,10 @@ describe(RegulatoryBodyController, () => {
         });
         const profession = professionFactory.build({
           id: 'profession-id',
+          organisation: organisation,
         });
         const version = professionVersionFactory.build({
           profession: profession,
-          organisation: organisation,
           mandatoryRegistration: MandatoryRegistration.Mandatory,
         });
 
@@ -139,7 +139,6 @@ describe(RegulatoryBodyController, () => {
         const version = professionVersionFactory.build({
           id: 'version-id',
           profession: profession,
-          organisation: organisationFactory.build(),
           mandatoryRegistration: MandatoryRegistration.Mandatory,
         });
 
@@ -164,10 +163,16 @@ describe(RegulatoryBodyController, () => {
           regulatoryBodyDto,
         );
 
+        expect(professionsService.save).toHaveBeenCalledWith(
+          expect.objectContaining({
+            id: 'profession-id',
+            organisation: newOrganisation,
+          }),
+        );
+
         expect(professionVersionsService.save).toHaveBeenCalledWith(
           expect.objectContaining({
             id: 'version-id',
-            organisation: newOrganisation,
             mandatoryRegistration: MandatoryRegistration.Voluntary,
             profession: profession,
           }),
@@ -213,11 +218,11 @@ describe(RegulatoryBodyController, () => {
         it('redirects to check your answers on submit', async () => {
           const profession = professionFactory.build({
             id: 'profession-id',
+            organisation: organisationFactory.build(),
           });
           const version = professionVersionFactory.build({
             id: 'version-id',
             profession: profession,
-            organisation: organisationFactory.build(),
             mandatoryRegistration: MandatoryRegistration.Mandatory,
           });
 
@@ -242,15 +247,6 @@ describe(RegulatoryBodyController, () => {
             regulatoryBodyDtoWithChangeParam,
           );
 
-          expect(professionVersionsService.save).toHaveBeenCalledWith(
-            expect.objectContaining({
-              id: 'version-id',
-              organisation: organisation,
-              mandatoryRegistration: MandatoryRegistration.Voluntary,
-              profession: profession,
-            }),
-          );
-
           expect(response.redirect).toHaveBeenCalledWith(
             '/admin/professions/profession-id/versions/version-id/check-your-answers',
           );
@@ -259,11 +255,14 @@ describe(RegulatoryBodyController, () => {
 
       describe('when false or missing', () => {
         it('continues to the next step in the journey', async () => {
-          const profession = professionFactory.build({ id: 'profession-id' });
+          const organisation = organisationFactory.build();
+          const profession = professionFactory.build({
+            id: 'profession-id',
+            organisation: organisation,
+          });
           const version = professionVersionFactory.build({
             id: 'version-id',
             profession: profession,
-            organisation: organisationFactory.build(),
             mandatoryRegistration: MandatoryRegistration.Mandatory,
           });
 
@@ -278,7 +277,6 @@ describe(RegulatoryBodyController, () => {
             change: false,
           };
 
-          const organisation = organisationFactory.build();
           organisationsService.find.mockResolvedValue(organisation);
 
           await controller.update(
@@ -286,15 +284,6 @@ describe(RegulatoryBodyController, () => {
             'profession-id',
             'version-id',
             regulatoryBodyDtoWithFalseChangeParam,
-          );
-
-          expect(professionVersionsService.save).toHaveBeenCalledWith(
-            expect.objectContaining({
-              id: 'version-id',
-              organisation: organisation,
-              mandatoryRegistration: MandatoryRegistration.Voluntary,
-              profession: profession,
-            }),
           );
 
           expect(response.redirect).toHaveBeenCalledWith(

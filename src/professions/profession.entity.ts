@@ -196,7 +196,6 @@ export class Profession {
       qualification: version.qualification,
       reservedActivities: version.reservedActivities,
       legislations: version.legislations,
-      organisation: version.organisation,
       status: version.status,
       versionId: version.id,
     };

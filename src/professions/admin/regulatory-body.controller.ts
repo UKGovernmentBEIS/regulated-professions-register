@@ -30,6 +30,7 @@ import {
   MandatoryRegistration,
   ProfessionVersion,
 } from '../profession-version.entity';
+import { Profession } from '../profession.entity';
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
 export class RegulatoryBodyController {
@@ -65,7 +66,7 @@ export class RegulatoryBodyController {
 
     return this.renderForm(
       res,
-      version.organisation,
+      profession.organisation,
       selectedMandatoryRegistration,
       profession.slug !== null,
       change,
@@ -118,14 +119,19 @@ export class RegulatoryBodyController {
       );
     }
 
+    const updatedProfession: Profession = {
+      ...profession,
+      organisation: selectedOrganisation,
+    };
+
     const updatedVersion: ProfessionVersion = {
       ...version,
       ...{
-        organisation: selectedOrganisation,
         mandatoryRegistration: selectedMandatoryRegistration,
       },
     };
 
+    await this.professionsService.save(updatedProfession);
     await this.professionVersionsService.save(updatedVersion);
 
     if (regulatoryBodyDto.change) {

@@ -57,6 +57,9 @@ describe('CheckYourAnswersController', () => {
         const profession = professionFactory.build({
           id: 'profession-id',
           name: 'Gas Safe Engineer',
+          organisation: organisationFactory.build({
+            name: 'Council of Gas Registered Engineers',
+          }),
           slug: null,
         });
         professionsService.findWithVersions.mockResolvedValue(profession);
@@ -66,9 +69,6 @@ describe('CheckYourAnswersController', () => {
           industries: [
             industryFactory.build({ name: 'industries.construction' }),
           ],
-          organisation: organisationFactory.build({
-            name: 'Council of Gas Registered Engineers',
-          }),
           mandatoryRegistration: MandatoryRegistration.Voluntary,
           description: 'A description of the regulation',
           reservedActivities: 'Some reserved activities',
