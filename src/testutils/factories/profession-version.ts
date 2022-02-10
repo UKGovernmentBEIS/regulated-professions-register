@@ -6,7 +6,6 @@ import {
 } from '../../professions/profession-version.entity';
 import industryFactory from './industry';
 import legislationFactory from './legislation';
-import organisationFactory from './organisation';
 import professionFactory from './profession';
 import qualificationFactory from './qualification';
 import userFactory from './user';
@@ -23,7 +22,6 @@ class ProfessionVersionFactory extends Factory<ProfessionVersion> {
       industries: undefined,
       qualification: undefined,
       legislations: undefined,
-      organisation: undefined,
       reservedActivities: undefined,
       profession: undefined,
       user: undefined,
@@ -46,7 +44,6 @@ export default ProfessionVersionFactory.define(({ sequence }) => ({
   qualifications: [],
   qualification: qualificationFactory.build(),
   legislations: legislationFactory.buildList(1),
-  organisation: organisationFactory.build(),
   reservedActivities: 'Stuff',
   profession: professionFactory.build(),
   user: userFactory.build(),
