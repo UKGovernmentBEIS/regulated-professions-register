@@ -95,28 +95,35 @@ describe('TopLevelInformationController', () => {
                 checked: false,
               },
             ],
-            nationsCheckboxItems: [
-              {
-                text: translationOf('nations.england'),
-                value: 'GB-ENG',
-                checked: false,
+            nationsCheckboxArgs: {
+              idPrefix: 'nations',
+              name: 'nations[]',
+              hint: {
+                text: translationOf('professions.form.checkboxes.hint'),
               },
-              {
-                text: translationOf('nations.scotland'),
-                value: 'GB-SCT',
-                checked: false,
-              },
-              {
-                text: translationOf('nations.wales'),
-                value: 'GB-WLS',
-                checked: false,
-              },
-              {
-                text: translationOf('nations.northernIreland'),
-                value: 'GB-NIR',
-                checked: false,
-              },
-            ],
+              items: [
+                {
+                  text: translationOf('nations.england'),
+                  value: 'GB-ENG',
+                  checked: false,
+                },
+                {
+                  text: translationOf('nations.scotland'),
+                  value: 'GB-SCT',
+                  checked: false,
+                },
+                {
+                  text: translationOf('nations.wales'),
+                  value: 'GB-WLS',
+                  checked: false,
+                },
+                {
+                  text: translationOf('nations.northernIreland'),
+                  value: 'GB-NIR',
+                  checked: false,
+                },
+              ],
+            },
           }),
         );
         expect(industriesService.all).toHaveBeenCalled();
@@ -170,28 +177,35 @@ describe('TopLevelInformationController', () => {
                 checked: false,
               },
             ],
-            nationsCheckboxItems: [
-              {
-                text: translationOf('nations.england'),
-                value: 'GB-ENG',
-                checked: true,
+            nationsCheckboxArgs: {
+              idPrefix: 'nations',
+              name: 'nations[]',
+              hint: {
+                text: translationOf('professions.form.checkboxes.hint'),
               },
-              {
-                text: translationOf('nations.scotland'),
-                value: 'GB-SCT',
-                checked: true,
-              },
-              {
-                text: translationOf('nations.wales'),
-                value: 'GB-WLS',
-                checked: false,
-              },
-              {
-                text: translationOf('nations.northernIreland'),
-                value: 'GB-NIR',
-                checked: false,
-              },
-            ],
+              items: [
+                {
+                  text: translationOf('nations.england'),
+                  value: 'GB-ENG',
+                  checked: true,
+                },
+                {
+                  text: translationOf('nations.scotland'),
+                  value: 'GB-SCT',
+                  checked: true,
+                },
+                {
+                  text: translationOf('nations.wales'),
+                  value: 'GB-WLS',
+                  checked: false,
+                },
+                {
+                  text: translationOf('nations.northernIreland'),
+                  value: 'GB-NIR',
+                  checked: false,
+                },
+              ],
+            },
           }),
         );
         expect(industriesService.all).toHaveBeenCalled();

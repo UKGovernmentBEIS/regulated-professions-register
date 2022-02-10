@@ -94,7 +94,11 @@ describe('Editing an existing profession', () => {
         'professions.form.label.topLevelInformation.name',
         'Change',
       );
-      cy.checkAccessibility();
+
+      // Conditional radio buttons add an additional `aria-expanded` field,
+      // so ignore that rule on this page
+      cy.checkAccessibility({ 'aria-allowed-attr': { enabled: false } });
+
       cy.translate('professions.form.captions.edit').then((editCaption) => {
         cy.get('body').contains(editCaption);
       });

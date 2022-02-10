@@ -164,16 +164,22 @@ export class TopLevelInformationController {
       this.i18nService,
     ).checkboxItems();
 
-    const nationsCheckboxItems = await new NationsCheckboxPresenter(
+    const nationsCheckboxPresenter = new NationsCheckboxPresenter(
       Nation.all(),
       selectedNations.map((nationCode) => Nation.find(nationCode)),
       this.i18nService,
-    ).checkboxItems();
+    );
+
+    const nationsCheckboxArgs = await nationsCheckboxPresenter.checkboxArgs(
+      'nations',
+      'nations[]',
+      'professions.form.checkboxes.hint',
+    );
 
     const templateArgs: TopLevelDetailsTemplate = {
       name,
       industriesCheckboxItems,
-      nationsCheckboxItems,
+      nationsCheckboxArgs,
       captionText: ViewUtils.captionText(isEditing),
       change,
       errors,
