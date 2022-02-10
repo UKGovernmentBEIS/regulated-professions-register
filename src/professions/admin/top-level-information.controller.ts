@@ -62,10 +62,14 @@ export class TopLevelInformationController {
       versionId,
     );
 
+    const coversUK = version.occupationLocations
+      ? this.isUK(version.occupationLocations)
+      : null;
+
     return this.renderForm(
       res,
       profession.name,
-      null,
+      coversUK,
       version.industries || [],
       version.occupationLocations || [],
       isConfirmed(profession),
@@ -190,5 +194,16 @@ export class TopLevelInformationController {
     };
 
     return res.render('admin/professions/top-level-information', templateArgs);
+  }
+
+  private allNations(): string[] {
+    return Nation.all().map((nation) => nation.code);
+  }
+
+  private isUK(nations: Array<string>) {
+    return (
+      nations.length === this.allNations().length &&
+      nations.every((e, i) => e === this.allNations()[i])
+    );
   }
 }

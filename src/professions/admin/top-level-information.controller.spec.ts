@@ -166,7 +166,7 @@ describe('TopLevelInformationController', () => {
           'admin/professions/top-level-information',
           expect.objectContaining({
             name: 'Example Profession',
-            coversUK: null,
+            coversUK: false,
             industriesCheckboxItems: [
               {
                 text: translationOf('industries.health'),
@@ -211,6 +211,31 @@ describe('TopLevelInformationController', () => {
           }),
         );
         expect(industriesService.all).toHaveBeenCalled();
+      });
+
+      it('should set coversUK to 1 if the profession covers all of the UK', async () => {
+        const profession = professionFactory.build({
+          name: 'Example Profession',
+        });
+
+        const version = professionVersionFactory.build({
+          id: 'version-id',
+          profession: profession,
+          occupationLocations: ['GB-ENG', 'GB-SCT', 'GB-WLS', 'GB-NIR'],
+          industries: [],
+        });
+
+        professionsService.findWithVersions.mockResolvedValue(profession);
+        professionVersionsService.findWithProfession.mockResolvedValue(version);
+
+        await controller.edit(response, 'profession-id', 'version-id', false);
+
+        expect(response.render).toHaveBeenCalledWith(
+          'admin/professions/top-level-information',
+          expect.objectContaining({
+            coversUK: true,
+          }),
+        );
       });
     });
   });
