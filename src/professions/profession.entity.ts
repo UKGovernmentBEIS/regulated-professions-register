@@ -1,21 +1,17 @@
-import { Legislation } from '../legislations/legislation.entity';
-import { Qualification } from '../qualifications/qualification.entity';
 import {
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
-  ManyToMany,
-  JoinTable,
-  ManyToOne,
-  Index,
   CreateDateColumn,
-  UpdateDateColumn,
-  OneToOne,
-  JoinColumn,
+  Entity,
+  Index,
+  ManyToOne,
   OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { Industry } from '../industries/industry.entity';
+import { Legislation } from '../legislations/legislation.entity';
 import { Organisation } from '../organisations/organisation.entity';
+import { Qualification } from '../qualifications/qualification.entity';
 import {
   ProfessionVersion,
   ProfessionVersionStatus,
@@ -35,69 +31,20 @@ export class Profession {
   @Column({ nullable: true })
   name: string;
 
-  @OneToMany(
-    () => ProfessionVersion,
-    (professionVersion) => professionVersion.profession,
-  )
-  versions: ProfessionVersion[];
-
-  @Column({ nullable: true })
-  alternateName: string;
-
-  @Index({ unique: true, where: '"slug" IS NOT NULL' })
-  @Column({ nullable: true })
-  slug: string;
-
-  @Column({ nullable: true })
-  description: string;
-
-  @Column('text', { array: true, nullable: true })
-  occupationLocations: string[];
-
-  @Column({ nullable: true })
-  regulationType: string;
-
-  @Column({ nullable: true, type: 'enum', enum: MandatoryRegistration })
-  mandatoryRegistration: MandatoryRegistration;
-
-  @ManyToMany(() => Industry, { nullable: true, eager: true })
-  @JoinTable()
-  industries: Industry[];
-
-  @OneToOne(() => Qualification, {
-    eager: true,
-    cascade: true,
-  })
-  @JoinColumn()
-  qualification: Qualification;
-
-  @Column({ nullable: true })
-  reservedActivities: string;
-
-  protectedTitles: string;
-
-  regulationUrl: string;
-
-  @OneToOne(() => Legislation, {
-    eager: true,
-    cascade: true,
-  })
-  @JoinColumn()
-  legislation: Legislation;
-
-  @ManyToMany(() => Legislation, {
-    eager: true,
-  })
-  @JoinTable()
-  legislations: Legislation[];
-
   @ManyToOne(() => Organisation, (organisation) => organisation.professions, {
     eager: true,
   })
   organisation: Organisation;
 
-  @Column({ default: false })
-  confirmed: boolean;
+  @Index({ unique: true, where: '"slug" IS NOT NULL' })
+  @Column({ nullable: true })
+  slug: string;
+
+  @OneToMany(
+    () => ProfessionVersion,
+    (professionVersion) => professionVersion.profession,
+  )
+  versions: ProfessionVersion[];
 
   @CreateDateColumn({
     type: 'timestamp',
@@ -112,6 +59,17 @@ export class Profession {
   })
   updated_at: Date;
 
+  alternateName?: string;
+  description?: string;
+  occupationLocations?: string[];
+  regulationType?: string;
+  mandatoryRegistration?: MandatoryRegistration;
+  industries?: Industry[];
+  qualification?: Qualification;
+  protectedTitles?: string;
+  regulationUrl?: string;
+  reservedActivities?: string;
+  legislations?: Legislation[];
   versionId?: string;
   status?: string;
 
@@ -127,7 +85,6 @@ export class Profession {
     qualification?: Qualification,
     reservedActivities?: string,
     legislations?: Legislation[],
-    legislation?: Legislation,
     organisation?: Organisation,
     versions?: ProfessionVersion[],
   ) {
@@ -142,7 +99,6 @@ export class Profession {
     this.qualification = qualification || null;
     this.reservedActivities = reservedActivities || null;
     this.legislations = legislations || null;
-    this.legislation = legislation || null;
     this.organisation = organisation || null;
     this.versions = versions || null;
   }
