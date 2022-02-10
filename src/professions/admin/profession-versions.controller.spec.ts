@@ -3,23 +3,23 @@ import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Response } from 'express';
 import { I18nService } from 'nestjs-i18n';
-import { Organisation } from '../organisations/organisation.entity';
-import QualificationPresenter from '../qualifications/presenters/qualification.presenter';
-import { createMockI18nService } from '../testutils/create-mock-i18n-service';
-import industryFactory from '../testutils/factories/industry';
-import legislationFactory from '../testutils/factories/legislation';
-import professionFactory from '../testutils/factories/profession';
-import professionVersionFactory from '../testutils/factories/profession-version';
-import { translationOf } from '../testutils/translation-of';
+import { Organisation } from '../../organisations/organisation.entity';
+import QualificationPresenter from '../../qualifications/presenters/qualification.presenter';
+import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
+import industryFactory from '../../testutils/factories/industry';
+import legislationFactory from '../../testutils/factories/legislation';
+import professionFactory from '../../testutils/factories/profession';
+import professionVersionFactory from '../../testutils/factories/profession-version';
+import { translationOf } from '../../testutils/translation-of';
 import { DeepPartial } from 'typeorm';
-import { RequestWithAppSession } from '../common/interfaces/request-with-app-session.interface';
-import userFactory from '../testutils/factories/user';
+import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
+import userFactory from '../../testutils/factories/user';
 import { ProfessionVersionsController } from './profession-versions.controller';
-import { ProfessionVersionsService } from './profession-versions.service';
-import { ProfessionsService } from './professions.service';
-import { Profession } from './profession.entity';
+import { ProfessionVersionsService } from '../profession-versions.service';
+import { ProfessionsService } from '../professions.service';
+import { Profession } from '../profession.entity';
 
-jest.mock('../organisations/organisation.entity');
+jest.mock('../../organisations/organisation.entity');
 
 describe('ProfessionVersionsController', () => {
   let controller: ProfessionVersionsController;
