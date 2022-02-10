@@ -93,29 +93,44 @@
 
 <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
 
-<h2 class="govuk-heading-m rpr-details__section-title">{{ "professions.show.regulatedActivities.heading" | t }}</h2>
+<div>
+  <h2 class="govuk-heading-m rpr-details__section-title">{{ "professions.show.regulatedActivities.heading" | t }}</h2>
 
-{{ govukSummaryList({
-  classes: 'govuk-summary-list--no-border',
-  rows: [
-    {
-      key: {
-        text: ("professions.show.regulatedActivities.reservedActivities" | t)
-      },
-      value: {
-        text: profession.reservedActivities
-      }
-    },
-    {
-      key: {
-        text: ("professions.show.regulatedActivities.description" | t)
-      },
-      value: {
-        text: profession.description
-      }
-    }
-  ]
-}) }}
+  <div>
+    <h3 class="govuk-heading-s">{{ "professions.show.regulatedActivities.regulationSummary" | t }}</h3>
+    <p class="govuk-body">{{ profession.description | escape }}</p>
+  </div>
+
+  <div>
+    <h3 class="govuk-heading-s">{{ "professions.show.regulatedActivities.reservedActivities" | t }}</h3>
+    <p class="govuk-body">{{ profession.reservedActivities | escape }}</p>
+  </div>
+
+  {% if profession.protectedTitles %}
+    <div>
+      <h3 class="govuk-heading-s">{{ "professions.show.regulatedActivities.protectedTitles" | t }}</h3>
+      <p class="govuk-body">{{ profession.protectedTitles | escape }}</p>
+    </div>
+  {% endif %}
+
+  {% if profession.regulationUrl %}
+
+    {{ govukSummaryList({
+      classes: 'govuk-summary-list--no-border',
+      rows: [
+        {
+          key: {
+            text: ("professions.show.regulatedActivities.regulationUrl" | t)
+          },
+          value: {
+            html: ["<a class=\"govuk-link\" href=\"", (profession.regulationUrl | escape), "\">", (profession.regulationUrl | escape),  "</a>" ] | join
+          }
+        }
+      ]
+    }) }}
+
+  {% endif %}
+</div>
 
 {% if qualification %}
 

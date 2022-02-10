@@ -34,12 +34,42 @@ describe('Showing a profession', () => {
 
     cy.translate('professions.show.regulatedActivities.heading').then(
       (heading) => {
-        cy.get('body').should('contain', heading);
+        cy.get('body h2').should('contain', heading);
+
+        cy.get('body h2')
+          .contains(heading)
+          .parent()
+          .within(() => {
+            cy.translate(
+              'professions.show.regulatedActivities.regulationSummary',
+            ).then((summaryHeading) => {
+              cy.get('h3').should('contain', summaryHeading);
+
+              cy.get('h3')
+                .contains(summaryHeading)
+                .parent()
+                .within(() => {
+                  cy.get('p').should(
+                    'contain',
+                    'Registration protection and exploitation of trade marks',
+                  );
+                });
+            });
+
+            cy.translate(
+              'professions.show.regulatedActivities.protectedTitles',
+            ).then((protectedTitlesHeading) => {
+              cy.get('h3').should('contain', protectedTitlesHeading);
+
+              cy.get('h3')
+                .contains(protectedTitlesHeading)
+                .parent()
+                .within(() => {
+                  cy.get('p').should('contain', 'Trade Mark Agent');
+                });
+            });
+          });
       },
-    );
-    cy.checkSummaryListRowValue(
-      'professions.show.regulatedActivities.description',
-      'Registration protection and exploitation of trade marks',
     );
 
     cy.translate('professions.show.qualification.heading').then((heading) => {
