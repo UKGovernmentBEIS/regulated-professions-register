@@ -71,7 +71,7 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rollbar": "^2.24.0",
-    "rxjs": "^7.5.2",
+    "rxjs": "^7.5.4",
     "sass": "^1.49.7",
     "sass-loader": "^12.4.0",
     "slugify": "^1.6.5",
