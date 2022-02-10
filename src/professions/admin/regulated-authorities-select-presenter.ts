@@ -8,12 +8,24 @@ export class RegulatedAuthoritiesSelectPresenter {
   ) {}
 
   selectArgs(): SelectItemArgs[] {
-    return this.allOrganisations.map((organisation) => ({
-      text: organisation.name,
-      value: organisation.id,
-      selected: this.selectedOrganisation
-        ? this.selectedOrganisation.id === organisation.id
-        : false,
-    }));
+    const options = [
+      {
+        text: '--- Please Select ---',
+        value: '',
+        selected: null,
+      },
+    ];
+
+    this.allOrganisations.forEach((organisation) =>
+      options.push({
+        text: organisation.name,
+        value: organisation.id,
+        selected: this.selectedOrganisation
+          ? this.selectedOrganisation.id === organisation.id
+          : false,
+      }),
+    );
+
+    return options;
   }
 }
