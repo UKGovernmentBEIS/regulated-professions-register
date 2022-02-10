@@ -77,6 +77,7 @@ describe('RoleController', () => {
 
       expect(RoleRadioButtonsPresenter).toBeCalledWith(
         expect.anything(),
+        false,
         Role.Registrar,
         i18nService,
       );
@@ -111,6 +112,7 @@ describe('RoleController', () => {
 
       expect(RoleRadioButtonsPresenter).toBeCalledWith(
         [Role.Administrator, Role.Editor],
+        false,
         expect.anything(),
         i18nService,
       );
@@ -127,6 +129,7 @@ describe('RoleController', () => {
 
       expect(RoleRadioButtonsPresenter).toBeCalledWith(
         [Role.Administrator, Role.Registrar, Role.Editor],
+        true,
         expect.anything(),
         i18nService,
       );
@@ -199,6 +202,7 @@ describe('RoleController', () => {
 
       expect(RoleRadioButtonsPresenter).toBeCalledWith(
         [Role.Administrator, Role.Editor],
+        false,
         undefined,
         i18nService,
       );

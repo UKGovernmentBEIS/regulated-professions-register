@@ -116,6 +116,7 @@ export class RoleController {
   ): Promise<void> {
     const roleRadioButtonArgs = await new RoleRadioButtonsPresenter(
       this.getAllowedRoles(serviceOwner),
+      serviceOwner,
       role,
       this.i18nService,
     ).radioButtonArgs();
