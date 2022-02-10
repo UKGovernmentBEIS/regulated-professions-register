@@ -4,7 +4,6 @@ import {
   Param,
   Query,
   Render,
-  Req,
   UseGuards,
 } from '@nestjs/common';
 import { Request } from 'express';
@@ -35,7 +34,6 @@ export class CheckYourAnswersController {
   @Render('admin/professions/check-your-answers')
   @BackLink((request: Request) => getReferrer(request))
   async show(
-    @Req() req: Request,
     @Param('professionId') professionId: string,
     @Param('versionId') versionId: string,
     @Query('edit') edit: boolean,
@@ -80,8 +78,10 @@ export class CheckYourAnswersController {
       industries: industryNames,
       organisation: draftProfession.organisation.name,
       mandatoryRegistration: version.mandatoryRegistration,
-      description: version.description,
+      regulationSummary: version.description,
       reservedActivities: version.reservedActivities,
+      protectedTitles: version.protectedTitles,
+      regulationUrl: version.regulationUrl,
       qualification: qualification,
       legislation: version.legislations[0],
       confirmed: draftProfession.slug !== null,

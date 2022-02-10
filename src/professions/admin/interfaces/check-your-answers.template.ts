@@ -9,8 +9,10 @@ export interface CheckYourAnswersTemplate {
   versionId: string;
   organisation: string;
   mandatoryRegistration: string;
+  regulationSummary: string;
   reservedActivities: string;
-  description: string;
+  protectedTitles: string;
+  regulationUrl: string;
   qualification: QualificationPresenter;
   legislation: Legislation;
   captionText: string;

@@ -1,10 +1,8 @@
 import { DeepMocked, createMock } from '@golevelup/ts-jest';
 import { TestingModule, Test } from '@nestjs/testing';
-import { Request } from 'express';
 import { I18nService } from 'nestjs-i18n';
 import QualificationPresenter from '../../qualifications/presenters/qualification.presenter';
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
-import { createMockRequest } from '../../testutils/create-mock-request';
 import industryFactory from '../../testutils/factories/industry';
 import legislationFactory from '../../testutils/factories/legislation';
 import organisationFactory from '../../testutils/factories/organisation';
@@ -70,8 +68,10 @@ describe('CheckYourAnswersController', () => {
             industryFactory.build({ name: 'industries.construction' }),
           ],
           mandatoryRegistration: MandatoryRegistration.Voluntary,
-          description: 'A description of the regulation',
+          description: 'A summary of the regulation',
           reservedActivities: 'Some reserved activities',
+          protectedTitles: 'Some protected titles',
+          regulationUrl: 'http://example.com/regulations',
           profession: profession,
           legislations: [legislation],
           qualification: qualification,
@@ -79,13 +79,7 @@ describe('CheckYourAnswersController', () => {
 
         professionVersionsService.findWithProfession.mockResolvedValue(version);
 
-        const request: Request = createMockRequest(
-          'http://example.com/some/path',
-          'example.com',
-        );
-
         const templateParams = await controller.show(
-          request,
           'profession-id',
           'version-id',
           false,
@@ -103,11 +97,15 @@ describe('CheckYourAnswersController', () => {
         expect(templateParams.mandatoryRegistration).toEqual(
           MandatoryRegistration.Voluntary,
         );
+        expect(templateParams.regulationSummary).toEqual(
+          'A summary of the regulation',
+        );
         expect(templateParams.reservedActivities).toEqual(
           'Some reserved activities',
         );
-        expect(templateParams.description).toEqual(
-          'A description of the regulation',
+        expect(templateParams.protectedTitles).toEqual('Some protected titles');
+        expect(templateParams.regulationUrl).toEqual(
+          'http://example.com/regulations',
         );
         expect(templateParams.qualification).toEqual(
           new QualificationPresenter(qualification),
@@ -140,13 +138,7 @@ describe('CheckYourAnswersController', () => {
         professionsService.findWithVersions.mockResolvedValue(profession);
         professionVersionsService.findWithProfession.mockResolvedValue(version);
 
-        const request: Request = createMockRequest(
-          'http://example.com/some/path',
-          'example.com',
-        );
-
         const templateParams = await controller.show(
-          request,
           'profession-id',
           'version-id',
           false,

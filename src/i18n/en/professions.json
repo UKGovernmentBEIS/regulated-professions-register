@@ -159,9 +159,11 @@
       "phoneNumber": "Phone number"
     },
     "regulatedActivities": {
-      "heading": "Regulated activities",
+      "heading": "Regulation",
+      "regulationSummary": "Regulation summary",
       "reservedActivities": "Reserved activities",
-      "description": "Description of activities / regulation description"
+      "protectedTitles": "Protected titles",
+      "regulationUrl": "More about regulated activities and titles"
     },
     "qualification": {
       "heading": "Qualification information",
