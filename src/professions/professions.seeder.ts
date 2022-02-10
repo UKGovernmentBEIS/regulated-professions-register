@@ -169,11 +169,11 @@ export class ProfessionsSeeder implements Seeder {
   async drop(): Promise<any> {
     // Handle deletion of dependent repositories here to prevent violation of
     // foreign key constraints
+    await this.legislationsRepository.delete({});
     await this.professionVersionsRepository.delete({});
-    await this.professionsRepository.delete({});
     await this.industriesRepository.delete({});
     await this.qualificationsRepository.delete({});
-    await this.legislationsRepository.delete({});
+    await this.professionsRepository.delete({});
     await this.organisationVersionRepository.delete({});
     await this.organisationRepository.delete({});
   }
