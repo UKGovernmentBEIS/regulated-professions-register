@@ -56,7 +56,7 @@ describe('Creating a new user', () => {
       cy.checkAccessibility();
 
       cy.translate(
-        'users.roleDescriptions.managerProfessionsAndOrganisations',
+        'users.roleDescriptions.manageProfessionsAndOrganisations',
       ).then((manageLabel) => {
         cy.get('body').should('contain', manageLabel);
       });
@@ -200,13 +200,13 @@ describe('Creating a new user', () => {
       cy.checkAccessibility();
 
       cy.translate(
-        'users.roleDescriptions.managerProfessionsAndOrganisations',
+        'users.roleDescriptions.manageProfessionsAndOrganisations',
       ).then((manageLabel) => {
         cy.get('body').should('not.contain', manageLabel);
       });
 
       cy.translate(
-        'users.roleDescriptions.managerProfessionsAndOrganisations',
+        'users.roleDescriptions.manageProfessionsAndOrganisations',
       ).then((manageLabel) => {
         cy.get('body').should('not.contain', manageLabel);
       });

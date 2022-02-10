@@ -7,15 +7,15 @@ import { User } from '../user.entity';
 
 const descriptions = [
   {
-    serviceOwnerText: 'users.roleDescriptions.managerUsers',
-    nonServiceOwnerText: 'users.roleDescriptions.managerUsers',
+    serviceOwnerText: 'users.roleDescriptions.manageUsers',
+    nonServiceOwnerText: 'users.roleDescriptions.manageUsers',
     permissions: [UserPermission.CreateUser],
   },
   {
     serviceOwnerText:
-      'users.roleDescriptions.managerProfessionsAndOrganisations',
+      'users.roleDescriptions.manageProfessionsAndOrganisations',
     nonServiceOwnerText:
-      'users.roleDescriptions.managerProfessionsAndOrganisations',
+      'users.roleDescriptions.manageProfessionsAndOrganisations',
     permissions: [
       UserPermission.CreateOrganisation,
       UserPermission.CreateProfession,

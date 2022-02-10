@@ -27,7 +27,7 @@ describe('RoleRadioButtonsPresenter', () => {
         const result = await presenter.radioButtonArgs();
 
         const registrarHint = `${translationOf(
-          'users.roleDescriptions.managerProfessionsAndOrganisations',
+          'users.roleDescriptions.manageProfessionsAndOrganisations',
         )}<br />${translationOf(
           'users.roleDescriptions.editProfessionsAndOrganisations',
         )}`;
@@ -75,7 +75,7 @@ describe('RoleRadioButtonsPresenter', () => {
         const result = await presenter.radioButtonArgs();
 
         const administratorHint = `${translationOf(
-          'users.roleDescriptions.managerUsers',
+          'users.roleDescriptions.manageUsers',
         )}<br />${translationOf(
           'users.roleDescriptions.editProfessionsAndOwnOrganisation',
         )}`;
