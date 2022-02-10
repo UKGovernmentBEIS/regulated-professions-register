@@ -296,6 +296,39 @@ describe('TopLevelInformationController', () => {
           '/admin/professions/profession-id/versions/version-id/regulatory-body/edit',
         );
       });
+
+      it('sets all nations when `coversUK` is set to `1`', async () => {
+        const profession = professionFactory
+          .justCreated('profession-id')
+          .build();
+
+        const version = professionVersionFactory.build({
+          id: 'version-id',
+          profession: profession,
+        });
+
+        professionsService.findWithVersions.mockResolvedValue(profession);
+        professionVersionsService.findWithProfession.mockResolvedValue(version);
+
+        const topLevelDetailsDto = {
+          name: 'Gas Safe Engineer',
+          coversUK: '1',
+          industries: ['construction-uuid'],
+        };
+
+        await controller.update(
+          topLevelDetailsDto,
+          response,
+          'profession-id',
+          'version-id',
+        );
+
+        expect(professionVersionsService.save).toHaveBeenCalledWith(
+          expect.objectContaining({
+            occupationLocations: ['GB-ENG', 'GB-SCT', 'GB-WLS', 'GB-NIR'],
+          }),
+        );
+      });
     });
 
     describe('when required parameters are not entered', () => {

@@ -97,6 +97,7 @@ export class TopLevelInformationController {
     );
 
     const submittedValues: TopLevelDetailsDto = topLevelDetailsDto;
+    const coversUK = Boolean(Number(submittedValues.coversUK));
 
     const profession = await this.professionsService.findWithVersions(
       professionId,
@@ -122,6 +123,10 @@ export class TopLevelInformationController {
         submittedValues.change,
         errors,
       );
+    }
+
+    if (coversUK) {
+      submittedValues.nations = this.allNations();
     }
 
     const updatedProfession: Profession = {
