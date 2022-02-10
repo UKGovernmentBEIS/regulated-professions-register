@@ -23,6 +23,7 @@ import { LegislationTemplate } from './interfaces/legislation.template';
 import ViewUtils from './viewUtils';
 import { BackLink } from '../../common/decorators/back-link.decorator';
 import { ProfessionVersionsService } from '../profession-versions.service';
+import { isConfirmed } from '../../helpers/is-confirmed';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
@@ -58,7 +59,7 @@ export class LegislationController {
     this.renderForm(
       res,
       version.legislations[0],
-      profession.slug !== null,
+      isConfirmed(profession),
       change,
     );
   }
@@ -109,7 +110,7 @@ export class LegislationController {
       return this.renderForm(
         res,
         updatedLegislation,
-        profession.slug !== null,
+        isConfirmed(profession),
         submittedValues.change,
         errors,
       );

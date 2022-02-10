@@ -24,6 +24,7 @@ import { QualificationInformationTemplate } from './interfaces/qualification-inf
 import { BackLink } from '../../common/decorators/back-link.decorator';
 import ViewUtils from './viewUtils';
 import { ProfessionVersionsService } from '../profession-versions.service';
+import { isConfirmed } from '../../helpers/is-confirmed';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
@@ -58,7 +59,7 @@ export class QualificationInformationController {
     return this.renderForm(
       res,
       version.qualification,
-      profession.slug !== null,
+      isConfirmed(profession),
       change,
     );
   }
@@ -117,7 +118,7 @@ export class QualificationInformationController {
       return this.renderForm(
         res,
         updatedQualification,
-        profession.slug !== null,
+        isConfirmed(profession),
         submittedValues.change,
         errors,
       );

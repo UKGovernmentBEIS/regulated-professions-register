@@ -37,6 +37,7 @@ import { IndustriesService } from '../../industries/industries.service';
 import { createFilterInput } from '../../helpers/create-filter-input.helper';
 
 import { flashMessage } from '../../common/flash-message';
+import { isConfirmed } from '../../helpers/is-confirmed';
 
 @UseGuards(AuthenticationGuard)
 @Controller('/admin/organisations')
@@ -130,7 +131,7 @@ export class OrganisationsController {
     if (body.confirm) {
       return this.confirm(res, req, organisation, version);
     } else {
-      if (!organisation.slug) {
+      if (!isConfirmed(organisation)) {
         organisation.name = body.name;
         await this.organisationsService.save(organisation);
       }
@@ -175,7 +176,7 @@ export class OrganisationsController {
   ): Promise<void> {
     let action: string;
 
-    if (!organisation.slug) {
+    if (!isConfirmed(organisation)) {
       action = 'create';
       await this.organisationsService.setSlug(organisation);
     } else {

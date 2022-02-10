@@ -20,6 +20,7 @@ import { UserPermission } from '../../users/user-permission';
 import ViewUtils from './viewUtils';
 import { BackLink } from '../../common/decorators/back-link.decorator';
 import { ProfessionVersionsService } from '../profession-versions.service';
+import { isConfirmed } from '../../helpers/is-confirmed';
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
 export class CheckYourAnswersController {
@@ -84,8 +85,8 @@ export class CheckYourAnswersController {
       regulationUrl: version.regulationUrl,
       qualification: qualification,
       legislation: version.legislations[0],
-      confirmed: draftProfession.slug !== null,
-      captionText: ViewUtils.captionText(draftProfession.slug !== null),
+      confirmed: isConfirmed(draftProfession),
+      captionText: ViewUtils.captionText(isConfirmed(draftProfession)),
       edit: Boolean(edit),
     };
   }
