@@ -141,6 +141,23 @@
             rows: [
               {
                 key: {
+                  text: ("professions.form.label.regulatedActivities.regulationSummary" | t)
+                },
+                value: {
+                  text: regulationSummary
+                },
+                actions: {
+                  items: [
+                    {
+                      href: "/admin/professions/" + professionId + "/versions/" + versionId + "/regulated-activities/edit?change=true",
+                      text: ("app.change" | t),
+                      visuallyHiddenText: ("professions.form.label.regulatedActivities.regulationSummary" | t)
+                    }
+                  ]
+                }
+              },
+              {
+                key: {
                   text: ("professions.form.label.regulatedActivities.reservedActivities" | t)
                 },
                 value: {
@@ -158,17 +175,34 @@
               },
               {
                 key: {
-                  text: ("professions.form.label.regulatedActivities.regulationSummary" | t)
+                  text: ("professions.form.label.regulatedActivities.protectedTitles" | t)
                 },
                 value: {
-                  text: description
+                  text: protectedTitles
                 },
                 actions: {
                   items: [
                     {
                       href: "/admin/professions/" + professionId + "/versions/" + versionId + "/regulated-activities/edit?change=true",
                       text: ("app.change" | t),
-                      visuallyHiddenText: ("professions.form.label.regulatedActivities.regulationSummary" | t)
+                      visuallyHiddenText: ("professions.form.label.regulatedActivities.protectedTitles" | t)
+                    }
+                  ]
+                }
+              },
+              {
+                key: {
+                  text: ("professions.form.label.regulatedActivities.regulationUrl" | t)
+                },
+                value: {
+                  html: ("<a class=\"govuk-link\" href=\"" + (regulationUrl | escape) + "\">" + (regulationUrl | escape) + "</a>") if regulationUrl else ""
+                },
+                actions: {
+                  items: [
+                    {
+                      href: "/admin/professions/" + professionId + "/versions/" + versionId + "/regulated-activities/edit?change=true",
+                      text: ("app.change" | t),
+                      visuallyHiddenText: ("professions.form.label.regulatedActivities.regulationUrl" | t)
                     }
                   ]
                 }
