@@ -65,6 +65,7 @@ export class TopLevelInformationController {
     return this.renderForm(
       res,
       profession.name,
+      null,
       version.industries || [],
       version.occupationLocations || [],
       isConfirmed(profession),
@@ -110,6 +111,7 @@ export class TopLevelInformationController {
       return this.renderForm(
         res,
         submittedValues.name,
+        submittedValues.coversUK,
         submittedIndustries,
         submittedValues.nations || [],
         isConfirmed(profession),
@@ -150,6 +152,7 @@ export class TopLevelInformationController {
   private async renderForm(
     res: Response,
     name: string,
+    coversUK: string,
     selectedIndustries: Industry[],
     selectedNations: string[],
     isEditing: boolean,
@@ -178,6 +181,7 @@ export class TopLevelInformationController {
 
     const templateArgs: TopLevelDetailsTemplate = {
       name,
+      coversUK,
       industriesCheckboxItems,
       nationsCheckboxArgs,
       captionText: ViewUtils.captionText(isEditing),

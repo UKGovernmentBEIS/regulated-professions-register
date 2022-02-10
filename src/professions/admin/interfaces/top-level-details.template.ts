@@ -3,6 +3,7 @@ import { CheckboxArgs } from '../../../common/interfaces/checkbox-args.interface
 
 export interface TopLevelDetailsTemplate {
   name: string | null;
+  coversUK: string | null;
   industriesCheckboxItems: CheckboxItems[];
   nationsCheckboxArgs: CheckboxArgs;
   captionText: string;

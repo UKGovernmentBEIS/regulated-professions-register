@@ -83,6 +83,7 @@ describe('TopLevelInformationController', () => {
           'admin/professions/top-level-information',
           expect.objectContaining({
             name: undefined,
+            coversUK: null,
             industriesCheckboxItems: [
               {
                 text: translationOf('industries.health'),
@@ -165,6 +166,7 @@ describe('TopLevelInformationController', () => {
           'admin/professions/top-level-information',
           expect.objectContaining({
             name: 'Example Profession',
+            coversUK: null,
             industriesCheckboxItems: [
               {
                 text: translationOf('industries.health'),
@@ -230,6 +232,7 @@ describe('TopLevelInformationController', () => {
 
         const topLevelDetailsDto = {
           name: 'Gas Safe Engineer',
+          coversUK: '0',
           nations: ['GB-ENG'],
           industries: ['construction-uuid'],
         };
@@ -275,6 +278,7 @@ describe('TopLevelInformationController', () => {
         const topLevelDetailsDtoWithNoAnswers = {
           name: '',
           nations: undefined,
+          coversUK: null,
           industries: undefined,
         };
 
@@ -292,7 +296,7 @@ describe('TopLevelInformationController', () => {
               name: {
                 text: 'professions.form.errors.name.empty',
               },
-              nations: {
+              coversUK: {
                 text: 'professions.form.errors.nations.empty',
               },
               industries: {
@@ -327,6 +331,7 @@ describe('TopLevelInformationController', () => {
 
           const topLevelDetailsDtoWithChangeParam = {
             name: 'A new profession',
+            coversUK: '0',
             nations: ['GB-ENG'],
             industries: ['construction-uuid'],
             change: true,
@@ -367,6 +372,7 @@ describe('TopLevelInformationController', () => {
           const topLevelDetailsDtoWithoutChangeParam = {
             name: 'A new profession',
             nations: ['GB-ENG'],
+            coversUK: '0',
             industries: ['construction-uuid'],
           };
 
