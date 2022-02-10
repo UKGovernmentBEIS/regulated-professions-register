@@ -13,7 +13,6 @@ import {
 } from 'typeorm';
 import { Industry } from '../industries/industry.entity';
 import { Legislation } from '../legislations/legislation.entity';
-import { Organisation } from '../organisations/organisation.entity';
 import { Qualification } from '../qualifications/qualification.entity';
 import { User } from '../users/user.entity';
 import { Profession } from './profession.entity';
@@ -84,11 +83,6 @@ export class ProfessionVersion {
     { eager: true, cascade: true },
   )
   legislations: Legislation[];
-
-  @ManyToOne(() => Organisation, (organisation) => organisation.professions, {
-    eager: true,
-  })
-  organisation: Organisation;
 
   @CreateDateColumn({
     type: 'timestamp',

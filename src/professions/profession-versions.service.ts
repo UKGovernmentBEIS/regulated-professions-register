@@ -137,7 +137,7 @@ export class ProfessionVersionsService {
     return this.repository
       .createQueryBuilder('professionVersion')
       .leftJoinAndSelect('professionVersion.profession', 'profession')
-      .leftJoinAndSelect('professionVersion.organisation', 'organisation')
+      .leftJoinAndSelect('profession.organisation', 'organisation')
       .leftJoinAndSelect('professionVersion.industries', 'industries')
       .leftJoinAndSelect('professionVersion.qualification', 'qualification')
       .leftJoinAndSelect('professionVersion.legislations', 'legislations');

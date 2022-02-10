@@ -170,10 +170,6 @@ export class ProfessionsSeeder implements Seeder {
               );
             }
 
-            const organisation = await this.organisationRepository.findOne({
-              where: { name: version.organisation },
-            });
-
             const newVersion = {
               alternateName: version.alternateName,
               description: version.description,
@@ -185,7 +181,6 @@ export class ProfessionsSeeder implements Seeder {
               industries: industries,
               legislations: legislations,
               qualification: qualification,
-              organisation: organisation,
               status: version.status as ProfessionVersionStatus,
               profession: profession,
             } as ProfessionVersion;

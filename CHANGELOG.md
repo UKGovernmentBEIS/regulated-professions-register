@@ -19,6 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Users are assigned a role rather than a list of permissions
 - All roles may edit professions
 - Only service admistrators may create professions
+- Setting an organisation on a profession updates immediately, rather than saving as draft
 
 ## [release-002] - 2022-02-01
 
