@@ -45,8 +45,8 @@ describe(RegulatedActivitiesController, () => {
       const version = professionVersionFactory.build({
         id: 'version-id',
         profession: profession,
+        description: 'Example regulation summary',
         reservedActivities: 'Example reserved activities',
-        description: 'A description of the profession',
       });
 
       professionsService.findWithVersions.mockResolvedValue(profession);
@@ -57,8 +57,8 @@ describe(RegulatedActivitiesController, () => {
       expect(response.render).toHaveBeenCalledWith(
         'admin/professions/regulated-activities',
         expect.objectContaining({
+          regulationSummary: 'Example regulation summary',
           reservedActivities: 'Example reserved activities',
-          regulationDescription: 'A description of the profession',
         }),
       );
     });
@@ -72,8 +72,10 @@ describe(RegulatedActivitiesController, () => {
           const version = professionVersionFactory.build({
             id: 'version-id',
             profession: profession,
+            description: 'Example regulation summary',
             reservedActivities: 'Example reserved activities',
-            description: 'A description of the profession',
+            protectedTitles: 'Example protected titles',
+            regulationUrl: 'https://example.com/regulation',
           });
 
           professionsService.findWithVersions.mockResolvedValue(profession);
@@ -82,8 +84,10 @@ describe(RegulatedActivitiesController, () => {
           );
 
           const regulatedActivitiesDto: RegulatedActivitiesDto = {
-            activities: 'Example reserved activities',
-            description: 'A description of the profession',
+            regulationSummary: 'Example regulation summary',
+            reservedActivities: 'Example reserved activities',
+            protectedTitles: 'Example protected titles',
+            regulationUrl: 'https://example.com/regulation',
             change: false,
           };
 
@@ -97,8 +101,10 @@ describe(RegulatedActivitiesController, () => {
           expect(professionVersionsService.save).toHaveBeenCalledWith(
             expect.objectContaining({
               id: 'version-id',
-              description: 'A description of the profession',
+              description: 'Example regulation summary',
               reservedActivities: 'Example reserved activities',
+              protectedTitles: 'Example protected titles',
+              regulationUrl: 'https://example.com/regulation',
             }),
           );
 
@@ -114,8 +120,10 @@ describe(RegulatedActivitiesController, () => {
           const version = professionVersionFactory.build({
             id: 'version-id',
             profession: profession,
+            description: 'Example regulation summary',
             reservedActivities: 'Example reserved activities',
-            description: 'A description of the profession',
+            protectedTitles: 'Example protected titles',
+            regulationUrl: 'https://example.com/regulation',
           });
 
           professionsService.findWithVersions.mockResolvedValue(profession);
@@ -124,8 +132,10 @@ describe(RegulatedActivitiesController, () => {
           );
 
           const regulatedActivitiesDto: RegulatedActivitiesDto = {
-            activities: 'Example reserved activities',
-            description: 'A description of the profession',
+            regulationSummary: 'Example regulation summary',
+            reservedActivities: 'Example reserved activities',
+            protectedTitles: 'Example protected titles',
+            regulationUrl: 'https://example.com/regulation',
             change: true,
           };
 
@@ -139,8 +149,10 @@ describe(RegulatedActivitiesController, () => {
           expect(professionVersionsService.save).toHaveBeenCalledWith(
             expect.objectContaining({
               id: 'version-id',
-              description: 'A description of the profession',
+              description: 'Example regulation summary',
               reservedActivities: 'Example reserved activities',
+              protectedTitles: 'Example protected titles',
+              regulationUrl: 'https://example.com/regulation',
             }),
           );
 
@@ -158,16 +170,20 @@ describe(RegulatedActivitiesController, () => {
         const version = professionVersionFactory.build({
           id: 'version-id',
           profession: profession,
+          description: 'Example regulation summary',
           reservedActivities: 'Example reserved activities',
-          description: 'A description of the profession',
+          protectedTitles: 'Example protected titles',
+          regulationUrl: 'https://example.com/regulation',
         });
 
         professionsService.findWithVersions.mockResolvedValue(profession);
         professionVersionsService.findWithProfession.mockResolvedValue(version);
 
         const regulatedActivitiesDto: RegulatedActivitiesDto = {
-          activities: undefined,
-          description: undefined,
+          regulationSummary: undefined,
+          reservedActivities: undefined,
+          protectedTitles: undefined,
+          regulationUrl: undefined,
           change: false,
         };
 
@@ -184,11 +200,11 @@ describe(RegulatedActivitiesController, () => {
           'admin/professions/regulated-activities',
           expect.objectContaining({
             errors: {
-              activities: {
+              reservedActivities: {
                 text: 'professions.form.errors.reservedActivities.empty',
               },
-              description: {
-                text: 'professions.form.errors.description.empty',
+              regulationSummary: {
+                text: 'professions.form.errors.regulationSummary.empty',
               },
             },
           }),

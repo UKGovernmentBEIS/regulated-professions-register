@@ -19,6 +19,7 @@
         "description": "Registration protection and exploitation of trade marks",
         "occupationLocations": ["GB-ENG", "GB-SCT", "GB-WLS", "GB-NIR"],
         "regulationType": "Reserves of activities",
+        "protectedTitles": "Trade Mark Agent",
         "industries": ["industries.law"],
         "qualification": "DSE - Diploma (post-secondary education), including Annex II (ex 92/51, Annex C,D) , Art. 11 c",
         "reservedActivities": "England and Wales: the exercise of a right of audience; the conduct of litigation; reserved instrument activities; probate activities; the administration of oaths (see section 12 Legal Services Act 2007).",

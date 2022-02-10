@@ -2,6 +2,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/textarea/macro.njk" import govukTextarea %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
 
 {% set bodyClasses = "rpr-internal__page" %}
 
@@ -18,6 +19,23 @@
         <input type="hidden" name="change" value="{{ change }}" />
 
         {{
+          govukTextarea({
+            label: {
+              text: ("professions.form.label.regulatedActivities.regulationSummary" | t),
+              classes: "govuk-label--m",
+              isPageHeading: false
+            },
+            id: "regulationSummary",
+            name: "regulationSummary",
+            value: regulationSummary,
+            rows: "7",
+            errorMessage: errors.regulationSummary | tError
+          })
+        }}
+
+        <label class="govuk-label govuk-label--m" for="reservedActivities">{{ "professions.form.label.regulatedActivities.reservedActivities" | t }}</label>
+
+        {{
           govukDetails({
             summaryText: ("professions.form.details.regulatedActivities.summaryText" | t),
             text: ("professions.form.details.regulatedActivities.text" | t)
@@ -26,31 +44,43 @@
 
         {{
           govukTextarea({
-            label: {
-              text: ("professions.form.label.regulatedActivities.activities" | t),
-              classes: "govuk-label--m",
-              isPageHeading: false
-            },
-            id: "activities",
-            name: "activities",
+            id: "reservedActivities",
+            name: "reservedActivities",
             value: reservedActivities,
             rows: "7",
-            errorMessage: errors.activities | tError
+            errorMessage: errors.reservedActivities | tError
           })
         }}
 
         {{
           govukTextarea({
             label: {
-              text: ("professions.form.label.regulatedActivities.description" | t),
+              text: ("professions.form.label.regulatedActivities.protectedTitles" | t),
               classes: "govuk-label--m",
               isPageHeading: false
             },
-            id: "description",
-            name: "description",
-            value: regulationDescription,
+            id: "protectedTitles",
+            name: "protectedTitles",
+            value: protectedTitles,
             rows: "7",
-            errorMessage: errors.description | tError
+            errorMessage: errors.protectedTitles | tError
+          })
+        }}
+
+        {{
+          govukInput({
+            label: {
+              text: ("professions.form.label.regulatedActivities.regulationUrl" | t),
+              classes: "govuk-label--m",
+              isPageHeading: false
+            },
+            hint: {
+              text: ("professions.form.hint.regulatedActivities.regulationUrl" | t)
+            },
+            id: "regulationUrl",
+            name: "regulationUrl",
+            value: regulationUrl,
+            errorMessage: errors.regulationUrl | tError
           })
         }}
 

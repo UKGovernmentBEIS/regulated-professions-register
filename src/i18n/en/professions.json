@@ -8,7 +8,7 @@
       "originalAnswers": "Your original answers",
       "confirmation": "New profession created",
       "amended": "Profession amended",
-      "regulatedActivities": "Regulated activities",
+      "regulatedActivities": "Regulations",
       "qualificationInformation": "Qualification information",
       "legislation": "Legislation",
       "edit": "Are you sure you want to amend {professionName}?"
@@ -29,8 +29,10 @@
         "mandatoryRegistration": "Is registration mandatory with professional bodies?"
       },
       "regulatedActivities": {
-        "activities": "Reserved activities",
-        "description": "Description of activities / regulation description"
+        "regulationSummary": "Regulation summary",
+        "reservedActivities": "Reserved activities",
+        "protectedTitles": "Protected titles",
+        "regulationUrl": "More about regulated activities and titles"
       },
       "qualificationInformation": {
         "qualificationLevel": "Qualification level",
@@ -42,6 +44,11 @@
       "legislation": {
         "nationalLegislation": "National legislation",
         "link": "Legislation link"
+      }
+    },
+    "hint": {
+      "regulatedActivities": {
+        "regulationUrl": "Please enter a link"
       }
     },
     "details": {
@@ -97,11 +104,11 @@
       "mandatoryRegistration": {
         "empty": "Select whether registration with the regulatory authority is mandatory"
       },
+      "regulationSummary": {
+        "empty": "Enter a regulation summary"
+      },
       "reservedActivities": {
         "empty": "Enter reserved activities"
-      },
-      "description": {
-        "empty": "Enter a description of the regulation / reserved activities"
       },
       "qualification": {
         "level": {

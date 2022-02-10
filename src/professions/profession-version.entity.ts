@@ -66,6 +66,12 @@ export class ProfessionVersion {
   @Column({ nullable: true })
   reservedActivities: string;
 
+  @Column({ nullable: true })
+  protectedTitles: string;
+
+  @Column({ nullable: true })
+  regulationUrl: string;
+
   @ManyToMany(() => Industry, { nullable: true, eager: true })
   @JoinTable()
   industries: Industry[];
