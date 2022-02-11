@@ -111,7 +111,7 @@ export class TopLevelInformationController {
       return this.renderForm(
         res,
         submittedValues.name,
-        submittedValues.coversUK,
+        coversUK,
         submittedIndustries,
         submittedValues.nations || [],
         isConfirmed(profession),
@@ -152,7 +152,7 @@ export class TopLevelInformationController {
   private async renderForm(
     res: Response,
     name: string,
-    coversUK: string,
+    coversUK: boolean,
     selectedIndustries: Industry[],
     selectedNations: string[],
     isEditing: boolean,
