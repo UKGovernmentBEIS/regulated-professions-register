@@ -11,6 +11,7 @@
     "reservedActivities": "England and Wales: the exercise of a right of audience; the conduct of litigation; reserved instrument activities; probate activities; the administration of oaths (see section 12 Legal Services Act 2007).",
     "legislation": "The Trade Marks Act 1994",
     "organisation": "Law Society of England and Wales",
+    "additionalOrganisation": null,
     "mandatoryRegistration": "voluntary",
     "versions": [
       {
@@ -41,6 +42,7 @@
     "reservedActivities": "No information submitted",
     "legislation": "The Education (School Teachers' Qualifications) (England) Regulations 2003/1662 (as amended)",
     "organisation": "Department for Education",
+    "additionalOrganisation": null,
     "mandatoryRegistration": "mandatory",
     "versions": [
       {
@@ -72,6 +74,7 @@
     "reservedActivities": "Gas Safe Register is the official list of gas engineers in the UK, Isle of Man and Guernsey. To work on gas appliances and installations you must be on the gas safe register. The register exists to protect the public from unsafe gas work (EN)",
     "legislation": "Gas Safety (Installation and Use) Regulations 1998",
     "organisation": "Council of Registered Gas Installers",
+    "additionalOrganisation": null,
     "mandatoryRegistration": "voluntary",
     "versions": [
       {
