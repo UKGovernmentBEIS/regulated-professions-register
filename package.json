@@ -50,7 +50,7 @@
     "@types/auth0": "^2.34.13",
     "@types/connect-flash": "^0.0.37",
     "@types/express-session": "^1.17.4",
-    "auth0": "^2.39.0",
+    "auth0": "^2.40.0",
     "bull": "^4.5.1",
     "bull-repl": "^0.26.3",
     "class-transformer": "^0.5.1",
