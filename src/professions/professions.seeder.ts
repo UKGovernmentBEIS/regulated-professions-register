@@ -122,9 +122,32 @@ export class ProfessionsSeeder implements Seeder {
           where: { name: In(version.industries || []) },
         });
 
-        const qualification = await this.qualificationsRepository.findOne({
-          where: { level: version.qualification },
-        });
+        let qualification: Qualification =
+          await this.qualificationsRepository.findOne({
+            where: { level: version.qualification },
+          });
+
+        if (qualification) {
+          // Currently the Qualification relation has a unique constraint
+          // on the QualificationID, so we need to create a new Qualification
+          // each time. We need to fix this, but in the interests of getting
+          // seed data in, we'll just create a new entry each time
+          qualification = await this.qualificationsRepository.save(
+            new Qualification(
+              qualification.level,
+              qualification.methodToObtain,
+              qualification.otherCommonPathToObtain,
+              qualification.commonPathToObtain,
+              qualification.otherCommonPathToObtain,
+              qualification.educationDuration,
+              null,
+              null,
+              null,
+              null,
+              qualification.mandatoryProfessionalExperience,
+            ),
+          );
+        }
 
         let legislations: Legislation[] =
           await this.legislationsRepository.find({
