@@ -9,6 +9,7 @@ export default Factory.define<User>(({ sequence }) => ({
   role: Role.Editor,
   externalIdentifier: 'extid|1234567',
   organisationVersions: [],
+  professionVersions: [],
   organisation: undefined,
   serviceOwner: false,
   confirmed: false,

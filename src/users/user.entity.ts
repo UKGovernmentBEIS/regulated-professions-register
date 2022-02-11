@@ -60,6 +60,12 @@ export class User {
   )
   organisationVersions: OrganisationVersion[];
 
+  @OneToMany(
+    () => ProfessionVersion,
+    (professionVersion) => professionVersion.user,
+  )
+  professionVersions: ProfessionVersion[];
+
   @ManyToOne(() => Organisation, (organisation) => organisation.users, {
     eager: true,
   })
