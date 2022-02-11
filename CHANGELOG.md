@@ -22,6 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Only service admistrators may create professions
 - Setting an organisation on a profession updates immediately, rather than saving as draft
 - Remove redundant fields from Profession, now the values are stored on a Version
+- Simplify nation selection
 
 ## [release-002] - 2022-02-01
 
