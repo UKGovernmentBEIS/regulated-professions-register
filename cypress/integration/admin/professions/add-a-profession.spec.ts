@@ -76,6 +76,9 @@ describe('Adding a new profession', () => {
         'Department for Education',
       );
       cy.get('input[name="mandatoryRegistration"][value="mandatory"]').check();
+      cy.get('select[name="additionalRegulatoryBody"]').select(
+        'General Medical Council',
+      );
       cy.translate('app.continue').then((buttonText) => {
         cy.get('button').contains(buttonText).click();
       });

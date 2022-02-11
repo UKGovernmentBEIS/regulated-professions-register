@@ -3,6 +3,7 @@ import { SelectItemArgs } from '../../../common/interfaces/select-item-args.inte
 
 export interface RegulatoryBodyTemplate {
   regulatedAuthoritiesSelectArgs: SelectItemArgs[];
+  additionalRegulatedAuthoritiesSelectArgs: SelectItemArgs[];
   mandatoryRegistrationRadioButtonArgs: RadioButtonArgs[];
   change: boolean;
   captionText: string;

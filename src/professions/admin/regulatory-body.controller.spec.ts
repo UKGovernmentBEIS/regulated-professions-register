@@ -1,5 +1,6 @@
 import { DeepMocked, createMock } from '@golevelup/ts-jest';
 import { TestingModule, Test } from '@nestjs/testing';
+import { when } from 'jest-when';
 import { Response } from 'express';
 import { I18nService } from 'nestjs-i18n';
 import { OrganisationsService } from '../../organisations/organisations.service';
@@ -75,6 +76,8 @@ describe(RegulatoryBodyController, () => {
           expect.objectContaining({
             regulatedAuthoritiesSelectArgs:
               regulatedAuthoritiesSelectPresenter.selectArgs(),
+            additionalRegulatedAuthoritiesSelectArgs:
+              regulatedAuthoritiesSelectPresenter.selectArgs(),
             mandatoryRegistrationRadioButtonArgs:
               await mandatoryRegistrationRadioButtonsPresenter.radioButtonArgs(),
           }),
@@ -84,14 +87,19 @@ describe(RegulatoryBodyController, () => {
     });
 
     describe('when an existing Profession is found', () => {
-      it('should pre-select the Organisation from the Select and the mandatory registration in the radio buttons', async () => {
+      it('should pre-select both Organisations from the Select and the mandatory registration in the radio buttons', async () => {
         const organisation = organisationFactory.build({
           name: 'Example org',
           id: 'example-org-id',
         });
+        const additionalOrganisation = organisationFactory.build({
+          name: 'Example org 2',
+          id: 'example-org-id-2',
+        });
         const profession = professionFactory.build({
           id: 'profession-id',
           organisation: organisation,
+          additionalOrganisation: additionalOrganisation,
         });
         const version = professionVersionFactory.build({
           profession: profession,
@@ -101,11 +109,21 @@ describe(RegulatoryBodyController, () => {
         professionsService.findWithVersions.mockResolvedValue(profession);
         professionVersionsService.findWithProfession.mockResolvedValue(version);
 
-        const organisations = [organisation, organisationFactory.build()];
+        const organisations = [
+          organisation,
+          additionalOrganisation,
+          organisationFactory.build(),
+        ];
         organisationsService.all.mockResolvedValue(organisations);
 
         const regulatedAuthoritiesSelectPresenterWithSelectedOrganisation =
           new RegulatedAuthoritiesSelectPresenter(organisations, organisation);
+
+        const regulatedAuthoritiesSelectPresenterWithSelectedAdditionalOrganisation =
+          new RegulatedAuthoritiesSelectPresenter(
+            organisations,
+            additionalOrganisation,
+          );
 
         const mandatoryRegistrationRadioButtonsPresenterWithSelectedValue =
           new MandatoryRegistrationRadioButtonsPresenter(
@@ -120,6 +138,8 @@ describe(RegulatoryBodyController, () => {
           expect.objectContaining({
             regulatedAuthoritiesSelectArgs:
               regulatedAuthoritiesSelectPresenterWithSelectedOrganisation.selectArgs(),
+            additionalRegulatedAuthoritiesSelectArgs:
+              regulatedAuthoritiesSelectPresenterWithSelectedAdditionalOrganisation.selectArgs(),
             mandatoryRegistrationRadioButtonArgs:
               await mandatoryRegistrationRadioButtonsPresenterWithSelectedValue.radioButtonArgs(),
           }),
@@ -147,6 +167,7 @@ describe(RegulatoryBodyController, () => {
 
         const regulatoryBodyDto = {
           regulatoryBody: 'example-org-id',
+          additionalRegulatoryBody: 'other-example-org-id',
           mandatoryRegistration: MandatoryRegistration.Voluntary,
         };
 
@@ -154,7 +175,15 @@ describe(RegulatoryBodyController, () => {
           name: 'Council of Gas Safe Engineers',
         });
 
-        organisationsService.find.mockResolvedValue(newOrganisation);
+        const newAdditionalOrganisation = organisationFactory.build();
+
+        when(organisationsService.find)
+          .calledWith('example-org-id')
+          .mockResolvedValue(newOrganisation);
+
+        when(organisationsService.find)
+          .calledWith('other-example-org-id')
+          .mockResolvedValue(newAdditionalOrganisation);
 
         await controller.update(
           response,
@@ -167,6 +196,7 @@ describe(RegulatoryBodyController, () => {
           expect.objectContaining({
             id: 'profession-id',
             organisation: newOrganisation,
+            additionalOrganisation: newAdditionalOrganisation,
           }),
         );
 

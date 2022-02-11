@@ -27,7 +27,8 @@
       },
       "regulatoryBody": {
         "regulatedAuthority": "Which body regulates this profession?",
-        "mandatoryRegistration": "Is registration mandatory with professional bodies?"
+        "mandatoryRegistration": "Is registration mandatory with professional bodies?",
+        "additionalAuthority": "Is there another regulator associated with this profession?"
       },
       "regulatedActivities": {
         "regulationSummary": "Regulation summary",

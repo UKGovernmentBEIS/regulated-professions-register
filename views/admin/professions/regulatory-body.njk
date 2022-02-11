@@ -52,6 +52,19 @@
         }}
 
         {{
+          govukSelect({
+            label: {
+              text: ("professions.form.label.regulatoryBody.additionalAuthority" | t),
+              classes: "govuk-label--m",
+              isPageHeading: false
+            },
+            id: "additionalRegulatoryBody",
+            name: "additionalRegulatoryBody",
+            items: additionalRegulatedAuthoritiesSelectArgs
+          })
+        }}
+
+        {{
           govukButton({
             id: "submit-button",
             type: "Submit",

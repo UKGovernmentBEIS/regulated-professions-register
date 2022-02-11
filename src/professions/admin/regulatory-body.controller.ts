@@ -68,6 +68,7 @@ export class RegulatoryBodyController {
     return this.renderForm(
       res,
       profession.organisation,
+      profession.additionalOrganisation,
       selectedMandatoryRegistration,
       isConfirmed(profession),
       change,
@@ -102,6 +103,13 @@ export class RegulatoryBodyController {
       ? await this.organisationsService.find(submittedValues.regulatoryBody)
       : null;
 
+    const selectedAdditionalOrganisation =
+      submittedValues.additionalRegulatoryBody
+        ? await this.organisationsService.find(
+            submittedValues.additionalRegulatoryBody,
+          )
+        : null;
+
     const selectedMandatoryRegistration = submittedValues.mandatoryRegistration;
 
     const profession = await this.professionsService.findWithVersions(
@@ -113,6 +121,7 @@ export class RegulatoryBodyController {
       return this.renderForm(
         res,
         selectedOrganisation,
+        selectedAdditionalOrganisation,
         selectedMandatoryRegistration,
         isConfirmed(profession),
         regulatoryBodyDto.change,
@@ -123,6 +132,7 @@ export class RegulatoryBodyController {
     const updatedProfession: Profession = {
       ...profession,
       organisation: selectedOrganisation,
+      additionalOrganisation: selectedAdditionalOrganisation,
     };
 
     const updatedVersion: ProfessionVersion = {
@@ -149,6 +159,7 @@ export class RegulatoryBodyController {
   private async renderForm(
     res: Response,
     selectedRegulatoryAuthority: Organisation | null,
+    selectedAdditionalRegulatoryAuthority: Organisation | null,
     mandatoryRegistration: MandatoryRegistration | null,
     isEditing: boolean,
     change: boolean,
@@ -162,6 +173,12 @@ export class RegulatoryBodyController {
         selectedRegulatoryAuthority,
       ).selectArgs();
 
+    const additionalRegulatedAuthoritiesSelectArgs =
+      new RegulatedAuthoritiesSelectPresenter(
+        regulatedAuthorities,
+        selectedAdditionalRegulatoryAuthority,
+      ).selectArgs();
+
     const mandatoryRegistrationRadioButtonArgs =
       await new MandatoryRegistrationRadioButtonsPresenter(
         mandatoryRegistration,
@@ -171,6 +188,7 @@ export class RegulatoryBodyController {
     const templateArgs: RegulatoryBodyTemplate = {
       regulatedAuthoritiesSelectArgs,
       mandatoryRegistrationRadioButtonArgs,
+      additionalRegulatedAuthoritiesSelectArgs,
       captionText: ViewUtils.captionText(isEditing),
       change,
       errors,
