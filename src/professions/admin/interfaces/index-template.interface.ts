@@ -1,4 +1,4 @@
-import { CheckboxArgs } from 'src/common/interfaces/checkbox-args.interface';
+import { CheckboxItems } from 'src/common/interfaces/checkbox-items.interface';
 import { TableRow } from 'src/common/interfaces/table-row';
 import { ProfessionsPresenterView } from '../professions.presenter';
 
@@ -18,8 +18,8 @@ export interface IndexTemplate {
     changedBy: string[];
   };
 
-  nationsCheckboxArgs: CheckboxArgs[];
-  organisationsCheckboxArgs: CheckboxArgs[];
-  industriesCheckboxArgs: CheckboxArgs[];
-  changedByCheckboxArgs: CheckboxArgs[];
+  nationsCheckboxItems: CheckboxItems[];
+  organisationsCheckboxItems: CheckboxItems[];
+  industriesCheckboxItems: CheckboxItems[];
+  changedByCheckboxItems: CheckboxItems[];
 }

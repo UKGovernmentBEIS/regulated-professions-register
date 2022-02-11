@@ -1,4 +1,4 @@
-import { CheckboxArgs } from 'src/common/interfaces/checkbox-args.interface';
+import { CheckboxItems } from 'src/common/interfaces/checkbox-items.interface';
 import { ProfessionSearchResultTemplate } from './profession-search-result-template.interface';
 
 export interface IndexTemplate {
@@ -10,7 +10,7 @@ export interface IndexTemplate {
     keywords: string;
   };
 
-  nationsCheckboxArgs: CheckboxArgs[];
+  nationsCheckboxItems: CheckboxItems[];
 
-  industriesCheckboxArgs: CheckboxArgs[];
+  industriesCheckboxItems: CheckboxItems[];
 }

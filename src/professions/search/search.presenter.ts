@@ -18,17 +18,17 @@ export class SearchPresenter {
   ) {}
 
   async present(): Promise<IndexTemplate> {
-    const nationsCheckboxArgs = await new NationsCheckboxPresenter(
+    const nationsCheckboxItems = await new NationsCheckboxPresenter(
       this.allNations,
       this.filterInput.nations,
       this.i18nService,
-    ).checkboxArgs();
+    ).checkboxItems();
 
-    const industriesCheckboxArgs = await new IndustriesCheckboxPresenter(
+    const industriesCheckboxItems = await new IndustriesCheckboxPresenter(
       this.allIndustries,
       this.filterInput.industries,
       this.i18nService,
-    ).checkboxArgs();
+    ).checkboxItems();
 
     const displayProfessions = await Promise.all(
       this.filteredProfessions.map(async (profession) =>
@@ -41,8 +41,8 @@ export class SearchPresenter {
 
     return {
       professions: displayProfessions,
-      nationsCheckboxArgs,
-      industriesCheckboxArgs,
+      nationsCheckboxItems,
+      industriesCheckboxItems,
       filters: {
         keywords: this.filterInput.keywords,
         nations: this.filterInput.nations.map((nation) => nation.name),

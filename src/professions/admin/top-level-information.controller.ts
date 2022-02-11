@@ -62,9 +62,14 @@ export class TopLevelInformationController {
       versionId,
     );
 
+    const coversUK = version.occupationLocations
+      ? this.isUK(version.occupationLocations)
+      : null;
+
     return this.renderForm(
       res,
       profession.name,
+      coversUK,
       version.industries || [],
       version.occupationLocations || [],
       isConfirmed(profession),
@@ -92,6 +97,7 @@ export class TopLevelInformationController {
     );
 
     const submittedValues: TopLevelDetailsDto = topLevelDetailsDto;
+    const coversUK = Boolean(Number(submittedValues.coversUK));
 
     const profession = await this.professionsService.findWithVersions(
       professionId,
@@ -110,12 +116,17 @@ export class TopLevelInformationController {
       return this.renderForm(
         res,
         submittedValues.name,
+        coversUK,
         submittedIndustries,
         submittedValues.nations || [],
         isConfirmed(profession),
         submittedValues.change,
         errors,
       );
+    }
+
+    if (coversUK) {
+      submittedValues.nations = this.allNations();
     }
 
     const updatedProfession: Profession = {
@@ -150,6 +161,7 @@ export class TopLevelInformationController {
   private async renderForm(
     res: Response,
     name: string,
+    coversUK: boolean,
     selectedIndustries: Industry[],
     selectedNations: string[],
     isEditing: boolean,
@@ -158,21 +170,28 @@ export class TopLevelInformationController {
   ): Promise<void> {
     const industries = await this.industriesService.all();
 
-    const industriesCheckboxArgs = await new IndustriesCheckboxPresenter(
+    const industriesCheckboxItems = await new IndustriesCheckboxPresenter(
       industries,
       selectedIndustries,
       this.i18nService,
-    ).checkboxArgs();
+    ).checkboxItems();
 
-    const nationsCheckboxArgs = await new NationsCheckboxPresenter(
+    const nationsCheckboxPresenter = new NationsCheckboxPresenter(
       Nation.all(),
       selectedNations.map((nationCode) => Nation.find(nationCode)),
       this.i18nService,
-    ).checkboxArgs();
+    );
+
+    const nationsCheckboxArgs = await nationsCheckboxPresenter.checkboxArgs(
+      'nations',
+      'nations[]',
+      'professions.form.checkboxes.hint',
+    );
 
     const templateArgs: TopLevelDetailsTemplate = {
       name,
-      industriesCheckboxArgs,
+      coversUK,
+      industriesCheckboxItems,
       nationsCheckboxArgs,
       captionText: ViewUtils.captionText(isEditing),
       change,
@@ -180,5 +199,16 @@ export class TopLevelInformationController {
     };
 
     return res.render('admin/professions/top-level-information', templateArgs);
+  }
+
+  private allNations(): string[] {
+    return Nation.all().map((nation) => nation.code);
+  }
+
+  private isUK(nations: Array<string>) {
+    return (
+      nations.length === this.allNations().length &&
+      nations.every((e, i) => e === this.allNations()[i])
+    );
   }
 }

@@ -1,5 +1,10 @@
+import { CheckboxItems } from './checkbox-items.interface';
+
 export interface CheckboxArgs {
-  text: string;
-  value: string;
-  checked: boolean;
+  idPrefix: string;
+  name: string;
+  hint: {
+    text: string;
+  };
+  items: CheckboxItems[];
 }

@@ -83,7 +83,8 @@ describe('TopLevelInformationController', () => {
           'admin/professions/top-level-information',
           expect.objectContaining({
             name: undefined,
-            industriesCheckboxArgs: [
+            coversUK: null,
+            industriesCheckboxItems: [
               {
                 text: translationOf('industries.health'),
                 value: 'health-uuid',
@@ -95,28 +96,35 @@ describe('TopLevelInformationController', () => {
                 checked: false,
               },
             ],
-            nationsCheckboxArgs: [
-              {
-                text: translationOf('nations.england'),
-                value: 'GB-ENG',
-                checked: false,
+            nationsCheckboxArgs: {
+              idPrefix: 'nations',
+              name: 'nations[]',
+              hint: {
+                text: translationOf('professions.form.checkboxes.hint'),
               },
-              {
-                text: translationOf('nations.scotland'),
-                value: 'GB-SCT',
-                checked: false,
-              },
-              {
-                text: translationOf('nations.wales'),
-                value: 'GB-WLS',
-                checked: false,
-              },
-              {
-                text: translationOf('nations.northernIreland'),
-                value: 'GB-NIR',
-                checked: false,
-              },
-            ],
+              items: [
+                {
+                  text: translationOf('nations.england'),
+                  value: 'GB-ENG',
+                  checked: false,
+                },
+                {
+                  text: translationOf('nations.scotland'),
+                  value: 'GB-SCT',
+                  checked: false,
+                },
+                {
+                  text: translationOf('nations.wales'),
+                  value: 'GB-WLS',
+                  checked: false,
+                },
+                {
+                  text: translationOf('nations.northernIreland'),
+                  value: 'GB-NIR',
+                  checked: false,
+                },
+              ],
+            },
           }),
         );
         expect(industriesService.all).toHaveBeenCalled();
@@ -158,7 +166,8 @@ describe('TopLevelInformationController', () => {
           'admin/professions/top-level-information',
           expect.objectContaining({
             name: 'Example Profession',
-            industriesCheckboxArgs: [
+            coversUK: false,
+            industriesCheckboxItems: [
               {
                 text: translationOf('industries.health'),
                 value: 'health-uuid',
@@ -170,31 +179,63 @@ describe('TopLevelInformationController', () => {
                 checked: false,
               },
             ],
-            nationsCheckboxArgs: [
-              {
-                text: translationOf('nations.england'),
-                value: 'GB-ENG',
-                checked: true,
+            nationsCheckboxArgs: {
+              idPrefix: 'nations',
+              name: 'nations[]',
+              hint: {
+                text: translationOf('professions.form.checkboxes.hint'),
               },
-              {
-                text: translationOf('nations.scotland'),
-                value: 'GB-SCT',
-                checked: true,
-              },
-              {
-                text: translationOf('nations.wales'),
-                value: 'GB-WLS',
-                checked: false,
-              },
-              {
-                text: translationOf('nations.northernIreland'),
-                value: 'GB-NIR',
-                checked: false,
-              },
-            ],
+              items: [
+                {
+                  text: translationOf('nations.england'),
+                  value: 'GB-ENG',
+                  checked: true,
+                },
+                {
+                  text: translationOf('nations.scotland'),
+                  value: 'GB-SCT',
+                  checked: true,
+                },
+                {
+                  text: translationOf('nations.wales'),
+                  value: 'GB-WLS',
+                  checked: false,
+                },
+                {
+                  text: translationOf('nations.northernIreland'),
+                  value: 'GB-NIR',
+                  checked: false,
+                },
+              ],
+            },
           }),
         );
         expect(industriesService.all).toHaveBeenCalled();
+      });
+
+      it('should set coversUK to 1 if the profession covers all of the UK', async () => {
+        const profession = professionFactory.build({
+          name: 'Example Profession',
+        });
+
+        const version = professionVersionFactory.build({
+          id: 'version-id',
+          profession: profession,
+          occupationLocations: ['GB-ENG', 'GB-SCT', 'GB-WLS', 'GB-NIR'],
+          industries: [],
+        });
+
+        professionsService.findWithVersions.mockResolvedValue(profession);
+        professionVersionsService.findWithProfession.mockResolvedValue(version);
+
+        await controller.edit(response, 'profession-id', 'version-id', false);
+
+        expect(response.render).toHaveBeenCalledWith(
+          'admin/professions/top-level-information',
+          expect.objectContaining({
+            coversUK: true,
+          }),
+        );
       });
     });
   });
@@ -216,6 +257,7 @@ describe('TopLevelInformationController', () => {
 
         const topLevelDetailsDto = {
           name: 'Gas Safe Engineer',
+          coversUK: '0',
           nations: ['GB-ENG'],
           industries: ['construction-uuid'],
         };
@@ -254,6 +296,39 @@ describe('TopLevelInformationController', () => {
           '/admin/professions/profession-id/versions/version-id/regulatory-body/edit',
         );
       });
+
+      it('sets all nations when `coversUK` is set to `1`', async () => {
+        const profession = professionFactory
+          .justCreated('profession-id')
+          .build();
+
+        const version = professionVersionFactory.build({
+          id: 'version-id',
+          profession: profession,
+        });
+
+        professionsService.findWithVersions.mockResolvedValue(profession);
+        professionVersionsService.findWithProfession.mockResolvedValue(version);
+
+        const topLevelDetailsDto = {
+          name: 'Gas Safe Engineer',
+          coversUK: '1',
+          industries: ['construction-uuid'],
+        };
+
+        await controller.update(
+          topLevelDetailsDto,
+          response,
+          'profession-id',
+          'version-id',
+        );
+
+        expect(professionVersionsService.save).toHaveBeenCalledWith(
+          expect.objectContaining({
+            occupationLocations: ['GB-ENG', 'GB-SCT', 'GB-WLS', 'GB-NIR'],
+          }),
+        );
+      });
     });
 
     describe('when required parameters are not entered', () => {
@@ -261,6 +336,7 @@ describe('TopLevelInformationController', () => {
         const topLevelDetailsDtoWithNoAnswers = {
           name: '',
           nations: undefined,
+          coversUK: null,
           industries: undefined,
         };
 
@@ -278,7 +354,7 @@ describe('TopLevelInformationController', () => {
               name: {
                 text: 'professions.form.errors.name.empty',
               },
-              nations: {
+              coversUK: {
                 text: 'professions.form.errors.nations.empty',
               },
               industries: {
@@ -313,6 +389,7 @@ describe('TopLevelInformationController', () => {
 
           const topLevelDetailsDtoWithChangeParam = {
             name: 'A new profession',
+            coversUK: '0',
             nations: ['GB-ENG'],
             industries: ['construction-uuid'],
             change: true,
@@ -353,6 +430,7 @@ describe('TopLevelInformationController', () => {
           const topLevelDetailsDtoWithoutChangeParam = {
             name: 'A new profession',
             nations: ['GB-ENG'],
+            coversUK: '0',
             industries: ['construction-uuid'],
           };
 

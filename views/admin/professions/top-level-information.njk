@@ -3,6 +3,7 @@
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
 
 {% set bodyClasses = "rpr-internal__page" %}
 
@@ -33,10 +34,16 @@
         })
       }}
 
+      {% set nationHtml %}
+        {{
+          govukCheckboxes(nationsCheckboxArgs)
+        }}
+      {% endset -%}
+
       {{
-        govukCheckboxes({
-          idPrefix: "nations",
-          name: "nations[]",
+        govukRadios({
+          idPrefix: "coversUK",
+          name: "coversUK",
           fieldset: {
             legend: {
               text: ("professions.form.label.topLevelInformation.nations" | t),
@@ -47,8 +54,21 @@
           hint: {
             text: ("professions.form.checkboxes.hint" | t)
           },
-          items: nationsCheckboxArgs,
-          errorMessage: errors.nations | tError
+          items: [
+            {
+              value: "1",
+              text: ("app.unitedKingdom" | t),
+              checked: (coversUK === true)
+            },
+            {
+              value: "0",
+              text: ("professions.form.label.topLevelInformation.certainNations" | t),
+              checked: (coversUK === false),
+              conditional: {
+                html: nationHtml
+              }
+            }
+          ]
         })
       }}
 
@@ -66,7 +86,7 @@
           hint: {
             text: ("professions.form.checkboxes.hint" | t)
           },
-          items: industriesCheckboxArgs,
+          items: industriesCheckboxItems,
           errorMessage: errors.industries | tError
         })
       }}

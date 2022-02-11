@@ -8,7 +8,7 @@ import { IndustriesCheckboxPresenter } from '../../../industries/industries-chec
 import { OrganisationPresenter } from '../../presenters/organisation.presenter';
 
 const mockTableRow = jest.fn();
-const mockCheckboxArgs = jest.fn();
+const mockCheckboxItems = jest.fn();
 
 jest.mock('../../presenters/organisation.presenter', () => {
   return {
@@ -24,7 +24,7 @@ jest.mock('../../../industries/industries-checkbox.presenter', () => {
   return {
     IndustriesCheckboxPresenter: jest.fn().mockImplementation(() => {
       return {
-        checkboxArgs: mockCheckboxArgs,
+        checkboxItems: mockCheckboxItems,
       };
     }),
   };
@@ -40,7 +40,7 @@ describe('OrganisationsPresenter', () => {
           },
         ]);
 
-        mockCheckboxArgs.mockReturnValue([
+        mockCheckboxItems.mockReturnValue([
           {
             text: 'Some text',
             value: 'Some value',
@@ -93,12 +93,12 @@ describe('OrganisationsPresenter', () => {
           mockTableRow(),
         ]);
 
-        expect(result.industriesCheckboxArgs).toEqual(mockCheckboxArgs());
+        expect(result.industriesCheckboxItems).toEqual(mockCheckboxItems());
       });
 
       it('returns empty filter data', async () => {
         mockTableRow.mockReturnValue([]);
-        mockCheckboxArgs.mockReturnValue([]);
+        mockCheckboxItems.mockReturnValue([]);
 
         const i18nService = createMockI18nService();
 
@@ -132,7 +132,7 @@ describe('OrganisationsPresenter', () => {
     describe('when called with populated `FilterInput`', () => {
       it('returns populated filter data', async () => {
         mockTableRow.mockReturnValue([]);
-        mockCheckboxArgs.mockReturnValue([]);
+        mockCheckboxItems.mockReturnValue([]);
 
         const i18nService = createMockI18nService();
 

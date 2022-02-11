@@ -33,7 +33,10 @@ describe('Adding a new profession', () => {
         cy.get('button').contains(buttonText).click();
       });
 
-      cy.checkAccessibility();
+      // Conditional radio buttons add an additional `aria-expanded` field,
+      // so ignore that rule on this page
+      cy.checkAccessibility({ 'aria-allowed-attr': { enabled: false } });
+
       cy.translate('professions.form.headings.topLevelInformation').then(
         (heading) => {
           cy.get('body').should('contain', heading);
@@ -43,7 +46,14 @@ describe('Adding a new profession', () => {
         cy.get('body').contains(addCaption);
       });
       cy.get('input[name="name"]').type('Example Profession');
-      cy.get('[type="checkbox"]').check('GB-ENG');
+
+      cy.translate(
+        'professions.form.label.topLevelInformation.certainNations',
+      ).then((certainNations) => {
+        cy.get('label').contains(certainNations).click();
+        cy.get('[type="checkbox"]').check('GB-ENG');
+      });
+
       cy.translate('industries.constructionAndEngineering').then(
         (constructionAndEngineering) => {
           cy.contains(constructionAndEngineering).click();

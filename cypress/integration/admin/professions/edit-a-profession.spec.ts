@@ -94,7 +94,11 @@ describe('Editing an existing profession', () => {
         'professions.form.label.topLevelInformation.name',
         'Change',
       );
-      cy.checkAccessibility();
+
+      // Conditional radio buttons add an additional `aria-expanded` field,
+      // so ignore that rule on this page
+      cy.checkAccessibility({ 'aria-allowed-attr': { enabled: false } });
+
       cy.translate('professions.form.captions.edit').then((editCaption) => {
         cy.get('body').contains(editCaption);
       });
@@ -202,6 +206,71 @@ describe('Editing an existing profession', () => {
           });
         },
       );
+    });
+
+    it('Selecting UK sets the nations to all UK nations', () => {
+      cy.visitAndCheckAccessibility('/admin/professions');
+
+      cy.get('table')
+        .contains('tr', 'Gas Safe Engineer')
+        .within(() => {
+          cy.contains('View details').click();
+        });
+
+      cy.checkAccessibility();
+      cy.translate('professions.admin.editProfession').then((buttonText) => {
+        cy.contains(buttonText).click();
+      });
+
+      cy.checkAccessibility();
+      cy.translate('professions.form.captions.edit').then((editCaption) => {
+        cy.get('body').contains(editCaption);
+      });
+
+      cy.translate('professions.form.button.edit').then((buttonText) => {
+        cy.get('button').contains(buttonText).click();
+      });
+
+      cy.clickSummaryListRowAction(
+        'professions.form.label.topLevelInformation.name',
+        'Change',
+      );
+
+      cy.translate('app.unitedKingdom').then((uk) => {
+        cy.get('label').contains(uk).click();
+      });
+
+      cy.translate('app.continue').then((buttonText) => {
+        cy.get('button').contains(buttonText).click();
+      });
+
+      cy.translate('nations.england').then((england) => {
+        cy.checkSummaryListRowValue(
+          'professions.form.label.topLevelInformation.nations',
+          england,
+        );
+      });
+
+      cy.translate('nations.wales').then((wales) => {
+        cy.checkSummaryListRowValue(
+          'professions.form.label.topLevelInformation.nations',
+          wales,
+        );
+      });
+
+      cy.translate('nations.northernIreland').then((northernIreland) => {
+        cy.checkSummaryListRowValue(
+          'professions.form.label.topLevelInformation.nations',
+          northernIreland,
+        );
+      });
+
+      cy.translate('nations.scotland').then((scotland) => {
+        cy.checkSummaryListRowValue(
+          'professions.form.label.topLevelInformation.nations',
+          scotland,
+        );
+      });
     });
   });
 });

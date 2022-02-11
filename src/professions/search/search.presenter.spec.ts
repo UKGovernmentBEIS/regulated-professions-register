@@ -70,17 +70,17 @@ describe('SearchPresenter', () => {
 
       const result = await presenter.present();
 
-      const industriesCheckboxArgs = await new IndustriesCheckboxPresenter(
+      const industriesCheckboxItems = await new IndustriesCheckboxPresenter(
         industries,
         [industry2],
         i18nService,
-      ).checkboxArgs();
+      ).checkboxItems();
 
-      const nationsCheckboxArgs = await new NationsCheckboxPresenter(
+      const nationsCheckboxItems = await new NationsCheckboxPresenter(
         Nation.all(),
         [Nation.find('GB-ENG')],
         i18nService,
-      ).checkboxArgs();
+      ).checkboxItems();
 
       const expected: IndexTemplate = {
         filters: {
@@ -88,8 +88,8 @@ describe('SearchPresenter', () => {
           keywords: 'Example Keywords',
           nations: ['nations.england'],
         },
-        industriesCheckboxArgs,
-        nationsCheckboxArgs,
+        industriesCheckboxItems,
+        nationsCheckboxItems,
         professions: [
           await new ProfessionSearchResultPresenter(
             profession1,

@@ -5,16 +5,16 @@
 {% set filterFormMethod = 'get' %}
 
 {% set filterColumns = 1 %}
-  {% if nationsCheckboxArgs %}
+  {% if nationsCheckboxItems %}
   {% set filterColumns = filterColumns + 1 %}
 {% endif %}
-  {% if organisationsCheckboxArgs %}
+  {% if organisationsCheckboxItems %}
   {% set filterColumns = filterColumns + 1 %}
 {% endif %}
-  {% if industriesCheckboxArgs %}
+  {% if industriesCheckboxItems %}
   {% set filterColumns = filterColumns + 1 %}
 {% endif %}
-  {% if nationsCheckboxArgs %}
+  {% if nationsCheckboxItems %}
   {% set filterColumns = filterColumns + 1 %}
 {% endif %}
 

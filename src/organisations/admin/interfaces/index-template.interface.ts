@@ -1,4 +1,4 @@
-import { CheckboxArgs } from '../../../common/interfaces/checkbox-args.interface';
+import { CheckboxItems } from '../../../common/interfaces/checkbox-items.interface';
 import { Table } from '../../../common/interfaces/table';
 
 export interface IndexTemplate {
@@ -9,5 +9,5 @@ export interface IndexTemplate {
     industries: string[];
   };
 
-  industriesCheckboxArgs: CheckboxArgs[];
+  industriesCheckboxItems: CheckboxItems[];
 }

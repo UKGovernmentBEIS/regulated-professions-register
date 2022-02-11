@@ -111,21 +111,21 @@ describe('ProfessionsPresenter', () => {
           changedBy: [],
         },
 
-        nationsCheckboxArgs: await new NationsCheckboxPresenter(
+        nationsCheckboxItems: await new NationsCheckboxPresenter(
           nations,
           [Nation.find('GB-ENG')],
           i18nService,
-        ).checkboxArgs(),
-        organisationsCheckboxArgs: await new OrganisationsCheckboxPresenter(
+        ).checkboxItems(),
+        organisationsCheckboxItems: await new OrganisationsCheckboxPresenter(
           organisations,
           [organisation1],
-        ).checkboxArgs(),
-        industriesCheckboxArgs: await new IndustriesCheckboxPresenter(
+        ).checkboxItems(),
+        industriesCheckboxItems: await new IndustriesCheckboxPresenter(
           industries,
           [transportIndustry],
           i18nService,
-        ).checkboxArgs(),
-        changedByCheckboxArgs: [],
+        ).checkboxItems(),
+        changedByCheckboxItems: [],
       };
 
       expect(result).toEqual(expected);
@@ -160,21 +160,21 @@ describe('ProfessionsPresenter', () => {
           changedBy: [],
         },
 
-        nationsCheckboxArgs: await new NationsCheckboxPresenter(
+        nationsCheckboxItems: await new NationsCheckboxPresenter(
           nations,
           [Nation.find('GB-ENG')],
           i18nService,
-        ).checkboxArgs(),
-        organisationsCheckboxArgs: await new OrganisationsCheckboxPresenter(
+        ).checkboxItems(),
+        organisationsCheckboxItems: await new OrganisationsCheckboxPresenter(
           organisations,
           [organisation1],
-        ).checkboxArgs(),
-        industriesCheckboxArgs: await new IndustriesCheckboxPresenter(
+        ).checkboxItems(),
+        industriesCheckboxItems: await new IndustriesCheckboxPresenter(
           industries,
           [transportIndustry],
           i18nService,
-        ).checkboxArgs(),
-        changedByCheckboxArgs: [],
+        ).checkboxItems(),
+        changedByCheckboxItems: [],
       };
 
       expect(result).toEqual(expected);
