@@ -25,8 +25,9 @@ env:
   ORGEDITOR_PASSWORD: ${{ secrets.ORGEDITOR_PASSWORD }}
 
 jobs:
-  test:
+  docker_build:
     runs-on: ubuntu-latest
+    name: Build Docker Image
 
     env:
       NODE_ENV: test
@@ -48,9 +49,66 @@ jobs:
       - name: Build
         run: script/ci/cibuild
 
+      - name: Save Docker image
+        run: |
+          mkdir -p /tmp/docker-save
+          docker save app_test:latest -o /tmp/docker-save/snapshot.tar
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: docker-artifact
+          path: /tmp/docker-save
+  unit_tests:
+    needs: docker_build
+    runs-on: ubuntu-latest
+    name: Unit Tests
+
+    env:
+      NODE_ENV: test
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Download Docker Image
+        uses: actions/download-artifact@v2
+        with:
+          name: docker-artifact
+          path: /tmp/docker-save
+
+      - name: Load Docker Image
+        run: |
+          cd /tmp/docker-save
+          docker load < snapshot.tar
       - name: Test
         id: test
-        run: script/ci/test
+        run: script/ci/unit-test
+  e2e_tests:
+    needs: docker_build
+    runs-on: ubuntu-latest
+    name: E2E Tests
+
+    env:
+      NODE_ENV: test
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Download Docker Image
+        uses: actions/download-artifact@v2
+        with:
+          name: docker-artifact
+          path: /tmp/docker-save
+
+      - name: Load Docker Image
+        run: |
+          cd /tmp/docker-save
+          docker load < snapshot.tar
+
+      - name: Test
+        id: test
+        run: script/ci/e2e
 
       - name: Upload end-to-end-test screenshots
         if: failure() && steps.Test.outcome == 'failure'
@@ -67,8 +125,3 @@ jobs:
           name: end-to-end-test-videos
           path: cypress/videos/
           retention-days: 14
-
-      - if: always() && steps.cache-docker.outputs.cache-hit != 'true'
-        name: Prepare Docker cache
-        run: mkdir -p /tmp/docker-save && docker save app_test:latest -o
-          /tmp/docker-save/snapshot.tar && ls -lh /tmp/docker-save
