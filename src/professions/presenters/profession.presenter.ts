@@ -51,6 +51,12 @@ export class ProfessionPresenter {
     };
   }
 
+  get changedBy(): string {
+    return this.profession.changedByUser
+      ? this.profession.changedByUser.name
+      : '';
+  }
+
   public async occupationLocations(): Promise<string> {
     return await stringifyNations(
       this.profession.occupationLocations.map((code) => Nation.find(code)),

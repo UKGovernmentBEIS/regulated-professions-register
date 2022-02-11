@@ -343,6 +343,7 @@ describe('Adding a new profession', () => {
           });
         },
       );
+      cy.get('[data-cy=changed-by-user]').should('contain', 'Registrar');
     });
   });
 });

@@ -12,6 +12,7 @@ import {
 import { OrganisationVersion } from '../organisations/organisation-version.entity';
 import { Role } from './role';
 import { Organisation } from '../organisations/organisation.entity';
+import { ProfessionVersion } from '../professions/profession-version.entity';
 
 @Entity({ name: 'users' })
 export class User {

@@ -27,6 +27,7 @@ import { Permissions } from '../../common/permissions.decorator';
 import { ProfessionVersionsService } from '../profession-versions.service';
 import { Profession } from '../profession.entity';
 import { ProfessionsService } from '../professions.service';
+import { ProfessionPresenter } from '../presenters/profession.presenter';
 
 @UseGuards(AuthenticationGuard)
 @Controller('/admin/professions')
@@ -71,6 +72,7 @@ export class ProfessionVersionsController {
     }
 
     const profession = Profession.withVersion(version.profession, version);
+    const presenter = new ProfessionPresenter(profession, this.i18nService);
 
     const organisation = Organisation.withLatestLiveVersion(
       profession.organisation,
@@ -94,6 +96,7 @@ export class ProfessionVersionsController {
 
     return {
       profession,
+      presenter,
       qualification: qualification,
       nations,
       industries,

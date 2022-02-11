@@ -13,6 +13,7 @@ import { Industry } from '../industries/industry.entity';
 import { Legislation } from '../legislations/legislation.entity';
 import { Organisation } from '../organisations/organisation.entity';
 import { Qualification } from '../qualifications/qualification.entity';
+import { User } from '../users/user.entity';
 import {
   ProfessionVersion,
   ProfessionVersionStatus,
@@ -75,6 +76,7 @@ export class Profession {
   regulationUrl?: string;
   reservedActivities?: string;
   legislations?: Legislation[];
+  changedByUser?: User;
   versionId?: string;
   status?: string;
 
@@ -161,6 +163,7 @@ export class Profession {
       protectedTitles: version.protectedTitles,
       regulationUrl: version.regulationUrl,
       legislations: version.legislations,
+      changedByUser: version.user,
       status: version.status,
       versionId: version.id,
     };

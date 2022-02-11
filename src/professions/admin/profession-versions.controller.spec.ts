@@ -18,8 +18,10 @@ import { ProfessionVersionsController } from './profession-versions.controller';
 import { ProfessionVersionsService } from '../profession-versions.service';
 import { ProfessionsService } from '../professions.service';
 import { Profession } from '../profession.entity';
+import { ProfessionPresenter } from '../presenters/profession.presenter';
 
 jest.mock('../../organisations/organisation.entity');
+jest.mock('../presenters/profession.presenter');
 
 describe('ProfessionVersionsController', () => {
   let controller: ProfessionVersionsController;
@@ -139,6 +141,8 @@ describe('ProfessionVersionsController', () => {
         version,
       );
 
+      (ProfessionPresenter as jest.Mock).mockReturnValue({});
+
       (Organisation.withLatestLiveVersion as jest.Mock).mockImplementation(
         () => profession.organisation,
       );
@@ -147,6 +151,7 @@ describe('ProfessionVersionsController', () => {
 
       expect(result).toEqual({
         profession: professionWithVersion,
+        presenter: {},
         qualification: new QualificationPresenter(
           professionWithVersion.qualification,
         ),
@@ -190,6 +195,8 @@ describe('ProfessionVersionsController', () => {
           version,
         );
 
+        (ProfessionPresenter as jest.Mock).mockReturnValue({});
+
         (Organisation.withLatestLiveVersion as jest.Mock).mockImplementation(
           () => profession.organisation,
         );
@@ -198,6 +205,7 @@ describe('ProfessionVersionsController', () => {
 
         expect(result).toEqual({
           profession: professionWithVersion,
+          presenter: {},
           qualification: null,
           nations: [translationOf('nations.england')],
           industries: [translationOf('industries.example')],

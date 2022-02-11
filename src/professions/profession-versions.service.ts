@@ -140,6 +140,7 @@ export class ProfessionVersionsService {
       .leftJoinAndSelect('profession.organisation', 'organisation')
       .leftJoinAndSelect('professionVersion.industries', 'industries')
       .leftJoinAndSelect('professionVersion.qualification', 'qualification')
+      .leftJoinAndSelect('professionVersion.user', 'user')
       .leftJoinAndSelect('professionVersion.legislations', 'legislations');
   }
 }

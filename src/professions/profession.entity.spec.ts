@@ -24,6 +24,7 @@ describe('Profession', () => {
         qualification: professionVersion.qualification,
         reservedActivities: professionVersion.reservedActivities,
         legislations: professionVersion.legislations,
+        changedByUser: professionVersion.user,
         status: professionVersion.status,
         versionId: professionVersion.id,
       });

@@ -257,6 +257,7 @@ describe('ProfessionVersionsService', () => {
         'professionVersion.profession',
         'professionVersion.industries',
         'profession.organisation',
+        'professionVersion.user',
         'professionVersion.qualification',
         'professionVersion.legislations',
       ]);
@@ -301,6 +302,7 @@ describe('ProfessionVersionsService', () => {
         'professionVersion.profession',
         'profession.organisation',
         'professionVersion.industries',
+        'professionVersion.user',
         'professionVersion.qualification',
         'professionVersion.legislations',
       ]);
@@ -344,6 +346,7 @@ describe('ProfessionVersionsService', () => {
         'professionVersion.profession',
         'professionVersion.industries',
         'profession.organisation',
+        'professionVersion.user',
         'professionVersion.qualification',
         'professionVersion.legislations',
       ]);
@@ -387,6 +390,7 @@ describe('ProfessionVersionsService', () => {
         'professionVersion.profession',
         'professionVersion.industries',
         'profession.organisation',
+        'professionVersion.user',
         'professionVersion.qualification',
         'professionVersion.legislations',
       ]);

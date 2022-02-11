@@ -10,6 +10,7 @@ import { formatMultilineString } from '../../helpers/format-multiline-string.hel
 import { multilineOf } from '../../testutils/multiline-of';
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 import { translationOf } from '../../testutils/translation-of';
+import userFactory from '../../testutils/factories/user';
 
 jest.mock('../../nations/helpers/stringifyNations');
 jest.mock('../../helpers/format-multiline-string.helper');
@@ -59,6 +60,38 @@ describe('ProfessionPresenter', () => {
       expect(formatMultilineString).toBeCalledWith(
         profession.qualification.level,
       );
+    });
+  });
+
+  describe('changedBy', () => {
+    describe('when the Profession has been edited by a user', () => {
+      it('returns the name of the user', () => {
+        const profession = professionFactory.build({
+          changedByUser: userFactory.build({ name: 'beis-rpr' }),
+        });
+
+        const presenter = new ProfessionPresenter(
+          profession,
+          createMockI18nService(),
+        );
+
+        expect(presenter.changedBy).toEqual('beis-rpr');
+      });
+    });
+
+    describe("when the Profession hasn't yet been edited by a user", () => {
+      it('returns an empty string', () => {
+        const profession = professionFactory.build({
+          changedByUser: undefined,
+        });
+
+        const presenter = new ProfessionPresenter(
+          profession,
+          createMockI18nService(),
+        );
+
+        expect(presenter.changedBy).toEqual('');
+      });
     });
   });
 
