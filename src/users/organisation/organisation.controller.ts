@@ -94,9 +94,11 @@ export class OrganisationController {
         ? undefined
         : Boolean(Number(submittedValues.serviceOwner));
 
-    const organisation = serviceOwner
-      ? undefined
-      : await this.organisationsService.find(submittedValues.organisation);
+    const organisation = submittedValues.organisation
+      ? serviceOwner
+        ? undefined
+        : await this.organisationsService.find(submittedValues.organisation)
+      : undefined;
 
     if (!validator.valid()) {
       const errors = new ValidationFailedError(validator.errors).fullMessages();
