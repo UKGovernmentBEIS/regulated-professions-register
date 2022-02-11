@@ -22,6 +22,7 @@ class ProfessionFactory extends Factory<Profession> {
       qualification: undefined,
       legislations: undefined,
       organisation: undefined,
+      additionalOrganisation: undefined,
       reservedActivities: undefined,
     });
   }
@@ -45,6 +46,7 @@ export default ProfessionFactory.define(({ sequence }) => ({
   created_at: new Date(),
   legislations: [],
   organisation: organisationFactory.build({ name: 'Example organisation' }),
+  additionalOrganisation: undefined,
   regulationSummary: 'Example summary',
   reservedActivities: 'Example activities',
   protectedTitles: 'Example titles',

@@ -7,6 +7,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
+  JoinColumn,
 } from 'typeorm';
 import { Industry } from '../industries/industry.entity';
 import { Legislation } from '../legislations/legislation.entity';
@@ -35,6 +36,10 @@ export class Profession {
     eager: true,
   })
   organisation: Organisation;
+
+  @ManyToOne(() => Organisation, { eager: true })
+  @JoinColumn()
+  additionalOrganisation: Organisation;
 
   @Index({ unique: true, where: '"slug" IS NOT NULL' })
   @Column({ nullable: true })
