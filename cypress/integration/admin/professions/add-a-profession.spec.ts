@@ -174,6 +174,10 @@ describe('Adding a new profession', () => {
 
       cy.get('body').should('contain', 'An example Qualification level');
       cy.get('body').should('contain', 'Another method');
+      cy.checkSummaryListRowValue(
+        'professions.form.label.regulatoryBody.additionalAuthority',
+        'General Medical Council',
+      );
       cy.translate(
         'professions.methodsToObtainQualification.generalSecondaryEducation',
       ).then((method) => {
