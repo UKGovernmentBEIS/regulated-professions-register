@@ -25,6 +25,7 @@ export class ProfessionSearchResultPresenter {
     return {
       name: this.profession.name,
       slug: this.profession.slug,
+      organisation: this.profession.organisation.name,
       nations,
       industries,
     };

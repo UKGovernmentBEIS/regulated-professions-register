@@ -4,6 +4,7 @@ import {
   Profession,
 } from '../../professions/profession.entity';
 import industryFactory from './industry';
+import organisationFactory from './organisation';
 import qualificationFactory from './qualification';
 
 class ProfessionFactory extends Factory<Profession> {
@@ -43,7 +44,7 @@ export default ProfessionFactory.define(({ sequence }) => ({
   confirmed: false,
   created_at: new Date(),
   legislations: [],
-  organisation: undefined,
+  organisation: organisationFactory.build({ name: 'Example organisation' }),
   regulationSummary: 'Example summary',
   reservedActivities: 'Example activities',
   protectedTitles: 'Example titles',
