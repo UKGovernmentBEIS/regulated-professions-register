@@ -102,6 +102,9 @@
       "industries": {
         "empty": "Select at least one industry"
       },
+      "regulatoryBody": {
+        "empty": "Select a regulatory authority for the profession"
+      },
       "mandatoryRegistration": {
         "empty": "Select whether registration with the regulatory authority is mandatory"
       },

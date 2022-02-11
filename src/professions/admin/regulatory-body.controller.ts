@@ -98,9 +98,9 @@ export class RegulatoryBodyController {
 
     const submittedValues: RegulatoryBodyDto = regulatoryBodyDto;
 
-    const selectedOrganisation = await this.organisationsService.find(
-      submittedValues.regulatoryBody,
-    );
+    const selectedOrganisation = submittedValues.regulatoryBody
+      ? await this.organisationsService.find(submittedValues.regulatoryBody)
+      : null;
 
     const selectedMandatoryRegistration = submittedValues.mandatoryRegistration;
 

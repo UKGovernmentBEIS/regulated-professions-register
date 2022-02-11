@@ -186,8 +186,8 @@ describe(RegulatoryBodyController, () => {
 
     describe('when required parameters are not entered', () => {
       it('does not update the profession, and re-renders the regulatory body form page with errors', async () => {
-        const regulatoryBodyDtoWithoutMandatoryRegistration = {
-          regulatoryBody: 'example-org-id',
+        const invalidDto = {
+          regulatoryBody: null,
           mandatoryRegistration: undefined,
         };
 
@@ -195,7 +195,7 @@ describe(RegulatoryBodyController, () => {
           response,
           'profession-id',
           'version-id',
-          regulatoryBodyDtoWithoutMandatoryRegistration,
+          invalidDto,
         );
 
         expect(professionVersionsService.save).not.toHaveBeenCalled();
@@ -204,6 +204,9 @@ describe(RegulatoryBodyController, () => {
           'admin/professions/regulatory-body',
           expect.objectContaining({
             errors: {
+              regulatoryBody: {
+                text: 'professions.form.errors.regulatoryBody.empty',
+              },
               mandatoryRegistration: {
                 text: 'professions.form.errors.mandatoryRegistration.empty',
               },
