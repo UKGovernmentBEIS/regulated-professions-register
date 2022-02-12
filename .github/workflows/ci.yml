@@ -83,10 +83,35 @@ jobs:
       - name: Test
         id: test
         run: script/ci/unit-test
-  e2e_tests:
-    needs: docker_build
+  e2e_setup:
     runs-on: ubuntu-latest
-    name: E2E Tests
+    outputs:
+      # will contain a json string with an array of n elements, each being a string of spec files delimited by ,
+      test-chunks: ${{ steps['set-test-chunks'].outputs['test-chunks'] }}
+      # json string with ids to use in the next job matrix depending on how many elements are in the above array, eg: [0,1]
+      test-chunk-ids: ${{ steps['set-test-chunk-ids'].outputs['test-chunk-ids'] }}
+    steps:
+      - uses: actions/checkout@v2
+      - id: set-test-chunks
+        name: Set Chunks
+        # get all spec files from the integration directory, group them to be at most 15 at a time and transform them to json
+        run: echo "::set-output name=test-chunks::$(find cypress/integration -type f -name "*.spec.ts" | xargs -n15 | tr ' ' ',' | jq -R . | jq -s -cM .)"
+      - id: set-test-chunk-ids
+        name: Set Chunk IDs
+        # get the number of elements from the above array as an array of indexes
+        run: echo "::set-output name=test-chunk-ids::$(echo $CHUNKS | jq -cM 'to_entries | map(.key)')"
+        env:
+          CHUNKS: ${{ steps['set-test-chunks'].outputs['test-chunks'] }}
+  e2e_tests:
+    needs:
+      - docker_build
+      - e2e_setup
+    runs-on: ubuntu-latest
+    name: E2E test (chunk ${{ matrix.chunk }})
+    strategy:
+      matrix:
+        # will be for eg chunk: [0,1]
+        chunk: ${{ fromJson(needs.setup.outputs['test-chunk-ids']) }}
 
     env:
       NODE_ENV: test
@@ -108,7 +133,7 @@ jobs:
 
       - name: Test
         id: test
-        run: script/ci/e2e
+        run: SPECS=$(echo $CHUNKS | jq -cMr '.[${{ matrix.chunk }}] | @text') && script/ci/e2e
 
       - name: Upload end-to-end-test screenshots
         if: failure() && steps.Test.outcome == 'failure'
