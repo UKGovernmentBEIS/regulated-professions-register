@@ -4,9 +4,7 @@ describe('Creating organisations', () => {
       cy.loginAuth0('admin');
       cy.visit('/admin');
 
-      cy.translate('organisations.admin.index.add.button').then(() => {
-        cy.get('a').contains('Regulatory authorities').click();
-      });
+      cy.get('a').contains('Regulatory authorities').click();
 
       cy.translate('organisations.admin.index.add.button').then(
         (buttonText) => {
