@@ -34,7 +34,7 @@ export class LegislationController {
   ) {}
 
   @Get('/:professionId/versions/:versionId/legislation/edit')
-  @Permissions(UserPermission.EditProfession)
+  @Permissions(UserPermission.CreateProfession, UserPermission.EditProfession)
   @BackLink((request: Request) =>
     request.query.change === 'true'
       ? '/admin/professions/:professionId/versions/:versionId/check-your-answers'
@@ -65,7 +65,7 @@ export class LegislationController {
   }
 
   @Post('/:professionId/versions/:versionId/legislation')
-  @Permissions(UserPermission.EditProfession)
+  @Permissions(UserPermission.CreateProfession, UserPermission.EditProfession)
   @UseFilters(
     new ValidationExceptionFilter(
       'admin/professions/legislation',

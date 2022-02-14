@@ -68,6 +68,12 @@ export class ProfessionsController {
   }
 
   @Get()
+  @Permissions(
+    UserPermission.CreateProfession,
+    UserPermission.EditProfession,
+    UserPermission.DeleteProfession,
+    UserPermission.PublishProfession,
+  )
   @Render('admin/professions/index')
   @BackLink('/admin')
   async index(

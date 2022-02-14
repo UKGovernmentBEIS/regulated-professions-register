@@ -31,7 +31,7 @@ export class CheckYourAnswersController {
   ) {}
 
   @Get(':professionId/versions/:versionId/check-your-answers')
-  @Permissions(UserPermission.EditProfession)
+  @Permissions(UserPermission.CreateProfession, UserPermission.EditProfession)
   @Render('admin/professions/check-your-answers')
   @BackLink((request: Request) => getReferrer(request))
   async show(
