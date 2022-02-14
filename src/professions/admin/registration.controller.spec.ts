@@ -157,6 +157,7 @@ describe(RegistrationController, () => {
       it('does not update the profession, and re-renders the regulatory body form page with errors', async () => {
         const registrationDtoWithoutMandatoryRegistration = {
           mandatoryRegistration: undefined,
+          registrationUrl: 'not a url',
         };
 
         await controller.update(
@@ -174,6 +175,9 @@ describe(RegistrationController, () => {
             errors: {
               mandatoryRegistration: {
                 text: 'professions.form.errors.mandatoryRegistration.empty',
+              },
+              registrationUrl: {
+                text: 'professions.form.errors.registrationUrl.invalid',
               },
             },
           }),
@@ -200,6 +204,7 @@ describe(RegistrationController, () => {
 
           const registrationDtoWithChangeParam = {
             mandatoryRegistration: MandatoryRegistration.Voluntary,
+            registrationUrl: '',
             change: true,
           };
 
@@ -234,6 +239,7 @@ describe(RegistrationController, () => {
 
           const registrationDtoWithFalseChangeParam = {
             mandatoryRegistration: MandatoryRegistration.Voluntary,
+            registrationUrl: '',
             change: false,
           };
 

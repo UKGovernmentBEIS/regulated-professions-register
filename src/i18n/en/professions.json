@@ -123,6 +123,9 @@
       "reservedActivities": {
         "empty": "Enter reserved activities"
       },
+      "registrationUrl": {
+        "invalid": "Please enter a valid website address"
+      },
       "qualification": {
         "level": {
           "empty": "Enter the qualification level"
