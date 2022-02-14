@@ -31,6 +31,8 @@ const permissions = {
       UserPermission.PublishProfession,
     ],
     [Role.Editor]: [
+      UserPermission.EditOrganisation,
+      UserPermission.PublishOrganisation,
       UserPermission.EditProfession,
       UserPermission.PublishProfession,
     ],
