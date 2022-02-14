@@ -24,6 +24,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Remove redundant fields from Profession, now the values are stored on a Version
 - Simplify nation selection
 - Remove placeholder authority data on index page
+- Enforce that users cannot perform actions outside their role
 
 ## [release-002] - 2022-02-01
 
