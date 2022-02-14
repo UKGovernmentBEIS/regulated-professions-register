@@ -279,23 +279,6 @@
             rows: [
               {
                 key: {
-                  text: ("professions.form.label.qualificationInformation.qualificationLevel" | t)
-                },
-                value: {
-                  text: qualification.level
-                },
-                actions: {
-                  items: [
-                    {
-                      href: "/admin/professions/" + professionId + "/versions/" + versionId + "/qualification-information/edit?change=true",
-                      text: ("app.change" | t),
-                      visuallyHiddenText: ("professions.form.label.qualificationInformation.qualificationLevel" | t)
-                    }
-                  ]
-                }
-              },
-              {
-                key: {
                   text: ("professions.form.label.qualificationInformation.methodsToObtainQualification" | t)
                 },
                 value: {
@@ -358,6 +341,23 @@
                       href: "/admin/professions/" + professionId + "/versions/" + versionId + "/qualification-information/edit?change=true",
                       text: ("app.change" | t),
                       visuallyHiddenText: ("professions.form.label.qualificationInformation.mandatoryProfessionalExperience" | t)
+                    }
+                  ]
+                }
+              },
+              {
+                key: {
+                  text: ("professions.form.label.qualificationInformation.qualificationLevel" | t)
+                },
+                value: {
+                  text: qualification.level
+                },
+                actions: {
+                  items: [
+                    {
+                      href: "/admin/professions/" + professionId + "/versions/" + versionId + "/qualification-information/edit?change=true",
+                      text: ("app.change" | t),
+                      visuallyHiddenText: ("professions.form.label.qualificationInformation.qualificationLevel" | t)
                     }
                   ]
                 }

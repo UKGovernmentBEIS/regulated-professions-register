@@ -145,13 +145,13 @@ describe('Adding a new profession', () => {
       cy.translate('professions.form.captions.add').then((addCaption) => {
         cy.get('body').contains(addCaption);
       });
-      cy.get('textarea[name="level"]').type('An example Qualification level');
       cy.get(
         'input[name="methodToObtainQualification"][value="others"]',
       ).check();
       cy.get('textarea[name="otherMethodToObtainQualification"]').type(
         'Another method',
       );
+
       cy.get(
         'input[name="mostCommonPathToObtainQualification"][value="generalSecondaryEducation"]',
       ).check();
@@ -159,6 +159,8 @@ describe('Adding a new profession', () => {
       cy.get(
         'input[name="mandatoryProfessionalExperience"][value="1"]',
       ).check();
+      cy.get('textarea[name="level"]').type('An example Qualification level');
+
       cy.translate('app.continue').then((buttonText) => {
         cy.get('button').contains(buttonText).click();
       });
