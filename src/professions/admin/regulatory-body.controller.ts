@@ -152,7 +152,7 @@ export class RegulatoryBodyController {
     }
 
     return res.redirect(
-      `/admin/professions/${version.profession.id}/versions/${versionId}/regulated-activities/edit`,
+      `/admin/professions/${version.profession.id}/versions/${versionId}/registration/edit`,
     );
   }
 

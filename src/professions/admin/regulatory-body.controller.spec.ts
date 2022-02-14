@@ -209,7 +209,7 @@ describe(RegulatoryBodyController, () => {
         );
 
         expect(response.redirect).toHaveBeenCalledWith(
-          '/admin/professions/profession-id/versions/version-id/regulated-activities/edit',
+          '/admin/professions/profession-id/versions/version-id/registration/edit',
         );
       });
     });
@@ -320,7 +320,7 @@ describe(RegulatoryBodyController, () => {
           );
 
           expect(response.redirect).toHaveBeenCalledWith(
-            '/admin/professions/profession-id/versions/version-id/regulated-activities/edit',
+            '/admin/professions/profession-id/versions/version-id/registration/edit',
           );
         });
       });

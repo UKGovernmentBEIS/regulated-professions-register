@@ -84,6 +84,19 @@ describe('Adding a new profession', () => {
       });
 
       cy.checkAccessibility();
+
+      cy.translate('professions.form.captions.add').then((addCaption) => {
+        cy.get('body').contains(addCaption);
+      });
+
+      cy.get('input[name="mandatoryRegistration"][value="mandatory"]').check();
+
+      cy.translate('app.continue').then((buttonText) => {
+        cy.get('button').contains(buttonText).click();
+      });
+
+      cy.checkAccessibility();
+
       cy.translate('professions.form.headings.regulatedActivities').then(
         (heading) => {
           cy.get('body').should('contain', heading);

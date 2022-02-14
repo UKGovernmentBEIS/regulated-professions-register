@@ -52,7 +52,7 @@ export class RegistrationController {
   @BackLink((request: Request) =>
     request.query.change === 'true'
       ? '/admin/professions/:professionId/versions/:versionId/check-your-answers'
-      : '/admin/professions/:professionId/versions/:versionId/top-level-information/edit',
+      : '/admin/professions/:professionId/versions/:versionId/regulatory-body/edit',
   )
   async edit(
     @Res() res: Response,
@@ -83,7 +83,7 @@ export class RegistrationController {
   @BackLink((request: Request) =>
     request.body.change === 'true'
       ? '/admin/professions/:professionId/versions/:versionId/check-your-answers'
-      : '/admin/professions/:professionId/versions/:versionId/top-level-information/edit',
+      : '/admin/professions/:professionId/versions/:versionId/regulatory-body/edit',
   )
   async update(
     @Res() res: Response,
