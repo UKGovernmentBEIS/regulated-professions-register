@@ -38,6 +38,8 @@ import { createFilterInput } from '../../helpers/create-filter-input.helper';
 
 import { flashMessage } from '../../common/flash-message';
 import { isConfirmed } from '../../helpers/is-confirmed';
+import { UserPermission } from '../../users/user-permission';
+import { Permissions } from '../../common/permissions.decorator';
 
 @UseGuards(AuthenticationGuard)
 @Controller('/admin/organisations')
@@ -50,6 +52,7 @@ export class OrganisationsController {
   ) {}
 
   @Get()
+  @Permissions(UserPermission.CreateOrganisation, UserPermission.EditOrganisation, UserPermission.DeleteOrganisation, UserPermission.PublishOrganisation)
   @Render('admin/organisations/index')
   @BackLink('/admin')
   async index(@Query() query: FilterDto = null): Promise<IndexTemplate> {
@@ -75,6 +78,7 @@ export class OrganisationsController {
   }
 
   @Get('/new')
+  @Permissions(UserPermission.CreateOrganisation)
   @Render('admin/organisations/new')
   @BackLink('/admin/organisations')
   async new() {
@@ -82,6 +86,7 @@ export class OrganisationsController {
   }
 
   @Post('/')
+  @Permissions(UserPermission.CreateOrganisation)
   async create(
     @Res() res: Response,
     @Req() req: RequestWithAppSession,
@@ -102,6 +107,10 @@ export class OrganisationsController {
   }
 
   @Get('/:organisationId/versions/:versionId/edit')
+  @Permissions(
+    UserPermission.CreateOrganisation,
+    UserPermission.EditOrganisation,
+  )
   @Render('admin/organisations/edit')
   @BackLink('/admin/organisations/:id')
   async edit(
@@ -117,6 +126,7 @@ export class OrganisationsController {
   }
 
   @Put('/:organisationId/versions/:versionId')
+  @Permissions(UserPermission.CreateOrganisation, UserPermission.EditOrganisation)
   @UseFilters(new ValidationExceptionFilter('admin/organisations/edit'))
   async update(
     @Param('organisationId') organisationId: string,

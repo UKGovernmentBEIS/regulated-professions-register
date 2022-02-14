@@ -27,6 +27,8 @@ import { Organisation } from '../organisation.entity';
 import { ShowTemplate } from '../interfaces/show-template.interface';
 
 import { OrganisationSummaryPresenter } from '../presenters/organisation-summary.presenter';
+import { Permissions } from '../../common/permissions.decorator';
+import { UserPermission } from '../../users/user-permission';
 
 @UseGuards(AuthenticationGuard)
 @Controller('/admin/organisations')
@@ -38,6 +40,7 @@ export class OrganisationVersionsController {
   ) {}
 
   @Get('/:organisationID/versions/new')
+  @Permissions(UserPermission.CreateOrganisation, UserPermission.EditOrganisation)
   @Render('admin/organisations/versions/new')
   @BackLink('/admin/organisations')
   async new(@Param('organisationID') organisationID: string) {
@@ -47,6 +50,7 @@ export class OrganisationVersionsController {
   }
 
   @Post('/:organisationID/versions')
+  @Permissions(UserPermission.EditOrganisation)
   async create(
     @Res() res: Response,
     @Req() req: RequestWithAppSession,
@@ -73,6 +77,7 @@ export class OrganisationVersionsController {
   }
 
   @Get(':organisationId/versions/:versionId')
+  @Permissions(UserPermission.EditOrganisation, UserPermission.DeleteOrganisation, UserPermission.PublishOrganisation)
   @Render('admin/organisations/show')
   @BackLink('/admin/organisations')
   async show(
@@ -100,6 +105,7 @@ export class OrganisationVersionsController {
   }
 
   @Put(':organisationId/versions/:versionId/publish')
+  @Permissions(UserPermission.PublishOrganisation)
   @Render('admin/organisations/versions/publish')
   async publish(
     @Param('organisationId') organisationId: string,

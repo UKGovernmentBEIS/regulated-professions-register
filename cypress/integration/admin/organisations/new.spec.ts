@@ -1,4 +1,21 @@
 describe('Creating organisations', () => {
+  context('when I am logged in without the correct permissions', () => {
+    beforeEach(() => {
+      cy.loginAuth0('editor');
+      cy.visit('/admin');
+
+      cy.get('a').contains('Regulatory authorities').click();
+    });
+
+    it('does not allow me to add an organisation', () => {
+      cy.translate('organisations.admin.index.add.button').then(
+        (buttonText) => {
+          cy.get('body').should('not.contain', buttonText);
+        },
+      );
+    });
+  });
+
   context('When I am logged in as admin', () => {
     beforeEach(() => {
       cy.loginAuth0('admin');
