@@ -460,6 +460,9 @@ describe('OrganisationsController', () => {
             organisationsService.find.mockResolvedValue(organisation);
             organisationVersionsService.find.mockResolvedValue(version);
 
+            flashMock = flashMessage as jest.Mock;
+            flashMock.mockImplementation(() => 'STUB_FLASH_MESSAGE');
+
             await controller.update(
               'some-uuid',
               'some-other-uuid',
@@ -496,6 +499,10 @@ describe('OrganisationsController', () => {
         });
       });
     });
+  });
+
+  afterEach(() => {
+    jest.resetAllMocks();
   });
 });
 
