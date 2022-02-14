@@ -52,7 +52,12 @@ export class OrganisationsController {
   ) {}
 
   @Get()
-  @Permissions(UserPermission.CreateOrganisation, UserPermission.EditOrganisation, UserPermission.DeleteOrganisation, UserPermission.PublishOrganisation)
+  @Permissions(
+    UserPermission.CreateOrganisation,
+    UserPermission.EditOrganisation,
+    UserPermission.DeleteOrganisation,
+    UserPermission.PublishOrganisation,
+  )
   @Render('admin/organisations/index')
   @BackLink('/admin')
   async index(@Query() query: FilterDto = null): Promise<IndexTemplate> {
@@ -126,7 +131,10 @@ export class OrganisationsController {
   }
 
   @Put('/:organisationId/versions/:versionId')
-  @Permissions(UserPermission.CreateOrganisation, UserPermission.EditOrganisation)
+  @Permissions(
+    UserPermission.CreateOrganisation,
+    UserPermission.EditOrganisation,
+  )
   @UseFilters(new ValidationExceptionFilter('admin/organisations/edit'))
   async update(
     @Param('organisationId') organisationId: string,

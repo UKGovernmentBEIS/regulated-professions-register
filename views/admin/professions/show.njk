@@ -17,7 +17,7 @@
         </h2>
 
         <ul class="govuk-list">
-          {% if profession.status === 'draft' and 'editProfession' in permissions %}
+          {% if profession.status === 'draft' and 'publishProfession' in permissions %}
             <li>
                 <form action="/admin/professions/{{ profession.id }}/versions/{{ profession.versionId }}/publish?_method=PUT" method="post">
                   {{ govukButton({

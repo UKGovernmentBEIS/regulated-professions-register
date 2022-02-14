@@ -40,7 +40,7 @@ export class OrganisationVersionsController {
   ) {}
 
   @Get('/:organisationID/versions/new')
-  @Permissions(UserPermission.CreateOrganisation, UserPermission.EditOrganisation)
+  @Permissions(UserPermission.EditOrganisation)
   @Render('admin/organisations/versions/new')
   @BackLink('/admin/organisations')
   async new(@Param('organisationID') organisationID: string) {
@@ -77,7 +77,11 @@ export class OrganisationVersionsController {
   }
 
   @Get(':organisationId/versions/:versionId')
-  @Permissions(UserPermission.EditOrganisation, UserPermission.DeleteOrganisation, UserPermission.PublishOrganisation)
+  @Permissions(
+    UserPermission.EditOrganisation,
+    UserPermission.DeleteOrganisation,
+    UserPermission.PublishOrganisation,
+  )
   @Render('admin/organisations/show')
   @BackLink('/admin/organisations')
   async show(
