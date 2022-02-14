@@ -27,7 +27,8 @@ import { getActionTypeFromUser } from './helpers/get-action-type-from-user';
 
 import { UserMailer } from './user.mailer';
 import { BackLink } from '../common/decorators/back-link.decorator';
-import { Request, Response } from 'express';
+import { Response } from 'express';
+import { RequestWithAppSession } from '../common/interfaces/request-with-app-session.interface';
 
 class UserAlreadyExistsError extends Error {}
 
@@ -45,8 +46,8 @@ export class UsersController {
   @Permissions(UserPermission.CreateUser, UserPermission.EditUser)
   @Render('admin/users/index')
   @BackLink('/admin')
-  async index(@Req() req: Request): Promise<IndexTemplate> {
-    const actingUser = req['appSession'].user;
+  async index(@Req() req: RequestWithAppSession): Promise<IndexTemplate> {
+    const actingUser = req.appSession.user;
 
     const users = await (actingUser.serviceOwner
       ? this.usersService.allConfirmed()
@@ -81,8 +82,8 @@ export class UsersController {
 
   @Post('/admin/users')
   @Permissions(UserPermission.CreateUser, UserPermission.EditUser)
-  async create(@Req() request: Request, @Res() res: Response) {
-    const actingUser = request['appSession'].user as User;
+  async create(@Req() request: RequestWithAppSession, @Res() res: Response) {
+    const actingUser = request.appSession.user as User;
 
     const organisation = actingUser.organisation;
 

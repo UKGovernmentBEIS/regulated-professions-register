@@ -8,7 +8,7 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { I18nService } from 'nestjs-i18n';
 import { IndustriesService } from '../../industries/industries.service';
 import { Nation } from '../../nations/nation';
@@ -71,7 +71,7 @@ export class ProfessionsController {
   @Render('admin/professions/index')
   @BackLink('/admin')
   async index(
-    @Req() request: Request,
+    @Req() request: RequestWithAppSession,
     @Query() query: FilterDto = null,
   ): Promise<IndexTemplate> {
     return this.createListEntries(query || new FilterDto(), request);
@@ -79,7 +79,7 @@ export class ProfessionsController {
 
   private async createListEntries(
     filter: FilterDto,
-    request: Request,
+    request: RequestWithAppSession,
   ): Promise<IndexTemplate> {
     const allNations = Nation.all();
     const allOrganisations = await this.organisationsService.all();
@@ -88,15 +88,15 @@ export class ProfessionsController {
     const allProfessions =
       await this.professionVersionsService.allDraftOrLive();
 
-    const user = request['appSession'].user as User;
+    const actingUser = request.appSession.user as User;
 
-    const showAllOrgs = user.serviceOwner;
+    const showAllOrgs = actingUser.serviceOwner;
 
     const view: ProfessionsPresenterView = showAllOrgs
       ? 'overview'
       : 'single-organisation';
 
-    const userOrganisation = showAllOrgs ? null : user.organisation;
+    const userOrganisation = showAllOrgs ? null : actingUser.organisation;
 
     const filterInput = createFilterInput({
       ...filter,

@@ -1,6 +1,6 @@
 import { createMock, DeepMocked } from '@golevelup/ts-jest';
 import { Test } from '@nestjs/testing';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { I18nService } from 'nestjs-i18n';
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 import { createMockRequest } from '../../testutils/create-mock-request';
@@ -74,7 +74,7 @@ const profession3 = professionFactory.build({
   updated_at: new Date(2021, 12, 1),
 });
 
-let request: DeepMocked<Request>;
+let request: DeepMocked<RequestWithAppSession>;
 let i18nService: DeepMocked<I18nService>;
 
 jest.mock('../../organisations/organisation.entity');
