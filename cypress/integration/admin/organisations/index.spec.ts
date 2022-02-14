@@ -97,6 +97,21 @@ describe('Listing organisations', () => {
     });
   });
 
+  context('When I am logged in as an organisation admin', () => {
+    beforeEach(() => {
+      cy.loginAuth0('orgadmin');
+      cy.visitAndCheckAccessibility('/admin');
+
+      cy.get('a').contains('Regulatory authorities').click();
+      cy.checkAccessibility();
+    });
+
+    it("Lists only the user's own organisation", () => {
+      cy.get('tbody tr').should('have.length', 1);
+      cy.get('tbody tr').should('contain', 'Department for Education');
+    });
+  });
+
   function clickFilterButtonAndCheckAccessibility(): void {
     cy.translate('organisations.admin.filter.button').then((buttonLabel) => {
       cy.get('button').contains(buttonLabel).click();

@@ -40,6 +40,7 @@ import { flashMessage } from '../../common/flash-message';
 import { isConfirmed } from '../../helpers/is-confirmed';
 import { UserPermission } from '../../users/user-permission';
 import { Permissions } from '../../common/permissions.decorator';
+import { User } from '../../users/user.entity';
 
 @UseGuards(AuthenticationGuard)
 @Controller('/admin/organisations')
@@ -55,13 +56,27 @@ export class OrganisationsController {
   @Permissions(UserPermission.CreateOrganisation, UserPermission.EditOrganisation, UserPermission.DeleteOrganisation, UserPermission.PublishOrganisation)
   @Render('admin/organisations/index')
   @BackLink('/admin')
-  async index(@Query() query: FilterDto = null): Promise<IndexTemplate> {
+  async index(
+    @Req() request: RequestWithAppSession,
+    @Query() query: FilterDto = null,
+  ): Promise<IndexTemplate> {
+    const actingUser = request.appSession.user as User;
+
+    const showAllOrgs = actingUser.serviceOwner;
+
     const allOrganisations =
       await this.organisationVersionsService.allDraftOrLive();
     const allIndustries = await this.industriesService.all();
 
     const filter = query || new FilterDto();
+
+    const userOrganisation = showAllOrgs ? null : actingUser.organisation;
+
     const filterInput = createFilterInput({ ...filter, allIndustries });
+
+    if (userOrganisation) {
+      filterInput.organisations = [userOrganisation];
+    }
 
     const filteredOrganisations = new OrganisationsFilterHelper(
       allOrganisations,
