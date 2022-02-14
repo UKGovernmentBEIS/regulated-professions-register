@@ -19,7 +19,7 @@
 
         <nav role="navigation" aria-labelledby="subsection-title">
           <ul class="govuk-list">
-            {% if organisation.status === 'draft' %}
+            {% if organisation.status === 'draft' and 'publishOrganisation' in permissions %}
             <li>
               <form action="/admin/organisations/{{ organisation.id }}/versions/{{ organisation.versionId }}/publish?_method=PUT" method="post">
                 {{
@@ -30,6 +30,7 @@
               </form>
             </li>
             {% endif %}
+            {% if 'editOrganisation' in permissions %}
             <li>
               {{
                 govukButton({
@@ -39,6 +40,8 @@
                 })
               }}
             </li>
+            {% endif %}
+            {% if 'deleteOrganisation' in permissions %}
             <li>
               {{
                 govukButton({
@@ -48,6 +51,7 @@
                 })
               }}
             </li>
+            {% endif %}
           </ul>
         </nav>
       </aside>
