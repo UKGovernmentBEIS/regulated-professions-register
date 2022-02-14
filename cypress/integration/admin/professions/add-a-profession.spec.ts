@@ -23,7 +23,7 @@ describe('Adding a new profession', () => {
 
   context('when I am logged in with the correct permissions', () => {
     beforeEach(() => {
-      cy.loginAuth0();
+      cy.loginAuth0('registrar');
     });
 
     it('I can add a new profession', () => {
