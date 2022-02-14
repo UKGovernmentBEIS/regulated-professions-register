@@ -15,6 +15,7 @@ const permissions = {
       UserPermission.CreateProfession,
       UserPermission.EditProfession,
       UserPermission.DeleteProfession,
+      UserPermission.PublishProfession,
       UserPermission.UploadDecisionData,
       UserPermission.DownloadDecisionData,
       UserPermission.ViewDecisionData,
@@ -27,8 +28,12 @@ const permissions = {
       UserPermission.CreateProfession,
       UserPermission.EditProfession,
       UserPermission.DeleteProfession,
+      UserPermission.PublishProfession,
     ],
-    [Role.Editor]: [UserPermission.EditProfession],
+    [Role.Editor]: [
+      UserPermission.EditProfession,
+      UserPermission.PublishProfession,
+    ],
   },
   notServiceOwner: {
     [Role.Administrator]: [
@@ -40,7 +45,10 @@ const permissions = {
       UserPermission.DownloadDecisionData,
       UserPermission.ViewDecisionData,
     ],
-    [Role.Editor]: [UserPermission.EditProfession],
+    [Role.Editor]: [
+      UserPermission.EditProfession,
+      UserPermission.PublishProfession,
+    ],
   },
 };
 
