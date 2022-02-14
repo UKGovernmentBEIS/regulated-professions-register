@@ -42,7 +42,7 @@
     "@nestjs/bull": "^0.4.2",
     "@nestjs/cli": "^8.2.1",
     "@nestjs/common": "^8.3.0",
-    "@nestjs/config": "^1.1.7",
+    "@nestjs/config": "^1.2.0",
     "@nestjs/core": "^8.2.6",
     "@nestjs/platform-express": "^8.3.0",
     "@nestjs/typeorm": "^8.0.3",
