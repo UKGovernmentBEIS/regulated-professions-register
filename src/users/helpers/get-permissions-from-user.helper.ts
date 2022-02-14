@@ -9,6 +9,8 @@ const permissions = {
       UserPermission.EditUser,
       UserPermission.DeleteUser,
       UserPermission.CreateOrganisation,
+      UserPermission.EditOrganisation,
+      UserPermission.PublishOrganisation,
       UserPermission.DeleteOrganisation,
       UserPermission.CreateProfession,
       UserPermission.EditProfession,
@@ -19,6 +21,8 @@ const permissions = {
     ],
     [Role.Registrar]: [
       UserPermission.CreateOrganisation,
+      UserPermission.EditOrganisation,
+      UserPermission.PublishOrganisation,
       UserPermission.DeleteOrganisation,
       UserPermission.CreateProfession,
       UserPermission.EditProfession,
