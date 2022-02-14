@@ -16,7 +16,6 @@ import { OrganisationsService } from '../../organisations/organisations.service'
 import { RegulatoryBodyTemplate } from './interfaces/regulatory-body.template';
 import { RegulatedAuthoritiesSelectPresenter } from './regulated-authorities-select-presenter';
 import { Organisation } from '../../organisations/organisation.entity';
-import { MandatoryRegistrationRadioButtonsPresenter } from './mandatory-registration-radio-buttons-presenter';
 import { Validator } from '../../helpers/validator';
 import { RegulatoryBodyDto } from './dto/regulatory-body.dto';
 import { ValidationFailedError } from '../../common/validation/validation-failed.error';
@@ -26,10 +25,6 @@ import { BackLink } from '../../common/decorators/back-link.decorator';
 
 import ViewUtils from './viewUtils';
 import { ProfessionVersionsService } from '../profession-versions.service';
-import {
-  MandatoryRegistration,
-  ProfessionVersion,
-} from '../profession-version.entity';
 import { Profession } from '../profession.entity';
 import { isConfirmed } from '../../helpers/is-confirmed';
 @UseGuards(AuthenticationGuard)
@@ -59,17 +54,10 @@ export class RegulatoryBodyController {
       professionId,
     );
 
-    const version = await this.professionVersionsService.findWithProfession(
-      versionId,
-    );
-
-    const selectedMandatoryRegistration = version.mandatoryRegistration;
-
     return this.renderForm(
       res,
       profession.organisation,
       profession.additionalOrganisation,
-      selectedMandatoryRegistration,
       isConfirmed(profession),
       change,
     );
@@ -110,8 +98,6 @@ export class RegulatoryBodyController {
           )
         : null;
 
-    const selectedMandatoryRegistration = submittedValues.mandatoryRegistration;
-
     const profession = await this.professionsService.findWithVersions(
       professionId,
     );
@@ -122,7 +108,6 @@ export class RegulatoryBodyController {
         res,
         selectedOrganisation,
         selectedAdditionalOrganisation,
-        selectedMandatoryRegistration,
         isConfirmed(profession),
         regulatoryBodyDto.change,
         errors,
@@ -135,15 +120,7 @@ export class RegulatoryBodyController {
       additionalOrganisation: selectedAdditionalOrganisation,
     };
 
-    const updatedVersion: ProfessionVersion = {
-      ...version,
-      ...{
-        mandatoryRegistration: selectedMandatoryRegistration,
-      },
-    };
-
     await this.professionsService.save(updatedProfession);
-    await this.professionVersionsService.save(updatedVersion);
 
     if (regulatoryBodyDto.change) {
       return res.redirect(
@@ -160,7 +137,6 @@ export class RegulatoryBodyController {
     res: Response,
     selectedRegulatoryAuthority: Organisation | null,
     selectedAdditionalRegulatoryAuthority: Organisation | null,
-    mandatoryRegistration: MandatoryRegistration | null,
     isEditing: boolean,
     change: boolean,
     errors: object | undefined = undefined,
@@ -179,15 +155,8 @@ export class RegulatoryBodyController {
         selectedAdditionalRegulatoryAuthority,
       ).selectArgs();
 
-    const mandatoryRegistrationRadioButtonArgs =
-      await new MandatoryRegistrationRadioButtonsPresenter(
-        mandatoryRegistration,
-        this.i18nService,
-      ).radioButtonArgs();
-
     const templateArgs: RegulatoryBodyTemplate = {
       regulatedAuthoritiesSelectArgs,
-      mandatoryRegistrationRadioButtonArgs,
       additionalRegulatedAuthoritiesSelectArgs,
       captionText: ViewUtils.captionText(isEditing),
       change,

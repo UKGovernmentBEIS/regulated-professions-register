@@ -33,25 +33,6 @@
         }}
 
         {{
-          govukRadios({
-            id: "mandatoryRegistration",
-            name: "mandatoryRegistration",
-            fieldset: {
-              legend: {
-                text: ("professions.form.label.regulatoryBody.mandatoryRegistration" | t),
-                isPageHeading: false,
-                classes: "govuk-fieldset__legend--m"
-              }
-            },
-            hint: {
-              text: ("professions.form.radioButtons.hint" | t)
-            },
-            items: mandatoryRegistrationRadioButtonArgs,
-            errorMessage: errors.mandatoryRegistration | tError
-          })
-        }}
-
-        {{
           govukSelect({
             label: {
               text: ("professions.form.label.regulatoryBody.additionalAuthority" | t),

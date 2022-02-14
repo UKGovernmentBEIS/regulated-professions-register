@@ -1,5 +1,4 @@
 import { IsNotEmpty } from 'class-validator';
-import { MandatoryRegistration } from '../../profession.entity';
 
 export class RegulatoryBodyDto {
   @IsNotEmpty({
@@ -8,11 +7,6 @@ export class RegulatoryBodyDto {
   regulatoryBody: string;
 
   additionalRegulatoryBody: string;
-
-  @IsNotEmpty({
-    message: 'professions.form.errors.mandatoryRegistration.empty',
-  })
-  mandatoryRegistration: MandatoryRegistration;
 
   change: boolean;
 }

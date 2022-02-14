@@ -8,10 +8,8 @@ import { createMockI18nService } from '../../testutils/create-mock-i18n-service'
 import organisationFactory from '../../testutils/factories/organisation';
 import professionFactory from '../../testutils/factories/profession';
 import professionVersionFactory from '../../testutils/factories/profession-version';
-import { MandatoryRegistration } from '../profession-version.entity';
 import { ProfessionVersionsService } from '../profession-versions.service';
 import { ProfessionsService } from '../professions.service';
-import { MandatoryRegistrationRadioButtonsPresenter } from './mandatory-registration-radio-buttons-presenter';
 import { RegulatedAuthoritiesSelectPresenter } from './regulated-authorities-select-presenter';
 import { RegulatoryBodyController } from './regulatory-body.controller';
 
@@ -49,7 +47,7 @@ describe(RegulatoryBodyController, () => {
 
   describe('edit', () => {
     describe('when editing a just-created, blank Profession', () => {
-      it('should render a list of Organisations to be displayed in a Select, alongside Radio Buttons with mandatory registration values with none of them selected', async () => {
+      it('should render a list of Organisations to be displayed in the Selects with none of them selected', async () => {
         const profession = professionFactory
           .justCreated('profession-id')
           .build();
@@ -66,9 +64,6 @@ describe(RegulatoryBodyController, () => {
         const regulatedAuthoritiesSelectPresenter =
           new RegulatedAuthoritiesSelectPresenter(organisations, null);
 
-        const mandatoryRegistrationRadioButtonsPresenter =
-          new MandatoryRegistrationRadioButtonsPresenter(null, i18nService);
-
         await controller.edit(response, 'profession-id', 'version-id', false);
 
         expect(response.render).toHaveBeenCalledWith(
@@ -78,8 +73,6 @@ describe(RegulatoryBodyController, () => {
               regulatedAuthoritiesSelectPresenter.selectArgs(),
             additionalRegulatedAuthoritiesSelectArgs:
               regulatedAuthoritiesSelectPresenter.selectArgs(),
-            mandatoryRegistrationRadioButtonArgs:
-              await mandatoryRegistrationRadioButtonsPresenter.radioButtonArgs(),
           }),
         );
         expect(organisationsService.all).toHaveBeenCalled();
@@ -87,7 +80,7 @@ describe(RegulatoryBodyController, () => {
     });
 
     describe('when an existing Profession is found', () => {
-      it('should pre-select both Organisations from the Select and the mandatory registration in the radio buttons', async () => {
+      it('should pre-select both Organisations from the Select', async () => {
         const organisation = organisationFactory.build({
           name: 'Example org',
           id: 'example-org-id',
@@ -103,7 +96,6 @@ describe(RegulatoryBodyController, () => {
         });
         const version = professionVersionFactory.build({
           profession: profession,
-          mandatoryRegistration: MandatoryRegistration.Mandatory,
         });
 
         professionsService.findWithVersions.mockResolvedValue(profession);
@@ -125,12 +117,6 @@ describe(RegulatoryBodyController, () => {
             additionalOrganisation,
           );
 
-        const mandatoryRegistrationRadioButtonsPresenterWithSelectedValue =
-          new MandatoryRegistrationRadioButtonsPresenter(
-            MandatoryRegistration.Mandatory,
-            i18nService,
-          );
-
         await controller.edit(response, 'profession-id', 'version-id', false);
 
         expect(response.render).toHaveBeenCalledWith(
@@ -140,8 +126,6 @@ describe(RegulatoryBodyController, () => {
               regulatedAuthoritiesSelectPresenterWithSelectedOrganisation.selectArgs(),
             additionalRegulatedAuthoritiesSelectArgs:
               regulatedAuthoritiesSelectPresenterWithSelectedAdditionalOrganisation.selectArgs(),
-            mandatoryRegistrationRadioButtonArgs:
-              await mandatoryRegistrationRadioButtonsPresenterWithSelectedValue.radioButtonArgs(),
           }),
         );
 
@@ -159,7 +143,6 @@ describe(RegulatoryBodyController, () => {
         const version = professionVersionFactory.build({
           id: 'version-id',
           profession: profession,
-          mandatoryRegistration: MandatoryRegistration.Mandatory,
         });
 
         professionsService.findWithVersions.mockResolvedValue(profession);
@@ -168,7 +151,6 @@ describe(RegulatoryBodyController, () => {
         const regulatoryBodyDto = {
           regulatoryBody: 'example-org-id',
           additionalRegulatoryBody: 'other-example-org-id',
-          mandatoryRegistration: MandatoryRegistration.Voluntary,
         };
 
         const newOrganisation = organisationFactory.build({
@@ -200,14 +182,6 @@ describe(RegulatoryBodyController, () => {
           }),
         );
 
-        expect(professionVersionsService.save).toHaveBeenCalledWith(
-          expect.objectContaining({
-            id: 'version-id',
-            mandatoryRegistration: MandatoryRegistration.Voluntary,
-            profession: profession,
-          }),
-        );
-
         expect(response.redirect).toHaveBeenCalledWith(
           '/admin/professions/profession-id/versions/version-id/registration/edit',
         );
@@ -218,7 +192,6 @@ describe(RegulatoryBodyController, () => {
       it('does not update the profession, and re-renders the regulatory body form page with errors', async () => {
         const invalidDto = {
           regulatoryBody: null,
-          mandatoryRegistration: undefined,
         };
 
         await controller.update(
@@ -237,9 +210,6 @@ describe(RegulatoryBodyController, () => {
               regulatoryBody: {
                 text: 'professions.form.errors.regulatoryBody.empty',
               },
-              mandatoryRegistration: {
-                text: 'professions.form.errors.mandatoryRegistration.empty',
-              },
             },
           }),
         );
@@ -256,7 +226,6 @@ describe(RegulatoryBodyController, () => {
           const version = professionVersionFactory.build({
             id: 'version-id',
             profession: profession,
-            mandatoryRegistration: MandatoryRegistration.Mandatory,
           });
 
           professionsService.findWithVersions.mockResolvedValue(profession);
@@ -266,7 +235,6 @@ describe(RegulatoryBodyController, () => {
 
           const regulatoryBodyDtoWithChangeParam = {
             regulatoryBody: 'example-org-id',
-            mandatoryRegistration: MandatoryRegistration.Voluntary,
             change: true,
           };
 
@@ -296,7 +264,6 @@ describe(RegulatoryBodyController, () => {
           const version = professionVersionFactory.build({
             id: 'version-id',
             profession: profession,
-            mandatoryRegistration: MandatoryRegistration.Mandatory,
           });
 
           professionsService.findWithVersions.mockResolvedValue(profession);
@@ -306,7 +273,6 @@ describe(RegulatoryBodyController, () => {
 
           const regulatoryBodyDtoWithFalseChangeParam = {
             regulatoryBody: 'example-org-id',
-            mandatoryRegistration: MandatoryRegistration.Voluntary,
             change: false,
           };
 
