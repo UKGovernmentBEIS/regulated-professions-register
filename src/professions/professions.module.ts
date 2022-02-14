@@ -19,6 +19,7 @@ import { LegislationController } from './admin/legislation.controller';
 import { ProfessionVersionsService } from './profession-versions.service';
 import { ProfessionVersion } from './profession-version.entity';
 import { ProfessionVersionsController } from './admin/profession-versions.controller';
+import { RegistrationController } from './admin/registration.controller';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { ProfessionVersionsController } from './admin/profession-versions.contro
     CheckYourAnswersController,
     ConfirmationController,
     AdminProfessionsController,
+    RegistrationController,
   ],
 })
 export class ProfessionsModule {}
