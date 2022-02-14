@@ -1,7 +1,7 @@
 describe('Creating organisations', () => {
-  context('When I am logged in as admin', () => {
+  context('When I am logged in a registrar', () => {
     beforeEach(() => {
-      cy.loginAuth0('admin');
+      cy.loginAuth0('registrar');
       cy.visit('/admin');
 
       cy.get('a').contains('Regulatory authorities').click();

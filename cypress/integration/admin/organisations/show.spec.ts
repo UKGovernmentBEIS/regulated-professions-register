@@ -1,7 +1,7 @@
 describe('Showing organisations', () => {
-  context('When I am logged in as admin', () => {
+  context('When I am logged in an editor', () => {
     beforeEach(() => {
-      cy.loginAuth0('admin');
+      cy.loginAuth0('editor');
       cy.visitAndCheckAccessibility('/admin');
     });
 
