@@ -9,6 +9,8 @@ const permissions = {
       UserPermission.EditUser,
       UserPermission.DeleteUser,
       UserPermission.CreateOrganisation,
+      UserPermission.EditOrganisation,
+      UserPermission.PublishOrganisation,
       UserPermission.DeleteOrganisation,
       UserPermission.CreateProfession,
       UserPermission.EditProfession,
@@ -19,24 +21,36 @@ const permissions = {
     ],
     [Role.Registrar]: [
       UserPermission.CreateOrganisation,
+      UserPermission.EditOrganisation,
+      UserPermission.PublishOrganisation,
       UserPermission.DeleteOrganisation,
       UserPermission.CreateProfession,
       UserPermission.EditProfession,
       UserPermission.DeleteProfession,
     ],
-    [Role.Editor]: [UserPermission.EditProfession],
+    [Role.Editor]: [
+      UserPermission.EditOrganisation,
+      UserPermission.PublishOrganisation,
+      UserPermission.EditProfession,
+    ],
   },
   notServiceOwner: {
     [Role.Administrator]: [
       UserPermission.CreateUser,
       UserPermission.EditUser,
       UserPermission.DeleteUser,
+      UserPermission.EditOrganisation,
+      UserPermission.PublishOrganisation,
       UserPermission.EditProfession,
       UserPermission.UploadDecisionData,
       UserPermission.DownloadDecisionData,
       UserPermission.ViewDecisionData,
     ],
-    [Role.Editor]: [UserPermission.EditProfession],
+    [Role.Editor]: [
+      UserPermission.EditOrganisation,
+      UserPermission.PublishOrganisation,
+      UserPermission.EditProfession,
+    ],
   },
 };
 
