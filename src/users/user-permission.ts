@@ -9,6 +9,7 @@ export enum UserPermission {
   CreateProfession = 'createProfession',
   DeleteProfession = 'deleteProfession',
   EditProfession = 'editProfession',
+  PublishProfession = 'publishProfession',
   UploadDecisionData = 'uploadDecisionData',
   DownloadDecisionData = 'downloadDecisionData',
   ViewDecisionData = 'viewDecisionData',
