@@ -43,7 +43,11 @@ export class UsersController {
   ) {}
 
   @Get('/admin/users')
-  @Permissions(UserPermission.CreateUser, UserPermission.EditUser)
+  @Permissions(
+    UserPermission.CreateUser,
+    UserPermission.EditUser,
+    UserPermission.DeleteUser,
+  )
   @Render('admin/users/index')
   @BackLink('/admin')
   async index(@Req() req: RequestWithAppSession): Promise<IndexTemplate> {
@@ -62,7 +66,7 @@ export class UsersController {
   }
 
   @Get('/admin/users/new')
-  @Permissions(UserPermission.CreateUser, UserPermission.EditUser)
+  @Permissions(UserPermission.CreateUser)
   @Render('admin/users/new')
   @BackLink('/admin/users')
   new(): object {
@@ -70,7 +74,7 @@ export class UsersController {
   }
 
   @Get('/admin/users/:id')
-  @Permissions(UserPermission.CreateUser, UserPermission.EditUser)
+  @Permissions(UserPermission.EditUser, UserPermission.DeleteUser)
   @Render('admin/users/show')
   async show(@Param('id') id): Promise<ShowTemplate> {
     const user = await this.usersService.find(id);
@@ -81,9 +85,9 @@ export class UsersController {
   }
 
   @Post('/admin/users')
-  @Permissions(UserPermission.CreateUser, UserPermission.EditUser)
+  @Permissions(UserPermission.CreateUser)
   async create(@Req() request: RequestWithAppSession, @Res() res: Response) {
-    const actingUser = request.appSession.user as User;
+    const actingUser = request['appSession'].user as User;
 
     const organisation = actingUser.organisation;
 
@@ -100,7 +104,7 @@ export class UsersController {
   }
 
   @Get('/admin/users/:id/confirm')
-  @Permissions(UserPermission.CreateUser)
+  @Permissions(UserPermission.CreateUser, UserPermission.EditUser)
   @Render('admin/users/confirm')
   @BackLink('/admin/users/:id/permissions/edit')
   async confirm(@Param('id') id): Promise<ConfirmTemplate> {
@@ -114,7 +118,7 @@ export class UsersController {
   }
 
   @Post('/admin/users/:id/confirm')
-  @Permissions(UserPermission.CreateUser)
+  @Permissions(UserPermission.CreateUser, UserPermission.EditUser)
   async complete(@Res() res, @Param('id') id): Promise<void> {
     const user = await this.usersService.find(id);
     const action = getActionTypeFromUser(user);
