@@ -18,10 +18,7 @@ import { UserPermission } from '../../users/user-permission';
 import { ProfessionsService } from '../professions.service';
 import { ProfessionVersionsService } from '../profession-versions.service';
 
-import {
-  MandatoryRegistration,
-  ProfessionVersion,
-} from '../profession-version.entity';
+import { ProfessionVersion } from '../profession-version.entity';
 
 import { Permissions } from '../../common/permissions.decorator';
 import { BackLink } from '../../common/decorators/back-link.decorator';
@@ -68,14 +65,7 @@ export class RegistrationController {
       versionId,
     );
 
-    const selectedMandatoryRegistration = version.mandatoryRegistration;
-
-    return this.renderForm(
-      res,
-      selectedMandatoryRegistration,
-      isConfirmed(profession),
-      change,
-    );
+    return this.renderForm(res, version, isConfirmed(profession), change);
   }
 
   @Post('/:professionId/versions/:versionId/registration')
@@ -111,7 +101,7 @@ export class RegistrationController {
       const errors = new ValidationFailedError(validator.errors).fullMessages();
       return this.renderForm(
         res,
-        selectedMandatoryRegistration,
+        version,
         isConfirmed(profession),
         registrationDto.change,
         errors,
@@ -121,6 +111,8 @@ export class RegistrationController {
     const updatedVersion: ProfessionVersion = {
       ...version,
       ...{
+        registrationRequirements: registrationDto.registrationRequirements,
+        registrationUrl: registrationDto.registrationUrl,
         mandatoryRegistration: selectedMandatoryRegistration,
       },
     };
@@ -140,11 +132,13 @@ export class RegistrationController {
 
   private async renderForm(
     res: Response,
-    mandatoryRegistration: MandatoryRegistration | null,
+    version: ProfessionVersion,
     isEditing: boolean,
     change: boolean,
     errors: object | undefined = undefined,
   ): Promise<void> {
+    const mandatoryRegistration = version.mandatoryRegistration;
+
     const mandatoryRegistrationRadioButtonArgs =
       await new MandatoryRegistrationRadioButtonsPresenter(
         mandatoryRegistration,
@@ -152,6 +146,7 @@ export class RegistrationController {
       ).radioButtonArgs();
 
     const templateArgs: RegistrationTemplate = {
+      ...version,
       mandatoryRegistrationRadioButtonArgs,
       captionText: ViewUtils.captionText(isEditing),
       change,

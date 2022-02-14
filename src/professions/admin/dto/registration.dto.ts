@@ -6,4 +6,7 @@ export class RegistrationDto {
     message: 'professions.form.errors.mandatoryRegistration.empty',
   })
   mandatoryRegistration: MandatoryRegistration;
+
+  registrationRequirements: string;
+  registrationUrl: string;
 }

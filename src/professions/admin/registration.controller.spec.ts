@@ -75,13 +75,15 @@ describe(RegistrationController, () => {
     });
 
     describe('when an existing Profession is found', () => {
-      it('should pre-select the mandatory registration in the radio buttons', async () => {
+      it('should pre-select the mandatory registration in the radio buttons and pre-populate the other values', async () => {
         const profession = professionFactory.build({
           id: 'profession-id',
         });
         const version = professionVersionFactory.build({
           profession: profession,
           mandatoryRegistration: MandatoryRegistration.Mandatory,
+          registrationRequirements: 'Something',
+          registrationUrl: 'http://example.com',
         });
 
         professionsService.findWithVersions.mockResolvedValue(profession);
@@ -98,6 +100,8 @@ describe(RegistrationController, () => {
         expect(response.render).toHaveBeenCalledWith(
           'admin/professions/registration',
           expect.objectContaining({
+            registrationRequirements: 'Something',
+            registrationUrl: 'http://example.com',
             mandatoryRegistrationRadioButtonArgs:
               await mandatoryRegistrationRadioButtonsPresenterWithSelectedValue.radioButtonArgs(),
           }),
@@ -123,6 +127,8 @@ describe(RegistrationController, () => {
 
         const registrationDto = {
           mandatoryRegistration: MandatoryRegistration.Voluntary,
+          registrationRequirements: 'Something',
+          registrationUrl: 'http://example.com',
         };
 
         await controller.update(
@@ -135,6 +141,8 @@ describe(RegistrationController, () => {
         expect(professionVersionsService.save).toHaveBeenCalledWith(
           expect.objectContaining({
             mandatoryRegistration: MandatoryRegistration.Voluntary,
+            registrationRequirements: 'Something',
+            registrationUrl: 'http://example.com',
             profession: profession,
           }),
         );

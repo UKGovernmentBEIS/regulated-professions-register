@@ -1,6 +1,7 @@
 {% extends "base.njk" %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
 
 {% set bodyClasses = "rpr-internal__page" %}
 
@@ -22,7 +23,7 @@
             name: "mandatoryRegistration",
             fieldset: {
               legend: {
-                text: ("professions.form.label.regulatoryBody.mandatoryRegistration" | t),
+                text: ("professions.form.label.registration.mandatoryRegistration" | t),
                 isPageHeading: false,
                 classes: "govuk-fieldset__legend--m"
               }
@@ -32,6 +33,36 @@
             },
             items: mandatoryRegistrationRadioButtonArgs,
             errorMessage: errors.mandatoryRegistration | tError
+          })
+        }}
+
+        {{
+          govukInput({
+            id: "registrationRequirements",
+            name: "registrationRequirements",
+            label: {
+              text: ("professions.form.label.registration.registrationRequirements" | t),
+              classes: "govuk-label--m",
+              isPageHeading: false
+            },
+            value: registrationRequirements
+          })
+        }}
+
+        {{
+          govukInput({
+            id: "registrationUrl",
+            name: "registrationUrl",
+            label: {
+              text: ("professions.form.label.registration.registrationUrl" | t),
+              classes: "govuk-label--m",
+              isPageHeading: false
+            },
+            value: registrationUrl,
+            hint: {
+              text: ("professions.form.hint.registration.registrationUrl" | t)
+            },
+            errorMessage: errors.registrationUrl | tError
           })
         }}
 

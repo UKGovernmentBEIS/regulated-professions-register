@@ -198,7 +198,7 @@ describe('Adding a new profession', () => {
         'professions.form.radioButtons.mandatoryRegistration.mandatory',
       ).then((mandatoryRegistration) => {
         cy.checkSummaryListRowValue(
-          'professions.form.label.regulatoryBody.mandatoryRegistration',
+          'professions.form.label.registration.mandatoryRegistration',
           mandatoryRegistration,
         );
       });
