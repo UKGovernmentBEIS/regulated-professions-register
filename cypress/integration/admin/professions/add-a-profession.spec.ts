@@ -87,6 +87,10 @@ describe('Adding a new profession', () => {
       cy.translate('professions.form.captions.add').then((addCaption) => {
         cy.get('body').contains(addCaption);
       });
+      cy.get('input[name="registrationRequirements"]').type('Requirements');
+      cy.get('input[name="registrationUrl"]').type(
+        'https://example.com/requirement',
+      );
 
       cy.get('input[name="mandatoryRegistration"][value="mandatory"]').check();
 
@@ -194,6 +198,11 @@ describe('Adding a new profession', () => {
         'Department for Education',
       );
 
+      cy.checkSummaryListRowValue(
+        'professions.form.label.regulatoryBody.additionalAuthority',
+        'General Medical Council',
+      );
+
       cy.translate(
         'professions.form.radioButtons.mandatoryRegistration.mandatory',
       ).then((mandatoryRegistration) => {
@@ -204,8 +213,13 @@ describe('Adding a new profession', () => {
       });
 
       cy.checkSummaryListRowValue(
-        'professions.form.label.regulatoryBody.additionalAuthority',
-        'General Medical Council',
+        'professions.form.label.registration.registrationRequirements',
+        'Requirements',
+      );
+
+      cy.checkSummaryListRowValue(
+        'professions.form.label.registration.registrationUrl',
+        'https://example.com/requirement',
       );
 
       cy.checkSummaryListRowValue(

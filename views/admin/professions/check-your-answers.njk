@@ -115,23 +115,6 @@
               },
               {
                 key: {
-                  text: ("professions.form.label.registration.mandatoryRegistration" | t)
-                },
-                value: {
-                  text: ("professions.mandatoryRegistration." + mandatoryRegistration) | t
-                },
-                actions: {
-                  items: [
-                    {
-                      href: "/admin/professions/" + professionId + "/versions/" + versionId + "/regulatory-body/edit?change=true",
-                      text: ("app.change" | t),
-                      visuallyHiddenText: ("professions.form.label.registration.mandatoryRegistration" | t)
-                    }
-                  ]
-                }
-              },
-              {
-                key: {
                   text: ("professions.form.label.regulatoryBody.additionalAuthority" | t)
                 },
                 value: {
@@ -143,6 +126,66 @@
                       href: "/admin/professions/" + professionId + "/versions/" + versionId + "/regulatory-body/edit?change=true",
                       text: ("app.change" | t),
                       visuallyHiddenText: ("professions.form.label.regulatoryBody.additionalAuthority" | t)
+                    }
+                  ]
+                }
+              }
+            ]
+          })
+        }}
+
+        <h2 class="govuk-heading-m">{{ ("professions.form.headings.registration" | t) }}</h2>
+
+        {{
+          govukSummaryList({
+            rows: [
+              {
+                key: {
+                  text: ("professions.form.label.registration.mandatoryRegistration" | t)
+                },
+                value: {
+                  text: ("professions.mandatoryRegistration." + mandatoryRegistration) | t
+                },
+                actions: {
+                  items: [
+                    {
+                      href: "/admin/professions/" + professionId + "/versions/" + versionId + "/registration/edit?change=true",
+                      text: ("app.change" | t),
+                      visuallyHiddenText: ("professions.form.label.registration.mandatoryRegistration" | t)
+                    }
+                  ]
+                }
+              },
+              {
+                key: {
+                  text: ("professions.form.label.registration.registrationRequirements" | t)
+                },
+                value: {
+                  text: registrationRequirements
+                },
+                actions: {
+                  items: [
+                    {
+                      href: "/admin/professions/" + professionId + "/versions/" + versionId + "/registration/edit?change=true",
+                      text: ("app.change" | t),
+                      visuallyHiddenText: ("professions.form.label.registration.registrationRequirements" | t)
+                    }
+                  ]
+                }
+              },
+              {
+                key: {
+                  text: ("professions.form.label.registration.registrationUrl" | t)
+                },
+                value: {
+                  html: ("<a class=\"govuk-link\" href=\"" + (registrationUrl | escape) + "\">" + (registrationUrl | escape) + "</a>") if registrationUrl else ""
+                },
+                actions: {
+                  items: [
+                    {
+                      href: "/admin/professions/" + professionId + "/versions/" + versionId + "/registration/edit?change=true",
+                      text: ("app.change" | t),
+                      visuallyHiddenText: ("professions.form.label.registration.registrationUrl" | t)
                     }
                   ]
                 }

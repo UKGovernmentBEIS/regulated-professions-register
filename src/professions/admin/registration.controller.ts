@@ -101,7 +101,7 @@ export class RegistrationController {
       const errors = new ValidationFailedError(validator.errors).fullMessages();
       return this.renderForm(
         res,
-        version,
+        submittedValues,
         isConfirmed(profession),
         registrationDto.change,
         errors,
@@ -132,12 +132,12 @@ export class RegistrationController {
 
   private async renderForm(
     res: Response,
-    version: ProfessionVersion,
+    submittedValues: ProfessionVersion | RegistrationDto,
     isEditing: boolean,
     change: boolean,
     errors: object | undefined = undefined,
   ): Promise<void> {
-    const mandatoryRegistration = version.mandatoryRegistration;
+    const mandatoryRegistration = submittedValues.mandatoryRegistration;
 
     const mandatoryRegistrationRadioButtonArgs =
       await new MandatoryRegistrationRadioButtonsPresenter(
@@ -146,7 +146,7 @@ export class RegistrationController {
       ).radioButtonArgs();
 
     const templateArgs: RegistrationTemplate = {
-      ...version,
+      ...submittedValues,
       mandatoryRegistrationRadioButtonArgs,
       captionText: ViewUtils.captionText(isEditing),
       change,
