@@ -311,7 +311,8 @@
       "draft": "Draft"
     },
     "changed": {
-      "by": "Changed by"
+      "by": "Changed by",
+      "on": "Last updated"
     },
     "viewDetails": "View details"
   },

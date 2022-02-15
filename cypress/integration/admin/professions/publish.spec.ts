@@ -1,3 +1,5 @@
+import { format } from 'date-fns';
+
 describe('Publishing professions', () => {
   context('When I am logged in as an editor', () => {
     beforeEach(() => {
@@ -54,7 +56,13 @@ describe('Publishing professions', () => {
         .within(() => {
           cy.get('a').contains('View details').click();
         });
+      cy.checkAccessibility();
+
       cy.get('[data-cy=changed-by-user]').should('contain', 'Editor');
+      cy.get('[data-cy=last-modified]').should(
+        'contain',
+        format(new Date(), 'dd-MM-yyyy'),
+      );
     });
   });
 });

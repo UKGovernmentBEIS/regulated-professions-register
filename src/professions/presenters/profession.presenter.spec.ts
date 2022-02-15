@@ -11,9 +11,11 @@ import { multilineOf } from '../../testutils/multiline-of';
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 import { translationOf } from '../../testutils/translation-of';
 import userFactory from '../../testutils/factories/user';
+import { formatDate } from '../../common/utils';
 
 jest.mock('../../nations/helpers/stringifyNations');
 jest.mock('../../helpers/format-multiline-string.helper');
+jest.mock('../../common/utils');
 
 describe('ProfessionPresenter', () => {
   let profession: Profession;
@@ -92,6 +94,24 @@ describe('ProfessionPresenter', () => {
 
         expect(presenter.changedBy).toEqual('');
       });
+    });
+  });
+
+  describe('lastModified', () => {
+    it('should format the lastModified date on a profession', () => {
+      const profession = professionFactory.build({
+        lastModified: new Date('01-01-2022'),
+      });
+
+      const presenter = new ProfessionPresenter(
+        profession,
+        createMockI18nService(),
+      );
+
+      presenter.lastModified;
+      expect(formatDate as jest.Mock).toHaveBeenCalledWith(
+        new Date('01-01-2022'),
+      );
     });
   });
 

@@ -1,3 +1,5 @@
+import { format } from 'date-fns';
+
 describe('Adding a new profession', () => {
   context('when I am not logged in', () => {
     it('I am prompted to log in', () => {
@@ -344,6 +346,10 @@ describe('Adding a new profession', () => {
         },
       );
       cy.get('[data-cy=changed-by-user]').should('contain', 'Registrar');
+      cy.get('[data-cy=last-modified]').should(
+        'contain',
+        format(new Date(), 'dd-MM-yyyy'),
+      );
     });
   });
 });

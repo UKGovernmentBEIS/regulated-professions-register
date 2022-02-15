@@ -17,6 +17,11 @@
           <span class="govuk-body">{{ ("professions.admin.status." + profession.status) | t }}</span>
         </h2>
 
+        <h2 class="govuk-heading-s" data-cy="last-modified-text">
+          {{ "professions.admin.changed.on" | t }}<br>
+          <span class="govuk-body" data-cy="last-modified">{{ presenter.lastModified }}</span>
+        </h2>
+
         <h2 class="govuk-heading-s" data-cy="changed-by-text">
           {{ "professions.admin.changed.by" | t }}<br>
           <span class="govuk-body" data-cy="changed-by-user">{{ presenter.changedBy }}</span>

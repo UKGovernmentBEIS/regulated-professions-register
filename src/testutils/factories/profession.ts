@@ -54,6 +54,7 @@ export default ProfessionFactory.define(({ sequence }) => ({
   regulationUrl: 'http://example.com/regulations',
   versions: [],
   changedByUser: userFactory.build(),
+  lastModified: new Date(),
   updated_at: new Date(),
   versionId: 'version-id',
 }));

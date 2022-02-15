@@ -79,6 +79,7 @@ export class Profession {
   changedByUser?: User;
   versionId?: string;
   status?: string;
+  lastModified?: Date;
 
   constructor(
     name?: string,
@@ -164,6 +165,7 @@ export class Profession {
       regulationUrl: version.regulationUrl,
       legislations: version.legislations,
       changedByUser: version.user,
+      lastModified: version.updated_at,
       status: version.status,
       versionId: version.id,
     };
