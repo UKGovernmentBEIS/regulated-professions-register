@@ -55,6 +55,18 @@ describe('Creating a new user', () => {
       cy.get('button').click();
       cy.checkAccessibility();
 
+      cy.translate(
+        'users.roleDescriptions.manageProfessionsAndOrganisations',
+      ).then((manageLabel) => {
+        cy.get('body').should('contain', manageLabel);
+      });
+
+      cy.translate(
+        'users.roleDescriptions.editProfessionsAndOrganisations',
+      ).then((editLabel) => {
+        cy.get('body').should('contain', editLabel);
+      });
+
       cy.get('input[name="role"][value="registrar"]').check();
 
       cy.get('button').click();
@@ -186,6 +198,24 @@ describe('Creating a new user', () => {
       cy.get('input[name="email"]').type('organisation@example.com');
       cy.get('button').click();
       cy.checkAccessibility();
+
+      cy.translate(
+        'users.roleDescriptions.manageProfessionsAndOrganisations',
+      ).then((manageLabel) => {
+        cy.get('body').should('not.contain', manageLabel);
+      });
+
+      cy.translate(
+        'users.roleDescriptions.manageProfessionsAndOrganisations',
+      ).then((manageLabel) => {
+        cy.get('body').should('not.contain', manageLabel);
+      });
+
+      cy.translate(
+        'users.roleDescriptions.editProfessionsAndOwnOrganisation',
+      ).then((editLabel) => {
+        cy.get('body').should('contain', editLabel);
+      });
 
       cy.get('input[name="role"][value="editor"]').check();
 

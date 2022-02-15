@@ -81,9 +81,10 @@
     "editor": "Editor"
   },
   "roleDescriptions": {
-    "managerUsers": "Onboard and manage users",
-    "managerProfessionsAndOrganisations": "Create and link regulators and professions",
-    "editProfessionsAndOrganisations": "Edit information about regulators and professions"
+    "manageUsers": "Onboard and manage users",
+    "manageProfessionsAndOrganisations": "Create and link regulators and professions",
+    "editProfessionsAndOrganisations": "Edit information about regulators and professions",
+    "editProfessionsAndOwnOrganisation": "Edit information about the regulator and its professions"
   },
   "serviceOwnerOrganisation": "Regulatory Professions Register"
 }

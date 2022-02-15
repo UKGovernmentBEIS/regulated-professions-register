@@ -115,9 +115,8 @@ export class RoleController {
     errors: object | undefined = undefined,
   ): Promise<void> {
     const roleRadioButtonArgs = await new RoleRadioButtonsPresenter(
-      serviceOwner
-        ? [Role.Administrator, Role.Registrar, Role.Editor]
-        : [Role.Administrator, Role.Editor],
+      this.getAllowedRoles(serviceOwner),
+      serviceOwner,
       role,
       this.i18nService,
     ).radioButtonArgs();
@@ -130,5 +129,11 @@ export class RoleController {
     };
 
     res.render('admin/users/role/edit', templateArgs);
+  }
+
+  private getAllowedRoles(serviceOwner: boolean): Role[] {
+    return serviceOwner
+      ? [Role.Administrator, Role.Registrar, Role.Editor]
+      : [Role.Administrator, Role.Editor];
   }
 }

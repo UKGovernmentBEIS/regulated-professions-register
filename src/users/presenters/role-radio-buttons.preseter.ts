@@ -1,10 +1,38 @@
 import { I18nService } from 'nestjs-i18n';
 import { RadioButtonArgs } from '../../common/interfaces/radio-button-args.interface';
+import { getPermissionsFromUser } from '../helpers/get-permissions-from-user.helper';
 import { Role } from '../role';
+import { UserPermission } from '../user-permission';
+import { User } from '../user.entity';
+
+const descriptions = [
+  {
+    serviceOwnerText: 'users.roleDescriptions.manageUsers',
+    nonServiceOwnerText: 'users.roleDescriptions.manageUsers',
+    permissions: [UserPermission.CreateUser],
+  },
+  {
+    serviceOwnerText:
+      'users.roleDescriptions.manageProfessionsAndOrganisations',
+    nonServiceOwnerText:
+      'users.roleDescriptions.manageProfessionsAndOrganisations',
+    permissions: [
+      UserPermission.CreateOrganisation,
+      UserPermission.CreateProfession,
+    ],
+  },
+  {
+    serviceOwnerText: 'users.roleDescriptions.editProfessionsAndOrganisations',
+    nonServiceOwnerText:
+      'users.roleDescriptions.editProfessionsAndOwnOrganisation',
+    permissions: [UserPermission.EditProfession],
+  },
+];
 
 export class RoleRadioButtonsPresenter {
   constructor(
     private readonly allRoles: Role[],
+    private readonly serviceOwner: boolean,
     private readonly selectedRole: Role | null,
     private readonly i18nService: I18nService,
   ) {}
@@ -15,33 +43,35 @@ export class RoleRadioButtonsPresenter {
         text: await this.i18nService.translate(`users.roles.${role}`),
         value: role,
         checked: this.selectedRole === role,
-        hint: { html: await this.getHintHtml(role) },
+        hint: { html: await this.getHintHtml(role, this.serviceOwner) },
       })),
     );
   }
 
-  private async getHintHtml(role: Role): Promise<string> {
-    const descriptions = [
-      {
-        text: 'users.roleDescriptions.managerUsers',
-        roles: [Role.Administrator],
-      },
-      {
-        text: 'users.roleDescriptions.managerProfessionsAndOrganisations',
-        roles: [Role.Administrator, Role.Registrar],
-      },
-      {
-        text: 'users.roleDescriptions.editProfessionsAndOrganisations',
-        roles: [Role.Administrator, Role.Registrar, Role.Editor],
-      },
-    ];
+  private async getHintHtml(
+    role: Role,
+    serviceOwner: boolean,
+  ): Promise<string> {
+    const permissions = getPermissionsFromUser({
+      ...new User(),
+      role,
+      serviceOwner,
+    });
 
     const lines = await Promise.all(
       descriptions
-        .filter((description) => description.roles.includes(role))
+        .filter((description) =>
+          description.permissions.every((permission) =>
+            permissions.includes(permission),
+          ),
+        )
         .map(
           (description) =>
-            this.i18nService.translate(description.text) as Promise<string>,
+            this.i18nService.translate(
+              serviceOwner
+                ? description.serviceOwnerText
+                : description.nonServiceOwnerText,
+            ) as Promise<string>,
         ),
     );
 
