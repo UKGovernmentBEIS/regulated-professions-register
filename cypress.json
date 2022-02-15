@@ -1,5 +1,6 @@
 {
   "baseUrl": "http://localhost:3000",
   "experimentalSessionSupport": true,
-  "video": false
+  "video": false,
+  "projectId": "v3vcd7"
 }

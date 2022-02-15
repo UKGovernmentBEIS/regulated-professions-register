@@ -52,22 +52,6 @@ jobs:
         id: test
         run: script/ci/test
 
-      - name: Upload end-to-end-test screenshots
-        if: failure() && steps.Test.outcome == 'failure'
-        uses: actions/upload-artifact@v2
-        with:
-          name: end-to-end-test-screenshots
-          path: cypress/screenshots/
-          retention-days: 14
-
-      - name: Upload end-to-end-test videos
-        if: failure() && steps.Test.outcome == 'failure'
-        uses: actions/upload-artifact@v2
-        with:
-          name: end-to-end-test-videos
-          path: cypress/videos/
-          retention-days: 14
-
       - if: always() && steps.cache-docker.outputs.cache-hit != 'true'
         name: Prepare Docker cache
         run: mkdir -p /tmp/docker-save && docker save app_test:latest -o

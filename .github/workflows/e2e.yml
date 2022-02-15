@@ -1,0 +1,75 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - develop
+
+env:
+  HOST_URL: ${{ secrets.HOST_URL }}
+  AUTH0_DOMAIN: ${{ secrets.AUTH0_DOMAIN }}
+  AUTH0_CLIENT_ID: ${{ secrets.AUTH0_CLIENT_ID }}
+  AUTH0_CLIENT_SECRET: ${{ secrets.AUTH0_CLIENT_SECRET }}
+  APP_SECRET: ${{ secrets.APP_SECRET }}
+  ADMIN_USERNAME: ${{ secrets.ADMIN_USERNAME }}
+  ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+  REGISTRAR_USERNAME: ${{ secrets.REGISTRAR_USERNAME }}
+  REGISTRAR_PASSWORD: ${{ secrets.REGISTRAR_PASSWORD }}
+  EDITOR_USERNAME: ${{ secrets.EDITOR_USERNAME }}
+  EDITOR_PASSWORD: ${{ secrets.EDITOR_PASSWORD }}
+  ORGADMIN_USERNAME: ${{ secrets.ORGADMIN_USERNAME }}
+  ORGADMIN_PASSWORD: ${{ secrets.ORGADMIN_PASSWORD }}
+  ORGEDITOR_USERNAME: ${{ secrets.ORGEDITOR_USERNAME }}
+  ORGEDITOR_PASSWORD: ${{ secrets.ORGEDITOR_PASSWORD }}
+  NODE_ENV: test
+  CI: 'true'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        containers: [1, 2, 3, 4, 5]
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: regulated-professions-register-test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+      redis:
+        image: redis
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: 'e2e tests'
+        uses: cypress-io/github-action@v2
+        with:
+          start: npm start
+          build: npm run build:all
+          wait-on: 'http://localhost:3000'
+          wait-on-timeout: 120
+          record: true
+          parallel: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          DATABASE_URL: postgres://postgres:password@localhost:5432/regulated-professions-register-test
+          REDIS_URI: redis://localhost:6379
