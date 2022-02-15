@@ -15,10 +15,11 @@ describe('Showing a profession', () => {
       'professions.show.bodies.regulatedAuthority',
       'Law Society of England and Wales',
     );
-    cy.checkSummaryListRowValue(
-      'professions.show.bodies.address',
-      '456 Example Street, London, EC1 1AB',
-    );
+    cy.checkSummaryListRowMultilineValue('professions.show.bodies.address', [
+      '456 Example Street',
+      'London',
+      'EC1 1AB',
+    ]);
     cy.checkSummaryListRowValue(
       'professions.show.bodies.emailAddress',
       'law@example.com',
