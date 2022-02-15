@@ -98,18 +98,18 @@
 
   <div>
     <h3 class="govuk-heading-s">{{ "professions.show.regulatedActivities.regulationSummary" | t }}</h3>
-    <p class="govuk-body">{{ profession.description | escape }}</p>
+    {{ profession.description | multiline('govuk-body') }}
   </div>
 
   <div>
     <h3 class="govuk-heading-s">{{ "professions.show.regulatedActivities.reservedActivities" | t }}</h3>
-    <p class="govuk-body">{{ profession.reservedActivities | escape }}</p>
+    {{ profession.reservedActivities | multiline('govuk-body') }}
   </div>
 
   {% if profession.protectedTitles %}
     <div>
       <h3 class="govuk-heading-s">{{ "professions.show.regulatedActivities.protectedTitles" | t }}</h3>
-      <p class="govuk-body">{{ profession.protectedTitles | escape }}</p>
+      {{ profession.protectedTitles | multiline('govuk-body') }}
     </div>
   {% endif %}
 
