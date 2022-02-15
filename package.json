@@ -25,6 +25,8 @@
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,cypress}/**/*.{ts,js}\" --fix --max-warnings=0",
     "cy:run": "cypress run",
+    "cypress:open": "cypress open",
+    "cy:open": "start-server-and-test start:test http://localhost:3000 cypress:open",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
