@@ -11,6 +11,7 @@ export interface QualificationInformationTemplate {
   otherCountriesRecognition: string;
   otherCountriesRecognitionUrl: string;
   captionText: string;
+  isUK: boolean;
   change: boolean;
   errors: object | undefined;
 }

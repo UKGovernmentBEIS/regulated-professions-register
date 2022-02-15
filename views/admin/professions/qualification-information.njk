@@ -102,6 +102,8 @@
           })
         }}
 
+        {% if isUK === false %}
+
         <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
 
         {{
@@ -132,6 +134,8 @@
             errorMessage: errors.ukRecognitionUrl | tError
           })
         }}
+
+        {% endif %}
 
         <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
 
