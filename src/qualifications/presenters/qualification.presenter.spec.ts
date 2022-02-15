@@ -144,4 +144,8 @@ describe(QualificationPresenter, () => {
       });
     });
   });
+
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
 });

@@ -1,6 +1,3 @@
-import { DeepMocked } from '@golevelup/ts-jest';
-
-import { I18nService } from 'nestjs-i18n';
 import { OrganisationPresenter } from './organisation.presenter';
 import { Organisation } from '../organisation.entity';
 import { Industry } from '../../industries/industry.entity';
@@ -22,8 +19,6 @@ describe('OrganisationPresenter', () => {
   let industries: Industry[];
   let professions: Profession[];
 
-  const i18nService: DeepMocked<I18nService> = createMockI18nService();
-
   describe('tableRow', () => {
     describe('when all relations are present', () => {
       describe('when the professions share one industry', () => {
@@ -40,6 +35,7 @@ describe('OrganisationPresenter', () => {
         });
 
         it('returns the table row data', async () => {
+          const i18nService = createMockI18nService();
           (escape as jest.Mock).mockImplementation(escapeOf);
 
           const presenter = new OrganisationPresenter(
@@ -92,6 +88,7 @@ describe('OrganisationPresenter', () => {
         });
 
         it('returns the table row data', async () => {
+          const i18nService = createMockI18nService();
           (escape as jest.Mock).mockImplementation(escapeOf);
 
           const presenter = new OrganisationPresenter(
@@ -124,6 +121,7 @@ describe('OrganisationPresenter', () => {
       });
 
       it('should raise an error', async () => {
+        const i18nService = createMockI18nService();
         const presenter = new OrganisationPresenter(organisation, i18nService);
 
         expect(async () => {
@@ -142,6 +140,7 @@ describe('OrganisationPresenter', () => {
       });
 
       it('should raise an error', async () => {
+        const i18nService = createMockI18nService();
         const presenter = new OrganisationPresenter(organisation, i18nService);
 
         expect(async () => {
@@ -156,7 +155,9 @@ describe('OrganisationPresenter', () => {
   describe('summaryList', () => {
     describe('when all fields are present', () => {
       it('should return all fields', async () => {
+        const i18nService = createMockI18nService();
         (escape as jest.Mock).mockImplementation(escapeOf);
+
         organisation = organisationFactory.withVersion().build();
 
         const presenter = new OrganisationPresenter(organisation, i18nService);
@@ -212,6 +213,7 @@ describe('OrganisationPresenter', () => {
     describe('when a field is missing', () => {
       describe('when removeBlank is true', () => {
         it('should filter out empty fields', async () => {
+          const i18nService = createMockI18nService();
           (escape as jest.Mock).mockImplementation(escapeOf);
 
           organisation = organisationFactory
@@ -237,6 +239,7 @@ describe('OrganisationPresenter', () => {
 
       describe('when removeBlank is false', () => {
         it('keeps empty rows intact', async () => {
+          const i18nService = createMockI18nService();
           (escape as jest.Mock).mockImplementation(escapeOf);
 
           organisation = organisationFactory
@@ -265,6 +268,7 @@ describe('OrganisationPresenter', () => {
 
     describe('when includeName is true', () => {
       it('should include the name of the organisation', async () => {
+        const i18nService = createMockI18nService();
         (escape as jest.Mock).mockImplementation(escapeOf);
 
         organisation = organisationFactory
@@ -289,6 +293,7 @@ describe('OrganisationPresenter', () => {
 
     describe('when includeActions is true', () => {
       it('should include an actions column', async () => {
+        const i18nService = createMockI18nService();
         (escape as jest.Mock).mockImplementation(escapeOf);
 
         const version = organisationVersionFactory.build();
@@ -319,6 +324,7 @@ describe('OrganisationPresenter', () => {
 
     describe('when classes are specified', () => {
       it('should return the specified class', async () => {
+        const i18nService = createMockI18nService();
         (escape as jest.Mock).mockImplementation(escapeOf);
 
         const presenter = new OrganisationPresenter(organisation, i18nService);
@@ -331,6 +337,7 @@ describe('OrganisationPresenter', () => {
 
   describe('address', () => {
     it('breaks the address into lines', () => {
+      const i18nService = createMockI18nService();
       (escape as jest.Mock).mockImplementation(escapeOf);
 
       organisation = organisationFactory.build({
@@ -349,6 +356,7 @@ describe('OrganisationPresenter', () => {
 
   describe('email', () => {
     it('makes the email into a link', () => {
+      const i18nService = createMockI18nService();
       (escape as jest.Mock).mockImplementation(escapeOf);
 
       organisation = organisationFactory.build({
@@ -369,6 +377,7 @@ describe('OrganisationPresenter', () => {
 
   describe('contactUrl', () => {
     it('makes the url into a link', () => {
+      const i18nService = createMockI18nService();
       (escape as jest.Mock).mockImplementation(escapeOf);
 
       organisation = organisationFactory.build({
@@ -385,5 +394,9 @@ describe('OrganisationPresenter', () => {
 
       expect(escape).toBeCalledWith('http://www.example.com');
     });
+  });
+
+  afterEach(() => {
+    jest.resetAllMocks();
   });
 });
