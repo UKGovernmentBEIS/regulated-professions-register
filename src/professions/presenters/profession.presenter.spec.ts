@@ -6,10 +6,13 @@ import { stringifyNations } from '../../nations/helpers/stringifyNations';
 
 import professionFactory from '../../testutils/factories/profession';
 import industryFactory from '../../testutils/factories/industry';
+import { formatMultilineString } from '../../helpers/format-multiline-string.helper';
+import { multilineOf } from '../../testutils/multiline-of';
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 import { translationOf } from '../../testutils/translation-of';
 
 jest.mock('../../nations/helpers/stringifyNations');
+jest.mock('../../helpers/format-multiline-string.helper');
 
 describe('ProfessionPresenter', () => {
   let profession: Profession;
@@ -17,6 +20,8 @@ describe('ProfessionPresenter', () => {
   describe('summaryList', () => {
     it('should return a summary list', async () => {
       const i18nService = createMockI18nService();
+      (formatMultilineString as jest.Mock).mockImplementation(multilineOf);
+
       profession = professionFactory.build();
 
       const presenter = new ProfessionPresenter(profession, i18nService);
@@ -45,11 +50,15 @@ describe('ProfessionPresenter', () => {
               text: translationOf('professions.show.qualification.level'),
             },
             value: {
-              text: profession.qualification.level,
+              html: multilineOf(profession.qualification.level),
             },
           },
         ],
       });
+
+      expect(formatMultilineString).toBeCalledWith(
+        profession.qualification.level,
+      );
     });
   });
 
