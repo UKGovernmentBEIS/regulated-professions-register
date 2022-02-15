@@ -198,12 +198,26 @@ describe('ProfessionVersionsController', () => {
       const version = professionVersionFactory.build({
         profession,
       });
+      const user = userFactory.build();
+
+      const req = createMock<RequestWithAppSession>({
+        appSession: {
+          user: user as DeepPartial<any>,
+        },
+      });
 
       professionVersionsService.findByIdWithProfession.mockResolvedValue(
         version,
       );
 
-      const result = await controller.publish(profession.id, version.id);
+      const newVersion = professionVersionFactory.build({
+        profession,
+        user,
+      });
+
+      professionVersionsService.create.mockResolvedValue(newVersion);
+
+      const result = await controller.publish(req, profession.id, version.id);
 
       expect(result).toEqual(profession);
 
@@ -211,7 +225,14 @@ describe('ProfessionVersionsController', () => {
         professionVersionsService.findByIdWithProfession,
       ).toHaveBeenCalledWith(profession.id, version.id);
 
-      expect(professionVersionsService.publish).toHaveBeenCalledWith(version);
+      expect(professionVersionsService.create).toHaveBeenCalledWith(
+        version,
+        user,
+      );
+
+      expect(professionVersionsService.publish).toHaveBeenCalledWith(
+        newVersion,
+      );
     });
   });
 });

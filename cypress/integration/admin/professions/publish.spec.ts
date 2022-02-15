@@ -19,6 +19,8 @@ describe('Publishing professions', () => {
         cy.get('h2[data-status]').should('contain', status);
       });
 
+      cy.get('[data-cy=changed-by-user]').should('contain', '');
+
       cy.translate('professions.form.button.publishNow').then(
         (publishButton) => {
           cy.get('button').contains(publishButton).click();
@@ -46,6 +48,13 @@ describe('Publishing professions', () => {
             cy.wrap($row).should('contain', status);
           });
         });
+
+      cy.contains('Gas Safe Engineer')
+        .parent('tr')
+        .within(() => {
+          cy.get('a').contains('View details').click();
+        });
+      cy.get('[data-cy=changed-by-user]').should('contain', 'Editor');
     });
   });
 });

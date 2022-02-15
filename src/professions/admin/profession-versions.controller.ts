@@ -127,6 +127,7 @@ export class ProfessionVersionsController {
   @Permissions(UserPermission.PublishProfession)
   @Render('admin/professions/publish')
   async publish(
+    @Req() req: RequestWithAppSession,
     @Param('professionId') professionId: string,
     @Param('versionId') versionId: string,
   ): Promise<Profession> {
@@ -135,7 +136,12 @@ export class ProfessionVersionsController {
       versionId,
     );
 
-    await this.professionVersionsService.publish(version);
+    const newVersion = await this.professionVersionsService.create(
+      version,
+      req.appSession.user,
+    );
+
+    await this.professionVersionsService.publish(newVersion);
 
     return version.profession;
   }
