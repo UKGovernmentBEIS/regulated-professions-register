@@ -11,8 +11,11 @@ import professionFactory from '../../testutils/factories/profession';
 import industryFactory from '../../testutils/factories/industry';
 import { escape } from '../../helpers/escape.helper';
 import { escapeOf } from '../../testutils/escape-of';
+import { formatMultilineString } from '../../helpers/format-multiline-string.helper';
+import { multilineOf } from '../../testutils/multiline-of';
 
 jest.mock('../../helpers/escape.helper');
+jest.mock('../../helpers/format-multiline-string.helper');
 
 describe('OrganisationPresenter', () => {
   let organisation: Organisation;
@@ -336,9 +339,9 @@ describe('OrganisationPresenter', () => {
   });
 
   describe('address', () => {
-    it('breaks the address into lines', () => {
+    it('formats the address as a multi-line string', () => {
       const i18nService = createMockI18nService();
-      (escape as jest.Mock).mockImplementation(escapeOf);
+      (formatMultilineString as jest.Mock).mockImplementation(multilineOf);
 
       organisation = organisationFactory.build({
         address: '123 Fake Street, London, SW1A 1AA',
@@ -347,10 +350,12 @@ describe('OrganisationPresenter', () => {
       const presenter = new OrganisationPresenter(organisation, i18nService);
 
       expect(presenter.address()).toEqual(
-        `${escapeOf('123 Fake Street<br /> London<br /> SW1A 1AA')}`,
+        `${multilineOf('123 Fake Street, London, SW1A 1AA')}`,
       );
 
-      expect(escape).toBeCalledWith('123 Fake Street, London, SW1A 1AA');
+      expect(formatMultilineString).toBeCalledWith(
+        '123 Fake Street, London, SW1A 1AA',
+      );
     });
   });
 
