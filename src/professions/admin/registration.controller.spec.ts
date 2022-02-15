@@ -1,23 +1,26 @@
 import { DeepMocked, createMock } from '@golevelup/ts-jest';
 import { TestingModule, Test } from '@nestjs/testing';
-import { when } from 'jest-when';
 import { Response } from 'express';
 import { I18nService } from 'nestjs-i18n';
-import { OrganisationsService } from '../../organisations/organisations.service';
+
+import { RegistrationController } from './registration.controller';
+
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
-import organisationFactory from '../../testutils/factories/organisation';
+
 import professionFactory from '../../testutils/factories/profession';
 import professionVersionFactory from '../../testutils/factories/profession-version';
+
+import { MandatoryRegistration } from '../profession-version.entity';
+
 import { ProfessionVersionsService } from '../profession-versions.service';
 import { ProfessionsService } from '../professions.service';
-import { RegulatedAuthoritiesSelectPresenter } from './regulated-authorities-select-presenter';
-import { RegulatoryBodyController } from './regulatory-body.controller';
 
-describe(RegulatoryBodyController, () => {
-  let controller: RegulatoryBodyController;
+import { MandatoryRegistrationRadioButtonsPresenter } from './mandatory-registration-radio-buttons-presenter';
+
+describe(RegistrationController, () => {
+  let controller: RegistrationController;
   let professionsService: DeepMocked<ProfessionsService>;
   let professionVersionsService: DeepMocked<ProfessionVersionsService>;
-  let organisationsService: DeepMocked<OrganisationsService>;
   let response: DeepMocked<Response>;
   let i18nService: DeepMocked<I18nService>;
 
@@ -25,29 +28,27 @@ describe(RegulatoryBodyController, () => {
     i18nService = createMockI18nService();
     professionsService = createMock<ProfessionsService>();
     professionVersionsService = createMock<ProfessionVersionsService>();
-    organisationsService = createMock<OrganisationsService>();
 
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [RegulatoryBodyController],
+      controllers: [RegistrationController],
       providers: [
         { provide: ProfessionsService, useValue: professionsService },
         {
           provide: ProfessionVersionsService,
           useValue: professionVersionsService,
         },
-        { provide: OrganisationsService, useValue: organisationsService },
         { provide: I18nService, useValue: i18nService },
       ],
     }).compile();
 
     response = createMock<Response>();
 
-    controller = module.get<RegulatoryBodyController>(RegulatoryBodyController);
+    controller = module.get<RegistrationController>(RegistrationController);
   });
 
   describe('edit', () => {
     describe('when editing a just-created, blank Profession', () => {
-      it('should render a list of Organisations to be displayed in the Selects with none of them selected', async () => {
+      it('should return Radio Buttons with mandatory registration values with none of them selected', async () => {
         const profession = professionFactory
           .justCreated('profession-id')
           .build();
@@ -58,78 +59,53 @@ describe(RegulatoryBodyController, () => {
         professionsService.findWithVersions.mockResolvedValue(profession);
         professionVersionsService.findWithProfession.mockResolvedValue(version);
 
-        const organisations = organisationFactory.buildList(2);
-        organisationsService.all.mockResolvedValue(organisations);
-
-        const regulatedAuthoritiesSelectPresenter =
-          new RegulatedAuthoritiesSelectPresenter(organisations, null);
+        const mandatoryRegistrationRadioButtonsPresenter =
+          new MandatoryRegistrationRadioButtonsPresenter(null, i18nService);
 
         await controller.edit(response, 'profession-id', 'version-id', false);
 
         expect(response.render).toHaveBeenCalledWith(
-          'admin/professions/regulatory-body',
+          'admin/professions/registration',
           expect.objectContaining({
-            regulatedAuthoritiesSelectArgs:
-              regulatedAuthoritiesSelectPresenter.selectArgs(),
-            additionalRegulatedAuthoritiesSelectArgs:
-              regulatedAuthoritiesSelectPresenter.selectArgs(),
+            mandatoryRegistrationRadioButtonArgs:
+              await mandatoryRegistrationRadioButtonsPresenter.radioButtonArgs(),
           }),
         );
-        expect(organisationsService.all).toHaveBeenCalled();
       });
     });
 
     describe('when an existing Profession is found', () => {
-      it('should pre-select both Organisations from the Select', async () => {
-        const organisation = organisationFactory.build({
-          name: 'Example org',
-          id: 'example-org-id',
-        });
-        const additionalOrganisation = organisationFactory.build({
-          name: 'Example org 2',
-          id: 'example-org-id-2',
-        });
+      it('should pre-select the mandatory registration in the radio buttons and pre-populate the other values', async () => {
         const profession = professionFactory.build({
           id: 'profession-id',
-          organisation: organisation,
-          additionalOrganisation: additionalOrganisation,
         });
         const version = professionVersionFactory.build({
           profession: profession,
+          mandatoryRegistration: MandatoryRegistration.Mandatory,
+          registrationRequirements: 'Something',
+          registrationUrl: 'http://example.com',
         });
 
         professionsService.findWithVersions.mockResolvedValue(profession);
         professionVersionsService.findWithProfession.mockResolvedValue(version);
 
-        const organisations = [
-          organisation,
-          additionalOrganisation,
-          organisationFactory.build(),
-        ];
-        organisationsService.all.mockResolvedValue(organisations);
-
-        const regulatedAuthoritiesSelectPresenterWithSelectedOrganisation =
-          new RegulatedAuthoritiesSelectPresenter(organisations, organisation);
-
-        const regulatedAuthoritiesSelectPresenterWithSelectedAdditionalOrganisation =
-          new RegulatedAuthoritiesSelectPresenter(
-            organisations,
-            additionalOrganisation,
+        const mandatoryRegistrationRadioButtonsPresenterWithSelectedValue =
+          new MandatoryRegistrationRadioButtonsPresenter(
+            MandatoryRegistration.Mandatory,
+            i18nService,
           );
 
         await controller.edit(response, 'profession-id', 'version-id', false);
 
         expect(response.render).toHaveBeenCalledWith(
-          'admin/professions/regulatory-body',
+          'admin/professions/registration',
           expect.objectContaining({
-            regulatedAuthoritiesSelectArgs:
-              regulatedAuthoritiesSelectPresenterWithSelectedOrganisation.selectArgs(),
-            additionalRegulatedAuthoritiesSelectArgs:
-              regulatedAuthoritiesSelectPresenterWithSelectedAdditionalOrganisation.selectArgs(),
+            registrationRequirements: 'Something',
+            registrationUrl: 'http://example.com',
+            mandatoryRegistrationRadioButtonArgs:
+              await mandatoryRegistrationRadioButtonsPresenterWithSelectedValue.radioButtonArgs(),
           }),
         );
-
-        expect(organisationsService.all).toHaveBeenCalled();
       });
     });
   });
@@ -143,72 +119,65 @@ describe(RegulatoryBodyController, () => {
         const version = professionVersionFactory.build({
           id: 'version-id',
           profession: profession,
+          mandatoryRegistration: MandatoryRegistration.Mandatory,
         });
 
         professionsService.findWithVersions.mockResolvedValue(profession);
         professionVersionsService.findWithProfession.mockResolvedValue(version);
 
-        const regulatoryBodyDto = {
-          regulatoryBody: 'example-org-id',
-          additionalRegulatoryBody: 'other-example-org-id',
+        const registrationDto = {
+          mandatoryRegistration: MandatoryRegistration.Voluntary,
+          registrationRequirements: 'Something',
+          registrationUrl: 'http://example.com',
         };
-
-        const newOrganisation = organisationFactory.build({
-          name: 'Council of Gas Safe Engineers',
-        });
-
-        const newAdditionalOrganisation = organisationFactory.build();
-
-        when(organisationsService.find)
-          .calledWith('example-org-id')
-          .mockResolvedValue(newOrganisation);
-
-        when(organisationsService.find)
-          .calledWith('other-example-org-id')
-          .mockResolvedValue(newAdditionalOrganisation);
 
         await controller.update(
           response,
           'profession-id',
           'version-id',
-          regulatoryBodyDto,
+          registrationDto,
         );
 
-        expect(professionsService.save).toHaveBeenCalledWith(
+        expect(professionVersionsService.save).toHaveBeenCalledWith(
           expect.objectContaining({
-            id: 'profession-id',
-            organisation: newOrganisation,
-            additionalOrganisation: newAdditionalOrganisation,
+            mandatoryRegistration: MandatoryRegistration.Voluntary,
+            registrationRequirements: 'Something',
+            registrationUrl: 'http://example.com',
+            profession: profession,
           }),
         );
 
         expect(response.redirect).toHaveBeenCalledWith(
-          '/admin/professions/profession-id/versions/version-id/registration/edit',
+          '/admin/professions/profession-id/versions/version-id/regulated-activities/edit',
         );
       });
     });
 
     describe('when required parameters are not entered', () => {
       it('does not update the profession, and re-renders the regulatory body form page with errors', async () => {
-        const invalidDto = {
-          regulatoryBody: null,
+        const registrationDtoWithoutMandatoryRegistration = {
+          mandatoryRegistration: undefined,
+          registrationUrl: 'not a url',
         };
 
         await controller.update(
           response,
           'profession-id',
           'version-id',
-          invalidDto,
+          registrationDtoWithoutMandatoryRegistration,
         );
 
         expect(professionVersionsService.save).not.toHaveBeenCalled();
 
         expect(response.render).toHaveBeenCalledWith(
-          'admin/professions/regulatory-body',
+          'admin/professions/registration',
           expect.objectContaining({
             errors: {
-              regulatoryBody: {
-                text: 'professions.form.errors.regulatoryBody.empty',
+              mandatoryRegistration: {
+                text: 'professions.form.errors.mandatoryRegistration.empty',
+              },
+              registrationUrl: {
+                text: 'professions.form.errors.registrationUrl.invalid',
               },
             },
           }),
@@ -221,11 +190,11 @@ describe(RegulatoryBodyController, () => {
         it('redirects to check your answers on submit', async () => {
           const profession = professionFactory.build({
             id: 'profession-id',
-            organisation: organisationFactory.build(),
           });
           const version = professionVersionFactory.build({
             id: 'version-id',
             profession: profession,
+            mandatoryRegistration: MandatoryRegistration.Mandatory,
           });
 
           professionsService.findWithVersions.mockResolvedValue(profession);
@@ -233,19 +202,17 @@ describe(RegulatoryBodyController, () => {
             version,
           );
 
-          const regulatoryBodyDtoWithChangeParam = {
-            regulatoryBody: 'example-org-id',
+          const registrationDtoWithChangeParam = {
+            mandatoryRegistration: MandatoryRegistration.Voluntary,
+            registrationUrl: '',
             change: true,
           };
-
-          const organisation = organisationFactory.build();
-          organisationsService.find.mockResolvedValue(organisation);
 
           await controller.update(
             response,
             'profession-id',
             'version-id',
-            regulatoryBodyDtoWithChangeParam,
+            registrationDtoWithChangeParam,
           );
 
           expect(response.redirect).toHaveBeenCalledWith(
@@ -256,14 +223,13 @@ describe(RegulatoryBodyController, () => {
 
       describe('when false or missing', () => {
         it('continues to the next step in the journey', async () => {
-          const organisation = organisationFactory.build();
           const profession = professionFactory.build({
             id: 'profession-id',
-            organisation: organisation,
           });
           const version = professionVersionFactory.build({
             id: 'version-id',
             profession: profession,
+            mandatoryRegistration: MandatoryRegistration.Mandatory,
           });
 
           professionsService.findWithVersions.mockResolvedValue(profession);
@@ -271,22 +237,21 @@ describe(RegulatoryBodyController, () => {
             version,
           );
 
-          const regulatoryBodyDtoWithFalseChangeParam = {
-            regulatoryBody: 'example-org-id',
+          const registrationDtoWithFalseChangeParam = {
+            mandatoryRegistration: MandatoryRegistration.Voluntary,
+            registrationUrl: '',
             change: false,
           };
-
-          organisationsService.find.mockResolvedValue(organisation);
 
           await controller.update(
             response,
             'profession-id',
             'version-id',
-            regulatoryBodyDtoWithFalseChangeParam,
+            registrationDtoWithFalseChangeParam,
           );
 
           expect(response.redirect).toHaveBeenCalledWith(
-            '/admin/professions/profession-id/versions/version-id/registration/edit',
+            '/admin/professions/profession-id/versions/version-id/regulated-activities/edit',
           );
         });
       });

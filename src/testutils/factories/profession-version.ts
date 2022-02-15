@@ -19,6 +19,8 @@ class ProfessionVersionFactory extends Factory<ProfessionVersion> {
       occupationLocations: undefined,
       regulationType: undefined,
       mandatoryRegistration: undefined,
+      registrationRequirements: undefined,
+      registrationUrl: undefined,
       industries: undefined,
       qualification: undefined,
       legislations: undefined,
@@ -38,6 +40,8 @@ export default ProfessionVersionFactory.define(({ sequence }) => ({
   occupationLocations: ['GB-ENG'],
   regulationType: 'Reserves of activities',
   mandatoryRegistration: MandatoryRegistration.Mandatory,
+  registrationRequirements: 'Some Requirements',
+  registrationUrl: 'http://example.com/required',
   industries: [
     industryFactory.build({ name: 'Example industry', id: 'example-industry' }),
   ],

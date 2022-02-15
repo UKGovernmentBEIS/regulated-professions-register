@@ -64,6 +64,12 @@ export class ProfessionVersion {
   mandatoryRegistration: MandatoryRegistration;
 
   @Column({ nullable: true })
+  registrationRequirements: string;
+
+  @Column({ nullable: true })
+  registrationUrl: string;
+
+  @Column({ nullable: true })
   reservedActivities: string;
 
   @Column({ nullable: true })

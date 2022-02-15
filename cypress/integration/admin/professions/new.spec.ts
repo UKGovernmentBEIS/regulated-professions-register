@@ -75,7 +75,6 @@ describe('Adding a new profession', () => {
       cy.get('select[name="regulatoryBody"]').select(
         'Department for Education',
       );
-      cy.get('input[name="mandatoryRegistration"][value="mandatory"]').check();
       cy.get('select[name="additionalRegulatoryBody"]').select(
         'General Medical Council',
       );
@@ -84,6 +83,35 @@ describe('Adding a new profession', () => {
       });
 
       cy.checkAccessibility();
+
+      cy.translate('professions.form.captions.add').then((addCaption) => {
+        cy.get('body').contains(addCaption);
+      });
+      cy.get('input[name="registrationRequirements"]').type('Requirements');
+      cy.get('input[name="registrationUrl"]').type('this is not a url');
+
+      cy.get('input[name="mandatoryRegistration"][value="mandatory"]').check();
+
+      cy.translate('app.continue').then((buttonText) => {
+        cy.get('button').contains(buttonText).click();
+      });
+
+      cy.translate('professions.form.errors.registrationUrl.invalid').then(
+        (error) => {
+          cy.get('body').should('contain', error);
+        },
+      );
+
+      cy.get('input[name="registrationUrl"]')
+        .invoke('val', '')
+        .type('https://example.com/requirement');
+
+      cy.translate('app.continue').then((buttonText) => {
+        cy.get('button').contains(buttonText).click();
+      });
+
+      cy.checkAccessibility();
+
       cy.translate('professions.form.headings.regulatedActivities').then(
         (heading) => {
           cy.get('body').should('contain', heading);
@@ -182,18 +210,28 @@ describe('Adding a new profession', () => {
         'Department for Education',
       );
 
+      cy.checkSummaryListRowValue(
+        'professions.form.label.regulatoryBody.additionalAuthority',
+        'General Medical Council',
+      );
+
       cy.translate(
         'professions.form.radioButtons.mandatoryRegistration.mandatory',
       ).then((mandatoryRegistration) => {
         cy.checkSummaryListRowValue(
-          'professions.form.label.regulatoryBody.mandatoryRegistration',
+          'professions.form.label.registration.mandatoryRegistration',
           mandatoryRegistration,
         );
       });
 
       cy.checkSummaryListRowValue(
-        'professions.form.label.regulatoryBody.additionalAuthority',
-        'General Medical Council',
+        'professions.form.label.registration.registrationRequirements',
+        'Requirements',
+      );
+
+      cy.checkSummaryListRowValue(
+        'professions.form.label.registration.registrationUrl',
+        'https://example.com/requirement',
       );
 
       cy.checkSummaryListRowValue(

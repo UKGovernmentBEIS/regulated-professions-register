@@ -72,6 +72,8 @@ describe('CheckYourAnswersController', () => {
           reservedActivities: 'Some reserved activities',
           protectedTitles: 'Some protected titles',
           regulationUrl: 'http://example.com/regulations',
+          registrationRequirements: 'Requirements',
+          registrationUrl: 'https://example.com/requirement',
           profession: profession,
           legislations: [legislation],
           qualification: qualification,
@@ -96,6 +98,10 @@ describe('CheckYourAnswersController', () => {
         );
         expect(templateParams.mandatoryRegistration).toEqual(
           MandatoryRegistration.Voluntary,
+        );
+        expect(templateParams.registrationRequirements).toEqual('Requirements');
+        expect(templateParams.registrationUrl).toEqual(
+          'https://example.com/requirement',
         );
         expect(templateParams.regulationSummary).toEqual(
           'A summary of the regulation',
