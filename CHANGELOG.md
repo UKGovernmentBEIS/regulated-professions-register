@@ -15,6 +15,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Protected titles and and a URL for further information on regulations can be entered when adding a profession
 - Allow second regulator to be chosen
 - Add registration page and fields
+- Add extra qualification recognition fields
 
 ### Changed
 
