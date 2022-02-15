@@ -1,3 +1,4 @@
+import { formatMultilineString } from '../../helpers/format-multiline-string.helper';
 import { MethodToObtain, Qualification } from '../qualification.entity';
 
 export default class QualificationPresenter {
@@ -7,12 +8,12 @@ export default class QualificationPresenter {
 
   readonly methodToObtainQualification: string =
     this.qualification.methodToObtain === MethodToObtain.Others
-      ? this.qualification.otherMethodToObtain
+      ? formatMultilineString(this.qualification.otherMethodToObtain)
       : `professions.methodsToObtainQualification.${this.qualification.methodToObtain}`;
 
   readonly mostCommonPathToObtainQualification: string =
     this.qualification.commonPathToObtain === MethodToObtain.Others
-      ? this.qualification.otherCommonPathToObtain
+      ? formatMultilineString(this.qualification.otherCommonPathToObtain)
       : `professions.methodsToObtainQualification.${this.qualification.commonPathToObtain}`;
 
   readonly duration = this.qualification.educationDuration;
