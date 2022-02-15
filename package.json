@@ -45,7 +45,7 @@
     "@nestjs/cli": "^8.2.1",
     "@nestjs/common": "^8.3.0",
     "@nestjs/config": "^1.2.0",
-    "@nestjs/core": "^8.2.6",
+    "@nestjs/core": "^8.3.0",
     "@nestjs/platform-express": "^8.3.0",
     "@nestjs/typeorm": "^8.0.3",
     "@symfony/webpack-encore": "^1.8.1",
