@@ -6,6 +6,9 @@ import {
   ProfessionVersionStatus,
 } from './profession-version.entity';
 import { Profession } from './profession.entity';
+import { Legislation } from '../legislations/legislation.entity';
+import { Qualification } from '../qualifications/qualification.entity';
+import { User } from '../users/user.entity';
 
 @Injectable()
 export class ProfessionVersionsService {
@@ -31,6 +34,40 @@ export class ProfessionVersionsService {
     version.status = ProfessionVersionStatus.Draft;
 
     return this.repository.save(version);
+  }
+
+  async create(
+    previousVersion: ProfessionVersion,
+    user: User,
+  ): Promise<ProfessionVersion> {
+    const newQualification = {
+      ...previousVersion.qualification,
+      id: undefined,
+      created_at: undefined,
+      updated_at: undefined,
+    } as Qualification;
+
+    const newLegislations = previousVersion.legislations.map((legislation) => {
+      return {
+        ...legislation,
+        id: undefined,
+        created_at: undefined,
+        updated_at: undefined,
+      } as Legislation;
+    });
+
+    const newVersion = {
+      ...previousVersion,
+      id: undefined,
+      status: undefined,
+      created_at: undefined,
+      updated_at: undefined,
+      user: user,
+      qualification: newQualification,
+      legislations: newLegislations,
+    } as ProfessionVersion;
+
+    return this.save(newVersion);
   }
 
   async publish(version: ProfessionVersion): Promise<ProfessionVersion> {

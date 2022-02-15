@@ -7,7 +7,6 @@ import { Organisation } from '../../organisations/organisation.entity';
 import QualificationPresenter from '../../qualifications/presenters/qualification.presenter';
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 import industryFactory from '../../testutils/factories/industry';
-import legislationFactory from '../../testutils/factories/legislation';
 import professionFactory from '../../testutils/factories/profession';
 import professionVersionFactory from '../../testutils/factories/profession-version';
 import { translationOf } from '../../testutils/translation-of';
@@ -73,23 +72,7 @@ describe('ProfessionVersionsController', () => {
 
   describe('create', () => {
     it('creates a copy of the latest version of the Profession and its Qualification', async () => {
-      const legislation = legislationFactory.build();
-
-      const version = professionVersionFactory.build();
-
-      const updatedQualification = {
-        ...version.qualification,
-        id: undefined,
-        created_at: undefined,
-        updated_at: undefined,
-      };
-
-      const updatedLegislation = {
-        ...legislation,
-        id: undefined,
-        created_at: undefined,
-        updated_at: undefined,
-      };
+      const previousVersion = professionVersionFactory.build();
       const user = userFactory.build();
 
       const res = createMock<Response>();
@@ -100,27 +83,21 @@ describe('ProfessionVersionsController', () => {
       });
 
       professionVersionsService.findLatestForProfessionId.mockResolvedValue(
-        version,
+        previousVersion,
       );
-      professionVersionsService.save.mockResolvedValue(version);
+
+      const newVersion = professionVersionFactory.build();
+      professionVersionsService.create.mockResolvedValue(newVersion);
 
       await controller.create(res, req, 'some-uuid');
 
-      expect(professionVersionsService.save).toHaveBeenCalledWith(
-        expect.objectContaining({
-          id: undefined,
-          status: undefined,
-          created_at: undefined,
-          updated_at: undefined,
-          qualification: updatedQualification,
-          legislations: [updatedLegislation],
-          profession: version.profession,
-          user: user,
-        }),
+      expect(professionVersionsService.create).toHaveBeenCalledWith(
+        previousVersion,
+        user,
       );
 
       expect(res.redirect).toHaveBeenCalledWith(
-        `/admin/professions/${version.profession.id}/versions/${version.id}/check-your-answers?edit=true`,
+        `/admin/professions/${newVersion.profession.id}/versions/${newVersion.id}/check-your-answers?edit=true`,
       );
     });
   });
