@@ -1,4 +1,4 @@
-import { IsNotEmpty, ValidateIf } from 'class-validator';
+import { IsNotEmpty, ValidateIf, IsUrl } from 'class-validator';
 import { MethodToObtain } from '../../../qualifications/qualification.entity';
 
 export class QualificationInformationDto {
@@ -45,6 +45,29 @@ export class QualificationInformationDto {
       'professions.form.errors.qualification.mandatoryProfessionalExperience.empty',
   })
   mandatoryProfessionalExperience: string;
+
+  ukRecognition: string;
+
+  @IsUrl(
+    {},
+    {
+      message: 'professions.form.errors.qualification.ukRecognitionUrl.invalid',
+    },
+  )
+  @ValidateIf((e) => e.ukRecognitionUrl)
+  ukRecognitionUrl: string;
+
+  otherCountriesRecognition: string;
+
+  @IsUrl(
+    {},
+    {
+      message:
+        'professions.form.errors.qualification.otherCountriesRecognitionUrl.invalid',
+    },
+  )
+  @ValidateIf((e) => e.otherCountriesRecognitionUrl)
+  otherCountriesRecognitionUrl: string;
 
   change: boolean;
 }

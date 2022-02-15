@@ -46,7 +46,11 @@
         "methodsToObtainQualification": "Method to obtain qualification",
         "mostCommonPathToObtainQualification": "Most common path to obtain qualification",
         "duration": "Duration of qualification",
-        "mandatoryProfessionalExperience": "Existence of mandatory professional experience"
+        "mandatoryProfessionalExperience": "Existence of mandatory professional experience",
+        "ukRecognition": "Recognition of qualifications in the UK",
+        "ukRecognitionUrl": "More about recognition within the UK",
+        "otherCountriesRecognition": "Recognition of qualifications from other countries",
+        "otherCountriesRecognitionUrl": "More about recognition in other countries"
       },
       "legislation": {
         "nationalLegislation": "National legislation",
@@ -59,6 +63,10 @@
       },
       "registration": {
         "registrationUrl": "Please enter a link"
+      },
+      "qualificationInformation": {
+        "ukRecognitionUrl": "Please enter a link",
+        "otherCountriesRecognitionUrl": "Please enter a link"
       }
     },
     "details": {
@@ -147,6 +155,12 @@
         },
         "mandatoryProfessionalExperience": {
           "empty": "Select whether existence of professional experience is mandatory"
+        },
+        "ukRecognitionUrl": {
+          "invalid": "Please enter a valid website address"
+        },
+        "otherCountriesRecognitionUrl": {
+          "invalid": "Please enter a valid website address"
         }
       },
       "legislation": {

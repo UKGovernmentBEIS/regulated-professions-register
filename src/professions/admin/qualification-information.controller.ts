@@ -109,6 +109,11 @@ export class QualificationInformationController {
           submittedValues.otherMostCommonPathToObtainQualification,
         educationDuration: submittedValues.duration,
         mandatoryProfessionalExperience,
+        ukRecognition: submittedValues.ukRecognition,
+        ukRecognitionUrl: submittedValues.ukRecognitionUrl,
+        otherCountriesRecognition: submittedValues.otherCountriesRecognition,
+        otherCountriesRecognitionUrl:
+          submittedValues.otherCountriesRecognitionUrl,
       },
     };
 
@@ -175,6 +180,10 @@ export class QualificationInformationController {
       mandatoryProfessionalExperienceRadioButtonArgs,
       duration: qualification?.educationDuration,
       captionText: ViewUtils.captionText(isEditing),
+      ukRecognition: qualification?.ukRecognition,
+      ukRecognitionUrl: qualification?.ukRecognitionUrl,
+      otherCountriesRecognition: qualification?.otherCountriesRecognition,
+      otherCountriesRecognitionUrl: qualification?.otherCountriesRecognitionUrl,
       change,
       errors,
     };

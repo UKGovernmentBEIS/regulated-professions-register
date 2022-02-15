@@ -113,6 +113,10 @@ describe(QualificationInformationController, () => {
             otherMostCommonPathToObtainQualification: '',
             duration: '3.0 Years',
             mandatoryProfessionalExperience: '1',
+            ukRecognition: 'ukRecognition',
+            ukRecognitionUrl: 'http://example.com/uk',
+            otherCountriesRecognition: 'otherCountriesRecognition',
+            otherCountriesRecognitionUrl: 'http://example.com/other',
             change: false,
           };
 
@@ -133,6 +137,10 @@ describe(QualificationInformationController, () => {
                 level: 'Qualification level',
                 mandatoryProfessionalExperience: true,
                 methodToObtain: 'degreeLevel',
+                ukRecognition: 'ukRecognition',
+                ukRecognitionUrl: 'http://example.com/uk',
+                otherCountriesRecognition: 'otherCountriesRecognition',
+                otherCountriesRecognitionUrl: 'http://example.com/other',
               }),
             }),
           );
@@ -161,6 +169,10 @@ describe(QualificationInformationController, () => {
             otherMostCommonPathToObtainQualification: '',
             duration: '3.0 Years',
             mandatoryProfessionalExperience: '1',
+            ukRecognition: 'ukRecognition',
+            ukRecognitionUrl: 'http://example.com/uk',
+            otherCountriesRecognition: 'otherCountriesRecognition',
+            otherCountriesRecognitionUrl: 'http://example.com/other',
             change: true,
           };
 
@@ -181,6 +193,10 @@ describe(QualificationInformationController, () => {
                 level: 'Qualification level',
                 mandatoryProfessionalExperience: true,
                 methodToObtain: 'degreeLevel',
+                ukRecognition: 'ukRecognition',
+                ukRecognitionUrl: 'http://example.com/uk',
+                otherCountriesRecognition: 'otherCountriesRecognition',
+                otherCountriesRecognitionUrl: 'http://example.com/other',
               }),
             }),
           );
@@ -211,6 +227,10 @@ describe(QualificationInformationController, () => {
           duration: '',
           mandatoryProfessionalExperience: undefined,
           change: false,
+          ukRecognition: '',
+          ukRecognitionUrl: 'not a url',
+          otherCountriesRecognition: '',
+          otherCountriesRecognitionUrl: 'not a url',
         };
 
         professionsService.findWithVersions.mockResolvedValue(profession);
@@ -241,6 +261,12 @@ describe(QualificationInformationController, () => {
               },
               mostCommonPathToObtainQualification: {
                 text: 'professions.form.errors.qualification.mostCommonPathToObtain.empty',
+              },
+              ukRecognitionUrl: {
+                text: 'professions.form.errors.qualification.ukRecognitionUrl.invalid',
+              },
+              otherCountriesRecognitionUrl: {
+                text: 'professions.form.errors.qualification.otherCountriesRecognitionUrl.invalid',
               },
             },
           }),

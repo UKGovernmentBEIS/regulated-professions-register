@@ -102,6 +102,68 @@
           })
         }}
 
+        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+
+        {{
+          govukInput({
+            label: {
+              text: ("professions.form.label.qualificationInformation.ukRecognition" | t),
+              classes: "govuk-label--m"
+            },
+            id: "ukRecognition",
+            name: "ukRecognition",
+            value: ukRecognition,
+            errorMessage: errors.ukRecognition | tError
+          })
+        }}
+
+        {{
+          govukInput({
+            label: {
+              text: ("professions.form.label.qualificationInformation.ukRecognitionUrl" | t),
+              classes: "govuk-label--m"
+            },
+            id: "ukRecognitionUrl",
+            name: "ukRecognitionUrl",
+            value: ukRecognitionUrl,
+            hint: {
+              text: ("professions.form.hint.qualificationInformation.ukRecognitionUrl" | t)
+            },
+            errorMessage: errors.ukRecognitionUrl | tError
+          })
+        }}
+
+        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+
+        {{
+          govukInput({
+            label: {
+              text: ("professions.form.label.qualificationInformation.otherCountriesRecognition" | t),
+              classes: "govuk-label--m"
+            },
+            id: "otherCountriesRecognition",
+            name: "otherCountriesRecognition",
+            value: otherCountriesRecognition,
+            errorMessage: errors.otherCountriesRecognition | tError
+          })
+        }}
+
+        {{
+          govukInput({
+            label: {
+              text: ("professions.form.label.qualificationInformation.otherCountriesRecognitionUrl" | t),
+              classes: "govuk-label--m"
+            },
+            id: "otherCountriesRecognitionUrl",
+            name: "otherCountriesRecognitionUrl",
+            value: otherCountriesRecognitionUrl,
+            hint: {
+              text: ("professions.form.hint.qualificationInformation.otherCountriesRecognitionUrl" | t)
+            },
+            errorMessage: errors.otherCountriesRecognitionUrl | tError
+          })
+        }}
+
         {{
           govukButton({
             id: "submit-button",

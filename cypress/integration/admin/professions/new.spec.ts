@@ -161,6 +161,15 @@ describe('Adding a new profession', () => {
       ).check();
       cy.get('textarea[name="level"]').type('An example Qualification level');
 
+      cy.get('input[name="ukRecognition"]').type('Recognition in the UK');
+      cy.get('input[name="ukRecognitionUrl"]').type('http://example.com/uk');
+      cy.get('input[name="otherCountriesRecognition"]').type(
+        'Recognition in other countries',
+      );
+      cy.get('input[name="otherCountriesRecognitionUrl"]').type(
+        'http://example.com/other',
+      );
+
       cy.translate('app.continue').then((buttonText) => {
         cy.get('button').contains(buttonText).click();
       });
