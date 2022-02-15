@@ -361,6 +361,74 @@
                     }
                   ]
                 }
+              },
+              {
+                key: {
+                  text: ("professions.form.label.qualificationInformation.ukRecognition" | t)
+                },
+                value: {
+                  text: qualification.ukRecognition
+                },
+                actions: {
+                  items: [
+                    {
+                      href: "/admin/professions/" + professionId + "/versions/" + versionId + "/qualification-information/edit?change=true",
+                      text: ("app.change" | t),
+                      visuallyHiddenText: ("professions.form.label.qualificationInformation.ukRecognition" | t)
+                    }
+                  ]
+                }
+              },
+              {
+                key: {
+                  text: ("professions.form.label.qualificationInformation.ukRecognitionUrl" | t)
+                },
+                value: {
+                   html: qualification.ukRecognitionUrl | safe
+                },
+                actions: {
+                  items: [
+                    {
+                      href: "/admin/professions/" + professionId + "/versions/" + versionId + "/qualification-information/edit?change=true",
+                      text: ("app.change" | t),
+                      visuallyHiddenText: ("professions.form.label.qualificationInformation.ukRecognitionUrl" | t)
+                    }
+                  ]
+                }
+              },
+              {
+                key: {
+                  text: ("professions.form.label.qualificationInformation.otherCountriesRecognition" | t)
+                },
+                value: {
+                  text: qualification.otherCountriesRecognition
+                },
+                actions: {
+                  items: [
+                    {
+                      href: "/admin/professions/" + professionId + "/versions/" + versionId + "/qualification-information/edit?change=true",
+                      text: ("app.change" | t),
+                      visuallyHiddenText: ("professions.form.label.qualificationInformation.otherCountriesRecognition" | t)
+                    }
+                  ]
+                }
+              },
+              {
+                key: {
+                  text: ("professions.form.label.qualificationInformation.otherCountriesRecognitionUrl" | t)
+                },
+                value: {
+                  html: qualification.otherCountriesRecognitionUrl | safe
+                },
+                actions: {
+                  items: [
+                    {
+                      href: "/admin/professions/" + professionId + "/versions/" + versionId + "/qualification-information/edit?change=true",
+                      text: ("app.change" | t),
+                      visuallyHiddenText: ("professions.form.label.qualificationInformation.otherCountriesRecognitionUrl" | t)
+                    }
+                  ]
+                }
               }
             ]
           })

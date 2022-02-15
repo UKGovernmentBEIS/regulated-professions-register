@@ -297,6 +297,26 @@ describe('Adding a new profession', () => {
       });
 
       cy.checkSummaryListRowValue(
+        'professions.form.label.qualificationInformation.ukRecognition',
+        'Recognition in the UK',
+      );
+
+      cy.checkSummaryListRowValue(
+        'professions.form.label.qualificationInformation.ukRecognitionUrl',
+        'http://example.com/uk',
+      );
+
+      cy.checkSummaryListRowValue(
+        'professions.form.label.qualificationInformation.otherCountriesRecognition',
+        'Recognition in other countries',
+      );
+
+      cy.checkSummaryListRowValue(
+        'professions.form.label.qualificationInformation.otherCountriesRecognitionUrl',
+        'http://example.com/other',
+      );
+
+      cy.checkSummaryListRowValue(
         'professions.form.label.legislation.nationalLegislation',
         'National legislation description',
       );
