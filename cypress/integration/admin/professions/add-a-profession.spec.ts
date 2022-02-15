@@ -76,6 +76,9 @@ describe('Adding a new profession', () => {
         'Department for Education',
       );
       cy.get('input[name="mandatoryRegistration"][value="mandatory"]').check();
+      cy.get('select[name="additionalRegulatoryBody"]').select(
+        'General Medical Council',
+      );
       cy.translate('app.continue').then((buttonText) => {
         cy.get('button').contains(buttonText).click();
       });
@@ -155,34 +158,104 @@ describe('Adding a new profession', () => {
       cy.translate('professions.form.captions.add').then((addCaption) => {
         cy.get('body').contains(addCaption);
       });
-      cy.get('body').should('contain', 'Example Profession');
+
+      cy.checkSummaryListRowValue(
+        'professions.form.label.topLevelInformation.name',
+        'Example Profession',
+      );
+
       cy.translate('nations.england').then((england) => {
+        cy.checkSummaryListRowValue(
+          'professions.form.label.topLevelInformation.nations',
+          england,
+        );
         cy.get('body').should('contain', england);
       });
-      cy.get('body').should('contain', 'Construction & Engineering');
-      cy.get('body').should('contain', 'Department for Education');
+
+      cy.checkSummaryListRowValue(
+        'professions.form.label.topLevelInformation.industry',
+        'Construction & Engineering',
+      );
+
+      cy.checkSummaryListRowValue(
+        'professions.form.label.regulatoryBody.regulatedAuthority',
+        'Department for Education',
+      );
+
       cy.translate(
         'professions.form.radioButtons.mandatoryRegistration.mandatory',
       ).then((mandatoryRegistration) => {
-        cy.get('body').should('contain', mandatoryRegistration);
+        cy.checkSummaryListRowValue(
+          'professions.form.label.regulatoryBody.mandatoryRegistration',
+          mandatoryRegistration,
+        );
       });
-      cy.get('body').should('contain', 'An example activity');
-      cy.get('body').should('contain', 'A summary of the regulation');
 
-      cy.get('body').should('contain', 'An example Qualification level');
-      cy.get('body').should('contain', 'Another method');
+      cy.checkSummaryListRowValue(
+        'professions.form.label.regulatoryBody.additionalAuthority',
+        'General Medical Council',
+      );
+
+      cy.checkSummaryListRowValue(
+        'professions.form.label.regulatedActivities.regulationSummary',
+        'A summary of the regulation',
+      );
+
+      cy.checkSummaryListRowValue(
+        'professions.form.label.regulatedActivities.reservedActivities',
+        'An example activity',
+      );
+
+      cy.checkSummaryListRowValue(
+        'professions.form.label.regulatedActivities.protectedTitles',
+        'An example protected title',
+      );
+
+      cy.checkSummaryListRowValue(
+        'professions.form.label.regulatedActivities.regulationUrl',
+        'https://example.com/regulation',
+      );
+
+      cy.checkSummaryListRowValue(
+        'professions.form.label.qualificationInformation.qualificationLevel',
+        'An example Qualification level',
+      );
+
+      cy.checkSummaryListRowValue(
+        'professions.form.label.qualificationInformation.methodsToObtainQualification',
+        'Another method',
+      );
+
       cy.translate(
         'professions.methodsToObtainQualification.generalSecondaryEducation',
       ).then((method) => {
-        cy.get('body').should('contain', method);
-      });
-      cy.get('body').should('contain', '4.0 Years');
-      cy.translate('app.yes').then((yes) => {
-        cy.get('body').should('contain', yes);
+        cy.checkSummaryListRowValue(
+          'professions.form.label.qualificationInformation.mostCommonPathToObtainQualification',
+          method,
+        );
       });
 
-      cy.get('body').should('contain', 'National legislation description');
-      cy.get('body').should('contain', 'www.example-legislation.com');
+      cy.checkSummaryListRowValue(
+        'professions.form.label.qualificationInformation.duration',
+        '4.0 Years',
+      );
+
+      cy.translate('app.yes').then((yes) => {
+        cy.checkSummaryListRowValue(
+          'professions.form.label.qualificationInformation.mandatoryProfessionalExperience',
+          yes,
+        );
+      });
+
+      cy.checkSummaryListRowValue(
+        'professions.form.label.legislation.nationalLegislation',
+        'National legislation description',
+      );
+
+      cy.checkSummaryListRowValue(
+        'professions.form.label.legislation.link',
+        'www.example-legislation.com',
+      );
 
       cy.translate('professions.form.button.create').then((buttonText) => {
         cy.get('button').contains(buttonText).click();

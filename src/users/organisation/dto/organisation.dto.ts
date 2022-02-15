@@ -1,4 +1,4 @@
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, ValidateIf } from 'class-validator';
 
 export class OrganisationDto {
   @IsNotEmpty({
@@ -9,6 +9,7 @@ export class OrganisationDto {
   @IsNotEmpty({
     message: 'users.form.errors.organisation.empty',
   })
+  @ValidateIf((e) => e.serviceOwner === '0')
   organisation: string;
 
   change: string;

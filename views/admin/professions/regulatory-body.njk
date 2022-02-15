@@ -27,7 +27,8 @@
             },
             id: "regulatoryBody",
             name: "regulatoryBody",
-            items: regulatedAuthoritiesSelectArgs
+            items: regulatedAuthoritiesSelectArgs,
+            errorMessage: errors.regulatoryBody | tError
           })
         }}
 
@@ -47,6 +48,19 @@
             },
             items: mandatoryRegistrationRadioButtonArgs,
             errorMessage: errors.mandatoryRegistration | tError
+          })
+        }}
+
+        {{
+          govukSelect({
+            label: {
+              text: ("professions.form.label.regulatoryBody.additionalAuthority" | t),
+              classes: "govuk-label--m",
+              isPageHeading: false
+            },
+            id: "additionalRegulatoryBody",
+            name: "additionalRegulatoryBody",
+            items: additionalRegulatedAuthoritiesSelectArgs
           })
         }}
 

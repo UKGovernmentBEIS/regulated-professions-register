@@ -98,6 +98,8 @@ describe('Creating a new user', () => {
       cy.get('button').click();
 
       cy.get('input[name="serviceOwner"][value="0"]').check();
+      cy.get('select[name="organisation"]').select('Department for Education');
+
       cy.get('button').click();
 
       cy.get('input[name="name"]').type('Example Name');
@@ -117,6 +119,8 @@ describe('Creating a new user', () => {
       cy.checkAccessibility();
 
       cy.get('input[name="serviceOwner"][value="0"]').check();
+      cy.get('select[name="organisation"]').select('Department for Education');
+
       cy.get('button').click();
 
       cy.get('input[name="name"]').type('Example Name');

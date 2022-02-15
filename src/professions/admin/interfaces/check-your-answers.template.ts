@@ -8,6 +8,7 @@ export interface CheckYourAnswersTemplate {
   professionId: string;
   versionId: string;
   organisation: string;
+  additionalOrganisation: string;
   mandatoryRegistration: string;
   regulationSummary: string;
   reservedActivities: string;

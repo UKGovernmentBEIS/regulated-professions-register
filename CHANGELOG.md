@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Allow a draft version to be published
 - Allow draft Professions to be published
 - Protected titles and and a URL for further information on regulations can be entered when adding a profession
+- Allow second regulator to be chosen
 
 ### Changed
 

@@ -78,6 +78,9 @@ export class CheckYourAnswersController {
       nations: selectedNations,
       industries: industryNames,
       organisation: draftProfession.organisation.name,
+      additionalOrganisation: draftProfession.additionalOrganisation
+        ? draftProfession.additionalOrganisation.name
+        : null,
       mandatoryRegistration: version.mandatoryRegistration,
       regulationSummary: version.description,
       reservedActivities: version.reservedActivities,

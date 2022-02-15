@@ -8,13 +8,18 @@ describe(RegulatedAuthoritiesSelectPresenter, () => {
   exampleOrganisation2.id = 'org2-id';
 
   describe('selectArgs', () => {
-    it('should return no selected item when called with an empty list of selected Organisations', async () => {
+    it('should return no selected item when called no selected Organisation', async () => {
       const presenter = new RegulatedAuthoritiesSelectPresenter(
         [exampleOrganisation1, exampleOrganisation2],
         null,
       );
 
       expect(presenter.selectArgs()).toEqual([
+        {
+          text: '--- Please Select ---',
+          value: '',
+          selected: null,
+        },
         {
           text: 'Example Organisation 1',
           value: 'org1-id',
@@ -28,13 +33,18 @@ describe(RegulatedAuthoritiesSelectPresenter, () => {
       ]);
     });
 
-    it('should return some checked checkbox arguments when called with a non-empty list of Nations', async () => {
+    it('should return a selected option when called with a selected Organisation', async () => {
       const presenter = new RegulatedAuthoritiesSelectPresenter(
         [exampleOrganisation1, exampleOrganisation2],
         exampleOrganisation1,
       );
 
       expect(presenter.selectArgs()).toEqual([
+        {
+          text: '--- Please Select ---',
+          value: '',
+          selected: null,
+        },
         {
           text: 'Example Organisation 1',
           value: 'org1-id',

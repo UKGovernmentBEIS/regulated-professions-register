@@ -30,6 +30,7 @@ type SeedProfession = {
   regulationUrl: string;
   legislation: string;
   organisation: string;
+  additionalOrganisation: string;
   mandatoryRegistration: MandatoryRegistration;
   confirmed: boolean;
   versions: SeedVersion[];
@@ -80,6 +81,13 @@ export class ProfessionsSeeder implements Seeder {
           where: { name: seedProfession.organisation },
         });
 
+        const additionalOrganisation =
+          seedProfession.additionalOrganisation !== null
+            ? await this.organisationRepository.findOne({
+                where: { name: seedProfession.additionalOrganisation },
+              })
+            : null;
+
         const existingProfession = await this.professionsRepository.findOne({
           slug: seedProfession.slug,
         });
@@ -89,6 +97,7 @@ export class ProfessionsSeeder implements Seeder {
           alternateName: seedProfession.alternateName,
           slug: seedProfession.slug,
           organisation: organisation,
+          additionalOrganisation: additionalOrganisation,
         } as Profession;
 
         const savedProfession = await this.professionsRepository.save({

@@ -27,7 +27,8 @@
       },
       "regulatoryBody": {
         "regulatedAuthority": "Which body regulates this profession?",
-        "mandatoryRegistration": "Is registration mandatory with professional bodies?"
+        "mandatoryRegistration": "Is registration mandatory with professional bodies?",
+        "additionalAuthority": "Is there another regulator associated with this profession?"
       },
       "regulatedActivities": {
         "regulationSummary": "Regulation summary",
@@ -101,6 +102,9 @@
       },
       "industries": {
         "empty": "Select at least one industry"
+      },
+      "regulatoryBody": {
+        "empty": "Select a regulatory authority for the profession"
       },
       "mandatoryRegistration": {
         "empty": "Select whether registration with the regulatory authority is mandatory"
