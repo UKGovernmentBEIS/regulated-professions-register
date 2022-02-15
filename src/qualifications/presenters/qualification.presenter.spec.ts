@@ -1,11 +1,17 @@
 import { MethodToObtain } from '../qualification.entity';
 import qualificationFactory from '../../testutils/factories/qualification';
 import QualificationPresenter from './qualification.presenter';
+import { formatMultilineString } from '../../helpers/format-multiline-string.helper';
+import { multilineOf } from '../../testutils/multiline-of';
+
+jest.mock('../../helpers/format-multiline-string.helper');
 
 describe(QualificationPresenter, () => {
   describe('methodToObtainQualification', () => {
     describe('when the method to ObtainQualification is "others"', () => {
       it('returns the other text value', () => {
+        (formatMultilineString as jest.Mock).mockImplementation(multilineOf);
+
         const qualification = qualificationFactory.build({
           methodToObtain: MethodToObtain.Others,
           otherMethodToObtain: 'other value',
@@ -13,7 +19,11 @@ describe(QualificationPresenter, () => {
 
         const presenter = new QualificationPresenter(qualification);
 
-        expect(presenter.methodToObtainQualification).toEqual('other value');
+        expect(presenter.methodToObtainQualification).toEqual(
+          multilineOf('other value'),
+        );
+
+        expect(formatMultilineString).toBeCalledWith('other value');
       });
     });
 
@@ -36,6 +46,8 @@ describe(QualificationPresenter, () => {
   describe('mostCommonPathToObtainQualification', () => {
     describe('when the method to ObtainQualification is "others"', () => {
       it('returns the other text value', () => {
+        (formatMultilineString as jest.Mock).mockImplementation(multilineOf);
+
         const qualification = qualificationFactory.build({
           commonPathToObtain: MethodToObtain.Others,
           otherCommonPathToObtain: 'other value',
@@ -44,8 +56,10 @@ describe(QualificationPresenter, () => {
         const presenter = new QualificationPresenter(qualification);
 
         expect(presenter.mostCommonPathToObtainQualification).toEqual(
-          'other value',
+          multilineOf('other value'),
         );
+
+        expect(formatMultilineString).toBeCalledWith('other value');
       });
     });
 
