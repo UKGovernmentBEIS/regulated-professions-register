@@ -6,23 +6,9 @@ describe('Editing an existing profession', () => {
     });
   });
 
-  context('when I am logged in without the correct permissions', () => {
-    beforeEach(() => {
-      cy.loginAuth0('editor');
-    });
-
-    it('does not allow me to edit a profession', () => {
-      cy.visitAndCheckAccessibility('/admin/professions');
-
-      cy.translate('professions.admin.addButtonLabel').then((buttonText) => {
-        cy.get('body').should('not.contain', buttonText);
-      });
-    });
-  });
-
   context('when I am logged in with the correct permissions', () => {
     beforeEach(() => {
-      cy.loginAuth0();
+      cy.loginAuth0('editor');
     });
 
     it('I can edit an existing profession', () => {

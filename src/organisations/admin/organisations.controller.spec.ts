@@ -29,6 +29,7 @@ import { FilterDto } from './dto/filter.dto';
 import { FilterInput } from '../../common/interfaces/filter-input.interface';
 import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
 import { flashMessage } from '../../common/flash-message';
+import { createDefaultMockRequest } from '../../testutils/factories/create-default-mock-request';
 
 jest.mock('./presenters/organisations.presenter');
 jest.mock('../presenters/organisation.presenter');
@@ -78,8 +79,127 @@ describe('OrganisationsController', () => {
   });
 
   describe('index', () => {
-    describe('when no filter is provided', () => {
-      it('should return template params for all organisations', async () => {
+    describe('when the user is a service owner', () => {
+      describe('when no filter is provided', () => {
+        it('should return template params for all organisations', async () => {
+          const request = createDefaultMockRequest({
+            user: userFactory.build({ serviceOwner: true }),
+          });
+
+          const templateParams: IndexTemplate = {
+            organisationsTable: {
+              firstCellIsHeader: true,
+              head: [{ text: 'Headers' }],
+              rows: [
+                [{ text: 'Row 1' }],
+                [{ text: 'Row 2' }],
+                [{ text: 'Row 3' }],
+              ],
+            },
+            filters: {
+              keywords: '',
+              industries: [],
+            },
+            industriesCheckboxItems: [],
+          };
+
+          const organisations = createOrganisations();
+          const industries = industryFactory.buildList(5);
+
+          (
+            OrganisationsPresenter.prototype as DeepMocked<OrganisationsPresenter>
+          ).present.mockResolvedValue(templateParams);
+
+          (
+            OrganisationsFilterHelper.prototype as DeepMocked<OrganisationsFilterHelper>
+          ).filter.mockReturnValue(organisations);
+
+          expect(await controller.index(request)).toEqual(templateParams);
+
+          expect(organisationVersionsService.allDraftOrLive).toHaveBeenCalled();
+
+          expect(OrganisationsFilterHelper).toBeCalledWith(organisations);
+          expect(OrganisationsFilterHelper.prototype.filter).toBeCalledWith({
+            keywords: '',
+            industries: [],
+          } as FilterInput);
+
+          expect(OrganisationsPresenter).toHaveBeenCalledWith(
+            industries,
+            {
+              keywords: '',
+              industries: [],
+            },
+            organisations,
+            i18nService,
+          );
+        });
+      });
+
+      describe('when a filter is provided', () => {
+        it('should return template params for filtered organisations', async () => {
+          const request = createDefaultMockRequest({
+            user: userFactory.build({ serviceOwner: true }),
+          });
+
+          const templateParams: IndexTemplate = {
+            organisationsTable: {
+              firstCellIsHeader: true,
+              head: [{ text: 'Headers' }],
+              rows: [
+                [{ text: 'Row 1' }],
+                [{ text: 'Row 2' }],
+                [{ text: 'Row 3' }],
+              ],
+            },
+            filters: {
+              keywords: '',
+              industries: [],
+            },
+            industriesCheckboxItems: [],
+          };
+
+          const organisations = createOrganisations();
+          const industries = industryFactory.buildList(5);
+
+          (
+            OrganisationsPresenter.prototype as DeepMocked<OrganisationsPresenter>
+          ).present.mockResolvedValue(templateParams);
+
+          (
+            OrganisationsFilterHelper.prototype as DeepMocked<OrganisationsFilterHelper>
+          ).filter.mockReturnValue([organisations[1], organisations[3]]);
+
+          expect(
+            await controller.index(request, {
+              keywords: 'example keywords',
+              industries: [industries[1].id],
+            } as FilterDto),
+          ).toEqual(templateParams);
+
+          expect(organisationVersionsService.allDraftOrLive).toHaveBeenCalled();
+
+          expect(OrganisationsFilterHelper).toBeCalledWith(organisations);
+          expect(OrganisationsFilterHelper.prototype.filter).toBeCalledWith({
+            keywords: 'example keywords',
+            industries: [industries[1]],
+          } as FilterInput);
+
+          expect(OrganisationsPresenter).toHaveBeenCalledWith(
+            industries,
+            {
+              keywords: 'example keywords',
+              industries: [industries[1]],
+            },
+            [organisations[1], organisations[3]],
+            i18nService,
+          );
+        });
+      });
+    });
+
+    describe('when the user is not a service owner', () => {
+      it("should return template params for the user's organisation", async () => {
         const templateParams: IndexTemplate = {
           organisationsTable: {
             firstCellIsHeader: true,
@@ -100,15 +220,24 @@ describe('OrganisationsController', () => {
         const organisations = createOrganisations();
         const industries = industryFactory.buildList(5);
 
+        const userOrganisation = organisations[0];
+
+        const request = createDefaultMockRequest({
+          user: userFactory.build({
+            serviceOwner: false,
+            organisation: userOrganisation,
+          }),
+        });
+
         (
           OrganisationsPresenter.prototype as DeepMocked<OrganisationsPresenter>
         ).present.mockResolvedValue(templateParams);
 
         (
           OrganisationsFilterHelper.prototype as DeepMocked<OrganisationsFilterHelper>
-        ).filter.mockReturnValue(organisations);
+        ).filter.mockReturnValue([userOrganisation]);
 
-        expect(await controller.index()).toEqual(templateParams);
+        expect(await controller.index(request)).toEqual(templateParams);
 
         expect(organisationVersionsService.allDraftOrLive).toHaveBeenCalled();
 
@@ -116,6 +245,7 @@ describe('OrganisationsController', () => {
         expect(OrganisationsFilterHelper.prototype.filter).toBeCalledWith({
           keywords: '',
           industries: [],
+          organisations: [userOrganisation],
         } as FilterInput);
 
         expect(OrganisationsPresenter).toHaveBeenCalledWith(
@@ -123,65 +253,9 @@ describe('OrganisationsController', () => {
           {
             keywords: '',
             industries: [],
+            organisations: [userOrganisation],
           },
-          organisations,
-          i18nService,
-        );
-      });
-    });
-
-    describe('when a filter is provided', () => {
-      it('should return template params for filtered organisations', async () => {
-        const templateParams: IndexTemplate = {
-          organisationsTable: {
-            firstCellIsHeader: true,
-            head: [{ text: 'Headers' }],
-            rows: [
-              [{ text: 'Row 1' }],
-              [{ text: 'Row 2' }],
-              [{ text: 'Row 3' }],
-            ],
-          },
-          filters: {
-            keywords: '',
-            industries: [],
-          },
-          industriesCheckboxItems: [],
-        };
-
-        const organisations = createOrganisations();
-        const industries = industryFactory.buildList(5);
-
-        (
-          OrganisationsPresenter.prototype as DeepMocked<OrganisationsPresenter>
-        ).present.mockResolvedValue(templateParams);
-
-        (
-          OrganisationsFilterHelper.prototype as DeepMocked<OrganisationsFilterHelper>
-        ).filter.mockReturnValue([organisations[1], organisations[3]]);
-
-        expect(
-          await controller.index({
-            keywords: 'example keywords',
-            industries: [industries[1].id],
-          } as FilterDto),
-        ).toEqual(templateParams);
-
-        expect(organisationVersionsService.allDraftOrLive).toHaveBeenCalled();
-
-        expect(OrganisationsFilterHelper).toBeCalledWith(organisations);
-        expect(OrganisationsFilterHelper.prototype.filter).toBeCalledWith({
-          keywords: 'example keywords',
-          industries: [industries[1]],
-        } as FilterInput);
-
-        expect(OrganisationsPresenter).toHaveBeenCalledWith(
-          industries,
-          {
-            keywords: 'example keywords',
-            industries: [industries[1]],
-          },
-          [organisations[1], organisations[3]],
+          [userOrganisation],
           i18nService,
         );
       });
@@ -460,6 +534,9 @@ describe('OrganisationsController', () => {
             organisationsService.find.mockResolvedValue(organisation);
             organisationVersionsService.find.mockResolvedValue(version);
 
+            flashMock = flashMessage as jest.Mock;
+            flashMock.mockImplementation(() => 'STUB_FLASH_MESSAGE');
+
             await controller.update(
               'some-uuid',
               'some-other-uuid',
@@ -496,6 +573,10 @@ describe('OrganisationsController', () => {
         });
       });
     });
+  });
+
+  afterEach(() => {
+    jest.resetAllMocks();
   });
 });
 

@@ -38,6 +38,7 @@ export class ProfessionVersionsController {
   ) {}
 
   @Get('/:professionId/versions/edit')
+  @Permissions(UserPermission.EditProfession)
   @Render('admin/professions/edit')
   @BackLink('/admin/professions')
   async edit(@Param('professionId') professionId: string) {
@@ -47,6 +48,11 @@ export class ProfessionVersionsController {
   }
 
   @Get(':professionId/versions/:versionId')
+  @Permissions(
+    UserPermission.EditProfession,
+    UserPermission.DeleteProfession,
+    UserPermission.PublishProfession,
+  )
   @Render('admin/professions/show')
   @BackLink('/admin/professions')
   async show(
@@ -142,7 +148,7 @@ export class ProfessionVersionsController {
   }
 
   @Put(':professionId/versions/:versionId/publish')
-  @Permissions(UserPermission.EditProfession)
+  @Permissions(UserPermission.PublishProfession)
   @Render('admin/professions/publish')
   async publish(
     @Param('professionId') professionId: string,

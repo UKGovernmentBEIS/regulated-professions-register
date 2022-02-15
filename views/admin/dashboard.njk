@@ -5,15 +5,17 @@
   <div class="govuk-grid-column-one-third">
     <nav role="navigation" aria-labelledby="subsection-title">
       <ul class="govuk-list">
-        <li>
-          <a class="govuk-link" href="/admin/professions">{{ "professions.admin.heading" | t }}</a>
-        </li>
-        {% if user.serviceOwner %}
+        {% if 'editProfession' in permissions %}
+          <li>
+            <a class="govuk-link" href="/admin/professions">{{ "professions.admin.heading" | t }}</a>
+          </li>
+        {% endif %}
+        {% if 'editOrganisation' in permissions %}
           <li>
             <a class="govuk-link" href="/admin/organisations">{{ "organisations.admin.heading" | t }}</a>
           </li>
         {% endif %}
-        {% if 'createUser' in permissions %}
+        {% if 'editUser' in permissions %}
           <li>
             <a class="govuk-link" href="/admin/users">{{ "users.headings.index" | t }}</a>
           </li>

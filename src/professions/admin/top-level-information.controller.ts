@@ -41,7 +41,7 @@ export class TopLevelInformationController {
   ) {}
 
   @Get('/:professionId/versions/:versionId/top-level-information/edit')
-  @Permissions(UserPermission.EditProfession)
+  @Permissions(UserPermission.CreateProfession, UserPermission.EditProfession)
   @BackLink((request: Request) =>
     request.query.change === 'true'
       ? '/admin/professions/:professionId/versions/:versionId/check-your-answers'
@@ -79,7 +79,7 @@ export class TopLevelInformationController {
   }
 
   @Post('/:professionId/versions/:versionId/top-level-information')
-  @Permissions(UserPermission.EditProfession)
+  @Permissions(UserPermission.CreateProfession, UserPermission.EditProfession)
   @BackLink((request: Request) =>
     request.body.change === 'true'
       ? '/admin/professions/:professionId/check-your-answers'

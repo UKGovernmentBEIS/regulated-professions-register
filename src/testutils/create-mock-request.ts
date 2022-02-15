@@ -1,12 +1,12 @@
 import { createMock, DeepMocked } from '@golevelup/ts-jest';
-import { Request } from 'express';
+import { RequestWithAppSession } from '../common/interfaces/request-with-app-session.interface';
 
 export function createMockRequest(
   referrer: string,
   host: string,
   appSession?: any,
-): DeepMocked<Request> {
-  const mock = createMock<Request>({
+): DeepMocked<RequestWithAppSession> {
+  const mock = createMock<RequestWithAppSession>({
     get: (header) => {
       if (header === 'Referrer') {
         return referrer;
@@ -17,7 +17,7 @@ export function createMockRequest(
   });
 
   if (appSession !== undefined) {
-    mock['appSession'] = appSession;
+    mock.appSession = appSession;
   }
 
   return mock;

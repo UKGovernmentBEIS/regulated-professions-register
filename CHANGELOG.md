@@ -27,6 +27,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Simplify nation selection
 - Remove placeholder authority data on index page
 - Revised text describing each role to reflect role differences between regulatory authority users and central users
+- Enforce that users cannot perform actions outside their role
 
 ## [release-002] - 2022-02-01
 
