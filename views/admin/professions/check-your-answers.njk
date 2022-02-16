@@ -15,7 +15,6 @@
         <h1 class="govuk-heading-l">{{ ("professions.form.headings.checkAnswers" | t) }}</h1>
       {% endif %}
 
-      <form method="post" action="confirmation">
         <h2 class="govuk-heading-m">{{ ("professions.form.headings.topLevelInformation" | t) }}</h2>
 
         {% set selectedNationsSummaryListHtml %}
@@ -481,16 +480,17 @@
         }}
 
         {% if not edit and not confirmed %}
-          {{
-            govukButton({
-              id: "submit-button",
-              type: "Submit",
-              preventDoubleClick: true,
-              text: ("professions.form.button.create" | t)
-            })
-          }}
+          <form method="post" action="confirmation">
+            {{
+              govukButton({
+                id: "submit-button",
+                type: "Submit",
+                preventDoubleClick: true,
+                text: ("professions.form.button.create" | t)
+              })
+            }}
+          </form>
         {% endif %}
-      </form>
 
     </div>
 
