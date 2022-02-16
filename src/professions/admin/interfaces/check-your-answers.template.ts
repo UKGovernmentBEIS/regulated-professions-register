@@ -17,7 +17,7 @@ export interface CheckYourAnswersTemplate {
   protectedTitles: string;
   regulationUrl: string;
   qualification: QualificationPresenter;
-  legislation: Legislation;
+  legislations: Legislation[];
   captionText: string;
   isUK: boolean;
   confirmed: boolean;

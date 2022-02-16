@@ -72,6 +72,8 @@ export class CheckYourAnswersController {
       ? new QualificationPresenter(version.qualification)
       : null;
 
+    const legislations = [version.legislations[0], version.legislations[1]];
+
     return {
       professionId,
       versionId,
@@ -89,8 +91,8 @@ export class CheckYourAnswersController {
       reservedActivities: version.reservedActivities,
       protectedTitles: version.protectedTitles,
       regulationUrl: version.regulationUrl,
-      legislation: version.legislations[0],
       qualification,
+      legislations,
       confirmed: isConfirmed(draftProfession),
       captionText: ViewUtils.captionText(isConfirmed(draftProfession)),
       isUK: isUK(version.occupationLocations),

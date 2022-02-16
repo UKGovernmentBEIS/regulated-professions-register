@@ -44,6 +44,11 @@ declare global {
       checkInputValue(label: string, value: string): Chainable<string>;
       checkTextareaValue(label: string, value: string): Chainable<string>;
       checkSummaryListRowValue(key: string, value: string): Chainable<string>;
+      checkIndexedSummaryListRowValue(
+        key: string,
+        value: string,
+        index: number,
+      ): Chainable<string>;
       checkSummaryListRowMultilineValue(
         key: string,
         lines: string[],

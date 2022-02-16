@@ -144,6 +144,20 @@ Cypress.Commands.add(
 );
 
 Cypress.Commands.add(
+  'checkIndexedSummaryListRowValue',
+  (key: string, value: string, index: number) => {
+    return cy.translate(key).then((label) => {
+      cy.get('.govuk-summary-list__key')
+        .contains(label + ' ' + index)
+        .siblings('.govuk-summary-list__value')
+        .then(($summaryListValue) => {
+          cy.wrap($summaryListValue).should('contain', value);
+        });
+    });
+  },
+);
+
+Cypress.Commands.add(
   'checkSummaryListRowMultilineValue',
   (key: string, lines: string[]) => {
     return cy.translate(key).then((label) => {
