@@ -5,6 +5,10 @@ import industryFactory from '../../testutils/factories/industry';
 import organisationFactory from '../../testutils/factories/organisation';
 import professionFactory from '../../testutils/factories/profession';
 import { translationOf } from '../../testutils/translation-of';
+import userFactory from '../../testutils/factories/user';
+import { ProfessionPresenter } from '../presenters/profession.presenter';
+
+jest.mock('../presenters/profession.presenter');
 
 describe('ListEntryPresenter', () => {
   describe('tableRow', () => {
@@ -21,8 +25,14 @@ describe('ListEntryPresenter', () => {
           industryFactory.build({ name: 'industries.finance' }),
         ],
         status: 'live',
-        updated_at: new Date(2003, 7, 12),
+        changedByUser: userFactory.build({ name: 'Administrator' }),
+        lastModified: new Date('12-08-2003'),
         versionId: 'version-id',
+      });
+
+      (ProfessionPresenter as jest.Mock).mockReturnValue({
+        changedBy: 'Administrator',
+        lastModified: '12-08-2003',
       });
 
       const presenter = new ListEntryPresenter(
@@ -68,8 +78,14 @@ describe('ListEntryPresenter', () => {
           industryFactory.build({ name: 'industries.finance' }),
         ],
         status: 'draft',
-        updated_at: new Date(2003, 7, 12),
+        lastModified: new Date('12-08-2003'),
+        changedByUser: userFactory.build({ name: 'Editor' }),
         versionId: 'version-id',
+      });
+
+      (ProfessionPresenter as jest.Mock).mockReturnValue({
+        changedBy: 'Editor',
+        lastModified: '12-08-2003',
       });
 
       const presenter = new ListEntryPresenter(
@@ -85,7 +101,7 @@ describe('ListEntryPresenter', () => {
           )}`,
         },
         { text: '12-08-2003' },
-        { text: 'Placeholder name' },
+        { text: 'Editor' },
         { text: translationOf('professions.admin.status.draft') },
         {
           html: `<a href="/admin/professions/profession-id/versions/version-id">${translationOf(
