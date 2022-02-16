@@ -65,7 +65,7 @@ export class ListEntryPresenter {
       this.i18nService,
     );
 
-    const instrustries = (
+    const industries = (
       await Promise.all(
         this.profession.industries.map(
           (industry) =>
@@ -90,7 +90,7 @@ export class ListEntryPresenter {
           ? this.profession.organisation.name
           : '',
       },
-      industry: { text: instrustries },
+      industry: { text: industries },
       status: {
         text: await this.i18nService.translate(
           `professions.admin.status.${this.profession.status}`,
