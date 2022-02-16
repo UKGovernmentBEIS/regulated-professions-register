@@ -6,7 +6,6 @@ import {
   Post,
   Query,
   Res,
-  UseFilters,
   UseGuards,
 } from '@nestjs/common';
 import { Response, Request } from 'express';
@@ -15,7 +14,6 @@ import { Permissions } from '../../common/permissions.decorator';
 import { Validator } from '../../helpers/validator';
 import { Legislation } from '../../legislations/legislation.entity';
 import { UserPermission } from '../../users/user-permission';
-import { ValidationExceptionFilter } from '../../common/validation/validation-exception.filter';
 import { ValidationFailedError } from '../../common/validation/validation-failed.error';
 import { ProfessionsService } from '../professions.service';
 import LegislationDto from './dto/legislation.dto';
@@ -66,12 +64,6 @@ export class LegislationController {
 
   @Post('/:professionId/versions/:versionId/legislation')
   @Permissions(UserPermission.CreateProfession, UserPermission.EditProfession)
-  @UseFilters(
-    new ValidationExceptionFilter(
-      'admin/professions/legislation',
-      'legislation',
-    ),
-  )
   @BackLink((request: Request) =>
     request.body.change === 'true'
       ? '/admin/professions/:professionId/versions/:versionId/check-your-answers'
