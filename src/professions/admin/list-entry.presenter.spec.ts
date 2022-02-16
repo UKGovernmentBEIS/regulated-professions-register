@@ -48,6 +48,7 @@ describe('ListEntryPresenter', () => {
           )}`,
         },
         { text: '12-08-2003' },
+        { text: 'Administrator' },
         { text: 'Example Organisation' },
         {
           text: `${translationOf('industries.law')}, ${translationOf(
@@ -122,6 +123,7 @@ describe('ListEntryPresenter', () => {
         { text: translationOf('professions.admin.tableHeading.profession') },
         { text: translationOf('professions.admin.tableHeading.nations') },
         { text: translationOf('professions.admin.tableHeading.lastModified') },
+        { text: translationOf('professions.admin.tableHeading.changedBy') },
         { text: translationOf('professions.admin.tableHeading.organisation') },
         { text: translationOf('professions.admin.tableHeading.industry') },
         { text: translationOf('professions.admin.tableHeading.status') },

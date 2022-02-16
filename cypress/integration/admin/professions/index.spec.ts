@@ -60,7 +60,7 @@ describe('Listing professions', () => {
 
       cy.translate('professions.admin.tableHeading.changedBy').then(
         (changedBy) => {
-          cy.get('tr').eq(0).should('not.contain', changedBy);
+          cy.get('tr').eq(0).should('contain', changedBy);
         },
       );
     });

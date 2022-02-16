@@ -22,6 +22,7 @@ const fields = {
     'profession',
     'nations',
     'lastModified',
+    'changedBy',
     'organisation',
     'industry',
     'status',
