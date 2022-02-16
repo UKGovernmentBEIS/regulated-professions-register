@@ -17,6 +17,16 @@
           <span class="govuk-body">{{ ("organisations.status." + organisation.status) | t }}</span>
         </h2>
 
+        <h2 class="govuk-heading-s" data-cy="last-modified-text">
+          {{ "organisations.headings.changed.on" | t }}<br>
+          <span class="govuk-body" data-cy="last-modified">{{ presenter.lastModified }}</span>
+        </h2>
+
+        <h2 class="govuk-heading-s" data-cy="changed-by-text">
+          {{ "organisations.headings.changed.by" | t }}<br>
+          <span class="govuk-body" data-cy="changed-by-user">{{ presenter.changedBy }}</span>
+        </h2>
+
         <nav role="navigation" aria-labelledby="subsection-title">
           <ul class="govuk-list">
             {% if organisation.status === 'draft' and 'publishOrganisation' in permissions %}

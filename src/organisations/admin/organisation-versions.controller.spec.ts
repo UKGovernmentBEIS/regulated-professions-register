@@ -22,8 +22,10 @@ import userFactory from '../../testutils/factories/user';
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 
 import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
+import { OrganisationPresenter } from '../presenters/organisation.presenter';
 
 jest.mock('../presenters/organisation-summary.presenter');
+jest.mock('../presenters/organisation.presenter');
 
 describe('OrganisationVersionsController', () => {
   let controller: OrganisationVersionsController;
@@ -128,6 +130,7 @@ describe('OrganisationVersionsController', () => {
 
       const showTemplate: ShowTemplate = {
         organisation,
+        presenter: {} as OrganisationPresenter,
         summaryList: {
           classes: 'govuk-summary-list--no-border',
           rows: [],

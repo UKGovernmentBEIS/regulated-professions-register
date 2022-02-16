@@ -28,8 +28,14 @@ export class OrganisationSummaryPresenter {
         (profession) => new ProfessionPresenter(profession, this.i18nService),
       );
 
+    const presenter = new OrganisationPresenter(
+      this.organisation,
+      this.i18nService,
+    );
+
     return {
       organisation: this.organisation,
+      presenter,
       summaryList: await organisationPresenter.summaryList({
         removeBlank: true,
       }),

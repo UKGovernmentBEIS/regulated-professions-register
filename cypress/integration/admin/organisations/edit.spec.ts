@@ -1,3 +1,5 @@
+import { format } from 'date-fns';
+
 describe('Editing organisations', () => {
   context('When I am logged in as an editor', () => {
     beforeEach(() => {
@@ -168,6 +170,13 @@ describe('Editing organisations', () => {
             cy.translate(`organisations.status.draft`).then((status) => {
               cy.wrap($row).should('contain', status);
             });
+
+            cy.wrap($row).contains('View details').click();
+            cy.get('[data-cy=changed-by-user]').should('contain', 'Editor');
+            cy.get('[data-cy=last-modified]').should(
+              'contain',
+              format(new Date(), 'dd-MM-yyyy'),
+            );
           });
       });
     });

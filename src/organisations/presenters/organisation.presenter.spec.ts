@@ -13,9 +13,12 @@ import { escape } from '../../helpers/escape.helper';
 import { escapeOf } from '../../testutils/escape-of';
 import { formatMultilineString } from '../../helpers/format-multiline-string.helper';
 import { multilineOf } from '../../testutils/multiline-of';
+import userFactory from '../../testutils/factories/user';
+import { formatDate } from '../../common/utils';
 
 jest.mock('../../helpers/escape.helper');
 jest.mock('../../helpers/format-multiline-string.helper');
+jest.mock('../../common/utils');
 
 describe('OrganisationPresenter', () => {
   let organisation: Organisation;
@@ -355,6 +358,56 @@ describe('OrganisationPresenter', () => {
 
       expect(formatMultilineString).toBeCalledWith(
         '123 Fake Street, London, SW1A 1AA',
+      );
+    });
+  });
+
+  describe('changedBy', () => {
+    describe('when the Profession has been edited by a user', () => {
+      it('returns the name of the user', () => {
+        const organisation = organisationFactory.build({
+          changedByUser: userFactory.build({ name: 'beis-rpr' }),
+        });
+
+        const presenter = new OrganisationPresenter(
+          organisation,
+          createMockI18nService(),
+        );
+
+        expect(presenter.changedBy).toEqual('beis-rpr');
+      });
+    });
+
+    describe("when the Profession hasn't yet been edited by a user", () => {
+      it('returns an empty string', () => {
+        const organisation = organisationFactory.build({
+          changedByUser: undefined,
+        });
+
+        const presenter = new OrganisationPresenter(
+          organisation,
+          createMockI18nService(),
+        );
+
+        expect(presenter.changedBy).toEqual('');
+      });
+    });
+  });
+
+  describe('lastModified', () => {
+    it('should format the lastModified date on a profession', () => {
+      const organisation = organisationFactory.build({
+        lastModified: new Date('01-01-2022'),
+      });
+
+      const presenter = new OrganisationPresenter(
+        organisation,
+        createMockI18nService(),
+      );
+
+      presenter.lastModified;
+      expect(formatDate as jest.Mock).toHaveBeenCalledWith(
+        new Date('01-01-2022'),
       );
     });
   });

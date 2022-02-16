@@ -130,7 +130,11 @@
   },
   "headings": {
     "professions": "Regulated professions",
-    "status": "Status"
+    "status": "Status",
+    "changed": {
+      "on": "Last modified",
+      "by": "Changed by"
+    }
   },
   "label": {
     "name": "Name",
