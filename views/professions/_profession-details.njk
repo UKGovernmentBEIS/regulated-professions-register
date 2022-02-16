@@ -198,7 +198,7 @@
     rows: [
       {
         key: {
-          text: ( "professions.show.legislation.nationalLegislation" | t) + " " + loop.index
+          html: ( "professions.show.legislation.nationalLegislation" | t) + "<span class=\"govuk-visually-hidden\"> " + loop.index + "</span>"
         },
         value: {
           html: legislation.name | multiline
@@ -206,7 +206,7 @@
       },
       {
         key: {
-          text: ( "professions.show.legislation.legislationLink" | t) + " " + loop.index
+          html: ( "professions.show.legislation.legislationLink" | t) + "<span class=\"govuk-visually-hidden\"> " + loop.index + "</span>"
         },
         value: {
           html: ["<a class=\"govuk-link\" href=\"", (legislation.url | escape), "\">", (legislation.url | escape),  "</a>" ] | join
