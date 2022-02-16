@@ -1,0 +1,18 @@
+#!/bin/sh
+
+# Run the test suite for the application. This is primarily designed to run on
+# CI with a clean build context. To run locally first remove any generic image
+# by running `docker rmi app:latest`
+
+set -e
+
+cd "$(dirname "$0")/../.."
+
+SPECS=$("npx ts-node util/get-tests-for-matrix.ts --chunks=4 --matrix=$MATRIX")
+
+export SPECS
+
+docker-compose -f docker-compose.ci.yml \
+            -p app \
+            run --rm test \
+            npm run test:e2e:ci

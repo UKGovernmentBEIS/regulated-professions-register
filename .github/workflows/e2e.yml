@@ -27,49 +27,58 @@ env:
   CI: 'true'
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - id: cache-docker
+        uses: actions/cache@v2
+        with:
+          path: /tmp/docker-save
+          key: docker-save-${{ hashFiles('Dockerfile', 'package-lock.json') }}
+
+      - if: steps.cache-docker.outputs.cache-hit == 'true'
+        name: Load cached Docker image
+        run: docker load -i /tmp/docker-save/snapshot.tar || true
+
+      - name: Build
+        run: script/ci/cibuild
+
+      - name: Save Docker image
+        run: |
+          mkdir -p /tmp/docker-save
+          docker save app_test:latest | gzip > /tmp/docker-save/snapshot.tar.gz
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: docker-artifact
+          path: /tmp/docker-save/snapshot.tar.gz
   test:
     runs-on: ubuntu-latest
+    needs: build
     strategy:
       fail-fast: false
       matrix:
-        containers: [1, 2, 3, 4, 5]
-    services:
-      postgres:
-        image: postgres
-        env:
-          POSTGRES_PASSWORD: password
-          POSTGRES_DB: regulated-professions-register-test
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 5432:5432
-      redis:
-        image: redis
-        options: >-
-          --health-cmd "redis-cli ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 6379:6379
+        container: [1, 2, 3, 4, 5]
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: 'e2e tests'
-        uses: cypress-io/github-action@v2
+      - name: Download Docker Image
+        uses: actions/download-artifact@v2
         with:
-          start: npm start
-          build: npm run build:all
-          wait-on: 'http://localhost:3000'
-          wait-on-timeout: 120
-          record: true
-          parallel: true
+          name: docker-artifact
+          path: /tmp/docker-save/snapshot.tar.gz
+
+      - name: Load Docker Image
+        run: |
+          cd /tmp/docker-save
+          docker load --input snapshot.tar.gz
+
+      - name: Test
+        id: test
+        run: script/ci/e2e
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-          DATABASE_URL: postgres://postgres:password@localhost:5432/regulated-professions-register-test
-          REDIS_URI: redis://localhost:6379
+          MATRIX: ${{ matrix.container }}
