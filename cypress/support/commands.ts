@@ -144,6 +144,20 @@ Cypress.Commands.add(
 );
 
 Cypress.Commands.add(
+  'checkSummaryListRowMultilineValue',
+  (key: string, lines: string[]) => {
+    return cy.translate(key).then((label) => {
+      cy.get('.govuk-summary-list__key')
+        .contains(label)
+        .siblings('.govuk-summary-list__value')
+        .within(() => {
+          cy.get('p').should('have.html', lines.join('<br>'));
+        });
+    });
+  },
+);
+
+Cypress.Commands.add(
   'clickSummaryListRowAction',
   (key: string, action: string) => {
     return cy.translate(key).then((label) => {

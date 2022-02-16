@@ -204,7 +204,7 @@
                   text: ("professions.form.label.regulatedActivities.regulationSummary" | t)
                 },
                 value: {
-                  text: regulationSummary
+                  html: regulationSummary | multiline
                 },
                 actions: {
                   items: [
@@ -221,7 +221,7 @@
                   text: ("professions.form.label.regulatedActivities.reservedActivities" | t)
                 },
                 value: {
-                  text: reservedActivities
+                  html: reservedActivities | multiline
                 },
                 actions: {
                   items: [
@@ -238,7 +238,7 @@
                   text: ("professions.form.label.regulatedActivities.protectedTitles" | t)
                 },
                 value: {
-                  text: protectedTitles
+                  html: protectedTitles | multiline
                 },
                 actions: {
                   items: [
@@ -282,7 +282,7 @@
                   text: ("professions.form.label.qualificationInformation.methodsToObtainQualification" | t)
                 },
                 value: {
-                  text: (qualification.methodToObtainQualification | t)
+                  html: (qualification.methodToObtainQualification | t)
                 },
                 actions: {
                   items: [
@@ -299,7 +299,7 @@
                   text: ("professions.form.label.qualificationInformation.mostCommonPathToObtainQualification" | t)
                 },
                 value: {
-                  text: (qualification.mostCommonPathToObtainQualification | t)
+                  html: (qualification.mostCommonPathToObtainQualification | t)
                 },
                 actions: {
                   items: [
@@ -350,7 +350,7 @@
                   text: ("professions.form.label.qualificationInformation.qualificationLevel" | t)
                 },
                 value: {
-                  text: qualification.level
+                  html: qualification.level | multiline
                 },
                 actions: {
                   items: [
@@ -386,7 +386,7 @@
                   text: ("professions.form.label.qualificationInformation.ukRecognitionUrl" | t)
                 },
                 value: {
-                   html: qualification.ukRecognitionUrl | safe
+                   html: qualification.ukRecognitionUrl
                 },
                 actions: {
                   items: [
@@ -420,7 +420,7 @@
                   text: ("professions.form.label.qualificationInformation.otherCountriesRecognitionUrl" | t)
                 },
                 value: {
-                  html: qualification.otherCountriesRecognitionUrl | safe
+                  html: qualification.otherCountriesRecognitionUrl
                 },
                 actions: {
                   items: [
@@ -447,7 +447,7 @@
                   text: ("professions.form.label.legislation.nationalLegislation" | t)
                 },
                 value: {
-                  text: legislation.name
+                  html: legislation.name | multiline
                 },
                 actions: {
                   items: [

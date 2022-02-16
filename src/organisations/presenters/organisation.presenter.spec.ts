@@ -1,6 +1,3 @@
-import { DeepMocked } from '@golevelup/ts-jest';
-
-import { I18nService } from 'nestjs-i18n';
 import { OrganisationPresenter } from './organisation.presenter';
 import { Organisation } from '../organisation.entity';
 import { Industry } from '../../industries/industry.entity';
@@ -14,15 +11,16 @@ import professionFactory from '../../testutils/factories/profession';
 import industryFactory from '../../testutils/factories/industry';
 import { escape } from '../../helpers/escape.helper';
 import { escapeOf } from '../../testutils/escape-of';
+import { formatMultilineString } from '../../helpers/format-multiline-string.helper';
+import { multilineOf } from '../../testutils/multiline-of';
 
 jest.mock('../../helpers/escape.helper');
+jest.mock('../../helpers/format-multiline-string.helper');
 
 describe('OrganisationPresenter', () => {
   let organisation: Organisation;
   let industries: Industry[];
   let professions: Profession[];
-
-  const i18nService: DeepMocked<I18nService> = createMockI18nService();
 
   describe('tableRow', () => {
     describe('when all relations are present', () => {
@@ -40,6 +38,7 @@ describe('OrganisationPresenter', () => {
         });
 
         it('returns the table row data', async () => {
+          const i18nService = createMockI18nService();
           (escape as jest.Mock).mockImplementation(escapeOf);
 
           const presenter = new OrganisationPresenter(
@@ -92,6 +91,7 @@ describe('OrganisationPresenter', () => {
         });
 
         it('returns the table row data', async () => {
+          const i18nService = createMockI18nService();
           (escape as jest.Mock).mockImplementation(escapeOf);
 
           const presenter = new OrganisationPresenter(
@@ -124,6 +124,7 @@ describe('OrganisationPresenter', () => {
       });
 
       it('should raise an error', async () => {
+        const i18nService = createMockI18nService();
         const presenter = new OrganisationPresenter(organisation, i18nService);
 
         expect(async () => {
@@ -142,6 +143,7 @@ describe('OrganisationPresenter', () => {
       });
 
       it('should raise an error', async () => {
+        const i18nService = createMockI18nService();
         const presenter = new OrganisationPresenter(organisation, i18nService);
 
         expect(async () => {
@@ -156,7 +158,9 @@ describe('OrganisationPresenter', () => {
   describe('summaryList', () => {
     describe('when all fields are present', () => {
       it('should return all fields', async () => {
+        const i18nService = createMockI18nService();
         (escape as jest.Mock).mockImplementation(escapeOf);
+
         organisation = organisationFactory.withVersion().build();
 
         const presenter = new OrganisationPresenter(organisation, i18nService);
@@ -212,6 +216,7 @@ describe('OrganisationPresenter', () => {
     describe('when a field is missing', () => {
       describe('when removeBlank is true', () => {
         it('should filter out empty fields', async () => {
+          const i18nService = createMockI18nService();
           (escape as jest.Mock).mockImplementation(escapeOf);
 
           organisation = organisationFactory
@@ -237,6 +242,7 @@ describe('OrganisationPresenter', () => {
 
       describe('when removeBlank is false', () => {
         it('keeps empty rows intact', async () => {
+          const i18nService = createMockI18nService();
           (escape as jest.Mock).mockImplementation(escapeOf);
 
           organisation = organisationFactory
@@ -265,6 +271,7 @@ describe('OrganisationPresenter', () => {
 
     describe('when includeName is true', () => {
       it('should include the name of the organisation', async () => {
+        const i18nService = createMockI18nService();
         (escape as jest.Mock).mockImplementation(escapeOf);
 
         organisation = organisationFactory
@@ -289,6 +296,7 @@ describe('OrganisationPresenter', () => {
 
     describe('when includeActions is true', () => {
       it('should include an actions column', async () => {
+        const i18nService = createMockI18nService();
         (escape as jest.Mock).mockImplementation(escapeOf);
 
         const version = organisationVersionFactory.build();
@@ -319,6 +327,7 @@ describe('OrganisationPresenter', () => {
 
     describe('when classes are specified', () => {
       it('should return the specified class', async () => {
+        const i18nService = createMockI18nService();
         (escape as jest.Mock).mockImplementation(escapeOf);
 
         const presenter = new OrganisationPresenter(organisation, i18nService);
@@ -330,8 +339,9 @@ describe('OrganisationPresenter', () => {
   });
 
   describe('address', () => {
-    it('breaks the address into lines', () => {
-      (escape as jest.Mock).mockImplementation(escapeOf);
+    it('formats the address as a multi-line string', () => {
+      const i18nService = createMockI18nService();
+      (formatMultilineString as jest.Mock).mockImplementation(multilineOf);
 
       organisation = organisationFactory.build({
         address: '123 Fake Street, London, SW1A 1AA',
@@ -340,15 +350,18 @@ describe('OrganisationPresenter', () => {
       const presenter = new OrganisationPresenter(organisation, i18nService);
 
       expect(presenter.address()).toEqual(
-        `${escapeOf('123 Fake Street<br /> London<br /> SW1A 1AA')}`,
+        `${multilineOf('123 Fake Street, London, SW1A 1AA')}`,
       );
 
-      expect(escape).toBeCalledWith('123 Fake Street, London, SW1A 1AA');
+      expect(formatMultilineString).toBeCalledWith(
+        '123 Fake Street, London, SW1A 1AA',
+      );
     });
   });
 
   describe('email', () => {
     it('makes the email into a link', () => {
+      const i18nService = createMockI18nService();
       (escape as jest.Mock).mockImplementation(escapeOf);
 
       organisation = organisationFactory.build({
@@ -369,6 +382,7 @@ describe('OrganisationPresenter', () => {
 
   describe('contactUrl', () => {
     it('makes the url into a link', () => {
+      const i18nService = createMockI18nService();
       (escape as jest.Mock).mockImplementation(escapeOf);
 
       organisation = organisationFactory.build({
@@ -385,5 +399,9 @@ describe('OrganisationPresenter', () => {
 
       expect(escape).toBeCalledWith('http://www.example.com');
     });
+  });
+
+  afterEach(() => {
+    jest.resetAllMocks();
   });
 });

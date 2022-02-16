@@ -3,6 +3,7 @@ import { Profession } from '../profession.entity';
 import { SummaryList } from '../../common/interfaces/summary-list';
 import { stringifyNations } from '../../nations/helpers/stringifyNations';
 import { Nation } from '../../nations/nation';
+import { formatMultilineString } from '../../helpers/format-multiline-string.helper';
 
 export class ProfessionPresenter {
   constructor(
@@ -41,8 +42,8 @@ export class ProfessionPresenter {
             ),
           },
           value: {
-            text: this.profession.qualification
-              ? this.profession.qualification.level
+            html: this.profession.qualification
+              ? formatMultilineString(this.profession.qualification.level)
               : null,
           },
         },

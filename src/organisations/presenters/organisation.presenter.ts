@@ -3,6 +3,7 @@ import { Organisation } from './../organisation.entity';
 import { TableRow } from '../../common/interfaces/table-row';
 import { SummaryList } from '../../common/interfaces/summary-list';
 import { escape } from '../../helpers/escape.helper';
+import { formatMultilineString } from '../../helpers/format-multiline-string.helper';
 
 interface OrganisationSummaryListOptions {
   classes?: string;
@@ -146,7 +147,7 @@ export class OrganisationPresenter {
   }
 
   public address(): string {
-    return escape(this.organisation.address).split(',').join('<br />');
+    return formatMultilineString(this.organisation.address);
   }
 
   public email(): string {

@@ -5,6 +5,7 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import * as nunjucks from 'nunjucks';
 
 import { AssetsHelper } from '../helpers/assets.helper';
+import { formatMultilineString } from '../helpers/format-multiline-string.helper';
 import { I18nHelper } from '../helpers/i18n.helper';
 
 export const nunjucksConfig = async (
@@ -65,6 +66,12 @@ export const nunjucksConfig = async (
     },
     true,
   );
+
+  env.addFilter('multiline', (text, classes) => {
+    return new nunjucks.runtime.SafeString(
+      formatMultilineString(text, classes),
+    );
+  });
 
   return env;
 };

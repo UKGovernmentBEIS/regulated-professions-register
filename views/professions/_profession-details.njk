@@ -61,7 +61,7 @@
         text: ("professions.show.bodies.address" | t)
       },
       value: {
-        text: organisation.address
+        html: organisation.address | multiline
       }
     },
     {
@@ -98,18 +98,18 @@
 
   <div>
     <h3 class="govuk-heading-s">{{ "professions.show.regulatedActivities.regulationSummary" | t }}</h3>
-    <p class="govuk-body">{{ profession.description | escape }}</p>
+    {{ profession.description | multiline('govuk-body') }}
   </div>
 
   <div>
     <h3 class="govuk-heading-s">{{ "professions.show.regulatedActivities.reservedActivities" | t }}</h3>
-    <p class="govuk-body">{{ profession.reservedActivities | escape }}</p>
+    {{ profession.reservedActivities | multiline('govuk-body') }}
   </div>
 
   {% if profession.protectedTitles %}
     <div>
       <h3 class="govuk-heading-s">{{ "professions.show.regulatedActivities.protectedTitles" | t }}</h3>
-      <p class="govuk-body">{{ profession.protectedTitles | escape }}</p>
+      {{ profession.protectedTitles | multiline('govuk-body') }}
     </div>
   {% endif %}
 
@@ -146,7 +146,7 @@
         text: ("professions.show.qualification.level" | t)
       },
       value: {
-        text: qualification.level
+        html: qualification.level | multiline
       }
     },
     {
@@ -154,7 +154,7 @@
         text: ("professions.show.qualification.methods" | t)
       },
       value: {
-        text: qualification.methodToObtainQualification | t
+        html: qualification.methodToObtainQualification | t
       }
     },
     {
@@ -162,7 +162,7 @@
         text: ("professions.show.qualification.commonPath" | t)
       },
       value: {
-        text: qualification.mostCommonPathToObtainQualification | t
+        html: qualification.mostCommonPathToObtainQualification | t
       }
     },
     {
@@ -201,7 +201,7 @@
           text: ( "professions.show.legislation.nationalLegislation" | t) + " " + loop.index
         },
         value: {
-          text: legislation.name
+          html: legislation.name | multiline
         }
       },
       {

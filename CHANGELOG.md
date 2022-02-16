@@ -31,6 +31,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Remove placeholder authority data on index page
 - Revised text describing each role to reflect role differences between regulatory authority users and central users
 - Enforce that users cannot perform actions outside their role
+- Preserve line breaks of any data entered in a multi-line text field
 
 ## [release-002] - 2022-02-01
 
