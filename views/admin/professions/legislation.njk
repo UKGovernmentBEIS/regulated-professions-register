@@ -50,6 +50,37 @@
         }}
 
         {{
+          govukTextarea({
+            label: {
+              text: ("professions.form.label.legislation.secondNationalLegislation" | t),
+              classes: "govuk-label--m",
+              isPageHeading: false
+            },
+            id: "secondNationalLegislation",
+            name: "secondNationalLegislation",
+            value: secondLegislation.name,
+            errorMessage: errors.secondNationalLegislation | tError
+          })
+        }}
+
+        {{
+          govukInput({
+            label: {
+              text: ("professions.form.label.legislation.secondLink" | t),
+              classes: "govuk-label--m",
+              isPageHeading: false
+            },
+            hint: {
+              text: "professions.form.hint.legislation.link" | t
+            },
+            id: "secondLink",
+            name: "secondLink",
+            value: secondLegislation.url,
+            errorMessage: errors.secondLink | tError
+          })
+        }}
+
+        {{
           govukButton({
             id: "submit-button",
             type: "Submit",

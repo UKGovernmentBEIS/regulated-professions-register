@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsUrl } from 'class-validator';
+import { IsNotEmpty, IsUrl, ValidateIf } from 'class-validator';
 
 export default class LegislationDto {
   @IsNotEmpty({
@@ -13,6 +13,22 @@ export default class LegislationDto {
     },
   )
   link: string;
+
+  @IsNotEmpty({
+    message:
+      'professions.form.errors.legislation.secondNationalLegislation.empty',
+  })
+  @ValidateIf((e) => e.secondLink || e.secondNationalLegislation)
+  secondNationalLegislation?: string;
+
+  @IsUrl(
+    {},
+    {
+      message: 'professions.form.errors.legislation.secondLink.invalid',
+    },
+  )
+  @ValidateIf((e) => e.secondLink || e.secondNationalLegislation)
+  secondLink?: string;
 
   change: string;
 }

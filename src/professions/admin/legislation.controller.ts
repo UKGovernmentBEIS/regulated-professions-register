@@ -126,6 +126,7 @@ export class LegislationController {
   ): Promise<void> {
     const templateArgs: LegislationTemplate = {
       legislation,
+      secondLegislation: null,
       captionText: ViewUtils.captionText(isEditing),
       change,
       errors,

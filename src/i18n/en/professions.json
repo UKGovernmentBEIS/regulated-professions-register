@@ -54,7 +54,9 @@
       },
       "legislation": {
         "nationalLegislation": "National legislation",
-        "link": "Legislation link"
+        "link": "Legislation link",
+        "secondNationalLegislation": "Second national legislation (optional)",
+        "secondLink": "Second legislation link (optional)"
       }
     },
     "hint": {
@@ -172,6 +174,12 @@
           "empty": "Enter the national legislation"
         },
         "link": {
+          "invalid": "Enter a valid link to the legislation"
+        },
+        "secondNationalLegislation": {
+          "empty": "Enter a second national legislation"
+        },
+        "secondLink": {
           "invalid": "Enter a valid link to the legislation"
         }
       }
