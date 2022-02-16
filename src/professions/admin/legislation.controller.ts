@@ -57,6 +57,7 @@ export class LegislationController {
     this.renderForm(
       res,
       version.legislations[0],
+      version.legislations[1],
       isConfirmed(profession),
       change === 'true',
     );
@@ -88,11 +89,18 @@ export class LegislationController {
     const submittedValues: LegislationDto = legislationDto;
 
     const updatedLegislation: Legislation = {
-      // We currently need to update one legislation here, but will update multiple in future
       ...version.legislations[0],
       ...{
         name: submittedValues.nationalLegislation,
         url: submittedValues.link,
+      },
+    };
+
+    const updatedSecondLegislation: Legislation = {
+      ...version.legislations[1],
+      ...{
+        name: submittedValues.secondNationalLegislation,
+        url: submittedValues.secondLink,
       },
     };
 
@@ -102,13 +110,20 @@ export class LegislationController {
       return this.renderForm(
         res,
         updatedLegislation,
+        updatedSecondLegislation,
         isConfirmed(profession),
         submittedValues.change === 'true',
         errors,
       );
     }
 
-    version.legislations = [updatedLegislation];
+    const updatedLegislations = [updatedLegislation];
+
+    if (updatedSecondLegislation.name || updatedSecondLegislation.url) {
+      updatedLegislations.push(updatedSecondLegislation);
+    }
+
+    version.legislations = updatedLegislations;
 
     await this.professionVersionsService.save(version);
 
@@ -120,13 +135,14 @@ export class LegislationController {
   private async renderForm(
     res: Response,
     legislation: Legislation,
+    secondLegislation: Legislation,
     isEditing: boolean,
     change: boolean,
     errors: object | undefined = undefined,
   ): Promise<void> {
     const templateArgs: LegislationTemplate = {
       legislation,
-      secondLegislation: null,
+      secondLegislation,
       captionText: ViewUtils.captionText(isEditing),
       change,
       errors,
