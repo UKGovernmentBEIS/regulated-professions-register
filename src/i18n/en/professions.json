@@ -67,6 +67,9 @@
       "qualificationInformation": {
         "ukRecognitionUrl": "Please enter a link",
         "otherCountriesRecognitionUrl": "Please enter a link"
+      },
+      "legislation": {
+        "link": "Please enter a link"
       }
     },
     "details": {
