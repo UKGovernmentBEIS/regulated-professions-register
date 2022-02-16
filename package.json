@@ -41,7 +41,7 @@
     "bull:repl": "bull-repl"
   },
   "dependencies": {
-    "@nestjs/bull": "^0.4.2",
+    "@nestjs/bull": "^0.5.0",
     "@nestjs/cli": "^8.2.1",
     "@nestjs/common": "^8.3.0",
     "@nestjs/config": "^1.2.0",
