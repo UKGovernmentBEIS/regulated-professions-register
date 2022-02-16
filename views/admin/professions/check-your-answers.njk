@@ -480,17 +480,7 @@
           })
         }}
 
-        {% if edit %}
-        {% elif confirmed %}
-          {{
-            govukButton({
-              id: "submit-button",
-              type: "Submit",
-              preventDoubleClick: true,
-              text: ("professions.form.button.publishNow" | t)
-            })
-          }}
-        {% else %}
+        {% if not edit and not confirmed %}
           {{
             govukButton({
               id: "submit-button",
@@ -504,7 +494,23 @@
 
     </div>
 
-    <div class="govuk-grid-column-one-third"></div>
+    <div class="govuk-grid-column-one-third">
+      {% if not edit and confirmed %}
+        <aside class="app-related-items rpr-internal__details-page-sidebar" role="complementary">
+          <form method="post" action="confirmation">
+            {{
+              govukButton({
+                id: "submit-button",
+                classes: "govuk-button--secondary",
+                type: "Submit",
+                preventDoubleClick: true,
+                text: ("professions.form.button.saveAsDraft" | t)
+              })
+            }}
+          </form>
+        </aside>
+      {% endif %}
+    </div>
   </div>
 
 {% endblock %}
