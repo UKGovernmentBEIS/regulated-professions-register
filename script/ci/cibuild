@@ -7,4 +7,6 @@ set -e
 
 cd "$(dirname "$0")/../.."
 
+docker build --target dependencies -t app_dependencies:latest .
+docker build --target web -t app_web:latest .
 docker-compose -f docker-compose.ci.yml -p app build
