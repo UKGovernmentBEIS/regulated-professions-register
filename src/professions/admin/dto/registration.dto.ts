@@ -15,6 +15,6 @@ export class RegistrationDto {
       message: 'professions.form.errors.registrationUrl.invalid',
     },
   )
-  @ValidateIf((e) => e.registrationUrl !== '')
+  @ValidateIf((e) => e.registrationUrl)
   registrationUrl: string;
 }

@@ -15,7 +15,7 @@ export class OrganisationDto {
       message: 'organisations.admin.form.errors.email.invalid',
     },
   )
-  @ValidateIf((e) => e.email !== undefined)
+  @ValidateIf((e) => e.email)
   email: string;
 
   @IsUrl(
@@ -32,7 +32,7 @@ export class OrganisationDto {
       message: 'organisations.admin.form.errors.contactUrl.invalid',
     },
   )
-  @ValidateIf((e) => e.contactUrl !== undefined)
+  @ValidateIf((e) => e.contactUrl)
   contactUrl: string;
 
   telephone: string;
