@@ -84,7 +84,7 @@ describe('CheckYourAnswersController', () => {
         const templateParams = await controller.show(
           'profession-id',
           'version-id',
-          false,
+          'false',
         );
         expect(templateParams.name).toEqual('Gas Safe Engineer');
         expect(templateParams.nations).toEqual([
@@ -147,7 +147,7 @@ describe('CheckYourAnswersController', () => {
         const templateParams = await controller.show(
           'profession-id',
           'version-id',
-          false,
+          'false',
         );
 
         expect(templateParams.qualification).toEqual(null);

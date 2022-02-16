@@ -45,7 +45,7 @@ export class LegislationController {
     @Param('professionId') professionId: string,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     @Param('versionId') versionId: string,
-    @Query('change') change: boolean,
+    @Query('change') change: string,
   ): Promise<void> {
     const profession = await this.professionsService.findWithVersions(
       professionId,
@@ -60,7 +60,7 @@ export class LegislationController {
       res,
       version.legislations[0],
       isConfirmed(profession),
-      change,
+      change === 'true',
     );
   }
 
@@ -111,7 +111,7 @@ export class LegislationController {
         res,
         updatedLegislation,
         isConfirmed(profession),
-        submittedValues.change,
+        submittedValues.change === 'true',
         errors,
       );
     }

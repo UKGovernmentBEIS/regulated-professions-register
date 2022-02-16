@@ -14,5 +14,5 @@ export default class LegislationDto {
   )
   link: string;
 
-  change: boolean;
+  change: string;
 }
