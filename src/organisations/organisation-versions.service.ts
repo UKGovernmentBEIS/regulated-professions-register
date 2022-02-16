@@ -138,6 +138,7 @@ export class OrganisationVersionsService {
     return this.repository
       .createQueryBuilder('organisationVersion')
       .leftJoinAndSelect('organisationVersion.organisation', 'organisation')
+      .leftJoinAndSelect('organisationVersion.user', 'user')
       .leftJoinAndSelect('organisation.professions', 'professions')
       .leftJoinAndSelect('professions.versions', 'professionVersions')
       .leftJoinAndSelect('professionVersions.industries', 'industries');

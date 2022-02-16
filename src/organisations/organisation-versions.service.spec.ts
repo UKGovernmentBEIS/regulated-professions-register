@@ -97,6 +97,7 @@ describe('OrganisationVersionsService', () => {
 
       expect(queryBuilder).toHaveJoined([
         'organisationVersion.organisation',
+        'organisationVersion.user',
         'organisation.professions',
       ]);
 
@@ -184,6 +185,7 @@ describe('OrganisationVersionsService', () => {
 
       expect(queryBuilder).toHaveJoined([
         'organisationVersion.organisation',
+        'organisationVersion.user',
         'organisation.professions',
       ]);
 
@@ -233,6 +235,7 @@ describe('OrganisationVersionsService', () => {
 
       expect(queryBuilder).toHaveJoined([
         'organisationVersion.organisation',
+        'organisationVersion.user',
         'organisation.professions',
       ]);
 
@@ -290,6 +293,7 @@ describe('OrganisationVersionsService', () => {
 
       expect(queryBuilder).toHaveJoined([
         'organisationVersion.organisation',
+        'organisationVersion.user',
         'organisation.professions',
       ]);
 
