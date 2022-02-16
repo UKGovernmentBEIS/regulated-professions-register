@@ -128,7 +128,7 @@ describe(LegislationController, () => {
           expect.objectContaining({
             errors: {
               link: {
-                text: 'professions.form.errors.legislation.link.empty',
+                text: 'professions.form.errors.legislation.link.invalid',
               },
               nationalLegislation: {
                 text: 'professions.form.errors.legislation.nationalLegislation.empty',

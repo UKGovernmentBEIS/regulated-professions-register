@@ -169,7 +169,7 @@
           "empty": "Enter the national legislation"
         },
         "link": {
-          "empty": "Enter a link to the registration"
+          "invalid": "Enter a valid link to the legislation"
         }
       }
     }
