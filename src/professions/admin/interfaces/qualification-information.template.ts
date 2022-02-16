@@ -6,7 +6,12 @@ export interface QualificationInformationTemplate {
   mostCommonPathToObtainQualificationRadioButtonArgs: RadioButtonArgs[];
   duration: string;
   mandatoryProfessionalExperienceRadioButtonArgs: RadioButtonArgs[];
+  ukRecognition: string;
+  ukRecognitionUrl: string;
+  otherCountriesRecognition: string;
+  otherCountriesRecognitionUrl: string;
   captionText: string;
+  isUK: boolean;
   change: boolean;
   errors: object | undefined;
 }

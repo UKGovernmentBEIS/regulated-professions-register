@@ -18,21 +18,6 @@
       <form method="post" action="./">
         <input type="hidden" name="change" value="{{ change }}" />
         {{
-          govukTextarea({
-            label: {
-              text: ("professions.form.label.qualificationInformation.qualificationLevel" | t),
-              classes: "govuk-label--m",
-              isPageHeading: false
-            },
-            id: "level",
-            name: "level",
-            rows: "7",
-            value: level,
-            errorMessage: errors.level | tError
-          })
-        }}
-
-        {{
           govukRadios({
             idPrefix: "methodToObtainQualification",
             name: "methodToObtainQualification",
@@ -99,6 +84,87 @@
             },
             items: mandatoryProfessionalExperienceRadioButtonArgs,
             errorMessage: errors.mandatoryProfessionalExperience | tError
+          })
+        }}
+
+        {{
+          govukTextarea({
+            label: {
+              text: ("professions.form.label.qualificationInformation.qualificationLevel" | t),
+              classes: "govuk-label--m",
+              isPageHeading: false
+            },
+            id: "level",
+            name: "level",
+            rows: "7",
+            value: level,
+            errorMessage: errors.level | tError
+          })
+        }}
+
+        {% if isUK === false %}
+
+        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+
+        {{
+          govukInput({
+            label: {
+              text: ("professions.form.label.qualificationInformation.ukRecognition" | t),
+              classes: "govuk-label--m"
+            },
+            id: "ukRecognition",
+            name: "ukRecognition",
+            value: ukRecognition,
+            errorMessage: errors.ukRecognition | tError
+          })
+        }}
+
+        {{
+          govukInput({
+            label: {
+              text: ("professions.form.label.qualificationInformation.ukRecognitionUrl" | t),
+              classes: "govuk-label--m"
+            },
+            id: "ukRecognitionUrl",
+            name: "ukRecognitionUrl",
+            value: ukRecognitionUrl,
+            hint: {
+              text: ("professions.form.hint.qualificationInformation.ukRecognitionUrl" | t)
+            },
+            errorMessage: errors.ukRecognitionUrl | tError
+          })
+        }}
+
+        {% endif %}
+
+        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+
+        {{
+          govukInput({
+            label: {
+              text: ("professions.form.label.qualificationInformation.otherCountriesRecognition" | t),
+              classes: "govuk-label--m"
+            },
+            id: "otherCountriesRecognition",
+            name: "otherCountriesRecognition",
+            value: otherCountriesRecognition,
+            errorMessage: errors.otherCountriesRecognition | tError
+          })
+        }}
+
+        {{
+          govukInput({
+            label: {
+              text: ("professions.form.label.qualificationInformation.otherCountriesRecognitionUrl" | t),
+              classes: "govuk-label--m"
+            },
+            id: "otherCountriesRecognitionUrl",
+            name: "otherCountriesRecognitionUrl",
+            value: otherCountriesRecognitionUrl,
+            hint: {
+              text: ("professions.form.hint.qualificationInformation.otherCountriesRecognitionUrl" | t)
+            },
+            errorMessage: errors.otherCountriesRecognitionUrl | tError
           })
         }}
 

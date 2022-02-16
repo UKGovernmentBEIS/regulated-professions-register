@@ -25,6 +25,8 @@ import { BackLink } from '../../common/decorators/back-link.decorator';
 import ViewUtils from './viewUtils';
 import { ProfessionVersionsService } from '../profession-versions.service';
 import { isConfirmed } from '../../helpers/is-confirmed';
+import { isUK } from '../../helpers/nations.helper';
+import { ProfessionVersion } from '../profession-version.entity';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
@@ -59,6 +61,7 @@ export class QualificationInformationController {
     return this.renderForm(
       res,
       version.qualification,
+      version,
       isConfirmed(profession),
       change,
     );
@@ -109,6 +112,11 @@ export class QualificationInformationController {
           submittedValues.otherMostCommonPathToObtainQualification,
         educationDuration: submittedValues.duration,
         mandatoryProfessionalExperience,
+        ukRecognition: submittedValues.ukRecognition,
+        ukRecognitionUrl: submittedValues.ukRecognitionUrl,
+        otherCountriesRecognition: submittedValues.otherCountriesRecognition,
+        otherCountriesRecognitionUrl:
+          submittedValues.otherCountriesRecognitionUrl,
       },
     };
 
@@ -118,6 +126,7 @@ export class QualificationInformationController {
       return this.renderForm(
         res,
         updatedQualification,
+        version,
         isConfirmed(profession),
         submittedValues.change,
         errors,
@@ -142,6 +151,7 @@ export class QualificationInformationController {
   private async renderForm(
     res: Response,
     qualification: Qualification | null,
+    version: ProfessionVersion | null,
     isEditing: boolean,
     change: boolean,
     errors: object | undefined = undefined,
@@ -175,6 +185,11 @@ export class QualificationInformationController {
       mandatoryProfessionalExperienceRadioButtonArgs,
       duration: qualification?.educationDuration,
       captionText: ViewUtils.captionText(isEditing),
+      ukRecognition: qualification?.ukRecognition,
+      ukRecognitionUrl: qualification?.ukRecognitionUrl,
+      otherCountriesRecognition: qualification?.otherCountriesRecognition,
+      otherCountriesRecognitionUrl: qualification?.otherCountriesRecognitionUrl,
+      isUK: isUK(version.occupationLocations),
       change,
       errors,
     };

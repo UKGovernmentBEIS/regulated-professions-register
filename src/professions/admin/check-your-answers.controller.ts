@@ -21,6 +21,7 @@ import ViewUtils from './viewUtils';
 import { BackLink } from '../../common/decorators/back-link.decorator';
 import { ProfessionVersionsService } from '../profession-versions.service';
 import { isConfirmed } from '../../helpers/is-confirmed';
+import { isUK } from '../../helpers/nations.helper';
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
 export class CheckYourAnswersController {
@@ -92,6 +93,7 @@ export class CheckYourAnswersController {
       legislation: version.legislations[0],
       confirmed: isConfirmed(draftProfession),
       captionText: ViewUtils.captionText(isConfirmed(draftProfession)),
+      isUK: isUK(version.occupationLocations),
       edit: Boolean(edit),
     };
   }

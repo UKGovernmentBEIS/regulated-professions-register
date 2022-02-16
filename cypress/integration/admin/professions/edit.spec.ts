@@ -194,6 +194,100 @@ describe('Editing an existing profession', () => {
       );
     });
 
+    it('hides the UK recognition fields if the organisation covers the whole of the UK', () => {
+      cy.visitAndCheckAccessibility('/admin/professions');
+
+      cy.get('table')
+        .contains('tr', 'Gas Safe Engineer')
+        .within(() => {
+          cy.contains('View details').click();
+        });
+
+      cy.translate('professions.admin.editProfession').then((buttonText) => {
+        cy.contains(buttonText).click();
+      });
+
+      cy.translate('professions.form.captions.edit').then((editCaption) => {
+        cy.get('body').contains(editCaption);
+      });
+
+      cy.translate('professions.form.button.edit').then((buttonText) => {
+        cy.get('button').contains(buttonText).click();
+      });
+
+      cy.clickSummaryListRowAction(
+        'professions.form.label.topLevelInformation.nations',
+        'Change',
+      );
+
+      cy.translate('app.unitedKingdom').then((uk) => {
+        cy.get('label').contains(uk).click();
+      });
+
+      cy.translate('app.continue').then((buttonText) => {
+        cy.get('button').contains(buttonText).click();
+      });
+
+      cy.translate(
+        'professions.form.label.qualificationInformation.ukRecognition',
+      ).then((ukRecognition) => {
+        cy.contains('.govuk-summary-list__row', ukRecognition).should(
+          'be.visible',
+        );
+      });
+
+      cy.clickSummaryListRowAction(
+        'professions.form.label.qualificationInformation.methodsToObtainQualification',
+        'Change',
+      );
+
+      cy.translate(
+        'professions.form.label.qualificationInformation.ukRecognition',
+      ).then((ukRecognition) => {
+        cy.get('body').should('not.contain', ukRecognition);
+      });
+
+      cy.translate('app.continue').then((buttonText) => {
+        cy.get('button').contains(buttonText).click();
+      });
+
+      cy.clickSummaryListRowAction(
+        'professions.form.label.topLevelInformation.nations',
+        'Change',
+      );
+
+      cy.translate(
+        'professions.form.label.topLevelInformation.certainNations',
+      ).then((certainNations) => {
+        cy.get('label').contains(certainNations).click();
+      });
+
+      cy.get('[type="checkbox"]').uncheck('GB-SCT');
+
+      cy.translate('app.continue').then((buttonText) => {
+        cy.get('button').contains(buttonText).click();
+      });
+
+      cy.translate(
+        'professions.form.label.qualificationInformation.ukRecognition',
+      ).then((ukRecognition) => {
+        cy.contains('.govuk-summary-list__row', ukRecognition).should(
+          'be.visible',
+        );
+      });
+
+      cy.clickSummaryListRowAction(
+        'professions.form.label.qualificationInformation.methodsToObtainQualification',
+        'Change',
+      );
+
+      cy.translate(
+        'professions.form.label.qualificationInformation.ukRecognition',
+      ).then((ukRecognition) => {
+        cy.get('body').should('contain', ukRecognition);
+      });
+    });
+
     it('Selecting UK sets the nations to all UK nations', () => {
       cy.visitAndCheckAccessibility('/admin/professions');
 

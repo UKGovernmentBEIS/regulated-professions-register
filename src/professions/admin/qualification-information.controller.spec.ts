@@ -11,8 +11,12 @@ import { YesNoRadioButtonArgsPresenter } from './yes-no-radio-buttons-presenter'
 import { QualificationInformationDto } from './dto/qualification-information.dto';
 import { QualificationInformationController } from './qualification-information.controller';
 import { ProfessionVersionsService } from '../profession-versions.service';
+import { isUK } from '../../helpers/nations.helper';
+
 import professionVersionFactory from '../../testutils/factories/profession-version';
 import qualificationFactory from '../../testutils/factories/qualification';
+
+jest.mock('../../helpers/nations.helper');
 
 describe(QualificationInformationController, () => {
   let controller: QualificationInformationController;
@@ -75,6 +79,7 @@ describe(QualificationInformationController, () => {
 
       professionsService.findWithVersions.mockResolvedValue(profession);
       professionVersionsService.findWithProfession.mockResolvedValue(version);
+      (isUK as jest.Mock).mockImplementation(() => false);
 
       await controller.edit(response, 'profession-id', 'version-id', false);
 
@@ -88,6 +93,7 @@ describe(QualificationInformationController, () => {
               version.qualification.mandatoryProfessionalExperience,
               i18nService,
             ).radioButtonArgs(),
+          isUK: false,
         }),
       );
     });
@@ -113,6 +119,10 @@ describe(QualificationInformationController, () => {
             otherMostCommonPathToObtainQualification: '',
             duration: '3.0 Years',
             mandatoryProfessionalExperience: '1',
+            ukRecognition: 'ukRecognition',
+            ukRecognitionUrl: 'http://example.com/uk',
+            otherCountriesRecognition: 'otherCountriesRecognition',
+            otherCountriesRecognitionUrl: 'http://example.com/other',
             change: false,
           };
 
@@ -133,6 +143,10 @@ describe(QualificationInformationController, () => {
                 level: 'Qualification level',
                 mandatoryProfessionalExperience: true,
                 methodToObtain: 'degreeLevel',
+                ukRecognition: 'ukRecognition',
+                ukRecognitionUrl: 'http://example.com/uk',
+                otherCountriesRecognition: 'otherCountriesRecognition',
+                otherCountriesRecognitionUrl: 'http://example.com/other',
               }),
             }),
           );
@@ -161,6 +175,10 @@ describe(QualificationInformationController, () => {
             otherMostCommonPathToObtainQualification: '',
             duration: '3.0 Years',
             mandatoryProfessionalExperience: '1',
+            ukRecognition: 'ukRecognition',
+            ukRecognitionUrl: 'http://example.com/uk',
+            otherCountriesRecognition: 'otherCountriesRecognition',
+            otherCountriesRecognitionUrl: 'http://example.com/other',
             change: true,
           };
 
@@ -181,6 +199,10 @@ describe(QualificationInformationController, () => {
                 level: 'Qualification level',
                 mandatoryProfessionalExperience: true,
                 methodToObtain: 'degreeLevel',
+                ukRecognition: 'ukRecognition',
+                ukRecognitionUrl: 'http://example.com/uk',
+                otherCountriesRecognition: 'otherCountriesRecognition',
+                otherCountriesRecognitionUrl: 'http://example.com/other',
               }),
             }),
           );
@@ -211,10 +233,15 @@ describe(QualificationInformationController, () => {
           duration: '',
           mandatoryProfessionalExperience: undefined,
           change: false,
+          ukRecognition: '',
+          ukRecognitionUrl: 'not a url',
+          otherCountriesRecognition: '',
+          otherCountriesRecognitionUrl: 'not a url',
         };
 
         professionsService.findWithVersions.mockResolvedValue(profession);
         professionVersionsService.findWithProfession.mockResolvedValue(version);
+        (isUK as jest.Mock).mockImplementation(() => false);
 
         await controller.update(response, 'profession-id', 'version-id', dto);
 
@@ -226,6 +253,7 @@ describe(QualificationInformationController, () => {
                 undefined,
                 i18nService,
               ).radioButtonArgs(),
+            isUK: false,
             errors: {
               level: {
                 text: 'professions.form.errors.qualification.level.empty',
@@ -241,6 +269,12 @@ describe(QualificationInformationController, () => {
               },
               mostCommonPathToObtainQualification: {
                 text: 'professions.form.errors.qualification.mostCommonPathToObtain.empty',
+              },
+              ukRecognitionUrl: {
+                text: 'professions.form.errors.qualification.ukRecognitionUrl.invalid',
+              },
+              otherCountriesRecognitionUrl: {
+                text: 'professions.form.errors.qualification.otherCountriesRecognitionUrl.invalid',
               },
             },
           }),

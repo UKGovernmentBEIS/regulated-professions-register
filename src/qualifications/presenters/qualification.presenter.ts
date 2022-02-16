@@ -1,5 +1,5 @@
 import { MethodToObtain, Qualification } from '../qualification.entity';
-
+import { escape } from '../../helpers/escape.helper';
 export default class QualificationPresenter {
   constructor(private readonly qualification: Qualification) {}
 
@@ -21,4 +21,22 @@ export default class QualificationPresenter {
     .mandatoryProfessionalExperience
     ? 'app.yes'
     : 'app.no';
+
+  readonly ukRecognition = this.qualification.ukRecognition;
+
+  readonly ukRecognitionUrl = this.qualification.ukRecognitionUrl
+    ? `<a class="govuk-link" href="${escape(
+        this.qualification.ukRecognitionUrl,
+      )}">${escape(this.qualification.ukRecognitionUrl)}</a>`
+    : null;
+
+  readonly otherCountriesRecognition =
+    this.qualification.otherCountriesRecognition;
+
+  readonly otherCountriesRecognitionUrl = this.qualification
+    .otherCountriesRecognitionUrl
+    ? `<a class="govuk-link" href="${escape(
+        this.qualification.otherCountriesRecognitionUrl,
+      )}">${escape(this.qualification.otherCountriesRecognitionUrl)}</a>`
+    : null;
 }

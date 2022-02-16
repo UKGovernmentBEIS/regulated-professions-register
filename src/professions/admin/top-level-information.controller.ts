@@ -30,6 +30,7 @@ import ViewUtils from './viewUtils';
 import { ProfessionVersionsService } from '../profession-versions.service';
 import { ProfessionVersion } from '../profession-version.entity';
 import { isConfirmed } from '../../helpers/is-confirmed';
+import { allNations, isUK } from '../../helpers/nations.helper';
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
 export class TopLevelInformationController {
@@ -63,7 +64,7 @@ export class TopLevelInformationController {
     );
 
     const coversUK = version.occupationLocations
-      ? this.isUK(version.occupationLocations)
+      ? isUK(version.occupationLocations)
       : null;
 
     return this.renderForm(
@@ -126,7 +127,7 @@ export class TopLevelInformationController {
     }
 
     if (coversUK) {
-      submittedValues.nations = this.allNations();
+      submittedValues.nations = allNations();
     }
 
     const updatedProfession: Profession = {
@@ -199,16 +200,5 @@ export class TopLevelInformationController {
     };
 
     return res.render('admin/professions/top-level-information', templateArgs);
-  }
-
-  private allNations(): string[] {
-    return Nation.all().map((nation) => nation.code);
-  }
-
-  private isUK(nations: Array<string>) {
-    return (
-      nations.length === this.allNations().length &&
-      nations.every((e, i) => e === this.allNations()[i])
-    );
   }
 }

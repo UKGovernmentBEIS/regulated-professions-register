@@ -53,6 +53,18 @@ export class Qualification {
   @Column()
   mandatoryProfessionalExperience: boolean;
 
+  @Column({ nullable: true })
+  ukRecognition: string;
+
+  @Column({ nullable: true })
+  ukRecognitionUrl: string;
+
+  @Column({ nullable: true })
+  otherCountriesRecognition: string;
+
+  @Column({ nullable: true })
+  otherCountriesRecognitionUrl: string;
+
   @CreateDateColumn({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP(6)',
@@ -78,6 +90,10 @@ export class Qualification {
     educationDurationDays?: number,
     educationDurationHours?: number,
     mandatoryProfessionalExperience?: boolean,
+    ukRecognition?: string,
+    ukRecognitionUrl?: string,
+    otherCountriesRecognition?: string,
+    otherCountriesRecognitionUrl?: string,
   ) {
     this.level = level || '';
     this.methodToObtain = methodToObtain || undefined;
@@ -91,5 +107,9 @@ export class Qualification {
     this.educationDurationHours = educationDurationHours || 0;
     this.mandatoryProfessionalExperience =
       mandatoryProfessionalExperience || true;
+    this.ukRecognition = ukRecognition || '';
+    this.ukRecognitionUrl = ukRecognitionUrl || '';
+    this.otherCountriesRecognition = otherCountriesRecognition || '';
+    this.otherCountriesRecognitionUrl = otherCountriesRecognitionUrl || '';
   }
 }

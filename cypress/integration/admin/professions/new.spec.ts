@@ -145,13 +145,13 @@ describe('Adding a new profession', () => {
       cy.translate('professions.form.captions.add').then((addCaption) => {
         cy.get('body').contains(addCaption);
       });
-      cy.get('textarea[name="level"]').type('An example Qualification level');
       cy.get(
         'input[name="methodToObtainQualification"][value="others"]',
       ).check();
       cy.get('textarea[name="otherMethodToObtainQualification"]').type(
         'Another method',
       );
+
       cy.get(
         'input[name="mostCommonPathToObtainQualification"][value="generalSecondaryEducation"]',
       ).check();
@@ -159,6 +159,17 @@ describe('Adding a new profession', () => {
       cy.get(
         'input[name="mandatoryProfessionalExperience"][value="1"]',
       ).check();
+      cy.get('textarea[name="level"]').type('An example Qualification level');
+
+      cy.get('input[name="ukRecognition"]').type('Recognition in the UK');
+      cy.get('input[name="ukRecognitionUrl"]').type('http://example.com/uk');
+      cy.get('input[name="otherCountriesRecognition"]').type(
+        'Recognition in other countries',
+      );
+      cy.get('input[name="otherCountriesRecognitionUrl"]').type(
+        'http://example.com/other',
+      );
+
       cy.translate('app.continue').then((buttonText) => {
         cy.get('button').contains(buttonText).click();
       });
@@ -284,6 +295,26 @@ describe('Adding a new profession', () => {
           yes,
         );
       });
+
+      cy.checkSummaryListRowValue(
+        'professions.form.label.qualificationInformation.ukRecognition',
+        'Recognition in the UK',
+      );
+
+      cy.checkSummaryListRowValue(
+        'professions.form.label.qualificationInformation.ukRecognitionUrl',
+        'http://example.com/uk',
+      );
+
+      cy.checkSummaryListRowValue(
+        'professions.form.label.qualificationInformation.otherCountriesRecognition',
+        'Recognition in other countries',
+      );
+
+      cy.checkSummaryListRowValue(
+        'professions.form.label.qualificationInformation.otherCountriesRecognitionUrl',
+        'http://example.com/other',
+      );
 
       cy.checkSummaryListRowValue(
         'professions.form.label.legislation.nationalLegislation',

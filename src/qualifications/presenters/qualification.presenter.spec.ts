@@ -90,4 +90,58 @@ describe(QualificationPresenter, () => {
       });
     });
   });
+
+  describe('ukRecognitionUrl', () => {
+    describe('when a blank string is provided', () => {
+      it('returns null', () => {
+        const qualification = qualificationFactory.build({
+          ukRecognitionUrl: '',
+        });
+
+        const presenter = new QualificationPresenter(qualification);
+
+        expect(presenter.ukRecognitionUrl).toEqual(null);
+      });
+    });
+    describe('when a URL is provided', () => {
+      it('returns a link', () => {
+        const qualification = qualificationFactory.build({
+          ukRecognitionUrl: 'http://example.com',
+        });
+
+        const presenter = new QualificationPresenter(qualification);
+
+        expect(presenter.ukRecognitionUrl).toEqual(
+          '<a class="govuk-link" href="http://example.com">http://example.com</a>',
+        );
+      });
+    });
+  });
+
+  describe('otherCountriesRecognitionUrl', () => {
+    describe('when a blank string is provided', () => {
+      it('returns null', () => {
+        const qualification = qualificationFactory.build({
+          otherCountriesRecognitionUrl: '',
+        });
+
+        const presenter = new QualificationPresenter(qualification);
+
+        expect(presenter.otherCountriesRecognitionUrl).toEqual(null);
+      });
+    });
+    describe('when a URL is provided', () => {
+      it('returns a link', () => {
+        const qualification = qualificationFactory.build({
+          otherCountriesRecognitionUrl: 'http://example.com',
+        });
+
+        const presenter = new QualificationPresenter(qualification);
+
+        expect(presenter.otherCountriesRecognitionUrl).toEqual(
+          '<a class="govuk-link" href="http://example.com">http://example.com</a>',
+        );
+      });
+    });
+  });
 });
