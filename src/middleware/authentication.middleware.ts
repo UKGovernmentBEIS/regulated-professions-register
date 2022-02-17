@@ -2,6 +2,7 @@ import { ForbiddenException } from '@nestjs/common';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { RequestHandler } from 'express';
 import { auth } from 'express-openid-connect';
+import { createPlausibleEvent } from '../common/create-plausible-event';
 
 import jwt_decode from 'jwt-decode';
 
@@ -77,6 +78,10 @@ export class AuthenticationMidleware {
 
     if (user === undefined) {
       throw new ForbiddenException();
+    }
+
+    if (process.env['NODE_ENV'] === 'production') {
+      await createPlausibleEvent('login', '/login');
     }
 
     return {
