@@ -27,30 +27,74 @@ env:
 jobs:
   test:
     runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
 
-    env:
-      NODE_ENV: test
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@master
+
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: false
+          load: true
+          tags: app_test:latest
+          build-args: NODE_ENV=test
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Unit Tests
+        id: test
+        run: script/ci/test
+  e2e:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        container: [1, 2, 3, 4, 5]
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: regulated-professions-register-test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+      redis:
+        image: redis
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
 
     steps:
       - name: Check out code
         uses: actions/checkout@v2
 
-      - id: cache-docker
-        uses: actions/cache@v2
-        with:
-          path: /tmp/docker-save
-          key: docker-save-${{ hashFiles('Dockerfile', 'package-lock.json') }}
-
-      - if: steps.cache-docker.outputs.cache-hit == 'true'
-        name: Load cached Docker image
-        run: docker load -i /tmp/docker-save/snapshot.tar || true
-
       - name: Build
-        run: script/ci/cibuild
+        run: |
+          npm install
+          npm run build:assets
+          npm run build
 
-      - name: Test
+      - name: End to End Tests
         id: test
-        run: script/ci/test
+        run: script/ci/e2e
+        env:
+          MATRIX: ${{ matrix.container }}
+          DATABASE_URL: postgres://postgres:password@localhost:5432/regulated-professions-register-test
+          REDIS_URI: redis://localhost:6379
 
       - name: Upload end-to-end-test screenshots
         if: failure() && steps.Test.outcome == 'failure'
@@ -67,8 +111,3 @@ jobs:
           name: end-to-end-test-videos
           path: cypress/videos/
           retention-days: 14
-
-      - if: always() && steps.cache-docker.outputs.cache-hit != 'true'
-        name: Prepare Docker cache
-        run: mkdir -p /tmp/docker-save && docker save app_test:latest -o
-          /tmp/docker-save/snapshot.tar && ls -lh /tmp/docker-save
