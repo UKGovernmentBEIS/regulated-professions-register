@@ -92,22 +92,21 @@ describe('OrganisationVersionsController', () => {
       organisationVersionsService.findLatestForOrganisationId.mockResolvedValue(
         organisationVersion,
       );
-      organisationVersionsService.save.mockResolvedValue(organisationVersion);
+
+      const newOrganisationVersion = organisationVersionFactory.build();
+      organisationVersionsService.create.mockResolvedValue(
+        newOrganisationVersion,
+      );
 
       await controller.create(response, request, 'some-uuid');
 
-      expect(organisationVersionsService.save).toHaveBeenCalledWith(
-        expect.objectContaining({
-          id: undefined,
-          user: user,
-          created_at: undefined,
-          updated_at: undefined,
-          organisation: organisationVersion.organisation,
-        }),
+      expect(organisationVersionsService.create).toHaveBeenCalledWith(
+        organisationVersion,
+        user,
       );
 
       expect(response.redirect).toHaveBeenCalledWith(
-        `/admin/organisations/${organisationVersion.organisation.id}/versions/${organisationVersion.id}/edit`,
+        `/admin/organisations/${newOrganisationVersion.organisation.id}/versions/${newOrganisationVersion.id}/edit`,
       );
     });
   });

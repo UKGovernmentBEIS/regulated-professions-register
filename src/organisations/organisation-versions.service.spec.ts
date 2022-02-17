@@ -18,6 +18,7 @@ import { OrganisationVersionsService } from './organisation-versions.service';
 
 import organisationVersionFactory from '../testutils/factories/organisation-version';
 import organisationFactory from '../testutils/factories/organisation';
+import userFactory from '../testutils/factories/user';
 
 describe('OrganisationVersionsService', () => {
   let service: OrganisationVersionsService;
@@ -133,6 +134,26 @@ describe('OrganisationVersionsService', () => {
 
       expect(result).toEqual(updatedVersion);
       expect(repoSpy).toHaveBeenCalledWith(updatedVersion);
+    });
+  });
+
+  describe('create', () => {
+    it('creates a copy of the version passed in, setting the user on it', async () => {
+      const version = organisationVersionFactory.build();
+      const user = userFactory.build();
+
+      const repoSpy = jest.spyOn(repo, 'save');
+
+      await service.create(version, user);
+
+      expect(repoSpy).toHaveBeenCalledWith({
+        ...version,
+        id: undefined,
+        user: user,
+        created_at: undefined,
+        updated_at: undefined,
+        organisation: version.organisation,
+      });
     });
   });
 

@@ -21,7 +21,6 @@ import { OrganisationVersionsService } from '../organisation-versions.service';
 
 import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
 
-import { OrganisationVersion } from '../organisation-version.entity';
 import { Organisation } from '../organisation.entity';
 
 import { ShowTemplate } from '../interfaces/show-template.interface';
@@ -61,18 +60,13 @@ export class OrganisationVersionsController {
         organisationID,
       );
 
-    const newVersion = {
-      ...latestVersion,
-      id: undefined,
-      user: req.appSession.user,
-      created_at: undefined,
-      updated_at: undefined,
-    } as OrganisationVersion;
-
-    const version = await this.organisationVersionsService.save(newVersion);
+    const newVersion = await this.organisationVersionsService.create(
+      latestVersion,
+      req.appSession.user,
+    );
 
     return res.redirect(
-      `/admin/organisations/${version.organisation.id}/versions/${version.id}/edit`,
+      `/admin/organisations/${newVersion.organisation.id}/versions/${newVersion.id}/edit`,
     );
   }
 
