@@ -440,6 +440,8 @@ describe('OrganisationsController', () => {
             ...OrganisationVersion.fromDto(organisationDto),
           };
 
+          organisationVersionsService.save.mockResolvedValue(newVersion);
+
           await controller.update(
             organisation.id,
             version.id,
