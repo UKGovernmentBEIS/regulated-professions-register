@@ -4,14 +4,9 @@
 {% block header %}
   {{
     govukHeader({
-      homepageUrl: "/",
+      homepageUrl: "/admin",
       serviceName: ("app.name" | t),
-        navigation: [
-          {
-            href: "/logout",
-            text: "Logout"
-          }
-        ]
+      serviceUrl: "/admin"
     })
   }}
 {% endblock %}
