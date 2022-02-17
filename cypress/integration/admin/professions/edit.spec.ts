@@ -72,7 +72,7 @@ describe('Editing an existing profession', () => {
         'The Trade Marks Act 1994',
       );
 
-      cy.translate('professions.form.button.publishNow').then((buttonText) => {
+      cy.translate('professions.form.button.saveAsDraft').then((buttonText) => {
         cy.get(buttonText).should('not.exist');
       });
 
@@ -175,7 +175,7 @@ describe('Editing an existing profession', () => {
         'Updated legislation',
       );
 
-      cy.translate('professions.form.button.publishNow').then((buttonText) => {
+      cy.translate('professions.form.button.saveAsDraft').then((buttonText) => {
         cy.get('button').contains(buttonText).click();
       });
 

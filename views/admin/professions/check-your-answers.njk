@@ -15,7 +15,6 @@
         <h1 class="govuk-heading-l">{{ ("professions.form.headings.checkAnswers" | t) }}</h1>
       {% endif %}
 
-      <form method="post" action="confirmation">
         <h2 class="govuk-heading-m">{{ ("professions.form.headings.topLevelInformation" | t) }}</h2>
 
         {% set selectedNationsSummaryListHtml %}
@@ -480,31 +479,38 @@
           })
         }}
 
-        {% if edit %}
-        {% elif confirmed %}
-          {{
-            govukButton({
-              id: "submit-button",
-              type: "Submit",
-              preventDoubleClick: true,
-              text: ("professions.form.button.publishNow" | t)
-            })
-          }}
-        {% else %}
-          {{
-            govukButton({
-              id: "submit-button",
-              type: "Submit",
-              preventDoubleClick: true,
-              text: ("professions.form.button.create" | t)
-            })
-          }}
+        {% if not edit and not confirmed %}
+          <form method="post" action="confirmation">
+            {{
+              govukButton({
+                id: "submit-button",
+                type: "Submit",
+                preventDoubleClick: true,
+                text: ("professions.form.button.create" | t)
+              })
+            }}
+          </form>
         {% endif %}
-      </form>
 
     </div>
 
-    <div class="govuk-grid-column-one-third"></div>
+    <div class="govuk-grid-column-one-third">
+      {% if not edit and confirmed %}
+        <aside class="app-related-items rpr-internal__details-page-sidebar" role="complementary">
+          <form method="post" action="confirmation">
+            {{
+              govukButton({
+                id: "submit-button",
+                classes: "govuk-button--secondary",
+                type: "Submit",
+                preventDoubleClick: true,
+                text: ("professions.form.button.saveAsDraft" | t)
+              })
+            }}
+          </form>
+        </aside>
+      {% endif %}
+    </div>
   </div>
 
 {% endblock %}

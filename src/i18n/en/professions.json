@@ -89,7 +89,8 @@
     "button": {
       "create": "Create profession",
       "edit": "Yes, continue",
-      "publishNow": "Publish now"
+      "publishNow": "Publish now",
+      "saveAsDraft": "Save as draft"
     },
     "select": {
       "topLevelInformation": {

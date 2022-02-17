@@ -32,6 +32,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Revised text describing each role to reflect role differences between regulatory authority users and central users
 - Enforce that users cannot perform actions outside their role
 - Preserve line breaks of any data entered in a multi-line text field
+- Fix incorrect "Publish now" button that should be saving as draft
 
 ## [release-002] - 2022-02-01
 
