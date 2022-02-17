@@ -8,7 +8,8 @@ set -e
 
 cd "$(dirname "$0")/../.."
 
-docker-compose -f docker-compose.ci.yml \
-            -p app \
-            run --rm test \
-            npm run test:ci
+SPECS=$(npx ts-node util/get-tests-for-matrix.ts --chunks=4 --matrix="$MATRIX")
+
+export SPECS
+
+npm run test:e2e:ci

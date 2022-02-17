@@ -27,10 +27,6 @@ env:
 jobs:
   test:
     runs-on: ubuntu-latest
-
-    env:
-      NODE_ENV: test
-
     steps:
       - name: Check out code
         uses: actions/checkout@v2
@@ -50,9 +46,55 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Test
+      - name: Unit Tests
         id: test
         run: script/ci/test
+  e2e:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        container: [1, 2, 3, 4, 5]
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: regulated-professions-register-test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+      redis:
+        image: redis
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Build
+        run: |
+          npm install
+          npm run build:assets
+          npm run build
+
+      - name: End to End Tests
+        id: test
+        run: script/ci/e2e
+        env:
+          MATRIX: ${{ matrix.container }}
+          DATABASE_URL: postgres://postgres:password@localhost:5432/regulated-professions-register-test
+          REDIS_URI: redis://localhost:6379
 
       - name: Upload end-to-end-test screenshots
         if: failure() && steps.Test.outcome == 'failure'
