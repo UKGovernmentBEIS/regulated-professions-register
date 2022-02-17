@@ -81,6 +81,14 @@ describe('OrganisationsPresenter', () => {
             text: translationOf('organisations.admin.tableHeading.industries'),
           },
           {
+            text: translationOf(
+              'organisations.admin.tableHeading.lastModified',
+            ),
+          },
+          {
+            text: translationOf('organisations.admin.tableHeading.changedBy'),
+          },
+          {
             text: translationOf('organisations.admin.tableHeading.status'),
           },
           { text: translationOf('organisations.admin.tableHeading.actions') },

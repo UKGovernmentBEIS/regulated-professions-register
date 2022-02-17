@@ -1,3 +1,5 @@
+import { format } from 'date-fns';
+
 describe('Listing organisations', () => {
   context('When I am logged in as an editor', () => {
     beforeEach(() => {
@@ -22,6 +24,11 @@ describe('Listing organisations', () => {
 
                 cy.wrap($row).should('contain', organisation.name);
                 cy.wrap($row).should('contain', latestVersion.alternateName);
+                cy.get('[data-cy=changed-by-user]').should('contain', '');
+                cy.wrap($row).should(
+                  'contain',
+                  format(new Date(), 'dd-MM-yyyy'),
+                );
 
                 cy.translate(
                   `organisations.status.${latestVersion.status}`,
@@ -109,6 +116,8 @@ describe('Listing organisations', () => {
     it("Lists only the user's own organisation", () => {
       cy.get('tbody tr').should('have.length', 1);
       cy.get('tbody tr').should('contain', 'Department for Education');
+      cy.get('[data-cy=changed-by-user]').should('contain', '');
+      cy.get('tbody tr').should('contain', format(new Date(), 'dd-MM-yyyy'));
     });
   });
 

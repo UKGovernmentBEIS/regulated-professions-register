@@ -31,6 +31,15 @@ export class OrganisationPresenter {
         html: await this.industries(),
       },
       {
+        text: this.lastModified,
+      },
+      {
+        text: this.changedBy,
+        attributes: {
+          'data-cy': 'changed-by-user',
+        },
+      },
+      {
         html: await this.i18nService.translate(
           `organisations.status.${this.organisation.status}`,
         ),
