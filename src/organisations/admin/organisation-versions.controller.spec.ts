@@ -162,12 +162,26 @@ describe('OrganisationVersionsController', () => {
       const version = organisationVersionFactory.build({
         organisation: organisation,
       });
+      const user = userFactory.build();
+
+      const req = createMock<RequestWithAppSession>({
+        appSession: {
+          user: user as DeepPartial<any>,
+        },
+      });
 
       organisationVersionsService.findByIdWithOrganisation.mockResolvedValue(
         version,
       );
 
-      const result = await controller.publish(organisation.id, version.id);
+      const newVersion = organisationVersionFactory.build({
+        organisation,
+        user,
+      });
+
+      organisationVersionsService.create.mockResolvedValue(newVersion);
+
+      const result = await controller.publish(req, organisation.id, version.id);
 
       expect(result).toEqual(organisation);
 
@@ -175,7 +189,14 @@ describe('OrganisationVersionsController', () => {
         organisationVersionsService.findByIdWithOrganisation,
       ).toHaveBeenCalledWith(organisation.id, version.id);
 
-      expect(organisationVersionsService.publish).toHaveBeenCalledWith(version);
+      expect(organisationVersionsService.create).toHaveBeenCalledWith(
+        version,
+        user,
+      );
+
+      expect(organisationVersionsService.publish).toHaveBeenCalledWith(
+        newVersion,
+      );
     });
   });
 });

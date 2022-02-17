@@ -1,3 +1,5 @@
+import { format } from 'date-fns';
+
 describe('Publishing organisations', () => {
   context('When I am logged in as an editor', () => {
     beforeEach(() => {
@@ -46,6 +48,19 @@ describe('Publishing organisations', () => {
             cy.wrap($row).should('contain', status);
           });
         });
+
+      cy.contains('Department for Education')
+        .parent('tr')
+        .within(() => {
+          cy.get('a').contains('View details').click();
+        });
+      cy.checkAccessibility();
+
+      cy.get('[data-cy=changed-by-user]').should('contain', 'Editor');
+      cy.get('[data-cy=last-modified]').should(
+        'contain',
+        format(new Date(), 'dd-MM-yyyy'),
+      );
     });
   });
 });

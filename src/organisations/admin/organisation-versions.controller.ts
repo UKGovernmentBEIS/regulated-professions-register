@@ -106,6 +106,7 @@ export class OrganisationVersionsController {
   @Permissions(UserPermission.PublishOrganisation)
   @Render('admin/organisations/versions/publish')
   async publish(
+    @Req() req: RequestWithAppSession,
     @Param('organisationId') organisationId: string,
     @Param('versionId') versionId: string,
   ): Promise<Organisation> {
@@ -115,7 +116,12 @@ export class OrganisationVersionsController {
         versionId,
       );
 
-    await this.organisationVersionsService.publish(version);
+    const newVersion = await this.organisationVersionsService.create(
+      version,
+      req.appSession.user,
+    );
+
+    await this.organisationVersionsService.publish(newVersion);
 
     return version.organisation;
   }
