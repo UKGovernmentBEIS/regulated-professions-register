@@ -195,9 +195,6 @@ export class QualificationsController {
       errors,
     };
 
-    return res.render(
-      'admin/professions/qualification-information',
-      templateArgs,
-    );
+    return res.render('admin/professions/qualifications', templateArgs);
   }
 }
