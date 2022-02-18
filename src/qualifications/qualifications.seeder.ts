@@ -10,9 +10,9 @@ import { InjectData } from '../common/decorators/seeds.decorator';
 type SeedQualification = {
   level: string;
   methodToObtain: MethodToObtain;
-  otherMethodToObtain: string;
+  routesToObtain: string;
   commonPathToObtain: MethodToObtain;
-  otherCommonPathToObtain: MethodToObtain;
+  mostCommonRouteToObtain: string;
   educationDuration: string;
   educationDurationYears: number;
   educationDurationMonths: number;
@@ -36,9 +36,9 @@ export class QualificationsSeeder implements Seeder {
       return new Qualification(
         qualification.level,
         qualification.methodToObtain as MethodToObtain,
-        qualification.otherMethodToObtain,
+        qualification.routesToObtain,
         qualification.commonPathToObtain as MethodToObtain,
-        qualification.otherCommonPathToObtain,
+        qualification.mostCommonRouteToObtain,
         qualification.educationDuration,
         qualification.educationDurationYears,
         qualification.educationDurationMonths,

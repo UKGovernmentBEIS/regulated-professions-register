@@ -27,13 +27,13 @@ export class Qualification {
   methodToObtainDeprecated: MethodToObtain;
 
   @Column({ nullable: true })
-  otherMethodToObtain: string;
+  routesToObtain: string;
 
   @Column({ type: 'enum', enum: MethodToObtain, nullable: true })
   commonPathToObtainDeprecated: MethodToObtain;
 
   @Column({ nullable: true })
-  otherCommonPathToObtain: string;
+  mostCommonRouteToObtain: string;
 
   @Column()
   educationDuration: string;
@@ -81,9 +81,9 @@ export class Qualification {
   constructor(
     level?: string,
     methodToObtain?: MethodToObtain,
-    otherMethodToObtain?: string,
+    routesToObtain?: string,
     commonPathToObtain?: MethodToObtain,
-    otherCommonPathToObtain?: string,
+    mostCommonRouteToObtain?: string,
     educationDuration?: string,
     educationDurationYears?: number,
     educationDurationMonths?: number,
@@ -98,8 +98,8 @@ export class Qualification {
     this.level = level || '';
     this.methodToObtainDeprecated = methodToObtain || undefined;
     this.commonPathToObtainDeprecated = commonPathToObtain || undefined;
-    this.otherMethodToObtain = otherMethodToObtain || '';
-    this.otherCommonPathToObtain = otherCommonPathToObtain || '';
+    this.routesToObtain = routesToObtain || '';
+    this.mostCommonRouteToObtain = mostCommonRouteToObtain || '';
     this.educationDuration = educationDuration || '';
     this.educationDurationYears = educationDurationYears || 0;
     this.educationDurationMonths = educationDurationMonths || 0;

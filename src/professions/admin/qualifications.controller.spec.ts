@@ -135,8 +135,8 @@ describe(QualificationsController, () => {
             expect.objectContaining({
               qualification: expect.objectContaining({
                 commonPathToObtainDeprecated: 'degreeLevel',
-                otherMethodToObtain: '',
-                otherCommonPathToObtain: '',
+                routesToObtain: '',
+                mostCommonRouteToObtain: '',
                 educationDuration: '3.0 Years',
                 level: 'Qualification level',
                 mandatoryProfessionalExperience: true,
@@ -191,8 +191,8 @@ describe(QualificationsController, () => {
             expect.objectContaining({
               qualification: expect.objectContaining({
                 commonPathToObtainDeprecated: 'degreeLevel',
-                otherMethodToObtain: '',
-                otherCommonPathToObtain: '',
+                routesToObtain: '',
+                mostCommonRouteToObtain: '',
                 educationDuration: '3.0 Years',
                 level: 'Qualification level',
                 mandatoryProfessionalExperience: true,

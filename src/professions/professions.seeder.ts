@@ -149,9 +149,9 @@ export class ProfessionsSeeder implements Seeder {
             new Qualification(
               qualification.level,
               qualification.methodToObtainDeprecated,
-              qualification.otherCommonPathToObtain,
+              qualification.mostCommonRouteToObtain,
               qualification.commonPathToObtainDeprecated,
-              qualification.otherCommonPathToObtain,
+              qualification.mostCommonRouteToObtain,
               qualification.educationDuration,
               null,
               null,

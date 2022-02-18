@@ -8,12 +8,12 @@ export default class QualificationPresenter {
 
   readonly methodToObtainQualification: string =
     this.qualification.methodToObtainDeprecated === MethodToObtain.Others
-      ? formatMultilineString(this.qualification.otherMethodToObtain)
+      ? formatMultilineString(this.qualification.routesToObtain)
       : `professions.methodsToObtainQualification.${this.qualification.methodToObtainDeprecated}`;
 
   readonly mostCommonPathToObtainQualification: string =
     this.qualification.commonPathToObtainDeprecated === MethodToObtain.Others
-      ? formatMultilineString(this.qualification.otherCommonPathToObtain)
+      ? formatMultilineString(this.qualification.mostCommonRouteToObtain)
       : `professions.methodsToObtainQualification.${this.qualification.commonPathToObtainDeprecated}`;
 
   readonly duration = this.qualification.educationDuration;

@@ -8,7 +8,7 @@ export default Factory.define<Qualification>(({ sequence }) => ({
   id: sequence.toString(),
   level: 'Diploma from post-secondary level (more than 4 years)',
   commonPathToObtainDeprecated: MethodToObtain.GeneralSecondaryEducation,
-  otherCommonPathToObtain: '',
+  mostCommonRouteToObtain: '',
   educationDuration: '1.0 Year',
   educationDurationYears: 1,
   educationDurationMonths: 0,
@@ -17,7 +17,7 @@ export default Factory.define<Qualification>(({ sequence }) => ({
   mandatoryProfessionalExperience: true,
   methodToObtainDeprecated:
     MethodToObtain.GeneralPostSecondaryEducationMandatoryVocational,
-  otherMethodToObtain: '',
+  routesToObtain: '',
   professionVersion: undefined,
   ukRecognition: undefined,
   ukRecognitionUrl: undefined,

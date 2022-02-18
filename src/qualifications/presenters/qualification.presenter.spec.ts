@@ -14,7 +14,7 @@ describe(QualificationPresenter, () => {
 
         const qualification = qualificationFactory.build({
           methodToObtainDeprecated: MethodToObtain.Others,
-          otherMethodToObtain: 'other value',
+          routesToObtain: 'other value',
         });
 
         const presenter = new QualificationPresenter(qualification);
@@ -31,7 +31,7 @@ describe(QualificationPresenter, () => {
       it('returns the localisation id for the selected method', () => {
         const qualification = qualificationFactory.build({
           methodToObtainDeprecated: MethodToObtain.DegreeLevel,
-          otherMethodToObtain: 'other value',
+          routesToObtain: 'other value',
         });
 
         const presenter = new QualificationPresenter(qualification);
@@ -50,7 +50,7 @@ describe(QualificationPresenter, () => {
 
         const qualification = qualificationFactory.build({
           commonPathToObtainDeprecated: MethodToObtain.Others,
-          otherCommonPathToObtain: 'other value',
+          mostCommonRouteToObtain: 'other value',
         });
 
         const presenter = new QualificationPresenter(qualification);
@@ -67,7 +67,7 @@ describe(QualificationPresenter, () => {
       it('returns the localisation id for the selected method', () => {
         const qualification = qualificationFactory.build({
           commonPathToObtainDeprecated: MethodToObtain.DegreeLevel,
-          otherCommonPathToObtain: 'other value',
+          mostCommonRouteToObtain: 'other value',
         });
 
         const presenter = new QualificationPresenter(qualification);
