@@ -10,10 +10,6 @@ export default Factory.define<Qualification>(({ sequence }) => ({
   commonPathToObtainDeprecated: MethodToObtain.GeneralSecondaryEducation,
   mostCommonRouteToObtain: '',
   educationDuration: '1.0 Year',
-  educationDurationYears: 1,
-  educationDurationMonths: 0,
-  educationDurationDays: 0,
-  educationDurationHours: 0,
   mandatoryProfessionalExperience: true,
   methodToObtainDeprecated:
     MethodToObtain.GeneralPostSecondaryEducationMandatoryVocational,

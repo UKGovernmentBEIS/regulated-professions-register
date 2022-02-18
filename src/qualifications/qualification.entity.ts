@@ -38,18 +38,6 @@ export class Qualification {
   @Column()
   educationDuration: string;
 
-  @Column({ nullable: true })
-  educationDurationYears: number;
-
-  @Column({ nullable: true })
-  educationDurationMonths: number;
-
-  @Column({ nullable: true })
-  educationDurationDays: number;
-
-  @Column({ nullable: true })
-  educationDurationHours: number;
-
   @Column()
   mandatoryProfessionalExperience: boolean;
 
@@ -85,10 +73,6 @@ export class Qualification {
     commonPathToObtain?: MethodToObtain,
     mostCommonRouteToObtain?: string,
     educationDuration?: string,
-    educationDurationYears?: number,
-    educationDurationMonths?: number,
-    educationDurationDays?: number,
-    educationDurationHours?: number,
     mandatoryProfessionalExperience?: boolean,
     ukRecognition?: string,
     ukRecognitionUrl?: string,
@@ -101,10 +85,6 @@ export class Qualification {
     this.routesToObtain = routesToObtain || '';
     this.mostCommonRouteToObtain = mostCommonRouteToObtain || '';
     this.educationDuration = educationDuration || '';
-    this.educationDurationYears = educationDurationYears || 0;
-    this.educationDurationMonths = educationDurationMonths || 0;
-    this.educationDurationDays = educationDurationDays || 0;
-    this.educationDurationHours = educationDurationHours || 0;
     this.mandatoryProfessionalExperience =
       mandatoryProfessionalExperience || true;
     this.ukRecognition = ukRecognition || '';

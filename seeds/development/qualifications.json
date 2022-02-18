@@ -6,10 +6,6 @@
     "methodToObtain": "generalSecondaryEducation",
     "commonPathToObtain": "generalSecondaryEducation",
     "educationDuration": " 5.0 Year",
-    "educationDurationYears": 5,
-    "educationDurationMonths": 0,
-    "educationDurationDays": 0,
-    "educationDurationHours": 0,
     "mandatoryProfessionalExperience": true
   },
   {
@@ -19,10 +15,6 @@
     "methodToObtain": "generalOrVocationalPostSecondaryEducation",
     "commonPathToObtain": "generalOrVocationalPostSecondaryEducation",
     "educationDuration": "3.5 Year",
-    "educationDurationYears": 3,
-    "educationDurationMonths": 6,
-    "educationDurationDays": 0,
-    "educationDurationHours": 0,
     "mandatoryProfessionalExperience": true
   },
   {
@@ -32,10 +24,6 @@
     "methodToObtain": "generalOrVocationalPostSecondaryEducation",
     "commonPathToObtain": "generalOrVocationalPostSecondaryEducation",
     "educationDuration": "3 Year",
-    "educationDurationYears": 3,
-    "educationDurationMonths": 6,
-    "educationDurationDays": 0,
-    "educationDurationHours": 0,
     "mandatoryProfessionalExperience": false
   }
 ]

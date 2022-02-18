@@ -153,10 +153,6 @@ export class ProfessionsSeeder implements Seeder {
               qualification.commonPathToObtainDeprecated,
               qualification.mostCommonRouteToObtain,
               qualification.educationDuration,
-              null,
-              null,
-              null,
-              null,
               qualification.mandatoryProfessionalExperience,
             ),
           );
