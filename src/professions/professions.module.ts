@@ -13,7 +13,7 @@ import { Organisation } from '../organisations/organisation.entity';
 import { OrganisationsService } from '../organisations/organisations.service';
 import { RegulatedActivitiesController } from './admin/regulated-activities.controller';
 import { ProfessionsController as AdminProfessionsController } from './admin/professions.controller';
-import { QualificationInformationController } from './admin/qualification-information.controller';
+import { QualificationsController } from './admin/qualifications.controller';
 import { LegislationController } from './admin/legislation.controller';
 import { ProfessionVersionsService } from './profession-versions.service';
 import { ProfessionVersion } from './profession-version.entity';
@@ -41,7 +41,7 @@ import { ScopeController } from './admin/scope.controller';
     TopLevelInformationController,
     ScopeController,
     RegulatedActivitiesController,
-    QualificationInformationController,
+    QualificationsController,
     LegislationController,
     CheckYourAnswersController,
     ConfirmationController,

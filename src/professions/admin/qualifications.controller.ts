@@ -30,7 +30,7 @@ import { ProfessionVersion } from '../profession-version.entity';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
-export class QualificationInformationController {
+export class QualificationsController {
   constructor(
     private readonly professionsService: ProfessionsService,
     private readonly professionVersionsService: ProfessionVersionsService,

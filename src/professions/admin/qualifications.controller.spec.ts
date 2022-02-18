@@ -9,7 +9,7 @@ import { ProfessionsService } from '../professions.service';
 import { MethodToObtainQualificationRadioButtonsPresenter } from './method-to-obtain-qualification-radio-buttons.presenter';
 import { YesNoRadioButtonArgsPresenter } from './yes-no-radio-buttons-presenter';
 import { QualificationInformationDto } from './dto/qualification-information.dto';
-import { QualificationInformationController } from './qualification-information.controller';
+import { QualificationsController } from './qualifications.controller';
 import { ProfessionVersionsService } from '../profession-versions.service';
 import { isUK } from '../../helpers/nations.helper';
 
@@ -18,8 +18,8 @@ import qualificationFactory from '../../testutils/factories/qualification';
 
 jest.mock('../../helpers/nations.helper');
 
-describe(QualificationInformationController, () => {
-  let controller: QualificationInformationController;
+describe(QualificationsController, () => {
+  let controller: QualificationsController;
   let response: DeepMocked<Response>;
   let professionsService: DeepMocked<ProfessionsService>;
   let professionVersionsService: DeepMocked<ProfessionVersionsService>;
@@ -31,7 +31,7 @@ describe(QualificationInformationController, () => {
     professionVersionsService = createMock<ProfessionVersionsService>();
 
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [QualificationInformationController],
+      controllers: [QualificationsController],
       providers: [
         { provide: ProfessionsService, useValue: professionsService },
         {
@@ -44,9 +44,7 @@ describe(QualificationInformationController, () => {
 
     response = createMock<Response>();
 
-    controller = module.get<QualificationInformationController>(
-      QualificationInformationController,
-    );
+    controller = module.get<QualificationsController>(QualificationsController);
   });
 
   describe('edit', () => {
