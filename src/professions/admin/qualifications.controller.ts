@@ -37,7 +37,7 @@ export class QualificationsController {
     private readonly i18nService: I18nService,
   ) {}
 
-  @Get('/:professionId/versions/:versionId/qualification-information/edit')
+  @Get('/:professionId/versions/:versionId/qualifications/edit')
   @Permissions(UserPermission.CreateProfession, UserPermission.EditProfession)
   @BackLink((request: Request) =>
     request.query.change === 'true'
@@ -67,7 +67,7 @@ export class QualificationsController {
     );
   }
 
-  @Post('/:professionId/versions/:versionId/qualification-information')
+  @Post('/:professionId/versions/:versionId/qualifications')
   @Permissions(UserPermission.CreateProfession, UserPermission.EditProfession)
   @BackLink((request: Request) =>
     request.body.change === 'true'

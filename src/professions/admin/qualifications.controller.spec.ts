@@ -82,7 +82,7 @@ describe(QualificationsController, () => {
       await controller.edit(response, 'profession-id', 'version-id', false);
 
       expect(response.render).toHaveBeenCalledWith(
-        'admin/professions/qualification-information',
+        'admin/professions/qualifications',
         expect.objectContaining({
           methodToObtainQualificationRadioButtonArgs,
           mostCommonPathToObtainQualificationRadioButtonArgs,
@@ -244,7 +244,7 @@ describe(QualificationsController, () => {
         await controller.update(response, 'profession-id', 'version-id', dto);
 
         expect(response.render).toHaveBeenCalledWith(
-          'admin/professions/qualification-information',
+          'admin/professions/qualifications',
           expect.objectContaining({
             mandatoryProfessionalExperienceRadioButtonArgs:
               await new YesNoRadioButtonArgsPresenter(
