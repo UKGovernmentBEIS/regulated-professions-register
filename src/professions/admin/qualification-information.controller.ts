@@ -105,9 +105,10 @@ export class QualificationInformationController {
       ...version.qualification,
       ...{
         level: submittedValues.level,
-        methodToObtain: submittedValues.methodToObtainQualification,
+        methodToObtainDeprecated: submittedValues.methodToObtainQualification,
         otherMethodToObtain: submittedValues.otherMethodToObtainQualification,
-        commonPathToObtain: submittedValues.mostCommonPathToObtainQualification,
+        commonPathToObtainDeprecated:
+          submittedValues.mostCommonPathToObtainQualification,
         otherCommonPathToObtain:
           submittedValues.otherMostCommonPathToObtainQualification,
         educationDuration: submittedValues.duration,
@@ -158,7 +159,7 @@ export class QualificationInformationController {
   ) {
     const mostCommonPathToObtainQualificationRadioButtonArgs =
       await new MethodToObtainQualificationRadioButtonsPresenter(
-        qualification?.commonPathToObtain,
+        qualification?.commonPathToObtainDeprecated,
         qualification?.otherCommonPathToObtain,
         errors,
         this.i18nService,
@@ -166,7 +167,7 @@ export class QualificationInformationController {
 
     const methodToObtainQualificationRadioButtonArgs =
       await new MethodToObtainQualificationRadioButtonsPresenter(
-        qualification?.methodToObtain,
+        qualification?.methodToObtainDeprecated,
         qualification?.otherMethodToObtain,
         errors,
         this.i18nService,

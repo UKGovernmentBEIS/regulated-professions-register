@@ -13,7 +13,7 @@ describe(QualificationPresenter, () => {
         (formatMultilineString as jest.Mock).mockImplementation(multilineOf);
 
         const qualification = qualificationFactory.build({
-          methodToObtain: MethodToObtain.Others,
+          methodToObtainDeprecated: MethodToObtain.Others,
           otherMethodToObtain: 'other value',
         });
 
@@ -30,7 +30,7 @@ describe(QualificationPresenter, () => {
     describe('when the method to ObtainQualification is not "others"', () => {
       it('returns the localisation id for the selected method', () => {
         const qualification = qualificationFactory.build({
-          methodToObtain: MethodToObtain.DegreeLevel,
+          methodToObtainDeprecated: MethodToObtain.DegreeLevel,
           otherMethodToObtain: 'other value',
         });
 
@@ -49,7 +49,7 @@ describe(QualificationPresenter, () => {
         (formatMultilineString as jest.Mock).mockImplementation(multilineOf);
 
         const qualification = qualificationFactory.build({
-          commonPathToObtain: MethodToObtain.Others,
+          commonPathToObtainDeprecated: MethodToObtain.Others,
           otherCommonPathToObtain: 'other value',
         });
 
@@ -66,7 +66,7 @@ describe(QualificationPresenter, () => {
     describe('when the method to ObtainQualification is not "others"', () => {
       it('returns the localisation id for the selected method', () => {
         const qualification = qualificationFactory.build({
-          commonPathToObtain: MethodToObtain.DegreeLevel,
+          commonPathToObtainDeprecated: MethodToObtain.DegreeLevel,
           otherCommonPathToObtain: 'other value',
         });
 

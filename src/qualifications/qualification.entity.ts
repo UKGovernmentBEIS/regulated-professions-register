@@ -24,13 +24,13 @@ export class Qualification {
   level: string;
 
   @Column({ type: 'enum', enum: MethodToObtain, nullable: true })
-  methodToObtain: MethodToObtain;
+  methodToObtainDeprecated: MethodToObtain;
 
   @Column({ nullable: true })
   otherMethodToObtain: string;
 
   @Column({ type: 'enum', enum: MethodToObtain, nullable: true })
-  commonPathToObtain: MethodToObtain;
+  commonPathToObtainDeprecated: MethodToObtain;
 
   @Column({ nullable: true })
   otherCommonPathToObtain: string;
@@ -96,8 +96,8 @@ export class Qualification {
     otherCountriesRecognitionUrl?: string,
   ) {
     this.level = level || '';
-    this.methodToObtain = methodToObtain || undefined;
-    this.commonPathToObtain = commonPathToObtain || undefined;
+    this.methodToObtainDeprecated = methodToObtain || undefined;
+    this.commonPathToObtainDeprecated = commonPathToObtain || undefined;
     this.otherMethodToObtain = otherMethodToObtain || '';
     this.otherCommonPathToObtain = otherCommonPathToObtain || '';
     this.educationDuration = educationDuration || '';

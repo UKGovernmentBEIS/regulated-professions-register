@@ -63,7 +63,7 @@ describe(QualificationInformationController, () => {
 
       const methodToObtainQualificationRadioButtonArgs =
         await new MethodToObtainQualificationRadioButtonsPresenter(
-          version.qualification.methodToObtain,
+          version.qualification.methodToObtainDeprecated,
           undefined,
           undefined,
           i18nService,
@@ -71,7 +71,7 @@ describe(QualificationInformationController, () => {
 
       const mostCommonPathToObtainQualificationRadioButtonArgs =
         await new MethodToObtainQualificationRadioButtonsPresenter(
-          version.qualification.commonPathToObtain,
+          version.qualification.commonPathToObtainDeprecated,
           undefined,
           undefined,
           i18nService,
@@ -136,13 +136,13 @@ describe(QualificationInformationController, () => {
           expect(professionVersionsService.save).toHaveBeenCalledWith(
             expect.objectContaining({
               qualification: expect.objectContaining({
-                commonPathToObtain: 'degreeLevel',
+                commonPathToObtainDeprecated: 'degreeLevel',
                 otherMethodToObtain: '',
                 otherCommonPathToObtain: '',
                 educationDuration: '3.0 Years',
                 level: 'Qualification level',
                 mandatoryProfessionalExperience: true,
-                methodToObtain: 'degreeLevel',
+                methodToObtainDeprecated: 'degreeLevel',
                 ukRecognition: 'ukRecognition',
                 ukRecognitionUrl: 'http://example.com/uk',
                 otherCountriesRecognition: 'otherCountriesRecognition',
@@ -192,13 +192,13 @@ describe(QualificationInformationController, () => {
           expect(professionVersionsService.save).toHaveBeenCalledWith(
             expect.objectContaining({
               qualification: expect.objectContaining({
-                commonPathToObtain: 'degreeLevel',
+                commonPathToObtainDeprecated: 'degreeLevel',
                 otherMethodToObtain: '',
                 otherCommonPathToObtain: '',
                 educationDuration: '3.0 Years',
                 level: 'Qualification level',
                 mandatoryProfessionalExperience: true,
-                methodToObtain: 'degreeLevel',
+                methodToObtainDeprecated: 'degreeLevel',
                 ukRecognition: 'ukRecognition',
                 ukRecognitionUrl: 'http://example.com/uk',
                 otherCountriesRecognition: 'otherCountriesRecognition',
