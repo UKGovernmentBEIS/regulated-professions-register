@@ -8,11 +8,20 @@ import { FilterInput } from '../../../common/interfaces/filter-input.interface';
 import { IndexTemplate } from '../interfaces/index-template.interface';
 import { IndustriesCheckboxPresenter } from '../../../industries/industries-checkbox.presenter';
 
-type Field = 'name' | 'alternateName' | 'industries' | 'status' | 'actions';
+type Field =
+  | 'name'
+  | 'alternateName'
+  | 'industries'
+  | 'lastModified'
+  | 'changedBy'
+  | 'status'
+  | 'actions';
 const fields = [
   'name',
   'alternateName',
   'industries',
+  'lastModified',
+  'changedBy',
   'status',
   'actions',
 ] as Field[];

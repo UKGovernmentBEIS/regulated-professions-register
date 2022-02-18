@@ -61,6 +61,8 @@ export class Organisation {
   telephone?: string;
   fax?: string;
   versionId?: string;
+  lastModified?: Date;
+  changedByUser?: User;
   status?: OrganisationVersionStatus;
 
   public static withLatestLiveVersion(
@@ -101,6 +103,8 @@ export class Organisation {
       fax: organisationVersion.fax,
       versionId: organisationVersion.id,
       status: organisationVersion.status,
+      lastModified: organisationVersion.updated_at,
+      changedByUser: organisationVersion.user,
       professions: professions,
     } as Organisation;
   }

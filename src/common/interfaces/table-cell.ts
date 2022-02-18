@@ -1,1 +1,3 @@
-export type TableCell = { text: string } | { html: string };
+export type TableCell =
+  | { text: string; attributes?: { [key: string]: string } }
+  | { html: string };

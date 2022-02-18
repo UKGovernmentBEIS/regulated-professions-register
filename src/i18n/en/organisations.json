@@ -69,6 +69,8 @@
       "alternateName": "Alternate name",
       "industries": "Industry/Sector(s)",
       "status": "Status",
+      "lastModified": "Last modified",
+      "changedBy": "Changed by",
       "actions": "Actions"
     },
     "form": {
@@ -130,7 +132,11 @@
   },
   "headings": {
     "professions": "Regulated professions",
-    "status": "Status"
+    "status": "Status",
+    "changed": {
+      "on": "Last modified",
+      "by": "Changed by"
+    }
   },
   "label": {
     "name": "Name",

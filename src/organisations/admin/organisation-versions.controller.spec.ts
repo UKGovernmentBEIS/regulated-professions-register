@@ -22,8 +22,10 @@ import userFactory from '../../testutils/factories/user';
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 
 import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
+import { OrganisationPresenter } from '../presenters/organisation.presenter';
 
 jest.mock('../presenters/organisation-summary.presenter');
+jest.mock('../presenters/organisation.presenter');
 
 describe('OrganisationVersionsController', () => {
   let controller: OrganisationVersionsController;
@@ -90,22 +92,21 @@ describe('OrganisationVersionsController', () => {
       organisationVersionsService.findLatestForOrganisationId.mockResolvedValue(
         organisationVersion,
       );
-      organisationVersionsService.save.mockResolvedValue(organisationVersion);
+
+      const newOrganisationVersion = organisationVersionFactory.build();
+      organisationVersionsService.create.mockResolvedValue(
+        newOrganisationVersion,
+      );
 
       await controller.create(response, request, 'some-uuid');
 
-      expect(organisationVersionsService.save).toHaveBeenCalledWith(
-        expect.objectContaining({
-          id: undefined,
-          user: user,
-          created_at: undefined,
-          updated_at: undefined,
-          organisation: organisationVersion.organisation,
-        }),
+      expect(organisationVersionsService.create).toHaveBeenCalledWith(
+        organisationVersion,
+        user,
       );
 
       expect(response.redirect).toHaveBeenCalledWith(
-        `/admin/organisations/${organisationVersion.organisation.id}/versions/${organisationVersion.id}/edit`,
+        `/admin/organisations/${newOrganisationVersion.organisation.id}/versions/${newOrganisationVersion.id}/edit`,
       );
     });
   });
@@ -128,6 +129,7 @@ describe('OrganisationVersionsController', () => {
 
       const showTemplate: ShowTemplate = {
         organisation,
+        presenter: {} as OrganisationPresenter,
         summaryList: {
           classes: 'govuk-summary-list--no-border',
           rows: [],
@@ -160,12 +162,26 @@ describe('OrganisationVersionsController', () => {
       const version = organisationVersionFactory.build({
         organisation: organisation,
       });
+      const user = userFactory.build();
+
+      const req = createMock<RequestWithAppSession>({
+        appSession: {
+          user: user as DeepPartial<any>,
+        },
+      });
 
       organisationVersionsService.findByIdWithOrganisation.mockResolvedValue(
         version,
       );
 
-      const result = await controller.publish(organisation.id, version.id);
+      const newVersion = organisationVersionFactory.build({
+        organisation,
+        user,
+      });
+
+      organisationVersionsService.create.mockResolvedValue(newVersion);
+
+      const result = await controller.publish(req, organisation.id, version.id);
 
       expect(result).toEqual(organisation);
 
@@ -173,7 +189,14 @@ describe('OrganisationVersionsController', () => {
         organisationVersionsService.findByIdWithOrganisation,
       ).toHaveBeenCalledWith(organisation.id, version.id);
 
-      expect(organisationVersionsService.publish).toHaveBeenCalledWith(version);
+      expect(organisationVersionsService.create).toHaveBeenCalledWith(
+        version,
+        user,
+      );
+
+      expect(organisationVersionsService.publish).toHaveBeenCalledWith(
+        newVersion,
+      );
     });
   });
 });

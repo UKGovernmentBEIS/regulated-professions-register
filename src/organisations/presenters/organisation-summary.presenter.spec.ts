@@ -65,8 +65,14 @@ describe('OrganisationSummaryPresenter', () => {
           i18nService,
         );
 
+        const organisationPresenter = new OrganisationPresenter(
+          organisation,
+          i18nService,
+        );
+
         expect(await presenter.present()).toEqual({
           organisation: organisation,
+          presenter: organisationPresenter,
           summaryList: mockSummaryList(),
           professions: [
             {
@@ -86,7 +92,8 @@ describe('OrganisationSummaryPresenter', () => {
           ],
         });
 
-        expect(OrganisationPresenter).toHaveBeenCalledWith(
+        expect(OrganisationPresenter).toHaveBeenNthCalledWith(
+          2,
           organisation,
           i18nService,
         );

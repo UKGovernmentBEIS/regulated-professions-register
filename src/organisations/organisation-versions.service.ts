@@ -6,6 +6,7 @@ import {
   OrganisationVersionStatus,
 } from './organisation-version.entity';
 import { Organisation } from './organisation.entity';
+import { User } from '../users/user.entity';
 
 @Injectable()
 export class OrganisationVersionsService {
@@ -21,6 +22,21 @@ export class OrganisationVersionsService {
 
   async find(id: string): Promise<OrganisationVersion> {
     return this.repository.findOne(id);
+  }
+
+  async create(
+    previousVersion: OrganisationVersion,
+    user: User,
+  ): Promise<OrganisationVersion> {
+    const newVersion = {
+      ...previousVersion,
+      id: undefined,
+      user: user,
+      created_at: undefined,
+      updated_at: undefined,
+    } as OrganisationVersion;
+
+    return this.save(newVersion);
   }
 
   async findByIdWithOrganisation(
@@ -138,6 +154,7 @@ export class OrganisationVersionsService {
     return this.repository
       .createQueryBuilder('organisationVersion')
       .leftJoinAndSelect('organisationVersion.organisation', 'organisation')
+      .leftJoinAndSelect('organisationVersion.user', 'user')
       .leftJoinAndSelect('organisation.professions', 'professions')
       .leftJoinAndSelect('professions.versions', 'professionVersions')
       .leftJoinAndSelect('professionVersions.industries', 'industries');

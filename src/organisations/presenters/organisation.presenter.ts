@@ -4,6 +4,7 @@ import { TableRow } from '../../common/interfaces/table-row';
 import { SummaryList } from '../../common/interfaces/summary-list';
 import { escape } from '../../helpers/escape.helper';
 import { formatMultilineString } from '../../helpers/format-multiline-string.helper';
+import { formatDate } from '../../common/utils';
 
 interface OrganisationSummaryListOptions {
   classes?: string;
@@ -28,6 +29,15 @@ export class OrganisationPresenter {
       },
       {
         html: await this.industries(),
+      },
+      {
+        text: this.lastModified,
+      },
+      {
+        text: this.changedBy,
+        attributes: {
+          'data-cy': 'changed-by-user',
+        },
       },
       {
         html: await this.i18nService.translate(
@@ -144,6 +154,16 @@ export class OrganisationPresenter {
       classes: classes,
       rows: rows,
     };
+  }
+
+  get changedBy(): string {
+    return this.organisation.changedByUser
+      ? this.organisation.changedByUser.name
+      : '';
+  }
+
+  get lastModified(): string {
+    return formatDate(this.organisation.lastModified);
   }
 
   public address(): string {

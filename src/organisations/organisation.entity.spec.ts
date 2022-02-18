@@ -38,6 +38,8 @@ describe('Organisation', () => {
         fax: organisationVersion.fax,
         versionId: organisationVersion.id,
         status: organisationVersion.status,
+        changedByUser: organisationVersion.user,
+        lastModified: organisationVersion.updated_at,
         professions: [profession],
       });
 
@@ -78,6 +80,8 @@ describe('Organisation', () => {
           fax: organisationVersion.fax,
           versionId: organisationVersion.id,
           status: organisationVersion.status,
+          changedByUser: organisationVersion.user,
+          lastModified: organisationVersion.updated_at,
           professions: [profession],
         });
 
@@ -117,6 +121,8 @@ describe('Organisation', () => {
           fax: organisationVersion.fax,
           versionId: organisationVersion.id,
           status: organisationVersion.status,
+          changedByUser: organisationVersion.user,
+          lastModified: organisationVersion.updated_at,
           professions: [],
         });
       });
