@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Added
+
+### Changed
+
+- Users can enter a second legislation for a profession
+
 ## [release-003] - 2022-02-16
 
 ### Added

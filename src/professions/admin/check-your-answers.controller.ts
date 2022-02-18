@@ -38,7 +38,7 @@ export class CheckYourAnswersController {
   async show(
     @Param('professionId') professionId: string,
     @Param('versionId') versionId: string,
-    @Query('edit') edit: boolean,
+    @Query('edit') edit: string,
   ): Promise<CheckYourAnswersTemplate> {
     const draftProfession = await this.professionsService.findWithVersions(
       professionId,
@@ -72,9 +72,11 @@ export class CheckYourAnswersController {
       ? new QualificationPresenter(version.qualification)
       : null;
 
+    const legislations = [version.legislations[0], version.legislations[1]];
+
     return {
-      professionId: professionId,
-      versionId: versionId,
+      professionId,
+      versionId,
       name: draftProfession.name,
       nations: selectedNations,
       industries: industryNames,
@@ -89,12 +91,12 @@ export class CheckYourAnswersController {
       reservedActivities: version.reservedActivities,
       protectedTitles: version.protectedTitles,
       regulationUrl: version.regulationUrl,
-      qualification: qualification,
-      legislation: version.legislations[0],
+      qualification,
+      legislations,
       confirmed: isConfirmed(draftProfession),
       captionText: ViewUtils.captionText(isConfirmed(draftProfession)),
       isUK: isUK(version.occupationLocations),
-      edit: Boolean(edit),
+      edit: edit === 'true',
     };
   }
 }

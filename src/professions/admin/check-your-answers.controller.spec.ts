@@ -47,9 +47,15 @@ describe('CheckYourAnswersController', () => {
     describe('when a Profession has been created with the persisted ID', () => {
       it('fetches the draft Profession from the persisted ID, and renders the answers on the page', async () => {
         const qualification = qualificationFactory.build();
-        const legislation = legislationFactory.build({
+
+        const legislation1 = legislationFactory.build({
           url: 'www.gas-legislation.com',
           name: 'Gas Safety Legislation',
+        });
+
+        const legislation2 = legislationFactory.build({
+          url: 'www.another-gas-legislation.com',
+          name: 'Another Gas Safety Legislation',
         });
 
         const profession = professionFactory.build({
@@ -75,7 +81,7 @@ describe('CheckYourAnswersController', () => {
           registrationRequirements: 'Requirements',
           registrationUrl: 'https://example.com/requirement',
           profession: profession,
-          legislations: [legislation],
+          legislations: [legislation1, legislation2],
           qualification: qualification,
         });
 
@@ -84,7 +90,7 @@ describe('CheckYourAnswersController', () => {
         const templateParams = await controller.show(
           'profession-id',
           'version-id',
-          false,
+          'false',
         );
         expect(templateParams.name).toEqual('Gas Safe Engineer');
         expect(templateParams.nations).toEqual([
@@ -116,11 +122,17 @@ describe('CheckYourAnswersController', () => {
         expect(templateParams.qualification).toEqual(
           new QualificationPresenter(qualification),
         );
-        expect(templateParams.legislation.url).toEqual(
+        expect(templateParams.legislations[0].url).toEqual(
           'www.gas-legislation.com',
         );
-        expect(templateParams.legislation.name).toEqual(
+        expect(templateParams.legislations[0].name).toEqual(
           'Gas Safety Legislation',
+        );
+        expect(templateParams.legislations[1].url).toEqual(
+          'www.another-gas-legislation.com',
+        );
+        expect(templateParams.legislations[1].name).toEqual(
+          'Another Gas Safety Legislation',
         );
         expect(templateParams.confirmed).toEqual(false);
 
@@ -147,10 +159,39 @@ describe('CheckYourAnswersController', () => {
         const templateParams = await controller.show(
           'profession-id',
           'version-id',
-          false,
+          'false',
         );
 
         expect(templateParams.qualification).toEqual(null);
+      });
+    });
+
+    describe('when the profession has only one legislation', () => {
+      it('the legislations array passed to the template is padded to length 2', async () => {
+        const legislation = legislationFactory.build({
+          url: 'www.gas-legislation.com',
+          name: 'Gas Safety Legislation',
+        });
+
+        const profession = professionFactory.build({
+          organisation: organisationFactory.build(),
+        });
+
+        const version = professionVersionFactory.build({
+          qualification: undefined,
+          legislations: [legislation],
+        });
+
+        professionsService.findWithVersions.mockResolvedValue(profession);
+        professionVersionsService.findWithProfession.mockResolvedValue(version);
+
+        const templateParams = await controller.show(
+          'profession-id',
+          'version-id',
+          'false',
+        );
+
+        expect(templateParams.legislations).toEqual([legislation, undefined]);
       });
     });
   });

@@ -6,7 +6,6 @@ import {
   Post,
   Query,
   Res,
-  UseFilters,
   UseGuards,
 } from '@nestjs/common';
 import { Response, Request } from 'express';
@@ -15,7 +14,6 @@ import { Permissions } from '../../common/permissions.decorator';
 import { Validator } from '../../helpers/validator';
 import { Legislation } from '../../legislations/legislation.entity';
 import { UserPermission } from '../../users/user-permission';
-import { ValidationExceptionFilter } from '../../common/validation/validation-exception.filter';
 import { ValidationFailedError } from '../../common/validation/validation-failed.error';
 import { ProfessionsService } from '../professions.service';
 import LegislationDto from './dto/legislation.dto';
@@ -45,7 +43,7 @@ export class LegislationController {
     @Param('professionId') professionId: string,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     @Param('versionId') versionId: string,
-    @Query('change') change: boolean,
+    @Query('change') change: string,
   ): Promise<void> {
     const profession = await this.professionsService.findWithVersions(
       professionId,
@@ -59,19 +57,14 @@ export class LegislationController {
     this.renderForm(
       res,
       version.legislations[0],
+      version.legislations[1],
       isConfirmed(profession),
-      change,
+      change === 'true',
     );
   }
 
   @Post('/:professionId/versions/:versionId/legislation')
   @Permissions(UserPermission.CreateProfession, UserPermission.EditProfession)
-  @UseFilters(
-    new ValidationExceptionFilter(
-      'admin/professions/legislation',
-      'legislation',
-    ),
-  )
   @BackLink((request: Request) =>
     request.body.change === 'true'
       ? '/admin/professions/:professionId/versions/:versionId/check-your-answers'
@@ -96,11 +89,18 @@ export class LegislationController {
     const submittedValues: LegislationDto = legislationDto;
 
     const updatedLegislation: Legislation = {
-      // We currently need to update one legislation here, but will update multiple in future
       ...version.legislations[0],
       ...{
         name: submittedValues.nationalLegislation,
         url: submittedValues.link,
+      },
+    };
+
+    const updatedSecondLegislation: Legislation = {
+      ...version.legislations[1],
+      ...{
+        name: submittedValues.secondNationalLegislation,
+        url: submittedValues.secondLink,
       },
     };
 
@@ -110,13 +110,20 @@ export class LegislationController {
       return this.renderForm(
         res,
         updatedLegislation,
+        updatedSecondLegislation,
         isConfirmed(profession),
-        submittedValues.change,
+        submittedValues.change === 'true',
         errors,
       );
     }
 
-    version.legislations = [updatedLegislation];
+    const updatedLegislations = [updatedLegislation];
+
+    if (updatedSecondLegislation.name || updatedSecondLegislation.url) {
+      updatedLegislations.push(updatedSecondLegislation);
+    }
+
+    version.legislations = updatedLegislations;
 
     await this.professionVersionsService.save(version);
 
@@ -128,12 +135,14 @@ export class LegislationController {
   private async renderForm(
     res: Response,
     legislation: Legislation,
+    secondLegislation: Legislation,
     isEditing: boolean,
     change: boolean,
     errors: object | undefined = undefined,
   ): Promise<void> {
     const templateArgs: LegislationTemplate = {
       legislation,
+      secondLegislation,
       captionText: ViewUtils.captionText(isEditing),
       change,
       errors,

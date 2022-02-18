@@ -54,7 +54,9 @@
       },
       "legislation": {
         "nationalLegislation": "National legislation",
-        "link": "Legislation link"
+        "link": "Legislation link",
+        "secondNationalLegislation": "Second national legislation (optional)",
+        "secondLink": "Second legislation link (optional)"
       }
     },
     "hint": {
@@ -67,6 +69,9 @@
       "qualificationInformation": {
         "ukRecognitionUrl": "Please enter a link",
         "otherCountriesRecognitionUrl": "Please enter a link"
+      },
+      "legislation": {
+        "link": "Please enter a link"
       }
     },
     "details": {
@@ -169,7 +174,13 @@
           "empty": "Enter the national legislation"
         },
         "link": {
-          "empty": "Enter a link to the registration"
+          "invalid": "Enter a valid link to the legislation"
+        },
+        "secondNationalLegislation": {
+          "empty": "Enter a second national legislation"
+        },
+        "secondLink": {
+          "invalid": "Enter a valid link to the legislation"
         }
       }
     }
