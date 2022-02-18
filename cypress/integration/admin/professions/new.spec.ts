@@ -128,7 +128,7 @@ describe('Adding a new profession', () => {
       // Conditional radio buttons add an additional `aria-expanded` field,
       // so ignore that rule on this page
       cy.checkAccessibility({ 'aria-allowed-attr': { enabled: false } });
-      cy.translate('professions.form.headings.qualificationInformation').then(
+      cy.translate('professions.form.headings.qualifications').then(
         (heading) => {
           cy.get('body').should('contain', heading);
         },
@@ -255,12 +255,12 @@ describe('Adding a new profession', () => {
       );
 
       cy.checkSummaryListRowValue(
-        'professions.form.label.qualificationInformation.qualificationLevel',
+        'professions.form.label.qualifications.qualificationLevel',
         'An example Qualification level',
       );
 
       cy.checkSummaryListRowValue(
-        'professions.form.label.qualificationInformation.methodsToObtainQualification',
+        'professions.form.label.qualifications.methodsToObtainQualification',
         'Another method',
       );
 
@@ -268,40 +268,40 @@ describe('Adding a new profession', () => {
         'professions.methodsToObtainQualification.generalSecondaryEducation',
       ).then((method) => {
         cy.checkSummaryListRowValue(
-          'professions.form.label.qualificationInformation.mostCommonPathToObtainQualification',
+          'professions.form.label.qualifications.mostCommonPathToObtainQualification',
           method,
         );
       });
 
       cy.checkSummaryListRowValue(
-        'professions.form.label.qualificationInformation.duration',
+        'professions.form.label.qualifications.duration',
         '4.0 Years',
       );
 
       cy.translate('app.yes').then((yes) => {
         cy.checkSummaryListRowValue(
-          'professions.form.label.qualificationInformation.mandatoryProfessionalExperience',
+          'professions.form.label.qualifications.mandatoryProfessionalExperience',
           yes,
         );
       });
 
       cy.checkSummaryListRowValue(
-        'professions.form.label.qualificationInformation.ukRecognition',
+        'professions.form.label.qualifications.ukRecognition',
         'Recognition in the UK',
       );
 
       cy.checkSummaryListRowValue(
-        'professions.form.label.qualificationInformation.ukRecognitionUrl',
+        'professions.form.label.qualifications.ukRecognitionUrl',
         'http://example.com/uk',
       );
 
       cy.checkSummaryListRowValue(
-        'professions.form.label.qualificationInformation.otherCountriesRecognition',
+        'professions.form.label.qualifications.otherCountriesRecognition',
         'Recognition in other countries',
       );
 
       cy.checkSummaryListRowValue(
-        'professions.form.label.qualificationInformation.otherCountriesRecognitionUrl',
+        'professions.form.label.qualifications.otherCountriesRecognitionUrl',
         'http://example.com/other',
       );
 

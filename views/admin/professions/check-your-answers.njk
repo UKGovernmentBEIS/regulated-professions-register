@@ -272,14 +272,14 @@
         }}
 
         {% if qualification %}
-        <h2 class="govuk-heading-m">{{ ("professions.form.headings.qualificationInformation" | t) }}</h2>
+        <h2 class="govuk-heading-m">{{ ("professions.form.headings.qualifications" | t) }}</h2>
 
         {{
           govukSummaryList({
             rows: [
               {
                 key: {
-                  text: ("professions.form.label.qualificationInformation.methodsToObtainQualification" | t)
+                  text: ("professions.form.label.qualifications.methodsToObtainQualification" | t)
                 },
                 value: {
                   html: (qualification.methodToObtainQualification | t)
@@ -289,14 +289,14 @@
                     {
                       href: "/admin/professions/" + professionId + "/versions/" + versionId + "/qualifications/edit?change=true",
                       text: ("app.change" | t),
-                      visuallyHiddenText: ("professions.form.label.qualificationInformation.methodsToObtainQualification" | t)
+                      visuallyHiddenText: ("professions.form.label.qualifications.methodsToObtainQualification" | t)
                     }
                   ]
                 }
               },
               {
                 key: {
-                  text: ("professions.form.label.qualificationInformation.mostCommonPathToObtainQualification" | t)
+                  text: ("professions.form.label.qualifications.mostCommonPathToObtainQualification" | t)
                 },
                 value: {
                   html: (qualification.mostCommonPathToObtainQualification | t)
@@ -306,14 +306,14 @@
                     {
                       href: "/admin/professions/" + professionId + "/versions/" + versionId + "/qualifications/edit?change=true",
                       text: ("app.change" | t),
-                      visuallyHiddenText: ("professions.form.label.qualificationInformation.mostCommonPathToObtainQualification" | t)
+                      visuallyHiddenText: ("professions.form.label.qualifications.mostCommonPathToObtainQualification" | t)
                     }
                   ]
                 }
               },
               {
                 key: {
-                  text: ("professions.form.label.qualificationInformation.duration" | t)
+                  text: ("professions.form.label.qualifications.duration" | t)
                 },
                 value: {
                   text: qualification.duration
@@ -323,14 +323,14 @@
                     {
                       href: "/admin/professions/" + professionId + "/versions/" + versionId + "/qualifications/edit?change=true",
                       text: ("app.change" | t),
-                      visuallyHiddenText: ("professions.form.label.qualificationInformation.mostCommonPathToObtainQualification" | t)
+                      visuallyHiddenText: ("professions.form.label.qualifications.mostCommonPathToObtainQualification" | t)
                     }
                   ]
                 }
               },
               {
                 key: {
-                  text: ("professions.form.label.qualificationInformation.mandatoryProfessionalExperience" | t)
+                  text: ("professions.form.label.qualifications.mandatoryProfessionalExperience" | t)
                 },
                 value: {
                   text: qualification.mandatoryProfessionalExperience | t
@@ -340,14 +340,14 @@
                     {
                       href: "/admin/professions/" + professionId + "/versions/" + versionId + "/qualifications/edit?change=true",
                       text: ("app.change" | t),
-                      visuallyHiddenText: ("professions.form.label.qualificationInformation.mandatoryProfessionalExperience" | t)
+                      visuallyHiddenText: ("professions.form.label.qualifications.mandatoryProfessionalExperience" | t)
                     }
                   ]
                 }
               },
               {
                 key: {
-                  text: ("professions.form.label.qualificationInformation.qualificationLevel" | t)
+                  text: ("professions.form.label.qualifications.qualificationLevel" | t)
                 },
                 value: {
                   html: qualification.level | multiline
@@ -357,7 +357,7 @@
                     {
                       href: "/admin/professions/" + professionId + "/versions/" + versionId + "/qualifications/edit?change=true",
                       text: ("app.change" | t),
-                      visuallyHiddenText: ("professions.form.label.qualificationInformation.qualificationLevel" | t)
+                      visuallyHiddenText: ("professions.form.label.qualifications.qualificationLevel" | t)
                     }
                   ]
                 }
@@ -365,7 +365,7 @@
               {
                 classes: ("govuk-visually-hidden" if isUK else ""),
                 key: {
-                  text: ("professions.form.label.qualificationInformation.ukRecognition" | t)
+                  text: ("professions.form.label.qualifications.ukRecognition" | t)
                 },
                 value: {
                   text: qualification.ukRecognition
@@ -375,7 +375,7 @@
                     {
                       href: "/admin/professions/" + professionId + "/versions/" + versionId + "/qualifications/edit?change=true",
                       text: ("app.change" | t),
-                      visuallyHiddenText: ("professions.form.label.qualificationInformation.ukRecognition" | t)
+                      visuallyHiddenText: ("professions.form.label.qualifications.ukRecognition" | t)
                     }
                   ]
                 }
@@ -383,7 +383,7 @@
               {
                 classes: ("govuk-visually-hidden" if isUK else ""),
                 key: {
-                  text: ("professions.form.label.qualificationInformation.ukRecognitionUrl" | t)
+                  text: ("professions.form.label.qualifications.ukRecognitionUrl" | t)
                 },
                 value: {
                    html: qualification.ukRecognitionUrl
@@ -393,14 +393,14 @@
                     {
                       href: "/admin/professions/" + professionId + "/versions/" + versionId + "/qualifications/edit?change=true",
                       text: ("app.change" | t),
-                      visuallyHiddenText: ("professions.form.label.qualificationInformation.ukRecognitionUrl" | t)
+                      visuallyHiddenText: ("professions.form.label.qualifications.ukRecognitionUrl" | t)
                     }
                   ]
                 }
               },
               {
                 key: {
-                  text: ("professions.form.label.qualificationInformation.otherCountriesRecognition" | t)
+                  text: ("professions.form.label.qualifications.otherCountriesRecognition" | t)
                 },
                 value: {
                   text: qualification.otherCountriesRecognition
@@ -410,14 +410,14 @@
                     {
                       href: "/admin/professions/" + professionId + "/versions/" + versionId + "/qualifications/edit?change=true",
                       text: ("app.change" | t),
-                      visuallyHiddenText: ("professions.form.label.qualificationInformation.otherCountriesRecognition" | t)
+                      visuallyHiddenText: ("professions.form.label.qualifications.otherCountriesRecognition" | t)
                     }
                   ]
                 }
               },
               {
                 key: {
-                  text: ("professions.form.label.qualificationInformation.otherCountriesRecognitionUrl" | t)
+                  text: ("professions.form.label.qualifications.otherCountriesRecognitionUrl" | t)
                 },
                 value: {
                   html: qualification.otherCountriesRecognitionUrl
@@ -427,7 +427,7 @@
                     {
                       href: "/admin/professions/" + professionId + "/versions/" + versionId + "/qualifications/edit?change=true",
                       text: ("app.change" | t),
-                      visuallyHiddenText: ("professions.form.label.qualificationInformation.otherCountriesRecognitionUrl" | t)
+                      visuallyHiddenText: ("professions.form.label.qualifications.otherCountriesRecognitionUrl" | t)
                     }
                   ]
                 }

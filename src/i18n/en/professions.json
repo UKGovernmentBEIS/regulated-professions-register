@@ -10,7 +10,7 @@
       "confirmation": "New profession created",
       "amended": "Profession amended",
       "regulatedActivities": "Regulations",
-      "qualificationInformation": "Qualification information",
+      "qualifications": "Qualification information",
       "legislation": "Legislation",
       "edit": "Are you sure you want to amend {professionName}?"
     },
@@ -41,7 +41,7 @@
         "protectedTitles": "Protected titles",
         "regulationUrl": "More about regulated activities and titles"
       },
-      "qualificationInformation": {
+      "qualifications": {
         "qualificationLevel": "Qualification level",
         "methodsToObtainQualification": "Method to obtain qualification",
         "mostCommonPathToObtainQualification": "Most common path to obtain qualification",
@@ -66,7 +66,7 @@
       "registration": {
         "registrationUrl": "Please enter a link"
       },
-      "qualificationInformation": {
+      "qualifications": {
         "ukRecognitionUrl": "Please enter a link",
         "otherCountriesRecognitionUrl": "Please enter a link"
       },
