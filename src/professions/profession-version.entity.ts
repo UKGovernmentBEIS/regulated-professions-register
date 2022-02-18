@@ -38,7 +38,7 @@ export class ProfessionVersion {
   @ManyToOne(() => Profession, (profession) => profession.versions)
   profession: Profession;
 
-  @ManyToOne(() => User, (user) => user.organisationVersions)
+  @ManyToOne(() => User, (user) => user.professionVersions)
   user: User;
 
   @Column({

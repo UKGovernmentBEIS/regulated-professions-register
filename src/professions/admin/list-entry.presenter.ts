@@ -1,9 +1,9 @@
 import { I18nService } from 'nestjs-i18n';
 import { TableCell } from '../../common/interfaces/table-cell';
 import { TableRow } from '../../common/interfaces/table-row';
-import { formatDate } from '../../common/utils';
 import { stringifyNations } from '../../nations/helpers/stringifyNations';
 import { Nation } from '../../nations/nation';
+import { ProfessionPresenter } from '../presenters/profession.presenter';
 import { Profession } from '../profession.entity';
 import { ProfessionsPresenterView } from './professions.presenter';
 
@@ -22,6 +22,7 @@ const fields = {
     'profession',
     'nations',
     'lastModified',
+    'changedBy',
     'organisation',
     'industry',
     'status',
@@ -60,12 +61,17 @@ export class ListEntryPresenter {
   ) {}
 
   async tableRow(contents: ProfessionsPresenterView): Promise<TableRow> {
+    const presenter = new ProfessionPresenter(
+      this.profession,
+      this.i18nService,
+    );
+
     const nations = await stringifyNations(
       this.profession.occupationLocations.map((code) => Nation.find(code)),
       this.i18nService,
     );
 
-    const instrustries = (
+    const industries = (
       await Promise.all(
         this.profession.industries.map(
           (industry) =>
@@ -83,14 +89,14 @@ export class ListEntryPresenter {
     const entries: { [K in Field]: TableCell } = {
       profession: { text: this.profession.name },
       nations: { text: nations },
-      lastModified: { text: formatDate(this.profession.updated_at) },
-      changedBy: { text: 'Placeholder name' },
+      lastModified: { text: presenter.lastModified },
+      changedBy: { text: presenter.changedBy },
       organisation: {
         text: this.profession.organisation
           ? this.profession.organisation.name
           : '',
       },
-      industry: { text: instrustries },
+      industry: { text: industries },
       status: {
         text: await this.i18nService.translate(
           `professions.admin.status.${this.profession.status}`,

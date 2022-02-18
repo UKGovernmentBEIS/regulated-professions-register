@@ -1,3 +1,5 @@
+import { format } from 'date-fns';
+
 describe('Editing an existing profession', () => {
   context('when I am not logged in', () => {
     it('I am prompted to log in', () => {
@@ -21,6 +23,12 @@ describe('Editing an existing profession', () => {
         });
 
       cy.checkAccessibility();
+
+      cy.translate('professions.admin.changed.by').then((lastUpdatedText) => {
+        cy.get('[data-cy=changed-by-text]').should('contain', lastUpdatedText);
+      });
+      cy.get('[data-cy=changed-by-user]').should('contain', '');
+
       cy.translate('professions.admin.editProfession').then((buttonText) => {
         cy.contains(buttonText).click();
       });
@@ -214,6 +222,12 @@ describe('Editing an existing profession', () => {
       });
 
       cy.checkAccessibility();
+      cy.get('[data-cy=changed-by-user]').should('contain', 'Editor');
+      cy.get('[data-cy=last-modified]').should(
+        'contain',
+        format(new Date(), 'dd-MM-yyyy'),
+      );
+
       cy.translate('professions.admin.update.confirmation.heading').then(
         (flashHeading) => {
           cy.translate('professions.admin.update.confirmation.body', {

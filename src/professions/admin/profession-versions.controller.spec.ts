@@ -7,7 +7,6 @@ import { Organisation } from '../../organisations/organisation.entity';
 import QualificationPresenter from '../../qualifications/presenters/qualification.presenter';
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 import industryFactory from '../../testutils/factories/industry';
-import legislationFactory from '../../testutils/factories/legislation';
 import professionFactory from '../../testutils/factories/profession';
 import professionVersionFactory from '../../testutils/factories/profession-version';
 import { translationOf } from '../../testutils/translation-of';
@@ -18,8 +17,10 @@ import { ProfessionVersionsController } from './profession-versions.controller';
 import { ProfessionVersionsService } from '../profession-versions.service';
 import { ProfessionsService } from '../professions.service';
 import { Profession } from '../profession.entity';
+import { ProfessionPresenter } from '../presenters/profession.presenter';
 
 jest.mock('../../organisations/organisation.entity');
+jest.mock('../presenters/profession.presenter');
 
 describe('ProfessionVersionsController', () => {
   let controller: ProfessionVersionsController;
@@ -71,23 +72,7 @@ describe('ProfessionVersionsController', () => {
 
   describe('create', () => {
     it('creates a copy of the latest version of the Profession and its Qualification', async () => {
-      const legislation = legislationFactory.build();
-
-      const version = professionVersionFactory.build();
-
-      const updatedQualification = {
-        ...version.qualification,
-        id: undefined,
-        created_at: undefined,
-        updated_at: undefined,
-      };
-
-      const updatedLegislation = {
-        ...legislation,
-        id: undefined,
-        created_at: undefined,
-        updated_at: undefined,
-      };
+      const previousVersion = professionVersionFactory.build();
       const user = userFactory.build();
 
       const res = createMock<Response>();
@@ -98,27 +83,21 @@ describe('ProfessionVersionsController', () => {
       });
 
       professionVersionsService.findLatestForProfessionId.mockResolvedValue(
-        version,
+        previousVersion,
       );
-      professionVersionsService.save.mockResolvedValue(version);
+
+      const newVersion = professionVersionFactory.build();
+      professionVersionsService.create.mockResolvedValue(newVersion);
 
       await controller.create(res, req, 'some-uuid');
 
-      expect(professionVersionsService.save).toHaveBeenCalledWith(
-        expect.objectContaining({
-          id: undefined,
-          status: undefined,
-          created_at: undefined,
-          updated_at: undefined,
-          qualification: updatedQualification,
-          legislations: [updatedLegislation],
-          profession: version.profession,
-          user: user,
-        }),
+      expect(professionVersionsService.create).toHaveBeenCalledWith(
+        previousVersion,
+        user,
       );
 
       expect(res.redirect).toHaveBeenCalledWith(
-        `/admin/professions/${version.profession.id}/versions/${version.id}/check-your-answers?edit=true`,
+        `/admin/professions/${newVersion.profession.id}/versions/${newVersion.id}/check-your-answers?edit=true`,
       );
     });
   });
@@ -139,6 +118,8 @@ describe('ProfessionVersionsController', () => {
         version,
       );
 
+      (ProfessionPresenter as jest.Mock).mockReturnValue({});
+
       (Organisation.withLatestLiveVersion as jest.Mock).mockImplementation(
         () => profession.organisation,
       );
@@ -147,6 +128,7 @@ describe('ProfessionVersionsController', () => {
 
       expect(result).toEqual({
         profession: professionWithVersion,
+        presenter: {},
         qualification: new QualificationPresenter(
           professionWithVersion.qualification,
         ),
@@ -190,6 +172,8 @@ describe('ProfessionVersionsController', () => {
           version,
         );
 
+        (ProfessionPresenter as jest.Mock).mockReturnValue({});
+
         (Organisation.withLatestLiveVersion as jest.Mock).mockImplementation(
           () => profession.organisation,
         );
@@ -198,6 +182,7 @@ describe('ProfessionVersionsController', () => {
 
         expect(result).toEqual({
           profession: professionWithVersion,
+          presenter: {},
           qualification: null,
           nations: [translationOf('nations.england')],
           industries: [translationOf('industries.example')],
@@ -213,12 +198,26 @@ describe('ProfessionVersionsController', () => {
       const version = professionVersionFactory.build({
         profession,
       });
+      const user = userFactory.build();
+
+      const req = createMock<RequestWithAppSession>({
+        appSession: {
+          user: user as DeepPartial<any>,
+        },
+      });
 
       professionVersionsService.findByIdWithProfession.mockResolvedValue(
         version,
       );
 
-      const result = await controller.publish(profession.id, version.id);
+      const newVersion = professionVersionFactory.build({
+        profession,
+        user,
+      });
+
+      professionVersionsService.create.mockResolvedValue(newVersion);
+
+      const result = await controller.publish(req, profession.id, version.id);
 
       expect(result).toEqual(profession);
 
@@ -226,7 +225,14 @@ describe('ProfessionVersionsController', () => {
         professionVersionsService.findByIdWithProfession,
       ).toHaveBeenCalledWith(profession.id, version.id);
 
-      expect(professionVersionsService.publish).toHaveBeenCalledWith(version);
+      expect(professionVersionsService.create).toHaveBeenCalledWith(
+        version,
+        user,
+      );
+
+      expect(professionVersionsService.publish).toHaveBeenCalledWith(
+        newVersion,
+      );
     });
   });
 });

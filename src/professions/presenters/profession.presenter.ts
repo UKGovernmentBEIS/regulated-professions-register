@@ -4,6 +4,7 @@ import { SummaryList } from '../../common/interfaces/summary-list';
 import { stringifyNations } from '../../nations/helpers/stringifyNations';
 import { Nation } from '../../nations/nation';
 import { formatMultilineString } from '../../helpers/format-multiline-string.helper';
+import { formatDate } from '../../common/utils';
 
 export class ProfessionPresenter {
   constructor(
@@ -49,6 +50,16 @@ export class ProfessionPresenter {
         },
       ],
     };
+  }
+
+  get changedBy(): string {
+    return this.profession.changedByUser
+      ? this.profession.changedByUser.name
+      : '';
+  }
+
+  get lastModified(): string {
+    return formatDate(this.profession.lastModified);
   }
 
   public async occupationLocations(): Promise<string> {

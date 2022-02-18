@@ -310,6 +310,10 @@
       "live": "Live",
       "draft": "Draft"
     },
+    "changed": {
+      "by": "Changed by",
+      "on": "Last updated"
+    },
     "viewDetails": "View details"
   },
   "search": {

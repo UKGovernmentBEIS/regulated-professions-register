@@ -52,9 +52,15 @@ describe('Listing professions', () => {
         cy.get('tr').eq(0).should('contain', status);
       });
 
+      cy.translate('professions.admin.tableHeading.lastModified').then(
+        (lastModified) => {
+          cy.get('tr').eq(0).should('contain', lastModified);
+        },
+      );
+
       cy.translate('professions.admin.tableHeading.changedBy').then(
         (changedBy) => {
-          cy.get('tr').eq(0).should('not.contain', changedBy);
+          cy.get('tr').eq(0).should('contain', changedBy);
         },
       );
     });
@@ -173,6 +179,12 @@ describe('Listing professions', () => {
       cy.translate('professions.admin.tableHeading.industry').then(
         (industry) => {
           cy.get('tr').eq(0).should('not.contain', industry);
+        },
+      );
+
+      cy.translate('professions.admin.tableHeading.lastModified').then(
+        (lastModified) => {
+          cy.get('tr').eq(0).should('contain', lastModified);
         },
       );
 

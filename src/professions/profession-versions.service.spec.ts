@@ -17,6 +17,9 @@ import {
 } from './profession-version.entity';
 import professionFactory from '../testutils/factories/profession';
 import { Profession } from './profession.entity';
+import legislationFactory from '../testutils/factories/legislation';
+import userFactory from '../testutils/factories/user';
+import qualificationFactory from '../testutils/factories/qualification';
 
 describe('ProfessionVersionsService', () => {
   let service: ProfessionVersionsService;
@@ -88,6 +91,51 @@ describe('ProfessionVersionsService', () => {
 
       expect(result).toEqual(updatedVersion);
       expect(repoSpy).toHaveBeenCalledWith(updatedVersion);
+    });
+  });
+
+  describe('create', () => {
+    it('creates a copy of an existing version and sets the user', async () => {
+      const legislation = legislationFactory.build();
+      const qualification = qualificationFactory.build();
+      const profession = professionFactory.build();
+
+      const previousVersion = professionVersionFactory.build({
+        profession: profession,
+        legislations: [legislation],
+        qualification: qualification,
+      });
+
+      const newQualification = {
+        ...previousVersion.qualification,
+        id: undefined,
+        created_at: undefined,
+        updated_at: undefined,
+      };
+
+      const newLegislation = {
+        ...legislation,
+        id: undefined,
+        created_at: undefined,
+        updated_at: undefined,
+      };
+      const user = userFactory.build();
+
+      const repoSpy = jest.spyOn(repo, 'save');
+
+      await service.create(previousVersion, user);
+
+      expect(repoSpy).toHaveBeenCalledWith({
+        ...previousVersion,
+        id: undefined,
+        status: undefined,
+        created_at: undefined,
+        updated_at: undefined,
+        qualification: newQualification,
+        legislations: [newLegislation],
+        profession: profession,
+        user: user,
+      });
     });
   });
 
@@ -257,6 +305,7 @@ describe('ProfessionVersionsService', () => {
         'professionVersion.profession',
         'professionVersion.industries',
         'profession.organisation',
+        'professionVersion.user',
         'professionVersion.qualification',
         'professionVersion.legislations',
       ]);
@@ -301,6 +350,7 @@ describe('ProfessionVersionsService', () => {
         'professionVersion.profession',
         'profession.organisation',
         'professionVersion.industries',
+        'professionVersion.user',
         'professionVersion.qualification',
         'professionVersion.legislations',
       ]);
@@ -344,6 +394,7 @@ describe('ProfessionVersionsService', () => {
         'professionVersion.profession',
         'professionVersion.industries',
         'profession.organisation',
+        'professionVersion.user',
         'professionVersion.qualification',
         'professionVersion.legislations',
       ]);
@@ -387,6 +438,7 @@ describe('ProfessionVersionsService', () => {
         'professionVersion.profession',
         'professionVersion.industries',
         'profession.organisation',
+        'professionVersion.user',
         'professionVersion.qualification',
         'professionVersion.legislations',
       ]);

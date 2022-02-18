@@ -6,6 +6,7 @@ import {
 import industryFactory from './industry';
 import organisationFactory from './organisation';
 import qualificationFactory from './qualification';
+import userFactory from './user';
 
 class ProfessionFactory extends Factory<Profession> {
   justCreated(id: string) {
@@ -52,6 +53,8 @@ export default ProfessionFactory.define(({ sequence }) => ({
   protectedTitles: 'Example titles',
   regulationUrl: 'http://example.com/regulations',
   versions: [],
+  changedByUser: userFactory.build(),
+  lastModified: new Date(),
   updated_at: new Date(),
   versionId: 'version-id',
 }));
