@@ -8,7 +8,7 @@ import professionFactory from '../../testutils/factories/profession';
 import { ProfessionsService } from '../professions.service';
 import { MethodToObtainQualificationRadioButtonsPresenter } from './method-to-obtain-qualification-radio-buttons.presenter';
 import { YesNoRadioButtonArgsPresenter } from './yes-no-radio-buttons-presenter';
-import { QualificationInformationDto } from './dto/qualification-information.dto';
+import { QualificationsDto } from './dto/qualifications.dto';
 import { QualificationsController } from './qualifications.controller';
 import { ProfessionVersionsService } from '../profession-versions.service';
 import { isUK } from '../../helpers/nations.helper';
@@ -109,7 +109,7 @@ describe(QualificationsController, () => {
             qualification: qualificationFactory.build(),
           });
 
-          const dto: QualificationInformationDto = {
+          const dto: QualificationsDto = {
             level: 'Qualification level',
             methodToObtainQualification: MethodToObtain.DegreeLevel,
             otherMethodToObtainQualification: '',
@@ -165,7 +165,7 @@ describe(QualificationsController, () => {
             qualification: qualificationFactory.build(),
           });
 
-          const dto: QualificationInformationDto = {
+          const dto: QualificationsDto = {
             level: 'Qualification level',
             methodToObtainQualification: MethodToObtain.DegreeLevel,
             otherMethodToObtainQualification: '',
@@ -222,7 +222,7 @@ describe(QualificationsController, () => {
           qualification: qualificationFactory.build(),
         });
 
-        const dto: QualificationInformationDto = {
+        const dto: QualificationsDto = {
           level: undefined,
           methodToObtainQualification: undefined,
           otherMethodToObtainQualification: '',

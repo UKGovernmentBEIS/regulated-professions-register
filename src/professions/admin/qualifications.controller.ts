@@ -19,7 +19,7 @@ import { ValidationFailedError } from '../../common/validation/validation-failed
 import { ProfessionsService } from '../professions.service';
 import { MethodToObtainQualificationRadioButtonsPresenter } from './method-to-obtain-qualification-radio-buttons.presenter';
 import { YesNoRadioButtonArgsPresenter } from './yes-no-radio-buttons-presenter';
-import { QualificationInformationDto } from './dto/qualification-information.dto';
+import { QualificationsDto } from './dto/qualifications.dto';
 import { QualificationInformationTemplate } from './interfaces/qualification-information.template';
 import { BackLink } from '../../common/decorators/back-link.decorator';
 import ViewUtils from './viewUtils';
@@ -78,11 +78,11 @@ export class QualificationsController {
     @Res() res: Response,
     @Param('professionId') professionId: string,
     @Param('versionId') versionId: string,
-    @Body() qualificationInformationDto,
+    @Body() qualificationsDto,
   ): Promise<void> {
     const validator = await Validator.validate(
-      QualificationInformationDto,
-      qualificationInformationDto,
+      QualificationsDto,
+      qualificationsDto,
     );
 
     const profession = await this.professionsService.findWithVersions(
@@ -93,8 +93,7 @@ export class QualificationsController {
       versionId,
     );
 
-    const submittedValues: QualificationInformationDto =
-      qualificationInformationDto;
+    const submittedValues: QualificationsDto = qualificationsDto;
 
     const mandatoryProfessionalExperience =
       submittedValues.mandatoryProfessionalExperience === undefined

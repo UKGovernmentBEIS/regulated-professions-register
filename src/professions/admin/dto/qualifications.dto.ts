@@ -1,7 +1,7 @@
 import { IsNotEmpty, ValidateIf, IsUrl } from 'class-validator';
 import { MethodToObtain } from '../../../qualifications/qualification.entity';
 
-export class QualificationInformationDto {
+export class QualificationsDto {
   @IsNotEmpty({ message: 'professions.form.errors.qualification.level.empty' })
   level: string;
 
@@ -11,7 +11,7 @@ export class QualificationInformationDto {
   methodToObtainQualification: MethodToObtain;
 
   @ValidateIf(
-    (dto: QualificationInformationDto) =>
+    (dto: QualificationsDto) =>
       dto.methodToObtainQualification === MethodToObtain.Others,
   )
   @IsNotEmpty({
@@ -26,7 +26,7 @@ export class QualificationInformationDto {
   mostCommonPathToObtainQualification: MethodToObtain;
 
   @ValidateIf(
-    (dto: QualificationInformationDto) =>
+    (dto: QualificationsDto) =>
       dto.mostCommonPathToObtainQualification === MethodToObtain.Others,
   )
   @IsNotEmpty({
