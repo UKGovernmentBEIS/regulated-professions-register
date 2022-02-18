@@ -2,11 +2,9 @@ import { createMock, DeepMocked } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Response } from 'express';
 import { I18nService } from 'nestjs-i18n';
-import { MethodToObtain } from '../../qualifications/qualification.entity';
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 import professionFactory from '../../testutils/factories/profession';
 import { ProfessionsService } from '../professions.service';
-import { MethodToObtainQualificationRadioButtonsPresenter } from './method-to-obtain-qualification-radio-buttons.presenter';
 import { YesNoRadioButtonArgsPresenter } from './yes-no-radio-buttons-presenter';
 import { QualificationsDto } from './dto/qualifications.dto';
 import { QualificationsController } from './qualifications.controller';
@@ -59,22 +57,6 @@ describe(QualificationsController, () => {
         qualification: qualificationFactory.build(),
       });
 
-      const methodToObtainQualificationRadioButtonArgs =
-        await new MethodToObtainQualificationRadioButtonsPresenter(
-          version.qualification.methodToObtainDeprecated,
-          undefined,
-          undefined,
-          i18nService,
-        ).radioButtonArgs('methodToObtainQualification');
-
-      const mostCommonPathToObtainQualificationRadioButtonArgs =
-        await new MethodToObtainQualificationRadioButtonsPresenter(
-          version.qualification.commonPathToObtainDeprecated,
-          undefined,
-          undefined,
-          i18nService,
-        ).radioButtonArgs('mostCommonPathToObtainQualification');
-
       professionsService.findWithVersions.mockResolvedValue(profession);
       professionVersionsService.findWithProfession.mockResolvedValue(version);
       (isUK as jest.Mock).mockImplementation(() => false);
@@ -84,8 +66,18 @@ describe(QualificationsController, () => {
       expect(response.render).toHaveBeenCalledWith(
         'admin/professions/qualifications',
         expect.objectContaining({
-          methodToObtainQualificationRadioButtonArgs,
-          mostCommonPathToObtainQualificationRadioButtonArgs,
+          level: profession.qualification.level,
+          routesToObtain: profession.qualification.routesToObtain,
+          mostCommonRouteToObtain:
+            profession.qualification.mostCommonRouteToObtain,
+          duration: profession.qualification.educationDuration,
+          captionText: 'professions.form.captions.edit',
+          ukRecognition: profession.qualification.ukRecognition,
+          ukRecognitionUrl: profession.qualification.ukRecognitionUrl,
+          otherCountriesRecognition:
+            profession.qualification.otherCountriesRecognition,
+          otherCountriesRecognitionUrl:
+            profession.qualification.otherCountriesRecognitionUrl,
           mandatoryProfessionalExperienceRadioButtonArgs:
             await new YesNoRadioButtonArgsPresenter(
               version.qualification.mandatoryProfessionalExperience,
@@ -111,10 +103,8 @@ describe(QualificationsController, () => {
 
           const dto: QualificationsDto = {
             level: 'Qualification level',
-            methodToObtainQualification: MethodToObtain.DegreeLevel,
-            otherMethodToObtainQualification: '',
-            mostCommonPathToObtainQualification: MethodToObtain.DegreeLevel,
-            otherMostCommonPathToObtainQualification: '',
+            routesToObtain: 'General secondary education',
+            mostCommonRouteToObtain: 'General secondary education',
             duration: '3.0 Years',
             mandatoryProfessionalExperience: '1',
             ukRecognition: 'ukRecognition',
@@ -134,13 +124,11 @@ describe(QualificationsController, () => {
           expect(professionVersionsService.save).toHaveBeenCalledWith(
             expect.objectContaining({
               qualification: expect.objectContaining({
-                commonPathToObtainDeprecated: 'degreeLevel',
-                routesToObtain: '',
-                mostCommonRouteToObtain: '',
+                routesToObtain: 'General secondary education',
+                mostCommonRouteToObtain: 'General secondary education',
                 educationDuration: '3.0 Years',
                 level: 'Qualification level',
                 mandatoryProfessionalExperience: true,
-                methodToObtainDeprecated: 'degreeLevel',
                 ukRecognition: 'ukRecognition',
                 ukRecognitionUrl: 'http://example.com/uk',
                 otherCountriesRecognition: 'otherCountriesRecognition',
@@ -167,10 +155,8 @@ describe(QualificationsController, () => {
 
           const dto: QualificationsDto = {
             level: 'Qualification level',
-            methodToObtainQualification: MethodToObtain.DegreeLevel,
-            otherMethodToObtainQualification: '',
-            mostCommonPathToObtainQualification: MethodToObtain.DegreeLevel,
-            otherMostCommonPathToObtainQualification: '',
+            routesToObtain: 'General secondary education',
+            mostCommonRouteToObtain: 'General secondary education',
             duration: '3.0 Years',
             mandatoryProfessionalExperience: '1',
             ukRecognition: 'ukRecognition',
@@ -190,13 +176,11 @@ describe(QualificationsController, () => {
           expect(professionVersionsService.save).toHaveBeenCalledWith(
             expect.objectContaining({
               qualification: expect.objectContaining({
-                commonPathToObtainDeprecated: 'degreeLevel',
-                routesToObtain: '',
-                mostCommonRouteToObtain: '',
+                routesToObtain: 'General secondary education',
+                mostCommonRouteToObtain: 'General secondary education',
                 educationDuration: '3.0 Years',
                 level: 'Qualification level',
                 mandatoryProfessionalExperience: true,
-                methodToObtainDeprecated: 'degreeLevel',
                 ukRecognition: 'ukRecognition',
                 ukRecognitionUrl: 'http://example.com/uk',
                 otherCountriesRecognition: 'otherCountriesRecognition',
@@ -224,10 +208,8 @@ describe(QualificationsController, () => {
 
         const dto: QualificationsDto = {
           level: undefined,
-          methodToObtainQualification: undefined,
-          otherMethodToObtainQualification: '',
-          mostCommonPathToObtainQualification: undefined,
-          otherMostCommonPathToObtainQualification: '',
+          routesToObtain: '',
+          mostCommonRouteToObtain: '',
           duration: '',
           mandatoryProfessionalExperience: undefined,
           change: false,
@@ -259,14 +241,14 @@ describe(QualificationsController, () => {
               mandatoryProfessionalExperience: {
                 text: 'professions.form.errors.qualification.mandatoryProfessionalExperience.empty',
               },
-              methodToObtainQualification: {
-                text: 'professions.form.errors.qualification.methodToObtain.empty',
+              routesToObtain: {
+                text: 'professions.form.errors.qualification.routesToObtain.empty',
               },
               duration: {
                 text: 'professions.form.errors.qualification.duration.empty',
               },
-              mostCommonPathToObtainQualification: {
-                text: 'professions.form.errors.qualification.mostCommonPathToObtain.empty',
+              mostCommonRouteToObtain: {
+                text: 'professions.form.errors.qualification.mostCommonRouteToObtain.empty',
               },
               ukRecognitionUrl: {
                 text: 'professions.form.errors.qualification.ukRecognitionUrl.invalid',

@@ -193,9 +193,8 @@ describe('Editing an existing profession', () => {
         'professions.form.label.qualifications.qualificationLevel',
         'Change',
       );
-      // Conditional radio buttons add an additional `aria-expanded` field,
-      // so ignore that rule on this page
-      cy.checkAccessibility({ 'aria-allowed-attr': { enabled: false } });
+
+      cy.checkAccessibility();
       cy.translate('professions.form.captions.edit').then((editCaption) => {
         cy.get('body').contains(editCaption);
       });
@@ -331,7 +330,7 @@ describe('Editing an existing profession', () => {
       );
 
       cy.clickSummaryListRowAction(
-        'professions.form.label.qualifications.methodsToObtainQualification',
+        'professions.form.label.qualifications.routesToObtain',
         'Change',
       );
 
@@ -371,7 +370,7 @@ describe('Editing an existing profession', () => {
       );
 
       cy.clickSummaryListRowAction(
-        'professions.form.label.qualifications.methodsToObtainQualification',
+        'professions.form.label.qualifications.routesToObtain',
         'Change',
       );
 

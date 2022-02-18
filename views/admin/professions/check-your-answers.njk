@@ -279,34 +279,34 @@
             rows: [
               {
                 key: {
-                  text: ("professions.form.label.qualifications.methodsToObtainQualification" | t)
+                  text: ("professions.form.label.qualifications.routesToObtain" | t)
                 },
                 value: {
-                  html: (qualification.methodToObtainQualification | t)
+                  html: qualification.routesToObtain
                 },
                 actions: {
                   items: [
                     {
                       href: "/admin/professions/" + professionId + "/versions/" + versionId + "/qualifications/edit?change=true",
                       text: ("app.change" | t),
-                      visuallyHiddenText: ("professions.form.label.qualifications.methodsToObtainQualification" | t)
+                      visuallyHiddenText: ("professions.form.label.qualifications.routesToObtain" | t)
                     }
                   ]
                 }
               },
               {
                 key: {
-                  text: ("professions.form.label.qualifications.mostCommonPathToObtainQualification" | t)
+                  text: ("professions.form.label.qualifications.mostCommonRouteToObtain" | t)
                 },
                 value: {
-                  html: (qualification.mostCommonPathToObtainQualification | t)
+                  html: qualification.mostCommonRouteToObtain
                 },
                 actions: {
                   items: [
                     {
                       href: "/admin/professions/" + professionId + "/versions/" + versionId + "/qualifications/edit?change=true",
                       text: ("app.change" | t),
-                      visuallyHiddenText: ("professions.form.label.qualifications.mostCommonPathToObtainQualification" | t)
+                      visuallyHiddenText: ("professions.form.label.qualifications.mostCommonRouteToObtain" | t)
                     }
                   ]
                 }

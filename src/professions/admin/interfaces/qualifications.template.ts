@@ -2,8 +2,8 @@ import { RadioButtonArgs } from '../../../common/interfaces/radio-button-args.in
 
 export interface QualificationsTemplate {
   level: string;
-  methodToObtainQualificationRadioButtonArgs: RadioButtonArgs[];
-  mostCommonPathToObtainQualificationRadioButtonArgs: RadioButtonArgs[];
+  routesToObtain: string;
+  mostCommonRouteToObtain: string;
   duration: string;
   mandatoryProfessionalExperienceRadioButtonArgs: RadioButtonArgs[];
   ukRecognition: string;

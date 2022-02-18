@@ -17,7 +17,6 @@ import { Qualification } from '../../qualifications/qualification.entity';
 import { UserPermission } from '../../users/user-permission';
 import { ValidationFailedError } from '../../common/validation/validation-failed.error';
 import { ProfessionsService } from '../professions.service';
-import { MethodToObtainQualificationRadioButtonsPresenter } from './method-to-obtain-qualification-radio-buttons.presenter';
 import { YesNoRadioButtonArgsPresenter } from './yes-no-radio-buttons-presenter';
 import { QualificationsDto } from './dto/qualifications.dto';
 import { QualificationsTemplate } from './interfaces/qualifications.template';
@@ -104,12 +103,8 @@ export class QualificationsController {
       ...version.qualification,
       ...{
         level: submittedValues.level,
-        methodToObtainDeprecated: submittedValues.methodToObtainQualification,
-        routesToObtain: submittedValues.otherMethodToObtainQualification,
-        commonPathToObtainDeprecated:
-          submittedValues.mostCommonPathToObtainQualification,
-        mostCommonRouteToObtain:
-          submittedValues.otherMostCommonPathToObtainQualification,
+        routesToObtain: submittedValues.routesToObtain,
+        mostCommonRouteToObtain: submittedValues.mostCommonRouteToObtain,
         educationDuration: submittedValues.duration,
         mandatoryProfessionalExperience,
         ukRecognition: submittedValues.ukRecognition,
@@ -156,22 +151,6 @@ export class QualificationsController {
     change: boolean,
     errors: object | undefined = undefined,
   ) {
-    const mostCommonPathToObtainQualificationRadioButtonArgs =
-      await new MethodToObtainQualificationRadioButtonsPresenter(
-        qualification?.commonPathToObtainDeprecated,
-        qualification?.mostCommonRouteToObtain,
-        errors,
-        this.i18nService,
-      ).radioButtonArgs('mostCommonPathToObtainQualification');
-
-    const methodToObtainQualificationRadioButtonArgs =
-      await new MethodToObtainQualificationRadioButtonsPresenter(
-        qualification?.methodToObtainDeprecated,
-        qualification?.routesToObtain,
-        errors,
-        this.i18nService,
-      ).radioButtonArgs('methodToObtainQualification');
-
     const mandatoryProfessionalExperienceRadioButtonArgs =
       await new YesNoRadioButtonArgsPresenter(
         qualification?.mandatoryProfessionalExperience,
@@ -180,8 +159,8 @@ export class QualificationsController {
 
     const templateArgs: QualificationsTemplate = {
       level: qualification?.level,
-      methodToObtainQualificationRadioButtonArgs,
-      mostCommonPathToObtainQualificationRadioButtonArgs,
+      routesToObtain: qualification?.routesToObtain,
+      mostCommonRouteToObtain: qualification?.mostCommonRouteToObtain,
       mandatoryProfessionalExperienceRadioButtonArgs,
       duration: qualification?.educationDuration,
       captionText: ViewUtils.captionText(isEditing),

@@ -1,4 +1,3 @@
-import { MethodToObtain } from '../qualification.entity';
 import qualificationFactory from '../../testutils/factories/qualification';
 import QualificationPresenter from './qualification.presenter';
 import { formatMultilineString } from '../../helpers/format-multiline-string.helper';
@@ -7,75 +6,37 @@ import { multilineOf } from '../../testutils/multiline-of';
 jest.mock('../../helpers/format-multiline-string.helper');
 
 describe(QualificationPresenter, () => {
-  describe('methodToObtainQualification', () => {
-    describe('when the method to ObtainQualification is "others"', () => {
-      it('returns the other text value', () => {
-        (formatMultilineString as jest.Mock).mockImplementation(multilineOf);
+  describe('routesToObtain', () => {
+    it('returns the a multiline string of the text value', () => {
+      (formatMultilineString as jest.Mock).mockImplementation(multilineOf);
 
-        const qualification = qualificationFactory.build({
-          methodToObtainDeprecated: MethodToObtain.Others,
-          routesToObtain: 'other value',
-        });
-
-        const presenter = new QualificationPresenter(qualification);
-
-        expect(presenter.methodToObtainQualification).toEqual(
-          multilineOf('other value'),
-        );
-
-        expect(formatMultilineString).toBeCalledWith('other value');
+      const qualification = qualificationFactory.build({
+        routesToObtain: 'other value',
       });
-    });
 
-    describe('when the method to ObtainQualification is not "others"', () => {
-      it('returns the localisation id for the selected method', () => {
-        const qualification = qualificationFactory.build({
-          methodToObtainDeprecated: MethodToObtain.DegreeLevel,
-          routesToObtain: 'other value',
-        });
+      const presenter = new QualificationPresenter(qualification);
 
-        const presenter = new QualificationPresenter(qualification);
+      expect(presenter.routesToObtain).toEqual(multilineOf('other value'));
 
-        expect(presenter.methodToObtainQualification).toEqual(
-          'professions.methodsToObtainQualification.degreeLevel',
-        );
-      });
+      expect(formatMultilineString).toBeCalledWith('other value');
     });
   });
 
-  describe('mostCommonPathToObtainQualification', () => {
-    describe('when the method to ObtainQualification is "others"', () => {
-      it('returns the other text value', () => {
-        (formatMultilineString as jest.Mock).mockImplementation(multilineOf);
+  describe('mostCommonRouteToObtain', () => {
+    it('returns the a multiline string of the text value', () => {
+      (formatMultilineString as jest.Mock).mockImplementation(multilineOf);
 
-        const qualification = qualificationFactory.build({
-          commonPathToObtainDeprecated: MethodToObtain.Others,
-          mostCommonRouteToObtain: 'other value',
-        });
-
-        const presenter = new QualificationPresenter(qualification);
-
-        expect(presenter.mostCommonPathToObtainQualification).toEqual(
-          multilineOf('other value'),
-        );
-
-        expect(formatMultilineString).toBeCalledWith('other value');
+      const qualification = qualificationFactory.build({
+        mostCommonRouteToObtain: 'other value',
       });
-    });
 
-    describe('when the method to ObtainQualification is not "others"', () => {
-      it('returns the localisation id for the selected method', () => {
-        const qualification = qualificationFactory.build({
-          commonPathToObtainDeprecated: MethodToObtain.DegreeLevel,
-          mostCommonRouteToObtain: 'other value',
-        });
+      const presenter = new QualificationPresenter(qualification);
 
-        const presenter = new QualificationPresenter(qualification);
+      expect(presenter.mostCommonRouteToObtain).toEqual(
+        multilineOf('other value'),
+      );
 
-        expect(presenter.mostCommonPathToObtainQualification).toEqual(
-          'professions.methodsToObtainQualification.degreeLevel',
-        );
-      });
+      expect(formatMultilineString).toBeCalledWith('other value');
     });
   });
 

@@ -1,20 +1,18 @@
 import { formatMultilineString } from '../../helpers/format-multiline-string.helper';
-import { MethodToObtain, Qualification } from '../qualification.entity';
+import { Qualification } from '../qualification.entity';
 import { escape } from '../../helpers/escape.helper';
 export default class QualificationPresenter {
   constructor(private readonly qualification: Qualification) {}
 
   readonly level = this.qualification.level;
 
-  readonly methodToObtainQualification: string =
-    this.qualification.methodToObtainDeprecated === MethodToObtain.Others
-      ? formatMultilineString(this.qualification.routesToObtain)
-      : `professions.methodsToObtainQualification.${this.qualification.methodToObtainDeprecated}`;
+  readonly routesToObtain = formatMultilineString(
+    this.qualification.routesToObtain,
+  );
 
-  readonly mostCommonPathToObtainQualification: string =
-    this.qualification.commonPathToObtainDeprecated === MethodToObtain.Others
-      ? formatMultilineString(this.qualification.mostCommonRouteToObtain)
-      : `professions.methodsToObtainQualification.${this.qualification.commonPathToObtainDeprecated}`;
+  readonly mostCommonRouteToObtain = formatMultilineString(
+    this.qualification.mostCommonRouteToObtain,
+  );
 
   readonly duration = this.qualification.educationDuration;
 

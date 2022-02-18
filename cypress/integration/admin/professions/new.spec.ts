@@ -125,9 +125,8 @@ describe('Adding a new profession', () => {
       cy.translate('app.continue').then((buttonText) => {
         cy.get('button').contains(buttonText).click();
       });
-      // Conditional radio buttons add an additional `aria-expanded` field,
-      // so ignore that rule on this page
-      cy.checkAccessibility({ 'aria-allowed-attr': { enabled: false } });
+
+      cy.checkAccessibility();
       cy.translate('professions.form.headings.qualifications').then(
         (heading) => {
           cy.get('body').should('contain', heading);
@@ -136,16 +135,12 @@ describe('Adding a new profession', () => {
       cy.translate('professions.form.captions.add').then((addCaption) => {
         cy.get('body').contains(addCaption);
       });
-      cy.get(
-        'input[name="methodToObtainQualification"][value="others"]',
-      ).check();
-      cy.get('textarea[name="otherMethodToObtainQualification"]').type(
-        'Another method',
+      cy.get('textarea[name="routesToObtain"]').type(
+        'General secondary education',
       );
-
-      cy.get(
-        'input[name="mostCommonPathToObtainQualification"][value="generalSecondaryEducation"]',
-      ).check();
+      cy.get('textarea[name="mostCommonRouteToObtain"]').type(
+        'A 4 year degree',
+      );
       cy.get('input[name="duration"]').type('4.0 Years');
       cy.get(
         'input[name="mandatoryProfessionalExperience"][value="1"]',
@@ -260,18 +255,14 @@ describe('Adding a new profession', () => {
       );
 
       cy.checkSummaryListRowValue(
-        'professions.form.label.qualifications.methodsToObtainQualification',
-        'Another method',
+        'professions.form.label.qualifications.routesToObtain',
+        'General secondary education',
       );
 
-      cy.translate(
-        'professions.methodsToObtainQualification.generalSecondaryEducation',
-      ).then((method) => {
-        cy.checkSummaryListRowValue(
-          'professions.form.label.qualifications.mostCommonPathToObtainQualification',
-          method,
-        );
-      });
+      cy.checkSummaryListRowValue(
+        'professions.form.label.qualifications.mostCommonRouteToObtain',
+        'A 4 year degree',
+      );
 
       cy.checkSummaryListRowValue(
         'professions.form.label.qualifications.duration',

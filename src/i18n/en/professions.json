@@ -43,8 +43,8 @@
       },
       "qualifications": {
         "qualificationLevel": "Qualification level",
-        "methodsToObtainQualification": "Method to obtain qualification",
-        "mostCommonPathToObtainQualification": "Most common path to obtain qualification",
+        "routesToObtain": "Routes to qualification",
+        "mostCommonRouteToObtain": "Most common route",
         "duration": "Duration of qualification",
         "mandatoryProfessionalExperience": "Existence of mandatory professional experience",
         "ukRecognition": "Recognition of qualifications in the UK",
@@ -67,6 +67,8 @@
         "registrationUrl": "Please enter a link"
       },
       "qualifications": {
+        "routesToObtain": "The ways that a new professional can become qualified",
+        "mostCommonRouteToObtain": "If there are many ways to qualify, the most common way",
         "ukRecognitionUrl": "Please enter a link",
         "otherCountriesRecognitionUrl": "Please enter a link"
       },
@@ -144,17 +146,11 @@
         "level": {
           "empty": "Enter the qualification level"
         },
-        "methodToObtain": {
-          "empty": "Select the method to obtain the qualification"
+        "routesToObtain": {
+          "empty": "Enter routes to obtain the qualification"
         },
-        "otherMethodToObtain": {
-          "empty": "Enter the other method to obtain the qualification"
-        },
-        "mostCommonPathToObtain": {
-          "empty": "Select the most common path to obtain the qualification"
-        },
-        "otherMostCommonPathToObtain": {
-          "empty": "Enter the other most common path to obtain the qualification"
+        "mostCommonRouteToObtain": {
+          "empty": "Enter the most common route to obtain the qualification"
         },
         "duration": {
           "empty": "Enter the duration of the qualification"
@@ -210,8 +206,8 @@
     "qualification": {
       "heading": "Qualification information",
       "level": "Qualification level",
-      "methods": "Method to obtain qualification",
-      "commonPath": "Most common path to obtain qualification",
+      "routesToObtain": "Routes to qualification",
+      "mostCommonRouteToObtain": "Most common route",
       "duration": "Duration of qualification",
       "mandatoryExperience": "Existence of mandatory professional experience"
     },
@@ -220,15 +216,6 @@
       "nationalLegislation": "National legislation",
       "legislationLink": "Legislation link"
     }
-  },
-  "methodsToObtainQualification": {
-    "generalSecondaryEducation": "General secondary education",
-    "generalOrVocationalPostSecondaryEducation": "General or vocational post-secondary education",
-    "generalPostSecondaryEducationMandatoryVocational": "General post-secondary education incorporating mandatory vocational content",
-    "vocationalPostSecondaryEducation": "Vocational post-secondary education level",
-    "degreeLevel": "Degree level education in an approved education institution",
-    "others": "Others",
-    "otherHint": "Please provide the methods to obtain the qualification"
   },
   "mandatoryRegistration": {
     "mandatory": "Mandatory",
