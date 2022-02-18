@@ -20,7 +20,7 @@ import { ProfessionsService } from '../professions.service';
 import { MethodToObtainQualificationRadioButtonsPresenter } from './method-to-obtain-qualification-radio-buttons.presenter';
 import { YesNoRadioButtonArgsPresenter } from './yes-no-radio-buttons-presenter';
 import { QualificationsDto } from './dto/qualifications.dto';
-import { QualificationInformationTemplate } from './interfaces/qualification-information.template';
+import { QualificationsTemplate } from './interfaces/qualifications.template';
 import { BackLink } from '../../common/decorators/back-link.decorator';
 import ViewUtils from './viewUtils';
 import { ProfessionVersionsService } from '../profession-versions.service';
@@ -178,7 +178,7 @@ export class QualificationsController {
         this.i18nService,
       ).radioButtonArgs();
 
-    const templateArgs: QualificationInformationTemplate = {
+    const templateArgs: QualificationsTemplate = {
       level: qualification?.level,
       methodToObtainQualificationRadioButtonArgs,
       mostCommonPathToObtainQualificationRadioButtonArgs,

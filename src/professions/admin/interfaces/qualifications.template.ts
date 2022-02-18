@@ -1,6 +1,6 @@
 import { RadioButtonArgs } from '../../../common/interfaces/radio-button-args.interface';
 
-export interface QualificationInformationTemplate {
+export interface QualificationsTemplate {
   level: string;
   methodToObtainQualificationRadioButtonArgs: RadioButtonArgs[];
   mostCommonPathToObtainQualificationRadioButtonArgs: RadioButtonArgs[];
