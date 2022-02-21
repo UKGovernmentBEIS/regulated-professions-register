@@ -152,6 +152,7 @@ export class ProfessionsSeeder implements Seeder {
               qualification.mostCommonRouteToObtain,
               qualification.educationDuration,
               qualification.mandatoryProfessionalExperience,
+              qualification.url,
             ),
           );
         }

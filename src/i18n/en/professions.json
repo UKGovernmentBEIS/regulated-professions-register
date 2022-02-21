@@ -219,7 +219,8 @@
       "routesToObtain": "Routes to qualification",
       "mostCommonRouteToObtain": "Most common route",
       "duration": "Duration of qualification",
-      "mandatoryExperience": "Existence of mandatory professional experience"
+      "mandatoryExperience": "Existence of mandatory professional experience",
+      "moreInformationUrl": "More about qualification"
     },
     "legislation": {
       "heading": "Legislation",

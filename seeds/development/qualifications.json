@@ -4,7 +4,8 @@
     "routesToObtain": "General secondary education",
     "mostCommonRouteToObtain": "General secondary education",
     "educationDuration": " 5.0 Year",
-    "mandatoryProfessionalExperience": true
+    "mandatoryProfessionalExperience": true,
+    "url": "http://www.example.com"
   },
   {
     "level": "PS3 - Diploma of post-secondary level (3-4 years) , Art. 11 d",

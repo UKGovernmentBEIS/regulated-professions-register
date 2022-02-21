@@ -106,6 +106,16 @@ export default class QualificationPresenter {
             ),
           },
         },
+        {
+          key: {
+            text: await this.i18nService.translate(
+              'professions.show.qualification.moreInformationUrl',
+            ),
+          },
+          value: {
+            html: this.moreInformationUrl,
+          },
+        },
       ],
     };
   }

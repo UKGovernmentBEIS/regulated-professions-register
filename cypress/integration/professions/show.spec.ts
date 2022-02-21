@@ -103,6 +103,11 @@ describe('Showing a profession', () => {
       );
     });
 
+    cy.checkSummaryListRowValue(
+      'professions.show.qualification.moreInformationUrl',
+      'http://www.example.com',
+    );
+
     cy.translate('professions.show.legislation.heading').then((heading) => {
       cy.get('body').should('contain', heading);
     });

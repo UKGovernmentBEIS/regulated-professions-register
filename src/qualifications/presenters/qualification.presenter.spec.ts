@@ -239,6 +239,16 @@ describe(QualificationPresenter, () => {
               text: translationOf(presenter.mandatoryProfessionalExperience),
             },
           },
+          {
+            key: {
+              text: translationOf(
+                'professions.show.qualification.moreInformationUrl',
+              ),
+            },
+            value: {
+              html: presenter.moreInformationUrl,
+            },
+          },
         ],
       });
     });

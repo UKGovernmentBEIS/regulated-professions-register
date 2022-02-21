@@ -13,6 +13,7 @@ type SeedQualification = {
   mostCommonRouteToObtain: string;
   educationDuration: string;
   mandatoryProfessionalExperience: boolean;
+  url: string;
 };
 
 @Injectable()
@@ -33,6 +34,7 @@ export class QualificationsSeeder implements Seeder {
         qualification.mostCommonRouteToObtain,
         qualification.educationDuration,
         qualification.mandatoryProfessionalExperience,
+        qualification.url,
       );
     });
 
