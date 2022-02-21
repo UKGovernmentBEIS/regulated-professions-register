@@ -25,10 +25,12 @@ describe('Editing organisations', () => {
           });
         cy.checkAccessibility({ 'link-name': { enabled: false } });
 
-        cy.translate('organisations.admin.button.edit').then((editButton) => {
-          cy.get('a').contains(editButton).click();
-          cy.checkAccessibility();
-        });
+        cy.translate('organisations.admin.button.edit.draft').then(
+          (editButton) => {
+            cy.get('a').contains(editButton).click();
+            cy.checkAccessibility();
+          },
+        );
 
         cy.translate('organisation-versions.admin.new.heading').then(
           (heading) => {
