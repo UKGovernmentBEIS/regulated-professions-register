@@ -27,6 +27,11 @@ export const nunjucksConfig = async (
     'encore_entry_script_tags',
     await assetsHelper.entryScriptTags(),
   );
+  env.addGlobal('environment', process.env['NODE_ENV']);
+  env.addGlobal(
+    'site_domain',
+    process.env['HOST_URL'].replace(/https?:\/\//, ''),
+  );
   env.addFilter(
     't',
     async (...args) => {
