@@ -7,14 +7,19 @@ export async function createPlausibleEvent(
   const domain = process.env['HOST_URL']
     .replace(/https?:\/\//, '')
     .split('/')[0];
-  await axios.post('https://plausible.io/api/event', {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    data: {
+  const url = [process.env['HOST_URL'], path].join('');
+
+  await axios.post(
+    'https://plausible.io/api/event',
+    {
       name: name,
-      url: [process.env['HOST_URL'], path].join(''),
+      url: url,
       domain: domain,
     },
-  });
+    {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    },
+  );
 }
