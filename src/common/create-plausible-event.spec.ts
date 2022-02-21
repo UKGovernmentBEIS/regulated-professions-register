@@ -5,7 +5,7 @@ jest.mock('axios');
 
 describe('createPlausibleEvent', () => {
   it('should send a HTTP request to Plausible', async () => {
-    process.env['HOST_URL'] = 'http://example.com';
+    process.env['HOST_URL'] = 'http://example.com/';
 
     createPlausibleEvent('event', 'some/path');
 
