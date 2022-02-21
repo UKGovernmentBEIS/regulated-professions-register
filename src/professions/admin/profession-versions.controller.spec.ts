@@ -18,9 +18,11 @@ import { ProfessionVersionsService } from '../profession-versions.service';
 import { ProfessionsService } from '../professions.service';
 import { Profession } from '../profession.entity';
 import { ProfessionPresenter } from '../presenters/profession.presenter';
+import { flashMessage } from '../../common/flash-message';
 
 jest.mock('../../organisations/organisation.entity');
 jest.mock('../presenters/profession.presenter');
+jest.mock('../../common/flash-message');
 
 describe('ProfessionVersionsController', () => {
   let controller: ProfessionVersionsController;
@@ -206,6 +208,11 @@ describe('ProfessionVersionsController', () => {
         },
       });
 
+      const res = createMock<Response>({});
+
+      const flashMock = flashMessage as jest.Mock;
+      flashMock.mockImplementation(() => 'STUB_FLASH_MESSAGE');
+
       professionVersionsService.findByIdWithProfession.mockResolvedValue(
         version,
       );
@@ -217,9 +224,7 @@ describe('ProfessionVersionsController', () => {
 
       professionVersionsService.create.mockResolvedValue(newVersion);
 
-      const result = await controller.publish(req, profession.id, version.id);
-
-      expect(result).toEqual(profession);
+      await controller.publish(req, res, profession.id, version.id);
 
       expect(
         professionVersionsService.findByIdWithProfession,
@@ -232,6 +237,17 @@ describe('ProfessionVersionsController', () => {
 
       expect(professionVersionsService.publish).toHaveBeenCalledWith(
         newVersion,
+      );
+
+      expect(flashMock).toHaveBeenCalledWith(
+        translationOf('professions.admin.publish.confirmation.heading'),
+        translationOf('professions.admin.publish.confirmation.body'),
+      );
+
+      expect(req.flash).toHaveBeenCalledWith('success', 'STUB_FLASH_MESSAGE');
+
+      expect(res.redirect).toHaveBeenCalledWith(
+        `/admin/professions/${profession.id}/versions/${newVersion.id}`,
       );
     });
   });

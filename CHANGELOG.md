@@ -17,6 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Display name of user who last edited an organisation and modified date to admins
 - Allow BEIS team users to see the "Changed By" field so they can track who has edited data.
 - Change edit button wording depending on entity status
+- Show a confirmation banner when publishing entities
 
 ## [release-003] - 2022-02-16
 

@@ -4,6 +4,8 @@ import { Response } from 'express';
 import { DeepPartial } from 'fishery';
 import { I18nService } from 'nestjs-i18n';
 
+import { translationOf } from '../../testutils/translation-of';
+
 import { OrganisationVersionsController } from './organisation-versions.controller';
 
 import { OrganisationVersionsService } from '../organisation-versions.service';
@@ -24,8 +26,11 @@ import { createMockI18nService } from '../../testutils/create-mock-i18n-service'
 import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
 import { OrganisationPresenter } from '../presenters/organisation.presenter';
 
+import { flashMessage } from '../../common/flash-message';
+
 jest.mock('../presenters/organisation-summary.presenter');
 jest.mock('../presenters/organisation.presenter');
+jest.mock('../../common/flash-message');
 
 describe('OrganisationVersionsController', () => {
   let controller: OrganisationVersionsController;
@@ -170,6 +175,11 @@ describe('OrganisationVersionsController', () => {
         },
       });
 
+      const res = createMock<Response>({});
+
+      const flashMock = flashMessage as jest.Mock;
+      flashMock.mockImplementation(() => 'STUB_FLASH_MESSAGE');
+
       organisationVersionsService.findByIdWithOrganisation.mockResolvedValue(
         version,
       );
@@ -181,9 +191,7 @@ describe('OrganisationVersionsController', () => {
 
       organisationVersionsService.create.mockResolvedValue(newVersion);
 
-      const result = await controller.publish(req, organisation.id, version.id);
-
-      expect(result).toEqual(organisation);
+      await controller.publish(req, res, organisation.id, version.id);
 
       expect(
         organisationVersionsService.findByIdWithOrganisation,
@@ -196,6 +204,17 @@ describe('OrganisationVersionsController', () => {
 
       expect(organisationVersionsService.publish).toHaveBeenCalledWith(
         newVersion,
+      );
+
+      expect(flashMock).toHaveBeenCalledWith(
+        translationOf('organisations.admin.publish.confirmation.heading'),
+        translationOf('organisations.admin.publish.confirmation.body'),
+      );
+
+      expect(req.flash).toHaveBeenCalledWith('success', 'STUB_FLASH_MESSAGE');
+
+      expect(res.redirect).toHaveBeenCalledWith(
+        `/admin/organisations/${organisation.id}/versions/${newVersion.id}`,
       );
     });
   });

@@ -29,6 +29,7 @@ import { OrganisationSummaryPresenter } from '../presenters/organisation-summary
 import { Permissions } from '../../common/permissions.decorator';
 import { UserPermission } from '../../users/user-permission';
 
+import { flashMessage } from '../../common/flash-message';
 @UseGuards(AuthenticationGuard)
 @Controller('/admin/organisations')
 export class OrganisationVersionsController {
@@ -104,12 +105,12 @@ export class OrganisationVersionsController {
 
   @Put(':organisationId/versions/:versionId/publish')
   @Permissions(UserPermission.PublishOrganisation)
-  @Render('admin/organisations/versions/publish')
   async publish(
     @Req() req: RequestWithAppSession,
+    @Res() res: Response,
     @Param('organisationId') organisationId: string,
     @Param('versionId') versionId: string,
-  ): Promise<Organisation> {
+  ): Promise<void> {
     const version =
       await this.organisationVersionsService.findByIdWithOrganisation(
         organisationId,
@@ -123,6 +124,19 @@ export class OrganisationVersionsController {
 
     await this.organisationVersionsService.publish(newVersion);
 
-    return version.organisation;
+    const messageTitle = await this.i18nService.translate(
+      'organisations.admin.publish.confirmation.heading',
+    );
+
+    const messageBody = await this.i18nService.translate(
+      'organisations.admin.publish.confirmation.body',
+      { args: { name: version.organisation.name } },
+    );
+
+    req.flash('success', flashMessage(messageTitle, messageBody));
+
+    res.redirect(
+      `/admin/organisations/${newVersion.organisation.id}/versions/${newVersion.id}`,
+    );
   }
 }
