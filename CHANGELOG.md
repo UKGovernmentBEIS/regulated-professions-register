@@ -8,6 +8,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
+### Changed
+
+## [release-004] - 2022-02-21
+
+### Added
+
 - Add Plausible.io analytics
 
 ### Changed
