@@ -10,7 +10,7 @@
       "confirmation": "New profession created",
       "amended": "Profession amended",
       "regulatedActivities": "Regulations",
-      "qualifications": "Qualification information",
+      "qualifications": "Qualifications",
       "legislation": "Legislation",
       "edit": "Are you sure you want to amend {professionName}?"
     },
@@ -45,12 +45,12 @@
         "qualificationLevel": "Qualification level",
         "routesToObtain": "Routes to qualification",
         "mostCommonRouteToObtain": "Most common route",
-        "duration": "Duration of qualification",
-        "mandatoryProfessionalExperience": "Existence of mandatory professional experience",
+        "duration": "How long to qualify",
+        "mandatoryProfessionalExperience": "Professional experience requirement",
         "ukRecognition": "Recognition of qualifications in the UK",
         "ukRecognitionUrl": "More about recognition within the UK",
         "otherCountriesRecognition": "Recognition of qualifications from other countries",
-        "otherCountriesRecognitionUrl": "More about recognition in other countries"
+        "otherCountriesRecognitionUrl": "More about recognition from other countries"
       },
       "legislation": {
         "nationalLegislation": "National legislation",
@@ -69,8 +69,13 @@
       "qualifications": {
         "routesToObtain": "The ways that a new professional can become qualified",
         "mostCommonRouteToObtain": "If there are many ways to qualify, the most common way",
-        "ukRecognitionUrl": "Please enter a link",
-        "otherCountriesRecognitionUrl": "Please enter a link"
+        "duration": "The number of months or years it takes to qualify. For example, 2 years.\nIf the length of time varies, provide the most typical or a range. For example, 6 to 12 months",
+        "mandatoryProfessionalExperience": "Is a period of professional practice require to become qualified?",
+        "qualificationLevel": "Equivalent qualification level against a recognised framework",
+        "ukRecognition": "Routes to recognition for existing professionals from other UK nations",
+        "ukRecognitionUrl": "Website link to more information",
+        "otherCountriesRecognition": "Routes to recognition for existing professionals from outside the UK",
+        "otherCountriesRecognitionUrl": "Website link to more information"
       },
       "legislation": {
         "link": "Please enter a link"

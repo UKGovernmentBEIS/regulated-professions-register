@@ -60,6 +60,9 @@
               text: ("professions.form.label.qualifications.duration" | t),
               classes: "govuk-label--m"
             },
+            hint: {
+              text: ("professions.form.hint.qualifications.duration" | t | multiline)
+            },
             id: "duration",
             name: "duration",
             value: duration,
@@ -79,7 +82,7 @@
               }
             },
             hint: {
-              text: ("professions.form.radioButtons.hint" | t)
+              text: ("professions.form.hint.qualifications.mandatoryProfessionalExperience" | t)
             },
             items: mandatoryProfessionalExperienceRadioButtonArgs,
             errorMessage: errors.mandatoryProfessionalExperience | tError
@@ -92,6 +95,9 @@
               text: ("professions.form.label.qualifications.qualificationLevel" | t),
               classes: "govuk-label--m",
               isPageHeading: false
+            },
+            hint: {
+              html: ("professions.form.hint.qualifications.qualificationLevel" | t)
             },
             id: "level",
             name: "level",
@@ -114,6 +120,9 @@
             id: "ukRecognition",
             name: "ukRecognition",
             value: ukRecognition,
+            hint: {
+              text: ("professions.form.hint.qualifications.ukRecognition" | t)
+            },
             errorMessage: errors.ukRecognition | tError
           })
         }}
@@ -147,6 +156,9 @@
             id: "otherCountriesRecognition",
             name: "otherCountriesRecognition",
             value: otherCountriesRecognition,
+            hint: {
+              text: ("professions.form.hint.qualifications.otherCountriesRecognition" | t)
+            },
             errorMessage: errors.otherCountriesRecognition | tError
           })
         }}
