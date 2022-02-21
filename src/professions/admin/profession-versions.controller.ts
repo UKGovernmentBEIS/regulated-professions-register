@@ -25,6 +25,7 @@ import { ProfessionVersionsService } from '../profession-versions.service';
 import { Profession } from '../profession.entity';
 import { ProfessionsService } from '../professions.service';
 import { ProfessionPresenter } from '../presenters/profession.presenter';
+import { flashMessage } from '../../common/flash-message';
 
 @UseGuards(AuthenticationGuard)
 @Controller('/admin/professions')
@@ -125,12 +126,12 @@ export class ProfessionVersionsController {
 
   @Put(':professionId/versions/:versionId/publish')
   @Permissions(UserPermission.PublishProfession)
-  @Render('admin/professions/publish')
   async publish(
     @Req() req: RequestWithAppSession,
+    @Res() res: Response,
     @Param('professionId') professionId: string,
     @Param('versionId') versionId: string,
-  ): Promise<Profession> {
+  ): Promise<void> {
     const version = await this.professionVersionsService.findByIdWithProfession(
       professionId,
       versionId,
@@ -143,6 +144,19 @@ export class ProfessionVersionsController {
 
     await this.professionVersionsService.publish(newVersion);
 
-    return version.profession;
+    const messageTitle = await this.i18nService.translate(
+      'professions.admin.publish.confirmation.heading',
+    );
+
+    const messageBody = await this.i18nService.translate(
+      'professions.admin.publish.confirmation.body',
+      { args: { name: version.profession.name } },
+    );
+
+    req.flash('success', flashMessage(messageTitle, messageBody));
+
+    res.redirect(
+      `/admin/professions/${newVersion.profession.id}/versions/${newVersion.id}`,
+    );
   }
 }

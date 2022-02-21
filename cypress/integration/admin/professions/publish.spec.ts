@@ -35,11 +35,17 @@ describe('Publishing professions', () => {
         },
       );
 
-      cy.translate(
-        'professions.admin.publish.confirmation.backToDashboard',
-      ).then((backToDashboard) => {
-        cy.get('a').contains(backToDashboard).click();
+      cy.translate('professions.admin.button.edit.live').then((buttonText) => {
+        cy.get('html').should('contain', buttonText);
       });
+
+      cy.get('[data-cy=changed-by-user]').should('contain', 'Editor');
+      cy.get('[data-cy=last-modified]').should(
+        'contain',
+        format(new Date(), 'dd-MM-yyyy'),
+      );
+
+      cy.visitAndCheckAccessibility('/admin/professions');
 
       cy.get('tr')
         .contains('Gas Safe Engineer')
@@ -50,23 +56,6 @@ describe('Publishing professions', () => {
             cy.wrap($row).should('contain', status);
           });
         });
-
-      cy.contains('Gas Safe Engineer')
-        .parent('tr')
-        .within(() => {
-          cy.get('a').contains('View details').click();
-        });
-      cy.checkAccessibility();
-
-      cy.translate('professions.admin.button.edit.live').then((buttonText) => {
-        cy.get('html').should('contain', buttonText);
-      });
-
-      cy.get('[data-cy=changed-by-user]').should('contain', 'Editor');
-      cy.get('[data-cy=last-modified]').should(
-        'contain',
-        format(new Date(), 'dd-MM-yyyy'),
-      );
     });
   });
 });
