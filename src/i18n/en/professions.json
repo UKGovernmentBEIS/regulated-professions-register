@@ -3,6 +3,7 @@
     "headings": {
       "main": "Add a new profession",
       "topLevelInformation": "Top level information",
+      "scope": "Scope",
       "regulatoryBody": "Regulatory / professional bodies",
       "checkAnswers": "Check your answers",
       "originalAnswers": "Your original answers",
@@ -21,7 +22,9 @@
     "editProfession": "Use this section of the site to add a new profession",
     "label": {
       "topLevelInformation": {
-        "name": "Name of regulated profession",
+        "name": "Name of regulated profession"
+      },
+      "scope": {
         "nations": "In which nation(s) is this profession regulated?",
         "certainNations": "Certain Nations",
         "industry": "Sectors"
@@ -98,7 +101,7 @@
       "saveAsDraft": "Save as draft"
     },
     "select": {
-      "topLevelInformation": {
+      "scope": {
         "nations": {
           "england": "England",
           "anywhere": "Anywhere in the United Kingdom",

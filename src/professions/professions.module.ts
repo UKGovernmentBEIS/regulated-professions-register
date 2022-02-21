@@ -20,6 +20,7 @@ import { ProfessionVersionsService } from './profession-versions.service';
 import { ProfessionVersion } from './profession-version.entity';
 import { ProfessionVersionsController } from './admin/profession-versions.controller';
 import { RegistrationController } from './admin/registration.controller';
+import { ScopeController } from './admin/scope.controller';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { RegistrationController } from './admin/registration.controller';
     ProfessionsController,
     ProfessionVersionsController,
     TopLevelInformationController,
+    ScopeController,
     RegulatoryBodyController,
     RegulatedActivitiesController,
     QualificationInformationController,

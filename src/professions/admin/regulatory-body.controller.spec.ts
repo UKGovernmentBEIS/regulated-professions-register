@@ -64,7 +64,7 @@ describe(RegulatoryBodyController, () => {
         const regulatedAuthoritiesSelectPresenter =
           new RegulatedAuthoritiesSelectPresenter(organisations, null);
 
-        await controller.edit(response, 'profession-id', 'version-id', false);
+        await controller.edit(response, 'profession-id', 'false');
 
         expect(response.render).toHaveBeenCalledWith(
           'admin/professions/regulatory-body',

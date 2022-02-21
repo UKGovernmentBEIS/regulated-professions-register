@@ -17,21 +17,6 @@
 
         <h2 class="govuk-heading-m">{{ ("professions.form.headings.topLevelInformation" | t) }}</h2>
 
-        {% set selectedNationsSummaryListHtml %}
-          <ul>
-            {% for nation in nations %}
-              <li class='govuk-body-m'>{{ nation }}</li>
-            {% endfor %}
-          </ul>
-        {% endset %}
-
-        {% set selectedIndustriesSummaryListHtml %}
-          <ul>
-            {% for industry in industries %}
-              <li class='govuk-body-m'>{{ industry }}</li>
-            {% endfor %}
-          </ul>
-        {% endset %}
         {{
           govukSummaryList({
             rows: [
@@ -51,10 +36,35 @@
                     }
                   ]
                 }
-              },
+              }
+            ]
+          })
+        }}
+
+        <h2 class="govuk-heading-m">{{ ("professions.form.headings.scope" | t) }}</h2>
+
+        {% set selectedNationsSummaryListHtml %}
+          <ul>
+            {% for nation in nations %}
+              <li class='govuk-body-m'>{{ nation }}</li>
+            {% endfor %}
+          </ul>
+        {% endset %}
+
+        {% set selectedIndustriesSummaryListHtml %}
+          <ul>
+            {% for industry in industries %}
+              <li class='govuk-body-m'>{{ industry }}</li>
+            {% endfor %}
+          </ul>
+        {% endset %}
+
+        {{
+          govukSummaryList({
+            rows: [
               {
                 key: {
-                  text: ("professions.form.label.topLevelInformation.nations" | t)
+                  text: ("professions.form.label.scope.nations" | t)
                 },
                 value: {
                   html: selectedNationsSummaryListHtml
@@ -62,16 +72,16 @@
                 actions: {
                   items: [
                     {
-                      href: "/admin/professions/" + professionId + "/versions/" + versionId + "/top-level-information/edit?change=true",
+                      href: "/admin/professions/" + professionId + "/versions/" + versionId + "/scope/edit?change=true",
                       text: ("app.change" | t),
-                      visuallyHiddenText: ("professions.form.label.topLevelInformation.nation" | t)
+                      visuallyHiddenText: ("professions.form.label.scope.nation" | t)
                     }
                   ]
                 }
               },
               {
                 key: {
-                  text: ("professions.form.label.topLevelInformation.industry" | t)
+                  text: ("professions.form.label.scope.industry" | t)
                 },
                 value: {
                   html: selectedIndustriesSummaryListHtml
@@ -79,9 +89,9 @@
                 actions: {
                   items: [
                     {
-                      href: "/admin/professions/" + professionId + "/versions/" + versionId + "/top-level-information/edit?change=true",
+                      href: "/admin/professions/" + professionId + "/versions/" + versionId + "/scope/edit?change=true",
                       text: ("app.change" | t),
-                      visuallyHiddenText: ("professions.form.label.topLevelInformation.industry" | t)
+                      visuallyHiddenText: ("professions.form.label.scop.industry" | t)
                     }
                   ]
                 }

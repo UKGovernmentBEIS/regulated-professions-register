@@ -9,17 +9,11 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { Response, Request } from 'express';
-import { IndustriesCheckboxPresenter } from '../../industries/industries-checkbox.presenter';
-import { NationsCheckboxPresenter } from '../../nations/nations-checkbox.presenter';
 import { Validator } from '../../helpers/validator';
-import { IndustriesService } from '../../industries/industries.service';
-import { Nation } from '../../nations/nation';
 import { ValidationFailedError } from '../../common/validation/validation-failed.error';
 import { Profession } from '../profession.entity';
 import { ProfessionsService } from '../professions.service';
 import { TopLevelDetailsDto } from './dto/top-level-details.dto';
-import { I18nService } from 'nestjs-i18n';
-import { Industry } from '../../industries/industry.entity';
 import { TopLevelDetailsTemplate } from './interfaces/top-level-details.template';
 import { AuthenticationGuard } from '../../common/authentication.guard';
 import { Permissions } from '../../common/permissions.decorator';
@@ -27,20 +21,12 @@ import { UserPermission } from '../../users/user-permission';
 import { BackLink } from '../../common/decorators/back-link.decorator';
 
 import ViewUtils from './viewUtils';
-import { ProfessionVersionsService } from '../profession-versions.service';
-import { ProfessionVersion } from '../profession-version.entity';
 import { isConfirmed } from '../../helpers/is-confirmed';
-import { allNations, isUK } from '../../helpers/nations.helper';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
 export class TopLevelInformationController {
-  constructor(
-    private readonly professionsService: ProfessionsService,
-    private readonly professionVersionsService: ProfessionVersionsService,
-    private readonly industriesService: IndustriesService,
-    private readonly i18nService: I18nService,
-  ) {}
+  constructor(private readonly professionsService: ProfessionsService) {}
 
   @Get('/:professionId/versions/:versionId/top-level-information/edit')
   @Permissions(UserPermission.CreateProfession, UserPermission.EditProfession)
@@ -52,7 +38,6 @@ export class TopLevelInformationController {
   async edit(
     @Res() res: Response,
     @Param('professionId') professionId: string,
-    @Param('versionId') versionId: string,
     @Query('change') change: string,
     errors: object | undefined = undefined,
   ): Promise<void> {
@@ -60,20 +45,9 @@ export class TopLevelInformationController {
       professionId,
     );
 
-    const version = await this.professionVersionsService.findWithProfession(
-      versionId,
-    );
-
-    const coversUK = version.occupationLocations
-      ? isUK(version.occupationLocations)
-      : null;
-
     return this.renderForm(
       res,
       profession.name,
-      coversUK,
-      version.industries || [],
-      version.occupationLocations || [],
       isConfirmed(profession),
       change === 'true',
       errors,
@@ -99,18 +73,9 @@ export class TopLevelInformationController {
     );
 
     const submittedValues: TopLevelDetailsDto = topLevelDetailsDto;
-    const coversUK = Boolean(Number(submittedValues.coversUK));
 
     const profession = await this.professionsService.findWithVersions(
       professionId,
-    );
-
-    const version = await this.professionVersionsService.findWithProfession(
-      versionId,
-    );
-
-    const submittedIndustries = await this.industriesService.findByIds(
-      submittedValues.industries || [],
     );
 
     if (!validator.valid()) {
@@ -118,17 +83,10 @@ export class TopLevelInformationController {
       return this.renderForm(
         res,
         submittedValues.name,
-        coversUK,
-        submittedIndustries,
-        submittedValues.nations || [],
         isConfirmed(profession),
         submittedValues.change === 'true',
         errors,
       );
-    }
-
-    if (coversUK) {
-      submittedValues.nations = allNations();
     }
 
     const updatedProfession: Profession = {
@@ -138,16 +96,7 @@ export class TopLevelInformationController {
       },
     };
 
-    const updatedVersion: ProfessionVersion = {
-      ...version,
-      ...{
-        occupationLocations: submittedValues.nations,
-        industries: submittedIndustries,
-      },
-    };
-
     await this.professionsService.save(updatedProfession);
-    await this.professionVersionsService.save(updatedVersion);
 
     if (submittedValues.change === 'true') {
       return res.redirect(
@@ -156,45 +105,19 @@ export class TopLevelInformationController {
     }
 
     return res.redirect(
-      `/admin/professions/${professionId}/versions/${versionId}/regulatory-body/edit`,
+      `/admin/professions/${professionId}/versions/${versionId}/scope/edit`,
     );
   }
 
   private async renderForm(
     res: Response,
     name: string,
-    coversUK: boolean,
-    selectedIndustries: Industry[],
-    selectedNations: string[],
     isEditing: boolean,
     change: boolean,
     errors: object | undefined = undefined,
   ): Promise<void> {
-    const industries = await this.industriesService.all();
-
-    const industriesCheckboxItems = await new IndustriesCheckboxPresenter(
-      industries,
-      selectedIndustries,
-      this.i18nService,
-    ).checkboxItems();
-
-    const nationsCheckboxPresenter = new NationsCheckboxPresenter(
-      Nation.all(),
-      selectedNations.map((nationCode) => Nation.find(nationCode)),
-      this.i18nService,
-    );
-
-    const nationsCheckboxArgs = await nationsCheckboxPresenter.checkboxArgs(
-      'nations',
-      'nations[]',
-      'professions.form.checkboxes.hint',
-    );
-
     const templateArgs: TopLevelDetailsTemplate = {
       name,
-      coversUK,
-      industriesCheckboxItems,
-      nationsCheckboxArgs,
       captionText: ViewUtils.captionText(isEditing),
       change,
       errors,
