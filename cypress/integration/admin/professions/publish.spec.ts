@@ -58,6 +58,10 @@ describe('Publishing professions', () => {
         });
       cy.checkAccessibility();
 
+      cy.translate('professions.admin.button.edit.live').then((buttonText) => {
+        cy.get('html').should('contain', buttonText);
+      });
+
       cy.get('[data-cy=changed-by-user]').should('contain', 'Editor');
       cy.get('[data-cy=last-modified]').should(
         'contain',

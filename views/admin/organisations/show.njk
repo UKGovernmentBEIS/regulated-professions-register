@@ -44,7 +44,7 @@
             <li>
               {{
                 govukButton({
-                  text: ("organisations.admin.button.edit" | t),
+                  text: (('organisations.admin.button.edit.' + organisation.status) | t),
                   href: "/admin/organisations/" + organisation.id + "/versions/new",
                   classes: "govuk-button--secondary"
                 })

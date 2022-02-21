@@ -99,7 +99,10 @@
       }
     },
     "button": {
-      "edit": "Edit this regulatory authority",
+      "edit": {
+        "draft": "Edit this draft",
+        "live": "Edit this regulatory authority"
+      },
       "delete": "Delete this regulatory authority",
       "amend": "Amend regulatory authority",
       "publish": "Publish regulatory authority"
