@@ -42,7 +42,7 @@
           {% if 'editProfession' in permissions %}
           <li>
               {{ govukButton({
-                text: ('professions.admin.editProfession' | t),
+                text: (('professions.admin.button.edit.' + profession.status) | t),
                 classes: "govuk-button--secondary",
                 id: "edit-button",
                 href: "/admin/professions/" + profession.id + "/versions/edit"

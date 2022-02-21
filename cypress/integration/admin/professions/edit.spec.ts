@@ -29,7 +29,7 @@ describe('Editing an existing profession', () => {
       });
       cy.get('[data-cy=changed-by-user]').should('contain', '');
 
-      cy.translate('professions.admin.editProfession').then((buttonText) => {
+      cy.translate('professions.admin.button.edit.live').then((buttonText) => {
         cy.contains(buttonText).click();
       });
 
@@ -251,7 +251,7 @@ describe('Editing an existing profession', () => {
           cy.contains('View details').click();
         });
 
-      cy.translate('professions.admin.editProfession').then((buttonText) => {
+      cy.translate('professions.admin.button.edit.draft').then((buttonText) => {
         cy.contains(buttonText).click();
       });
 
@@ -346,7 +346,7 @@ describe('Editing an existing profession', () => {
         });
 
       cy.checkAccessibility();
-      cy.translate('professions.admin.editProfession').then((buttonText) => {
+      cy.translate('professions.admin.button.edit.draft').then((buttonText) => {
         cy.contains(buttonText).click();
       });
 

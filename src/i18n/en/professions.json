@@ -240,9 +240,14 @@
     "addHeading": "Add a new profession",
     "addButtonLabel": "Add a new profession",
     "addText": "You can add a new profession for your organisation here.",
-    "editProfession": "Edit this profession",
     "manageHeading": "Manage existing professions",
     "showFilters": "Show filters",
+    "button": {
+      "edit": {
+        "draft": "Edit this draft",
+        "live": "Edit this profession"
+      }
+    },
     "labels": {
       "keywords": "Keywords:",
       "nations": "Nations:",
