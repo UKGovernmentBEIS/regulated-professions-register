@@ -1,8 +1,13 @@
 import { formatMultilineString } from '../../helpers/format-multiline-string.helper';
 import { Qualification } from '../qualification.entity';
 import { escape } from '../../helpers/escape.helper';
+import { I18nService } from 'nestjs-i18n';
+import { SummaryList } from '../../common/interfaces/summary-list';
 export default class QualificationPresenter {
-  constructor(private readonly qualification: Qualification) {}
+  constructor(
+    private readonly qualification: Qualification,
+    private readonly i18nService: I18nService,
+  ) {}
 
   readonly level = this.qualification.level;
 
@@ -44,4 +49,64 @@ export default class QualificationPresenter {
         this.qualification.otherCountriesRecognitionUrl,
       )}">${escape(this.qualification.otherCountriesRecognitionUrl)}</a>`
     : null;
+
+  async summaryList(): Promise<SummaryList> {
+    return {
+      classes: 'govuk-summary-list--no-border',
+      rows: [
+        {
+          key: {
+            text: await this.i18nService.translate(
+              'professions.show.qualification.level',
+            ),
+          },
+          value: {
+            html: formatMultilineString(this.level),
+          },
+        },
+        {
+          key: {
+            text: await this.i18nService.translate(
+              'professions.show.qualification.routesToObtain',
+            ),
+          },
+          value: {
+            html: this.routesToObtain,
+          },
+        },
+        {
+          key: {
+            text: await this.i18nService.translate(
+              'professions.show.qualification.mostCommonRouteToObtain',
+            ),
+          },
+          value: {
+            html: this.mostCommonRouteToObtain,
+          },
+        },
+        {
+          key: {
+            text: await this.i18nService.translate(
+              'professions.show.qualification.duration',
+            ),
+          },
+          value: {
+            text: this.duration,
+          },
+        },
+        {
+          key: {
+            text: await this.i18nService.translate(
+              'professions.show.qualification.mandatoryExperience',
+            ),
+          },
+          value: {
+            text: await this.i18nService.translate(
+              this.mandatoryProfessionalExperience,
+            ),
+          },
+        },
+      ],
+    };
+  }
 }

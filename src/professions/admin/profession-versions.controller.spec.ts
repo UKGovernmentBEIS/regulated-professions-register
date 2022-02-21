@@ -133,6 +133,7 @@ describe('ProfessionVersionsController', () => {
         presenter: {},
         qualification: new QualificationPresenter(
           professionWithVersion.qualification,
+          createMockI18nService(),
         ),
         nations: ['Translation of `nations.england`'],
         industries: ['Translation of `industries.example`'],

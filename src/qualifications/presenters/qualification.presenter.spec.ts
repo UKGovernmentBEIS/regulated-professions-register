@@ -2,6 +2,8 @@ import qualificationFactory from '../../testutils/factories/qualification';
 import QualificationPresenter from './qualification.presenter';
 import { formatMultilineString } from '../../helpers/format-multiline-string.helper';
 import { multilineOf } from '../../testutils/multiline-of';
+import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
+import { translationOf } from '../../testutils/translation-of';
 
 jest.mock('../../helpers/format-multiline-string.helper');
 
@@ -14,7 +16,10 @@ describe(QualificationPresenter, () => {
         routesToObtain: 'other value',
       });
 
-      const presenter = new QualificationPresenter(qualification);
+      const presenter = new QualificationPresenter(
+        qualification,
+        createMockI18nService(),
+      );
 
       expect(presenter.routesToObtain).toEqual(multilineOf('other value'));
 
@@ -30,7 +35,10 @@ describe(QualificationPresenter, () => {
         mostCommonRouteToObtain: 'other value',
       });
 
-      const presenter = new QualificationPresenter(qualification);
+      const presenter = new QualificationPresenter(
+        qualification,
+        createMockI18nService(),
+      );
 
       expect(presenter.mostCommonRouteToObtain).toEqual(
         multilineOf('other value'),
@@ -47,7 +55,10 @@ describe(QualificationPresenter, () => {
           mandatoryProfessionalExperience: true,
         });
 
-        const presenter = new QualificationPresenter(qualification);
+        const presenter = new QualificationPresenter(
+          qualification,
+          createMockI18nService(),
+        );
 
         expect(presenter.mandatoryProfessionalExperience).toEqual('app.yes');
       });
@@ -59,7 +70,10 @@ describe(QualificationPresenter, () => {
           mandatoryProfessionalExperience: false,
         });
 
-        const presenter = new QualificationPresenter(qualification);
+        const presenter = new QualificationPresenter(
+          qualification,
+          createMockI18nService(),
+        );
 
         expect(presenter.mandatoryProfessionalExperience).toEqual('app.no');
       });
@@ -73,7 +87,10 @@ describe(QualificationPresenter, () => {
           url: '',
         });
 
-        const presenter = new QualificationPresenter(qualification);
+        const presenter = new QualificationPresenter(
+          qualification,
+          createMockI18nService(),
+        );
 
         expect(presenter.moreInformationUrl).toEqual(null);
       });
@@ -84,7 +101,10 @@ describe(QualificationPresenter, () => {
           url: 'http://example.com',
         });
 
-        const presenter = new QualificationPresenter(qualification);
+        const presenter = new QualificationPresenter(
+          qualification,
+          createMockI18nService(),
+        );
 
         expect(presenter.moreInformationUrl).toEqual(
           '<a class="govuk-link" href="http://example.com">http://example.com</a>',
@@ -100,7 +120,10 @@ describe(QualificationPresenter, () => {
           ukRecognitionUrl: '',
         });
 
-        const presenter = new QualificationPresenter(qualification);
+        const presenter = new QualificationPresenter(
+          qualification,
+          createMockI18nService(),
+        );
 
         expect(presenter.ukRecognitionUrl).toEqual(null);
       });
@@ -111,7 +134,10 @@ describe(QualificationPresenter, () => {
           ukRecognitionUrl: 'http://example.com',
         });
 
-        const presenter = new QualificationPresenter(qualification);
+        const presenter = new QualificationPresenter(
+          qualification,
+          createMockI18nService(),
+        );
 
         expect(presenter.ukRecognitionUrl).toEqual(
           '<a class="govuk-link" href="http://example.com">http://example.com</a>',
@@ -127,7 +153,10 @@ describe(QualificationPresenter, () => {
           otherCountriesRecognitionUrl: '',
         });
 
-        const presenter = new QualificationPresenter(qualification);
+        const presenter = new QualificationPresenter(
+          qualification,
+          createMockI18nService(),
+        );
 
         expect(presenter.otherCountriesRecognitionUrl).toEqual(null);
       });
@@ -138,11 +167,79 @@ describe(QualificationPresenter, () => {
           otherCountriesRecognitionUrl: 'http://example.com',
         });
 
-        const presenter = new QualificationPresenter(qualification);
+        const presenter = new QualificationPresenter(
+          qualification,
+          createMockI18nService(),
+        );
 
         expect(presenter.otherCountriesRecognitionUrl).toEqual(
           '<a class="govuk-link" href="http://example.com">http://example.com</a>',
         );
+      });
+    });
+  });
+
+  describe('summaryList', () => {
+    it('returns a summary list of all Qualification fields', async () => {
+      const qualification = qualificationFactory.build({
+        otherCountriesRecognitionUrl: 'http://example.com',
+      });
+
+      const presenter = new QualificationPresenter(
+        qualification,
+        createMockI18nService(),
+      );
+
+      expect(presenter.summaryList()).resolves.toEqual({
+        classes: 'govuk-summary-list--no-border',
+        rows: [
+          {
+            key: {
+              text: translationOf('professions.show.qualification.level'),
+            },
+            value: {
+              html: formatMultilineString(presenter.level),
+            },
+          },
+          {
+            key: {
+              text: translationOf(
+                'professions.show.qualification.routesToObtain',
+              ),
+            },
+            value: {
+              html: presenter.routesToObtain,
+            },
+          },
+          {
+            key: {
+              text: translationOf(
+                'professions.show.qualification.mostCommonRouteToObtain',
+              ),
+            },
+            value: {
+              html: presenter.mostCommonRouteToObtain,
+            },
+          },
+          {
+            key: {
+              text: translationOf('professions.show.qualification.duration'),
+            },
+            value: {
+              text: presenter.duration,
+            },
+          },
+          {
+            key: {
+              text: translationOf(
+                'professions.show.qualification.mandatoryExperience',
+              ),
+            },
+            value: {
+              text: translationOf(presenter.mandatoryProfessionalExperience),
+            },
+          },
+        ],
       });
     });
   });
