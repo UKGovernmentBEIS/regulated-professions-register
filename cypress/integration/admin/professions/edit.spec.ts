@@ -373,31 +373,16 @@ describe('Editing an existing profession', () => {
       });
 
       cy.translate('nations.england').then((england) => {
-        cy.checkSummaryListRowValue(
-          'professions.form.label.topLevelInformation.nations',
-          england,
-        );
-      });
-
-      cy.translate('nations.wales').then((wales) => {
-        cy.checkSummaryListRowValue(
-          'professions.form.label.topLevelInformation.nations',
-          wales,
-        );
-      });
-
-      cy.translate('nations.northernIreland').then((northernIreland) => {
-        cy.checkSummaryListRowValue(
-          'professions.form.label.topLevelInformation.nations',
-          northernIreland,
-        );
-      });
-
-      cy.translate('nations.scotland').then((scotland) => {
-        cy.checkSummaryListRowValue(
-          'professions.form.label.topLevelInformation.nations',
-          scotland,
-        );
+        cy.translate('nations.scotland').then((scotland) => {
+          cy.translate('nations.wales').then((wales) => {
+            cy.translate('nations.northernIreland').then((northernIreland) => {
+              cy.checkSummaryListRowList(
+                'professions.form.label.topLevelInformation.nations',
+                [england, scotland, wales, northernIreland],
+              );
+            });
+          });
+        });
       });
     });
   });

@@ -172,6 +172,23 @@ Cypress.Commands.add(
 );
 
 Cypress.Commands.add(
+  'checkSummaryListRowList',
+  (key: string, listItems: string[]) => {
+    return cy.translate(key).then((label) => {
+      cy.get('.govuk-summary-list__key')
+        .contains(label)
+        .siblings('.govuk-summary-list__value')
+        .within(() => {
+          cy.get('ul li').should('have.length', listItems.length);
+          listItems.forEach((listItem) =>
+            cy.get('ul li').should('contain', listItem),
+          );
+        });
+    });
+  },
+);
+
+Cypress.Commands.add(
   'clickSummaryListRowAction',
   (key: string, action: string) => {
     return cy.translate(key).then((label) => {
