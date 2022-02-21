@@ -36,6 +36,40 @@
                     }
                   ]
                 }
+              },
+              {
+                key: {
+                  text: ("professions.form.label.topLevelInformation.regulatedAuthority" | t)
+                },
+                value: {
+                  text: organisation
+                },
+                actions: {
+                  items: [
+                    {
+                      href: "/admin/professions/" + professionId + "/versions/" + versionId + "/top-level-information/edit?change=true",
+                      text: ("app.change" | t),
+                      visuallyHiddenText: ("professions.form.label.topLevelInformation.regulatedAuthority" | t)
+                    }
+                  ]
+                }
+              },
+              {
+                key: {
+                  text: ("professions.form.label.topLevelInformation.additionalAuthority" | t)
+                },
+                value: {
+                  text: (additionalOrganisation if (additionalOrganisation|length) else ("app.no" | t))
+                },
+                actions: {
+                  items: [
+                    {
+                      href: "/admin/professions/" + professionId + "/versions/" + versionId + "/top-level-information/edit?change=true",
+                      text: ("app.change" | t),
+                      visuallyHiddenText: ("professions.form.label.topLevelInformation.additionalAuthority" | t)
+                    }
+                  ]
+                }
               }
             ]
           })
@@ -92,49 +126,6 @@
                       href: "/admin/professions/" + professionId + "/versions/" + versionId + "/scope/edit?change=true",
                       text: ("app.change" | t),
                       visuallyHiddenText: ("professions.form.label.scop.industry" | t)
-                    }
-                  ]
-                }
-              }
-            ]
-          })
-        }}
-
-        <h2 class="govuk-heading-m">{{ ("professions.form.headings.regulatoryBody" | t) }}</h2>
-
-        {{
-          govukSummaryList({
-            rows: [
-              {
-                key: {
-                  text: ("professions.form.label.regulatoryBody.regulatedAuthority" | t)
-                },
-                value: {
-                  text: organisation
-                },
-                actions: {
-                  items: [
-                    {
-                      href: "/admin/professions/" + professionId + "/versions/" + versionId + "/regulatory-body/edit?change=true",
-                      text: ("app.change" | t),
-                      visuallyHiddenText: ("professions.form.label.regulatoryBody.regulatedAuthority" | t)
-                    }
-                  ]
-                }
-              },
-              {
-                key: {
-                  text: ("professions.form.label.regulatoryBody.additionalAuthority" | t)
-                },
-                value: {
-                  text: (additionalOrganisation if (additionalOrganisation|length) else ("app.no" | t))
-                },
-                actions: {
-                  items: [
-                    {
-                      href: "/admin/professions/" + professionId + "/versions/" + versionId + "/regulatory-body/edit?change=true",
-                      text: ("app.change" | t),
-                      visuallyHiddenText: ("professions.form.label.regulatoryBody.additionalAuthority" | t)
                     }
                   ]
                 }

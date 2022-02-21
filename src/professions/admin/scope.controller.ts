@@ -142,7 +142,7 @@ export class ScopeController {
     }
 
     return res.redirect(
-      `/admin/professions/${professionId}/versions/${versionId}/regulatory-body/edit`,
+      `/admin/professions/${professionId}/versions/${versionId}/registration/edit`,
     );
   }
 

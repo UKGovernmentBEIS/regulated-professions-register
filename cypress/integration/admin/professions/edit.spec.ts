@@ -60,6 +60,11 @@ describe('Editing an existing profession', () => {
         'Registered Trademark Attorney',
       );
 
+      cy.checkSummaryListRowValue(
+        'professions.form.label.topLevelInformation.regulatedAuthority',
+        'Law Society of England and Wales',
+      );
+
       cy.translate('nations.england').then((england) => {
         cy.translate('nations.scotland').then((scotland) => {
           cy.translate('nations.wales').then((wales) => {
@@ -72,11 +77,6 @@ describe('Editing an existing profession', () => {
           });
         });
       });
-
-      cy.checkSummaryListRowValue(
-        'professions.form.label.regulatoryBody.regulatedAuthority',
-        'Law Society of England and Wales',
-      );
 
       cy.checkSummaryListRowValue(
         'professions.form.label.regulatedActivities.regulationSummary',
@@ -119,6 +119,25 @@ describe('Editing an existing profession', () => {
       );
 
       cy.clickSummaryListRowAction(
+        'professions.form.label.topLevelInformation.regulatedAuthority',
+        'Change',
+      );
+      cy.checkAccessibility();
+      cy.translate('professions.form.captions.edit').then((editCaption) => {
+        cy.get('body').contains(editCaption);
+      });
+      cy.get('select[name="regulatoryBody"]').select(
+        'Department for Education',
+      );
+      cy.translate('app.continue').then((buttonText) => {
+        cy.get('button').contains(buttonText).click();
+      });
+      cy.checkSummaryListRowValue(
+        'professions.form.label.topLevelInformation.regulatedAuthority',
+        'Department for Education',
+      );
+
+      cy.clickSummaryListRowAction(
         'professions.form.label.scope.nations',
         'Change',
       );
@@ -150,25 +169,6 @@ describe('Editing an existing profession', () => {
           });
         });
       });
-
-      cy.clickSummaryListRowAction(
-        'professions.form.label.regulatoryBody.regulatedAuthority',
-        'Change',
-      );
-      cy.checkAccessibility();
-      cy.translate('professions.form.captions.edit').then((editCaption) => {
-        cy.get('body').contains(editCaption);
-      });
-      cy.get('select[name="regulatoryBody"]').select(
-        'Department for Education',
-      );
-      cy.translate('app.continue').then((buttonText) => {
-        cy.get('button').contains(buttonText).click();
-      });
-      cy.checkSummaryListRowValue(
-        'professions.form.label.regulatoryBody.regulatedAuthority',
-        'Department for Education',
-      );
 
       cy.clickSummaryListRowAction(
         'professions.form.label.regulatedActivities.regulationSummary',

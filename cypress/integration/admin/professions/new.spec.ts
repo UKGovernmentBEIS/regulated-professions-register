@@ -45,6 +45,12 @@ describe('Adding a new profession', () => {
         cy.get('body').contains(addCaption);
       });
       cy.get('input[name="name"]').type('Example Profession');
+      cy.get('select[name="regulatoryBody"]').select(
+        'Department for Education',
+      );
+      cy.get('select[name="additionalRegulatoryBody"]').select(
+        'General Medical Council',
+      );
       cy.translate('app.continue').then((buttonText) => {
         cy.get('button').contains(buttonText).click();
       });
@@ -69,26 +75,6 @@ describe('Adding a new profession', () => {
       });
 
       cy.checkAccessibility();
-      cy.translate('professions.form.headings.regulatoryBody').then(
-        (heading) => {
-          cy.get('body').should('contain', heading);
-        },
-      );
-      cy.translate('professions.form.captions.add').then((addCaption) => {
-        cy.get('body').contains(addCaption);
-      });
-      cy.get('select[name="regulatoryBody"]').select(
-        'Department for Education',
-      );
-      cy.get('select[name="additionalRegulatoryBody"]').select(
-        'General Medical Council',
-      );
-      cy.translate('app.continue').then((buttonText) => {
-        cy.get('button').contains(buttonText).click();
-      });
-
-      cy.checkAccessibility();
-
       cy.translate('professions.form.captions.add').then((addCaption) => {
         cy.get('body').contains(addCaption);
       });
@@ -207,6 +193,14 @@ describe('Adding a new profession', () => {
         'professions.form.label.topLevelInformation.name',
         'Example Profession',
       );
+      cy.checkSummaryListRowValue(
+        'professions.form.label.topLevelInformation.regulatedAuthority',
+        'Department for Education',
+      );
+      cy.checkSummaryListRowValue(
+        'professions.form.label.topLevelInformation.additionalAuthority',
+        'General Medical Council',
+      );
 
       cy.translate('nations.england').then((england) => {
         cy.checkSummaryListRowValue(
@@ -219,16 +213,6 @@ describe('Adding a new profession', () => {
       cy.checkSummaryListRowValue(
         'professions.form.label.scope.industry',
         'Construction & Engineering',
-      );
-
-      cy.checkSummaryListRowValue(
-        'professions.form.label.regulatoryBody.regulatedAuthority',
-        'Department for Education',
-      );
-
-      cy.checkSummaryListRowValue(
-        'professions.form.label.regulatoryBody.additionalAuthority',
-        'General Medical Council',
       );
 
       cy.translate(

@@ -9,7 +9,6 @@ import { Industry } from '../industries/industry.entity';
 import { CheckYourAnswersController } from './admin/check-your-answers.controller';
 import { ConfirmationController } from './admin/confirmation.controller';
 import { SearchController } from './search/search.controller';
-import { RegulatoryBodyController } from './admin/regulatory-body.controller';
 import { Organisation } from '../organisations/organisation.entity';
 import { OrganisationsService } from '../organisations/organisations.service';
 import { RegulatedActivitiesController } from './admin/regulated-activities.controller';
@@ -41,7 +40,6 @@ import { ScopeController } from './admin/scope.controller';
     ProfessionVersionsController,
     TopLevelInformationController,
     ScopeController,
-    RegulatoryBodyController,
     RegulatedActivitiesController,
     QualificationInformationController,
     LegislationController,

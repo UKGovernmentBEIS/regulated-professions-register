@@ -277,7 +277,7 @@ describe('ScopeController', () => {
         );
 
         expect(response.redirect).toHaveBeenCalledWith(
-          '/admin/professions/profession-id/versions/version-id/regulatory-body/edit',
+          '/admin/professions/profession-id/versions/version-id/registration/edit',
         );
       });
 
@@ -369,7 +369,7 @@ describe('ScopeController', () => {
             coversUK: '0',
             nations: ['GB-ENG'],
             industries: ['construction-uuid'],
-            change: true,
+            change: 'true',
           };
 
           industriesService.findByIds.mockResolvedValue([industry]);
@@ -420,7 +420,7 @@ describe('ScopeController', () => {
           );
 
           expect(response.redirect).toHaveBeenCalledWith(
-            '/admin/professions/profession-id/versions/version-id/regulatory-body/edit',
+            '/admin/professions/profession-id/versions/version-id/registration/edit',
           );
         });
       });

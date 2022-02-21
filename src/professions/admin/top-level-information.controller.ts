@@ -22,11 +22,17 @@ import { BackLink } from '../../common/decorators/back-link.decorator';
 
 import ViewUtils from './viewUtils';
 import { isConfirmed } from '../../helpers/is-confirmed';
+import { OrganisationsService } from '../../organisations/organisations.service';
+import { RegulatedAuthoritiesSelectPresenter } from './regulated-authorities-select-presenter';
+import { Organisation } from '../../organisations/organisation.entity';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
 export class TopLevelInformationController {
-  constructor(private readonly professionsService: ProfessionsService) {}
+  constructor(
+    private readonly professionsService: ProfessionsService,
+    private readonly organisationsService: OrganisationsService,
+  ) {}
 
   @Get('/:professionId/versions/:versionId/top-level-information/edit')
   @Permissions(UserPermission.CreateProfession, UserPermission.EditProfession)
@@ -48,6 +54,8 @@ export class TopLevelInformationController {
     return this.renderForm(
       res,
       profession.name,
+      profession.organisation,
+      profession.additionalOrganisation,
       isConfirmed(profession),
       change === 'true',
       errors,
@@ -74,6 +82,17 @@ export class TopLevelInformationController {
 
     const submittedValues: TopLevelDetailsDto = topLevelDetailsDto;
 
+    const selectedOrganisation = submittedValues.regulatoryBody
+      ? await this.organisationsService.find(submittedValues.regulatoryBody)
+      : null;
+
+    const selectedAdditionalOrganisation =
+      submittedValues.additionalRegulatoryBody
+        ? await this.organisationsService.find(
+            submittedValues.additionalRegulatoryBody,
+          )
+        : null;
+
     const profession = await this.professionsService.findWithVersions(
       professionId,
     );
@@ -83,6 +102,8 @@ export class TopLevelInformationController {
       return this.renderForm(
         res,
         submittedValues.name,
+        selectedOrganisation,
+        selectedAdditionalOrganisation,
         isConfirmed(profession),
         submittedValues.change === 'true',
         errors,
@@ -93,6 +114,8 @@ export class TopLevelInformationController {
       ...profession,
       ...{
         name: submittedValues.name,
+        organisation: selectedOrganisation,
+        additionalOrganisation: selectedAdditionalOrganisation,
       },
     };
 
@@ -112,12 +135,30 @@ export class TopLevelInformationController {
   private async renderForm(
     res: Response,
     name: string,
+    selectedRegulatoryAuthority: Organisation | null,
+    selectedAdditionalRegulatoryAuthority: Organisation | null,
     isEditing: boolean,
     change: boolean,
     errors: object | undefined = undefined,
   ): Promise<void> {
+    const regulatedAuthorities = await this.organisationsService.all();
+
+    const regulatedAuthoritiesSelectArgs =
+      new RegulatedAuthoritiesSelectPresenter(
+        regulatedAuthorities,
+        selectedRegulatoryAuthority,
+      ).selectArgs();
+
+    const additionalRegulatedAuthoritiesSelectArgs =
+      new RegulatedAuthoritiesSelectPresenter(
+        regulatedAuthorities,
+        selectedAdditionalRegulatoryAuthority,
+      ).selectArgs();
+
     const templateArgs: TopLevelDetailsTemplate = {
       name,
+      regulatedAuthoritiesSelectArgs,
+      additionalRegulatedAuthoritiesSelectArgs,
       captionText: ViewUtils.captionText(isEditing),
       change,
       errors,
