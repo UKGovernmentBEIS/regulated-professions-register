@@ -197,7 +197,7 @@
       "name": "Name",
       "address": "Address",
       "emailAddress": "Email address",
-      "url": "URL",
+      "url": "Website",
       "phoneNumber": "Phone number"
     },
     "regulatedActivities": {
