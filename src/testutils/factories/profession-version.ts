@@ -27,6 +27,8 @@ class ProfessionVersionFactory extends Factory<ProfessionVersion> {
       reservedActivities: undefined,
       profession: undefined,
       user: undefined,
+      keywords: undefined,
+      socCode: undefined,
       status: ProfessionVersionStatus.Unconfirmed,
     });
   }
@@ -55,6 +57,8 @@ export default ProfessionVersionFactory.define(({ sequence }) => ({
   profession: professionFactory.build(),
   user: userFactory.build(),
   status: ProfessionVersionStatus.Unconfirmed,
+  keywords: 'foo,bar,baz',
+  socCode: 1234,
   created_at: new Date(),
   updated_at: new Date(),
 }));
