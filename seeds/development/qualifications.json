@@ -3,8 +3,6 @@
     "level": "DSE - Diploma (post-secondary education), including Annex II (ex 92/51, Annex C,D) , Art. 11 c",
     "routesToObtain": "General secondary education",
     "mostCommonRouteToObtain": "General secondary education",
-    "methodToObtain": "generalSecondaryEducation",
-    "commonPathToObtain": "generalSecondaryEducation",
     "educationDuration": " 5.0 Year",
     "mandatoryProfessionalExperience": true
   },
@@ -12,8 +10,6 @@
     "level": "PS3 - Diploma of post-secondary level (3-4 years) , Art. 11 d",
     "routesToObtain": "General or vocational post-secondary education",
     "mostCommonRouteToObtain": "General or vocational post-secondary education",
-    "methodToObtain": "generalOrVocationalPostSecondaryEducation",
-    "commonPathToObtain": "generalOrVocationalPostSecondaryEducation",
     "educationDuration": "3.5 Year",
     "mandatoryProfessionalExperience": true
   },
@@ -21,8 +17,6 @@
     "level": "ATT - Attestation of competence , Art. 11 a",
     "routesToObtain": "General or vocational post-secondary education",
     "mostCommonRouteToObtain": "General or vocational post-secondary education",
-    "methodToObtain": "generalOrVocationalPostSecondaryEducation",
-    "commonPathToObtain": "generalOrVocationalPostSecondaryEducation",
     "educationDuration": "3 Year",
     "mandatoryProfessionalExperience": false
   }

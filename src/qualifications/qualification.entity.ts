@@ -6,15 +6,6 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-export enum MethodToObtain {
-  GeneralSecondaryEducation = 'generalSecondaryEducation',
-  GeneralOrVocationalPostSecondaryEducation = 'generalOrVocationalPostSecondaryEducation',
-  GeneralPostSecondaryEducationMandatoryVocational = 'generalPostSecondaryEducationMandatoryVocational',
-  VocationalPostSecondaryEducation = 'vocationalPostSecondaryEducation',
-  DegreeLevel = 'degreeLevel',
-  Others = 'others',
-}
-
 @Entity({ name: 'qualifications' })
 export class Qualification {
   @PrimaryGeneratedColumn('uuid')
@@ -23,14 +14,8 @@ export class Qualification {
   @Column()
   level: string;
 
-  @Column({ type: 'enum', enum: MethodToObtain, nullable: true })
-  methodToObtainDeprecated: MethodToObtain;
-
   @Column({ nullable: true })
   routesToObtain: string;
-
-  @Column({ type: 'enum', enum: MethodToObtain, nullable: true })
-  commonPathToObtainDeprecated: MethodToObtain;
 
   @Column({ nullable: true })
   mostCommonRouteToObtain: string;
@@ -68,9 +53,7 @@ export class Qualification {
 
   constructor(
     level?: string,
-    methodToObtain?: MethodToObtain,
     routesToObtain?: string,
-    commonPathToObtain?: MethodToObtain,
     mostCommonRouteToObtain?: string,
     educationDuration?: string,
     mandatoryProfessionalExperience?: boolean,
@@ -80,8 +63,6 @@ export class Qualification {
     otherCountriesRecognitionUrl?: string,
   ) {
     this.level = level || '';
-    this.methodToObtainDeprecated = methodToObtain || undefined;
-    this.commonPathToObtainDeprecated = commonPathToObtain || undefined;
     this.routesToObtain = routesToObtain || '';
     this.mostCommonRouteToObtain = mostCommonRouteToObtain || '';
     this.educationDuration = educationDuration || '';
