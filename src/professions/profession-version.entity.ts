@@ -96,6 +96,12 @@ export class ProfessionVersion {
   )
   legislations: Legislation[];
 
+  @Column({ nullable: true })
+  keywords: string;
+
+  @Column({ nullable: true })
+  socCode: number;
+
   @CreateDateColumn({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP(6)',
