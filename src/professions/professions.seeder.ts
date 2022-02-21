@@ -31,6 +31,8 @@ type SeedProfession = {
   legislation: string;
   organisation: string;
   additionalOrganisation: string;
+  socCode: number;
+  keywords: string;
   mandatoryRegistration: MandatoryRegistration;
   confirmed: boolean;
   versions: SeedVersion[];
@@ -48,6 +50,8 @@ type SeedVersion = {
   regulationUrl: string;
   legislations: string[];
   organisation: string;
+  socCode: number;
+  keywords: string;
   mandatoryRegistration: MandatoryRegistration;
   status: ProfessionVersionStatus;
 };
@@ -191,6 +195,8 @@ export class ProfessionsSeeder implements Seeder {
           qualification: qualification,
           status: version.status as ProfessionVersionStatus,
           profession: savedProfession,
+          socCode: version.socCode,
+          keywords: version.keywords,
         } as ProfessionVersion;
 
         return { ...existingVersion, ...newVersion };

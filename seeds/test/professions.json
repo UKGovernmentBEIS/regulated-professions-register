@@ -19,14 +19,16 @@
         "description": "Registration protection and exploitation of trade marks",
         "occupationLocations": ["GB-ENG", "GB-SCT", "GB-WLS", "GB-NIR"],
         "regulationType": "Reserves of activities",
-        "protectedTitles": "Trade Mark Agent",
         "industries": ["industries.law"],
         "qualification": "DSE - Diploma (post-secondary education), including Annex II (ex 92/51, Annex C,D) , Art. 11 c",
         "reservedActivities": "England and Wales: the exercise of a right of audience; the conduct of litigation; reserved instrument activities; probate activities; the administration of oaths (see section 12 Legal Services Act 2007).",
+        "protectedTitles": "Trade Mark Agent",
         "legislations": ["The Trade Marks Act 1994"],
         "organisation": "Law Society of England and Wales",
         "mandatoryRegistration": "voluntary",
-        "status": "live"
+        "status": "live",
+        "socCode": 2419,
+        "keywords": "Accountant of Court,Adjudicator, parking,Adjudicator,Adviser, legal, court,Adviser, legal, protection, data,Adviser, legal,Adviser, protection, data,Adviser,Agent, law,Agent, parliamentary,Agent, patent,Arbitrator,Assistant, court,Attorney, mark, trade,Attorney, patent,Attorney,Auditor of Court,Clerk, articled,Clerk, chief,Clerk, court,Clerk, justice's,Clerk, law,Clerk, magistrate's,Clerk, sessions, quarter,Clerk, solicitor's,Clerk of arraigns,Clerk of the court,Clerk of the peace,Clerk to the justices,Commissioner,Commissioner of oaths,Consultant, immigration,Consultant, legal,Conveyancer,Coordinator, legal,Counsel, general,Counsel, legal,Counsellor,Draftsman, parliamentary,Executive, legal, chartered,Executive, legal,Executive, legal,Executive, litigation,Notary,Officer, legal,Owner,Paralegal,Reporter, children’s,Reporter to the Children's Panel"
       }
     ]
   },
@@ -58,7 +60,9 @@
         ],
         "organisation": "Department for Education",
         "mandatoryRegistration": "mandatory",
-        "status": "live"
+        "status": "live",
+        "socCode": 2313,
+        "keywords": "Director of studies,Director of studies,Head, assistant,Head, assistant,Head, deputy,Head, deputy,Head of department,Head of department,Head of year,Instructor, training, physical,Instructor, woodwork,Instructor, woodwork,Instructor,Instructor,Instructor,Leader, curriculum,Lecturer, dance,Lecturer,Lecturer,Master, head, assistant,Master, head, assistant,Master, head, deputy,Master, head, deputy,Master, house,Master, house,Master, school,Master, school,Master,Master,Mistress, head, assistant,Mistress, head, assistant,Mistress, head, deputy,Mistress, head, deputy,Mistress, house,Mistress, house,Mistress, school,Mistress, school,Mistress,Mistress,Monk,Nun,Principal teacher of guidance,Teacher, art,Teacher, art and design,Teacher, biology,Teacher, chemistry,Teacher, college, form, sixth,Teacher, dance,Teacher, dancing,Teacher, design and technology,Teacher, drama,Teacher, economics, home,Teacher, economics,Teacher, education, physical,Teacher, education, religious,Teacher, English,Teacher, form, sixth,Teacher, French,Teacher, geography,Teacher, German,Teacher, head, assistant,Teacher, head, assistant,Teacher, head, deputy,Teacher, head, deputy,Teacher, history,Teacher, ICT,Teacher, IT,Teacher, Italian,Teacher, language,Teacher, languages, foreign, modern,Teacher, mathematics,Teacher, music,Teacher, PE,Teacher, physics,Teacher, psychology,Teacher, RE,Teacher, school, comprehensive,Teacher, school, secondary,Teacher, school, upper,Teacher, science, computer,Teacher, science,Teacher, secondary,Teacher, sociology,Teacher, Spanish,Teacher, technology, information,Teacher, technology, information and communication,Teacher, Welsh,Teacher,Teacher,Tutor,Tutor"
       }
     ]
   },
@@ -88,7 +92,9 @@
         "legislations": ["Gas Safety (Installation and Use) Regulations 1998"],
         "organisation": "Council of Registered Gas Installers",
         "mandatoryRegistration": "voluntary",
-        "status": "draft"
+        "status": "draft",
+        "socCode": 5315,
+        "keywords": "Adviser, heating,Connector, coupling,Consultant, heating,Contractor, plumbing,Converter,Craftsman, distribution,Craftsman, governor,Craftsman, transmission,Craftsman,Engineer, biomass,Engineer, domestic,Engineer, field,Engineer, Gas, British,Engineer, gas, domestic,Engineer, gas, emergency,Engineer, gas, technical,Engineer, gas,Engineer, gas and heating,Engineer, gas and water,Engineer, heat and domestic,Engineer, heating, central,Engineer, heating, gas,Engineer, heating,Engineer, heating and lighting,Engineer, heating and plumbing,Engineer, heating and ventilating,Engineer, installation, gas,Engineer, installation,Engineer, mains,Engineer, maintenance,Engineer, plumber and gas,Engineer, plumbing,Engineer, plumbing and heating,Engineer, pump, heat,Engineer, safe, gas,Engineer, sanitary,Engineer, service, gas,Engineer, service,Engineer, service,Engineer, service,Engineer, technical, gas,Engineer, technical,Engineer, thermal,Engineer, thermal and acoustic,Engineer, ventilating,Engineer, ventilation,Engineer, ventilation,Engineer, water, hot,Erector, mains, gas,Fitter, bathroom,Fitter, burner,Fitter, district,Fitter, engineer's, heating,Fitter, engineer's, sanitary,Fitter, fire, gas,Fitter, gas,Fitter, governor,Fitter, heating,Fitter, heating and ventilation,Fitter, kitchen and bathroom,Fitter, maintenance,Fitter, maintenance,Fitter, maintenance,Fitter, sanitary,Fitter, sprinkler,Fitter, steam,Fitter, steam and hot water,Fitter, stove,Fitter, ventilation,Fitter, water,Fitter,Fitter,Fitter,Fitter-welder,Fixer, appliances,Fixer, meter,Fixer, meter,Fixer, ventilator,Inserter, ferrule,Installer, bathroom,Installer, heating,Installer, meter,Installer, meter,Installer, pump, heat,Installer,Jointer, pipe, sprinkler,Linesman, gas,Man, maintenance,Man, service, sales,Man, service,Man, service,Mender,Pewterer,Plumber,Plumber and decorator,Plumber and gasfitter,Plumber-welder,Repairer, stove,Repairer,Technician, gas,Technician, network,Technician, network,Technician, plumbing,Technician, service,Worker, gas, maintenance"
       }
     ]
   }
