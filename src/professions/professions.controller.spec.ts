@@ -58,10 +58,10 @@ describe('ProfessionsController', () => {
 
       expect(result).toEqual({
         profession: profession,
-        qualification: new QualificationPresenter(
+        qualificationSummaryList: await new QualificationPresenter(
           profession.qualification,
           createMockI18nService(),
-        ),
+        ).summaryList(),
         nations: [translationOf('nations.england')],
         industries: [translationOf('industries.example')],
         organisation: profession.organisation,
@@ -98,7 +98,7 @@ describe('ProfessionsController', () => {
 
         expect(result).toEqual({
           profession: profession,
-          qualification: null,
+          qualificationSummaryList: null,
           nations: [translationOf('nations.england')],
           industries: [translationOf('industries.example')],
           organisation: profession.organisation,

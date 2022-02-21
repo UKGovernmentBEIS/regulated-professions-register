@@ -95,7 +95,9 @@ export class ProfessionVersionsController {
     return {
       profession,
       presenter,
-      qualification: qualification,
+      qualificationSummaryList: qualification
+        ? await qualification.summaryList()
+        : null,
       nations,
       industries,
       organisation,
