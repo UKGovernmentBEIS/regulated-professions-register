@@ -33,29 +33,6 @@ describe('Publishing organisations', () => {
         },
       );
 
-      cy.translate(
-        'organisations.admin.publish.confirmation.backToDashboard',
-      ).then((backToDashboard) => {
-        cy.get('a').contains(backToDashboard).click();
-      });
-
-      cy.get('tr')
-        .contains('Department for Education')
-        .then(($header) => {
-          const $row = $header.parent();
-
-          cy.translate(`organisations.status.live`).then((status) => {
-            cy.wrap($row).should('contain', status);
-          });
-        });
-
-      cy.contains('Department for Education')
-        .parent('tr')
-        .within(() => {
-          cy.get('a').contains('View details').click();
-        });
-      cy.checkAccessibility();
-
       cy.translate('organisations.admin.button.edit.live').then(
         (editButton) => {
           cy.get('html').should('contain', editButton);
@@ -67,6 +44,18 @@ describe('Publishing organisations', () => {
         'contain',
         format(new Date(), 'dd-MM-yyyy'),
       );
+
+      cy.visitAndCheckAccessibility('/admin/organisations');
+
+      cy.get('tr')
+        .contains('Department for Education')
+        .then(($header) => {
+          const $row = $header.parent();
+
+          cy.translate(`organisations.status.live`).then((status) => {
+            cy.wrap($row).should('contain', status);
+          });
+        });
     });
   });
 });
