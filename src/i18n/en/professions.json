@@ -24,7 +24,7 @@
         "name": "Name of regulated profession",
         "nations": "In which nation(s) is this profession regulated?",
         "certainNations": "Certain Nations",
-        "industry": "Industry / sector"
+        "industry": "Sectors"
       },
       "regulatoryBody": {
         "regulatedAuthority": "Which body regulates this profession?",
@@ -189,7 +189,7 @@
     "overview": {
       "heading": "Overview",
       "nations": "Nations",
-      "industry": "Industry / sector"
+      "industry": "Sectors"
     },
     "bodies": {
       "heading": "Regulatory / professional bodies",
@@ -271,7 +271,7 @@
         "hint": "Select all that apply."
       },
       "industries": {
-        "label": "Industry / sector",
+        "label": "Sectors",
         "hint": "Select all that apply."
       },
       "changedBy": {
@@ -285,8 +285,8 @@
       "nations": "Nations",
       "lastModified": "Last modified",
       "changedBy": "Changed by",
-      "organisation": "Regulator",
-      "industry": "Industry / sector",
+      "organisation": "Regulators",
+      "industry": "Sectors",
       "status": "Status",
       "actions": "Actions"
     },
@@ -330,7 +330,7 @@
     },
     "profession": {
       "regulators": "Regulators",
-      "industry": "Industry / sector"
+      "industry": "Sectors"
     },
     "foundSingular": "profession found.",
     "foundPlural": "professions found.",
@@ -344,7 +344,7 @@
         "hint": "Select all that apply."
       },
       "industries": {
-        "label": "Industry / sector",
+        "label": "Sectors",
         "hint": "Select all that apply."
       },
       "button": "Filter results"
