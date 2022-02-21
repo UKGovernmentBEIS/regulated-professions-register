@@ -27,6 +27,9 @@ export class Qualification {
   mandatoryProfessionalExperience: boolean;
 
   @Column({ nullable: true })
+  url: string;
+
+  @Column({ nullable: true })
   ukRecognition: string;
 
   @Column({ nullable: true })
@@ -57,6 +60,7 @@ export class Qualification {
     mostCommonRouteToObtain?: string,
     educationDuration?: string,
     mandatoryProfessionalExperience?: boolean,
+    url?: string,
     ukRecognition?: string,
     ukRecognitionUrl?: string,
     otherCountriesRecognition?: string,
@@ -68,6 +72,7 @@ export class Qualification {
     this.educationDuration = educationDuration || '';
     this.mandatoryProfessionalExperience =
       mandatoryProfessionalExperience || true;
+    this.url = url || '';
     this.ukRecognition = ukRecognition || '';
     this.ukRecognitionUrl = ukRecognitionUrl || '';
     this.otherCountriesRecognition = otherCountriesRecognition || '';

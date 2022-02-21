@@ -7,6 +7,7 @@ export default Factory.define<Qualification>(({ sequence }) => ({
   mostCommonRouteToObtain: '',
   educationDuration: '1.0 Year',
   mandatoryProfessionalExperience: true,
+  url: 'http://www.example.com',
   routesToObtain: '',
   professionVersion: undefined,
   ukRecognition: undefined,
