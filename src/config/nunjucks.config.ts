@@ -30,7 +30,7 @@ export const nunjucksConfig = async (
   env.addGlobal('environment', process.env['NODE_ENV']);
   env.addGlobal(
     'site_domain',
-    process.env['HOST_URL'].replace(/https?:\/\//, ''),
+    process.env['HOST_URL'].replace(/https?:\/\//, '').split('/')[0],
   );
   env.addFilter(
     't',
