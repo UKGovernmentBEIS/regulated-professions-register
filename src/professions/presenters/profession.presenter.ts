@@ -3,7 +3,6 @@ import { Profession } from '../profession.entity';
 import { SummaryList } from '../../common/interfaces/summary-list';
 import { stringifyNations } from '../../nations/helpers/stringifyNations';
 import { Nation } from '../../nations/nation';
-import { formatMultilineString } from '../../helpers/format-multiline-string.helper';
 import { formatDate } from '../../common/utils';
 
 export class ProfessionPresenter {
@@ -34,18 +33,6 @@ export class ProfessionPresenter {
           },
           value: {
             text: await this.industries(),
-          },
-        },
-        {
-          key: {
-            text: await this.i18nService.translate(
-              'professions.show.qualification.level',
-            ),
-          },
-          value: {
-            html: this.profession.qualification
-              ? formatMultilineString(this.profession.qualification.level)
-              : null,
           },
         },
       ],
