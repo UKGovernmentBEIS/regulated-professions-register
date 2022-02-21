@@ -25,6 +25,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Allow BEIS team users to see the "Changed By" field so they can track who has edited data.
 - Change edit button wording depending on entity status
 - Show a confirmation banner when publishing entities
+- Change order of data entry when creating a profession, so name and organisation(s) are inputted first
 
 ## [release-003] - 2022-02-16
 
