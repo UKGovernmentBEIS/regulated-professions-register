@@ -77,7 +77,7 @@ describe('TopLevelInformationController', () => {
 
         industriesService.all.mockResolvedValue(industries);
 
-        await controller.edit(response, 'profession-id', 'version-id', false);
+        await controller.edit(response, 'profession-id', 'version-id', 'false');
 
         expect(response.render).toHaveBeenCalledWith(
           'admin/professions/top-level-information',
@@ -160,7 +160,7 @@ describe('TopLevelInformationController', () => {
           }),
         ]);
 
-        await controller.edit(response, 'profession-id', 'version-id', false);
+        await controller.edit(response, 'profession-id', 'version-id', 'false');
 
         expect(response.render).toHaveBeenCalledWith(
           'admin/professions/top-level-information',
@@ -228,7 +228,7 @@ describe('TopLevelInformationController', () => {
         professionsService.findWithVersions.mockResolvedValue(profession);
         professionVersionsService.findWithProfession.mockResolvedValue(version);
 
-        await controller.edit(response, 'profession-id', 'version-id', false);
+        await controller.edit(response, 'profession-id', 'version-id', 'false');
 
         expect(response.render).toHaveBeenCalledWith(
           'admin/professions/top-level-information',
@@ -392,7 +392,7 @@ describe('TopLevelInformationController', () => {
             coversUK: '0',
             nations: ['GB-ENG'],
             industries: ['construction-uuid'],
-            change: true,
+            change: 'true',
           };
 
           industriesService.findByIds.mockResolvedValue([industry]);

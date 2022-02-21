@@ -31,6 +31,7 @@ import { ProfessionVersionsService } from '../profession-versions.service';
 import { ProfessionVersion } from '../profession-version.entity';
 import { isConfirmed } from '../../helpers/is-confirmed';
 import { allNations, isUK } from '../../helpers/nations.helper';
+
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
 export class TopLevelInformationController {
@@ -52,7 +53,7 @@ export class TopLevelInformationController {
     @Res() res: Response,
     @Param('professionId') professionId: string,
     @Param('versionId') versionId: string,
-    @Query('change') change: boolean,
+    @Query('change') change: string,
     errors: object | undefined = undefined,
   ): Promise<void> {
     const profession = await this.professionsService.findWithVersions(
@@ -74,7 +75,7 @@ export class TopLevelInformationController {
       version.industries || [],
       version.occupationLocations || [],
       isConfirmed(profession),
-      change,
+      change === 'true',
       errors,
     );
   }
@@ -83,7 +84,7 @@ export class TopLevelInformationController {
   @Permissions(UserPermission.CreateProfession, UserPermission.EditProfession)
   @BackLink((request: Request) =>
     request.body.change === 'true'
-      ? '/admin/professions/:professionId/check-your-answers'
+      ? '/admin/professions/:professionId/versions/:versionId/check-your-answers'
       : '/admin/professions',
   )
   async update(
@@ -121,7 +122,7 @@ export class TopLevelInformationController {
         submittedIndustries,
         submittedValues.nations || [],
         isConfirmed(profession),
-        submittedValues.change,
+        submittedValues.change === 'true',
         errors,
       );
     }
@@ -148,7 +149,7 @@ export class TopLevelInformationController {
     await this.professionsService.save(updatedProfession);
     await this.professionVersionsService.save(updatedVersion);
 
-    if (submittedValues.change) {
+    if (submittedValues.change === 'true') {
       return res.redirect(
         `/admin/professions/${professionId}/versions/${versionId}/check-your-answers`,
       );

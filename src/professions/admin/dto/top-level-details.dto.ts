@@ -14,5 +14,5 @@ export class TopLevelDetailsDto {
   @IsNotEmpty({ message: 'professions.form.errors.industries.empty' })
   industries: string[];
 
-  change: boolean;
+  change: string;
 }
