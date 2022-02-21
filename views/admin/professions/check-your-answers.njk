@@ -363,6 +363,23 @@
                 }
               },
               {
+                key: {
+                  text: ("professions.form.label.qualifications.moreInformationUrl" | t)
+                },
+                value: {
+                  html: qualification.moreInformationUrl
+                },
+                actions: {
+                  items: [
+                    {
+                      href: "/admin/professions/" + professionId + "/versions/" + versionId + "/qualifications/edit?change=true",
+                      text: ("app.change" | t),
+                      visuallyHiddenText: ("professions.form.label.qualifications.moreInformationUrl" | t)
+                    }
+                  ]
+                }
+              },
+              {
                 classes: ("govuk-visually-hidden" if isUK else ""),
                 key: {
                   text: ("professions.form.label.qualifications.ukRecognition" | t)

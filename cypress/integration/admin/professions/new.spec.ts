@@ -280,6 +280,11 @@ describe('Adding a new profession', () => {
       });
 
       cy.checkSummaryListRowValue(
+        'professions.form.label.qualifications.moreInformationUrl',
+        'http://example.com/more-info',
+      );
+
+      cy.checkSummaryListRowValue(
         'professions.form.label.qualifications.ukRecognition',
         'Recognition in the UK',
       );
