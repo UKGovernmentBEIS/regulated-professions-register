@@ -49,10 +49,6 @@
         "findContactDetails": {
           "text": "find contact details for your profession’s regulatory authority",
           "link": "/regulatory-authorities/search"
-        },
-        "viewFigures": {
-          "text": "view annual figures for applications to work in regulated professions in the UK",
-          "link": "#"
         }
       },
       "help": {

@@ -23,7 +23,7 @@
         "hint": "Select all that apply."
       },
       "industries": {
-        "label": "Industry / sector",
+        "label": "Sectors",
         "hint": "Select all that apply."
       },
       "changedBy": {
@@ -127,7 +127,7 @@
         "hint": "Select all that apply."
       },
       "industries": {
-        "label": "Industry / sector",
+        "label": "Sectors",
         "hint": "Select all that apply."
       },
       "button": "Filter results"
