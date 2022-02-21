@@ -66,6 +66,33 @@ describe(QualificationPresenter, () => {
     });
   });
 
+  describe('moreInformationUrl', () => {
+    describe('when a blank string is provided', () => {
+      it('returns null', () => {
+        const qualification = qualificationFactory.build({
+          url: '',
+        });
+
+        const presenter = new QualificationPresenter(qualification);
+
+        expect(presenter.moreInformationUrl).toEqual(null);
+      });
+    });
+    describe('when a URL is provided', () => {
+      it('returns a link', () => {
+        const qualification = qualificationFactory.build({
+          url: 'http://example.com',
+        });
+
+        const presenter = new QualificationPresenter(qualification);
+
+        expect(presenter.moreInformationUrl).toEqual(
+          '<a class="govuk-link" href="http://example.com">http://example.com</a>',
+        );
+      });
+    });
+  });
+
   describe('ukRecognitionUrl', () => {
     describe('when a blank string is provided', () => {
       it('returns null', () => {

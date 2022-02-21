@@ -26,6 +26,16 @@ export class QualificationsDto {
   })
   mandatoryProfessionalExperience: string;
 
+  @IsUrl(
+    {},
+    {
+      message:
+        'professions.form.errors.qualification.moreInformationUrl.invalid',
+    },
+  )
+  @ValidateIf((e) => e.moreInformationUrl)
+  moreInformationUrl: string;
+
   ukRecognition: string;
 
   @IsUrl(

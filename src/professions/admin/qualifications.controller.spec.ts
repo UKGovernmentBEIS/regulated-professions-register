@@ -71,6 +71,7 @@ describe(QualificationsController, () => {
           mostCommonRouteToObtain:
             profession.qualification.mostCommonRouteToObtain,
           duration: profession.qualification.educationDuration,
+          moreInformationUrl: profession.qualification.url,
           captionText: 'professions.form.captions.edit',
           ukRecognition: profession.qualification.ukRecognition,
           ukRecognitionUrl: profession.qualification.ukRecognitionUrl,
@@ -106,6 +107,7 @@ describe(QualificationsController, () => {
             routesToObtain: 'General secondary education',
             mostCommonRouteToObtain: 'General secondary education',
             duration: '3.0 Years',
+            moreInformationUrl: 'www.example.com/more-info',
             mandatoryProfessionalExperience: '1',
             ukRecognition: 'ukRecognition',
             ukRecognitionUrl: 'http://example.com/uk',
@@ -128,6 +130,7 @@ describe(QualificationsController, () => {
                 mostCommonRouteToObtain: 'General secondary education',
                 educationDuration: '3.0 Years',
                 level: 'Qualification level',
+                url: 'www.example.com/more-info',
                 mandatoryProfessionalExperience: true,
                 ukRecognition: 'ukRecognition',
                 ukRecognitionUrl: 'http://example.com/uk',
@@ -158,6 +161,7 @@ describe(QualificationsController, () => {
             routesToObtain: 'General secondary education',
             mostCommonRouteToObtain: 'General secondary education',
             duration: '3.0 Years',
+            moreInformationUrl: 'www.example.com/more-info',
             mandatoryProfessionalExperience: '1',
             ukRecognition: 'ukRecognition',
             ukRecognitionUrl: 'http://example.com/uk',
@@ -180,6 +184,7 @@ describe(QualificationsController, () => {
                 mostCommonRouteToObtain: 'General secondary education',
                 educationDuration: '3.0 Years',
                 level: 'Qualification level',
+                url: 'www.example.com/more-info',
                 mandatoryProfessionalExperience: true,
                 ukRecognition: 'ukRecognition',
                 ukRecognitionUrl: 'http://example.com/uk',
@@ -211,6 +216,7 @@ describe(QualificationsController, () => {
           routesToObtain: '',
           mostCommonRouteToObtain: '',
           duration: '',
+          moreInformationUrl: 'not a url',
           mandatoryProfessionalExperience: undefined,
           change: false,
           ukRecognition: '',
@@ -246,6 +252,9 @@ describe(QualificationsController, () => {
               },
               duration: {
                 text: 'professions.form.errors.qualification.duration.empty',
+              },
+              moreInformationUrl: {
+                text: 'professions.form.errors.qualification.moreInformationUrl.invalid',
               },
               mostCommonRouteToObtain: {
                 text: 'professions.form.errors.qualification.mostCommonRouteToObtain.empty',

@@ -21,6 +21,12 @@ export default class QualificationPresenter {
     ? 'app.yes'
     : 'app.no';
 
+  readonly moreInformationUrl = this.qualification.url
+    ? `<a class="govuk-link" href="${escape(this.qualification.url)}">${escape(
+        this.qualification.url,
+      )}</a>`
+    : null;
+
   readonly ukRecognition = this.qualification.ukRecognition;
 
   readonly ukRecognitionUrl = this.qualification.ukRecognitionUrl

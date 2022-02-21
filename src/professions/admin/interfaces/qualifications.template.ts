@@ -6,6 +6,7 @@ export interface QualificationsTemplate {
   mostCommonRouteToObtain: string;
   duration: string;
   mandatoryProfessionalExperienceRadioButtonArgs: RadioButtonArgs[];
+  moreInformationUrl: string;
   ukRecognition: string;
   ukRecognitionUrl: string;
   otherCountriesRecognition: string;

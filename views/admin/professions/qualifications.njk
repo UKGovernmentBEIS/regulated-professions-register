@@ -107,6 +107,22 @@
           })
         }}
 
+        {{
+          govukInput({
+            label: {
+              text: ("professions.form.label.qualifications.moreInformationUrl" | t),
+              classes: "govuk-label--m"
+            },
+            id: "moreInformationUrl",
+            name: "moreInformationUrl",
+            value: moreInformationUrl,
+            hint: {
+              text: ("professions.form.hint.qualifications.moreInformationUrl" | t)
+            },
+            errorMessage: errors.moreInformationUrl | tError
+          })
+        }}
+
         {% if isUK === false %}
 
         <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />

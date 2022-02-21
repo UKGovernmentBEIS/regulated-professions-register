@@ -146,6 +146,9 @@ describe('Adding a new profession', () => {
         'input[name="mandatoryProfessionalExperience"][value="1"]',
       ).check();
       cy.get('textarea[name="level"]').type('An example Qualification level');
+      cy.get('input[name="moreInformationUrl"]').type(
+        'http://example.com/more-info',
+      );
 
       cy.get('input[name="ukRecognition"]').type('Recognition in the UK');
       cy.get('input[name="ukRecognitionUrl"]').type('http://example.com/uk');

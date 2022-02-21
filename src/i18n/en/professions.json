@@ -47,6 +47,7 @@
         "mostCommonRouteToObtain": "Most common route",
         "duration": "How long to qualify",
         "mandatoryProfessionalExperience": "Professional experience requirement",
+        "moreInformationUrl": "More about qualification",
         "ukRecognition": "Recognition of qualifications in the UK",
         "ukRecognitionUrl": "More about recognition within the UK",
         "otherCountriesRecognition": "Recognition of qualifications from other countries",
@@ -72,6 +73,7 @@
         "duration": "The number of months or years it takes to qualify. For example, 2 years.\nIf the length of time varies, provide the most typical or a range. For example, 6 to 12 months",
         "mandatoryProfessionalExperience": "Is a period of professional practice require to become qualified?",
         "qualificationLevel": "Equivalent qualification level against a recognised framework",
+        "moreInformationUrl": "Website link to more information",
         "ukRecognition": "Routes to recognition for existing professionals from other UK nations",
         "ukRecognitionUrl": "Website link to more information",
         "otherCountriesRecognition": "Routes to recognition for existing professionals from outside the UK",
@@ -162,6 +164,9 @@
         },
         "mandatoryProfessionalExperience": {
           "empty": "Select whether existence of professional experience is mandatory"
+        },
+        "moreInformationUrl": {
+          "invalid": "Please enter a valid website address"
         },
         "ukRecognitionUrl": {
           "invalid": "Please enter a valid website address"
