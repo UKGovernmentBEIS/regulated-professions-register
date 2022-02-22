@@ -97,7 +97,9 @@ describe('ScopeController', () => {
               idPrefix: 'nations',
               name: 'nations[]',
               hint: {
-                text: translationOf('professions.form.checkboxes.hint'),
+                text: translationOf(
+                  'professions.form.label.scope.certainNationsHint',
+                ),
               },
               items: [
                 {
@@ -177,7 +179,9 @@ describe('ScopeController', () => {
               idPrefix: 'nations',
               name: 'nations[]',
               hint: {
-                text: translationOf('professions.form.checkboxes.hint'),
+                text: translationOf(
+                  'professions.form.label.scope.certainNationsHint',
+                ),
               },
               items: [
                 {

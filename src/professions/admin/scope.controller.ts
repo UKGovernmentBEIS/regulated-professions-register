@@ -172,7 +172,7 @@ export class ScopeController {
     const nationsCheckboxArgs = await nationsCheckboxPresenter.checkboxArgs(
       'nations',
       'nations[]',
-      'professions.form.checkboxes.hint',
+      'professions.form.label.scope.certainNationsHint',
     );
 
     const templateArgs: ScopeTemplate = {

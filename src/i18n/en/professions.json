@@ -3,7 +3,7 @@
     "headings": {
       "main": "Add a new profession",
       "topLevelInformation": "Profession",
-      "scope": "Scope",
+      "scope": "Nations and sectors",
       "checkAnswers": "Check your answers",
       "originalAnswers": "Your original answers",
       "registration": "Registration",
@@ -29,9 +29,12 @@
         "additionalAuthorityHint": "Another authority or professional body involved in regulating this profession."
       },
       "scope": {
-        "nations": "In which nation(s) is this profession regulated?",
-        "certainNations": "Certain Nations",
-        "industry": "Sectors"
+        "nations": "Nations",
+        "nationsHint" : "The nations where you regulate this profession.",
+        "certainNations": "Certain nations",
+        "certainNationsHint": "Select all that apply.",
+        "industry": "Sectors",
+        "industryHint": "The sectors this profession is part of. Select all that apply."
       },
       "registration": {
         "mandatoryRegistration": "Is registration mandatory with professional bodies?",
@@ -99,9 +102,6 @@
         "voluntary": "Voluntary",
         "unknown": "Unknown"
       }
-    },
-    "checkboxes": {
-      "hint": "Select all that apply."
     },
     "button": {
       "create": "Create profession",
