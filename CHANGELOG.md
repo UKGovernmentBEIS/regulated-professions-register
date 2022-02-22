@@ -9,12 +9,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 
 - Add "more information url" to Qualification detail entry page
+- Display message in search results when no professions match filter criteria
 
 ### Changed
 
 - Replace routes to obtain Qualification & most common path to obtain radio buttons with textareas
 - Remove Qualification Level from admin organisation list
 - Remove deprecated fields from Qualification
+- Move Sectors filter above the Nations filter
 
 ## [release-004] - 2022-02-21
 
