@@ -1,30 +1,39 @@
-@startuml C4_Elements
+@startuml container
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
-LAYOUT_AS_SKETCH()
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+!define DEVICONS2 https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons2
+
+!include DEVICONS/postgresql.puml
+!include DEVICONS/redis.puml
+!include DEVICONS2/nestjs.puml
+!include ../sprites/govuk.puml
+!include ../sprites/auth0.puml
 
 Person(public, "Public User", "People searching for information on regulated professions")
 Person(regulators, "Regulatory Authority", "Users who maintain their information in the system")
-Person(beis, "BEIS Service Owners", "Users who manage access and approve changes")
+Person(beis, "Service Owners", "Users who manage access and approve changes")
 
 System_Boundary(rpr, "Reguatory Providers Register") {
-  Container(nestApplication, "NestJS Web application", "NestJS")
-  ContainerDb(postgres, "PostgreSQL database", "PostgreSQL")
-  Container(worker, "Worker", "NodeJS")
+  Container(nestApplication, "NestJS Web application", "NestJS", $sprite="nestjs")
+  ContainerDb(postgres, "PostgreSQL database", "PostgreSQL", $sprite="postgresql")
+  ContainerDb(redis, "Redis database", "Redis", $sprite="redis")
 
   Rel(nestApplication, postgres, "Read/write")
-  Rel(worker, postgres, "Read/write")
-  Rel(nestApplication, worker, "Sends jobs")
+  Rel(nestApplication, redis, "Sends jobs")
+  Rel(redis, nestApplication, "Picks jobs from the queue")
 }
 
-System_Ext(notify, "GOV.UK Notify")
-System_Ext(auth0, "Auth0")
+System_Ext(notify, "GOV.UK Notify", $sprite="govuk")
+System_Ext(auth0, "Auth0", $sprite="auth0")
 
-Rel(worker, notify, "API calls", "HTTPS")
 Rel(notify, regulators, "Sends notifications", "email")
 Rel(notify, beis, "Sends notifications", "email")
 
 Rel(regulators, auth0, "Logs in", "HTTPS/OAuth2")
 Rel(beis, auth0, "Logs in", "HTTPS/OAuth2")
+
+Rel(nestApplication, notify, "API calls", "HTTPS")
+Rel_L(nestApplication, auth0, "API calls", "HTTPS")
 
 Rel(public, nestApplication, "Uses")
 Rel(regulators, nestApplication, "Uses")
