@@ -27,18 +27,8 @@ describe('Editing organisations', () => {
 
         cy.translate('organisations.admin.button.edit.draft').then(
           (editButton) => {
-            cy.get('a').contains(editButton).click();
+            cy.get('button').contains(editButton).click();
             cy.checkAccessibility();
-          },
-        );
-
-        cy.translate('organisation-versions.admin.new.heading').then(
-          (heading) => {
-            cy.get('body').should('contain', heading);
-
-            cy.translate('app.start').then((startButton) => {
-              cy.get('button').contains(startButton).click();
-            });
           },
         );
       });

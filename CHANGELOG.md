@@ -18,6 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Remove deprecated fields from Qualification
 - Move Sectors filter above the Nations filter
 - Allow admin users to edit blank Qualifications when no values have been set from a data import
+- Remove confirmation screens when creating new entities
 
 ## [release-004] - 2022-02-21
 

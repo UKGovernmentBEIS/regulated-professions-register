@@ -34,21 +34,6 @@ describe('Editing an existing profession', () => {
       });
 
       cy.checkAccessibility();
-      cy.translate('professions.form.captions.edit').then((editCaption) => {
-        cy.get('body').contains(editCaption);
-      });
-
-      cy.translate('professions.form.headings.edit', {
-        professionName: 'Registered Trademark Attorney',
-      }).then((heading) => {
-        cy.contains(heading);
-      });
-
-      cy.translate('professions.form.button.edit').then((buttonText) => {
-        cy.get('button').contains(buttonText).click();
-      });
-
-      cy.checkAccessibility();
       cy.translate('professions.form.headings.originalAnswers').then(
         (heading) => {
           cy.get('body').should('contain', heading);
@@ -281,14 +266,6 @@ describe('Editing an existing profession', () => {
         cy.contains(buttonText).click();
       });
 
-      cy.translate('professions.form.captions.edit').then((editCaption) => {
-        cy.get('body').contains(editCaption);
-      });
-
-      cy.translate('professions.form.button.edit').then((buttonText) => {
-        cy.get('button').contains(buttonText).click();
-      });
-
       cy.clickSummaryListRowAction(
         'professions.form.label.scope.nations',
         'Change',
@@ -376,15 +353,6 @@ describe('Editing an existing profession', () => {
         cy.contains(buttonText).click();
       });
 
-      cy.checkAccessibility();
-      cy.translate('professions.form.captions.edit').then((editCaption) => {
-        cy.get('body').contains(editCaption);
-      });
-
-      cy.translate('professions.form.button.edit').then((buttonText) => {
-        cy.get('button').contains(buttonText).click();
-      });
-
       cy.clickSummaryListRowAction(
         'professions.form.label.scope.nations',
         'Change',
@@ -435,12 +403,6 @@ describe('Editing an existing profession', () => {
             cy.contains(buttonText).click();
           },
         );
-
-        cy.checkAccessibility();
-
-        cy.translate('professions.form.button.edit').then((buttonText) => {
-          cy.get('button').contains(buttonText).click();
-        });
 
         cy.checkAccessibility();
 
@@ -577,20 +539,6 @@ describe('Editing an existing profession', () => {
       });
 
       cy.checkAccessibility();
-      cy.translate('professions.form.captions.edit').then((editCaption) => {
-        cy.get('body').contains(editCaption);
-      });
-
-      cy.translate('professions.form.headings.edit', {
-        professionName:
-          'Secondary School Teacher in State maintained schools (England)',
-      }).then((heading) => {
-        cy.contains(heading);
-      });
-
-      cy.translate('professions.form.button.edit').then((buttonText) => {
-        cy.get('button').contains(buttonText).click();
-      });
 
       cy.clickSummaryListRowAction(
         'professions.form.label.topLevelInformation.name',

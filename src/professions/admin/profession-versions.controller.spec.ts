@@ -60,19 +60,6 @@ describe('ProfessionVersionsController', () => {
     );
   });
 
-  describe('new', () => {
-    it('fetches the Profession', async () => {
-      const profession = professionFactory.build();
-      professionsService.find.mockResolvedValue(profession);
-
-      const result = await controller.edit(profession.id);
-
-      expect(result).toEqual({ profession });
-
-      expect(professionsService.find).toHaveBeenCalledWith(profession.id);
-    });
-  });
-
   describe('create', () => {
     it('creates a copy of the latest version of the Profession and its Qualification', async () => {
       const previousVersion = professionVersionFactory.build();

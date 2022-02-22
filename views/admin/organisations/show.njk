@@ -43,13 +43,14 @@
             {% endif %}
             {% if 'editOrganisation' in permissions %}
             <li>
-              {{
-                govukButton({
-                  text: (('organisations.admin.button.edit.' + organisation.status) | t),
-                  href: "/admin/organisations/" + organisation.id + "/versions/new",
-                  classes: "govuk-button--secondary"
-                })
-              }}
+              <form method="post" action="/admin/organisations/{{ organisation.id }}/versions">
+                {{ govukButton({
+                  id: "submit-button",
+                  type: "Submit",
+                  classes: "govuk-button--secondary",
+                  text: (('organisations.admin.button.edit.' + organisation.status) | t)
+                }) }}
+              </form>
             </li>
             {% endif %}
             {% if 'deleteOrganisation' in permissions %}

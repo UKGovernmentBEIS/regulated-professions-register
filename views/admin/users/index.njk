@@ -16,12 +16,11 @@
         <h2 class="govuk-heading-l">{{ "users.headings.addNew" | t }}</h2>
         <p class="govuk-body">{{ "users.body.intro" | t }}</p>
 
-        <form action="/admin/users/new/" method="get">
+        <form method="post" action="/admin/users">
           {{
             govukButton({
               id: "submit-button",
               type: "Submit",
-              classes: "govuk-button",
               text: ("users.form.button.add" | t)
             })
           }}

@@ -66,14 +66,6 @@ export class UsersController {
     };
   }
 
-  @Get('/admin/users/new')
-  @Permissions(UserPermission.CreateUser)
-  @Render('admin/users/new')
-  @BackLink('/admin/users')
-  new(): object {
-    return {};
-  }
-
   @Get('/admin/users/:id')
   @Permissions(UserPermission.EditUser, UserPermission.DeleteUser)
   @Render('admin/users/show')

@@ -97,14 +97,6 @@ export class OrganisationsController {
     return presenter.present();
   }
 
-  @Get('/new')
-  @Permissions(UserPermission.CreateOrganisation)
-  @Render('admin/organisations/new')
-  @BackLink('/admin/organisations')
-  async new() {
-    // Do nothing
-  }
-
   @Post('/')
   @Permissions(UserPermission.CreateOrganisation)
   async create(
