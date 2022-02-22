@@ -35,7 +35,7 @@
                       visuallyHiddenText: ("professions.form.label.topLevelInformation.name" | t)
                     }
                   ]
-                }
+                } if 'createProfession' in permissions else undefined
               },
               {
                 key: {
@@ -52,7 +52,7 @@
                       visuallyHiddenText: ("professions.form.label.topLevelInformation.regulatedAuthority" | t)
                     }
                   ]
-                }
+                } if 'createProfession' in permissions else undefined
               },
               {
                 key: {
@@ -69,7 +69,7 @@
                       visuallyHiddenText: ("professions.form.label.topLevelInformation.additionalAuthority" | t)
                     }
                   ]
-                }
+                } if 'createProfession' in permissions else undefined
               }
             ]
           })

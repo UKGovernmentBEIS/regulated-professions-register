@@ -8,12 +8,12 @@ describe('Editing an existing profession', () => {
     });
   });
 
-  context('when I am logged in with the correct permissions', () => {
+  context('when I am logged in as an editor', () => {
     beforeEach(() => {
       cy.loginAuth0('editor');
     });
 
-    it('I can edit an existing profession', () => {
+    it('I can edit an all fields of an existing profession except top-level information', () => {
       cy.visitAndCheckAccessibility('/admin/professions');
 
       cy.get('table')
@@ -97,45 +97,26 @@ describe('Editing an existing profession', () => {
         cy.get(buttonText).should('not.exist');
       });
 
-      cy.clickSummaryListRowAction(
-        'professions.form.label.topLevelInformation.name',
-        'Change',
+      cy.translate('professions.form.label.topLevelInformation.name').then(
+        (label) => {
+          cy.get('dt')
+            .contains(label)
+            .siblings()
+            .should('not.contain', 'Change');
+        },
       );
 
-      // Conditional radio buttons add an additional `aria-expanded` field,
-      // so ignore that rule on this page
-      cy.checkAccessibility();
-
-      cy.translate('professions.form.captions.edit').then((editCaption) => {
-        cy.get('body').contains(editCaption);
-      });
-      cy.get('input[name="name"]').clear().type('Updated name');
-      cy.translate('app.continue').then((buttonText) => {
-        cy.get('button').contains(buttonText).click();
-      });
-      cy.checkSummaryListRowValue(
-        'professions.form.label.topLevelInformation.name',
-        'Updated name',
-      );
-
-      cy.clickSummaryListRowAction(
+      cy.translate(
         'professions.form.label.topLevelInformation.regulatedAuthority',
-        'Change',
-      );
-      cy.checkAccessibility();
-      cy.translate('professions.form.captions.edit').then((editCaption) => {
-        cy.get('body').contains(editCaption);
+      ).then((label) => {
+        cy.get('dt').contains(label).siblings().should('not.contain', 'Change');
       });
-      cy.get('select[name="regulatoryBody"]').select(
-        'Department for Education',
-      );
-      cy.translate('app.continue').then((buttonText) => {
-        cy.get('button').contains(buttonText).click();
+
+      cy.translate(
+        'professions.form.label.topLevelInformation.additionalAuthority',
+      ).then((label) => {
+        cy.get('dt').contains(label).siblings().should('not.contain', 'Change');
       });
-      cy.checkSummaryListRowValue(
-        'professions.form.label.topLevelInformation.regulatedAuthority',
-        'Department for Education',
-      );
 
       cy.clickSummaryListRowAction(
         'professions.form.label.scope.nations',
@@ -276,12 +257,12 @@ describe('Editing an existing profession', () => {
       cy.translate('professions.admin.update.confirmation.heading').then(
         (flashHeading) => {
           cy.translate('professions.admin.update.confirmation.body', {
-            name: 'Updated name',
+            name: 'Registered Trademark Attorney',
           }).then((flashBody) => {
             cy.get('body')
               .should('contain', flashHeading)
               .should('contain.html', flashBody)
-              .should('contain', 'Updated name');
+              .should('contain', 'Registered Trademark Attorney');
           });
         },
       );
@@ -429,6 +410,112 @@ describe('Editing an existing profession', () => {
           });
         });
       });
+    });
+  });
+
+  context('when I am logged in as a registrar', () => {
+    beforeEach(() => {
+      cy.loginAuth0('registrar');
+    });
+
+    it('I edit the top-level information of a profession', () => {
+      cy.visitAndCheckAccessibility('/admin/professions');
+
+      cy.get('table')
+        .contains(
+          'tr',
+          'Secondary School Teacher in State maintained schools (England)',
+        )
+        .within(() => {
+          cy.contains('View details').click();
+        });
+
+      cy.checkAccessibility();
+
+      cy.translate('professions.admin.changed.by').then((lastUpdatedText) => {
+        cy.get('[data-cy=changed-by-text]').should('contain', lastUpdatedText);
+      });
+      cy.get('[data-cy=changed-by-user]').should('contain', '');
+
+      cy.translate('professions.admin.button.edit.live').then((buttonText) => {
+        cy.contains(buttonText).click();
+      });
+
+      cy.checkAccessibility();
+      cy.translate('professions.form.captions.edit').then((editCaption) => {
+        cy.get('body').contains(editCaption);
+      });
+
+      cy.translate('professions.form.headings.edit', {
+        professionName:
+          'Secondary School Teacher in State maintained schools (England)',
+      }).then((heading) => {
+        cy.contains(heading);
+      });
+
+      cy.translate('professions.form.button.edit').then((buttonText) => {
+        cy.get('button').contains(buttonText).click();
+      });
+
+      cy.clickSummaryListRowAction(
+        'professions.form.label.topLevelInformation.name',
+        'Change',
+      );
+      cy.checkAccessibility();
+      cy.translate('professions.form.captions.edit').then((editCaption) => {
+        cy.get('body').contains(editCaption);
+      });
+      cy.get('input[name="name"]').clear().type('Updated name');
+      cy.translate('app.continue').then((buttonText) => {
+        cy.get('button').contains(buttonText).click();
+      });
+      cy.checkSummaryListRowValue(
+        'professions.form.label.topLevelInformation.name',
+        'Updated name',
+      );
+
+      cy.clickSummaryListRowAction(
+        'professions.form.label.topLevelInformation.regulatedAuthority',
+        'Change',
+      );
+      cy.checkAccessibility();
+      cy.translate('professions.form.captions.edit').then((editCaption) => {
+        cy.get('body').contains(editCaption);
+      });
+      cy.get('select[name="regulatoryBody"]').select(
+        'Department for Education',
+      );
+      cy.translate('app.continue').then((buttonText) => {
+        cy.get('button').contains(buttonText).click();
+      });
+      cy.checkSummaryListRowValue(
+        'professions.form.label.topLevelInformation.regulatedAuthority',
+        'Department for Education',
+      );
+
+      cy.translate('professions.form.button.saveAsDraft').then((buttonText) => {
+        cy.get('button').contains(buttonText).click();
+      });
+
+      cy.checkAccessibility();
+      cy.get('[data-cy=changed-by-user]').should('contain', 'Registrar');
+      cy.get('[data-cy=last-modified]').should(
+        'contain',
+        format(new Date(), 'dd-MM-yyyy'),
+      );
+
+      cy.translate('professions.admin.update.confirmation.heading').then(
+        (flashHeading) => {
+          cy.translate('professions.admin.update.confirmation.body', {
+            name: 'Updated name',
+          }).then((flashBody) => {
+            cy.get('body')
+              .should('contain', flashHeading)
+              .should('contain.html', flashBody)
+              .should('contain', 'Updated name');
+          });
+        },
+      );
     });
   });
 });
