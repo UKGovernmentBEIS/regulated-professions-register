@@ -78,6 +78,21 @@ describe(QualificationPresenter, () => {
         expect(presenter.mandatoryProfessionalExperience).toEqual('app.no');
       });
     });
+
+    describe('when not set at all on a blank Qualification', () => {
+      it('returns an empty string', () => {
+        const qualification = qualificationFactory.build({
+          mandatoryProfessionalExperience: null,
+        });
+
+        const presenter = new QualificationPresenter(
+          qualification,
+          createMockI18nService(),
+        );
+
+        expect(presenter.mandatoryProfessionalExperience).toEqual('');
+      });
+    });
   });
 
   describe('moreInformationUrl', () => {

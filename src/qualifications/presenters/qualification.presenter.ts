@@ -21,10 +21,15 @@ export default class QualificationPresenter {
 
   readonly duration = this.qualification.educationDuration;
 
-  readonly mandatoryProfessionalExperience = this.qualification
-    .mandatoryProfessionalExperience
-    ? 'app.yes'
-    : 'app.no';
+  get mandatoryProfessionalExperience(): string {
+    if (this.qualification.mandatoryProfessionalExperience === null) {
+      return '';
+    }
+
+    return this.qualification.mandatoryProfessionalExperience
+      ? 'app.yes'
+      : 'app.no';
+  }
 
   readonly moreInformationUrl = this.qualification.url
     ? `<a class="govuk-link" href="${escape(this.qualification.url)}">${escape(
