@@ -1,0 +1,93 @@
+{% extends "admin/base.njk" %}
+
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% set bodyClasses = "rpr-internal__page" %}
+
+{% block content %}
+
+{% include "../../shared/_errors.njk" %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <span class="govuk-caption-l">{{ captionText | t }}</span>
+    <h1 class="govuk-heading-l">{{ ("professions.form.headings.scope" | t) }}</h1>
+
+    <form method="post" action="./">
+      <input type="hidden" name="change" value="{{ change }}" />
+
+      {% set nationHtml %}
+        {{
+          govukCheckboxes(nationsCheckboxArgs)
+        }}
+      {% endset -%}
+
+      {{
+        govukRadios({
+          idPrefix: "coversUK",
+          name: "coversUK",
+          fieldset: {
+            legend: {
+              text: ("professions.form.label.scope.nations" | t),
+              isPageHeading: false,
+              classes: "govuk-fieldset__legend--m"
+            }
+          },
+          hint: {
+            text: ("professions.form.checkboxes.hint" | t)
+          },
+          items: [
+            {
+              value: "1",
+              text: ("app.unitedKingdom" | t),
+              checked: (coversUK === true)
+            },
+            {
+              value: "0",
+              text: ("professions.form.label.scope.certainNations" | t),
+              checked: (coversUK === false),
+              conditional: {
+                html: nationHtml
+              }
+            }
+          ]
+        })
+      }}
+
+      {{
+        govukCheckboxes({
+          idPrefix: "industries",
+          name: "industries[]",
+          fieldset: {
+            legend: {
+            text: ("professions.form.label.scope.industry" | t),
+              isPageHeading: false,
+              classes: "govuk-fieldset__legend--m"
+            }
+          },
+          hint: {
+            text: ("professions.form.checkboxes.hint" | t)
+          },
+          items: industriesCheckboxItems,
+          errorMessage: errors.industries | tError
+        })
+      }}
+
+      {{
+        govukButton({
+          id: "submit-button",
+          type: "Submit",
+          text: ("app.continue" | t)
+
+        })
+      }}
+    </form>
+
+  </div>
+</div>
+
+{% endblock %}

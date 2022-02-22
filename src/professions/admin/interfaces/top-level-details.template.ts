@@ -1,11 +1,9 @@
-import { CheckboxItems } from '../../../common/interfaces/checkbox-items.interface';
-import { CheckboxArgs } from '../../../common/interfaces/checkbox-args.interface';
+import { SelectItemArgs } from '../../../common/interfaces/select-item-args.interface';
 
 export interface TopLevelDetailsTemplate {
   name: string | null;
-  coversUK: boolean | null;
-  industriesCheckboxItems: CheckboxItems[];
-  nationsCheckboxArgs: CheckboxArgs;
+  regulatedAuthoritiesSelectArgs: SelectItemArgs[];
+  additionalRegulatedAuthoritiesSelectArgs: SelectItemArgs[];
   captionText: string;
   change: boolean;
   errors: object | undefined;

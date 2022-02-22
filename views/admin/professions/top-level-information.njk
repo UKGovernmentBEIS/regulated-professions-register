@@ -1,10 +1,8 @@
 {% extends "admin/base.njk" %}
 
 {% from "govuk/components/input/macro.njk" import govukInput %}
-{% from "govuk/components/select/macro.njk" import govukSelect %}
-{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
 
 {% set bodyClasses = "rpr-internal__page" %}
 
@@ -35,60 +33,30 @@
         })
       }}
 
-      {% set nationHtml %}
-        {{
-          govukCheckboxes(nationsCheckboxArgs)
-        }}
-      {% endset -%}
-
       {{
-        govukRadios({
-          idPrefix: "coversUK",
-          name: "coversUK",
-          fieldset: {
-            legend: {
-              text: ("professions.form.label.topLevelInformation.nations" | t),
-              isPageHeading: false,
-              classes: "govuk-fieldset__legend--m"
-            }
+        govukSelect({
+          label: {
+            text: ("professions.form.label.topLevelInformation.regulatedAuthority" | t),
+            classes: "govuk-label--m",
+            isPageHeading: false
           },
-          hint: {
-            text: ("professions.form.checkboxes.hint" | t)
-          },
-          items: [
-            {
-              value: "1",
-              text: ("app.unitedKingdom" | t),
-              checked: (coversUK === true)
-            },
-            {
-              value: "0",
-              text: ("professions.form.label.topLevelInformation.certainNations" | t),
-              checked: (coversUK === false),
-              conditional: {
-                html: nationHtml
-              }
-            }
-          ]
+          id: "regulatoryBody",
+          name: "regulatoryBody",
+          items: regulatedAuthoritiesSelectArgs,
+          errorMessage: errors.regulatoryBody | tError
         })
       }}
 
       {{
-        govukCheckboxes({
-          idPrefix: "industries",
-          name: "industries[]",
-          fieldset: {
-            legend: {
-            text: ("professions.form.label.topLevelInformation.industry" | t),
-              isPageHeading: false,
-              classes: "govuk-fieldset__legend--m"
-            }
+        govukSelect({
+          label: {
+            text: ("professions.form.label.topLevelInformation.additionalAuthority" | t),
+            classes: "govuk-label--m",
+            isPageHeading: false
           },
-          hint: {
-            text: ("professions.form.checkboxes.hint" | t)
-          },
-          items: industriesCheckboxItems,
-          errorMessage: errors.industries | tError
+          id: "additionalRegulatoryBody",
+          name: "additionalRegulatoryBody",
+          items: additionalRegulatedAuthoritiesSelectArgs
         })
       }}
 

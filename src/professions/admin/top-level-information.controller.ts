@@ -9,17 +9,11 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { Response, Request } from 'express';
-import { IndustriesCheckboxPresenter } from '../../industries/industries-checkbox.presenter';
-import { NationsCheckboxPresenter } from '../../nations/nations-checkbox.presenter';
 import { Validator } from '../../helpers/validator';
-import { IndustriesService } from '../../industries/industries.service';
-import { Nation } from '../../nations/nation';
 import { ValidationFailedError } from '../../common/validation/validation-failed.error';
 import { Profession } from '../profession.entity';
 import { ProfessionsService } from '../professions.service';
 import { TopLevelDetailsDto } from './dto/top-level-details.dto';
-import { I18nService } from 'nestjs-i18n';
-import { Industry } from '../../industries/industry.entity';
 import { TopLevelDetailsTemplate } from './interfaces/top-level-details.template';
 import { AuthenticationGuard } from '../../common/authentication.guard';
 import { Permissions } from '../../common/permissions.decorator';
@@ -27,18 +21,17 @@ import { UserPermission } from '../../users/user-permission';
 import { BackLink } from '../../common/decorators/back-link.decorator';
 
 import ViewUtils from './viewUtils';
-import { ProfessionVersionsService } from '../profession-versions.service';
-import { ProfessionVersion } from '../profession-version.entity';
 import { isConfirmed } from '../../helpers/is-confirmed';
-import { allNations, isUK } from '../../helpers/nations.helper';
+import { OrganisationsService } from '../../organisations/organisations.service';
+import { RegulatedAuthoritiesSelectPresenter } from './regulated-authorities-select-presenter';
+import { Organisation } from '../../organisations/organisation.entity';
+
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
 export class TopLevelInformationController {
   constructor(
     private readonly professionsService: ProfessionsService,
-    private readonly professionVersionsService: ProfessionVersionsService,
-    private readonly industriesService: IndustriesService,
-    private readonly i18nService: I18nService,
+    private readonly organisationsService: OrganisationsService,
   ) {}
 
   @Get('/:professionId/versions/:versionId/top-level-information/edit')
@@ -51,30 +44,20 @@ export class TopLevelInformationController {
   async edit(
     @Res() res: Response,
     @Param('professionId') professionId: string,
-    @Param('versionId') versionId: string,
-    @Query('change') change: boolean,
+    @Query('change') change: string,
     errors: object | undefined = undefined,
   ): Promise<void> {
     const profession = await this.professionsService.findWithVersions(
       professionId,
     );
 
-    const version = await this.professionVersionsService.findWithProfession(
-      versionId,
-    );
-
-    const coversUK = version.occupationLocations
-      ? isUK(version.occupationLocations)
-      : null;
-
     return this.renderForm(
       res,
       profession.name,
-      coversUK,
-      version.industries || [],
-      version.occupationLocations || [],
+      profession.organisation,
+      profession.additionalOrganisation,
       isConfirmed(profession),
-      change,
+      change === 'true',
       errors,
     );
   }
@@ -83,7 +66,7 @@ export class TopLevelInformationController {
   @Permissions(UserPermission.CreateProfession, UserPermission.EditProfession)
   @BackLink((request: Request) =>
     request.body.change === 'true'
-      ? '/admin/professions/:professionId/check-your-answers'
+      ? '/admin/professions/:professionId/versions/:versionId/check-your-answers'
       : '/admin/professions',
   )
   async update(
@@ -98,18 +81,20 @@ export class TopLevelInformationController {
     );
 
     const submittedValues: TopLevelDetailsDto = topLevelDetailsDto;
-    const coversUK = Boolean(Number(submittedValues.coversUK));
+
+    const selectedOrganisation = submittedValues.regulatoryBody
+      ? await this.organisationsService.find(submittedValues.regulatoryBody)
+      : null;
+
+    const selectedAdditionalOrganisation =
+      submittedValues.additionalRegulatoryBody
+        ? await this.organisationsService.find(
+            submittedValues.additionalRegulatoryBody,
+          )
+        : null;
 
     const profession = await this.professionsService.findWithVersions(
       professionId,
-    );
-
-    const version = await this.professionVersionsService.findWithProfession(
-      versionId,
-    );
-
-    const submittedIndustries = await this.industriesService.findByIds(
-      submittedValues.industries || [],
     );
 
     if (!validator.valid()) {
@@ -117,83 +102,63 @@ export class TopLevelInformationController {
       return this.renderForm(
         res,
         submittedValues.name,
-        coversUK,
-        submittedIndustries,
-        submittedValues.nations || [],
+        selectedOrganisation,
+        selectedAdditionalOrganisation,
         isConfirmed(profession),
-        submittedValues.change,
+        submittedValues.change === 'true',
         errors,
       );
-    }
-
-    if (coversUK) {
-      submittedValues.nations = allNations();
     }
 
     const updatedProfession: Profession = {
       ...profession,
       ...{
         name: submittedValues.name,
-      },
-    };
-
-    const updatedVersion: ProfessionVersion = {
-      ...version,
-      ...{
-        occupationLocations: submittedValues.nations,
-        industries: submittedIndustries,
+        organisation: selectedOrganisation,
+        additionalOrganisation: selectedAdditionalOrganisation,
       },
     };
 
     await this.professionsService.save(updatedProfession);
-    await this.professionVersionsService.save(updatedVersion);
 
-    if (submittedValues.change) {
+    if (submittedValues.change === 'true') {
       return res.redirect(
         `/admin/professions/${professionId}/versions/${versionId}/check-your-answers`,
       );
     }
 
     return res.redirect(
-      `/admin/professions/${professionId}/versions/${versionId}/regulatory-body/edit`,
+      `/admin/professions/${professionId}/versions/${versionId}/scope/edit`,
     );
   }
 
   private async renderForm(
     res: Response,
     name: string,
-    coversUK: boolean,
-    selectedIndustries: Industry[],
-    selectedNations: string[],
+    selectedRegulatoryAuthority: Organisation | null,
+    selectedAdditionalRegulatoryAuthority: Organisation | null,
     isEditing: boolean,
     change: boolean,
     errors: object | undefined = undefined,
   ): Promise<void> {
-    const industries = await this.industriesService.all();
+    const regulatedAuthorities = await this.organisationsService.all();
 
-    const industriesCheckboxItems = await new IndustriesCheckboxPresenter(
-      industries,
-      selectedIndustries,
-      this.i18nService,
-    ).checkboxItems();
+    const regulatedAuthoritiesSelectArgs =
+      new RegulatedAuthoritiesSelectPresenter(
+        regulatedAuthorities,
+        selectedRegulatoryAuthority,
+      ).selectArgs();
 
-    const nationsCheckboxPresenter = new NationsCheckboxPresenter(
-      Nation.all(),
-      selectedNations.map((nationCode) => Nation.find(nationCode)),
-      this.i18nService,
-    );
-
-    const nationsCheckboxArgs = await nationsCheckboxPresenter.checkboxArgs(
-      'nations',
-      'nations[]',
-      'professions.form.checkboxes.hint',
-    );
+    const additionalRegulatedAuthoritiesSelectArgs =
+      new RegulatedAuthoritiesSelectPresenter(
+        regulatedAuthorities,
+        selectedAdditionalRegulatoryAuthority,
+      ).selectArgs();
 
     const templateArgs: TopLevelDetailsTemplate = {
       name,
-      coversUK,
-      industriesCheckboxItems,
-      nationsCheckboxArgs,
+      regulatedAuthoritiesSelectArgs,
+      additionalRegulatedAuthoritiesSelectArgs,
       captionText: ViewUtils.captionText(isEditing),
       change,
       errors,

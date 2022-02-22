@@ -53,6 +53,10 @@ declare global {
         key: string,
         lines: string[],
       ): Chainable<string>;
+      checkSummaryListRowList(
+        key: string,
+        listItems: string[],
+      ): Chainable<string>;
       clickSummaryListRowAction(key: string, action: string): Chainable<string>;
       visitAndCheckAccessibility(url: string): void;
       checkAccessibility(rules?: AxeRules): void;

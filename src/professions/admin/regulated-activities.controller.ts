@@ -36,7 +36,7 @@ export class RegulatedActivitiesController {
   @BackLink((request: Request) =>
     request.query.change === 'true'
       ? '/admin/professions/:professionId/versions/:versionId/check-your-answers'
-      : '/admin/professions/:professionId/versions/:versionId/regulatory-body/edit',
+      : '/admin/professions/:professionId/versions/:versionId/registration/edit',
   )
   async edit(
     @Res() res: Response,
@@ -68,7 +68,7 @@ export class RegulatedActivitiesController {
   @BackLink((request: Request) =>
     request.body.change === 'true'
       ? '/admin/professions/:professionId/versions/:versionId/check-your-answers'
-      : '/admin/professions/:professionId/versions/:versionId/regulatory-body/edit',
+      : '/admin/professions/:professionId/versions/:versionId/registration/edit',
   )
   async update(
     @Res() res: Response,

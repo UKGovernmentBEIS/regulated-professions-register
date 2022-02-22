@@ -61,9 +61,22 @@ describe('Editing an existing profession', () => {
       );
 
       cy.checkSummaryListRowValue(
-        'professions.form.label.regulatoryBody.regulatedAuthority',
+        'professions.form.label.topLevelInformation.regulatedAuthority',
         'Law Society of England and Wales',
       );
+
+      cy.translate('nations.england').then((england) => {
+        cy.translate('nations.scotland').then((scotland) => {
+          cy.translate('nations.wales').then((wales) => {
+            cy.translate('nations.northernIreland').then((northernIreland) => {
+              cy.checkSummaryListRowList(
+                'professions.form.label.scope.nations',
+                [england, scotland, wales, northernIreland],
+              );
+            });
+          });
+        });
+      });
 
       cy.checkSummaryListRowValue(
         'professions.form.label.regulatedActivities.regulationSummary',
@@ -91,7 +104,7 @@ describe('Editing an existing profession', () => {
 
       // Conditional radio buttons add an additional `aria-expanded` field,
       // so ignore that rule on this page
-      cy.checkAccessibility({ 'aria-allowed-attr': { enabled: false } });
+      cy.checkAccessibility();
 
       cy.translate('professions.form.captions.edit').then((editCaption) => {
         cy.get('body').contains(editCaption);
@@ -106,7 +119,7 @@ describe('Editing an existing profession', () => {
       );
 
       cy.clickSummaryListRowAction(
-        'professions.form.label.regulatoryBody.regulatedAuthority',
+        'professions.form.label.topLevelInformation.regulatedAuthority',
         'Change',
       );
       cy.checkAccessibility();
@@ -120,9 +133,42 @@ describe('Editing an existing profession', () => {
         cy.get('button').contains(buttonText).click();
       });
       cy.checkSummaryListRowValue(
-        'professions.form.label.regulatoryBody.regulatedAuthority',
+        'professions.form.label.topLevelInformation.regulatedAuthority',
         'Department for Education',
       );
+
+      cy.clickSummaryListRowAction(
+        'professions.form.label.scope.nations',
+        'Change',
+      );
+
+      // Conditional radio buttons add an additional `aria-expanded` field,
+      // so ignore that rule on this page
+      cy.checkAccessibility({ 'aria-allowed-attr': { enabled: false } });
+
+      cy.translate('professions.form.label.scope.certainNations').then(
+        (certainNations) => {
+          cy.get('label').contains(certainNations).click();
+        },
+      );
+      cy.translate('nations.england').then((england) => {
+        cy.get('label').contains(england).click();
+      });
+      cy.translate('app.continue').then((buttonText) => {
+        cy.get('button').contains(buttonText).click();
+      });
+
+      cy.translate('nations.scotland').then((scotland) => {
+        cy.translate('nations.wales').then((wales) => {
+          cy.translate('nations.northernIreland').then((northernIreland) => {
+            cy.checkSummaryListRowList('professions.form.label.scope.nations', [
+              scotland,
+              wales,
+              northernIreland,
+            ]);
+          });
+        });
+      });
 
       cy.clickSummaryListRowAction(
         'professions.form.label.regulatedActivities.regulationSummary',
@@ -264,7 +310,7 @@ describe('Editing an existing profession', () => {
       });
 
       cy.clickSummaryListRowAction(
-        'professions.form.label.topLevelInformation.nations',
+        'professions.form.label.scope.nations',
         'Change',
       );
 
@@ -300,15 +346,15 @@ describe('Editing an existing profession', () => {
       });
 
       cy.clickSummaryListRowAction(
-        'professions.form.label.topLevelInformation.nations',
+        'professions.form.label.scope.nations',
         'Change',
       );
 
-      cy.translate(
-        'professions.form.label.topLevelInformation.certainNations',
-      ).then((certainNations) => {
-        cy.get('label').contains(certainNations).click();
-      });
+      cy.translate('professions.form.label.scope.certainNations').then(
+        (certainNations) => {
+          cy.get('label').contains(certainNations).click();
+        },
+      );
 
       cy.get('[type="checkbox"]').uncheck('GB-SCT');
 
@@ -360,7 +406,7 @@ describe('Editing an existing profession', () => {
       });
 
       cy.clickSummaryListRowAction(
-        'professions.form.label.topLevelInformation.name',
+        'professions.form.label.scope.nations',
         'Change',
       );
 
@@ -373,31 +419,16 @@ describe('Editing an existing profession', () => {
       });
 
       cy.translate('nations.england').then((england) => {
-        cy.checkSummaryListRowValue(
-          'professions.form.label.topLevelInformation.nations',
-          england,
-        );
-      });
-
-      cy.translate('nations.wales').then((wales) => {
-        cy.checkSummaryListRowValue(
-          'professions.form.label.topLevelInformation.nations',
-          wales,
-        );
-      });
-
-      cy.translate('nations.northernIreland').then((northernIreland) => {
-        cy.checkSummaryListRowValue(
-          'professions.form.label.topLevelInformation.nations',
-          northernIreland,
-        );
-      });
-
-      cy.translate('nations.scotland').then((scotland) => {
-        cy.checkSummaryListRowValue(
-          'professions.form.label.topLevelInformation.nations',
-          scotland,
-        );
+        cy.translate('nations.scotland').then((scotland) => {
+          cy.translate('nations.wales').then((wales) => {
+            cy.translate('nations.northernIreland').then((northernIreland) => {
+              cy.checkSummaryListRowList(
+                'professions.form.label.scope.nations',
+                [england, scotland, wales, northernIreland],
+              );
+            });
+          });
+        });
       });
     });
   });
