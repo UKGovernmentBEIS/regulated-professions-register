@@ -293,39 +293,39 @@ describe('OrganisationController', () => {
           ServiceOwnerRadioButtonArgsPresenter.prototype.radioButtonArgs,
         ).toBeCalled();
       });
-    });
 
-    it('does not check for the presence of an organisation if the user is a service owner', async () => {
-      (getActionTypeFromUser as jest.Mock).mockReturnValue('edit');
+      it('does not check for the presence of an organisation when creating a service-owner user', async () => {
+        (getActionTypeFromUser as jest.Mock).mockReturnValue('edit');
 
-      const serviceOwnerUser = userFactory.build({ serviceOwner: true });
+        const serviceOwnerUser = userFactory.build({ serviceOwner: true });
 
-      const request = createMockRequest(
-        'http://example.com/some/path',
-        'example.com',
-        { user: serviceOwnerUser },
-      );
+        const request = createMockRequest(
+          'http://example.com/some/path',
+          'example.com',
+          { user: serviceOwnerUser },
+        );
 
-      const response = createMock<Response>();
-      const user = userFactory.build();
-      const organisationDto: OrganisationDto = {
-        serviceOwner: '1',
-        organisation: undefined,
-        change: 'false',
-      };
+        const response = createMock<Response>();
+        const user = userFactory.build();
+        const organisationDto: OrganisationDto = {
+          serviceOwner: '1',
+          organisation: undefined,
+          change: 'false',
+        };
 
-      usersService.find.mockResolvedValue(user);
+        usersService.find.mockResolvedValue(user);
 
-      await controller.update(request, response, user.id, organisationDto);
+        await controller.update(request, response, user.id, organisationDto);
 
-      expect(organisationsService.find).not.toHaveBeenCalled();
-      expect(usersService.save).toBeCalledWith({
-        ...user,
-        serviceOwner: true,
+        expect(organisationsService.find).not.toHaveBeenCalled();
+        expect(usersService.save).toBeCalledWith({
+          ...user,
+          serviceOwner: true,
+        });
+        expect(response.redirect).toBeCalledWith(
+          `/admin/users/${user.id}/personal-details/edit`,
+        );
       });
-      expect(response.redirect).toBeCalledWith(
-        `/admin/users/${user.id}/personal-details/edit`,
-      );
     });
   });
 
