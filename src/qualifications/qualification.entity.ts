@@ -11,7 +11,7 @@ export class Qualification {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({ nullable: true })
   level: string;
 
   @Column({ nullable: true })
@@ -20,10 +20,10 @@ export class Qualification {
   @Column({ nullable: true })
   mostCommonRouteToObtain: string;
 
-  @Column()
+  @Column({ nullable: true })
   educationDuration: string;
 
-  @Column()
+  @Column({ nullable: true })
   mandatoryProfessionalExperience: boolean;
 
   @Column({ nullable: true })
