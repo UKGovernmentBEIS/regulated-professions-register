@@ -37,16 +37,6 @@ export class ProfessionVersionsController {
     private readonly i18nService: I18nService,
   ) {}
 
-  @Get('/:professionId/versions/edit')
-  @Permissions(UserPermission.EditProfession)
-  @Render('admin/professions/edit')
-  @BackLink('/admin/professions')
-  async edit(@Param('professionId') professionId: string) {
-    const profession = await this.professionsService.find(professionId);
-
-    return { profession };
-  }
-
   @Get(':professionId/versions/:versionId')
   @Permissions(
     UserPermission.EditProfession,

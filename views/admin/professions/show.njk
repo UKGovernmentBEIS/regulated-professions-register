@@ -41,12 +41,17 @@
           {% endif %}
           {% if 'editProfession' in permissions %}
           <li>
-              {{ govukButton({
-                text: (('professions.admin.button.edit.' + profession.status) | t),
-                classes: "govuk-button--secondary",
-                id: "edit-button",
-                href: "/admin/professions/" + profession.id + "/versions/edit"
-              }) }}
+              <form method="post" action="/admin/professions/{{ profession.id }}/versions">
+                {{
+                  govukButton({
+                    id: "submit-button",
+                    type: "Submit",
+                    classes: "govuk-button--secondary",
+                    id: "edit-button",
+                    text: (('professions.admin.button.edit.' + profession.status) | t)
+                  })
+                }}
+              </form>
           </li>
           {% endif %}
         </ul>
