@@ -37,9 +37,12 @@
         "industryHint": "The sectors this profession is part of. Select all that apply."
       },
       "registration": {
-        "mandatoryRegistration": "Is registration mandatory with professional bodies?",
+        "mandatoryRegistration": "Registration with authority",
+        "mandatoryRegistrationHint": "Is registration with a regulator or professional body mandatory or voluntary.",
         "registrationRequirements": "Registration requirements",
-        "registrationUrl": "More about registration"
+        "registrationRequirementsHint": "The body professionals should register with and other requirements for registration.",
+        "registrationUrl": "More about registration",
+        "registrationUrlHint": "Website link to more information."
       },
       "regulatedActivities": {
         "regulationSummary": "Regulation summary",
@@ -70,9 +73,6 @@
       "regulatedActivities": {
         "regulationUrl": "Please enter a link"
       },
-      "registration": {
-        "registrationUrl": "Please enter a link"
-      },
       "qualifications": {
         "routesToObtain": "The ways that a new professional can become qualified",
         "mostCommonRouteToObtain": "If there are many ways to qualify, the most common way",
@@ -99,8 +99,7 @@
       "hint": "Select one option.",
       "mandatoryRegistration": {
         "mandatory": "Mandatory",
-        "voluntary": "Voluntary",
-        "unknown": "Unknown"
+        "voluntary": "Voluntary"
       }
     },
     "button": {
