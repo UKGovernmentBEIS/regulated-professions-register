@@ -70,19 +70,6 @@ describe('OrganisationVersionsController', () => {
     expect(controller).toBeDefined();
   });
 
-  describe('new', () => {
-    it('fetches the organisation', async () => {
-      const organisation = organisationFactory.build();
-      organisationsService.find.mockResolvedValue(organisation);
-
-      const result = await controller.new(organisation.id);
-
-      expect(result).toEqual(organisation);
-
-      expect(organisationsService.find).toHaveBeenCalledWith(organisation.id);
-    });
-  });
-
   describe('create', () => {
     it('creates a copy of the latest version of the organisation', async () => {
       const organisationVersion = organisationVersionFactory.build();

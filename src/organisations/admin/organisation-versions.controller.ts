@@ -40,16 +40,6 @@ export class OrganisationVersionsController {
     private readonly i18nService: I18nService,
   ) {}
 
-  @Get('/:organisationID/versions/new')
-  @Permissions(UserPermission.EditOrganisation)
-  @Render('admin/organisations/versions/new')
-  @BackLink('/admin/organisations')
-  async new(@Param('organisationID') organisationID: string) {
-    const organisation = await this.organisationsService.find(organisationID);
-
-    return organisation;
-  }
-
   @Post('/:organisationID/versions')
   @Permissions(UserPermission.EditOrganisation)
   async create(
