@@ -24,49 +24,65 @@
 
       <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
 
-      {% for profession in professions %}
+      {% if professions | length %}
 
-        {% set industriesHtml %}
-          {% for industry in profession.industries %}
-            <p class="govuk-body-m">{{ industry }}</p>
-          {% endfor %}
-        {% endset %}
+        {% for profession in professions %}
 
-        <div>
-          <h2>
-            <a class="govuk-link govuk-heading-l rpr-listing__profession-title" href="/professions/{{ profession.slug }}">{{ profession.name }}<br>
-              <span class="govuk-caption-l">{{ profession.nations }}</span></a>
-          </h2>
+          {% set industriesHtml %}
+            {% for industry in profession.industries %}
+              <p class="govuk-body-m">{{ industry }}</p>
+            {% endfor %}
+          {% endset %}
 
-            {{ govukSummaryList({
-              classes: 'govuk-summary-list--no-border rpr-listing__profession-summary-list',
-              rows: [
-                {
-                  key: {
-                    text: ("professions.search.profession.regulators" | t)
+          <div>
+            <h2>
+              <a class="govuk-link govuk-heading-l rpr-listing__profession-title" href="/professions/{{ profession.slug }}">{{ profession.name }}<br>
+                <span class="govuk-caption-l">{{ profession.nations }}</span></a>
+            </h2>
+
+              {{ govukSummaryList({
+                classes: 'govuk-summary-list--no-border rpr-listing__profession-summary-list',
+                rows: [
+                  {
+                    key: {
+                      text: ("professions.search.profession.regulators" | t)
+                    },
+                    value: {
+                      text: profession.organisation
+                    }
                   },
-                  value: {
-                    text: profession.organisation
+                  {
+                    key: {
+                      text: ("professions.search.profession.industry" | t)
+                    },
+                    value: {
+                      html: industriesHtml
+                    }
                   }
-                },
-                {
-                  key: {
-                    text: ("professions.search.profession.industry" | t)
-                  },
-                  value: {
-                    html: industriesHtml
-                  }
-                }
-              ]
-            }) }}
+                ]
+              }) }}
 
-          {% if not loop.last %}
-            <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
-          {% endif %}
+            {% if not loop.last %}
+              <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+            {% endif %}
 
-        </div>
+          </div>
 
-      {% endfor %}
+        {% endfor %}
+
+      {% else %}
+
+        <p class="govuk-body">{{ "professions.search.zeroResults.message" | t }}</p>
+
+        <p class="govuk-body">{{ "professions.search.zeroResults.listHeading" | t }}</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>{{ "professions.search.zeroResults.differentSpellings" | t }}</li>
+          <li>{{ "professions.search.zeroResults.relatedWords" | t }}</li>
+          <li>{{ "professions.search.zeroResults.removeFilters" | t }}</li>
+          <li>{{ "professions.search.zeroResults.sectorOnly" | t }}</li>
+        </ul>
+
+      {% endif %}
 
     </div>
 
