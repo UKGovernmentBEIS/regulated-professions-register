@@ -7,7 +7,6 @@ import {
   Query,
   Req,
   Res,
-  UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
@@ -31,6 +30,7 @@ import {
   ActionType,
 } from '../helpers/get-action-type-from-user';
 import { getActingUser } from '../helpers/get-acting-user.helper';
+import { checkUserIsServiceOwner } from '../helpers/check-user-is-service-owner.helper';
 import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
 
 @Controller('/admin/users')
@@ -55,7 +55,7 @@ export class OrganisationController {
     @Param('id') id,
     @Query('change') change: boolean,
   ): Promise<void> {
-    this.checkUserIsServiceOwner(req);
+    checkUserIsServiceOwner(getActingUser(req));
 
     const user = await this.usersService.find(id);
 
@@ -81,7 +81,7 @@ export class OrganisationController {
     @Param('id') id: string,
     @Body() organisationDto,
   ): Promise<void> {
-    this.checkUserIsServiceOwner(req);
+    checkUserIsServiceOwner(getActingUser(req));
 
     const validator = await Validator.validate(
       OrganisationDto,
@@ -161,13 +161,5 @@ export class OrganisationController {
     };
 
     res.render('admin/users/organisation/edit', templateArgs);
-  }
-
-  private checkUserIsServiceOwner(req: RequestWithAppSession): void {
-    const actingUser = getActingUser(req);
-
-    if (!actingUser.serviceOwner) {
-      throw new UnauthorizedException();
-    }
   }
 }

@@ -16,10 +16,12 @@ import { UsersService } from '../users.service';
 import { OrganisationDto } from './dto/organisation.dto';
 import { OrganisationController } from './organisation.controller';
 import { getActionTypeFromUser } from '../helpers/get-action-type-from-user';
+import { checkUserIsServiceOwner } from '../helpers/check-user-is-service-owner.helper';
 
 jest.mock('../../professions/admin/regulated-authorities-select-presenter');
 jest.mock('../presenters/service-owner-radio-buttons.presenter');
 jest.mock('../helpers/get-action-type-from-user');
+jest.mock('../helpers/check-user-is-service-owner.helper');
 
 describe('OrganisationController', () => {
   let controller: OrganisationController;
@@ -55,7 +57,11 @@ describe('OrganisationController', () => {
 
   describe('edit', () => {
     describe('when logged in as a non-service owner user', () => {
-      it('throws an exception ', async () => {
+      it('throws an exception', async () => {
+        (checkUserIsServiceOwner as jest.Mock).mockImplementation(() => {
+          throw new UnauthorizedException();
+        });
+
         const user = userFactory.build({ serviceOwner: false });
 
         const request = createMockRequest(
@@ -69,6 +75,8 @@ describe('OrganisationController', () => {
         await expect(
           controller.edit(request, response, 'user-id', false),
         ).rejects.toThrowError(UnauthorizedException);
+
+        expect(checkUserIsServiceOwner).toBeCalledWith(request);
       });
     });
 
@@ -122,6 +130,8 @@ describe('OrganisationController', () => {
 
         await controller.edit(request, response, user.id, false);
 
+        expect(checkUserIsServiceOwner).toBeCalledWith(request);
+
         expect(response.render).toBeCalledWith(
           'admin/users/organisation/edit',
           expect.objectContaining({
@@ -155,6 +165,10 @@ describe('OrganisationController', () => {
   describe('update', () => {
     describe('when logged in as a non-service owner user', () => {
       it('throws an exception', async () => {
+        (checkUserIsServiceOwner as jest.Mock).mockImplementation(() => {
+          throw new UnauthorizedException();
+        });
+
         const user = userFactory.build({ serviceOwner: false });
 
         const request = createMockRequest(
@@ -168,6 +182,10 @@ describe('OrganisationController', () => {
         await expect(
           controller.update(request, response, 'user-id', false),
         ).rejects.toThrowError(UnauthorizedException);
+
+        expect(usersService.save).not.toBeCalled();
+
+        expect(checkUserIsServiceOwner).toBeCalledWith(request);
       });
     });
 
@@ -196,6 +214,8 @@ describe('OrganisationController', () => {
         organisationsService.find.mockResolvedValue(organisation);
 
         await controller.update(request, response, user.id, organisationDto);
+
+        expect(checkUserIsServiceOwner).toBeCalledWith(request);
 
         expect(organisationsService.find).toBeCalledWith(organisation.id);
         expect(usersService.save).toBeCalledWith({
@@ -273,6 +293,8 @@ describe('OrganisationController', () => {
           }),
         );
 
+        expect(checkUserIsServiceOwner).toBeCalledWith(request);
+
         expect(usersService.find).toBeCalledWith(user.id);
         expect(usersService.save).not.toBeCalled();
         expect(organisationsService.find).not.toBeCalled();
@@ -316,6 +338,8 @@ describe('OrganisationController', () => {
         usersService.find.mockResolvedValue(user);
 
         await controller.update(request, response, user.id, organisationDto);
+
+        expect(checkUserIsServiceOwner).toBeCalledWith(request);
 
         expect(organisationsService.find).not.toHaveBeenCalled();
         expect(usersService.save).toBeCalledWith({

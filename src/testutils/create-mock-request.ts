@@ -16,9 +16,7 @@ export function createMockRequest(
     },
   });
 
-  if (appSession !== undefined) {
-    mock.appSession = appSession;
-  }
+  mock.appSession = appSession || {};
 
   return mock;
 }
