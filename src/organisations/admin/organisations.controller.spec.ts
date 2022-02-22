@@ -2,7 +2,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { createMock, DeepMocked } from '@golevelup/ts-jest';
 import { I18nService } from 'nestjs-i18n';
 import { Response, Request } from 'express';
-import { DeepPartial } from 'fishery';
 
 import { OrganisationsController } from './organisations.controller';
 import { OrganisationsService } from '../organisations.service';
@@ -27,14 +26,15 @@ import { IndexTemplate } from './interfaces/index-template.interface';
 import { OrganisationsFilterHelper } from '../helpers/organisations-filter.helper';
 import { FilterDto } from './dto/filter.dto';
 import { FilterInput } from '../../common/interfaces/filter-input.interface';
-import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
 import { flashMessage } from '../../common/flash-message';
 import { createDefaultMockRequest } from '../../testutils/factories/create-default-mock-request';
+import { getActingUser } from '../../users/helpers/get-acting-user.helper';
 
 jest.mock('./presenters/organisations.presenter');
 jest.mock('../presenters/organisation.presenter');
 jest.mock('../helpers/organisations-filter.helper');
 jest.mock('../../common/flash-message');
+jest.mock('../../users/helpers/get-acting-user.helper');
 
 describe('OrganisationsController', () => {
   let controller: OrganisationsController;
@@ -82,9 +82,10 @@ describe('OrganisationsController', () => {
     describe('when the user is a service owner', () => {
       describe('when no filter is provided', () => {
         it('should return template params for all organisations', async () => {
-          const request = createDefaultMockRequest({
-            user: userFactory.build({ serviceOwner: true }),
-          });
+          const request = createDefaultMockRequest();
+          (getActingUser as jest.Mock).mockReturnValue(
+            userFactory.build({ serviceOwner: true }),
+          );
 
           const templateParams: IndexTemplate = {
             organisationsTable: {
@@ -138,9 +139,10 @@ describe('OrganisationsController', () => {
 
       describe('when a filter is provided', () => {
         it('should return template params for filtered organisations', async () => {
-          const request = createDefaultMockRequest({
-            user: userFactory.build({ serviceOwner: true }),
-          });
+          const request = createDefaultMockRequest();
+          (getActingUser as jest.Mock).mockReturnValue(
+            userFactory.build({ serviceOwner: true }),
+          );
 
           const templateParams: IndexTemplate = {
             organisationsTable: {
@@ -222,12 +224,13 @@ describe('OrganisationsController', () => {
 
         const userOrganisation = organisations[0];
 
-        const request = createDefaultMockRequest({
-          user: userFactory.build({
+        const request = createDefaultMockRequest();
+        (getActingUser as jest.Mock).mockReturnValue(
+          userFactory.build({
             serviceOwner: false,
             organisation: userOrganisation,
           }),
-        });
+        );
 
         (
           OrganisationsPresenter.prototype as DeepMocked<OrganisationsPresenter>
@@ -274,11 +277,8 @@ describe('OrganisationsController', () => {
       });
 
       const response = createMock<Response>();
-      const request = createMock<RequestWithAppSession>({
-        appSession: {
-          user: user as DeepPartial<any>,
-        },
-      });
+      const request = createDefaultMockRequest();
+      (getActingUser as jest.Mock).mockReturnValue(user);
 
       organisationsService.save.mockResolvedValue(organisation);
       organisationVersionsService.save.mockResolvedValue(organisationVersion);
@@ -332,7 +332,7 @@ describe('OrganisationsController', () => {
           const organisationId = 'some-uuid';
           const versionId = 'some-other-uuid';
           const response = createMock<Response>();
-          const request = createMock<Request>();
+          const request = createDefaultMockRequest();
 
           const organisationDto: OrganisationDto = {
             name: 'Organisation',
@@ -430,7 +430,7 @@ describe('OrganisationsController', () => {
           });
           const version = organisationVersionFactory.build({});
           const response = createMock<Response>();
-          const request = createMock<Request>();
+          const request = createDefaultMockRequest();
 
           organisationsService.find.mockResolvedValue(organisation);
           organisationVersionsService.find.mockResolvedValue(version);
@@ -471,7 +471,7 @@ describe('OrganisationsController', () => {
           organisation = organisationFactory.build({ slug: '' });
           version = organisationVersionFactory.build();
           response = createMock<Response>();
-          request = createMock<Request>();
+          request = createDefaultMockRequest();
 
           organisationDto = createMock<OrganisationDto>({
             confirm: true,
@@ -528,7 +528,7 @@ describe('OrganisationsController', () => {
           organisation = organisationFactory.build({ slug: 'some-slug' });
           version = organisationVersionFactory.build();
           response = createMock<Response>();
-          request = createMock<Request>();
+          request = createDefaultMockRequest();
 
           organisationDto = createMock<OrganisationDto>({
             confirm: true,

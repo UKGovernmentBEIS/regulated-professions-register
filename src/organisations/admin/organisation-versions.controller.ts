@@ -30,6 +30,7 @@ import { Permissions } from '../../common/permissions.decorator';
 import { UserPermission } from '../../users/user-permission';
 
 import { flashMessage } from '../../common/flash-message';
+import { getActingUser } from '../../users/helpers/get-acting-user.helper';
 @UseGuards(AuthenticationGuard)
 @Controller('/admin/organisations')
 export class OrganisationVersionsController {
@@ -63,7 +64,7 @@ export class OrganisationVersionsController {
 
     const newVersion = await this.organisationVersionsService.create(
       latestVersion,
-      req.appSession.user,
+      getActingUser(req),
     );
 
     return res.redirect(
@@ -119,7 +120,7 @@ export class OrganisationVersionsController {
 
     const newVersion = await this.organisationVersionsService.create(
       version,
-      req.appSession.user,
+      getActingUser(req),
     );
 
     await this.organisationVersionsService.publish(newVersion);

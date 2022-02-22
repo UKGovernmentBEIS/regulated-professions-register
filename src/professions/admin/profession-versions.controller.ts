@@ -26,6 +26,7 @@ import { Profession } from '../profession.entity';
 import { ProfessionsService } from '../professions.service';
 import { ProfessionPresenter } from '../presenters/profession.presenter';
 import { flashMessage } from '../../common/flash-message';
+import { getActingUser } from '../../users/helpers/get-acting-user.helper';
 
 @UseGuards(AuthenticationGuard)
 @Controller('/admin/professions')
@@ -118,7 +119,7 @@ export class ProfessionVersionsController {
 
     const version = await this.professionVersionsService.create(
       latestVersion,
-      req.appSession.user,
+      getActingUser(req),
     );
 
     return res.redirect(
@@ -141,7 +142,7 @@ export class ProfessionVersionsController {
 
     const newVersion = await this.professionVersionsService.create(
       version,
-      req.appSession.user,
+      getActingUser(req),
     );
 
     await this.professionVersionsService.publish(newVersion);

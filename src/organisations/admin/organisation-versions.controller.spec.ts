@@ -1,7 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { createMock, DeepMocked } from '@golevelup/ts-jest';
 import { Response } from 'express';
-import { DeepPartial } from 'fishery';
 import { I18nService } from 'nestjs-i18n';
 
 import { translationOf } from '../../testutils/translation-of';
@@ -23,14 +22,16 @@ import userFactory from '../../testutils/factories/user';
 
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 
-import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
 import { OrganisationPresenter } from '../presenters/organisation.presenter';
 
 import { flashMessage } from '../../common/flash-message';
+import { getActingUser } from '../../users/helpers/get-acting-user.helper';
+import { createDefaultMockRequest } from '../../testutils/factories/create-default-mock-request';
 
 jest.mock('../presenters/organisation-summary.presenter');
 jest.mock('../presenters/organisation.presenter');
 jest.mock('../../common/flash-message');
+jest.mock('../../users/helpers/get-acting-user.helper');
 
 describe('OrganisationVersionsController', () => {
   let controller: OrganisationVersionsController;
@@ -88,11 +89,8 @@ describe('OrganisationVersionsController', () => {
       const user = userFactory.build();
 
       const response = createMock<Response>();
-      const request = createMock<RequestWithAppSession>({
-        appSession: {
-          user: user as DeepPartial<any>,
-        },
-      });
+      const request = createDefaultMockRequest();
+      (getActingUser as jest.Mock).mockReturnValue(user);
 
       organisationVersionsService.findLatestForOrganisationId.mockResolvedValue(
         organisationVersion,
@@ -169,11 +167,8 @@ describe('OrganisationVersionsController', () => {
       });
       const user = userFactory.build();
 
-      const req = createMock<RequestWithAppSession>({
-        appSession: {
-          user: user as DeepPartial<any>,
-        },
-      });
+      const req = createDefaultMockRequest();
+      (getActingUser as jest.Mock).mockReturnValue(user);
 
       const res = createMock<Response>({});
 

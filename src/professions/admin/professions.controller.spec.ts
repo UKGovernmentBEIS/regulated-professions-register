@@ -3,12 +3,10 @@ import { Test } from '@nestjs/testing';
 import { Response } from 'express';
 import { I18nService } from 'nestjs-i18n';
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
-import { createMockRequest } from '../../testutils/create-mock-request';
 import { IndustriesService } from '../../industries/industries.service';
 import { Nation } from '../../nations/nation';
 import { Organisation } from '../../organisations/organisation.entity';
 import { OrganisationsService } from '../../organisations/organisations.service';
-import { User } from '../../users/user.entity';
 import { FilterInput } from '../../common/interfaces/filter-input.interface';
 import { Profession } from '../profession.entity';
 import { ProfessionsService } from '../professions.service';
@@ -21,10 +19,10 @@ import { ProfessionVersionsService } from '../profession-versions.service';
 import professionVersion from '../../testutils/factories/profession-version';
 import userFactory from '../../testutils/factories/user';
 import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
-import { DeepPartial } from 'typeorm';
+import { getActingUser } from '../../users/helpers/get-acting-user.helper';
+import { createDefaultMockRequest } from '../../testutils/factories/create-default-mock-request';
 
-const referrer = 'http://example.com/some/path';
-const host = 'example.com';
+jest.mock('../../users/helpers/get-acting-user.helper');
 
 const industry1 = industryFactory.build({
   id: 'example-industry-1',
@@ -87,7 +85,7 @@ describe('ProfessionsController', () => {
   let organisationsService: DeepMocked<OrganisationsService>;
 
   beforeEach(async () => {
-    request = createMockRequest(referrer, host);
+    request = createDefaultMockRequest();
 
     professionsService = createMock<ProfessionsService>();
     professionVersionsService = createMock<ProfessionVersionsService>();
@@ -174,13 +172,9 @@ describe('ProfessionsController', () => {
       professionVersionsService.save.mockResolvedValue(version);
 
       const res = createMock<Response>();
-      const req = createMock<RequestWithAppSession>({
-        appSession: {
-          user: user as DeepPartial<any>,
-        },
-      });
+      (getActingUser as jest.Mock).mockReturnValue(user);
 
-      await controller.create(res, req);
+      await controller.create(res, request);
 
       expect(professionsService.save).toHaveBeenCalled();
       expect(professionVersionsService.save).toHaveBeenCalledWith(
@@ -195,9 +189,9 @@ describe('ProfessionsController', () => {
   describe('index', () => {
     describe('when the user is a service owner', () => {
       beforeEach(() => {
-        request['appSession'].user = createMock<User>({
-          serviceOwner: true,
-        });
+        (getActingUser as jest.Mock).mockReturnValue(
+          userFactory.build({ serviceOwner: true }),
+        );
       });
 
       it('returns template params poulated to show an overview of professions', async () => {
@@ -308,10 +302,12 @@ describe('ProfessionsController', () => {
 
     describe('when the user is not a service owner', () => {
       beforeEach(() => {
-        request['appSession'].user = createMock<User>({
-          serviceOwner: false,
-          organisation: organisation1,
-        });
+        (getActingUser as jest.Mock).mockReturnValue(
+          userFactory.build({
+            serviceOwner: false,
+            organisation: organisation1,
+          }),
+        );
       });
 
       it('returns template params poulated to show professions for a single organisation', async () => {

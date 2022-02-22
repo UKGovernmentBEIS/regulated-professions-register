@@ -30,6 +30,9 @@ import {
   getActionTypeFromUser,
   ActionType,
 } from '../helpers/get-action-type-from-user';
+import { getActingUser } from '../helpers/get-acting-user.helper';
+import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
+
 @Controller('/admin/users')
 @UseGuards(AuthenticationGuard)
 export class OrganisationController {
@@ -47,7 +50,7 @@ export class OrganisationController {
       : '/admin/users/new',
   )
   async edit(
-    @Req() req: Request,
+    @Req() req: RequestWithAppSession,
     @Res() res: Response,
     @Param('id') id,
     @Query('change') change: boolean,
@@ -73,7 +76,7 @@ export class OrganisationController {
       : '/admin/users/new',
   )
   async update(
-    @Req() req: Request,
+    @Req() req: RequestWithAppSession,
     @Res() res: Response,
     @Param('id') id: string,
     @Body() organisationDto,
@@ -160,8 +163,8 @@ export class OrganisationController {
     res.render('admin/users/organisation/edit', templateArgs);
   }
 
-  private checkUserIsServiceOwner(req: Request): void {
-    const actingUser = req['appSession'].user as User;
+  private checkUserIsServiceOwner(req: RequestWithAppSession): void {
+    const actingUser = getActingUser(req);
 
     if (!actingUser.serviceOwner) {
       throw new UnauthorizedException();

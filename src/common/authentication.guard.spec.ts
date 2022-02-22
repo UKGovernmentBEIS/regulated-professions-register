@@ -6,8 +6,10 @@ import { AuthenticationGuard } from './authentication.guard';
 import userFactory from '../testutils/factories/user';
 import { UserPermission } from '../users/user-permission';
 import { getPermissionsFromUser } from '../users/helpers/get-permissions-from-user.helper';
+import { getActingUser } from '../users/helpers/get-acting-user.helper';
 
 jest.mock('../users/helpers/get-permissions-from-user.helper');
+jest.mock('../users/helpers/get-acting-user.helper');
 
 describe('AuthenticationGuard', () => {
   describe('when isAuthenticated() is true', () => {
@@ -38,6 +40,7 @@ describe('AuthenticationGuard', () => {
     describe('when permissions are specified', () => {
       it('should return true when the user has the appropriate permission', () => {
         const user = userFactory.build();
+        (getActingUser as jest.Mock).mockReturnValue(user);
 
         const host = createMock<ExecutionContext>({
           switchToHttp: () => ({
@@ -46,7 +49,6 @@ describe('AuthenticationGuard', () => {
                 oidc: createMock<any>({
                   isAuthenticated: () => true,
                 }),
-                appSession: { user },
               };
             },
           }),
@@ -70,6 +72,7 @@ describe('AuthenticationGuard', () => {
 
       it('should return false when the user does not have the appropriate permission', () => {
         const user = userFactory.build();
+        (getActingUser as jest.Mock).mockReturnValue(user);
 
         const host = createMock<ExecutionContext>({
           switchToHttp: () => ({
@@ -78,7 +81,6 @@ describe('AuthenticationGuard', () => {
                 oidc: createMock<any>({
                   isAuthenticated: () => true,
                 }),
-                appSession: { user },
               };
             },
           }),
@@ -102,6 +104,7 @@ describe('AuthenticationGuard', () => {
 
       it('should return false when the user has no permissions', () => {
         const user = userFactory.build();
+        (getActingUser as jest.Mock).mockReturnValue(user);
 
         const host = createMock<ExecutionContext>({
           switchToHttp: () => ({
@@ -110,7 +113,6 @@ describe('AuthenticationGuard', () => {
                 oidc: createMock<any>({
                   isAuthenticated: () => true,
                 }),
-                appSession: { user },
               };
             },
           }),
