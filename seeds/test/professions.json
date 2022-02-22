@@ -97,5 +97,26 @@
         "keywords": "Adviser, heating,Connector, coupling,Consultant, heating,Contractor, plumbing,Converter,Craftsman, distribution,Craftsman, governor,Craftsman, transmission,Craftsman,Engineer, biomass,Engineer, domestic,Engineer, field,Engineer, Gas, British,Engineer, gas, domestic,Engineer, gas, emergency,Engineer, gas, technical,Engineer, gas,Engineer, gas and heating,Engineer, gas and water,Engineer, heat and domestic,Engineer, heating, central,Engineer, heating, gas,Engineer, heating,Engineer, heating and lighting,Engineer, heating and plumbing,Engineer, heating and ventilating,Engineer, installation, gas,Engineer, installation,Engineer, mains,Engineer, maintenance,Engineer, plumber and gas,Engineer, plumbing,Engineer, plumbing and heating,Engineer, pump, heat,Engineer, safe, gas,Engineer, sanitary,Engineer, service, gas,Engineer, service,Engineer, service,Engineer, service,Engineer, technical, gas,Engineer, technical,Engineer, thermal,Engineer, thermal and acoustic,Engineer, ventilating,Engineer, ventilation,Engineer, ventilation,Engineer, water, hot,Erector, mains, gas,Fitter, bathroom,Fitter, burner,Fitter, district,Fitter, engineer's, heating,Fitter, engineer's, sanitary,Fitter, fire, gas,Fitter, gas,Fitter, governor,Fitter, heating,Fitter, heating and ventilation,Fitter, kitchen and bathroom,Fitter, maintenance,Fitter, maintenance,Fitter, maintenance,Fitter, sanitary,Fitter, sprinkler,Fitter, steam,Fitter, steam and hot water,Fitter, stove,Fitter, ventilation,Fitter, water,Fitter,Fitter,Fitter,Fitter-welder,Fixer, appliances,Fixer, meter,Fixer, meter,Fixer, ventilator,Inserter, ferrule,Installer, bathroom,Installer, heating,Installer, meter,Installer, meter,Installer, pump, heat,Installer,Jointer, pipe, sprinkler,Linesman, gas,Man, maintenance,Man, service, sales,Man, service,Man, service,Mender,Pewterer,Plumber,Plumber and decorator,Plumber and gasfitter,Plumber-welder,Repairer, stove,Repairer,Technician, gas,Technician, network,Technician, network,Technician, plumbing,Technician, service,Worker, gas, maintenance"
       }
     ]
+  },
+  {
+    "name": "Orthodontic Therapist",
+    "slug": "orthodontic-therapist",
+    "organisation": "General Medical Council",
+    "additionalOrganisation": null,
+    "versions": [
+      {
+        "alternateName": "Orthodontic Auxiliary",
+        "description": "Orthodontic therapists are registered dental professionals who carry out certain parts of orthodontic treatment under prescription from a dentist.",
+        "occupationLocations": ["GB-ENG", "GB-SCT", "GB-WLS", "GB-NIR"],
+        "regulationType": "N/A",
+        "industries": ["industries.health"],
+        "reservedActivities": "",
+        "legislations": ["Dentists Act 1984"],
+        "mandatoryRegistration": "voluntary",
+        "status": "draft",
+        "socCode": 3213,
+        "keywords": "Associate, nursing"
+      }
+    ]
   }
 ]

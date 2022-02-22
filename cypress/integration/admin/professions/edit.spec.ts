@@ -411,6 +411,141 @@ describe('Editing an existing profession', () => {
         });
       });
     });
+
+    context('when no Qualification has been set on the Profession', () => {
+      it('allows users to update Qualification values', () => {
+        cy.visitAndCheckAccessibility('/admin/professions');
+
+        cy.get('table')
+          .contains('tr', 'Orthodontic Therapist')
+          .within(() => {
+            cy.contains('View details').click();
+          });
+
+        cy.checkAccessibility();
+
+        cy.translate('professions.form.headings.qualifications').then(
+          (qualifications) => {
+            cy.get('body').should('not.contain', qualifications);
+          },
+        );
+
+        cy.translate('professions.admin.button.edit.draft').then(
+          (buttonText) => {
+            cy.contains(buttonText).click();
+          },
+        );
+
+        cy.checkAccessibility();
+
+        cy.translate('professions.form.button.edit').then((buttonText) => {
+          cy.get('button').contains(buttonText).click();
+        });
+
+        cy.checkAccessibility();
+
+        cy.checkSummaryListRowValue(
+          'professions.form.label.qualifications.routesToObtain',
+          '',
+        );
+        cy.checkSummaryListRowValue(
+          'professions.form.label.qualifications.mostCommonRouteToObtain',
+          '',
+        );
+        cy.checkSummaryListRowValue(
+          'professions.form.label.qualifications.duration',
+          '',
+        );
+        cy.checkSummaryListRowValue(
+          'professions.form.label.qualifications.mandatoryProfessionalExperience',
+          '',
+        );
+        cy.checkSummaryListRowValue(
+          'professions.form.label.qualifications.moreInformationUrl',
+          '',
+        );
+
+        cy.clickSummaryListRowAction(
+          'professions.form.label.qualifications.qualificationLevel',
+          'Change',
+        );
+
+        cy.checkAccessibility();
+
+        cy.get('textarea[name="routesToObtain"]').type(
+          'General secondary education',
+        );
+        cy.get('textarea[name="mostCommonRouteToObtain"]').type(
+          'A 4 year degree',
+        );
+        cy.get('input[name="duration"]').type('4.0 Years');
+        cy.get(
+          'input[name="mandatoryProfessionalExperience"][value="1"]',
+        ).check();
+        cy.get('textarea[name="level"]').type('An example Qualification level');
+        cy.get('input[name="moreInformationUrl"]').type(
+          'http://example.com/more-info',
+        );
+
+        cy.get('input[name="otherCountriesRecognition"]').type(
+          'Recognition in other countries',
+        );
+        cy.get('input[name="otherCountriesRecognitionUrl"]').type(
+          'http://example.com/other',
+        );
+
+        cy.translate('app.continue').then((buttonText) => {
+          cy.get('button').contains(buttonText).click();
+        });
+
+        cy.checkAccessibility();
+
+        cy.checkSummaryListRowValue(
+          'professions.form.label.qualifications.qualificationLevel',
+          'An example Qualification level',
+        );
+
+        cy.checkSummaryListRowValue(
+          'professions.form.label.qualifications.routesToObtain',
+          'General secondary education',
+        );
+
+        cy.checkSummaryListRowValue(
+          'professions.form.label.qualifications.mostCommonRouteToObtain',
+          'A 4 year degree',
+        );
+
+        cy.checkSummaryListRowValue(
+          'professions.form.label.qualifications.duration',
+          '4.0 Years',
+        );
+
+        cy.translate('app.yes').then((yes) => {
+          cy.checkSummaryListRowValue(
+            'professions.form.label.qualifications.mandatoryProfessionalExperience',
+            yes,
+          );
+        });
+
+        cy.checkSummaryListRowValue(
+          'professions.form.label.qualifications.moreInformationUrl',
+          'http://example.com/more-info',
+        );
+
+        cy.translate('professions.form.button.saveAsDraft').then(
+          (buttonText) => {
+            cy.get('button').contains(buttonText).click();
+          },
+        );
+
+        cy.checkAccessibility();
+
+        cy.checkSummaryListRowValue(
+          'professions.form.label.qualifications.moreInformationUrl',
+          'http://example.com/more-info',
+        );
+      });
+    });
   });
 
   context('when I am logged in as a registrar', () => {

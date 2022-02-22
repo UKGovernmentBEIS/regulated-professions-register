@@ -142,30 +142,6 @@ describe('CheckYourAnswersController', () => {
       });
     });
 
-    describe('when the profession has no qualification', () => {
-      it('passes a `null` qualification value to the template', async () => {
-        const profession = professionFactory.build({
-          organisation: organisationFactory.build(),
-        });
-
-        const version = professionVersionFactory.build({
-          qualification: undefined,
-          profession: profession,
-        });
-
-        professionsService.findWithVersions.mockResolvedValue(profession);
-        professionVersionsService.findWithProfession.mockResolvedValue(version);
-
-        const templateParams = await controller.show(
-          'profession-id',
-          'version-id',
-          'false',
-        );
-
-        expect(templateParams.qualification).toEqual(null);
-      });
-    });
-
     describe('when the profession has only one legislation', () => {
       it('the legislations array passed to the template is padded to length 2', async () => {
         const legislation = legislationFactory.build({
@@ -178,7 +154,6 @@ describe('CheckYourAnswersController', () => {
         });
 
         const version = professionVersionFactory.build({
-          qualification: undefined,
           legislations: [legislation],
         });
 
