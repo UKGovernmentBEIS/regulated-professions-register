@@ -25,13 +25,9 @@ describe('Creating organisations', () => {
 
       cy.translate('organisations.admin.index.add.button').then(
         (buttonText) => {
-          cy.get('a').contains(buttonText).click();
+          cy.get('button').contains(buttonText).click();
         },
       );
-
-      cy.translate('app.start').then((startButton) => {
-        cy.get('button').contains(startButton).click();
-      });
     });
 
     it('Shows errors when I input data incorrectly', () => {
