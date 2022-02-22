@@ -2,7 +2,7 @@
   "form": {
     "headings": {
       "main": "Add a new profession",
-      "topLevelInformation": "Top level information",
+      "topLevelInformation": "Profession",
       "scope": "Scope",
       "checkAnswers": "Check your answers",
       "originalAnswers": "Your original answers",
@@ -21,9 +21,12 @@
     "editProfession": "Use this section of the site to add a new profession",
     "label": {
       "topLevelInformation": {
-        "name": "Name of regulated profession",
-        "regulatedAuthority": "Which body regulates this profession?",
-        "additionalAuthority": "Is there another regulator associated with this profession?"
+        "name": "Name",
+        "nameHint": "The official name for the profession.",
+        "regulatedAuthority": "Main regulator",
+        "regulatedAuthorityHint": "The main authority that regulates this profession.",
+        "additionalAuthority": "Additional regulator (optional)",
+        "additionalAuthorityHint": "Another authority or professional body involved in regulating this profession."
       },
       "scope": {
         "nations": "In which nation(s) is this profession regulated?",
