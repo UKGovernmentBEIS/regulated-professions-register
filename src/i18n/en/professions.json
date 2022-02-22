@@ -346,6 +346,14 @@
         "hint": "Select all that apply."
       },
       "button": "Filter results"
+    },
+    "zeroResults": {
+      "message": "Your search found 0 professions. This might be because the profession you’re looking for isn’t regulated in the UK, or it’s listed under a different name.",
+      "listHeading": "You may get more results if you:",
+      "differentSpellings": "try different spellings",
+      "relatedWords": "use related words like nurse instead of nursing",
+      "removeFilters": "remove any filters you’ve used",
+      "sectorOnly": "leave the profession blank and search by sector only"
     }
   }
 }
