@@ -120,7 +120,7 @@ describe('CheckYourAnswersController', () => {
           'http://example.com/regulations',
         );
         expect(templateParams.qualification).toEqual(
-          new QualificationPresenter(qualification),
+          new QualificationPresenter(qualification, i18nService),
         );
         expect(templateParams.legislations[0].url).toEqual(
           'www.gas-legislation.com',

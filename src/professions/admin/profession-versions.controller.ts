@@ -89,13 +89,15 @@ export class ProfessionVersionsController {
     );
 
     const qualification = profession.qualification
-      ? new QualificationPresenter(profession.qualification)
+      ? new QualificationPresenter(profession.qualification, this.i18nService)
       : null;
 
     return {
       profession,
       presenter,
-      qualification: qualification,
+      qualificationSummaryList: qualification
+        ? await qualification.summaryList()
+        : null,
       nations,
       industries,
       organisation,

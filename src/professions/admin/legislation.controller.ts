@@ -36,7 +36,7 @@ export class LegislationController {
   @BackLink((request: Request) =>
     request.query.change === 'true'
       ? '/admin/professions/:professionId/versions/:versionId/check-your-answers'
-      : '/admin/professions/:professionId/versions/:versionId/qualification-information/edit',
+      : '/admin/professions/:professionId/versions/:versionId/qualifications/edit',
   )
   async edit(
     @Res() res: Response,
@@ -68,7 +68,7 @@ export class LegislationController {
   @BackLink((request: Request) =>
     request.body.change === 'true'
       ? '/admin/professions/:professionId/versions/:versionId/check-your-answers'
-      : '/admin/professions/:professionId/versions/:versionId/qualification-information/edit',
+      : '/admin/professions/:professionId/versions/:versionId/qualifications/edit',
   )
   async update(
     @Res() res: Response,

@@ -69,7 +69,7 @@ export class CheckYourAnswersController {
     );
 
     const qualification = version.qualification
-      ? new QualificationPresenter(version.qualification)
+      ? new QualificationPresenter(version.qualification, this.i18nService)
       : null;
 
     const legislations = [version.legislations[0], version.legislations[1]];

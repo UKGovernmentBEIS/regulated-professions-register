@@ -109,7 +109,7 @@ describe(RegulatedActivitiesController, () => {
           );
 
           expect(response.redirect).toHaveBeenCalledWith(
-            '/admin/professions/profession-id/versions/version-id/qualification-information/edit',
+            '/admin/professions/profession-id/versions/version-id/qualifications/edit',
           );
         });
       });

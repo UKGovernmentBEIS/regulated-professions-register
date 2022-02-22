@@ -1,41 +1,24 @@
 [
   {
     "level": "DSE - Diploma (post-secondary education), including Annex II (ex 92/51, Annex C,D) , Art. 11 c",
-    "methodToObtain": "generalSecondaryEducation",
-    "otherMethodToObtain": "",
-    "commonPathToObtain": "generalSecondaryEducation",
-    "otherCommonPathToObtain": "",
+    "routesToObtain": "General secondary education",
+    "mostCommonRouteToObtain": "General secondary education",
     "educationDuration": " 5.0 Year",
-    "educationDurationYears": 5,
-    "educationDurationMonths": 0,
-    "educationDurationDays": 0,
-    "educationDurationHours": 0,
-    "mandatoryProfessionalExperience": true
+    "mandatoryProfessionalExperience": true,
+    "url": "http://www.example.com"
   },
   {
     "level": "PS3 - Diploma of post-secondary level (3-4 years) , Art. 11 d",
-    "methodToObtain": "generalOrVocationalPostSecondaryEducation",
-    "otherMethodToObtain": "",
-    "commonPathToObtain": "generalOrVocationalPostSecondaryEducation",
-    "otherCommonPathToObtain": "",
+    "routesToObtain": "General or vocational post-secondary education",
+    "mostCommonRouteToObtain": "General or vocational post-secondary education",
     "educationDuration": "3.5 Year",
-    "educationDurationYears": 3,
-    "educationDurationMonths": 6,
-    "educationDurationDays": 0,
-    "educationDurationHours": 0,
     "mandatoryProfessionalExperience": true
   },
   {
     "level": "ATT - Attestation of competence , Art. 11 a",
-    "methodToObtain": "generalOrVocationalPostSecondaryEducation",
-    "otherMethodToObtain": "",
-    "commonPathToObtain": "generalOrVocationalPostSecondaryEducation",
-    "otherCommonPathToObtain": "",
+    "routesToObtain": "General or vocational post-secondary education",
+    "mostCommonRouteToObtain": "General or vocational post-secondary education",
     "educationDuration": "3 Year",
-    "educationDurationYears": 3,
-    "educationDurationMonths": 6,
-    "educationDurationDays": 0,
-    "educationDurationHours": 0,
     "mandatoryProfessionalExperience": false
   }
 ]

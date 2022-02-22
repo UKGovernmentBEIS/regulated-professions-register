@@ -148,16 +148,11 @@ export class ProfessionsSeeder implements Seeder {
           qualification = await this.qualificationsRepository.save(
             new Qualification(
               qualification.level,
-              qualification.methodToObtain,
-              qualification.otherCommonPathToObtain,
-              qualification.commonPathToObtain,
-              qualification.otherCommonPathToObtain,
+              qualification.routesToObtain,
+              qualification.mostCommonRouteToObtain,
               qualification.educationDuration,
-              null,
-              null,
-              null,
-              null,
               qualification.mandatoryProfessionalExperience,
+              qualification.url,
             ),
           );
         }

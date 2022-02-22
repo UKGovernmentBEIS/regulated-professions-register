@@ -2,14 +2,12 @@ import { createMock, DeepMocked } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Response } from 'express';
 import { I18nService } from 'nestjs-i18n';
-import { MethodToObtain } from '../../qualifications/qualification.entity';
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 import professionFactory from '../../testutils/factories/profession';
 import { ProfessionsService } from '../professions.service';
-import { MethodToObtainQualificationRadioButtonsPresenter } from './method-to-obtain-qualification-radio-buttons.presenter';
 import { YesNoRadioButtonArgsPresenter } from './yes-no-radio-buttons-presenter';
-import { QualificationInformationDto } from './dto/qualification-information.dto';
-import { QualificationInformationController } from './qualification-information.controller';
+import { QualificationsDto } from './dto/qualifications.dto';
+import { QualificationsController } from './qualifications.controller';
 import { ProfessionVersionsService } from '../profession-versions.service';
 import { isUK } from '../../helpers/nations.helper';
 
@@ -18,8 +16,8 @@ import qualificationFactory from '../../testutils/factories/qualification';
 
 jest.mock('../../helpers/nations.helper');
 
-describe(QualificationInformationController, () => {
-  let controller: QualificationInformationController;
+describe(QualificationsController, () => {
+  let controller: QualificationsController;
   let response: DeepMocked<Response>;
   let professionsService: DeepMocked<ProfessionsService>;
   let professionVersionsService: DeepMocked<ProfessionVersionsService>;
@@ -31,7 +29,7 @@ describe(QualificationInformationController, () => {
     professionVersionsService = createMock<ProfessionVersionsService>();
 
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [QualificationInformationController],
+      controllers: [QualificationsController],
       providers: [
         { provide: ProfessionsService, useValue: professionsService },
         {
@@ -44,9 +42,7 @@ describe(QualificationInformationController, () => {
 
     response = createMock<Response>();
 
-    controller = module.get<QualificationInformationController>(
-      QualificationInformationController,
-    );
+    controller = module.get<QualificationsController>(QualificationsController);
   });
 
   describe('edit', () => {
@@ -61,22 +57,6 @@ describe(QualificationInformationController, () => {
         qualification: qualificationFactory.build(),
       });
 
-      const methodToObtainQualificationRadioButtonArgs =
-        await new MethodToObtainQualificationRadioButtonsPresenter(
-          version.qualification.methodToObtain,
-          undefined,
-          undefined,
-          i18nService,
-        ).radioButtonArgs('methodToObtainQualification');
-
-      const mostCommonPathToObtainQualificationRadioButtonArgs =
-        await new MethodToObtainQualificationRadioButtonsPresenter(
-          version.qualification.commonPathToObtain,
-          undefined,
-          undefined,
-          i18nService,
-        ).radioButtonArgs('mostCommonPathToObtainQualification');
-
       professionsService.findWithVersions.mockResolvedValue(profession);
       professionVersionsService.findWithProfession.mockResolvedValue(version);
       (isUK as jest.Mock).mockImplementation(() => false);
@@ -84,10 +64,21 @@ describe(QualificationInformationController, () => {
       await controller.edit(response, 'profession-id', 'version-id', false);
 
       expect(response.render).toHaveBeenCalledWith(
-        'admin/professions/qualification-information',
+        'admin/professions/qualifications',
         expect.objectContaining({
-          methodToObtainQualificationRadioButtonArgs,
-          mostCommonPathToObtainQualificationRadioButtonArgs,
+          level: profession.qualification.level,
+          routesToObtain: profession.qualification.routesToObtain,
+          mostCommonRouteToObtain:
+            profession.qualification.mostCommonRouteToObtain,
+          duration: profession.qualification.educationDuration,
+          moreInformationUrl: profession.qualification.url,
+          captionText: 'professions.form.captions.edit',
+          ukRecognition: profession.qualification.ukRecognition,
+          ukRecognitionUrl: profession.qualification.ukRecognitionUrl,
+          otherCountriesRecognition:
+            profession.qualification.otherCountriesRecognition,
+          otherCountriesRecognitionUrl:
+            profession.qualification.otherCountriesRecognitionUrl,
           mandatoryProfessionalExperienceRadioButtonArgs:
             await new YesNoRadioButtonArgsPresenter(
               version.qualification.mandatoryProfessionalExperience,
@@ -111,13 +102,12 @@ describe(QualificationInformationController, () => {
             qualification: qualificationFactory.build(),
           });
 
-          const dto: QualificationInformationDto = {
+          const dto: QualificationsDto = {
             level: 'Qualification level',
-            methodToObtainQualification: MethodToObtain.DegreeLevel,
-            otherMethodToObtainQualification: '',
-            mostCommonPathToObtainQualification: MethodToObtain.DegreeLevel,
-            otherMostCommonPathToObtainQualification: '',
+            routesToObtain: 'General secondary education',
+            mostCommonRouteToObtain: 'General secondary education',
             duration: '3.0 Years',
+            moreInformationUrl: 'www.example.com/more-info',
             mandatoryProfessionalExperience: '1',
             ukRecognition: 'ukRecognition',
             ukRecognitionUrl: 'http://example.com/uk',
@@ -136,13 +126,12 @@ describe(QualificationInformationController, () => {
           expect(professionVersionsService.save).toHaveBeenCalledWith(
             expect.objectContaining({
               qualification: expect.objectContaining({
-                commonPathToObtain: 'degreeLevel',
-                otherMethodToObtain: '',
-                otherCommonPathToObtain: '',
+                routesToObtain: 'General secondary education',
+                mostCommonRouteToObtain: 'General secondary education',
                 educationDuration: '3.0 Years',
                 level: 'Qualification level',
+                url: 'www.example.com/more-info',
                 mandatoryProfessionalExperience: true,
-                methodToObtain: 'degreeLevel',
                 ukRecognition: 'ukRecognition',
                 ukRecognitionUrl: 'http://example.com/uk',
                 otherCountriesRecognition: 'otherCountriesRecognition',
@@ -167,13 +156,12 @@ describe(QualificationInformationController, () => {
             qualification: qualificationFactory.build(),
           });
 
-          const dto: QualificationInformationDto = {
+          const dto: QualificationsDto = {
             level: 'Qualification level',
-            methodToObtainQualification: MethodToObtain.DegreeLevel,
-            otherMethodToObtainQualification: '',
-            mostCommonPathToObtainQualification: MethodToObtain.DegreeLevel,
-            otherMostCommonPathToObtainQualification: '',
+            routesToObtain: 'General secondary education',
+            mostCommonRouteToObtain: 'General secondary education',
             duration: '3.0 Years',
+            moreInformationUrl: 'www.example.com/more-info',
             mandatoryProfessionalExperience: '1',
             ukRecognition: 'ukRecognition',
             ukRecognitionUrl: 'http://example.com/uk',
@@ -192,13 +180,12 @@ describe(QualificationInformationController, () => {
           expect(professionVersionsService.save).toHaveBeenCalledWith(
             expect.objectContaining({
               qualification: expect.objectContaining({
-                commonPathToObtain: 'degreeLevel',
-                otherMethodToObtain: '',
-                otherCommonPathToObtain: '',
+                routesToObtain: 'General secondary education',
+                mostCommonRouteToObtain: 'General secondary education',
                 educationDuration: '3.0 Years',
                 level: 'Qualification level',
+                url: 'www.example.com/more-info',
                 mandatoryProfessionalExperience: true,
-                methodToObtain: 'degreeLevel',
                 ukRecognition: 'ukRecognition',
                 ukRecognitionUrl: 'http://example.com/uk',
                 otherCountriesRecognition: 'otherCountriesRecognition',
@@ -224,13 +211,12 @@ describe(QualificationInformationController, () => {
           qualification: qualificationFactory.build(),
         });
 
-        const dto: QualificationInformationDto = {
+        const dto: QualificationsDto = {
           level: undefined,
-          methodToObtainQualification: undefined,
-          otherMethodToObtainQualification: '',
-          mostCommonPathToObtainQualification: undefined,
-          otherMostCommonPathToObtainQualification: '',
+          routesToObtain: '',
+          mostCommonRouteToObtain: '',
           duration: '',
+          moreInformationUrl: 'not a url',
           mandatoryProfessionalExperience: undefined,
           change: false,
           ukRecognition: '',
@@ -246,7 +232,7 @@ describe(QualificationInformationController, () => {
         await controller.update(response, 'profession-id', 'version-id', dto);
 
         expect(response.render).toHaveBeenCalledWith(
-          'admin/professions/qualification-information',
+          'admin/professions/qualifications',
           expect.objectContaining({
             mandatoryProfessionalExperienceRadioButtonArgs:
               await new YesNoRadioButtonArgsPresenter(
@@ -261,14 +247,17 @@ describe(QualificationInformationController, () => {
               mandatoryProfessionalExperience: {
                 text: 'professions.form.errors.qualification.mandatoryProfessionalExperience.empty',
               },
-              methodToObtainQualification: {
-                text: 'professions.form.errors.qualification.methodToObtain.empty',
+              routesToObtain: {
+                text: 'professions.form.errors.qualification.routesToObtain.empty',
               },
               duration: {
                 text: 'professions.form.errors.qualification.duration.empty',
               },
-              mostCommonPathToObtainQualification: {
-                text: 'professions.form.errors.qualification.mostCommonPathToObtain.empty',
+              moreInformationUrl: {
+                text: 'professions.form.errors.qualification.moreInformationUrl.invalid',
+              },
+              mostCommonRouteToObtain: {
+                text: 'professions.form.errors.qualification.mostCommonRouteToObtain.empty',
               },
               ukRecognitionUrl: {
                 text: 'professions.form.errors.qualification.ukRecognitionUrl.invalid',

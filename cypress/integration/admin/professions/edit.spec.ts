@@ -84,7 +84,7 @@ describe('Editing an existing profession', () => {
       );
 
       cy.checkSummaryListRowValue(
-        'professions.form.label.qualificationInformation.qualificationLevel',
+        'professions.form.label.qualifications.qualificationLevel',
         'DSE - Diploma (post-secondary education), including Annex II (ex 92/51, Annex C,D) , Art. 11 c',
       );
 
@@ -190,12 +190,11 @@ describe('Editing an existing profession', () => {
       );
 
       cy.clickSummaryListRowAction(
-        'professions.form.label.qualificationInformation.qualificationLevel',
+        'professions.form.label.qualifications.qualificationLevel',
         'Change',
       );
-      // Conditional radio buttons add an additional `aria-expanded` field,
-      // so ignore that rule on this page
-      cy.checkAccessibility({ 'aria-allowed-attr': { enabled: false } });
+
+      cy.checkAccessibility();
       cy.translate('professions.form.captions.edit').then((editCaption) => {
         cy.get('body').contains(editCaption);
       });
@@ -206,7 +205,7 @@ describe('Editing an existing profession', () => {
         cy.get('button').contains(buttonText).click();
       });
       cy.checkSummaryListRowValue(
-        'professions.form.label.qualificationInformation.qualificationLevel',
+        'professions.form.label.qualifications.qualificationLevel',
         'Updated qualification level',
       );
 
@@ -322,24 +321,24 @@ describe('Editing an existing profession', () => {
         cy.get('button').contains(buttonText).click();
       });
 
-      cy.translate(
-        'professions.form.label.qualificationInformation.ukRecognition',
-      ).then((ukRecognition) => {
-        cy.contains('.govuk-summary-list__row', ukRecognition).should(
-          'be.visible',
-        );
-      });
+      cy.translate('professions.form.label.qualifications.ukRecognition').then(
+        (ukRecognition) => {
+          cy.contains('.govuk-summary-list__row', ukRecognition).should(
+            'be.visible',
+          );
+        },
+      );
 
       cy.clickSummaryListRowAction(
-        'professions.form.label.qualificationInformation.methodsToObtainQualification',
+        'professions.form.label.qualifications.routesToObtain',
         'Change',
       );
 
-      cy.translate(
-        'professions.form.label.qualificationInformation.ukRecognition',
-      ).then((ukRecognition) => {
-        cy.get('body').should('not.contain', ukRecognition);
-      });
+      cy.translate('professions.form.label.qualifications.ukRecognition').then(
+        (ukRecognition) => {
+          cy.get('body').should('not.contain', ukRecognition);
+        },
+      );
 
       cy.translate('app.continue').then((buttonText) => {
         cy.get('button').contains(buttonText).click();
@@ -362,24 +361,24 @@ describe('Editing an existing profession', () => {
         cy.get('button').contains(buttonText).click();
       });
 
-      cy.translate(
-        'professions.form.label.qualificationInformation.ukRecognition',
-      ).then((ukRecognition) => {
-        cy.contains('.govuk-summary-list__row', ukRecognition).should(
-          'be.visible',
-        );
-      });
+      cy.translate('professions.form.label.qualifications.ukRecognition').then(
+        (ukRecognition) => {
+          cy.contains('.govuk-summary-list__row', ukRecognition).should(
+            'be.visible',
+          );
+        },
+      );
 
       cy.clickSummaryListRowAction(
-        'professions.form.label.qualificationInformation.methodsToObtainQualification',
+        'professions.form.label.qualifications.routesToObtain',
         'Change',
       );
 
-      cy.translate(
-        'professions.form.label.qualificationInformation.ukRecognition',
-      ).then((ukRecognition) => {
-        cy.get('body').should('contain', ukRecognition);
-      });
+      cy.translate('professions.form.label.qualifications.ukRecognition').then(
+        (ukRecognition) => {
+          cy.get('body').should('contain', ukRecognition);
+        },
+      );
     });
 
     it('Selecting UK sets the nations to all UK nations', () => {

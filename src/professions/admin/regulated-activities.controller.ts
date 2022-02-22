@@ -125,7 +125,7 @@ export class RegulatedActivitiesController {
     }
 
     return res.redirect(
-      `/admin/professions/${professionId}/versions/${versionId}/qualification-information/edit`,
+      `/admin/professions/${professionId}/versions/${versionId}/qualifications/edit`,
     );
   }
 

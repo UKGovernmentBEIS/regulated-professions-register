@@ -14,53 +14,54 @@
     <div class="govuk-grid-column-two-thirds">
 
       <span class="govuk-caption-l">{{ captionText | t }}</span>
-      <h1 class="govuk-heading-l">{{ ("professions.form.headings.qualificationInformation" | t) }}</h1>
+      <h1 class="govuk-heading-l">{{ ("professions.form.headings.qualifications" | t) }}</h1>
 
       <form method="post" action="./">
         <input type="hidden" name="change" value="{{ change }}" />
         {{
-          govukRadios({
-            idPrefix: "methodToObtainQualification",
-            name: "methodToObtainQualification",
-            fieldset: {
-              legend: {
-                text: ("professions.form.label.qualificationInformation.methodsToObtainQualification" | t),
-                isPageHeading: false,
-                classes: "govuk-fieldset__legend--m"
-              }
+          govukTextarea({
+            label: {
+              text: ("professions.form.label.qualifications.routesToObtain" | t),
+              classes: "govuk-label--m",
+              isPageHeading: false
             },
             hint: {
-              text: ("professions.form.radioButtons.hint" | t)
+              text: ("professions.form.hint.qualifications.routesToObtain" | t)
             },
-            items: methodToObtainQualificationRadioButtonArgs,
-            errorMessage: errors.methodToObtainQualification | tError
+            id: "routesToObtain",
+            name: "routesToObtain",
+            rows: "7",
+            value: routesToObtain,
+            errorMessage: errors.routesToObtain | tError
           })
         }}
 
         {{
-          govukRadios({
-            idPrefix: "mostCommonPathToObtainQualification",
-            name: "mostCommonPathToObtainQualification",
-            fieldset: {
-              legend: {
-                text: ("professions.form.label.qualificationInformation.mostCommonPathToObtainQualification" | t),
-                isPageHeading: false,
-                classes: "govuk-fieldset__legend--m"
-              }
+          govukTextarea({
+            label: {
+              text: ("professions.form.label.qualifications.mostCommonRouteToObtain" | t),
+              classes: "govuk-label--m",
+              isPageHeading: false
             },
             hint: {
-              text: ("professions.form.radioButtons.hint" | t)
+              text: ("professions.form.hint.qualifications.mostCommonRouteToObtain" | t)
             },
-            items: mostCommonPathToObtainQualificationRadioButtonArgs,
-            errorMessage: errors.mostCommonPathToObtainQualification | tError
+            id: "mostCommonRouteToObtain",
+            name: "mostCommonRouteToObtain",
+            rows: "7",
+            value: mostCommonRouteToObtain,
+            errorMessage: errors.mostCommonRouteToObtain | tError
           })
         }}
 
         {{
           govukInput({
             label: {
-              text: ("professions.form.label.qualificationInformation.duration" | t),
+              text: ("professions.form.label.qualifications.duration" | t),
               classes: "govuk-label--m"
+            },
+            hint: {
+              text: ("professions.form.hint.qualifications.duration" | t | multiline)
             },
             id: "duration",
             name: "duration",
@@ -75,13 +76,13 @@
             name: "mandatoryProfessionalExperience",
             fieldset: {
               legend: {
-                text: ("professions.form.label.qualificationInformation.mandatoryProfessionalExperience" | t),
+                text: ("professions.form.label.qualifications.mandatoryProfessionalExperience" | t),
                 isPageHeading: false,
                 classes: "govuk-fieldset__legend--m"
               }
             },
             hint: {
-              text: ("professions.form.radioButtons.hint" | t)
+              text: ("professions.form.hint.qualifications.mandatoryProfessionalExperience" | t)
             },
             items: mandatoryProfessionalExperienceRadioButtonArgs,
             errorMessage: errors.mandatoryProfessionalExperience | tError
@@ -91,15 +92,34 @@
         {{
           govukTextarea({
             label: {
-              text: ("professions.form.label.qualificationInformation.qualificationLevel" | t),
+              text: ("professions.form.label.qualifications.qualificationLevel" | t),
               classes: "govuk-label--m",
               isPageHeading: false
+            },
+            hint: {
+              html: ("professions.form.hint.qualifications.qualificationLevel" | t)
             },
             id: "level",
             name: "level",
             rows: "7",
             value: level,
             errorMessage: errors.level | tError
+          })
+        }}
+
+        {{
+          govukInput({
+            label: {
+              text: ("professions.form.label.qualifications.moreInformationUrl" | t),
+              classes: "govuk-label--m"
+            },
+            id: "moreInformationUrl",
+            name: "moreInformationUrl",
+            value: moreInformationUrl,
+            hint: {
+              text: ("professions.form.hint.qualifications.moreInformationUrl" | t)
+            },
+            errorMessage: errors.moreInformationUrl | tError
           })
         }}
 
@@ -110,12 +130,15 @@
         {{
           govukInput({
             label: {
-              text: ("professions.form.label.qualificationInformation.ukRecognition" | t),
+              text: ("professions.form.label.qualifications.ukRecognition" | t),
               classes: "govuk-label--m"
             },
             id: "ukRecognition",
             name: "ukRecognition",
             value: ukRecognition,
+            hint: {
+              text: ("professions.form.hint.qualifications.ukRecognition" | t)
+            },
             errorMessage: errors.ukRecognition | tError
           })
         }}
@@ -123,14 +146,14 @@
         {{
           govukInput({
             label: {
-              text: ("professions.form.label.qualificationInformation.ukRecognitionUrl" | t),
+              text: ("professions.form.label.qualifications.ukRecognitionUrl" | t),
               classes: "govuk-label--m"
             },
             id: "ukRecognitionUrl",
             name: "ukRecognitionUrl",
             value: ukRecognitionUrl,
             hint: {
-              text: ("professions.form.hint.qualificationInformation.ukRecognitionUrl" | t)
+              text: ("professions.form.hint.qualifications.ukRecognitionUrl" | t)
             },
             errorMessage: errors.ukRecognitionUrl | tError
           })
@@ -143,12 +166,15 @@
         {{
           govukInput({
             label: {
-              text: ("professions.form.label.qualificationInformation.otherCountriesRecognition" | t),
+              text: ("professions.form.label.qualifications.otherCountriesRecognition" | t),
               classes: "govuk-label--m"
             },
             id: "otherCountriesRecognition",
             name: "otherCountriesRecognition",
             value: otherCountriesRecognition,
+            hint: {
+              text: ("professions.form.hint.qualifications.otherCountriesRecognition" | t)
+            },
             errorMessage: errors.otherCountriesRecognition | tError
           })
         }}
@@ -156,14 +182,14 @@
         {{
           govukInput({
             label: {
-              text: ("professions.form.label.qualificationInformation.otherCountriesRecognitionUrl" | t),
+              text: ("professions.form.label.qualifications.otherCountriesRecognitionUrl" | t),
               classes: "govuk-label--m"
             },
             id: "otherCountriesRecognitionUrl",
             name: "otherCountriesRecognitionUrl",
             value: otherCountriesRecognitionUrl,
             hint: {
-              text: ("professions.form.hint.qualificationInformation.otherCountriesRecognitionUrl" | t)
+              text: ("professions.form.hint.qualifications.otherCountriesRecognitionUrl" | t)
             },
             errorMessage: errors.otherCountriesRecognitionUrl | tError
           })

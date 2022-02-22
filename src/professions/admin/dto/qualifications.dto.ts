@@ -1,39 +1,19 @@
 import { IsNotEmpty, ValidateIf, IsUrl } from 'class-validator';
-import { MethodToObtain } from '../../../qualifications/qualification.entity';
 
-export class QualificationInformationDto {
+export class QualificationsDto {
   @IsNotEmpty({ message: 'professions.form.errors.qualification.level.empty' })
   level: string;
 
   @IsNotEmpty({
-    message: 'professions.form.errors.qualification.methodToObtain.empty',
+    message: 'professions.form.errors.qualification.routesToObtain.empty',
   })
-  methodToObtainQualification: MethodToObtain;
-
-  @ValidateIf(
-    (dto: QualificationInformationDto) =>
-      dto.methodToObtainQualification === MethodToObtain.Others,
-  )
-  @IsNotEmpty({
-    message: 'professions.form.errors.qualification.otherMethodToObtain.empty',
-  })
-  otherMethodToObtainQualification: string;
+  routesToObtain: string;
 
   @IsNotEmpty({
     message:
-      'professions.form.errors.qualification.mostCommonPathToObtain.empty',
+      'professions.form.errors.qualification.mostCommonRouteToObtain.empty',
   })
-  mostCommonPathToObtainQualification: MethodToObtain;
-
-  @ValidateIf(
-    (dto: QualificationInformationDto) =>
-      dto.mostCommonPathToObtainQualification === MethodToObtain.Others,
-  )
-  @IsNotEmpty({
-    message:
-      'professions.form.errors.qualification.otherMostCommonPathToObtain.empty',
-  })
-  otherMostCommonPathToObtainQualification: string;
+  mostCommonRouteToObtain: string;
 
   @IsNotEmpty({
     message: 'professions.form.errors.qualification.duration.empty',
@@ -45,6 +25,16 @@ export class QualificationInformationDto {
       'professions.form.errors.qualification.mandatoryProfessionalExperience.empty',
   })
   mandatoryProfessionalExperience: string;
+
+  @IsUrl(
+    {},
+    {
+      message:
+        'professions.form.errors.qualification.moreInformationUrl.invalid',
+    },
+  )
+  @ValidateIf((e) => e.moreInformationUrl)
+  moreInformationUrl: string;
 
   ukRecognition: string;
 

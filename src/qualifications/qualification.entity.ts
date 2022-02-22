@@ -6,15 +6,6 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-export enum MethodToObtain {
-  GeneralSecondaryEducation = 'generalSecondaryEducation',
-  GeneralOrVocationalPostSecondaryEducation = 'generalOrVocationalPostSecondaryEducation',
-  GeneralPostSecondaryEducationMandatoryVocational = 'generalPostSecondaryEducationMandatoryVocational',
-  VocationalPostSecondaryEducation = 'vocationalPostSecondaryEducation',
-  DegreeLevel = 'degreeLevel',
-  Others = 'others',
-}
-
 @Entity({ name: 'qualifications' })
 export class Qualification {
   @PrimaryGeneratedColumn('uuid')
@@ -23,35 +14,20 @@ export class Qualification {
   @Column()
   level: string;
 
-  @Column({ type: 'enum', enum: MethodToObtain, nullable: true })
-  methodToObtain: MethodToObtain;
+  @Column({ nullable: true })
+  routesToObtain: string;
 
   @Column({ nullable: true })
-  otherMethodToObtain: string;
-
-  @Column({ type: 'enum', enum: MethodToObtain, nullable: true })
-  commonPathToObtain: MethodToObtain;
-
-  @Column({ nullable: true })
-  otherCommonPathToObtain: string;
+  mostCommonRouteToObtain: string;
 
   @Column()
   educationDuration: string;
 
-  @Column({ nullable: true })
-  educationDurationYears: number;
-
-  @Column({ nullable: true })
-  educationDurationMonths: number;
-
-  @Column({ nullable: true })
-  educationDurationDays: number;
-
-  @Column({ nullable: true })
-  educationDurationHours: number;
-
   @Column()
   mandatoryProfessionalExperience: boolean;
+
+  @Column({ nullable: true })
+  url: string;
 
   @Column({ nullable: true })
   ukRecognition: string;
@@ -80,33 +56,23 @@ export class Qualification {
 
   constructor(
     level?: string,
-    methodToObtain?: MethodToObtain,
-    otherMethodToObtain?: string,
-    commonPathToObtain?: MethodToObtain,
-    otherCommonPathToObtain?: string,
+    routesToObtain?: string,
+    mostCommonRouteToObtain?: string,
     educationDuration?: string,
-    educationDurationYears?: number,
-    educationDurationMonths?: number,
-    educationDurationDays?: number,
-    educationDurationHours?: number,
     mandatoryProfessionalExperience?: boolean,
+    url?: string,
     ukRecognition?: string,
     ukRecognitionUrl?: string,
     otherCountriesRecognition?: string,
     otherCountriesRecognitionUrl?: string,
   ) {
     this.level = level || '';
-    this.methodToObtain = methodToObtain || undefined;
-    this.commonPathToObtain = commonPathToObtain || undefined;
-    this.otherMethodToObtain = otherMethodToObtain || '';
-    this.otherCommonPathToObtain = otherCommonPathToObtain || '';
+    this.routesToObtain = routesToObtain || '';
+    this.mostCommonRouteToObtain = mostCommonRouteToObtain || '';
     this.educationDuration = educationDuration || '';
-    this.educationDurationYears = educationDurationYears || 0;
-    this.educationDurationMonths = educationDurationMonths || 0;
-    this.educationDurationDays = educationDurationDays || 0;
-    this.educationDurationHours = educationDurationHours || 0;
     this.mandatoryProfessionalExperience =
       mandatoryProfessionalExperience || true;
+    this.url = url || '';
     this.ukRecognition = ukRecognition || '';
     this.ukRecognitionUrl = ukRecognitionUrl || '';
     this.otherCountriesRecognition = otherCountriesRecognition || '';
