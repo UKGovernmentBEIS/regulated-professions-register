@@ -10,8 +10,6 @@ import industryFactory from '../../testutils/factories/industry';
 import professionFactory from '../../testutils/factories/profession';
 import professionVersionFactory from '../../testutils/factories/profession-version';
 import { translationOf } from '../../testutils/translation-of';
-import { DeepPartial } from 'typeorm';
-import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
 import userFactory from '../../testutils/factories/user';
 import { ProfessionVersionsController } from './profession-versions.controller';
 import { ProfessionVersionsService } from '../profession-versions.service';
@@ -19,10 +17,13 @@ import { ProfessionsService } from '../professions.service';
 import { Profession } from '../profession.entity';
 import { ProfessionPresenter } from '../presenters/profession.presenter';
 import { flashMessage } from '../../common/flash-message';
+import { getActingUser } from '../../users/helpers/get-acting-user.helper';
+import { createDefaultMockRequest } from '../../testutils/factories/create-default-mock-request';
 
 jest.mock('../../organisations/organisation.entity');
 jest.mock('../presenters/profession.presenter');
 jest.mock('../../common/flash-message');
+jest.mock('../../users/helpers/get-acting-user.helper');
 
 describe('ProfessionVersionsController', () => {
   let controller: ProfessionVersionsController;
@@ -78,11 +79,8 @@ describe('ProfessionVersionsController', () => {
       const user = userFactory.build();
 
       const res = createMock<Response>();
-      const req = createMock<RequestWithAppSession>({
-        appSession: {
-          user: user as DeepPartial<any>,
-        },
-      });
+      const req = createDefaultMockRequest();
+      (getActingUser as jest.Mock).mockReturnValue(user);
 
       professionVersionsService.findLatestForProfessionId.mockResolvedValue(
         previousVersion,
@@ -203,11 +201,8 @@ describe('ProfessionVersionsController', () => {
       });
       const user = userFactory.build();
 
-      const req = createMock<RequestWithAppSession>({
-        appSession: {
-          user: user as DeepPartial<any>,
-        },
-      });
+      const req = createDefaultMockRequest();
+      (getActingUser as jest.Mock).mockReturnValue(user);
 
       const res = createMock<Response>({});
 

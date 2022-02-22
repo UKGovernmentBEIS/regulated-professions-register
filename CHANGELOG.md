@@ -34,6 +34,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Change edit button wording depending on entity status
 - Show a confirmation banner when publishing entities
 - Change order of data entry when creating a profession, so name and organisation(s) are inputted first
+- Only service administrators and registrars may edit the top-level information of a profession
 
 ## [release-003] - 2022-02-16
 

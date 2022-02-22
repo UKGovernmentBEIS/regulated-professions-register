@@ -5,6 +5,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { getActingUser } from '../users/helpers/get-acting-user.helper';
 import { getPermissionsFromUser } from '../users/helpers/get-permissions-from-user.helper';
 import { UserPermission } from '../users/user-permission';
 import { User } from '../users/user.entity';
@@ -54,7 +55,7 @@ export class AuthenticationGuard implements CanActivate {
     if (!permissions) {
       return loggedIn;
     } else {
-      const user = request.appSession.user as User;
+      const user = getActingUser(request);
 
       return this.matchPermissions(user, permissions);
     }

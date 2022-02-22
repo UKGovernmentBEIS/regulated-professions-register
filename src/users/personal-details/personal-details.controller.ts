@@ -20,11 +20,13 @@ import { AuthenticationGuard } from '../../common/authentication.guard';
 import { Permissions } from '../../common/permissions.decorator';
 import { EditTemplate } from './interfaces/edit-template';
 import { BackLink } from '../../common/decorators/back-link.decorator';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import {
   getActionTypeFromUser,
   ActionType,
 } from '../helpers/get-action-type-from-user';
+import { getActingUser } from '../helpers/get-acting-user.helper';
+import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
 
 @Controller('/admin/users')
 @UseGuards(AuthenticationGuard)
@@ -34,7 +36,9 @@ export class PersonalDetailsController {
   @Get(':id/personal-details/edit')
   @Permissions(UserPermission.CreateUser, UserPermission.EditUser)
   @Render('admin/users/personal-details/edit')
-  @BackLink((request: Request) => getBackLink(request, request.query))
+  @BackLink((request: RequestWithAppSession) =>
+    getBackLink(request, request.query),
+  )
   async edit(
     @Param('id') id,
     @Query('change') change: boolean,
@@ -51,7 +55,9 @@ export class PersonalDetailsController {
 
   @Post(':id/personal-details')
   @Permissions(UserPermission.CreateUser, UserPermission.EditUser)
-  @BackLink((request: Request) => getBackLink(request, request.body))
+  @BackLink((request: RequestWithAppSession) =>
+    getBackLink(request, request.body),
+  )
   async update(
     @Body() personalDetailsDto,
     @Res() res,
@@ -119,9 +125,12 @@ export class PersonalDetailsController {
   }
 }
 
-function getBackLink(request: Request, values: Record<string, any>): string {
+function getBackLink(
+  request: RequestWithAppSession,
+  values: Record<string, any>,
+): string {
   const change = values.change === 'true';
-  const serviceOwner = (request['appSession'].user as User).serviceOwner;
+  const serviceOwner = getActingUser(request).serviceOwner;
 
   if (change) {
     return '/admin/users/:id/confirm';

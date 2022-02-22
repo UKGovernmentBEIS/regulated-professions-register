@@ -1,14 +1,14 @@
 import { Response, NextFunction } from 'express';
 import { RequestWithAppSession } from './interfaces/request-with-app-session.interface';
 import { getPermissionsFromUser } from '../users/helpers/get-permissions-from-user.helper';
-import { User } from './../users/user.entity';
+import { getActingUser } from '../users/helpers/get-acting-user.helper';
 
 export function globalLocals(
   req: RequestWithAppSession,
   res: Response,
   next: NextFunction,
 ): void {
-  const user = req.appSession.user as User;
+  const user = getActingUser(req);
 
   res.app.locals.isLoggedin = user !== undefined;
   res.app.locals.user = user;

@@ -14,16 +14,19 @@ import { translationOf } from '../testutils/translation-of';
 import { createMockI18nService } from '../testutils/create-mock-i18n-service';
 import { TableRow } from '../common/interfaces/table-row';
 import { flashMessage } from '../common/flash-message';
-import { createMockRequest } from '../testutils/create-mock-request';
 import { getActionTypeFromUser } from './helpers/get-action-type-from-user';
 
 import organisationFactory from '../testutils/factories/organisation';
+import { getActingUser } from './helpers/get-acting-user.helper';
+import { createDefaultMockRequest } from '../testutils/factories/create-default-mock-request';
 
 jest.mock('./presenters/users.presenter');
 jest.mock('./presenters/user.presenter');
 
 jest.mock('../common/flash-message');
 jest.mock('./helpers/get-action-type-from-user');
+
+jest.mock('./helpers/get-acting-user.helper');
 
 describe('UsersController', () => {
   let controller: UsersController;
@@ -35,7 +38,7 @@ describe('UsersController', () => {
   beforeEach(async () => {
     const i18nService = createMockI18nService();
 
-    request = createMock<Request>();
+    request = createDefaultMockRequest();
 
     auth0Service = createMock<Auth0Service>();
     userMailer = createMock<UserMailer>();
@@ -77,11 +80,8 @@ describe('UsersController', () => {
           serviceOwner: true,
         });
 
-        const request = createMockRequest(
-          'http://example.com/some/path',
-          'example.com',
-          { user: actingUser },
-        );
+        const request = createDefaultMockRequest();
+        (getActingUser as jest.Mock).mockReturnValue(actingUser);
 
         const user = userFactory.build();
 
@@ -112,11 +112,8 @@ describe('UsersController', () => {
           organisation: organisationFactory.build(),
         });
 
-        const request = createMockRequest(
-          'http://example.com/some/path',
-          'example.com',
-          { user: actingUser },
-        );
+        const request = createDefaultMockRequest();
+        (getActingUser as jest.Mock).mockReturnValue(actingUser);
 
         const user = userFactory.build();
 
@@ -160,18 +157,15 @@ describe('UsersController', () => {
   describe('create', () => {
     describe('when logged in as a service owner user', () => {
       it('should create a user and redirect', async () => {
-        const loggedInUser = userFactory.build({ serviceOwner: true });
+        const actingUser = userFactory.build({ serviceOwner: true });
 
         const user = userFactory.build();
 
         usersService.save.mockResolvedValue(user);
 
         const res = createMock<Response>();
-        const req = createMockRequest(
-          'http://example.com/some/path',
-          'example.com',
-          { user: loggedInUser },
-        );
+        const req = createDefaultMockRequest();
+        (getActingUser as jest.Mock).mockReturnValue(actingUser);
 
         await controller.create(req, res);
 
@@ -186,7 +180,7 @@ describe('UsersController', () => {
 
     describe('when logged in as a non-service owner user', () => {
       it('should create a user and redirect', async () => {
-        const loggedInUser = userFactory.build({
+        const actingUser = userFactory.build({
           serviceOwner: false,
           organisation: organisationFactory.build(),
         });
@@ -196,16 +190,13 @@ describe('UsersController', () => {
         usersService.save.mockResolvedValue(user);
 
         const res = createMock<Response>();
-        const req = createMockRequest(
-          'http://example.com/some/path',
-          'example.com',
-          { user: loggedInUser },
-        );
+        const req = createDefaultMockRequest();
+        (getActingUser as jest.Mock).mockReturnValue(actingUser);
 
         await controller.create(req, res);
 
         expect(usersService.save).toHaveBeenCalledWith(
-          expect.objectContaining({ organisation: loggedInUser.organisation }),
+          expect.objectContaining({ organisation: actingUser.organisation }),
         );
         expect(res.redirect).toHaveBeenCalledWith(
           `/admin/users/${user.id}/personal-details/edit`,

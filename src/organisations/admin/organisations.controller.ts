@@ -40,7 +40,7 @@ import { flashMessage } from '../../common/flash-message';
 import { isConfirmed } from '../../helpers/is-confirmed';
 import { UserPermission } from '../../users/user-permission';
 import { Permissions } from '../../common/permissions.decorator';
-import { User } from '../../users/user.entity';
+import { getActingUser } from '../../users/helpers/get-acting-user.helper';
 
 @UseGuards(AuthenticationGuard)
 @Controller('/admin/organisations')
@@ -65,7 +65,7 @@ export class OrganisationsController {
     @Req() request: RequestWithAppSession,
     @Query() query: FilterDto = null,
   ): Promise<IndexTemplate> {
-    const actingUser = request.appSession.user as User;
+    const actingUser = getActingUser(request);
 
     const showAllOrgs = actingUser.serviceOwner;
 
@@ -117,7 +117,7 @@ export class OrganisationsController {
     );
     const blankVersion = {
       organisation: organisation,
-      user: req.appSession.user,
+      user: getActingUser(req),
     } as OrganisationVersion;
     const version = await this.organisationVersionsService.save(blankVersion);
 

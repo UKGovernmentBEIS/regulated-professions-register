@@ -20,7 +20,6 @@ import {
   ProfessionsPresenterView,
 } from './professions.presenter';
 import { AuthenticationGuard } from '../../common/authentication.guard';
-import { User } from '../../users/user.entity';
 import { FilterDto } from './dto/filter.dto';
 import { OrganisationsService } from '../../organisations/organisations.service';
 import { Profession } from '../profession.entity';
@@ -31,6 +30,7 @@ import { ProfessionVersion } from '../profession-version.entity';
 import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
 import { UserPermission } from '../../users/user-permission';
 import { Permissions } from '../../common/permissions.decorator';
+import { getActingUser } from '../../users/helpers/get-acting-user.helper';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
@@ -55,7 +55,7 @@ export class ProfessionsController {
 
     const blankVersion = {
       profession: blankProfession,
-      user: req.appSession.user,
+      user: getActingUser(req),
     } as ProfessionVersion;
 
     const savedVersion = await this.professionVersionsService.save(
@@ -94,7 +94,7 @@ export class ProfessionsController {
     const allProfessions =
       await this.professionVersionsService.allDraftOrLive();
 
-    const actingUser = request.appSession.user as User;
+    const actingUser = getActingUser(request);
 
     const showAllOrgs = actingUser.serviceOwner;
 
