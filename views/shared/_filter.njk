@@ -20,6 +20,25 @@
       }) }}
     </div>
 
+    {% if industriesCheckboxItems %}
+      <div class="{{ filterColumnClass }}">
+        {{ govukCheckboxes({
+          name: "industries[]",
+          classes: filterCheckboxClasses,
+          fieldset: {
+            legend: {
+            text: (filterTextPrefix + ".filter.industries.label") | t,
+            classes: "govuk-fieldset__legend--s"
+            }
+          },
+          hint: {
+            text: (filterTextPrefix + ".filter.industries.hint") | t
+          },
+          items: industriesCheckboxItems
+        }) }}
+      </div>
+    {% endif %}
+    
     {% if nationsCheckboxItems %}
       <div class="{{ filterColumnClass }}">
         {{ govukCheckboxes({
@@ -54,25 +73,6 @@
             text: (filterTextPrefix + ".filter.organisations.hint") | t
           },
           items: organisationsCheckboxItems
-        }) }}
-      </div>
-    {% endif %}
-
-    {% if industriesCheckboxItems %}
-      <div class="{{ filterColumnClass }}">
-        {{ govukCheckboxes({
-          name: "industries[]",
-          classes: filterCheckboxClasses,
-          fieldset: {
-            legend: {
-            text: (filterTextPrefix + ".filter.industries.label") | t,
-            classes: "govuk-fieldset__legend--s"
-            }
-          },
-          hint: {
-            text: (filterTextPrefix + ".filter.industries.hint") | t
-          },
-          items: industriesCheckboxItems
         }) }}
       </div>
     {% endif %}
