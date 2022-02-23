@@ -13,6 +13,7 @@ import { isUK } from '../../helpers/nations.helper';
 
 import professionVersionFactory from '../../testutils/factories/profession-version';
 import qualificationFactory from '../../testutils/factories/qualification';
+import organisationFactory from '../../testutils/factories/organisation';
 
 jest.mock('../../helpers/nations.helper');
 
@@ -46,47 +47,95 @@ describe(QualificationsController, () => {
   });
 
   describe('edit', () => {
-    it('should render form page', async () => {
-      const profession = professionFactory.build({
-        id: 'profession-id',
+    describe('when the Profession is complete', () => {
+      it('should render form page', async () => {
+        const profession = professionFactory.build({
+          id: 'profession-id',
+        });
+
+        const version = professionVersionFactory.build({
+          id: 'version-id',
+          profession: profession,
+          qualification: qualificationFactory.build(),
+        });
+
+        professionsService.findWithVersions.mockResolvedValue(profession);
+        professionVersionsService.findWithProfession.mockResolvedValue(version);
+        (isUK as jest.Mock).mockImplementation(() => false);
+
+        await controller.edit(response, 'profession-id', 'version-id', false);
+
+        expect(response.render).toHaveBeenCalledWith(
+          'admin/professions/qualifications',
+          expect.objectContaining({
+            level: profession.qualification.level,
+            routesToObtain: profession.qualification.routesToObtain,
+            mostCommonRouteToObtain:
+              profession.qualification.mostCommonRouteToObtain,
+            duration: profession.qualification.educationDuration,
+            moreInformationUrl: profession.qualification.url,
+            captionText: 'professions.form.captions.edit',
+            ukRecognition: profession.qualification.ukRecognition,
+            ukRecognitionUrl: profession.qualification.ukRecognitionUrl,
+            otherCountriesRecognition:
+              profession.qualification.otherCountriesRecognition,
+            otherCountriesRecognitionUrl:
+              profession.qualification.otherCountriesRecognitionUrl,
+            mandatoryProfessionalExperienceRadioButtonArgs:
+              await new YesNoRadioButtonArgsPresenter(
+                version.qualification.mandatoryProfessionalExperience,
+                i18nService,
+              ).radioButtonArgs(),
+            isUK: false,
+          }),
+        );
       });
+    });
 
-      const version = professionVersionFactory.build({
-        id: 'version-id',
-        profession: profession,
-        qualification: qualificationFactory.build(),
+    describe('when the Profession has just been created by a service owner user', () => {
+      it('returns a mostly empty table row', async () => {
+        const profession = professionFactory
+          .justCreated('profession-id')
+          .build({
+            name: 'Example Profession',
+            organisation: organisationFactory.build(),
+            slug: 'example-profession',
+          });
+
+        const version = professionVersionFactory
+          .justCreated('version-id')
+          .build({
+            profession: profession,
+          });
+
+        professionsService.findWithVersions.mockResolvedValue(profession);
+        professionVersionsService.findWithProfession.mockResolvedValue(version);
+        (isUK as jest.Mock).mockImplementation(() => false);
+
+        await controller.edit(response, 'profession-id', 'version-id', false);
+
+        expect(response.render).toHaveBeenCalledWith(
+          'admin/professions/qualifications',
+          expect.objectContaining({
+            level: undefined,
+            routesToObtain: undefined,
+            mostCommonRouteToObtain: undefined,
+            duration: undefined,
+            moreInformationUrl: undefined,
+            captionText: 'professions.form.captions.edit',
+            ukRecognition: undefined,
+            ukRecognitionUrl: undefined,
+            otherCountriesRecognition: undefined,
+            otherCountriesRecognitionUrl: undefined,
+            mandatoryProfessionalExperienceRadioButtonArgs:
+              await new YesNoRadioButtonArgsPresenter(
+                null,
+                i18nService,
+              ).radioButtonArgs(),
+            isUK: false,
+          }),
+        );
       });
-
-      professionsService.findWithVersions.mockResolvedValue(profession);
-      professionVersionsService.findWithProfession.mockResolvedValue(version);
-      (isUK as jest.Mock).mockImplementation(() => false);
-
-      await controller.edit(response, 'profession-id', 'version-id', false);
-
-      expect(response.render).toHaveBeenCalledWith(
-        'admin/professions/qualifications',
-        expect.objectContaining({
-          level: profession.qualification.level,
-          routesToObtain: profession.qualification.routesToObtain,
-          mostCommonRouteToObtain:
-            profession.qualification.mostCommonRouteToObtain,
-          duration: profession.qualification.educationDuration,
-          moreInformationUrl: profession.qualification.url,
-          captionText: 'professions.form.captions.edit',
-          ukRecognition: profession.qualification.ukRecognition,
-          ukRecognitionUrl: profession.qualification.ukRecognitionUrl,
-          otherCountriesRecognition:
-            profession.qualification.otherCountriesRecognition,
-          otherCountriesRecognitionUrl:
-            profession.qualification.otherCountriesRecognitionUrl,
-          mandatoryProfessionalExperienceRadioButtonArgs:
-            await new YesNoRadioButtonArgsPresenter(
-              version.qualification.mandatoryProfessionalExperience,
-              i18nService,
-            ).radioButtonArgs(),
-          isUK: false,
-        }),
-      );
     });
   });
 
