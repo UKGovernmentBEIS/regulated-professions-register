@@ -9,19 +9,24 @@ export default class QualificationPresenter {
     private readonly i18nService: I18nService,
   ) {}
 
-  readonly level = this.qualification.level;
+  readonly level = this.qualification?.level;
 
   readonly routesToObtain = formatMultilineString(
-    this.qualification.routesToObtain,
+    this.qualification && this.qualification.routesToObtain,
   );
 
   readonly mostCommonRouteToObtain = formatMultilineString(
-    this.qualification.mostCommonRouteToObtain,
+    this.qualification && this.qualification.mostCommonRouteToObtain,
   );
 
-  readonly duration = this.qualification.educationDuration;
+  readonly duration =
+    this.qualification && this.qualification.educationDuration;
 
   get mandatoryProfessionalExperience(): string {
+    if (!this.qualification) {
+      return '';
+    }
+
     if (this.qualification.mandatoryProfessionalExperience === null) {
       return '';
     }
@@ -31,29 +36,32 @@ export default class QualificationPresenter {
       : 'app.no';
   }
 
-  readonly moreInformationUrl = this.qualification.url
-    ? `<a class="govuk-link" href="${escape(this.qualification.url)}">${escape(
-        this.qualification.url,
-      )}</a>`
-    : null;
+  readonly moreInformationUrl =
+    this.qualification && this.qualification.url
+      ? `<a class="govuk-link" href="${escape(
+          this.qualification.url,
+        )}">${escape(this.qualification.url)}</a>`
+      : null;
 
-  readonly ukRecognition = this.qualification.ukRecognition;
+  readonly ukRecognition =
+    this.qualification && this.qualification.ukRecognition;
 
-  readonly ukRecognitionUrl = this.qualification.ukRecognitionUrl
-    ? `<a class="govuk-link" href="${escape(
-        this.qualification.ukRecognitionUrl,
-      )}">${escape(this.qualification.ukRecognitionUrl)}</a>`
-    : null;
+  readonly ukRecognitionUrl =
+    this.qualification && this.qualification.ukRecognitionUrl
+      ? `<a class="govuk-link" href="${escape(
+          this.qualification.ukRecognitionUrl,
+        )}">${escape(this.qualification.ukRecognitionUrl)}</a>`
+      : null;
 
   readonly otherCountriesRecognition =
-    this.qualification.otherCountriesRecognition;
+    this.qualification && this.qualification.otherCountriesRecognition;
 
-  readonly otherCountriesRecognitionUrl = this.qualification
-    .otherCountriesRecognitionUrl
-    ? `<a class="govuk-link" href="${escape(
-        this.qualification.otherCountriesRecognitionUrl,
-      )}">${escape(this.qualification.otherCountriesRecognitionUrl)}</a>`
-    : null;
+  readonly otherCountriesRecognitionUrl =
+    this.qualification && this.qualification.otherCountriesRecognitionUrl
+      ? `<a class="govuk-link" href="${escape(
+          this.qualification.otherCountriesRecognitionUrl,
+        )}">${escape(this.qualification.otherCountriesRecognitionUrl)}</a>`
+      : null;
 
   async summaryList(): Promise<SummaryList> {
     return {
