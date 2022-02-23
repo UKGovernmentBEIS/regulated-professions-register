@@ -142,7 +142,7 @@ describe('CheckYourAnswersController', () => {
       });
     });
 
-    describe('when the profession has only one legislation', () => {
+    describe('when the Profession has only one legislation', () => {
       it('the legislations array passed to the template is padded to length 2', async () => {
         const legislation = legislationFactory.build({
           url: 'www.gas-legislation.com',
@@ -167,6 +167,58 @@ describe('CheckYourAnswersController', () => {
         );
 
         expect(templateParams.legislations).toEqual([legislation, undefined]);
+      });
+    });
+
+    describe('when the Profession has just been created by a service owner user', () => {
+      it('renders a mostly blank check your answers page', async () => {
+        const profession = professionFactory
+          .justCreated('profession-id')
+          .build({
+            name: 'Gas Safe Engineer',
+            organisation: organisationFactory.build({
+              name: 'Council of Gas Registered Engineers',
+            }),
+          });
+
+        const version = professionVersionFactory
+          .justCreated('version-id')
+          .build({
+            industries: [],
+            legislations: [],
+          });
+
+        professionsService.findWithVersions.mockResolvedValue(profession);
+        professionVersionsService.findWithProfession.mockResolvedValue(version);
+
+        const templateParams = await controller.show(
+          'profession-id',
+          'version-id',
+          'false',
+        );
+
+        expect(templateParams.name).toEqual('Gas Safe Engineer');
+        expect(templateParams.nations).toEqual([]);
+        expect(templateParams.industries).toEqual([]);
+        expect(templateParams.organisation).toEqual(
+          'Council of Gas Registered Engineers',
+        );
+        expect(templateParams.mandatoryRegistration).toEqual(undefined);
+        expect(templateParams.registrationRequirements).toEqual(undefined);
+        expect(templateParams.registrationUrl).toEqual(undefined);
+        expect(templateParams.regulationSummary).toEqual(undefined);
+        expect(templateParams.reservedActivities).toEqual(undefined);
+        expect(templateParams.protectedTitles).toEqual(undefined);
+        expect(templateParams.regulationUrl).toEqual(undefined);
+        expect(templateParams.qualification).toEqual(
+          new QualificationPresenter(undefined, i18nService),
+        );
+        expect(templateParams.legislations).toEqual([undefined, undefined]);
+        expect(templateParams.confirmed).toEqual(false);
+
+        expect(professionsService.findWithVersions).toHaveBeenCalledWith(
+          'profession-id',
+        );
       });
     });
   });
