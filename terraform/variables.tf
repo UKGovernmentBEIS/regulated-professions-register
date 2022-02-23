@@ -67,3 +67,14 @@ variable "rollbar_token" {
   type = string
   description = "The access token to use when sending Rollbar errors"
 }
+
+variable "basic_auth_username" {
+  type = string
+  description = "The username we use for basic authentication if we want to hide the site from the public"
+}
+
+variable "basic_auth_password" {
+  type = string
+  description = "The password we use for basic authentication if we want to hide the site from the public"
+}
+

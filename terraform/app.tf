@@ -27,6 +27,8 @@ resource "cloudfoundry_app" "beis-rpr-app" {
     "NOTIFY_API_KEY"      = var.notify_api_key
     "ENVIRONMENT"         = var.environment
     "ROLLBAR_TOKEN"       = var.rollbar_token
+    "BASIC_AUTH_USERNAME" = var.basic_auth_username
+    "BASIC_AUTH_PASSWORD" = var.basic_auth_password
   }
   # routes need to be declared with the app for blue green deployments to work
   routes {
