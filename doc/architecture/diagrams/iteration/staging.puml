@@ -1,0 +1,12 @@
+@startuml staging
+
+partition "Staging Environment" {
+  start
+  :Branch off main;
+  :Write feature code;
+  :Open a new pull request back into main;
+  :Unit tests, integration tests, security and linting are run in Github Actions;
+  :Code review by at least one contributor;
+  :Approve and Merge;
+  :Code is automatically deployed to staging via Github Actions;
+}
