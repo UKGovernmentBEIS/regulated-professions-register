@@ -67,7 +67,9 @@ export class ListEntryPresenter {
     );
 
     const nations = await stringifyNations(
-      this.profession.occupationLocations.map((code) => Nation.find(code)),
+      (this.profession.occupationLocations || []).map((code) =>
+        Nation.find(code),
+      ),
       this.i18nService,
     );
 
