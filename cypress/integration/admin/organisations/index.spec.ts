@@ -42,11 +42,13 @@ describe('Listing organisations', () => {
                 );
 
                 professionsForOrganisation.forEach((profession: any) => {
-                  profession.versions[0].industries.forEach((industry: any) => {
-                    cy.translate(industry).then((industry) => {
-                      cy.wrap($row).should('contain', industry);
-                    });
-                  });
+                  (profession.versions[0].industries || []).forEach(
+                    (industry: any) => {
+                      cy.translate(industry).then((industry) => {
+                        cy.wrap($row).should('contain', industry);
+                      });
+                    },
+                  );
                 });
               });
           });

@@ -118,5 +118,16 @@
         "keywords": "Associate, nursing"
       }
     ]
+  },
+  {
+    "name": "Draft Profession",
+    "slug": "draft-profession",
+    "organisation": "Council of Registered Gas Installers",
+    "additionalOrganisation": null,
+    "versions": [
+      {
+        "status": "draft"
+      }
+    ]
   }
 ]
