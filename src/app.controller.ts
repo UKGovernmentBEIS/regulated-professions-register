@@ -20,4 +20,13 @@ export class AppController {
       name: req.oidc.user.nickname,
     };
   }
+
+  @Get('/health-check')
+  healthCheck() {
+    return {
+      status: 'OK',
+      git_sha: process.env['CURRENT_SHA'],
+      built_at: process.env['TIME_OF_BUILD'],
+    };
+  }
 }

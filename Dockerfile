@@ -32,6 +32,12 @@ COPY --from=dependencies ${DEPS_HOME}/package.json ${APP_HOME}/package.json
 COPY --from=dependencies ${DEPS_HOME}/package-lock.json ${APP_HOME}/package-lock.json
 COPY --from=dependencies ${DEPS_HOME}/node_modules ${APP_HOME}/node_modules
 
+ARG current_sha
+ARG time_of_build
+
+ENV CURRENT_SHA=$current_sha
+ENV TIME_OF_BUILD=$time_of_build
+
 RUN mkdir -p ${APP_HOME}
 WORKDIR ${APP_HOME}
 

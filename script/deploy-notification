@@ -1,0 +1,19 @@
+#!/bin/sh
+
+printf "Waiting for deploy."
+current_sha=$(git rev-parse HEAD)
+
+while :
+do
+  printf "."
+  deployed_sha=$(curl -s https://beis-rpr-prod.london.cloudapps.digital/health-check | jq -r '.git_sha')
+  if [ "$deployed_sha" = "$current_sha" ]; then
+    break
+  fi
+  sleep 10
+done
+
+echo "Sending Slack notification!"
+
+curl -s -X POST --data-urlencode "payload={\"text\": \"<!here> :badgerbadger: The latest release of the Regulated Professions Register has been deployed to production :badgerbadger:\"}" "$SLACK_WEBHOOK_URL"
+
