@@ -131,14 +131,17 @@ export class ProfessionsSeeder implements Seeder {
           },
         );
 
-        const industries = await this.industriesRepository.find({
-          where: { name: In(version.industries || []) },
-        });
+        const industries =
+          version.industries &&
+          (await this.industriesRepository.find({
+            where: { name: In(version.industries || []) },
+          }));
 
         let qualification: Qualification =
-          await this.qualificationsRepository.findOne({
+          version.qualification &&
+          (await this.qualificationsRepository.findOne({
             where: { level: version.qualification },
-          });
+          }));
 
         if (qualification) {
           // Currently the Qualification relation has a unique constraint
@@ -158,11 +161,12 @@ export class ProfessionsSeeder implements Seeder {
         }
 
         let legislations: Legislation[] =
-          await this.legislationsRepository.find({
+          version.legislations &&
+          (await this.legislationsRepository.find({
             where: { name: In(version.legislations) },
-          });
+          }));
 
-        if (legislations.length > 0) {
+        if (legislations && legislations.length > 0) {
           // Currently the Legislation relation has a unique constraint
           // on the legislationID, so we need to create a new Legislation
           // each time. We need to fix this, but in the interests of getting
