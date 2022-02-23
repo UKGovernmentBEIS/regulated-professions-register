@@ -135,8 +135,6 @@ function getBackLink(
   if (change) {
     return '/admin/users/:id/confirm';
   } else {
-    return serviceOwner
-      ? '/admin/users/:id/organisation/edit'
-      : '/admin/users/new';
+    return serviceOwner ? '/admin/users/:id/organisation/edit' : '/admin/users';
   }
 }

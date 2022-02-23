@@ -1,5 +1,5 @@
 function createUser(name: string, email: string): void {
-  cy.visitAndCheckAccessibility('/admin/users/new');
+  cy.visitAndCheckAccessibility('/admin/users');
 
   cy.get('button').click();
 
