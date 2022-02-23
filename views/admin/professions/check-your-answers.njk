@@ -144,7 +144,7 @@
                   text: ("professions.form.label.registration.mandatoryRegistration" | t)
                 },
                 value: {
-                  text: ("professions.mandatoryRegistration." + mandatoryRegistration) | t
+                  text: (("professions.mandatoryRegistration." + mandatoryRegistration) | t) if mandatoryRegistration else ''
                 },
                 actions: {
                   items: [
