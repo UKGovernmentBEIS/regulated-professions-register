@@ -30,7 +30,7 @@
       },
       "scope": {
         "nations": "Nations",
-        "nationsHint" : "The nations where you regulate this profession.",
+        "nationsHint": "The nations where you regulate this profession.",
         "certainNations": "Certain nations",
         "certainNationsHint": "Select all that apply.",
         "industry": "Sectors",
@@ -56,15 +56,25 @@
       },
       "qualifications": {
         "qualificationLevel": "Qualification level",
+        "qualificationLevelHint": "Equivalent qualification level against a recognised framework",
         "routesToObtain": "Routes to qualification",
+        "routesToObtainHint": "The ways that a new professional can become qualified",
         "mostCommonRouteToObtain": "Most common route",
+        "mostCommonRouteToObtainHint": "If there are many ways to qualify, the most common way",
         "duration": "How long to qualify",
+        "durationHint": "The number of months or years it takes to qualify. For example, 2 years.\nIf the length of time varies, provide the most typical or a range. For example, 6 to 12 months",
         "mandatoryProfessionalExperience": "Professional experience requirement",
+        "mandatoryProfessionalExperienceHint": "Is a period of professional practice require to become qualified?",
         "moreInformationUrl": "More about qualification",
+        "moreInformationUrlHint": "Website link to more information",
         "ukRecognition": "Recognition of qualifications in the UK",
+        "ukRecognitionHint": "Routes to recognition for existing professionals from other UK nations",
         "ukRecognitionUrl": "More about recognition within the UK",
+        "ukRecognitionUrlHint": "Website link to more information",
         "otherCountriesRecognition": "Recognition of qualifications from other countries",
-        "otherCountriesRecognitionUrl": "More about recognition from other countries"
+        "otherCountriesRecognitionHint": "Routes to recognition for existing professionals from outside the UK",
+        "otherCountriesRecognitionUrl": "More about recognition from other countries",
+        "otherCountriesRecognitionUrlHint": "Website link to more information"
       },
       "legislation": {
         "nationalLegislation": "Legislation title",
@@ -77,20 +87,6 @@
         "secondLinkHint": "Website link to the legislation."
       }
     },
-    "hint": {
-      "qualifications": {
-        "routesToObtain": "The ways that a new professional can become qualified",
-        "mostCommonRouteToObtain": "If there are many ways to qualify, the most common way",
-        "duration": "The number of months or years it takes to qualify. For example, 2 years.\nIf the length of time varies, provide the most typical or a range. For example, 6 to 12 months",
-        "mandatoryProfessionalExperience": "Is a period of professional practice require to become qualified?",
-        "qualificationLevel": "Equivalent qualification level against a recognised framework",
-        "moreInformationUrl": "Website link to more information",
-        "ukRecognition": "Routes to recognition for existing professionals from other UK nations",
-        "ukRecognitionUrl": "Website link to more information",
-        "otherCountriesRecognition": "Routes to recognition for existing professionals from outside the UK",
-        "otherCountriesRecognitionUrl": "Website link to more information"
-      }
-    },
     "details": {
       "regulatedActivities": {
         "summaryText": "What are reserved activities?",
@@ -98,7 +94,6 @@
       }
     },
     "radioButtons": {
-      "hint": "Select one option.",
       "mandatoryRegistration": {
         "mandatory": "Mandatory",
         "voluntary": "Voluntary"
