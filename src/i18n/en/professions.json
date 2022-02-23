@@ -2,14 +2,14 @@
   "form": {
     "headings": {
       "main": "Add a new profession",
-      "topLevelInformation": "Top level information",
-      "scope": "Scope",
+      "topLevelInformation": "Profession",
+      "scope": "Nations and sectors",
       "checkAnswers": "Check your answers",
       "originalAnswers": "Your original answers",
       "registration": "Registration",
       "confirmation": "New profession created",
       "amended": "Profession amended",
-      "regulatedActivities": "Regulations",
+      "regulatedActivities": "Regulation",
       "qualifications": "Qualifications",
       "legislation": "Legislation",
       "edit": "Are you sure you want to amend {professionName}?"
@@ -21,66 +21,70 @@
     "editProfession": "Use this section of the site to add a new profession",
     "label": {
       "topLevelInformation": {
-        "name": "Name of regulated profession",
-        "regulatedAuthority": "Which body regulates this profession?",
-        "additionalAuthority": "Is there another regulator associated with this profession?"
+        "name": "Name",
+        "nameHint": "The official name for the profession.",
+        "regulatedAuthority": "Main regulator",
+        "regulatedAuthorityHint": "The main authority that regulates this profession.",
+        "additionalAuthority": "Additional regulator (optional)",
+        "additionalAuthorityHint": "Another authority or professional body involved in regulating this profession."
       },
       "scope": {
-        "nations": "In which nation(s) is this profession regulated?",
-        "certainNations": "Certain Nations",
-        "industry": "Sectors"
+        "nations": "Nations",
+        "nationsHint": "The nations where you regulate this profession.",
+        "certainNations": "Certain nations",
+        "certainNationsHint": "Select all that apply.",
+        "industry": "Sectors",
+        "industryHint": "The sectors this profession is part of. Select all that apply."
       },
       "registration": {
-        "mandatoryRegistration": "Is registration mandatory with professional bodies?",
+        "mandatoryRegistration": "Registration with authority",
+        "mandatoryRegistrationHint": "Is registration with a regulator or professional body mandatory or voluntary.",
         "registrationRequirements": "Registration requirements",
-        "registrationUrl": "More about registration"
+        "registrationRequirementsHint": "The body professionals should register with and other requirements for registration.",
+        "registrationUrl": "More about registration",
+        "registrationUrlHint": "Website link to more information."
       },
       "regulatedActivities": {
         "regulationSummary": "Regulation summary",
+        "regulationSummaryHint": "Brief description of the profession and how it is regulated.",
         "reservedActivities": "Reserved activities",
+        "reservedActivitiesHint": "Any activities that only qualified professionals can do.",
         "protectedTitles": "Protected titles",
-        "regulationUrl": "More about regulated activities and titles"
+        "protectedTitlesHint": "Professional titles and letters that only qualified professionals can use.",
+        "regulationUrl": "More about regulated activities and titles",
+        "regulationUrlHint": "Website link to more information."
       },
       "qualifications": {
         "qualificationLevel": "Qualification level",
+        "qualificationLevelHint": "Equivalent qualification level against a recognised framework",
         "routesToObtain": "Routes to qualification",
+        "routesToObtainHint": "The ways that a new professional can become qualified",
         "mostCommonRouteToObtain": "Most common route",
+        "mostCommonRouteToObtainHint": "If there are many ways to qualify, the most common way",
         "duration": "How long to qualify",
+        "durationHint": "The number of months or years it takes to qualify. For example, 2 years.\nIf the length of time varies, provide the most typical or a range. For example, 6 to 12 months",
         "mandatoryProfessionalExperience": "Professional experience requirement",
+        "mandatoryProfessionalExperienceHint": "Is a period of professional practice require to become qualified?",
         "moreInformationUrl": "More about qualification",
+        "moreInformationUrlHint": "Website link to more information",
         "ukRecognition": "Recognition of qualifications in the UK",
+        "ukRecognitionHint": "Routes to recognition for existing professionals from other UK nations",
         "ukRecognitionUrl": "More about recognition within the UK",
+        "ukRecognitionUrlHint": "Website link to more information",
         "otherCountriesRecognition": "Recognition of qualifications from other countries",
-        "otherCountriesRecognitionUrl": "More about recognition from other countries"
+        "otherCountriesRecognitionHint": "Routes to recognition for existing professionals from outside the UK",
+        "otherCountriesRecognitionUrl": "More about recognition from other countries",
+        "otherCountriesRecognitionUrlHint": "Website link to more information"
       },
       "legislation": {
-        "nationalLegislation": "National legislation",
+        "nationalLegislation": "Legislation title",
+        "nationalLegislationHint": "Title of the relevant act or charter.",
         "link": "Legislation link",
-        "secondNationalLegislation": "Second national legislation (optional)",
-        "secondLink": "Second legislation link (optional)"
-      }
-    },
-    "hint": {
-      "regulatedActivities": {
-        "regulationUrl": "Please enter a link"
-      },
-      "registration": {
-        "registrationUrl": "Please enter a link"
-      },
-      "qualifications": {
-        "routesToObtain": "The ways that a new professional can become qualified",
-        "mostCommonRouteToObtain": "If there are many ways to qualify, the most common way",
-        "duration": "The number of months or years it takes to qualify. For example, 2 years.\nIf the length of time varies, provide the most typical or a range. For example, 6 to 12 months",
-        "mandatoryProfessionalExperience": "Is a period of professional practice require to become qualified?",
-        "qualificationLevel": "Equivalent qualification level against a recognised framework",
-        "moreInformationUrl": "Website link to more information",
-        "ukRecognition": "Routes to recognition for existing professionals from other UK nations",
-        "ukRecognitionUrl": "Website link to more information",
-        "otherCountriesRecognition": "Routes to recognition for existing professionals from outside the UK",
-        "otherCountriesRecognitionUrl": "Website link to more information"
-      },
-      "legislation": {
-        "link": "Please enter a link"
+        "linkHint": "Website link to the legislation.",
+        "secondNationalLegislation": "Second legislation title (optional)",
+        "secondNationalLegislationHint": "Title of the relevant act or charter.",
+        "secondLink": "Second legislation link (optional)",
+        "secondLinkHint": "Website link to the legislation."
       }
     },
     "details": {
@@ -90,15 +94,10 @@
       }
     },
     "radioButtons": {
-      "hint": "Select one option.",
       "mandatoryRegistration": {
         "mandatory": "Mandatory",
-        "voluntary": "Voluntary",
-        "unknown": "Unknown"
+        "voluntary": "Voluntary"
       }
-    },
-    "checkboxes": {
-      "hint": "Select all that apply."
     },
     "button": {
       "create": "Create profession",

@@ -30,7 +30,7 @@
               }
             },
             hint: {
-              text: ("professions.form.radioButtons.hint" | t)
+              text: ("professions.form.label.registration.mandatoryRegistrationHint" | t)
             },
             items: mandatoryRegistrationRadioButtonArgs,
             errorMessage: errors.mandatoryRegistration | tError
@@ -45,6 +45,9 @@
               text: ("professions.form.label.registration.registrationRequirements" | t),
               classes: "govuk-label--m",
               isPageHeading: false
+            },
+            hint: {
+              text: ("professions.form.label.registration.registrationRequirementsHint" | t)
             },
             value: registrationRequirements
           })
@@ -61,7 +64,7 @@
             },
             value: registrationUrl,
             hint: {
-              text: ("professions.form.hint.registration.registrationUrl" | t)
+              text: ("professions.form.label.registration.registrationUrlHint" | t)
             },
             errorMessage: errors.registrationUrl | tError
           })

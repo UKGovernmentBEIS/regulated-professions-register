@@ -24,13 +24,6 @@ export class MandatoryRegistrationRadioButtonsPresenter {
         ),
         checked: this.mandatoryRegistration === MandatoryRegistration.Voluntary,
       },
-      {
-        value: MandatoryRegistration.Unknown,
-        text: await this.i18nService.translate(
-          'professions.form.radioButtons.mandatoryRegistration.unknown',
-        ),
-        checked: this.mandatoryRegistration === MandatoryRegistration.Unknown,
-      },
     ];
   }
 }

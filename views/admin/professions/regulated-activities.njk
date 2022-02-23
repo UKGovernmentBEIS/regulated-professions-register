@@ -26,6 +26,9 @@
               classes: "govuk-label--m",
               isPageHeading: false
             },
+            hint: {
+              text: ("professions.form.label.regulatedActivities.regulationSummaryHint" | t)
+            },
             id: "regulationSummary",
             name: "regulationSummary",
             value: regulationSummary,
@@ -35,11 +38,15 @@
         }}
 
         <label class="govuk-label govuk-label--m" for="reservedActivities">{{ "professions.form.label.regulatedActivities.reservedActivities" | t }}</label>
+        <div class="govuk-hint">
+          {{ "professions.form.label.regulatedActivities.reservedActivitiesHint" | t }}
+        </div>
 
         {{
           govukDetails({
             summaryText: ("professions.form.details.regulatedActivities.summaryText" | t),
-            text: ("professions.form.details.regulatedActivities.text" | t)
+            text: ("professions.form.details.regulatedActivities.text" | t),
+            classes: "govuk-!-margin-bottom-2"
           })
         }}
 
@@ -60,6 +67,9 @@
               classes: "govuk-label--m",
               isPageHeading: false
             },
+            hint: {
+              text: ("professions.form.label.regulatedActivities.protectedTitlesHint" | t)
+            },
             id: "protectedTitles",
             name: "protectedTitles",
             value: protectedTitles,
@@ -76,7 +86,7 @@
               isPageHeading: false
             },
             hint: {
-              text: ("professions.form.hint.regulatedActivities.regulationUrl" | t)
+              text: ("professions.form.label.regulatedActivities.regulationUrlHint" | t)
             },
             id: "regulationUrl",
             name: "regulationUrl",

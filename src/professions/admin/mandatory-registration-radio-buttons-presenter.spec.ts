@@ -15,8 +15,6 @@ describe(MandatoryRegistrationRadioButtonsPresenter, () => {
           return 'Mandatory';
         case 'professions.form.radioButtons.mandatoryRegistration.voluntary':
           return 'Voluntary';
-        case 'professions.form.radioButtons.mandatoryRegistration.unknown':
-          return 'Unknown';
         default:
           return '';
       }
@@ -41,11 +39,6 @@ describe(MandatoryRegistrationRadioButtonsPresenter, () => {
           value: MandatoryRegistration.Voluntary,
           checked: false,
         },
-        {
-          text: 'Unknown',
-          value: MandatoryRegistration.Unknown,
-          checked: false,
-        },
       ]);
     });
 
@@ -64,11 +57,6 @@ describe(MandatoryRegistrationRadioButtonsPresenter, () => {
         {
           text: 'Voluntary',
           value: MandatoryRegistration.Voluntary,
-          checked: false,
-        },
-        {
-          text: 'Unknown',
-          value: MandatoryRegistration.Unknown,
           checked: false,
         },
       ]);
