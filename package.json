@@ -87,7 +87,7 @@
     "@nestjs/testing": "^8.3.1",
     "@types/bull": "^3.15.8",
     "@types/express": "^4.17.13",
-    "@types/jest": "^27.4.0",
+    "@types/jest": "^27.4.1",
     "@types/method-override": "^0.0.32",
     "@types/node": "^17.0.20",
     "@types/nunjucks": "^3.2.1",
