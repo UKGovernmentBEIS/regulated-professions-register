@@ -508,6 +508,54 @@ describe('Editing an existing profession', () => {
         );
       });
     });
+
+    context('When the Profession has minimal data', () => {
+      it('I can add missing data', () => {
+        cy.visitAndCheckAccessibility('/admin/professions');
+
+        cy.get('table')
+          .contains('tr', 'Draft Profession')
+          .within(() => {
+            cy.contains('View details').click();
+          });
+
+        cy.checkAccessibility();
+
+        cy.translate('professions.admin.button.edit.draft').then(
+          (buttonText) => {
+            cy.contains(buttonText).click();
+          },
+        );
+
+        cy.checkAccessibility();
+
+        cy.clickSummaryListRowAction(
+          'professions.form.label.legislation.nationalLegislation',
+          'Change',
+        );
+        cy.checkAccessibility();
+        cy.translate('professions.form.captions.edit').then((editCaption) => {
+          cy.get('body').contains(editCaption);
+        });
+        cy.get('textarea[name="nationalLegislation"]').type(
+          'National legislation',
+        );
+        cy.get('input[name="link"]').type('http://www.example.com/legislation');
+        cy.translate('app.continue').then((buttonText) => {
+          cy.get('button').contains(buttonText).click();
+        });
+        cy.checkIndexedSummaryListRowValue(
+          'professions.form.label.legislation.nationalLegislation',
+          'National legislation',
+          1,
+        );
+        cy.checkIndexedSummaryListRowValue(
+          'professions.form.label.legislation.link',
+          'http://www.example.com/legislation',
+          1,
+        );
+      });
+    });
   });
 
   context('when I am logged in as a registrar', () => {
@@ -515,7 +563,7 @@ describe('Editing an existing profession', () => {
       cy.loginAuth0('registrar');
     });
 
-    it('I edit the top-level information of a profession', () => {
+    it('I can edit the top-level information of a profession', () => {
       cy.visitAndCheckAccessibility('/admin/professions');
 
       cy.get('table')
