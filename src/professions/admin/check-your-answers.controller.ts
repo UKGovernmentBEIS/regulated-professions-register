@@ -22,6 +22,7 @@ import { BackLink } from '../../common/decorators/back-link.decorator';
 import { ProfessionVersionsService } from '../profession-versions.service';
 import { isConfirmed } from '../../helpers/is-confirmed';
 import { isUK } from '../../helpers/nations.helper';
+
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
 export class CheckYourAnswersController {
@@ -63,7 +64,7 @@ export class CheckYourAnswersController {
     );
 
     const selectedNations: string[] = await Promise.all(
-      version.occupationLocations.map(async (nationCode) =>
+      (version.occupationLocations || []).map(async (nationCode) =>
         Nation.find(nationCode).translatedName(this.i18nService),
       ),
     );
@@ -96,7 +97,7 @@ export class CheckYourAnswersController {
       legislations,
       confirmed: isConfirmed(draftProfession),
       captionText: ViewUtils.captionText(isConfirmed(draftProfession)),
-      isUK: isUK(version.occupationLocations),
+      isUK: isUK(version.occupationLocations || []),
       edit: edit === 'true',
     };
   }
