@@ -9,7 +9,7 @@
       "registration": "Registration",
       "confirmation": "New profession created",
       "amended": "Profession amended",
-      "regulatedActivities": "Regulations",
+      "regulatedActivities": "Regulation",
       "qualifications": "Qualifications",
       "legislation": "Legislation",
       "edit": "Are you sure you want to amend {professionName}?"
@@ -46,9 +46,13 @@
       },
       "regulatedActivities": {
         "regulationSummary": "Regulation summary",
+        "regulationSummaryHint": "Brief description of the profession and how it is regulated.",
         "reservedActivities": "Reserved activities",
+        "reservedActivitiesHint": "Any activities that only qualified professionals can do.",
         "protectedTitles": "Protected titles",
-        "regulationUrl": "More about regulated activities and titles"
+        "protectedTitlesHint": "Professional titles and letters that only qualified professionals can use.",
+        "regulationUrl": "More about regulated activities and titles",
+        "regulationUrlHint": "Website link to more information."
       },
       "qualifications": {
         "qualificationLevel": "Qualification level",
