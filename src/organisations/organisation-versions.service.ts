@@ -7,6 +7,7 @@ import {
 } from './organisation-version.entity';
 import { Organisation } from './organisation.entity';
 import { User } from '../users/user.entity';
+import { ProfessionVersionStatus } from '../professions/profession-version.entity';
 
 @Injectable()
 export class OrganisationVersionsService {
@@ -81,15 +82,21 @@ export class OrganisationVersionsService {
 
   async allDraftOrLive(): Promise<Organisation[]> {
     const versions = await this.versionsWithJoins()
-      .distinctOn(['organisationVersion.organisation'])
+      .distinctOn(['organisationVersion.organisation', 'professions.id'])
       .where('organisationVersion.status IN(:...status)', {
         status: [
           OrganisationVersionStatus.Live,
           OrganisationVersionStatus.Draft,
         ],
       })
+      .where(
+        'professionVersions.status IN(:...status) OR professionVersions.status IS NULL',
+        {
+          status: [ProfessionVersionStatus.Live, ProfessionVersionStatus.Draft],
+        },
+      )
       .orderBy(
-        'organisationVersion.organisation, organisationVersion.created_at',
+        'organisationVersion.organisation, professions.id, professionVersions.created_at, organisationVersion.created_at',
         'DESC',
       )
       .getMany();

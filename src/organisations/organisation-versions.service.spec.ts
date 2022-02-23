@@ -19,6 +19,7 @@ import { OrganisationVersionsService } from './organisation-versions.service';
 import organisationVersionFactory from '../testutils/factories/organisation-version';
 import organisationFactory from '../testutils/factories/organisation';
 import userFactory from '../testutils/factories/user';
+import { ProfessionVersionStatus } from '../professions/profession-version.entity';
 
 describe('OrganisationVersionsService', () => {
   let service: OrganisationVersionsService;
@@ -272,6 +273,7 @@ describe('OrganisationVersionsService', () => {
 
       expect(queryBuilder.distinctOn).toHaveBeenCalledWith([
         'organisationVersion.organisation',
+        'professions.id',
       ]);
 
       expect(queryBuilder.where).toHaveBeenCalledWith(
@@ -284,8 +286,15 @@ describe('OrganisationVersionsService', () => {
         },
       );
 
+      expect(queryBuilder.where).toHaveBeenCalledWith(
+        'professionVersions.status IN(:...status) OR professionVersions.status IS NULL',
+        {
+          status: [ProfessionVersionStatus.Live, ProfessionVersionStatus.Draft],
+        },
+      );
+
       expect(queryBuilder.orderBy).toHaveBeenCalledWith(
-        'organisationVersion.organisation, organisationVersion.created_at',
+        'organisationVersion.organisation, professions.id, professionVersions.created_at, organisationVersion.created_at',
         'DESC',
       );
     });
