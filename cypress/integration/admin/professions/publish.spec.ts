@@ -25,9 +25,28 @@ describe('Publishing professions', () => {
 
       cy.translate('professions.form.button.publishNow').then(
         (publishButton) => {
-          cy.get('button').contains(publishButton).click();
+          cy.get('a').contains(publishButton).click();
         },
       );
+
+      cy.checkAccessibility();
+      cy.translate('professions.form.captions.publish').then(
+        (publishCaption) => {
+          cy.get('body').contains(publishCaption);
+        },
+      );
+
+      cy.translate('professions.form.headings.publish', {
+        professionName: 'Gas Safe Engineer',
+      }).then((heading) => {
+        cy.contains(heading);
+      });
+
+      cy.translate('professions.form.button.publishNow').then((buttonText) => {
+        cy.get('button').contains(buttonText).click();
+      });
+
+      cy.checkAccessibility();
 
       cy.translate('professions.admin.publish.confirmation.heading').then(
         (confirmation) => {
