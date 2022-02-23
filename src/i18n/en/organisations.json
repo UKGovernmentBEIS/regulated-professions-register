@@ -3,6 +3,7 @@
     "heading": "Regulatory authorities",
     "manageHeading": "Manage existing regulatory authorities",
     "showFilters": "Show filters",
+    "viewDetails": "View details <span class='govuk-visually-hidden'>about {name}</span>",
     "labels": {
       "keywords": "Keywords:",
       "industries": "Industries:"

@@ -47,11 +47,12 @@ export class OrganisationPresenter {
       {
         html: `<a class="govuk-link" href="/admin/organisations/${
           this.organisation.id
-        }/versions/${this.organisation.versionId}">
-          View details
-          <span class="govuk-visually-hidden">
-            about ${escape(this.organisation.name)}
-          </span>
+        }/versions/${
+          this.organisation.versionId
+        }">${await this.i18nService.translate(
+          'organisations.admin.viewDetails',
+          { args: { name: escape(this.organisation.name) } },
+        )}
         </a>`,
       },
     ];

@@ -15,6 +15,7 @@ import { formatMultilineString } from '../../helpers/format-multiline-string.hel
 import { multilineOf } from '../../testutils/multiline-of';
 import userFactory from '../../testutils/factories/user';
 import { formatDate } from '../../common/utils';
+import { translationOf } from '../../testutils/translation-of';
 
 jest.mock('../../helpers/escape.helper');
 jest.mock('../../helpers/format-multiline-string.helper');
@@ -71,12 +72,11 @@ describe('OrganisationPresenter', () => {
           });
           expect(tableRow[6]).toEqual({
             html: expect.stringContaining(
-              `<a class="govuk-link" href="/admin/organisations/${organisation.id}/versions/${organisation.versionId}">`,
-            ),
-          });
-          expect(tableRow[6]).toEqual({
-            html: expect.stringContaining(
-              `about ${escapeOf(organisation.name)}`,
+              `<a class="govuk-link" href="/admin/organisations/${
+                organisation.id
+              }/versions/${organisation.versionId}">${translationOf(
+                'organisations.admin.viewDetails',
+              )}`,
             ),
           });
 
