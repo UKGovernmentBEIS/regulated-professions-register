@@ -518,7 +518,7 @@ describe('OrganisationsController', () => {
           );
 
           expect(response.redirect).toHaveBeenCalledWith(
-            '/admin/organisations',
+            `/admin/organisations/${organisation.id}/versions/${version.id}`,
           );
         });
       });
@@ -570,7 +570,7 @@ describe('OrganisationsController', () => {
           );
 
           expect(response.redirect).toHaveBeenCalledWith(
-            '/admin/organisations',
+            `/admin/organisations/${organisation.id}/versions/${version.id}`,
           );
         });
       });

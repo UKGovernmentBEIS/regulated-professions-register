@@ -152,24 +152,20 @@ describe('Editing organisations', () => {
           cy.get('html').should('contain.html', confirmationBody);
         });
 
-        cy.get('tr')
-          .contains(organisation.name)
-          .then(($header) => {
-            const $row = $header.parent();
+        cy.checkSummaryListRowValue(
+          'organisations.label.alternateName',
+          'New Alternate Name',
+        );
 
-            cy.wrap($row).should('contain', 'Alternate Name');
+        cy.translate(`organisations.status.draft`).then((status) => {
+          cy.get('h2[data-status]').should('contain', status);
+        });
 
-            cy.translate(`organisations.status.draft`).then((status) => {
-              cy.wrap($row).should('contain', status);
-            });
-
-            cy.wrap($row).contains('View details').click();
-            cy.get('[data-cy=changed-by-user]').should('contain', 'Editor');
-            cy.get('[data-cy=last-modified]').should(
-              'contain',
-              format(new Date(), 'dd-MM-yyyy'),
-            );
-          });
+        cy.get('[data-cy=changed-by-user]').should('contain', 'Editor');
+        cy.get('[data-cy=last-modified]').should(
+          'contain',
+          format(new Date(), 'dd-MM-yyyy'),
+        );
       });
     });
   });

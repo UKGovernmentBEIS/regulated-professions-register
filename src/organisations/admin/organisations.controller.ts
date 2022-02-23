@@ -220,7 +220,9 @@ export class OrganisationsController {
 
     req.flash('info', flashMessage(messageTitle, messageBody));
 
-    res.redirect('/admin/organisations');
+    res.redirect(
+      `/admin/organisations/${organisation.id}/versions/${version.id}`,
+    );
   }
 
   private async showReviewPage(
