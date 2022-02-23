@@ -38,6 +38,13 @@ describe('Showing organisations', () => {
               cy.contains(professionsForOrganisation[0].name).click();
               cy.checkAccessibility();
               cy.get('body').should('contain', 'Edit this profession');
+
+              cy.get('[data-cy=back-link]').click();
+              // This should really go back to the organisation page itself
+              // but we'll fix that in a future piece of work
+              cy.translate('professions.admin.heading').then((heading) => {
+                cy.contains(heading);
+              });
             });
         });
       });

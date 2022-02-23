@@ -1,0 +1,25 @@
+{% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+
+<div class="govuk-width-container" id="phase-banner-container">
+  {{
+    govukPhaseBanner({
+      tag: {
+        text: ("app.phase.beta.label" | t)
+      },
+      html: ("app.phase.beta.html" | t)
+    })
+  }}
+
+  {% if backLink %}
+    {{
+      govukBackLink({
+        text: ("app.back" | t),
+        href: backLink,
+        attributes: {
+          "data-cy": "back-link"
+        }
+      })
+    }}
+  {% endif %}
+</div>
