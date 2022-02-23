@@ -95,46 +95,82 @@ describe('ProfessionVersionsService', () => {
   });
 
   describe('create', () => {
-    it('creates a copy of an existing version and sets the user', async () => {
-      const legislation = legislationFactory.build();
-      const qualification = qualificationFactory.build();
-      const profession = professionFactory.build();
+    describe('when the Profession is complete', () => {
+      it('creates a copy of an existing version and sets the user', async () => {
+        const legislation = legislationFactory.build();
+        const qualification = qualificationFactory.build();
+        const profession = professionFactory.build();
 
-      const previousVersion = professionVersionFactory.build({
-        profession: profession,
-        legislations: [legislation],
-        qualification: qualification,
+        const previousVersion = professionVersionFactory.build({
+          profession: profession,
+          legislations: [legislation],
+          qualification: qualification,
+        });
+
+        const newQualification = {
+          ...previousVersion.qualification,
+          id: undefined,
+          created_at: undefined,
+          updated_at: undefined,
+        };
+
+        const newLegislation = {
+          ...legislation,
+          id: undefined,
+          created_at: undefined,
+          updated_at: undefined,
+        };
+        const user = userFactory.build();
+
+        const repoSpy = jest.spyOn(repo, 'save');
+
+        await service.create(previousVersion, user);
+
+        expect(repoSpy).toHaveBeenCalledWith({
+          ...previousVersion,
+          id: undefined,
+          status: undefined,
+          created_at: undefined,
+          updated_at: undefined,
+          qualification: newQualification,
+          legislations: [newLegislation],
+          profession: profession,
+          user: user,
+        });
       });
+    });
 
-      const newQualification = {
-        ...previousVersion.qualification,
-        id: undefined,
-        created_at: undefined,
-        updated_at: undefined,
-      };
+    describe('when the Profession has just been created by a service owner user', () => {
+      it('creates a copy of an existing version and sets the user', async () => {
+        const profession = professionFactory
+          .justCreated('profession-id')
+          .build();
 
-      const newLegislation = {
-        ...legislation,
-        id: undefined,
-        created_at: undefined,
-        updated_at: undefined,
-      };
-      const user = userFactory.build();
+        const previousVersion = professionVersionFactory
+          .justCreated('version-id')
+          .build({
+            legislations: [],
+            qualification: undefined,
+            profession: profession,
+          });
 
-      const repoSpy = jest.spyOn(repo, 'save');
+        const user = userFactory.build();
 
-      await service.create(previousVersion, user);
+        const repoSpy = jest.spyOn(repo, 'save');
 
-      expect(repoSpy).toHaveBeenCalledWith({
-        ...previousVersion,
-        id: undefined,
-        status: undefined,
-        created_at: undefined,
-        updated_at: undefined,
-        qualification: newQualification,
-        legislations: [newLegislation],
-        profession: profession,
-        user: user,
+        await service.create(previousVersion, user);
+
+        expect(repoSpy).toHaveBeenCalledWith({
+          ...previousVersion,
+          id: undefined,
+          status: undefined,
+          created_at: undefined,
+          updated_at: undefined,
+          qualification: undefined,
+          legislations: [],
+          profession: profession,
+          user: user,
+        });
       });
     });
   });
