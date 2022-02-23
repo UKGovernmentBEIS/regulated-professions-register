@@ -47,7 +47,7 @@ export class OrganisationController {
   @BackLink((request: Request) =>
     request.query.change === 'true'
       ? '/admin/users/:id/confirm'
-      : '/admin/users/new',
+      : '/admin/users',
   )
   async edit(
     @Req() req: RequestWithAppSession,
@@ -73,7 +73,7 @@ export class OrganisationController {
   @BackLink((request: Request) =>
     request.body.change === 'true'
       ? '/admin/users/:id/confirm'
-      : '/admin/users/new',
+      : '/admin/users',
   )
   async update(
     @Req() req: RequestWithAppSession,
