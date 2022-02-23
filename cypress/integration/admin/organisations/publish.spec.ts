@@ -23,9 +23,29 @@ describe('Publishing organisations', () => {
 
       cy.translate('organisations.admin.button.publish').then(
         (publishButton) => {
-          cy.get('button').contains(publishButton).click();
+          cy.get('a').contains(publishButton).click();
         },
       );
+
+      cy.checkAccessibility();
+
+      cy.translate('organisations.admin.publish.caption').then(
+        (publishCaption) => {
+          cy.get('body').contains(publishCaption);
+        },
+      );
+
+      cy.translate('organisations.admin.publish.heading', {
+        organisationName: 'Department for Education',
+      }).then((heading) => {
+        cy.contains(heading);
+      });
+
+      cy.translate('organisations.admin.button.publish').then((buttonText) => {
+        cy.get('button').contains(buttonText).click();
+      });
+
+      cy.checkAccessibility();
 
       cy.translate('organisations.admin.publish.confirmation.heading').then(
         (confirmation) => {
