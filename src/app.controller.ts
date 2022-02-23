@@ -20,4 +20,11 @@ export class AppController {
       name: req.oidc.user.nickname,
     };
   }
+
+  @Get('/health-check')
+  healthCheck() {
+    return {
+      status: 'OK',
+    };
+  }
 }

@@ -31,4 +31,10 @@ describe('AppController', () => {
       });
     });
   });
+
+  describe('healthCheck', () => {
+    it('should return OK', () => {
+      expect(appController.healthCheck()).toEqual({ status: 'OK' });
+    });
+  });
 });
