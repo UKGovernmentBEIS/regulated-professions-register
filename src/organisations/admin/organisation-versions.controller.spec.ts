@@ -3,8 +3,6 @@ import { createMock, DeepMocked } from '@golevelup/ts-jest';
 import { Response } from 'express';
 import { I18nService } from 'nestjs-i18n';
 
-import { translationOf } from '../../testutils/translation-of';
-
 import { OrganisationVersionsController } from './organisation-versions.controller';
 
 import { OrganisationVersionsService } from '../organisation-versions.service';
@@ -24,13 +22,11 @@ import { createMockI18nService } from '../../testutils/create-mock-i18n-service'
 
 import { OrganisationPresenter } from '../presenters/organisation.presenter';
 
-import { flashMessage } from '../../common/flash-message';
 import { getActingUser } from '../../users/helpers/get-acting-user.helper';
 import { createDefaultMockRequest } from '../../testutils/factories/create-default-mock-request';
 
 jest.mock('../presenters/organisation-summary.presenter');
 jest.mock('../presenters/organisation.presenter');
-jest.mock('../../common/flash-message');
 jest.mock('../../users/helpers/get-acting-user.helper');
 
 describe('OrganisationVersionsController', () => {
@@ -142,61 +138,6 @@ describe('OrganisationVersionsController', () => {
       expect(OrganisationSummaryPresenter).toHaveBeenCalledWith(
         organisationWithVersion,
         i18nService,
-      );
-    });
-  });
-
-  describe('publish', () => {
-    it('should publish the current version', async () => {
-      const organisation = organisationFactory.build();
-      const version = organisationVersionFactory.build({
-        organisation: organisation,
-      });
-      const user = userFactory.build();
-
-      const req = createDefaultMockRequest();
-      (getActingUser as jest.Mock).mockReturnValue(user);
-
-      const res = createMock<Response>({});
-
-      const flashMock = flashMessage as jest.Mock;
-      flashMock.mockImplementation(() => 'STUB_FLASH_MESSAGE');
-
-      organisationVersionsService.findByIdWithOrganisation.mockResolvedValue(
-        version,
-      );
-
-      const newVersion = organisationVersionFactory.build({
-        organisation,
-        user,
-      });
-
-      organisationVersionsService.create.mockResolvedValue(newVersion);
-
-      await controller.publish(req, res, organisation.id, version.id);
-
-      expect(
-        organisationVersionsService.findByIdWithOrganisation,
-      ).toHaveBeenCalledWith(organisation.id, version.id);
-
-      expect(organisationVersionsService.create).toHaveBeenCalledWith(
-        version,
-        user,
-      );
-
-      expect(organisationVersionsService.publish).toHaveBeenCalledWith(
-        newVersion,
-      );
-
-      expect(flashMock).toHaveBeenCalledWith(
-        translationOf('organisations.admin.publish.confirmation.heading'),
-        translationOf('organisations.admin.publish.confirmation.body'),
-      );
-
-      expect(req.flash).toHaveBeenCalledWith('success', 'STUB_FLASH_MESSAGE');
-
-      expect(res.redirect).toHaveBeenCalledWith(
-        `/admin/organisations/${organisation.id}/versions/${newVersion.id}`,
       );
     });
   });
