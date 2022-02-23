@@ -28,7 +28,7 @@
     "cypress:open": "cypress open",
     "cy:open": "start-server-and-test start:test http://localhost:3000 cypress:open",
     "test": "jest",
-    "test:ci": "npm run format:check && npm run lint && npm run test",
+    "test:ci": "npm run format:check && npm run lint && npm run test:cov",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
@@ -119,15 +119,29 @@
       "json",
       "ts"
     ],
+    "coveragePathIgnorePatterns": [
+      "<rootDir>/db/migrate/"
+    ],
     "rootDir": "src",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
     },
     "collectCoverageFrom": [
-      "**/*.(t|j)s"
+      "**/*.(t|j)s",
+      "!**/main.ts",
+      "!**/seeder.ts",
+      "!**/*.module.ts",
+      "!**/*.module.ts",
+      "!**/*.config.ts",
+      "!**/*.seeder.ts"
     ],
     "coverageDirectory": "../coverage",
+    "coverageThreshold": {
+      "global": {
+        "lines": 90
+      }
+    },
     "testEnvironment": "node",
     "setupFilesAfterEnv": [
       "./testutils/jest.setup.ts"
