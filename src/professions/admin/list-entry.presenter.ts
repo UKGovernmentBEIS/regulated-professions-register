@@ -1,6 +1,7 @@
 import { I18nService } from 'nestjs-i18n';
 import { TableCell } from '../../common/interfaces/table-cell';
 import { TableRow } from '../../common/interfaces/table-row';
+import { escape } from '../../helpers/escape.helper';
 import { stringifyNations } from '../../nations/helpers/stringifyNations';
 import { Nation } from '../../nations/nation';
 import { ProfessionPresenter } from '../presenters/profession.presenter';
@@ -84,6 +85,7 @@ export class ListEntryPresenter {
       this.profession.id
     }/versions/${this.profession.versionId}">${await this.i18nService.translate(
       'professions.admin.viewDetails',
+      { args: { name: escape(this.profession.name) } },
     )}</a>`;
 
     const entries: { [K in Field]: TableCell } = {
