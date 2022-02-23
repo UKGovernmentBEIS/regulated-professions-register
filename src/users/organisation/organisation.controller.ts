@@ -23,7 +23,7 @@ import { User } from '../user.entity';
 import { UserPermission } from '../user-permission';
 import { UsersService } from '../users.service';
 import { OrganisationDto } from './dto/organisation.dto';
-import { EditTemplate } from './interfaces/edit-template';
+import { EditTemplate } from './interfaces/edit-template.interface';
 import { ServiceOwnerRadioButtonArgsPresenter } from '../presenters/service-owner-radio-buttons.presenter';
 import {
   getActionTypeFromUser,
