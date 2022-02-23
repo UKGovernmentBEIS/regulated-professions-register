@@ -119,13 +119,22 @@
       "json",
       "ts"
     ],
+    "coveragePathIgnorePatterns": [
+      "<rootDir>/db/migrate/"
+    ],
     "rootDir": "src",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
     },
     "collectCoverageFrom": [
-      "**/*.(t|j)s"
+      "**/*.(t|j)s",
+      "!**/main.ts",
+      "!**/seeder.ts",
+      "!**/*.module.ts",
+      "!**/*.module.ts",
+      "!**/*.config.ts",
+      "!**/*.seeder.ts"
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node",
