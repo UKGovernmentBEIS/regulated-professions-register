@@ -25,6 +25,8 @@ class ProfessionVersionFactory extends Factory<ProfessionVersion> {
       qualification: undefined,
       legislations: undefined,
       reservedActivities: undefined,
+      protectedTitles: undefined,
+      regulationUrl: undefined,
       profession: undefined,
       user: undefined,
       keywords: undefined,
@@ -47,7 +49,6 @@ export default ProfessionVersionFactory.define(({ sequence }) => ({
   industries: [
     industryFactory.build({ name: 'Example industry', id: 'example-industry' }),
   ],
-  qualifications: [],
   qualification: qualificationFactory.build(),
   legislations: legislationFactory.buildList(1),
   regulationSummary: 'Example summary',
