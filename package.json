@@ -137,6 +137,11 @@
       "!**/*.seeder.ts"
     ],
     "coverageDirectory": "../coverage",
+    "coverageThreshold": {
+      "global": {
+        "lines": 90
+      }
+    },
     "testEnvironment": "node",
     "setupFilesAfterEnv": [
       "./testutils/jest.setup.ts"
