@@ -4,7 +4,6 @@ import {
   NotFoundException,
   Param,
   Post,
-  Put,
   Render,
   Req,
   Res,
@@ -25,7 +24,6 @@ import { ProfessionVersionsService } from '../profession-versions.service';
 import { Profession } from '../profession.entity';
 import { ProfessionsService } from '../professions.service';
 import { ProfessionPresenter } from '../presenters/profession.presenter';
-import { flashMessage } from '../../common/flash-message';
 import { getActingUser } from '../../users/helpers/get-acting-user.helper';
 
 @UseGuards(AuthenticationGuard)
@@ -114,42 +112,6 @@ export class ProfessionVersionsController {
 
     return res.redirect(
       `/admin/professions/${version.profession.id}/versions/${version.id}/check-your-answers?edit=true`,
-    );
-  }
-
-  @Put(':professionId/versions/:versionId/publish')
-  @Permissions(UserPermission.PublishProfession)
-  async publish(
-    @Req() req: RequestWithAppSession,
-    @Res() res: Response,
-    @Param('professionId') professionId: string,
-    @Param('versionId') versionId: string,
-  ): Promise<void> {
-    const version = await this.professionVersionsService.findByIdWithProfession(
-      professionId,
-      versionId,
-    );
-
-    const newVersion = await this.professionVersionsService.create(
-      version,
-      getActingUser(req),
-    );
-
-    await this.professionVersionsService.publish(newVersion);
-
-    const messageTitle = await this.i18nService.translate(
-      'professions.admin.publish.confirmation.heading',
-    );
-
-    const messageBody = await this.i18nService.translate(
-      'professions.admin.publish.confirmation.body',
-      { args: { name: version.profession.name } },
-    );
-
-    req.flash('success', flashMessage(messageTitle, messageBody));
-
-    res.redirect(
-      `/admin/professions/${newVersion.profession.id}/versions/${newVersion.id}`,
     );
   }
 }
