@@ -67,16 +67,17 @@
         "otherCountriesRecognitionUrl": "More about recognition from other countries"
       },
       "legislation": {
-        "nationalLegislation": "National legislation",
+        "nationalLegislation": "Legislation title",
+        "nationalLegislationHint": "Title of the relevant act or charter.",
         "link": "Legislation link",
-        "secondNationalLegislation": "Second national legislation (optional)",
-        "secondLink": "Second legislation link (optional)"
+        "linkHint": "Website link to the legislation.",
+        "secondNationalLegislation": "Second legislation title (optional)",
+        "secondNationalLegislationHint": "Title of the relevant act or charter.",
+        "secondLink": "Second legislation link (optional)",
+        "secondLinkHint": "Website link to the legislation."
       }
     },
     "hint": {
-      "regulatedActivities": {
-        "regulationUrl": "Please enter a link"
-      },
       "qualifications": {
         "routesToObtain": "The ways that a new professional can become qualified",
         "mostCommonRouteToObtain": "If there are many ways to qualify, the most common way",
@@ -88,9 +89,6 @@
         "ukRecognitionUrl": "Website link to more information",
         "otherCountriesRecognition": "Routes to recognition for existing professionals from outside the UK",
         "otherCountriesRecognitionUrl": "Website link to more information"
-      },
-      "legislation": {
-        "link": "Please enter a link"
       }
     },
     "details": {
