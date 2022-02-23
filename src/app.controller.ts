@@ -25,6 +25,8 @@ export class AppController {
   healthCheck() {
     return {
       status: 'OK',
+      git_sha: process.env['CURRENT_SHA'],
+      built_at: process.env['TIME_OF_BUILD'],
     };
   }
 }
