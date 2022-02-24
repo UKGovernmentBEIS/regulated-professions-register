@@ -78,7 +78,20 @@ export class ProfessionsPresenter {
       ),
     );
 
+    const numberOfResults = rows.length;
+
+    const caption =
+      numberOfResults === 1
+        ? await this.i18nService.translate('professions.admin.foundSingular', {
+            args: { count: numberOfResults },
+          })
+        : await this.i18nService.translate('professions.admin.foundPlural', {
+            args: { count: numberOfResults },
+          });
+
     return {
+      caption,
+      captionClasses: 'govuk-table__caption--m',
       firstCellIsHeader: true,
       head: headings,
       rows: rows,

@@ -53,10 +53,6 @@
       {% endif %}
       {% include "../../shared/_filter-criteria.njk" %}
 
-      <p class="govuk-body-m">
-        <span class="govuk-!-font-size-36 govuk-!-font-weight-bold">{{ professions.length }}</span> {{ ("professions.admin.foundSingular" | t) if (professions.length === 1) else ("professions.admin.foundPlural" | t) }}
-      </p>
-
       {{ govukTable(professionsTable) }}
     </div>
 

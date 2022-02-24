@@ -95,6 +95,8 @@ describe('ProfessionsPresenter', () => {
         view: 'overview',
         organisation: 'UK Centre for Professional Qualifications',
         professionsTable: {
+          caption: `${translationOf('professions.admin.foundPlural')}`,
+          captionClasses: 'govuk-table__caption--m',
           firstCellIsHeader: true,
           head: await ListEntryPresenter.headings(i18nService, 'overview'),
           rows: await Promise.all(
@@ -142,6 +144,8 @@ describe('ProfessionsPresenter', () => {
         view: 'single-organisation',
         organisation: 'Example Organisation 1',
         professionsTable: {
+          caption: `${translationOf('professions.admin.foundPlural')}`,
+          captionClasses: 'govuk-table__caption--m',
           firstCellIsHeader: true,
           head: await ListEntryPresenter.headings(
             i18nService,
@@ -180,6 +184,74 @@ describe('ProfessionsPresenter', () => {
       };
 
       expect(result).toEqual(expected);
+    });
+
+    describe('captions', () => {
+      describe('when only one profession is found', () => {
+        it('returns the singular professions found text', async () => {
+          const i18nService = createMockI18nService();
+          const industries = industryFactory.buildList(3);
+          const filterInput: FilterInput = {};
+
+          const organisation = organisationFactory.build({
+            id: 'example-organisation',
+            name: 'Example Organisation',
+          });
+
+          const organisations = [organisation, organisationFactory.build()];
+
+          const foundProfessions = professionFactory.buildList(1);
+
+          const presenter = new ProfessionsPresenter(
+            filterInput,
+            organisation,
+            Nation.all(),
+            organisations,
+            industries,
+            foundProfessions,
+            i18nService,
+          );
+
+          const result = await presenter.present('overview');
+
+          expect(result.professionsTable.caption).toEqual(
+            `${translationOf('professions.admin.foundSingular')}`,
+          );
+        });
+      });
+
+      describe('when more than one profession is found', () => {
+        it('returns the singular professions found text', async () => {
+          const i18nService = createMockI18nService();
+          const industries = industryFactory.buildList(3);
+          const filterInput: FilterInput = {};
+
+          const organisation = organisationFactory.build({
+            id: 'example-organisation',
+            name: 'Example Organisation',
+          });
+
+          const organisations = [organisation, organisationFactory.build()];
+
+          const foundProfessions = professionFactory.buildList(3);
+
+          const presenter = new ProfessionsPresenter(
+            filterInput,
+            organisation,
+            Nation.all(),
+            organisations,
+            industries,
+            foundProfessions,
+            i18nService,
+          );
+
+          const result = await presenter.present('overview');
+
+          expect(result.professionsTable.caption).toEqual(
+            `${translationOf('professions.admin.foundPlural')}`,
+          );
+        });
+      });
     });
   });
 });
