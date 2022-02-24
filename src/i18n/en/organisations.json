@@ -8,8 +8,8 @@
       "keywords": "Keywords:",
       "industries": "Industries:"
     },
-    "foundSingular": "regulatory authorities found.",
-    "foundPlural": "regulatory authorities found.",
+    "foundSingular": "{count} regulatory authority found",
+    "foundPlural": "{count} regulatory authorities found",
     "filter": {
       "keywords": {
         "label": "Keyword",

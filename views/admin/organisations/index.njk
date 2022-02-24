@@ -50,10 +50,6 @@
       {% set filterCriteriaTextPrefix = "organisations.admin" %}
       {% include "../../shared/_filter-criteria.njk" %}
 
-      <p class="govuk-body-m">
-        <span class="govuk-!-font-size-36 govuk-!-font-weight-bold">{{ organisationsTable.rows.length }}</span> {{ ("organisations.admin.foundSingular" | t) if (organisationsTable.rows.length === 1) else ("organisations.admin.foundPlural" | t) }}
-      </p>
-
       {{ govukTable(organisationsTable) }}
     </div>
 

@@ -54,18 +54,34 @@ export class OrganisationsPresenter {
   }
 
   private async table(firstCellIsHeader = true): Promise<Table> {
+    const rows = await Promise.all(
+      this.filteredOrganisations.map(
+        async (organisation) =>
+          await new OrganisationPresenter(
+            organisation,
+            this.i18nService,
+          ).tableRow(),
+      ),
+    );
+
+    const numberOfResults = rows.length;
+
+    const caption =
+      numberOfResults === 1
+        ? await this.i18nService.translate(
+            'organisations.admin.foundSingular',
+            { args: { count: numberOfResults } },
+          )
+        : await this.i18nService.translate('organisations.admin.foundPlural', {
+            args: { count: numberOfResults },
+          });
+
     return {
+      caption,
+      captionClasses: 'govuk-table__caption--m',
       firstCellIsHeader: firstCellIsHeader,
       head: await this.headers(),
-      rows: await Promise.all(
-        this.filteredOrganisations.map(
-          async (organisation) =>
-            await new OrganisationPresenter(
-              organisation,
-              this.i18nService,
-            ).tableRow(),
-        ),
-      ),
+      rows: rows,
     };
   }
 
