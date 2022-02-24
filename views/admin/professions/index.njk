@@ -53,7 +53,9 @@
       {% endif %}
       {% include "../../shared/_filter-criteria.njk" %}
 
-      {{ govukTable(professionsTable) }}
+      <div class='rpr-internal__table-container'>
+        {{ govukTable(professionsTable) }}
+      </div>
     </div>
 
   </div>

@@ -50,7 +50,9 @@
       {% set filterCriteriaTextPrefix = "organisations.admin" %}
       {% include "../../shared/_filter-criteria.njk" %}
 
-      {{ govukTable(organisationsTable) }}
+      <div class='rpr-internal__table-container'>
+        {{ govukTable(organisationsTable) }}
+      </div>
     </div>
 
   </div>

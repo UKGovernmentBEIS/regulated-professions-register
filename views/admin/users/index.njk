@@ -31,24 +31,26 @@
 
       <h2 class="govuk-heading-l">{{ "users.headings.manageExisting" | t }}</h2>
 
-      {{
-        govukTable({
-          firstCellIsHeader: true,
-          head: [
-            {
-              text: "Name"
-            },
-            {
-              text: "Email"
-            },
-            {
-              text: "Actions"
-            }
+      <div class='rpr-internal__table-container'>
+        {{
+          govukTable({
+            firstCellIsHeader: true,
+            head: [
+              {
+                text: "Name"
+              },
+              {
+                text: "Email"
+              },
+              {
+                text: "Actions"
+              }
 
-          ],
-          rows: rows
-        })
-      }}
+            ],
+            rows: rows
+          })
+        }}
+      </div>
     </div>
   </div>
 
