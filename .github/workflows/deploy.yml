@@ -89,4 +89,5 @@ jobs:
       - name: Notifying the team of a successful deploy
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          HEALTH_CHECK_URL: https://${{ secrets.PROD_BASIC_AUTH_USERNAME }}:${{ secrets.PROD_BASIC_AUTH_PASSWORD }}@beis-rpr-prod.london.cloudapps.digital/health-check
         run: script/deploy-notification

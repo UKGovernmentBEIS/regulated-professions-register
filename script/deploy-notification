@@ -6,7 +6,7 @@ current_sha=$(git rev-parse HEAD)
 while :
 do
   printf "."
-  deployed_sha=$(curl -s https://beis-rpr-prod.london.cloudapps.digital/health-check | jq -r '.git_sha')
+  deployed_sha=$(curl -s "$HEALTH_CHECK_URL" | jq -r '.git_sha')
   if [ "$deployed_sha" = "$current_sha" ]; then
     break
   fi
