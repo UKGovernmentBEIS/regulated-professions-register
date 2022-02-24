@@ -118,7 +118,7 @@ describe('ProfessionsPresenter', () => {
           [Nation.find('GB-ENG')],
           i18nService,
         ).checkboxItems(),
-        organisationsCheckboxItems: await new OrganisationsCheckboxPresenter(
+        organisationsCheckboxItems: new OrganisationsCheckboxPresenter(
           organisations,
           [organisation1],
         ).checkboxItems(),
@@ -167,7 +167,7 @@ describe('ProfessionsPresenter', () => {
           [Nation.find('GB-ENG')],
           i18nService,
         ).checkboxItems(),
-        organisationsCheckboxItems: await new OrganisationsCheckboxPresenter(
+        organisationsCheckboxItems: new OrganisationsCheckboxPresenter(
           organisations,
           [organisation1],
         ).checkboxItems(),
