@@ -1,3 +1,5 @@
+import { format } from 'date-fns';
+
 describe('Creating organisations', () => {
   context('when I am logged in without the correct permissions', () => {
     beforeEach(() => {
@@ -123,17 +125,17 @@ describe('Creating organisations', () => {
         cy.get('html').should('contain.html', confirmationBody);
       });
 
-      cy.get('tr')
-        .contains('New Organisation')
-        .then(($header) => {
-          const $row = $header.parent();
+      cy.get('body').should('contain', 'New Organisation');
 
-          cy.wrap($row).should('contain', 'Alternate Name');
+      cy.translate(`organisations.status.draft`).then((status) => {
+        cy.get('h2[data-status]').should('contain', status);
+      });
 
-          cy.translate(`organisations.status.draft`).then((status) => {
-            cy.wrap($row).should('contain', status);
-          });
-        });
+      cy.get('[data-cy=changed-by-user]').should('contain', 'Registrar');
+      cy.get('[data-cy=last-modified]').should(
+        'contain',
+        format(new Date(), 'dd-MM-yyyy'),
+      );
     });
   });
 });

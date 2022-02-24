@@ -4,7 +4,6 @@ import {
   Get,
   Render,
   Param,
-  Put,
   Post,
   Res,
   Req,
@@ -29,7 +28,6 @@ import { OrganisationSummaryPresenter } from '../presenters/organisation-summary
 import { Permissions } from '../../common/permissions.decorator';
 import { UserPermission } from '../../users/user-permission';
 
-import { flashMessage } from '../../common/flash-message';
 import { getActingUser } from '../../users/helpers/get-acting-user.helper';
 @UseGuards(AuthenticationGuard)
 @Controller('/admin/organisations')
@@ -92,42 +90,5 @@ export class OrganisationVersionsController {
     );
 
     return organisationSummaryPresenter.present();
-  }
-
-  @Put(':organisationId/versions/:versionId/publish')
-  @Permissions(UserPermission.PublishOrganisation)
-  async publish(
-    @Req() req: RequestWithAppSession,
-    @Res() res: Response,
-    @Param('organisationId') organisationId: string,
-    @Param('versionId') versionId: string,
-  ): Promise<void> {
-    const version =
-      await this.organisationVersionsService.findByIdWithOrganisation(
-        organisationId,
-        versionId,
-      );
-
-    const newVersion = await this.organisationVersionsService.create(
-      version,
-      getActingUser(req),
-    );
-
-    await this.organisationVersionsService.publish(newVersion);
-
-    const messageTitle = await this.i18nService.translate(
-      'organisations.admin.publish.confirmation.heading',
-    );
-
-    const messageBody = await this.i18nService.translate(
-      'organisations.admin.publish.confirmation.body',
-      { args: { name: version.organisation.name } },
-    );
-
-    req.flash('success', flashMessage(messageTitle, messageBody));
-
-    res.redirect(
-      `/admin/organisations/${newVersion.organisation.id}/versions/${newVersion.id}`,
-    );
   }
 }

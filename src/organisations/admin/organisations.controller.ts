@@ -124,7 +124,7 @@ export class OrganisationsController {
     UserPermission.EditOrganisation,
   )
   @Render('admin/organisations/edit')
-  @BackLink('/admin/organisations/:id')
+  @BackLink('/admin/organisations/:organisationId/versions/:versionId')
   async edit(
     @Param('organisationId') organisationId: string,
     @Param('versionId') versionId: string,
@@ -220,7 +220,9 @@ export class OrganisationsController {
 
     req.flash('info', flashMessage(messageTitle, messageBody));
 
-    res.redirect('/admin/organisations');
+    res.redirect(
+      `/admin/organisations/${organisation.id}/versions/${version.id}`,
+    );
   }
 
   private async showReviewPage(

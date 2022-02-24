@@ -57,6 +57,8 @@
       }
     },
     "publish": {
+      "heading": "Are you sure you want to publish {organisationName}?",
+      "caption": "Publishing an organisation",
       "confirmation": {
         "heading": "Regulatory authority published",
         "body": "The new regulator <strong>{name}</strong> has been published.",

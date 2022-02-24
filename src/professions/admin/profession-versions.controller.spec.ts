@@ -16,13 +16,11 @@ import { ProfessionVersionsService } from '../profession-versions.service';
 import { ProfessionsService } from '../professions.service';
 import { Profession } from '../profession.entity';
 import { ProfessionPresenter } from '../presenters/profession.presenter';
-import { flashMessage } from '../../common/flash-message';
 import { getActingUser } from '../../users/helpers/get-acting-user.helper';
 import { createDefaultMockRequest } from '../../testutils/factories/create-default-mock-request';
 
 jest.mock('../../organisations/organisation.entity');
 jest.mock('../presenters/profession.presenter');
-jest.mock('../../common/flash-message');
 jest.mock('../../users/helpers/get-acting-user.helper');
 
 describe('ProfessionVersionsController', () => {
@@ -177,61 +175,6 @@ describe('ProfessionVersionsController', () => {
           organisation: profession.organisation,
         });
       });
-    });
-  });
-
-  describe('publish', () => {
-    it('should publish the current version', async () => {
-      const profession = professionFactory.build();
-      const version = professionVersionFactory.build({
-        profession,
-      });
-      const user = userFactory.build();
-
-      const req = createDefaultMockRequest();
-      (getActingUser as jest.Mock).mockReturnValue(user);
-
-      const res = createMock<Response>({});
-
-      const flashMock = flashMessage as jest.Mock;
-      flashMock.mockImplementation(() => 'STUB_FLASH_MESSAGE');
-
-      professionVersionsService.findByIdWithProfession.mockResolvedValue(
-        version,
-      );
-
-      const newVersion = professionVersionFactory.build({
-        profession,
-        user,
-      });
-
-      professionVersionsService.create.mockResolvedValue(newVersion);
-
-      await controller.publish(req, res, profession.id, version.id);
-
-      expect(
-        professionVersionsService.findByIdWithProfession,
-      ).toHaveBeenCalledWith(profession.id, version.id);
-
-      expect(professionVersionsService.create).toHaveBeenCalledWith(
-        version,
-        user,
-      );
-
-      expect(professionVersionsService.publish).toHaveBeenCalledWith(
-        newVersion,
-      );
-
-      expect(flashMock).toHaveBeenCalledWith(
-        translationOf('professions.admin.publish.confirmation.heading'),
-        translationOf('professions.admin.publish.confirmation.body'),
-      );
-
-      expect(req.flash).toHaveBeenCalledWith('success', 'STUB_FLASH_MESSAGE');
-
-      expect(res.redirect).toHaveBeenCalledWith(
-        `/admin/professions/${profession.id}/versions/${newVersion.id}`,
-      );
     });
   });
 });
