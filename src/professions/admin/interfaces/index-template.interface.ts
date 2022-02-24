@@ -1,5 +1,5 @@
 import { CheckboxItems } from 'src/common/interfaces/checkbox-items.interface';
-import { TableRow } from 'src/common/interfaces/table-row';
+import { Table } from '../../../common/interfaces/table';
 import { ProfessionsPresenterView } from '../professions.presenter';
 
 export interface IndexTemplate {
@@ -7,8 +7,7 @@ export interface IndexTemplate {
 
   organisation: string;
 
-  headings: TableRow;
-  professions: TableRow[];
+  professionsTable: Table;
 
   filters: {
     keywords: string;

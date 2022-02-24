@@ -9,6 +9,7 @@ import { IndexTemplate } from './interfaces/index-template.interface';
 import { ListEntryPresenter } from './list-entry.presenter';
 import { Organisation } from '../../organisations/organisation.entity';
 import { OrganisationsCheckboxPresenter } from '../../organisations/organisations-checkbox-presenter';
+import { Table } from '../../common/interfaces/table';
 
 export type ProfessionsPresenterView = 'overview' | 'single-organisation';
 
@@ -29,8 +30,6 @@ export class ProfessionsPresenter {
         ? await this.i18nService.translate('app.ukcpq')
         : this.userOrganisaiton.name;
 
-    const headings = await ListEntryPresenter.headings(this.i18nService, view);
-
     const nationsCheckboxItems = await new NationsCheckboxPresenter(
       this.allNations,
       this.filterInput.nations || [],
@@ -48,17 +47,10 @@ export class ProfessionsPresenter {
       this.i18nService,
     ).checkboxItems();
 
-    const displayProfessions = await Promise.all(
-      this.filteredProfessions.map(async (profession) =>
-        new ListEntryPresenter(profession, this.i18nService).tableRow(view),
-      ),
-    );
-
     return {
       view,
       organisation,
-      headings,
-      professions: displayProfessions,
+      professionsTable: await this.table(view),
       nationsCheckboxItems,
       organisationsCheckboxItems,
       industriesCheckboxItems,
@@ -74,6 +66,22 @@ export class ProfessionsPresenter {
         ),
         changedBy: [],
       },
+    };
+  }
+
+  private async table(view: ProfessionsPresenterView): Promise<Table> {
+    const headings = await ListEntryPresenter.headings(this.i18nService, view);
+
+    const rows = await Promise.all(
+      this.filteredProfessions.map(async (profession) =>
+        new ListEntryPresenter(profession, this.i18nService).tableRow(view),
+      ),
+    );
+
+    return {
+      firstCellIsHeader: true,
+      head: headings,
+      rows: rows,
     };
   }
 }

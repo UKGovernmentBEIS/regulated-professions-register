@@ -12,6 +12,7 @@ import { ListEntryPresenter } from './list-entry.presenter';
 import industryFactory from '../../testutils/factories/industry';
 import organisationFactory from '../../testutils/factories/organisation';
 import professionFactory from '../../testutils/factories/profession';
+import { translationOf } from '../../testutils/translation-of';
 
 const transportIndustry = industryFactory.build({
   id: 'transport',
@@ -93,16 +94,17 @@ describe('ProfessionsPresenter', () => {
       const expected: IndexTemplate = {
         view: 'overview',
         organisation: 'UK Centre for Professional Qualifications',
-        headings: await ListEntryPresenter.headings(i18nService, 'overview'),
-
-        professions: await Promise.all(
-          [profession1, profession2, profession3].map((profession) =>
-            new ListEntryPresenter(profession, i18nService).tableRow(
-              'overview',
+        professionsTable: {
+          firstCellIsHeader: true,
+          head: await ListEntryPresenter.headings(i18nService, 'overview'),
+          rows: await Promise.all(
+            [profession1, profession2, profession3].map((profession) =>
+              new ListEntryPresenter(profession, i18nService).tableRow(
+                'overview',
+              ),
             ),
           ),
-        ),
-
+        },
         filters: {
           keywords: 'Nuclear',
           nations: ['nations.england'],
@@ -139,19 +141,20 @@ describe('ProfessionsPresenter', () => {
       const expected: IndexTemplate = {
         view: 'single-organisation',
         organisation: 'Example Organisation 1',
-        headings: await ListEntryPresenter.headings(
-          i18nService,
-          'single-organisation',
-        ),
-
-        professions: await Promise.all(
-          [profession1, profession2, profession3].map((profession) =>
-            new ListEntryPresenter(profession, i18nService).tableRow(
-              'single-organisation',
+        professionsTable: {
+          firstCellIsHeader: true,
+          head: await ListEntryPresenter.headings(
+            i18nService,
+            'single-organisation',
+          ),
+          rows: await Promise.all(
+            [profession1, profession2, profession3].map((profession) =>
+              new ListEntryPresenter(profession, i18nService).tableRow(
+                'single-organisation',
+              ),
             ),
           ),
-        ),
-
+        },
         filters: {
           keywords: 'Nuclear',
           nations: ['nations.england'],
@@ -159,7 +162,6 @@ describe('ProfessionsPresenter', () => {
           industries: ['industries.transport'],
           changedBy: [],
         },
-
         nationsCheckboxItems: await new NationsCheckboxPresenter(
           nations,
           [Nation.find('GB-ENG')],
