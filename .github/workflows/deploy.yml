@@ -48,6 +48,8 @@ jobs:
       TF_VAR_notify_template_id: ${{ secrets.PROD_NOTIFY_TEMPLATE_ID }}
       TF_VAR_notify_api_key: ${{ secrets.PROD_NOTIFY_API_KEY }}
       TF_VAR_rollbar_token: ${{ secrets.PROD_ROLLBAR_TOKEN }}
+      TF_VAR_basic_auth_username: ${{ secrets.PROD_BASIC_AUTH_USERNAME }}
+      TF_VAR_basic_auth_password: ${{ secrets.PROD_BASIC_AUTH_PASSWORD }}
     steps:
       - uses: actions/checkout@v2
       - name: Deploy latest code to Production
@@ -71,6 +73,8 @@ jobs:
       TF_VAR_notify_template_id: ${{ secrets.STAGING_NOTIFY_TEMPLATE_ID }}
       TF_VAR_notify_api_key: ${{ secrets.STAGING_NOTIFY_API_KEY }}
       TF_VAR_rollbar_token: ${{ secrets.STAGING_ROLLBAR_TOKEN }}
+      TF_VAR_basic_auth_username: ${{ secrets.STAGING_BASIC_AUTH_USERNAME }}
+      TF_VAR_basic_auth_password: ${{ secrets.STAGING_BASIC_AUTH_PASSWORD }}
     steps:
       - uses: actions/checkout@v2
       - name: Deploy latest code to Staging
