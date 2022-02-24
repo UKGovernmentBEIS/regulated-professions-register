@@ -8,6 +8,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
+### Changed
+
+## [release-005] - 2022-02-24
+
+### Added
+
 - Add "more information url" to Qualification detail entry page
 - Display message in search results when no professions match filter criteria
 - Add a confirmation page before publishing an organisation or a profession
@@ -124,6 +130,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Make validation errors more human readable
 
 [unreleased]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-003...HEAD
+[release-005]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release004...release-005
+[release-004]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release003...release-004
 [release-003]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release002...release-003
 [release-002]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release001...release-002
 [release-001]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release...release-001
