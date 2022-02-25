@@ -79,13 +79,14 @@ export class OrganisationVersionsService {
     );
   }
 
-  async allDraftOrLive(): Promise<Organisation[]> {
+  async allWithLatestVersion(): Promise<Organisation[]> {
     const versions = await this.versionsWithJoins()
       .distinctOn(['organisationVersion.organisation'])
       .where('organisationVersion.status IN(:...status)', {
         status: [
           OrganisationVersionStatus.Live,
           OrganisationVersionStatus.Draft,
+          OrganisationVersionStatus.Archived,
         ],
       })
       .orderBy(

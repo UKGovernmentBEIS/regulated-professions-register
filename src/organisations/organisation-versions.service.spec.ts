@@ -231,7 +231,7 @@ describe('OrganisationVersionsService', () => {
     });
   });
 
-  describe('allDraftOrLive', () => {
+  describe('allWithLatestVersion', () => {
     it('gets all organisations and their latest draft or live version with draft or live Professions', async () => {
       const versions = organisationVersionFactory.buildList(5);
       const queryBuilder = createMock<SelectQueryBuilder<OrganisationVersion>>({
@@ -246,7 +246,7 @@ describe('OrganisationVersionsService', () => {
         .spyOn(repo, 'createQueryBuilder')
         .mockImplementation(() => queryBuilder);
 
-      const result = await service.allDraftOrLive();
+      const result = await service.allWithLatestVersion();
 
       const expectedOrganisations = versions.map((version) =>
         Organisation.withVersion(version.organisation, version, true),
@@ -280,6 +280,7 @@ describe('OrganisationVersionsService', () => {
           status: [
             OrganisationVersionStatus.Live,
             OrganisationVersionStatus.Draft,
+            OrganisationVersionStatus.Archived,
           ],
         },
       );

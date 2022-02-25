@@ -64,6 +64,18 @@ describe('Archiving organisations', () => {
         format(new Date(), 'dd-MM-yyyy'),
       );
 
+      cy.visitAndCheckAccessibility('/admin/organisations');
+
+      cy.get('tr')
+        .contains('Department for Education')
+        .then(($header) => {
+          const $row = $header.parent();
+
+          cy.translate(`organisations.status.archived`).then((status) => {
+            cy.wrap($row).should('contain', status);
+          });
+        });
+
     });
   });
 });
