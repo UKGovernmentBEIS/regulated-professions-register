@@ -92,7 +92,7 @@ export class ProfessionsController {
     const allIndustries = await this.industriesService.all();
 
     const allProfessions =
-      await this.professionVersionsService.allDraftOrLive();
+      await this.professionVersionsService.allWithLatestVersion();
 
     const actingUser = getActingUser(request);
 

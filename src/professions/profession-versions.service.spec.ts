@@ -414,7 +414,7 @@ describe('ProfessionVersionsService', () => {
     });
   });
 
-  describe('allDraftOrLive', () => {
+  describe('allWithLatestVersion', () => {
     it('gets all Professions and their latest draft or live version', async () => {
       const versions = professionVersionFactory.buildList(5);
       const queryBuilder = createMock<SelectQueryBuilder<ProfessionVersion>>({
@@ -429,7 +429,7 @@ describe('ProfessionVersionsService', () => {
         .spyOn(repo, 'createQueryBuilder')
         .mockImplementation(() => queryBuilder);
 
-      const result = await service.allDraftOrLive();
+      const result = await service.allWithLatestVersion();
 
       const expectedProfessions = versions.map((version) =>
         Profession.withVersion(version.profession, version),
@@ -453,7 +453,11 @@ describe('ProfessionVersionsService', () => {
       expect(queryBuilder.where).toHaveBeenCalledWith(
         'professionVersion.status IN(:...status)',
         {
-          status: [ProfessionVersionStatus.Live, ProfessionVersionStatus.Draft],
+          status: [
+            ProfessionVersionStatus.Live,
+            ProfessionVersionStatus.Draft,
+            ProfessionVersionStatus.Archived,
+          ],
         },
       );
 

@@ -160,11 +160,15 @@ export class ProfessionVersionsService {
     );
   }
 
-  async allDraftOrLive(): Promise<Profession[]> {
+  async allWithLatestVersion(): Promise<Profession[]> {
     const versions = await this.versionsWithJoins()
       .distinctOn(['professionVersion.profession'])
       .where('professionVersion.status IN(:...status)', {
-        status: [ProfessionVersionStatus.Live, ProfessionVersionStatus.Draft],
+        status: [
+          ProfessionVersionStatus.Live,
+          ProfessionVersionStatus.Draft,
+          ProfessionVersionStatus.Archived,
+        ],
       })
       .orderBy(
         'professionVersion.profession, professionVersion.created_at',

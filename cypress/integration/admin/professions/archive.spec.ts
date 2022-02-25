@@ -58,6 +58,18 @@ describe('Archiving professions', () => {
         'contain',
         format(new Date(), 'dd-MM-yyyy'),
       );
+
+      cy.visitAndCheckAccessibility('/admin/professions');
+
+      cy.get('tr')
+        .contains('Gas Safe Engineer')
+        .then(($header) => {
+          const $row = $header.parent();
+
+          cy.translate('professions.admin.status.archived').then((status) => {
+            cy.wrap($row).should('contain', status);
+          });
+        });
     });
   });
 });
