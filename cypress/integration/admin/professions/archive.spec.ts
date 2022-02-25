@@ -70,6 +70,10 @@ describe('Archiving professions', () => {
             cy.wrap($row).should('contain', status);
           });
         });
+
+      cy.visitAndCheckAccessibility('/professions/search');
+
+      cy.get('body').should('not.contain', 'Gas Safe Engineer');
     });
   });
 });
