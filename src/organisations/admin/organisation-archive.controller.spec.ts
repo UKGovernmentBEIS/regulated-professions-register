@@ -68,4 +68,58 @@ describe('OrganisationArchiveController', () => {
     });
   });
 
+  describe('delete', () => {
+    it('should archive the current version', async () => {
+      const organisation = organisationFactory.build();
+      const version = organisationVersionFactory.build({
+        organisation: organisation,
+      });
+      const user = userFactory.build();
+
+      const req = createDefaultMockRequest();
+      (getActingUser as jest.Mock).mockReturnValue(user);
+
+      const res = createMock<Response>({});
+
+      const flashMock = flashMessage as jest.Mock;
+      flashMock.mockImplementation(() => 'STUB_FLASH_MESSAGE');
+
+      organisationVersionsService.findByIdWithOrganisation.mockResolvedValue(
+        version,
+      );
+
+      const versionToArchive = organisationVersionFactory.build({
+        organisation,
+        user,
+      });
+
+      organisationVersionsService.create.mockResolvedValue(versionToArchive);
+
+      await controller.delete(req, res, organisation.id, version.id);
+
+      expect(
+        organisationVersionsService.findByIdWithOrganisation,
+      ).toHaveBeenCalledWith(organisation.id, version.id);
+
+      expect(organisationVersionsService.create).toHaveBeenCalledWith(
+        version,
+        user,
+      );
+
+      expect(organisationVersionsService.archive).toHaveBeenCalledWith(
+        versionToArchive,
+      );
+
+      expect(flashMock).toHaveBeenCalledWith(
+        translationOf('organisations.admin.archive.confirmation.heading'),
+        translationOf('organisations.admin.archive.confirmation.body'),
+      );
+
+      expect(req.flash).toHaveBeenCalledWith('success', 'STUB_FLASH_MESSAGE');
+
+      expect(res.redirect).toHaveBeenCalledWith(
+        `/admin/organisations/${organisation.id}/versions/${versionToArchive.id}`,
+      );
+    });
+  });
 });

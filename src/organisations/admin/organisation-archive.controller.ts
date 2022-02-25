@@ -47,4 +47,40 @@ export class OrganisationArchiveController {
     return { organisation };
   }
 
+  @Delete(':organisationId/versions/:versionId/archive')
+  @Permissions(UserPermission.DeleteOrganisation)
+  async delete(
+    @Req() req: RequestWithAppSession,
+    @Res() res: Response,
+    @Param('organisationId') organisationId: string,
+    @Param('versionId') versionId: string,
+  ): Promise<void> {
+    const version =
+      await this.organisationVersionsService.findByIdWithOrganisation(
+        organisationId,
+        versionId,
+      );
+
+    const versionToArchive = await this.organisationVersionsService.create(
+      version,
+      getActingUser(req),
+    );
+
+    await this.organisationVersionsService.archive(versionToArchive);
+
+    const messageTitle = await this.i18nService.translate(
+      'organisations.admin.archive.confirmation.heading',
+    );
+
+    const messageBody = await this.i18nService.translate(
+      'organisations.admin.archive.confirmation.body',
+      { args: { name: version.organisation.name } },
+    );
+
+    req.flash('success', flashMessage(messageTitle, messageBody));
+
+    res.redirect(
+      `/admin/organisations/${versionToArchive.organisation.id}/versions/${versionToArchive.id}`,
+    );
+  }
 }
