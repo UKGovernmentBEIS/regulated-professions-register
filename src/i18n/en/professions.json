@@ -244,7 +244,12 @@
       "edit": {
         "draft": "Edit this draft",
         "live": "Edit this profession"
-      }
+      },
+      "archive": "Archive this profession"
+    },
+    "archive": {
+      "heading": "Are you sure you want to archive {professionName}?",
+      "caption": "Archiving a profession"
     },
     "labels": {
       "keywords": "Keywords:",

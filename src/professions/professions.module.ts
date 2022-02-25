@@ -21,6 +21,7 @@ import { ProfessionVersionsController } from './admin/profession-versions.contro
 import { RegistrationController } from './admin/registration.controller';
 import { ScopeController } from './admin/scope.controller';
 import { ProfessionPublicationController } from './admin/profession-publication.controller';
+import { ProfessionArchiveController } from './admin/profession-archive.controller';
 
 @Module({
   imports: [
@@ -49,6 +50,7 @@ import { ProfessionPublicationController } from './admin/profession-publication.
     AdminProfessionsController,
     RegistrationController,
     ProfessionPublicationController,
+    ProfessionArchiveController,
   ],
 })
 export class ProfessionsModule {}
