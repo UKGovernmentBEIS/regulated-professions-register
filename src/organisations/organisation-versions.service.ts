@@ -150,6 +150,37 @@ export class OrganisationVersionsService {
     return version;
   }
 
+  async archive(version: OrganisationVersion): Promise<OrganisationVersion> {
+    const queryRunner = this.connection.createQueryRunner();
+    const organisation = version.organisation;
+
+    const liveVersion = await this.repository.findOne({
+      organisation,
+      status: OrganisationVersionStatus.Live,
+    });
+
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      if (liveVersion) {
+        liveVersion.status = OrganisationVersionStatus.Draft;
+        await this.repository.save(liveVersion);
+      }
+
+      version.status = OrganisationVersionStatus.Archived;
+      await this.repository.save(version);
+
+      await queryRunner.commitTransaction();
+    } catch (err) {
+      await queryRunner.rollbackTransaction();
+    } finally {
+      await queryRunner.release();
+    }
+
+    return version;
+  }
+
   private versionsWithJoins(): SelectQueryBuilder<OrganisationVersion> {
     return this.repository
       .createQueryBuilder('organisationVersion')
