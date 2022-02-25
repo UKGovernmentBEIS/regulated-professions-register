@@ -48,6 +48,16 @@ describe('Archiving professions', () => {
         },
       );
 
+      cy.get('[data-cy=actions]').should('not.exist');
+
+      cy.translate('professions.admin.status.archived').then((status) => {
+        cy.get('h2[data-status]').should('contain', status);
+      });
+      cy.get('[data-cy=changed-by-user]').should('contain', 'Registrar');
+      cy.get('[data-cy=last-modified]').should(
+        'contain',
+        format(new Date(), 'dd-MM-yyyy'),
+      );
     });
   });
 });

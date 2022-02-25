@@ -320,7 +320,8 @@
     "status": {
       "heading": "Status",
       "live": "Live",
-      "draft": "Draft"
+      "draft": "Draft",
+      "archived": "Archived"
     },
     "changed": {
       "by": "Changed by",
