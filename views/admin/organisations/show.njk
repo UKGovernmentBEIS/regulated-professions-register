@@ -58,8 +58,8 @@
             <li>
               {{
                 govukButton({
-                  text: ("organisations.admin.button.delete" | t),
-                  href: "#",
+                  text: ("organisations.admin.button.archive" | t),
+                  href: "/admin/organisations/" + organisation.id + "/versions/" + organisation.versionId + "/archive",
                   classes: "govuk-button--warning"
                 })
               }}
