@@ -1,0 +1,24 @@
+{% extends "admin/base.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set bodyClasses = "rpr-internal__page" %}
+
+{% block content %}
+  <span class="govuk-caption-l">{{ 'organisations.admin.archive.caption' | t }}</span>
+  <h1 class="govuk-heading-l">{{ ('organisations.admin.archive.heading' | t({organisationName: organisation.name})) }}</h1>
+
+  <div class="govuk-grid-row">
+
+    <div class="govuk-grid-column-full">
+      <form action="/admin/organisations/{{ organisation.id }}/versions/{{ organisation.versionId }}/archive?_method=DELETE" method="post">
+        {{
+          govukButton({
+            text: ("organisations.admin.button.archive" | t)
+          })
+        }}
+      </form>
+    </div>
+
+  </div>
+
+{% endblock %}

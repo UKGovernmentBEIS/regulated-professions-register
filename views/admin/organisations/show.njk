@@ -28,45 +28,49 @@
           <span class="govuk-body" data-cy="changed-by-user">{{ presenter.changedBy }}</span>
         </h2>
 
-        <nav role="navigation" aria-labelledby="subsection-title">
-          <ul class="govuk-list">
-            {% if organisation.status === 'draft' and 'publishOrganisation' in permissions %}
-            <li>
-              {{
-                govukButton({
-                  text: ("organisations.admin.button.publish" | t),
-                  classes: "govuk-button",
-                  id: "publish-button",
-                  href: "/admin/organisations/" + organisation.id + "/versions/" + organisation.versionId + "/publish"
-                })
-              }}
-            </li>
-            {% endif %}
-            {% if 'editOrganisation' in permissions %}
-            <li>
-              <form method="post" action="/admin/organisations/{{ organisation.id }}/versions">
-                {{ govukButton({
-                  id: "submit-button",
-                  type: "Submit",
-                  classes: "govuk-button--secondary",
-                  text: (('organisations.admin.button.edit.' + organisation.status) | t)
-                }) }}
-              </form>
-            </li>
-            {% endif %}
-            {% if 'deleteOrganisation' in permissions %}
-            <li>
-              {{
-                govukButton({
-                  text: ("organisations.admin.button.delete" | t),
-                  href: "#",
-                  classes: "govuk-button--warning"
-                })
-              }}
-            </li>
-            {% endif %}
-          </ul>
-        </nav>
+        {% if organisation.status !== 'archived' %}
+
+          <nav role="navigation" aria-labelledby="subsection-title" data-cy="actions">
+            <ul class="govuk-list">
+              {% if organisation.status === 'draft' and 'publishOrganisation' in permissions %}
+              <li>
+                {{
+                  govukButton({
+                    text: ("organisations.admin.button.publish" | t),
+                    classes: "govuk-button",
+                    id: "publish-button",
+                    href: "/admin/organisations/" + organisation.id + "/versions/" + organisation.versionId + "/publish"
+                  })
+                }}
+              </li>
+              {% endif %}
+              {% if 'editOrganisation' in permissions %}
+              <li>
+                <form method="post" action="/admin/organisations/{{ organisation.id }}/versions">
+                  {{ govukButton({
+                    id: "submit-button",
+                    type: "Submit",
+                    classes: "govuk-button--secondary",
+                    text: (('organisations.admin.button.edit.' + organisation.status) | t)
+                  }) }}
+                </form>
+              </li>
+              {% endif %}
+              {% if 'deleteOrganisation' in permissions %}
+              <li>
+                {{
+                  govukButton({
+                    text: ("organisations.admin.button.archive" | t),
+                    href: "/admin/organisations/" + organisation.id + "/versions/" + organisation.versionId + "/archive",
+                    classes: "govuk-button--warning"
+                  })
+                }}
+              </li>
+              {% endif %}
+            </ul>
+          </nav>
+
+        {% endif %}
       </aside>
     </div>
   </div>

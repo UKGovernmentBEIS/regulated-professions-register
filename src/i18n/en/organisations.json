@@ -66,6 +66,14 @@
         "backToDashboard": "Back to the dashboard"
       }
     },
+    "archive": {
+      "heading": "Are you sure you want to archive {organisationName}?",
+      "caption": "Archiving an organisation",
+      "confirmation": {
+        "heading": "Regulatory authority archived",
+        "body": "The regulator <strong>{name}</strong> has been archived."
+      }
+    },
     "tableHeading": {
       "name": "Name",
       "alternateName": "Alternate name",
@@ -105,7 +113,7 @@
         "draft": "Edit this draft",
         "live": "Edit this regulatory authority"
       },
-      "delete": "Delete this regulatory authority",
+      "archive": "Archive this regulatory authority",
       "amend": "Amend regulatory authority",
       "publish": "Publish regulatory authority"
     }
@@ -153,6 +161,7 @@
   },
   "status": {
     "live": "Live",
-    "draft": "Draft"
+    "draft": "Draft",
+    "archived": "Archived"
   }
 }

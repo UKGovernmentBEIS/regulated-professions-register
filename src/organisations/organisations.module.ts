@@ -12,6 +12,7 @@ import { OrganisationVersionsController as AdminOrganisationVersionsController }
 import { SearchController } from './search/search.controller';
 import { OrganisationsController } from './organisations.controller';
 import { OrganisationPublicationController } from './admin/organisation-publication.controller';
+import { OrganisationArchiveController } from './admin/organisation-archive.controller';
 
 @Module({
   providers: [
@@ -25,6 +26,7 @@ import { OrganisationPublicationController } from './admin/organisation-publicat
     SearchController,
     OrganisationsController,
     OrganisationPublicationController,
+    OrganisationArchiveController,
   ],
   imports: [
     TypeOrmModule.forFeature([Organisation]),

@@ -231,7 +231,7 @@ describe('OrganisationVersionsService', () => {
     });
   });
 
-  describe('allDraftOrLive', () => {
+  describe('allWithLatestVersion', () => {
     it('gets all organisations and their latest draft or live version with draft or live Professions', async () => {
       const versions = organisationVersionFactory.buildList(5);
       const queryBuilder = createMock<SelectQueryBuilder<OrganisationVersion>>({
@@ -246,7 +246,7 @@ describe('OrganisationVersionsService', () => {
         .spyOn(repo, 'createQueryBuilder')
         .mockImplementation(() => queryBuilder);
 
-      const result = await service.allDraftOrLive();
+      const result = await service.allWithLatestVersion();
 
       const expectedOrganisations = versions.map((version) =>
         Organisation.withVersion(version.organisation, version, true),
@@ -280,6 +280,7 @@ describe('OrganisationVersionsService', () => {
           status: [
             OrganisationVersionStatus.Live,
             OrganisationVersionStatus.Draft,
+            OrganisationVersionStatus.Archived,
           ],
         },
       );
@@ -429,6 +430,102 @@ describe('OrganisationVersionsService', () => {
       });
 
       await service.publish(version);
+
+      expect(queryRunner.rollbackTransaction).toHaveBeenCalled();
+      expect(queryRunner.commitTransaction).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('archive', () => {
+    let queryRunner: DeepMocked<QueryRunner>;
+
+    beforeEach(() => {
+      queryRunner = createMock<QueryRunner>();
+
+      jest
+        .spyOn(connection, 'createQueryRunner')
+        .mockImplementation(() => queryRunner);
+    });
+
+    it('archives the draft version', async () => {
+      const version = organisationVersionFactory.build({
+        status: OrganisationVersionStatus.Draft,
+      });
+
+      const findSpy = jest.spyOn(repo, 'findOne');
+
+      const saveSpy = jest.spyOn(repo, 'save').mockResolvedValue(version);
+
+      const result = await service.archive(version);
+
+      expect(result.status).toBe(OrganisationVersionStatus.Archived);
+
+      expect(findSpy).toHaveBeenCalledWith({
+        organisation: version.organisation,
+        status: OrganisationVersionStatus.Live,
+      });
+
+      expect(saveSpy).toHaveBeenCalledWith({
+        ...version,
+        status: OrganisationVersionStatus.Archived,
+      });
+
+      expect(queryRunner.commitTransaction).toHaveBeenCalled();
+      expect(queryRunner.release).toHaveBeenCalled();
+    });
+
+    it('demotes the latest live version', async () => {
+      const liveVersion = organisationVersionFactory.build({
+        status: OrganisationVersionStatus.Live,
+      });
+
+      const organisation = organisationFactory.build({
+        versions: [liveVersion],
+      });
+
+      const draftVersion = organisationVersionFactory.build({
+        status: OrganisationVersionStatus.Draft,
+        organisation: organisation,
+      });
+
+      const saveSpy = jest.spyOn(repo, 'save');
+      const findSpy = jest
+        .spyOn(repo, 'findOne')
+        .mockResolvedValue(liveVersion);
+
+      const result = await service.archive(draftVersion);
+
+      expect(result.status).toBe(OrganisationVersionStatus.Archived);
+
+      expect(findSpy).toHaveBeenCalledWith({
+        organisation: organisation,
+        status: OrganisationVersionStatus.Live,
+      });
+
+      expect(saveSpy).toHaveBeenCalledWith({
+        ...liveVersion,
+        status: OrganisationVersionStatus.Draft,
+      });
+
+      expect(saveSpy).toHaveBeenCalledWith({
+        ...draftVersion,
+        status: OrganisationVersionStatus.Archived,
+      });
+
+      expect(queryRunner.commitTransaction).toHaveBeenCalled();
+      expect(queryRunner.release).toHaveBeenCalled();
+    });
+
+    it('rolls back the transaction if an error occurs', async () => {
+      const version = organisationVersionFactory.build({
+        status: OrganisationVersionStatus.Draft,
+      });
+
+      jest.spyOn(repo, 'save').mockImplementation(() => {
+        throw Error;
+      });
+
+      await service.archive(version);
 
       expect(queryRunner.rollbackTransaction).toHaveBeenCalled();
       expect(queryRunner.commitTransaction).not.toHaveBeenCalled();

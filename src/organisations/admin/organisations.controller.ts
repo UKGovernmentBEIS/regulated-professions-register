@@ -70,7 +70,7 @@ export class OrganisationsController {
     const showAllOrgs = actingUser.serviceOwner;
 
     const allOrganisations =
-      await this.organisationVersionsService.allDraftOrLive();
+      await this.organisationVersionsService.allWithLatestVersion();
     const allIndustries = await this.industriesService.all();
 
     const filter = query || new FilterDto();

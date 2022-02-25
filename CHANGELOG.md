@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
+- Allow organisations to be archived
+
 ### Changed
 
 ## [release-005] - 2022-02-24
