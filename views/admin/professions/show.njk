@@ -55,6 +55,17 @@
               </form>
           </li>
           {% endif %}
+          {% if 'deleteProfession' in permissions %}
+          <li>
+              {{
+                govukButton({
+                  text: ("professions.admin.button.archive" | t),
+                  href: "/admin/professions/" + profession.id + "/versions/" + profession.versionId + "/archive",
+                  classes: "govuk-button--warning"
+                })
+              }}
+          </li>
+          {% endif %}
         </ul>
       </aside>
     </div>
