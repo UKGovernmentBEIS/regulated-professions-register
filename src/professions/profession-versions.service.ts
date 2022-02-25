@@ -101,6 +101,37 @@ export class ProfessionVersionsService {
     return version;
   }
 
+  async archive(version: ProfessionVersion): Promise<ProfessionVersion> {
+    const queryRunner = this.connection.createQueryRunner();
+    const profession = version.profession;
+
+    const liveVersion = await this.repository.findOne({
+      profession,
+      status: ProfessionVersionStatus.Live,
+    });
+
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      if (liveVersion) {
+        liveVersion.status = ProfessionVersionStatus.Draft;
+        await this.repository.save(liveVersion);
+      }
+
+      version.status = ProfessionVersionStatus.Archived;
+      await this.repository.save(version);
+
+      await queryRunner.commitTransaction();
+    } catch (err) {
+      await queryRunner.rollbackTransaction();
+    } finally {
+      await queryRunner.release();
+    }
+
+    return version;
+  }
+
   async findLatestForProfessionId(
     professionId: string,
   ): Promise<ProfessionVersion> {
