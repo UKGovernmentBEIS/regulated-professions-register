@@ -66,6 +66,10 @@
         "backToDashboard": "Back to the dashboard"
       }
     },
+    "archive": {
+      "heading": "Are you sure you want to archive {organisationName}?",
+      "caption": "Archiving an organisation",
+    },
     "tableHeading": {
       "name": "Name",
       "alternateName": "Alternate name",
