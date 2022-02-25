@@ -1,4 +1,12 @@
-import { Controller, Get, Param, Put, Render, Req, Res } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  Delete,
+  Render,
+  Req,
+  Res,
+} from '@nestjs/common';
 import { Response } from 'express';
 import { I18nService } from 'nestjs-i18n';
 import { BackLink } from '../../common/decorators/back-link.decorator';
@@ -35,4 +43,39 @@ export class ProfessionArchiveController {
     return { profession };
   }
 
+  @Delete(':professionId/versions/:versionId/archive')
+  @Permissions(UserPermission.DeleteProfession)
+  async delete(
+    @Req() req: RequestWithAppSession,
+    @Res() res: Response,
+    @Param('professionId') professionId: string,
+    @Param('versionId') versionId: string,
+  ): Promise<void> {
+    const version = await this.professionVersionsService.findByIdWithProfession(
+      professionId,
+      versionId,
+    );
+
+    const versionToBeArchived = await this.professionVersionsService.create(
+      version,
+      getActingUser(req),
+    );
+
+    await this.professionVersionsService.archive(versionToBeArchived);
+
+    const messageTitle = await this.i18nService.translate(
+      'professions.admin.archive.confirmation.heading',
+    );
+
+    const messageBody = await this.i18nService.translate(
+      'professions.admin.archive.confirmation.body',
+      { args: { name: version.profession.name } },
+    );
+
+    req.flash('success', flashMessage(messageTitle, messageBody));
+
+    res.redirect(
+      `/admin/professions/${versionToBeArchived.profession.id}/versions/${versionToBeArchived.id}`,
+    );
+  }
 }

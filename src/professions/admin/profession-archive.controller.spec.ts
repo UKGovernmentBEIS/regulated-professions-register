@@ -68,4 +68,58 @@ describe('ProfessionArchiveController', () => {
     });
   });
 
+  describe('create', () => {
+    it('should archive the current version', async () => {
+      const profession = professionFactory.build();
+      const version = professionVersionFactory.build({
+        profession,
+      });
+      const user = userFactory.build();
+
+      const req = createDefaultMockRequest();
+      (getActingUser as jest.Mock).mockReturnValue(user);
+
+      const res = createMock<Response>({});
+
+      const flashMock = flashMessage as jest.Mock;
+      flashMock.mockImplementation(() => 'STUB_FLASH_MESSAGE');
+
+      professionVersionsService.findByIdWithProfession.mockResolvedValue(
+        version,
+      );
+
+      const versionToBeArchived = professionVersionFactory.build({
+        profession,
+        user,
+      });
+
+      professionVersionsService.create.mockResolvedValue(versionToBeArchived);
+
+      await controller.delete(req, res, profession.id, version.id);
+
+      expect(
+        professionVersionsService.findByIdWithProfession,
+      ).toHaveBeenCalledWith(profession.id, version.id);
+
+      expect(professionVersionsService.create).toHaveBeenCalledWith(
+        version,
+        user,
+      );
+
+      expect(professionVersionsService.archive).toHaveBeenCalledWith(
+        versionToBeArchived,
+      );
+
+      expect(flashMock).toHaveBeenCalledWith(
+        translationOf('professions.admin.archive.confirmation.heading'),
+        translationOf('professions.admin.archive.confirmation.body'),
+      );
+
+      expect(req.flash).toHaveBeenCalledWith('success', 'STUB_FLASH_MESSAGE');
+
+      expect(res.redirect).toHaveBeenCalledWith(
+        `/admin/professions/${profession.id}/versions/${versionToBeArchived.id}`,
+      );
+    });
+  });
 });

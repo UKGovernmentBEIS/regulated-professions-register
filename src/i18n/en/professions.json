@@ -249,7 +249,11 @@
     },
     "archive": {
       "heading": "Are you sure you want to archive {professionName}?",
-      "caption": "Archiving a profession"
+      "caption": "Archiving a profession",
+      "confirmation": {
+        "heading": "Profession archived",
+        "body": "The profession <strong>{name}</strong> has been archived."
+      }
     },
     "labels": {
       "keywords": "Keywords:",
