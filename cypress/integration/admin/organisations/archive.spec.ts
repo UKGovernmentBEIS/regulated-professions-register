@@ -76,6 +76,9 @@ describe('Archiving organisations', () => {
           });
         });
 
+      cy.visitAndCheckAccessibility('/regulatory-authorities');
+
+      cy.get('body').should('not.contain', 'Department for Education');
     });
   });
 });
