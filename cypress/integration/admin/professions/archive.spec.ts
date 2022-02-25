@@ -75,5 +75,50 @@ describe('Archiving professions', () => {
 
       cy.get('body').should('not.contain', 'Gas Safe Engineer');
     });
+
+    it('Allows me to archive a live profession', () => {
+      cy.get('a').contains('Regulated professions').click();
+
+      cy.contains('Registered Trademark Attorney')
+        .parent('tr')
+        .within(() => {
+          cy.get('a').contains('View details').click();
+        });
+
+      cy.translate('professions.admin.button.archive').then((button) => {
+        cy.get('a').contains(button).click();
+      });
+
+      cy.translate('professions.admin.button.archive').then((buttonText) => {
+        cy.get('button').contains(buttonText).click();
+      });
+
+      cy.get('[data-cy=actions]').should('not.exist');
+
+      cy.translate('professions.admin.status.archived').then((status) => {
+        cy.get('h2[data-status]').should('contain', status);
+      });
+      cy.get('[data-cy=changed-by-user]').should('contain', 'Registrar');
+      cy.get('[data-cy=last-modified]').should(
+        'contain',
+        format(new Date(), 'dd-MM-yyyy'),
+      );
+
+      cy.visit('/admin/professions');
+
+      cy.get('tr')
+        .contains('Registered Trademark Attorney')
+        .then(($header) => {
+          const $row = $header.parent();
+
+          cy.translate('professions.admin.status.archived').then((status) => {
+            cy.wrap($row).should('contain', status);
+          });
+        });
+
+      cy.visitAndCheckAccessibility('/professions/search');
+
+      cy.get('body').should('not.contain', 'Registered Trademark Attorney');
+    });
   });
 });
