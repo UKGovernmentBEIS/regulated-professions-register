@@ -161,6 +161,7 @@
   },
   "status": {
     "live": "Live",
-    "draft": "Draft"
+    "draft": "Draft",
+    "archived": "Archived"
   }
 }

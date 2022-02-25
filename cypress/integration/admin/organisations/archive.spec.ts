@@ -1,3 +1,5 @@
+import { format } from 'date-fns';
+
 describe('Archiving organisations', () => {
   context('When I am logged in as a registrar', () => {
     beforeEach(() => {
@@ -50,6 +52,18 @@ describe('Archiving organisations', () => {
           cy.get('html').should('contain', confirmation);
         },
       );
+
+      cy.get('[data-cy=actions]').should('not.exist');
+
+      cy.translate('organisations.status.archived').then((status) => {
+        cy.get('h2[data-status]').should('contain', status);
+      });
+      cy.get('[data-cy=changed-by-user]').should('contain', 'Registrar');
+      cy.get('[data-cy=last-modified]').should(
+        'contain',
+        format(new Date(), 'dd-MM-yyyy'),
+      );
+
     });
   });
 });
