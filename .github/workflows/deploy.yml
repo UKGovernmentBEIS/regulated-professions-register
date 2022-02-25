@@ -50,6 +50,8 @@ jobs:
       TF_VAR_rollbar_token: ${{ secrets.PROD_ROLLBAR_TOKEN }}
       TF_VAR_basic_auth_username: ${{ secrets.PROD_BASIC_AUTH_USERNAME }}
       TF_VAR_basic_auth_password: ${{ secrets.PROD_BASIC_AUTH_PASSWORD }}
+      TF_VAR_custom_domain: ${{ secrets.PROD_CUSTOM_DOMAIN }}
+      TF_VAR_custom_hostname: ${{ secrets.PROD_CUSTOM_HOSTNAME }}
     steps:
       - uses: actions/checkout@v2
       - name: Deploy latest code to Production
@@ -75,6 +77,8 @@ jobs:
       TF_VAR_rollbar_token: ${{ secrets.STAGING_ROLLBAR_TOKEN }}
       TF_VAR_basic_auth_username: ${{ secrets.STAGING_BASIC_AUTH_USERNAME }}
       TF_VAR_basic_auth_password: ${{ secrets.STAGING_BASIC_AUTH_PASSWORD }}
+      TF_VAR_custom_domain: ${{ secrets.STAGING_CUSTOM_DOMAIN }}
+      TF_VAR_custom_hostname: ${{ secrets.STAGING_CUSTOM_HOSTNAME }}
     steps:
       - uses: actions/checkout@v2
       - name: Deploy latest code to Staging

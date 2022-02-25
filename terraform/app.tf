@@ -34,5 +34,8 @@ resource "cloudfoundry_app" "beis-rpr-app" {
   routes {
     route = cloudfoundry_route.beis-rpr-route.id
   }
+  routes {
+    route = cloudfoundry_route.beis-rpr-custom-domain-route.id
+  }
 
 }
