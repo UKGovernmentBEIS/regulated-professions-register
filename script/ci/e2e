@@ -8,7 +8,7 @@ set -e
 
 cd "$(dirname "$0")/../.."
 
-SPECS=$(npx ts-node util/get-tests-for-matrix.ts --chunks=4 --matrix="$MATRIX")
+SPECS=$(npx ts-node util/get-tests-for-matrix.ts --chunks=5 --matrix="$MATRIX")
 
 export SPECS
 
