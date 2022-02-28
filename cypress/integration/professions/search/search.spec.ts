@@ -11,6 +11,11 @@ describe('Searching a profession', () => {
   });
 
   it('I can view an unfiltered list of live professions', () => {
+    cy.translate('professions.search.foundPlural', { count: 2 }).then(
+      (foundText) => {
+        cy.get('body').should('contain.text', foundText);
+      },
+    );
     cy.get('body').should('contain', 'Registered Trademark Attorney');
     cy.get('body').should(
       'contain',

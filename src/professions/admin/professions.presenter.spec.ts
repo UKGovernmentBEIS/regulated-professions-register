@@ -95,7 +95,7 @@ describe('ProfessionsPresenter', () => {
         view: 'overview',
         organisation: 'UK Centre for Professional Qualifications',
         professionsTable: {
-          caption: `${translationOf('professions.admin.foundPlural')}`,
+          caption: `${translationOf('professions.search.foundPlural')}`,
           captionClasses: 'govuk-table__caption--m',
           firstCellIsHeader: true,
           head: await ListEntryPresenter.headings(i18nService, 'overview'),
@@ -144,7 +144,7 @@ describe('ProfessionsPresenter', () => {
         view: 'single-organisation',
         organisation: 'Example Organisation 1',
         professionsTable: {
-          caption: `${translationOf('professions.admin.foundPlural')}`,
+          caption: `${translationOf('professions.search.foundPlural')}`,
           captionClasses: 'govuk-table__caption--m',
           firstCellIsHeader: true,
           head: await ListEntryPresenter.headings(
@@ -215,7 +215,7 @@ describe('ProfessionsPresenter', () => {
           const result = await presenter.present('overview');
 
           expect(result.professionsTable.caption).toEqual(
-            `${translationOf('professions.admin.foundSingular')}`,
+            `${translationOf('professions.search.foundSingular')}`,
           );
         });
       });
@@ -248,7 +248,7 @@ describe('ProfessionsPresenter', () => {
           const result = await presenter.present('overview');
 
           expect(result.professionsTable.caption).toEqual(
-            `${translationOf('professions.admin.foundPlural')}`,
+            `${translationOf('professions.search.foundPlural')}`,
           );
         });
       });

@@ -262,8 +262,6 @@
       "industries": "Industries:",
       "changedBy": "Changed by:"
     },
-    "foundSingular": "{count} profession found",
-    "foundPlural": "{count} professions found",
     "filter": {
       "keywords": {
         "label": "Keyword",
@@ -331,6 +329,8 @@
   },
   "search": {
     "heading": "Find a regulated profession",
+    "foundSingular": "{count} profession found",
+    "foundPlural": "{count} professions found",
     "labels": {
       "keywords": "Keywords:",
       "nations": "Nations:",

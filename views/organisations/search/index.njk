@@ -18,7 +18,11 @@
       {% include "../../shared/_filter-criteria.njk" %}
 
       <p class="govuk-body-m">
-        <span class="govuk-!-font-size-36 govuk-!-font-weight-bold">{{ organisations.length }}</span> {{ ("organisations.search.foundSingular" | t) if (organisations.length === 1) else ("organisations.search.foundPlural" | t) }}
+        {% if (organisations.length === 1) %}
+          {{ ("organisations.search.foundSingular" | t({ count: "<span class='govuk-!-font-size-36 govuk-!-font-weight-bold'>" + organisations.length + "</span>" }) | safe) }}
+        {% else %}
+          {{ ("organisations.search.foundPlural" | t({ count: "<span class='govuk-!-font-size-36 govuk-!-font-weight-bold'>" + organisations.length + "</span>" }) | safe) }}
+        {% endif %}
       </p>
 
       <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">

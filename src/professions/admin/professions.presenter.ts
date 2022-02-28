@@ -82,10 +82,10 @@ export class ProfessionsPresenter {
 
     const caption =
       numberOfResults === 1
-        ? await this.i18nService.translate('professions.admin.foundSingular', {
+        ? await this.i18nService.translate('professions.search.foundSingular', {
             args: { count: numberOfResults },
           })
-        : await this.i18nService.translate('professions.admin.foundPlural', {
+        : await this.i18nService.translate('professions.search.foundPlural', {
             args: { count: numberOfResults },
           });
 

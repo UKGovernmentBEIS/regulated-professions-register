@@ -6,6 +6,11 @@ describe('Listing professions', () => {
     });
 
     it('I can view an unfiltered list of draft and live Professions', () => {
+      cy.translate('professions.search.foundPlural', { count: 5 }).then(
+        (foundText) => {
+          cy.get('body').should('contain', foundText);
+        },
+      );
       cy.get('tr')
         .contains('Registered Trademark Attorney')
         .then(($header) => {

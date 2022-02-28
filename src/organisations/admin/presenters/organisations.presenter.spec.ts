@@ -206,7 +206,7 @@ describe('OrganisationsPresenter', () => {
           const result = await presenter.present();
 
           expect(result.organisationsTable.caption).toEqual(
-            `${translationOf('organisations.admin.foundSingular')}`,
+            `${translationOf('organisations.search.foundSingular')}`,
           );
         });
       });
@@ -242,7 +242,7 @@ describe('OrganisationsPresenter', () => {
           const result = await presenter.present();
 
           expect(result.organisationsTable.caption).toEqual(
-            `${translationOf('organisations.admin.foundPlural')}`,
+            `${translationOf('organisations.search.foundPlural')}`,
           );
         });
       });

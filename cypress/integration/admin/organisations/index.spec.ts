@@ -11,6 +11,11 @@ describe('Listing organisations', () => {
     });
 
     it('Lists all the organisations', () => {
+      cy.translate('organisations.search.foundPlural', { count: 4 }).then(
+        (foundText) => {
+          cy.get('body').should('contain', foundText);
+        },
+      );
       cy.readFile('./seeds/test/professions.json').then((professions) => {
         cy.readFile('./seeds/test/organisations.json').then((organisations) => {
           organisations.forEach((organisation) => {
