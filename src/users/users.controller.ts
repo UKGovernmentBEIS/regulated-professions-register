@@ -166,13 +166,13 @@ export class UsersController {
 
     user.externalIdentifier = externalResult.externalIdentifier;
 
-    if (externalResult.result == 'user-exists') {
+    if (externalResult.result === 'user-exists') {
       const internalResult = await this.usersService.attemptAdd({
         ...user,
         confirmed: true,
       });
 
-      if (internalResult == 'user-exists') {
+      if (internalResult === 'user-exists') {
         throw new UserAlreadyExistsError();
       }
     } else {
