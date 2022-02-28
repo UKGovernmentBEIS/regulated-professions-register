@@ -183,6 +183,20 @@ export class ProfessionVersionsService {
     );
   }
 
+  async latestVersion(profession: Profession): Promise<ProfessionVersion> {
+    return await this.versionsWithJoins()
+      .distinctOn(['professionVersion.profession'])
+      .where('professionVersion.status IN(:...status)', {
+        status: [ProfessionVersionStatus.Live, ProfessionVersionStatus.Draft],
+      })
+      .where({ profession: profession })
+      .orderBy(
+        'professionVersion.profession, professionVersion.created_at',
+        'DESC',
+      )
+      .getOne();
+  }
+
   async findLiveBySlug(slug: string): Promise<Profession> {
     const version = await this.versionsWithJoins()
       .leftJoinAndSelect('organisation.versions', 'organisationVersions')
