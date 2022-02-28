@@ -123,6 +123,7 @@ export class UsersController {
         if (err instanceof UserAlreadyExistsError) {
           return res.render('admin/users/confirm', {
             ...user,
+            action,
             userAlreadyExists: true,
           });
         }
