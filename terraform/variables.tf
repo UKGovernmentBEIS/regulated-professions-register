@@ -78,3 +78,12 @@ variable "basic_auth_password" {
   description = "The password we use for basic authentication if we want to hide the site from the public"
 }
 
+variable "custom_domain" {
+  type        = string
+  description = "Name of custom domain created in the cf org"
+}
+
+variable "custom_hostname" {
+  type        = string
+  description = "Custom hostname (prepended to custom_domain for the app and cdn-route)"
+}
