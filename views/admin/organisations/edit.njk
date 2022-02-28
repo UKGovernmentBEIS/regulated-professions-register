@@ -10,7 +10,7 @@
     {% if slug|length == 0 %}
       {{ "organisations.admin.create.heading" | t }}
     {% else %}
-      {{ "organisations.admin.edit.heading" | t }}
+      {{ "organisations.admin.edit.heading" | t({ organisationName: name }) }}
     {% endif %}
   </h1>
 

@@ -6,7 +6,7 @@
 {% set bodyClasses = "rpr-internal__page" %}
 
 {% block content %}
-<span class="govuk-caption-l">{{ "organisations.admin.edit.heading" | t }}</span>
+<span class="govuk-caption-l">{{ "organisations.admin.edit.heading" | t({ organisationName: name }) }}</span>
 <h1 class="govuk-heading-xl">{{ "app.headings.checkAnswers" | t }}</h1>
 
 <div class="govuk-grid-row">

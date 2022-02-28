@@ -32,7 +32,7 @@
       "button": "Filter results"
     },
     "edit": {
-      "heading": "Amending a regulatory authority",
+      "heading": "Amending a regulatory authority - {organisationName}",
       "confirmation": {
         "heading": "Regulatory authority amended",
         "body": "The changes to <strong>{name}</strong> are not published yet."
