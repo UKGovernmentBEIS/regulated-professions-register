@@ -6,6 +6,7 @@ import * as nunjucks from 'nunjucks';
 
 import { AssetsHelper } from '../helpers/assets.helper';
 import { formatMultilineString } from '../helpers/format-multiline-string.helper';
+import { formatLink } from '../helpers/format-link.helper';
 import { I18nHelper } from '../helpers/i18n.helper';
 
 export const nunjucksConfig = async (
@@ -76,6 +77,10 @@ export const nunjucksConfig = async (
     return new nunjucks.runtime.SafeString(
       formatMultilineString(text, classes),
     );
+  });
+
+  env.addFilter('link', (text) => {
+    return new nunjucks.runtime.SafeString(formatLink(text));
   });
 
   return env;
