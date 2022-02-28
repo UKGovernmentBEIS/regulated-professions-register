@@ -23,9 +23,9 @@ import { QualificationsTemplate } from './interfaces/qualifications.template';
 import { BackLink } from '../../common/decorators/back-link.decorator';
 import ViewUtils from './viewUtils';
 import { ProfessionVersionsService } from '../profession-versions.service';
-import { isConfirmed } from '../../helpers/is-confirmed';
 import { isUK } from '../../helpers/nations.helper';
 import { ProfessionVersion } from '../profession-version.entity';
+import { Profession } from '../profession.entity';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
@@ -61,7 +61,7 @@ export class QualificationsController {
       res,
       version.qualification,
       version,
-      isConfirmed(profession),
+      profession,
       change,
     );
   }
@@ -122,7 +122,7 @@ export class QualificationsController {
         res,
         updatedQualification,
         version,
-        isConfirmed(profession),
+        profession,
         submittedValues.change,
         errors,
       );
@@ -147,7 +147,7 @@ export class QualificationsController {
     res: Response,
     qualification: Qualification | null,
     version: ProfessionVersion | null,
-    isEditing: boolean,
+    profession: Profession,
     change: boolean,
     errors: object | undefined = undefined,
   ) {
@@ -164,7 +164,7 @@ export class QualificationsController {
       mandatoryProfessionalExperienceRadioButtonArgs,
       moreInformationUrl: qualification?.url,
       duration: qualification?.educationDuration,
-      captionText: ViewUtils.captionText(isEditing),
+      captionText: await ViewUtils.captionText(this.i18nService, profession),
       ukRecognition: qualification?.ukRecognition,
       ukRecognitionUrl: qualification?.ukRecognitionUrl,
       otherCountriesRecognition: qualification?.otherCountriesRecognition,

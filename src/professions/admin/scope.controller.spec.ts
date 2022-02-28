@@ -124,6 +124,7 @@ describe('ScopeController', () => {
                 },
               ],
             },
+            captionText: translationOf('professions.form.captions.add'),
           }),
         );
         expect(industriesService.all).toHaveBeenCalled();
@@ -206,6 +207,7 @@ describe('ScopeController', () => {
                 },
               ],
             },
+            captionText: translationOf('professions.form.captions.edit'),
           }),
         );
         expect(industriesService.all).toHaveBeenCalled();

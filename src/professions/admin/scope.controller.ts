@@ -27,9 +27,9 @@ import { BackLink } from '../../common/decorators/back-link.decorator';
 import ViewUtils from './viewUtils';
 import { ProfessionVersionsService } from '../profession-versions.service';
 import { ProfessionVersion } from '../profession-version.entity';
-import { isConfirmed } from '../../helpers/is-confirmed';
 import { allNations, isUK } from '../../helpers/nations.helper';
 import { ScopeDto } from './dto/scope.dto';
+import { Profession } from '../profession.entity';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
@@ -72,7 +72,7 @@ export class ScopeController {
       coversUK,
       version.industries || [],
       version.occupationLocations || [],
-      isConfirmed(profession),
+      profession,
       change === 'true',
       errors,
     );
@@ -115,7 +115,7 @@ export class ScopeController {
         coversUK,
         submittedIndustries,
         submittedValues.nations || [],
-        isConfirmed(profession),
+        profession,
         submittedValues.change,
         errors,
       );
@@ -151,7 +151,7 @@ export class ScopeController {
     coversUK: boolean,
     selectedIndustries: Industry[],
     selectedNations: string[],
-    isEditing: boolean,
+    profession: Profession,
     change: boolean,
     errors: object | undefined = undefined,
   ): Promise<void> {
@@ -179,7 +179,7 @@ export class ScopeController {
       coversUK,
       industriesCheckboxItems,
       nationsCheckboxArgs,
-      captionText: ViewUtils.captionText(isEditing),
+      captionText: await ViewUtils.captionText(this.i18nService, profession),
       change,
       errors,
     };

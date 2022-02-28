@@ -141,7 +141,9 @@ describe('Editing an existing profession', () => {
         'Change',
       );
       cy.checkAccessibility();
-      cy.translate('professions.form.captions.edit').then((editCaption) => {
+      cy.translate('professions.form.captions.edit', {
+        professionName: 'Registered Trademark Attorney',
+      }).then((editCaption) => {
         cy.get('body').contains(editCaption);
       });
       cy.get('textarea[name="regulationSummary"]')
@@ -161,7 +163,9 @@ describe('Editing an existing profession', () => {
       );
 
       cy.checkAccessibility();
-      cy.translate('professions.form.captions.edit').then((editCaption) => {
+      cy.translate('professions.form.captions.edit', {
+        professionName: 'Registered Trademark Attorney',
+      }).then((editCaption) => {
         cy.get('body').contains(editCaption);
       });
       cy.get('textarea[name="level"]')
@@ -180,7 +184,9 @@ describe('Editing an existing profession', () => {
         'Change',
       );
       cy.checkAccessibility();
-      cy.translate('professions.form.captions.edit').then((editCaption) => {
+      cy.translate('professions.form.captions.edit', {
+        professionName: 'Registered Trademark Attorney',
+      }).then((editCaption) => {
         cy.get('body').contains(editCaption);
       });
       cy.get('textarea[name="nationalLegislation"]')
@@ -200,7 +206,9 @@ describe('Editing an existing profession', () => {
         'Change',
       );
       cy.checkAccessibility();
-      cy.translate('professions.form.captions.edit').then((editCaption) => {
+      cy.translate('professions.form.captions.edit', {
+        professionName: 'Registered Trademark Attorney',
+      }).then((editCaption) => {
         cy.get('body').contains(editCaption);
       });
       cy.get('textarea[name="secondNationalLegislation"]').type(
@@ -534,7 +542,9 @@ describe('Editing an existing profession', () => {
           'Change',
         );
         cy.checkAccessibility();
-        cy.translate('professions.form.captions.edit').then((editCaption) => {
+        cy.translate('professions.form.captions.edit', {
+          professionName: 'Draft Profession',
+        }).then((editCaption) => {
           cy.get('body').contains(editCaption);
         });
         cy.get('textarea[name="nationalLegislation"]').type(
@@ -593,7 +603,10 @@ describe('Editing an existing profession', () => {
         'Change',
       );
       cy.checkAccessibility();
-      cy.translate('professions.form.captions.edit').then((editCaption) => {
+      cy.translate('professions.form.captions.edit', {
+        professionName:
+          'Secondary School Teacher in State maintained schools (England)',
+      }).then((editCaption) => {
         cy.get('body').contains(editCaption);
       });
       cy.get('input[name="name"]').clear().type('Updated name');
@@ -610,7 +623,9 @@ describe('Editing an existing profession', () => {
         'Change',
       );
       cy.checkAccessibility();
-      cy.translate('professions.form.captions.edit').then((editCaption) => {
+      cy.translate('professions.form.captions.edit', {
+        professionName: 'Updated name',
+      }).then((editCaption) => {
         cy.get('body').contains(editCaption);
       });
       cy.get('select[name="regulatoryBody"]').select(

@@ -16,7 +16,7 @@
     },
     "captions": {
       "add": "Adding a new profession",
-      "edit": "Amending a profession",
+      "edit": "Amending a profession - {professionName}",
       "publish": "Publishing a profession"
     },
     "editProfession": "Use this section of the site to add a new profession",

@@ -1,9 +1,12 @@
 import { createMock, DeepMocked } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Response } from 'express';
+import { I18nService } from 'nestjs-i18n';
+import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 import legislationFactory from '../../testutils/factories/legislation';
 import professionFactory from '../../testutils/factories/profession';
 import professionVersionFactory from '../../testutils/factories/profession-version';
+import { translationOf } from '../../testutils/translation-of';
 import { ProfessionVersionsService } from '../profession-versions.service';
 import { ProfessionsService } from '../professions.service';
 import LegislationDto from './dto/legislation.dto';
@@ -14,10 +17,12 @@ describe(LegislationController, () => {
   let professionsService: DeepMocked<ProfessionsService>;
   let professionVersionsService: DeepMocked<ProfessionVersionsService>;
   let response: DeepMocked<Response>;
+  let i18nService: I18nService;
 
   beforeEach(async () => {
     professionsService = createMock<ProfessionsService>();
     professionVersionsService = createMock<ProfessionVersionsService>();
+    i18nService = createMockI18nService();
 
     const module: TestingModule = await Test.createTestingModule({
       controllers: [LegislationController],
@@ -27,6 +32,7 @@ describe(LegislationController, () => {
           provide: ProfessionVersionsService,
           useValue: professionVersionsService,
         },
+        { provide: I18nService, useValue: i18nService },
       ],
     }).compile();
 
@@ -60,6 +66,7 @@ describe(LegislationController, () => {
           'admin/professions/legislation',
           expect.objectContaining({
             legislation: legislation,
+            captionText: translationOf('professions.form.captions.edit'),
           }),
         );
       });
@@ -96,6 +103,7 @@ describe(LegislationController, () => {
           expect.objectContaining({
             legislation: legislation1,
             secondLegislation: legislation2,
+            captionText: translationOf('professions.form.captions.edit'),
           }),
         );
       });
