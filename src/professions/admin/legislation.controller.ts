@@ -41,7 +41,6 @@ export class LegislationController {
   async edit(
     @Res() res: Response,
     @Param('professionId') professionId: string,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     @Param('versionId') versionId: string,
     @Query('change') change: string,
   ): Promise<void> {
