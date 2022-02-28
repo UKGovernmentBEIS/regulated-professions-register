@@ -146,6 +146,9 @@
       "reservedActivities": {
         "empty": "Enter reserved activities"
       },
+      "regulationUrl": {
+        "invalid": "Please enter a valid website address"
+      },
       "registrationUrl": {
         "invalid": "Please enter a valid website address"
       },
