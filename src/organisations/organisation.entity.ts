@@ -77,6 +77,12 @@ export class Organisation {
     return Organisation.withVersion(organisation, latestVersion);
   }
 
+  public static withLatestVersion(organisation: Organisation): Organisation {
+    const versions = Organisation.sortedVersions(organisation);
+
+    return Organisation.withVersion(organisation, versions[0]);
+  }
+
   private static sortedVersions(
     organisation: Organisation,
   ): OrganisationVersion[] {

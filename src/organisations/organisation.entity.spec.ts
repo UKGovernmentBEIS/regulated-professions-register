@@ -154,4 +154,27 @@ describe('Organisation', () => {
       );
     });
   });
+
+  describe('withLatestVersion', () => {
+    it('should get the latest version', () => {
+      const organisationVersion = organisationVersionFactory.build({
+        updated_at: new Date(2022, 1, 3),
+      });
+      const organisation = organisationFactory.build({
+        versions: [
+          organisationVersionFactory.build({
+            updated_at: new Date(2022, 1, 1),
+          }),
+          organisationVersion,
+          organisationVersionFactory.build({
+            updated_at: new Date(2022, 1, 2),
+          }),
+        ],
+      });
+
+      expect(Organisation.withLatestVersion(organisation)).toEqual(
+        Organisation.withVersion(organisation, organisationVersion),
+      );
+    });
+  });
 });

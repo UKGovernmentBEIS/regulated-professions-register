@@ -110,7 +110,7 @@ describe('ProfessionVersionsController', () => {
 
         (ProfessionPresenter as jest.Mock).mockReturnValue({});
 
-        (Organisation.withLatestLiveVersion as jest.Mock).mockImplementation(
+        (Organisation.withLatestVersion as jest.Mock).mockImplementation(
           () => profession.organisation,
         );
 
@@ -166,7 +166,7 @@ describe('ProfessionVersionsController', () => {
 
         (ProfessionPresenter as jest.Mock).mockReturnValue({});
 
-        (Organisation.withLatestLiveVersion as jest.Mock).mockImplementation(
+        (Organisation.withLatestVersion as jest.Mock).mockImplementation(
           () => profession.organisation,
         );
 
@@ -211,7 +211,7 @@ describe('ProfessionVersionsController', () => {
 
         (ProfessionPresenter as jest.Mock).mockReturnValue({});
 
-        (Organisation.withLatestLiveVersion as jest.Mock).mockImplementation(
+        (Organisation.withLatestVersion as jest.Mock).mockImplementation(
           () => profession.organisation,
         );
 
