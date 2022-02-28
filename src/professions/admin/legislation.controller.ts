@@ -76,6 +76,7 @@ export class LegislationController {
     @Body() legislationDto,
   ): Promise<void> {
     const validator = await Validator.validate(LegislationDto, legislationDto);
+    const submittedValues = validator.obj;
 
     const profession = await this.professionsService.findWithVersions(
       professionId,
@@ -84,8 +85,6 @@ export class LegislationController {
     const version = await this.professionVersionsService.findWithProfession(
       versionId,
     );
-
-    const submittedValues: LegislationDto = legislationDto;
 
     const updatedLegislation: Legislation = {
       ...version.legislations[0],

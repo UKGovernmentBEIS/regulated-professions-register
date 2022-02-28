@@ -462,6 +462,99 @@ describe('OrganisationsController', () => {
           );
         });
       });
+
+      describe('when provided URLs are mis-formatted', () => {
+        it('correctly formats the URLs before saving', async () => {
+          const summaryList: SummaryList = {
+            classes: 'govuk-summary-list--no-border',
+            rows: [],
+          };
+
+          (
+            OrganisationPresenter.prototype as DeepMocked<OrganisationPresenter>
+          ).summaryList.mockResolvedValue(summaryList);
+
+          const organisationId = 'some-uuid';
+          const versionId = 'some-other-uuid';
+          const response = createMock<Response>();
+          const request = createDefaultMockRequest();
+
+          const organisationDto: OrganisationDto = {
+            name: 'Organisation',
+            alternateName: '',
+            email: 'email@example.com',
+            url: 'example.com',
+            contactUrl: ' http://example.com',
+            address: '123 Fake Street',
+            telephone: '122356',
+            fax: '',
+          };
+
+          const organisation = organisationFactory.build({ slug: '' });
+          const version = organisationVersionFactory.build({});
+
+          organisationsService.find.mockResolvedValue(organisation);
+          organisationVersionsService.find.mockResolvedValue(version);
+
+          const newOrganisation = {
+            ...organisation,
+            name: 'Organisation',
+          };
+
+          const newVersion = {
+            ...version,
+            ...OrganisationVersion.fromDto(organisationDto),
+          };
+
+          organisationsService.save.mockResolvedValue(newOrganisation);
+          organisationVersionsService.save.mockResolvedValue(newVersion);
+
+          await controller.update(
+            organisationId,
+            versionId,
+            organisationDto,
+            response,
+            request,
+          );
+
+          expect(organisationsService.save).toHaveBeenCalledWith(
+            newOrganisation,
+          );
+
+          expect(organisationVersionsService.save).toHaveBeenCalledWith(
+            newVersion,
+          );
+
+          const updatedOrganisation = Organisation.withVersion(
+            organisation,
+            newVersion,
+            true,
+          );
+
+          expect(OrganisationPresenter).toHaveBeenCalledWith(
+            updatedOrganisation,
+            i18nService,
+          );
+
+          expect(
+            OrganisationPresenter.prototype.summaryList,
+          ).toHaveBeenCalledWith({
+            classes: 'govuk-summary-list',
+            removeBlank: false,
+            includeName: true,
+            includeActions: true,
+          });
+
+          expect(response.render).toHaveBeenCalledWith(
+            'admin/organisations/review',
+            {
+              ...updatedOrganisation,
+              summaryList: summaryList,
+              backLink: `/admin/organisations/${organisation.id}/versions/${version.id}/edit/`,
+            },
+          );
+        });
+      });
     });
 
     describe('when confirm is set', () => {

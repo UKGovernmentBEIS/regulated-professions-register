@@ -69,8 +69,7 @@ export class PersonalDetailsController {
       PersonalDetailsDto,
       personalDetailsDto,
     );
-
-    const submittedValues: PersonalDetailsDto = personalDetailsDto;
+    const submittedValues = validator.obj;
 
     const user = await this.usersService.find(id);
     const action = getActionTypeFromUser(user);

@@ -79,8 +79,7 @@ export class TopLevelInformationController {
       TopLevelDetailsDto,
       topLevelDetailsDto,
     );
-
-    const submittedValues: TopLevelDetailsDto = topLevelDetailsDto;
+    const submittedValues = validator.obj;
 
     const selectedOrganisation = submittedValues.regulatoryBody
       ? await this.organisationsService.find(submittedValues.regulatoryBody)

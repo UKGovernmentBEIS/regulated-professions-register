@@ -90,12 +90,12 @@ export class RegistrationController {
       RegistrationDto,
       registrationDto,
     );
+    const submittedValues = validator.obj;
 
     const version = await this.professionVersionsService.findWithProfession(
       versionId,
     );
 
-    const submittedValues: RegistrationDto = registrationDto;
     const selectedMandatoryRegistration = submittedValues.mandatoryRegistration;
 
     const profession = await this.professionsService.findWithVersions(
@@ -116,8 +116,8 @@ export class RegistrationController {
     const updatedVersion: ProfessionVersion = {
       ...version,
       ...{
-        registrationRequirements: registrationDto.registrationRequirements,
-        registrationUrl: registrationDto.registrationUrl,
+        registrationRequirements: submittedValues.registrationRequirements,
+        registrationUrl: submittedValues.registrationUrl,
         mandatoryRegistration: selectedMandatoryRegistration,
       },
     };

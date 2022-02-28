@@ -153,6 +153,48 @@ describe(RegistrationController, () => {
       });
     });
 
+    describe('when provided URL is mis-formatted', () => {
+      it('correctly formats the URL before saving', async () => {
+        const profession = professionFactory.build({
+          id: 'profession-id',
+        });
+        const version = professionVersionFactory.build({
+          id: 'version-id',
+          profession: profession,
+          mandatoryRegistration: MandatoryRegistration.Mandatory,
+        });
+
+        professionsService.findWithVersions.mockResolvedValue(profession);
+        professionVersionsService.findWithProfession.mockResolvedValue(version);
+
+        const registrationDto = {
+          mandatoryRegistration: MandatoryRegistration.Voluntary,
+          registrationRequirements: 'Something',
+          registrationUrl: 'example.com',
+        };
+
+        await controller.update(
+          response,
+          'profession-id',
+          'version-id',
+          registrationDto,
+        );
+
+        expect(professionVersionsService.save).toHaveBeenCalledWith(
+          expect.objectContaining({
+            mandatoryRegistration: MandatoryRegistration.Voluntary,
+            registrationRequirements: 'Something',
+            registrationUrl: 'http://example.com',
+            profession: profession,
+          }),
+        );
+
+        expect(response.redirect).toHaveBeenCalledWith(
+          '/admin/professions/profession-id/versions/version-id/regulated-activities/edit',
+        );
+      });
+    });
+
     describe('when required parameters are not entered', () => {
       it('does not update the profession, and re-renders the regulatory body form page with errors', async () => {
         const registrationDtoWithoutMandatoryRegistration = {

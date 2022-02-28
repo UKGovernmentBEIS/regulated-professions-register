@@ -92,8 +92,8 @@ export class ScopeController {
     @Param('versionId') versionId: string,
   ): Promise<void> {
     const validator = await Validator.validate(ScopeDto, scopeDto);
+    const submittedValues = validator.obj;
 
-    const submittedValues: ScopeDto = scopeDto;
     const coversUK = Boolean(Number(submittedValues.coversUK));
 
     const profession = await this.professionsService.findWithVersions(
