@@ -30,7 +30,7 @@
 
         {% if organisation.status !== 'archived' %}
 
-          <nav role="navigation" aria-labelledby="subsection-title" data-cy="actions">
+          <nav role="navigation" data-cy="actions">
             <ul class="govuk-list">
               {% if organisation.status === 'draft' and 'publishOrganisation' in permissions %}
               <li>
