@@ -1,6 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Connection, Repository, SelectQueryBuilder } from 'typeorm';
+import {
+  Connection,
+  EntityManager,
+  QueryRunner,
+  Repository,
+  SelectQueryBuilder,
+} from 'typeorm';
 import { createMock, DeepMocked } from '@golevelup/ts-jest';
 import userFactory from '../testutils/factories/user';
 
@@ -15,9 +21,11 @@ describe('UsersService', () => {
   let service: UsersService;
   let repo: Repository<User>;
   let queryBuilder: DeepMocked<SelectQueryBuilder<User>>;
+  let connection: DeepMocked<Connection>;
 
   beforeEach(async () => {
     queryBuilder = createMock<SelectQueryBuilder<User>>();
+    connection = createMock<Connection>();
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -41,7 +49,7 @@ describe('UsersService', () => {
         },
         {
           provide: Connection,
-          useValue: {},
+          useValue: connection,
         },
       ],
     }).compile();
@@ -141,6 +149,87 @@ describe('UsersService', () => {
           .from(expect.anything())
           .where(expect.anything(), expect.anything()).execute,
       ).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('attemptAdd', () => {
+    let queryRunner: DeepMocked<QueryRunner>;
+
+    beforeEach(() => {
+      queryRunner = createMock<QueryRunner>({
+        manager: createMock<EntityManager>(),
+      });
+
+      jest
+        .spyOn(connection, 'createQueryRunner')
+        .mockImplementation(() => queryRunner);
+    });
+
+    describe('when a user with the given external identifier is not found', () => {
+      it('adds a new user', async () => {
+        const user = userFactory.build();
+
+        const saveSpy = jest.spyOn(queryRunner.manager, 'save');
+        const findSpy = jest
+          .spyOn(queryRunner.manager, 'findOne')
+          .mockResolvedValue(undefined);
+
+        const result = await service.attemptAdd(user);
+
+        expect(result).toEqual('user-created');
+
+        expect(findSpy).toHaveBeenCalledWith(User, {
+          externalIdentifier: user.externalIdentifier,
+        });
+        expect(saveSpy).toHaveBeenCalledWith(User, user);
+
+        expect(queryRunner.commitTransaction).toHaveBeenCalled();
+        expect(queryRunner.release).toHaveBeenCalled();
+      });
+    });
+
+    describe('when a user with the given external identifier is found', () => {
+      it('does not add a new user', async () => {
+        const user = userFactory.build();
+
+        const saveSpy = jest.spyOn(queryRunner.manager, 'save');
+        const findSpy = jest
+          .spyOn(queryRunner.manager, 'findOne')
+          .mockResolvedValue({});
+
+        const result = await service.attemptAdd(user);
+
+        expect(result).toEqual('user-exists');
+
+        expect(findSpy).toHaveBeenCalledWith(User, {
+          externalIdentifier: user.externalIdentifier,
+        });
+        expect(saveSpy).not.toBeCalled();
+
+        expect(queryRunner.commitTransaction).toHaveBeenCalled();
+        expect(queryRunner.release).toHaveBeenCalled();
+      });
+    });
+
+    it('rolls back the transaction if an error occurs', async () => {
+      const user = userFactory.build();
+
+      const saveSpy = jest.spyOn(queryRunner.manager, 'save');
+      const findSpy = jest
+        .spyOn(queryRunner.manager, 'findOne')
+        .mockImplementation(() => {
+          throw new Error();
+        });
+
+      await expect(service.attemptAdd(user)).rejects.toThrowError();
+
+      expect(findSpy).toHaveBeenCalledWith(User, {
+        externalIdentifier: user.externalIdentifier,
+      });
+      expect(saveSpy).not.toBeCalled();
+
+      expect(queryRunner.rollbackTransaction).toHaveBeenCalled();
+      expect(queryRunner.commitTransaction).not.toHaveBeenCalled();
     });
   });
 });
