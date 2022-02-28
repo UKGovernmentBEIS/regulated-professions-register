@@ -8,8 +8,9 @@
   <h1 class="govuk-heading-l">{{ ('organisations.admin.archive.heading' | t({organisationName: organisation.name})) }}</h1>
 
   <div class="govuk-grid-row">
-
     <div class="govuk-grid-column-full">
+      <p class="govuk-body">{{ 'organisations.admin.archive.details' | t }}</p>
+
       <form action="/admin/organisations/{{ organisation.id }}/versions/{{ organisation.versionId }}/archive?_method=DELETE" method="post">
         {{
           govukButton({

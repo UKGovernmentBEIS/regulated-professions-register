@@ -68,6 +68,7 @@
     "archive": {
       "heading": "Are you sure you want to archive {organisationName}?",
       "caption": "Archiving an organisation",
+      "details": "This will also archive all of this regulator's professions.",
       "confirmation": {
         "heading": "Regulatory authority archived",
         "body": "The regulator <strong>{name}</strong> has been archived."
