@@ -27,35 +27,50 @@
           <span class="govuk-body" data-cy="changed-by-user">{{ presenter.changedBy }}</span>
         </h2>
 
-        <ul class="govuk-list">
-          {% if profession.status === 'draft' and 'publishProfession' in permissions %}
-            <li>
-              {{
-                govukButton({
-                  text: ('professions.form.button.publishNow' | t),
-                  classes: "govuk-button",
-                  id: "publish-button",
-                  href: "/admin/professions/" + profession.id + "/versions/" + profession.versionId + "/publish"
-                })
-              }}
-            </li>
-          {% endif %}
-          {% if 'editProfession' in permissions %}
-          <li>
-              <form method="post" action="/admin/professions/{{ profession.id }}/versions">
-                {{
-                  govukButton({
-                    id: "submit-button",
-                    type: "Submit",
-                    classes: "govuk-button--secondary",
-                    id: "edit-button",
-                    text: (('professions.admin.button.edit.' + profession.status) | t)
-                  })
-                }}
-              </form>
-          </li>
-          {% endif %}
-        </ul>
+        {% if profession.status !== 'archived' %}
+          <nav role="navigation" aria-labelledby="subsection-title" data-cy="actions">
+            <ul class="govuk-list">
+              {% if profession.status === 'draft' and 'publishProfession' in permissions %}
+                <li>
+                  {{
+                    govukButton({
+                      text: ('professions.form.button.publishNow' | t),
+                      classes: "govuk-button",
+                      id: "publish-button",
+                      href: "/admin/professions/" + profession.id + "/versions/" + profession.versionId + "/publish"
+                    })
+                  }}
+                </li>
+              {% endif %}
+              {% if 'editProfession' in permissions %}
+              <li>
+                  <form method="post" action="/admin/professions/{{ profession.id }}/versions">
+                    {{
+                      govukButton({
+                        id: "submit-button",
+                        type: "Submit",
+                        classes: "govuk-button--secondary",
+                        id: "edit-button",
+                        text: (('professions.admin.button.edit.' + profession.status) | t)
+                      })
+                    }}
+                  </form>
+              </li>
+              {% endif %}
+              {% if 'deleteProfession' in permissions %}
+              <li>
+                  {{
+                    govukButton({
+                      text: ("professions.admin.button.archive" | t),
+                      href: "/admin/professions/" + profession.id + "/versions/" + profession.versionId + "/archive",
+                      classes: "govuk-button--warning"
+                    })
+                  }}
+              </li>
+              {% endif %}
+            </ul>
+          </nav>
+        {% endif %}
       </aside>
     </div>
   </div>

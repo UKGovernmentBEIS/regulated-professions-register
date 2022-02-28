@@ -244,6 +244,15 @@
       "edit": {
         "draft": "Edit this draft",
         "live": "Edit this profession"
+      },
+      "archive": "Archive this profession"
+    },
+    "archive": {
+      "heading": "Are you sure you want to archive {professionName}?",
+      "caption": "Archiving a profession",
+      "confirmation": {
+        "heading": "Profession archived",
+        "body": "The profession <strong>{name}</strong> has been archived."
       }
     },
     "labels": {
@@ -311,7 +320,8 @@
     "status": {
       "heading": "Status",
       "live": "Live",
-      "draft": "Draft"
+      "draft": "Draft",
+      "archived": "Archived"
     },
     "changed": {
       "by": "Changed by",

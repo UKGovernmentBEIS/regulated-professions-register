@@ -236,6 +236,101 @@ describe('ProfessionVersionsService', () => {
     });
   });
 
+  describe('archive', () => {
+    let queryRunner: DeepMocked<QueryRunner>;
+
+    beforeEach(() => {
+      queryRunner = createMock<QueryRunner>();
+
+      jest
+        .spyOn(connection, 'createQueryRunner')
+        .mockImplementation(() => queryRunner);
+    });
+
+    it('archives the draft version', async () => {
+      const version = professionVersionFactory.build({
+        status: ProfessionVersionStatus.Draft,
+      });
+
+      const findSpy = jest.spyOn(repo, 'findOne');
+      const saveSpy = jest.spyOn(repo, 'save').mockResolvedValue(version);
+
+      const result = await service.archive(version);
+
+      expect(result.status).toBe(ProfessionVersionStatus.Archived);
+
+      expect(findSpy).toHaveBeenCalledWith({
+        profession: version.profession,
+        status: ProfessionVersionStatus.Live,
+      });
+
+      expect(saveSpy).toHaveBeenCalledWith({
+        ...version,
+        status: ProfessionVersionStatus.Archived,
+      });
+
+      expect(queryRunner.commitTransaction).toHaveBeenCalled();
+      expect(queryRunner.release).toHaveBeenCalled();
+    });
+
+    it('demotes the latest live version', async () => {
+      const liveVersion = professionVersionFactory.build({
+        status: ProfessionVersionStatus.Live,
+      });
+
+      const profession = professionFactory.build({
+        versions: [liveVersion],
+      });
+
+      const draftVersion = professionVersionFactory.build({
+        status: ProfessionVersionStatus.Draft,
+        profession,
+      });
+
+      const saveSpy = jest.spyOn(repo, 'save');
+      const findSpy = jest
+        .spyOn(repo, 'findOne')
+        .mockResolvedValue(liveVersion);
+
+      const result = await service.archive(draftVersion);
+
+      expect(result.status).toBe(ProfessionVersionStatus.Archived);
+
+      expect(findSpy).toHaveBeenCalledWith({
+        profession,
+        status: ProfessionVersionStatus.Live,
+      });
+
+      expect(saveSpy).toHaveBeenCalledWith({
+        ...liveVersion,
+        status: ProfessionVersionStatus.Draft,
+      });
+
+      expect(saveSpy).toHaveBeenCalledWith({
+        ...draftVersion,
+        status: ProfessionVersionStatus.Archived,
+      });
+
+      expect(queryRunner.commitTransaction).toHaveBeenCalled();
+      expect(queryRunner.release).toHaveBeenCalled();
+    });
+
+    it('rolls back the transaction if an error occurs', async () => {
+      const version = professionVersionFactory.build({
+        status: ProfessionVersionStatus.Draft,
+      });
+
+      jest.spyOn(repo, 'save').mockImplementation(() => {
+        throw Error;
+      });
+
+      await service.archive(version);
+
+      expect(queryRunner.rollbackTransaction).toHaveBeenCalled();
+      expect(queryRunner.commitTransaction).not.toHaveBeenCalled();
+    });
+  });
+
   describe('findWithProfession', () => {
     it('searches for a ProfessionVersion with its Profession', async () => {
       const version = professionVersionFactory.build();
@@ -319,7 +414,7 @@ describe('ProfessionVersionsService', () => {
     });
   });
 
-  describe('allDraftOrLive', () => {
+  describe('allWithLatestVersion', () => {
     it('gets all Professions and their latest draft or live version', async () => {
       const versions = professionVersionFactory.buildList(5);
       const queryBuilder = createMock<SelectQueryBuilder<ProfessionVersion>>({
@@ -334,7 +429,7 @@ describe('ProfessionVersionsService', () => {
         .spyOn(repo, 'createQueryBuilder')
         .mockImplementation(() => queryBuilder);
 
-      const result = await service.allDraftOrLive();
+      const result = await service.allWithLatestVersion();
 
       const expectedProfessions = versions.map((version) =>
         Profession.withVersion(version.profession, version),
@@ -358,7 +453,11 @@ describe('ProfessionVersionsService', () => {
       expect(queryBuilder.where).toHaveBeenCalledWith(
         'professionVersion.status IN(:...status)',
         {
-          status: [ProfessionVersionStatus.Live, ProfessionVersionStatus.Draft],
+          status: [
+            ProfessionVersionStatus.Live,
+            ProfessionVersionStatus.Draft,
+            ProfessionVersionStatus.Archived,
+          ],
         },
       );
 

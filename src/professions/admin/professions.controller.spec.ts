@@ -93,7 +93,7 @@ describe('ProfessionsController', () => {
     industriesService = createMock<IndustriesService>();
     i18nService = createMockI18nService();
 
-    professionVersionsService.allDraftOrLive.mockResolvedValue([
+    professionVersionsService.allWithLatestVersion.mockResolvedValue([
       profession1,
       profession2,
       profession3,
