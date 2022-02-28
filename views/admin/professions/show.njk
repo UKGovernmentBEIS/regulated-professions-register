@@ -28,7 +28,7 @@
         </h2>
 
         {% if profession.status !== 'archived' %}
-          <nav role="navigation" aria-labelledby="subsection-title" data-cy="actions">
+          <nav role="navigation" data-cy="actions">
             <ul class="govuk-list">
               {% if profession.status === 'draft' and 'publishProfession' in permissions %}
                 <li>
