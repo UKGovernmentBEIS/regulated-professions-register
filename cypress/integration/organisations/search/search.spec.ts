@@ -11,6 +11,11 @@ describe('Searching an organisation', () => {
   });
 
   it('I can view an unfiltered list of organisations', () => {
+    cy.translate('organisations.search.foundPlural', { count: 4 }).then(
+      (foundText) => {
+        cy.get('body').should('contain.text', foundText);
+      },
+    );
     cy.get('body').should('contain', 'Department for Education');
     cy.get('body').should('contain', 'General Medical Council');
 
