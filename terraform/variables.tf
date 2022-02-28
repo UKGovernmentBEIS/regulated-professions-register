@@ -28,11 +28,6 @@ variable "app_secret" {
   description = "App Secret"
 }
 
-variable "host_url" {
-  type        = string
-  description = "Host URL"
-}
-
 variable "docker_tag" {
   type        = string
   description = "The Docker tag to be pushed"

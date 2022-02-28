@@ -43,15 +43,14 @@ jobs:
       TF_VAR_auth0_client_secret: ${{ secrets.PROD_AUTH0_CLIENT_SECRET }}
       TF_VAR_auth0_domain: ${{ secrets.PROD_AUTH0_DOMAIN }}
       TF_VAR_auth0_redirect_url: ${{ secrets.PROD_AUTH0_REDIRECT_URL }}
-      TF_VAR_host_url: ${{ secrets.PROD_HOST_URL }}
       TF_VAR_papertrail_destination: ${{ secrets.PROD_PAPERTRAIL_DESTINATION }}
       TF_VAR_notify_template_id: ${{ secrets.PROD_NOTIFY_TEMPLATE_ID }}
       TF_VAR_notify_api_key: ${{ secrets.PROD_NOTIFY_API_KEY }}
       TF_VAR_rollbar_token: ${{ secrets.PROD_ROLLBAR_TOKEN }}
       TF_VAR_basic_auth_username: ${{ secrets.PROD_BASIC_AUTH_USERNAME }}
       TF_VAR_basic_auth_password: ${{ secrets.PROD_BASIC_AUTH_PASSWORD }}
-      TF_VAR_custom_domain: ${{ secrets.PROD_CUSTOM_DOMAIN }}
-      TF_VAR_custom_hostname: ${{ secrets.PROD_CUSTOM_HOSTNAME }}
+      TF_VAR_custom_domain: regulated-professions.beis.gov.uk
+      TF_VAR_custom_hostname: www
     steps:
       - uses: actions/checkout@v2
       - name: Deploy latest code to Production
@@ -70,15 +69,14 @@ jobs:
       TF_VAR_auth0_client_secret: ${{ secrets.STAGING_AUTH0_CLIENT_SECRET }}
       TF_VAR_auth0_domain: ${{ secrets.STAGING_AUTH0_DOMAIN }}
       TF_VAR_auth0_redirect_url: ${{ secrets.STAGING_AUTH0_REDIRECT_URL }}
-      TF_VAR_host_url: ${{ secrets.STAGING_HOST_URL }}
       TF_VAR_papertrail_destination: ${{ secrets.STAGING_PAPERTRAIL_DESTINATION }}
       TF_VAR_notify_template_id: ${{ secrets.STAGING_NOTIFY_TEMPLATE_ID }}
       TF_VAR_notify_api_key: ${{ secrets.STAGING_NOTIFY_API_KEY }}
       TF_VAR_rollbar_token: ${{ secrets.STAGING_ROLLBAR_TOKEN }}
       TF_VAR_basic_auth_username: ${{ secrets.STAGING_BASIC_AUTH_USERNAME }}
       TF_VAR_basic_auth_password: ${{ secrets.STAGING_BASIC_AUTH_PASSWORD }}
-      TF_VAR_custom_domain: ${{ secrets.STAGING_CUSTOM_DOMAIN }}
-      TF_VAR_custom_hostname: ${{ secrets.STAGING_CUSTOM_HOSTNAME }}
+      TF_VAR_custom_domain: regulated-professions.beis.gov.uk
+      TF_VAR_custom_hostname: staging
     steps:
       - uses: actions/checkout@v2
       - name: Deploy latest code to Staging
@@ -93,5 +91,5 @@ jobs:
       - name: Notifying the team of a successful deploy
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-          HEALTH_CHECK_URL: https://${{ secrets.PROD_BASIC_AUTH_USERNAME }}:${{ secrets.PROD_BASIC_AUTH_PASSWORD }}@beis-rpr-prod.london.cloudapps.digital/health-check
+          HEALTH_CHECK_URL: https://${{ secrets.PROD_BASIC_AUTH_USERNAME }}:${{ secrets.PROD_BASIC_AUTH_PASSWORD }}@www.regulated-professions.beis.gov.uk/health-check
         run: script/deploy-notification
