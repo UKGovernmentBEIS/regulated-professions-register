@@ -30,6 +30,7 @@ import { BackLink } from '../common/decorators/back-link.decorator';
 import { Response } from 'express';
 import { RequestWithAppSession } from '../common/interfaces/request-with-app-session.interface';
 import { getActingUser } from './helpers/get-acting-user.helper';
+import { CompleteTemplate } from './interfaces/complete-template';
 
 class UserAlreadyExistsError extends Error {}
 
@@ -125,7 +126,7 @@ export class UsersController {
             ...user,
             action,
             userAlreadyExists: true,
-          });
+          } as ConfirmTemplate);
         }
 
         throw err;
@@ -140,7 +141,7 @@ export class UsersController {
     res.render('admin/users/complete', {
       ...user,
       action,
-    });
+    } as CompleteTemplate);
   }
 
   @Delete('/admin/users/:id')
