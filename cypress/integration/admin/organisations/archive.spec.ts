@@ -139,6 +139,28 @@ describe('Archiving organisations', () => {
         'not.contain',
         'Council of Registered Gas Installers',
       );
+
+      cy.visit('/admin/professions');
+
+      cy.get('tr')
+        .contains('Gas Safe Engineer')
+        .then(($header) => {
+          const $row = $header.parent();
+
+          cy.translate('professions.admin.status.archived').then((status) => {
+            cy.wrap($row).should('contain', status);
+          });
+        });
+
+      cy.get('tr')
+        .contains('Draft Profession')
+        .then(($header) => {
+          const $row = $header.parent();
+
+          cy.translate('professions.admin.status.archived').then((status) => {
+            cy.wrap($row).should('contain', status);
+          });
+        });
     });
   });
 });
