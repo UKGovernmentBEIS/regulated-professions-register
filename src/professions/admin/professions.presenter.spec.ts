@@ -12,6 +12,7 @@ import { ListEntryPresenter } from './list-entry.presenter';
 import industryFactory from '../../testutils/factories/industry';
 import organisationFactory from '../../testutils/factories/organisation';
 import professionFactory from '../../testutils/factories/profession';
+import { translationOf } from '../../testutils/translation-of';
 
 const transportIndustry = industryFactory.build({
   id: 'transport',
@@ -93,16 +94,19 @@ describe('ProfessionsPresenter', () => {
       const expected: IndexTemplate = {
         view: 'overview',
         organisation: 'UK Centre for Professional Qualifications',
-        headings: await ListEntryPresenter.headings(i18nService, 'overview'),
-
-        professions: await Promise.all(
-          [profession1, profession2, profession3].map((profession) =>
-            new ListEntryPresenter(profession, i18nService).tableRow(
-              'overview',
+        professionsTable: {
+          caption: `${translationOf('professions.admin.foundPlural')}`,
+          captionClasses: 'govuk-table__caption--m',
+          firstCellIsHeader: true,
+          head: await ListEntryPresenter.headings(i18nService, 'overview'),
+          rows: await Promise.all(
+            [profession1, profession2, profession3].map((profession) =>
+              new ListEntryPresenter(profession, i18nService).tableRow(
+                'overview',
+              ),
             ),
           ),
-        ),
-
+        },
         filters: {
           keywords: 'Nuclear',
           nations: ['nations.england'],
@@ -116,7 +120,7 @@ describe('ProfessionsPresenter', () => {
           [Nation.find('GB-ENG')],
           i18nService,
         ).checkboxItems(),
-        organisationsCheckboxItems: await new OrganisationsCheckboxPresenter(
+        organisationsCheckboxItems: new OrganisationsCheckboxPresenter(
           organisations,
           [organisation1],
         ).checkboxItems(),
@@ -139,19 +143,22 @@ describe('ProfessionsPresenter', () => {
       const expected: IndexTemplate = {
         view: 'single-organisation',
         organisation: 'Example Organisation 1',
-        headings: await ListEntryPresenter.headings(
-          i18nService,
-          'single-organisation',
-        ),
-
-        professions: await Promise.all(
-          [profession1, profession2, profession3].map((profession) =>
-            new ListEntryPresenter(profession, i18nService).tableRow(
-              'single-organisation',
+        professionsTable: {
+          caption: `${translationOf('professions.admin.foundPlural')}`,
+          captionClasses: 'govuk-table__caption--m',
+          firstCellIsHeader: true,
+          head: await ListEntryPresenter.headings(
+            i18nService,
+            'single-organisation',
+          ),
+          rows: await Promise.all(
+            [profession1, profession2, profession3].map((profession) =>
+              new ListEntryPresenter(profession, i18nService).tableRow(
+                'single-organisation',
+              ),
             ),
           ),
-        ),
-
+        },
         filters: {
           keywords: 'Nuclear',
           nations: ['nations.england'],
@@ -159,13 +166,12 @@ describe('ProfessionsPresenter', () => {
           industries: ['industries.transport'],
           changedBy: [],
         },
-
         nationsCheckboxItems: await new NationsCheckboxPresenter(
           nations,
           [Nation.find('GB-ENG')],
           i18nService,
         ).checkboxItems(),
-        organisationsCheckboxItems: await new OrganisationsCheckboxPresenter(
+        organisationsCheckboxItems: new OrganisationsCheckboxPresenter(
           organisations,
           [organisation1],
         ).checkboxItems(),
@@ -178,6 +184,74 @@ describe('ProfessionsPresenter', () => {
       };
 
       expect(result).toEqual(expected);
+    });
+
+    describe('captions', () => {
+      describe('when only one profession is found', () => {
+        it('returns the singular professions found text', async () => {
+          const i18nService = createMockI18nService();
+          const industries = industryFactory.buildList(3);
+          const filterInput: FilterInput = {};
+
+          const organisation = organisationFactory.build({
+            id: 'example-organisation',
+            name: 'Example Organisation',
+          });
+
+          const organisations = [organisation, organisationFactory.build()];
+
+          const foundProfessions = professionFactory.buildList(1);
+
+          const presenter = new ProfessionsPresenter(
+            filterInput,
+            organisation,
+            Nation.all(),
+            organisations,
+            industries,
+            foundProfessions,
+            i18nService,
+          );
+
+          const result = await presenter.present('overview');
+
+          expect(result.professionsTable.caption).toEqual(
+            `${translationOf('professions.admin.foundSingular')}`,
+          );
+        });
+      });
+
+      describe('when more than one profession is found', () => {
+        it('returns the singular professions found text', async () => {
+          const i18nService = createMockI18nService();
+          const industries = industryFactory.buildList(3);
+          const filterInput: FilterInput = {};
+
+          const organisation = organisationFactory.build({
+            id: 'example-organisation',
+            name: 'Example Organisation',
+          });
+
+          const organisations = [organisation, organisationFactory.build()];
+
+          const foundProfessions = professionFactory.buildList(3);
+
+          const presenter = new ProfessionsPresenter(
+            filterInput,
+            organisation,
+            Nation.all(),
+            organisations,
+            industries,
+            foundProfessions,
+            i18nService,
+          );
+
+          const result = await presenter.present('overview');
+
+          expect(result.professionsTable.caption).toEqual(
+            `${translationOf('professions.admin.foundPlural')}`,
+          );
+        });
+      });
     });
   });
 });

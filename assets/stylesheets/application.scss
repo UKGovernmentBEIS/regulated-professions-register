@@ -78,6 +78,10 @@ $govuk-assets-path: '~govuk-frontend/govuk/assets/';
     }
   }
 
+  &__table-container {
+    overflow-x: scroll;
+  }
+
   &-listing {
     &__filter {
       background-color: govuk-colour('white');

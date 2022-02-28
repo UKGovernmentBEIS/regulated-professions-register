@@ -173,5 +173,79 @@ describe('OrganisationsPresenter', () => {
         });
       });
     });
+
+    describe('caption', () => {
+      describe('when only one organisation is found', () => {
+        it('uses the singular text for a caption', async () => {
+          mockTableRow.mockReturnValue([
+            {
+              text: 'Some text',
+            },
+          ]);
+
+          mockCheckboxItems.mockReturnValue([
+            {
+              text: 'Some text',
+              value: 'Some value',
+              checked: true,
+            },
+          ]);
+
+          const i18nService = createMockI18nService();
+          const industries = industryFactory.buildList(3);
+          const filterInput: FilterInput = {};
+
+          const foundOrganisations = organisationFactory.buildList(1);
+
+          const presenter = new OrganisationsPresenter(
+            industries,
+            filterInput,
+            foundOrganisations,
+            i18nService,
+          );
+          const result = await presenter.present();
+
+          expect(result.organisationsTable.caption).toEqual(
+            `${translationOf('organisations.admin.foundSingular')}`,
+          );
+        });
+      });
+
+      describe('when more than one profession is found', () => {
+        it('uses the plural text', async () => {
+          mockTableRow.mockReturnValue([
+            {
+              text: 'Some text',
+            },
+          ]);
+
+          mockCheckboxItems.mockReturnValue([
+            {
+              text: 'Some text',
+              value: 'Some value',
+              checked: true,
+            },
+          ]);
+
+          const i18nService = createMockI18nService();
+          const industries = industryFactory.buildList(3);
+          const filterInput: FilterInput = {};
+
+          const foundOrganisations = organisationFactory.buildList(5);
+
+          const presenter = new OrganisationsPresenter(
+            industries,
+            filterInput,
+            foundOrganisations,
+            i18nService,
+          );
+          const result = await presenter.present();
+
+          expect(result.organisationsTable.caption).toEqual(
+            `${translationOf('organisations.admin.foundPlural')}`,
+          );
+        });
+      });
+    });
   });
 });
