@@ -5,6 +5,7 @@ import { SummaryList } from '../../common/interfaces/summary-list';
 import { escape } from '../../helpers/escape.helper';
 import { formatMultilineString } from '../../helpers/format-multiline-string.helper';
 import { formatDate } from '../../common/utils';
+import { formatLink } from '../../helpers/format-link.helper';
 
 interface OrganisationSummaryListOptions {
   classes?: string;
@@ -178,9 +179,7 @@ export class OrganisationPresenter {
   }
 
   public contactUrl(): string {
-    return `<a href="${escape(
-      this.organisation.contactUrl,
-    )}" class="govuk-link">${escape(this.organisation.contactUrl)}</a>`;
+    return formatLink(this.organisation.contactUrl);
   }
 
   private async industries(): Promise<string> {

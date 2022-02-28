@@ -178,7 +178,7 @@
                   text: ("professions.form.label.registration.registrationUrl" | t)
                 },
                 value: {
-                  html: ("<a class=\"govuk-link\" href=\"" + (registrationUrl | escape) + "\">" + (registrationUrl | escape) + "</a>") if registrationUrl else ""
+                  html: registrationUrl | link
                 },
                 actions: {
                   items: [
@@ -255,7 +255,7 @@
                   text: ("professions.form.label.regulatedActivities.regulationUrl" | t)
                 },
                 value: {
-                  html: ("<a class=\"govuk-link\" href=\"" + (regulationUrl | escape) + "\">" + (regulationUrl | escape) + "</a>") if regulationUrl else ""
+                  html: regulationUrl | link
                 },
                 actions: {
                   items: [
@@ -482,7 +482,7 @@
                     html: ("professions.form.label.legislation.link" | t) + "<span class=\"govuk-visually-hidden\"> " + loop.index + "</span>"
                   },
                   value: {
-                    html: ("<a class='govuk-link' href='" + (legislation.url | escape) + "'>" + (legislation.url | escape) + "</a>") if legislation else ""
+                    html: legislation.url | link
                   },
                   actions: {
                     items: [

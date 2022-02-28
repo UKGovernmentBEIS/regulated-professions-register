@@ -77,7 +77,7 @@
         text: ("professions.show.bodies.url" | t)
       },
       value: {
-        html: ["<a class=\"govuk-link\" href=\"", (organisation.url | escape), "\">", (organisation.url | escape),  "</a>" ] | join
+        html: organisation.url | link
       }
     },
     {
@@ -123,7 +123,7 @@
             text: ("professions.show.regulatedActivities.regulationUrl" | t)
           },
           value: {
-            html: ["<a class=\"govuk-link\" href=\"", (profession.regulationUrl | escape), "\">", (profession.regulationUrl | escape),  "</a>" ] | join
+            html: profession.regulationUrl | link
           }
         }
       ]
@@ -165,7 +165,7 @@
           html: ( "professions.show.legislation.legislationLink" | t) + "<span class=\"govuk-visually-hidden\"> " + loop.index + "</span>"
         },
         value: {
-          html: ["<a class=\"govuk-link\" href=\"", (legislation.url | escape), "\">", (legislation.url | escape),  "</a>" ] | join
+          html: legislation.url | link
         }
       }
     ]
