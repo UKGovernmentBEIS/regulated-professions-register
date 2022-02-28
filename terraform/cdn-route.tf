@@ -7,6 +7,6 @@ resource "cloudfoundry_service_instance" "cdn_route" {
   space        = cloudfoundry_space.space.id
   service_plan = data.cloudfoundry_service.cdn_route.service_plans["cdn-route"]
   json_params  = <<EOF
-{"domain": "${var.custom_hostname}.${var.custom_domain}"}
+{"domain": "${var.custom_hostname}.${var.custom_domain}", "headers": ["*"]}
 EOF
 }
