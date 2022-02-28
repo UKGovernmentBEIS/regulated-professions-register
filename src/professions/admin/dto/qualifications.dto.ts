@@ -1,4 +1,9 @@
+import { Transform } from 'class-transformer';
 import { IsNotEmpty, ValidateIf, IsUrl } from 'class-validator';
+import {
+  preprocessUrl,
+  urlOptions,
+} from '../../../helpers/preprocess-url.helper';
 
 export class QualificationsDto {
   @IsNotEmpty({ message: 'professions.form.errors.qualification.level.empty' })
@@ -26,36 +31,29 @@ export class QualificationsDto {
   })
   mandatoryProfessionalExperience: string;
 
-  @IsUrl(
-    {},
-    {
-      message:
-        'professions.form.errors.qualification.moreInformationUrl.invalid',
-    },
-  )
+  @IsUrl(urlOptions, {
+    message: 'professions.form.errors.qualification.moreInformationUrl.invalid',
+  })
+  @Transform(({ value }) => preprocessUrl(value))
   @ValidateIf((e) => e.moreInformationUrl)
   moreInformationUrl: string;
 
   ukRecognition: string;
 
-  @IsUrl(
-    {},
-    {
-      message: 'professions.form.errors.qualification.ukRecognitionUrl.invalid',
-    },
-  )
+  @IsUrl(urlOptions, {
+    message: 'professions.form.errors.qualification.ukRecognitionUrl.invalid',
+  })
+  @Transform(({ value }) => preprocessUrl(value))
   @ValidateIf((e) => e.ukRecognitionUrl)
   ukRecognitionUrl: string;
 
   otherCountriesRecognition: string;
 
-  @IsUrl(
-    {},
-    {
-      message:
-        'professions.form.errors.qualification.otherCountriesRecognitionUrl.invalid',
-    },
-  )
+  @IsUrl(urlOptions, {
+    message:
+      'professions.form.errors.qualification.otherCountriesRecognitionUrl.invalid',
+  })
+  @Transform(({ value }) => preprocessUrl(value))
   @ValidateIf((e) => e.otherCountriesRecognitionUrl)
   otherCountriesRecognitionUrl: string;
 

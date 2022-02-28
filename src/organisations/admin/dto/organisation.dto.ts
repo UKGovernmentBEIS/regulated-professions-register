@@ -1,4 +1,9 @@
+import { Transform } from 'class-transformer';
 import { IsEmail, IsNotEmpty, IsUrl, ValidateIf } from 'class-validator';
+import {
+  preprocessUrl,
+  urlOptions,
+} from '../../../helpers/preprocess-url.helper';
 
 export class OrganisationDto {
   @IsNotEmpty({
@@ -18,20 +23,16 @@ export class OrganisationDto {
   @ValidateIf((e) => e.email)
   email: string;
 
-  @IsUrl(
-    {},
-    {
-      message: 'organisations.admin.form.errors.url.invalid',
-    },
-  )
+  @IsUrl(urlOptions, {
+    message: 'organisations.admin.form.errors.url.invalid',
+  })
+  @Transform(({ value }) => preprocessUrl(value))
   url: string;
 
-  @IsUrl(
-    {},
-    {
-      message: 'organisations.admin.form.errors.contactUrl.invalid',
-    },
-  )
+  @IsUrl(urlOptions, {
+    message: 'organisations.admin.form.errors.contactUrl.invalid',
+  })
+  @Transform(({ value }) => preprocessUrl(value))
   @ValidateIf((e) => e.contactUrl)
   contactUrl: string;
 
