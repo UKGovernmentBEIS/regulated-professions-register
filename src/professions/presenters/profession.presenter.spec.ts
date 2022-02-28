@@ -101,21 +101,39 @@ describe('ProfessionPresenter', () => {
   });
 
   describe('occupationLocations', () => {
-    it('should pass the locations to stringifyNations', async () => {
-      const i18nService = createMockI18nService();
+    describe('when occupationLocations is defined', () => {
+      it('should pass the locations to stringifyNations', async () => {
+        const i18nService = createMockI18nService();
 
-      profession = professionFactory.build({
-        occupationLocations: ['GB-ENG', 'GB-SCT', 'GB-WLS', 'GB-NIR'],
+        profession = professionFactory.build({
+          occupationLocations: ['GB-ENG', 'GB-SCT', 'GB-WLS', 'GB-NIR'],
+        });
+
+        const presenter = new ProfessionPresenter(profession, i18nService);
+        const nations = profession.occupationLocations.map((code) =>
+          Nation.find(code),
+        );
+
+        await presenter.occupationLocations();
+
+        expect(stringifyNations).toHaveBeenCalledWith(nations, i18nService);
       });
+    });
 
-      const presenter = new ProfessionPresenter(profession, i18nService);
-      const nations = profession.occupationLocations.map((code) =>
-        Nation.find(code),
-      );
+    describe('when occupationLocations is undefined', () => {
+      it('should pass an empty array to stringifyNations', async () => {
+        const i18nService = createMockI18nService();
 
-      await presenter.occupationLocations();
+        profession = professionFactory.build({
+          occupationLocations: undefined,
+        });
 
-      expect(stringifyNations).toHaveBeenCalledWith(nations, i18nService);
+        const presenter = new ProfessionPresenter(profession, i18nService);
+
+        await presenter.occupationLocations();
+
+        expect(stringifyNations).toHaveBeenCalledWith([], i18nService);
+      });
     });
   });
 

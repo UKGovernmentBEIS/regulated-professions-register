@@ -51,7 +51,9 @@ export class ProfessionPresenter {
 
   public async occupationLocations(): Promise<string> {
     return await stringifyNations(
-      this.profession.occupationLocations.map((code) => Nation.find(code)),
+      (this.profession.occupationLocations || []).map((code) =>
+        Nation.find(code),
+      ),
       this.i18nService,
     );
   }

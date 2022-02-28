@@ -40,12 +40,14 @@ export class ProfessionVersionsService {
     previousVersion: ProfessionVersion,
     user: User,
   ): Promise<ProfessionVersion> {
-    const newQualification = {
-      ...previousVersion.qualification,
-      id: undefined,
-      created_at: undefined,
-      updated_at: undefined,
-    } as Qualification;
+    const newQualification =
+      previousVersion.qualification &&
+      ({
+        ...previousVersion.qualification,
+        id: undefined,
+        created_at: undefined,
+        updated_at: undefined,
+      } as Qualification);
 
     const newLegislations = previousVersion.legislations.map((legislation) => {
       return {

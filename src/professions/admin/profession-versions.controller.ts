@@ -66,7 +66,7 @@ export class ProfessionVersionsController {
     );
 
     const nations = await Promise.all(
-      profession.occupationLocations.map(async (code) =>
+      (profession.occupationLocations || []).map(async (code) =>
         Nation.find(code).translatedName(this.i18nService),
       ),
     );

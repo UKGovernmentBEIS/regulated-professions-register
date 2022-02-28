@@ -7,113 +7,171 @@ import professionFactory from '../../testutils/factories/profession';
 import { translationOf } from '../../testutils/translation-of';
 import userFactory from '../../testutils/factories/user';
 import { ProfessionPresenter } from '../presenters/profession.presenter';
+import professionVersionFactory from '../../testutils/factories/profession-version';
+import { Profession } from '../profession.entity';
+import { ProfessionVersionStatus } from '../profession-version.entity';
 
 jest.mock('../presenters/profession.presenter');
 
 describe('ListEntryPresenter', () => {
   describe('tableRow', () => {
-    it('returns a table row when called with `overview`', () => {
-      const profession = professionFactory.build({
-        name: 'Example Profession',
-        id: 'profession-id',
-        occupationLocations: ['GB-SCT', 'GB-NIR'],
-        organisation: organisationFactory.build({
-          name: 'Example Organisation',
-        }),
-        industries: [
-          industryFactory.build({ name: 'industries.law' }),
-          industryFactory.build({ name: 'industries.finance' }),
-        ],
-        status: 'live',
-        changedByUser: userFactory.build({ name: 'Administrator' }),
-        lastModified: new Date('12-08-2003'),
-        versionId: 'version-id',
+    describe('when the Profession is complete', () => {
+      it('returns a table row when called with `overview`', () => {
+        const profession = professionFactory.build({
+          name: 'Example Profession',
+          id: 'profession-id',
+          occupationLocations: ['GB-SCT', 'GB-NIR'],
+          organisation: organisationFactory.build({
+            name: 'Example Organisation',
+          }),
+          industries: [
+            industryFactory.build({ name: 'industries.law' }),
+            industryFactory.build({ name: 'industries.finance' }),
+          ],
+          status: 'live',
+          changedByUser: userFactory.build({ name: 'Administrator' }),
+          lastModified: new Date('12-08-2003'),
+          versionId: 'version-id',
+        });
+
+        (ProfessionPresenter as jest.Mock).mockReturnValue({
+          changedBy: 'Administrator',
+          lastModified: '12-08-2003',
+        });
+
+        const presenter = new ListEntryPresenter(
+          profession,
+          createMockI18nService(),
+        );
+
+        const expected: TableRow = [
+          { text: 'Example Profession' },
+          {
+            text: `${translationOf('nations.scotland')}, ${translationOf(
+              'nations.northernIreland',
+            )}`,
+          },
+          { text: '12-08-2003' },
+          { text: 'Administrator' },
+          { text: 'Example Organisation' },
+          {
+            text: `${translationOf('industries.law')}, ${translationOf(
+              'industries.finance',
+            )}`,
+          },
+          { text: translationOf('professions.admin.status.live') },
+          {
+            html: `<a href="/admin/professions/profession-id/versions/version-id">${translationOf(
+              'professions.admin.viewDetails',
+            )}</a>`,
+          },
+        ];
+
+        expect(presenter.tableRow(`overview`)).resolves.toEqual(expected);
       });
 
-      (ProfessionPresenter as jest.Mock).mockReturnValue({
-        changedBy: 'Administrator',
-        lastModified: '12-08-2003',
+      it('returns a table row when called with `single-organisation`', () => {
+        const profession = professionFactory.build({
+          name: 'Example Profession',
+          id: 'profession-id',
+          occupationLocations: ['GB-SCT', 'GB-NIR'],
+          organisation: organisationFactory.build({
+            name: 'Example Organisation',
+          }),
+          industries: [
+            industryFactory.build({ name: 'industries.law' }),
+            industryFactory.build({ name: 'industries.finance' }),
+          ],
+          status: 'draft',
+          lastModified: new Date('12-08-2003'),
+          changedByUser: userFactory.build({ name: 'Editor' }),
+          versionId: 'version-id',
+        });
+
+        (ProfessionPresenter as jest.Mock).mockReturnValue({
+          changedBy: 'Editor',
+          lastModified: '12-08-2003',
+        });
+
+        const presenter = new ListEntryPresenter(
+          profession,
+          createMockI18nService(),
+        );
+
+        const expected: TableRow = [
+          { text: 'Example Profession' },
+          {
+            text: `${translationOf('nations.scotland')}, ${translationOf(
+              'nations.northernIreland',
+            )}`,
+          },
+          { text: '12-08-2003' },
+          { text: 'Editor' },
+          { text: translationOf('professions.admin.status.draft') },
+          {
+            html: `<a href="/admin/professions/profession-id/versions/version-id">${translationOf(
+              'professions.admin.viewDetails',
+            )}</a>`,
+          },
+        ];
+
+        expect(presenter.tableRow(`single-organisation`)).resolves.toEqual(
+          expected,
+        );
       });
-
-      const presenter = new ListEntryPresenter(
-        profession,
-        createMockI18nService(),
-      );
-
-      const expected: TableRow = [
-        { text: 'Example Profession' },
-        {
-          text: `${translationOf('nations.scotland')}, ${translationOf(
-            'nations.northernIreland',
-          )}`,
-        },
-        { text: '12-08-2003' },
-        { text: 'Administrator' },
-        { text: 'Example Organisation' },
-        {
-          text: `${translationOf('industries.law')}, ${translationOf(
-            'industries.finance',
-          )}`,
-        },
-        { text: translationOf('professions.admin.status.live') },
-        {
-          html: `<a href="/admin/professions/profession-id/versions/version-id">${translationOf(
-            'professions.admin.viewDetails',
-          )}</a>`,
-        },
-      ];
-
-      expect(presenter.tableRow(`overview`)).resolves.toEqual(expected);
     });
 
-    it('returns a table row when called with `single-organisation`', () => {
-      const profession = professionFactory.build({
-        name: 'Example Profession',
-        id: 'profession-id',
-        occupationLocations: ['GB-SCT', 'GB-NIR'],
-        organisation: organisationFactory.build({
-          name: 'Example Organisation',
-        }),
-        industries: [
-          industryFactory.build({ name: 'industries.law' }),
-          industryFactory.build({ name: 'industries.finance' }),
-        ],
-        status: 'draft',
-        lastModified: new Date('12-08-2003'),
-        changedByUser: userFactory.build({ name: 'Editor' }),
-        versionId: 'version-id',
+    describe('when the Profession has just been created by a service owner user', () => {
+      it('returns a mostly empty table row', () => {
+        const profession = professionFactory
+          .justCreated('profession-id')
+          .build({
+            name: 'Example Profession',
+            organisation: organisationFactory.build(),
+          });
+
+        const version = professionVersionFactory
+          .justCreated('version-id')
+          .build({
+            industries: [],
+            profession: profession,
+            status: ProfessionVersionStatus.Draft,
+          });
+
+        const professionWithVersion = Profession.withVersion(
+          profession,
+          version,
+        );
+
+        (ProfessionPresenter as jest.Mock).mockReturnValue({
+          changedBy: 'Editor',
+          lastModified: '12-08-2003',
+        });
+
+        const presenter = new ListEntryPresenter(
+          professionWithVersion,
+          createMockI18nService(),
+        );
+
+        const expected: TableRow = [
+          { text: 'Example Profession' },
+          {
+            text: '',
+          },
+          { text: '12-08-2003' },
+          { text: 'Editor' },
+          { text: translationOf('professions.admin.status.draft') },
+          {
+            html: `<a href="/admin/professions/profession-id/versions/version-id">${translationOf(
+              'professions.admin.viewDetails',
+            )}</a>`,
+          },
+        ];
+
+        expect(presenter.tableRow(`single-organisation`)).resolves.toEqual(
+          expected,
+        );
       });
-
-      (ProfessionPresenter as jest.Mock).mockReturnValue({
-        changedBy: 'Editor',
-        lastModified: '12-08-2003',
-      });
-
-      const presenter = new ListEntryPresenter(
-        profession,
-        createMockI18nService(),
-      );
-
-      const expected: TableRow = [
-        { text: 'Example Profession' },
-        {
-          text: `${translationOf('nations.scotland')}, ${translationOf(
-            'nations.northernIreland',
-          )}`,
-        },
-        { text: '12-08-2003' },
-        { text: 'Editor' },
-        { text: translationOf('professions.admin.status.draft') },
-        {
-          html: `<a href="/admin/professions/profession-id/versions/version-id">${translationOf(
-            'professions.admin.viewDetails',
-          )}</a>`,
-        },
-      ];
-
-      expect(presenter.tableRow(`single-organisation`)).resolves.toEqual(
-        expected,
-      );
     });
   });
 

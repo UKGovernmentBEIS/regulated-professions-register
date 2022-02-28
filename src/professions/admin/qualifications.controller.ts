@@ -170,7 +170,9 @@ export class QualificationsController {
       ukRecognitionUrl: qualification?.ukRecognitionUrl,
       otherCountriesRecognition: qualification?.otherCountriesRecognition,
       otherCountriesRecognitionUrl: qualification?.otherCountriesRecognitionUrl,
-      isUK: isUK(version.occupationLocations),
+      isUK: version.occupationLocations
+        ? isUK(version.occupationLocations)
+        : false,
       change,
       errors,
     };
