@@ -19,7 +19,11 @@
       {% include "../../shared/_filter-criteria.njk" %}
 
       <p class="govuk-body-m">
-        <span class="govuk-!-font-size-36 govuk-!-font-weight-bold">{{ professions.length }}</span> {{ ("professions.search.foundSingular" | t) if (professions.length === 1) else ("professions.search.foundPlural" | t) }}
+        {% if (professions.length === 1) %}
+          {{ ("professions.search.foundSingular" | t({ count: "<span class='govuk-!-font-size-36 govuk-!-font-weight-bold'>" + professions.length + "</span>" }) | safe) }}
+        {% else %}
+          {{ ("professions.search.foundPlural" | t({ count: "<span class='govuk-!-font-size-36 govuk-!-font-weight-bold'>" + professions.length + "</span>" }) | safe) }}
+        {% endif %}
       </p>
 
       <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
