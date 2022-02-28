@@ -71,7 +71,7 @@ export class UsersService {
       });
 
       if (!foundUser) {
-        await queryRunner.manager.save(user);
+        await queryRunner.manager.save(User, user);
         result = 'user-created';
       } else {
         result = 'user-exists';

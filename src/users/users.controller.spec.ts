@@ -285,6 +285,7 @@ describe('UsersController', () => {
 
         expect(res.render).toBeCalledWith('admin/users/confirm', {
           ...user,
+          action: 'new',
           userAlreadyExists: true,
         });
       });
