@@ -247,7 +247,7 @@ describe(RegistrationController, () => {
           const registrationDtoWithChangeParam = {
             mandatoryRegistration: MandatoryRegistration.Voluntary,
             registrationUrl: '',
-            change: 'true',
+            change: true,
           };
 
           await controller.update(
@@ -282,7 +282,7 @@ describe(RegistrationController, () => {
           const registrationDtoWithFalseChangeParam = {
             mandatoryRegistration: MandatoryRegistration.Voluntary,
             registrationUrl: '',
-            change: 'false',
+            change: false,
           };
 
           await controller.update(

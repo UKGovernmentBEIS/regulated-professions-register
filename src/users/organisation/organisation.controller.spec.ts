@@ -207,7 +207,7 @@ describe('OrganisationController', () => {
         const organisationDto: OrganisationDto = {
           serviceOwner: '0',
           organisation: organisation.id,
-          change: 'false',
+          change: false,
         };
 
         usersService.find.mockResolvedValue(user);
@@ -272,7 +272,7 @@ describe('OrganisationController', () => {
         const organisationDto: OrganisationDto = {
           serviceOwner: '0',
           organisation: undefined,
-          change: 'false',
+          change: false,
         };
 
         usersService.find.mockResolvedValue(user);
@@ -332,7 +332,7 @@ describe('OrganisationController', () => {
         const organisationDto: OrganisationDto = {
           serviceOwner: '1',
           organisation: undefined,
-          change: 'false',
+          change: false,
         };
 
         usersService.find.mockResolvedValue(user);

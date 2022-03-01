@@ -108,7 +108,7 @@ export class RegistrationController {
         res,
         submittedValues,
         isConfirmed(profession),
-        submittedValues.change === 'true',
+        submittedValues.change,
         errors,
       );
     }
@@ -124,7 +124,7 @@ export class RegistrationController {
 
     await this.professionVersionsService.save(updatedVersion);
 
-    if (submittedValues.change === 'true') {
+    if (submittedValues.change) {
       return res.redirect(
         `/admin/professions/${version.profession.id}/versions/${versionId}/check-your-answers`,
       );

@@ -1,5 +1,6 @@
 import { Transform } from 'class-transformer';
 import { IsNotEmpty, IsUrl, ValidateIf } from 'class-validator';
+import { parseBoolean } from '../../../helpers/parse-boolean.helper';
 import {
   preprocessUrl,
   urlOptions,
@@ -31,5 +32,6 @@ export default class LegislationDto {
   @ValidateIf((e) => e.secondLink || e.secondNationalLegislation)
   secondLink?: string;
 
-  change: string;
+  @Transform(({ value }) => parseBoolean(value))
+  change: boolean;
 }

@@ -1,4 +1,6 @@
+import { Transform } from 'class-transformer';
 import { IsNotEmpty, ValidateIf, IsIn } from 'class-validator';
+import { parseBoolean } from '../../../helpers/parse-boolean.helper';
 
 export class ScopeDto {
   @IsIn(['1', '0'], { message: 'professions.form.errors.nations.empty' })
@@ -11,5 +13,6 @@ export class ScopeDto {
   @IsNotEmpty({ message: 'professions.form.errors.industries.empty' })
   industries: string[];
 
-  change: string;
+  @Transform(({ value }) => parseBoolean(value))
+  change: boolean;
 }

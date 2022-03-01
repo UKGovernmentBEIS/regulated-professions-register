@@ -100,7 +100,7 @@ export class RegulatedActivitiesController {
         submittedValues.protectedTitles,
         submittedValues.regulationUrl,
         isConfirmed(profession),
-        submittedValues.change === 'true',
+        submittedValues.change,
         errors,
       );
     }
@@ -117,7 +117,7 @@ export class RegulatedActivitiesController {
 
     await this.professionVersionsService.save(updatedVersion);
 
-    if (submittedValues.change === 'true') {
+    if (submittedValues.change) {
       return res.redirect(
         `/admin/professions/${professionId}/versions/${versionId}/check-your-answers`,
       );

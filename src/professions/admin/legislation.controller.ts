@@ -110,7 +110,7 @@ export class LegislationController {
         updatedLegislation,
         updatedSecondLegislation,
         isConfirmed(profession),
-        submittedValues.change === 'true',
+        submittedValues.change,
         errors,
       );
     }

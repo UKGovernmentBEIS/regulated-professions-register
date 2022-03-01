@@ -88,7 +88,7 @@ describe(RegulatedActivitiesController, () => {
             reservedActivities: 'Example reserved activities',
             protectedTitles: 'Example protected titles',
             regulationUrl: 'https://example.com/regulation',
-            change: 'false',
+            change: false,
           };
 
           await controller.update(
@@ -136,7 +136,7 @@ describe(RegulatedActivitiesController, () => {
             reservedActivities: 'Example reserved activities',
             protectedTitles: 'Example protected titles',
             regulationUrl: ' example.com/regulation',
-            change: 'false',
+            change: false,
           };
 
           await controller.update(
@@ -184,7 +184,7 @@ describe(RegulatedActivitiesController, () => {
             reservedActivities: 'Example reserved activities',
             protectedTitles: 'Example protected titles',
             regulationUrl: 'https://example.com/regulation',
-            change: 'true',
+            change: true,
           };
 
           await controller.update(
@@ -232,7 +232,7 @@ describe(RegulatedActivitiesController, () => {
           reservedActivities: undefined,
           protectedTitles: undefined,
           regulationUrl: undefined,
-          change: 'false',
+          change: false,
         };
 
         await controller.update(

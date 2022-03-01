@@ -85,7 +85,7 @@ export class RoleController {
         res,
         user.serviceOwner,
         role,
-        submittedValues.change === 'true',
+        submittedValues.change,
         getActionTypeFromUser(user),
         errors,
       );

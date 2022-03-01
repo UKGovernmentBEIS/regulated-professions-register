@@ -108,7 +108,7 @@ export class OrganisationController {
         res,
         organisation,
         serviceOwner,
-        submittedValues.change === 'true',
+        submittedValues.change,
         getActionTypeFromUser(user),
         errors,
       );
@@ -122,7 +122,7 @@ export class OrganisationController {
 
     await this.usersService.save(updatedUser);
 
-    if (submittedValues.change === 'true') {
+    if (submittedValues.change) {
       return res.redirect(`/admin/users/${id}/confirm`);
     }
 

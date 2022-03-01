@@ -1,5 +1,6 @@
 import { Transform } from 'class-transformer';
 import { IsNotEmpty, ValidateIf, IsUrl } from 'class-validator';
+import { parseBoolean } from '../../../helpers/parse-boolean.helper';
 import {
   preprocessUrl,
   urlOptions,
@@ -57,5 +58,6 @@ export class QualificationsDto {
   @ValidateIf((e) => e.otherCountriesRecognitionUrl)
   otherCountriesRecognitionUrl: string;
 
+  @Transform(({ value }) => parseBoolean(value))
   change: boolean;
 }
