@@ -1,5 +1,6 @@
 import { Transform } from 'class-transformer';
 import { IsEmail, IsNotEmpty, IsUrl, ValidateIf } from 'class-validator';
+import { preprocessEmail } from '../../../helpers/preprocess-email.helper';
 import {
   preprocessUrl,
   urlOptions,
@@ -20,6 +21,7 @@ export class OrganisationDto {
       message: 'organisations.admin.form.errors.email.invalid',
     },
   )
+  @Transform(({ value }) => preprocessEmail(value))
   @ValidateIf((e) => e.email)
   email: string;
 
