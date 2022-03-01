@@ -83,12 +83,33 @@ describe('PersonalDetailsController', () => {
       res = createMock<Response>();
     });
 
-    it('should redirect to role and update the user the email address is not already in use and the body is populated', async () => {
+    it('should redirect to role and update the user the email address if not already in use and the body is populated', async () => {
       usersService.findByEmail.mockImplementationOnce(() => {
         return null;
       });
 
       await controller.update({ name: name, email: email }, res, 'user-uuid');
+
+      expect(usersService.save).toHaveBeenCalledWith({
+        id: 'user-uuid',
+        name: name,
+        email: email,
+      });
+      expect(res.redirect).toHaveBeenCalledWith(
+        `/admin/users/user-uuid/role/edit`,
+      );
+    });
+
+    it('should correct a mis-formatted email address before saving', async () => {
+      usersService.findByEmail.mockImplementationOnce(() => {
+        return null;
+      });
+
+      await controller.update(
+        { name: name, email: ` ${email}  ` },
+        res,
+        'user-uuid',
+      );
 
       expect(usersService.save).toHaveBeenCalledWith({
         id: 'user-uuid',
