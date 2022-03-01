@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { createMock, DeepMocked } from '@golevelup/ts-jest';
-import { Response, Request } from 'express';
+import { Response } from 'express';
 import { I18nService } from 'nestjs-i18n';
 
 import { UsersService } from './users.service';
@@ -10,10 +10,8 @@ import { UsersPresenter } from './presenters/users.presenter';
 import { UserMailer } from './user.mailer';
 
 import userFactory from '../testutils/factories/user';
-import { translationOf } from '../testutils/translation-of';
 import { createMockI18nService } from '../testutils/create-mock-i18n-service';
 import { TableRow } from '../common/interfaces/table-row';
-import { flashMessage } from '../common/flash-message';
 import { getActionTypeFromUser } from './helpers/get-action-type-from-user';
 
 import organisationFactory from '../testutils/factories/organisation';
@@ -33,12 +31,9 @@ describe('UsersController', () => {
   let auth0Service: DeepMocked<Auth0Service>;
   let usersService: DeepMocked<UsersService>;
   let userMailer: DeepMocked<UserMailer>;
-  let request: DeepMocked<Request>;
 
   beforeEach(async () => {
     const i18nService = createMockI18nService();
-
-    request = createDefaultMockRequest();
 
     auth0Service = createMock<Auth0Service>();
     userMailer = createMock<UserMailer>();
@@ -353,43 +348,6 @@ describe('UsersController', () => {
           action: 'edit',
         });
       });
-    });
-  });
-
-  describe('delete', () => {
-    it('should delete a user', async () => {
-      const flashMock = flashMessage as jest.Mock;
-
-      flashMock.mockImplementation(() => 'Stub Deletion Message');
-
-      const user = userFactory.build();
-
-      auth0Service.deleteUser.mockReturnValue({
-        performNow: async () => {
-          return null;
-        },
-        performLater: async () => {
-          return null;
-        },
-      });
-      usersService.find.mockResolvedValue(user);
-
-      await controller.delete(request, 'some-uuid');
-
-      expect(flashMock).toHaveBeenCalledWith(
-        translationOf('users.form.delete.successMessage'),
-      );
-
-      expect(request.flash).toHaveBeenCalledWith(
-        'success',
-        'Stub Deletion Message',
-      );
-
-      expect(auth0Service.deleteUser).toHaveBeenCalledWith(
-        user.externalIdentifier,
-      );
-
-      expect(usersService.delete).toHaveBeenCalledWith('some-uuid');
     });
   });
 

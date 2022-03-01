@@ -18,12 +18,14 @@ export class UsersService {
   }
 
   allConfirmed(): Promise<User[]> {
-    return this.repository.find({ where: { confirmed: true } });
+    return this.repository.find({
+      where: { confirmed: true, archived: false },
+    });
   }
 
   allConfirmedForOrganisation(organisation: Organisation): Promise<User[]> {
     return this.repository.find({
-      where: { confirmed: true, organisation },
+      where: { confirmed: true, archived: false, organisation },
     });
   }
 

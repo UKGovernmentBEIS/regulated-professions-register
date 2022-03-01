@@ -18,17 +18,13 @@
         <ul class="govuk-list">
           {% if 'deleteUser' in permissions %}
             <li>
-              <form action="{{ "/admin/users/" + id }}?_method=DELETE" method="post" data-confirm data-confirm-message="{{ ("users.form.delete.confirmMessage" | t) }}">
-                <input type="hidden" name="_method" value="DELETE" />
-                {{
-                  govukButton({
-                    id: "submit-button",
-                    type: "Submit",
-                    classes: "govuk-button--warning",
-                    text: ("users.form.button.delete" | t)
-                  })
-                }}
-              </form>
+              {{
+                govukButton({
+                  href: '/admin/users/' + id + '/archive',
+                  classes: "govuk-button--warning",
+                  text: ("users.form.button.archive" | t)
+                })
+              }}
             </li>
           {% endif %}
         </ul>

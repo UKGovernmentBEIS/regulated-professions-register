@@ -74,7 +74,9 @@ describe('UsersService', () => {
       const posts = await service.allConfirmed();
 
       expect(posts).toEqual(userArray);
-      expect(repoSpy).toHaveBeenCalledWith({ where: { confirmed: true } });
+      expect(repoSpy).toHaveBeenCalledWith({
+        where: { confirmed: true, archived: false },
+      });
     });
   });
 
@@ -87,7 +89,7 @@ describe('UsersService', () => {
 
       expect(posts).toEqual(userArray);
       expect(repoSpy).toHaveBeenCalledWith({
-        where: { confirmed: true, organisation },
+        where: { confirmed: true, archived: false, organisation },
       });
     });
   });

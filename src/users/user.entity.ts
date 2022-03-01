@@ -55,6 +55,9 @@ export class User {
   @Column({ default: false })
   confirmed: boolean;
 
+  @Column({ default: false })
+  archived: boolean;
+
   @OneToMany(
     () => OrganisationVersion,
     (organisationVersion) => organisationVersion.user,
