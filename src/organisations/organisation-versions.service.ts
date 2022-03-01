@@ -85,17 +85,18 @@ export class OrganisationVersionsService {
   async allWithLatestVersion(): Promise<Organisation[]> {
     const versions = await this.versionsWithJoins()
       .distinctOn(['organisationVersion.organisation', 'professions.id'])
-      .where('organisationVersion.status IN(:...status)', {
-        status: [
-          OrganisationVersionStatus.Live,
-          OrganisationVersionStatus.Draft,
-          OrganisationVersionStatus.Archived,
-        ],
-      })
       .where(
-        'professionVersions.status IN(:...status) OR professionVersions.status IS NULL',
+        '(organisationVersion.status IN(:...organisationStatus)) AND (professionVersions.status IN(:...professionStatus) OR professionVersions.status IS NULL)',
         {
-          status: [ProfessionVersionStatus.Live, ProfessionVersionStatus.Draft],
+          organisationStatus: [
+            OrganisationVersionStatus.Live,
+            OrganisationVersionStatus.Draft,
+            OrganisationVersionStatus.Archived,
+          ],
+          professionStatus: [
+            ProfessionVersionStatus.Live,
+            ProfessionVersionStatus.Draft,
+          ],
         },
       )
       .orderBy(

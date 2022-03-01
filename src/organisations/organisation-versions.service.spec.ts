@@ -288,20 +288,17 @@ describe('OrganisationVersionsService', () => {
       ]);
 
       expect(queryBuilder.where).toHaveBeenCalledWith(
-        'organisationVersion.status IN(:...status)',
+        '(organisationVersion.status IN(:...organisationStatus)) AND (professionVersions.status IN(:...professionStatus) OR professionVersions.status IS NULL)',
         {
-          status: [
+          organisationStatus: [
             OrganisationVersionStatus.Live,
             OrganisationVersionStatus.Draft,
             OrganisationVersionStatus.Archived,
           ],
-        },
-      );
-
-      expect(queryBuilder.where).toHaveBeenCalledWith(
-        'professionVersions.status IN(:...status) OR professionVersions.status IS NULL',
-        {
-          status: [ProfessionVersionStatus.Live, ProfessionVersionStatus.Draft],
+          professionStatus: [
+            ProfessionVersionStatus.Live,
+            ProfessionVersionStatus.Draft,
+          ],
         },
       );
 
