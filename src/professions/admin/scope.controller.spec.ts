@@ -373,7 +373,7 @@ describe('ScopeController', () => {
             coversUK: '0',
             nations: ['GB-ENG'],
             industries: ['construction-uuid'],
-            change: 'true',
+            change: true,
           };
 
           industriesService.findByIds.mockResolvedValue([industry]);

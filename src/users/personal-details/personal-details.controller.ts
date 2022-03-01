@@ -69,8 +69,7 @@ export class PersonalDetailsController {
       PersonalDetailsDto,
       personalDetailsDto,
     );
-
-    const submittedValues: PersonalDetailsDto = personalDetailsDto;
+    const submittedValues = validator.obj;
 
     const user = await this.usersService.find(id);
     const action = getActionTypeFromUser(user);
@@ -103,7 +102,7 @@ export class PersonalDetailsController {
 
     await this.usersService.save(updatedUser);
 
-    if (submittedValues.change === 'true') {
+    if (submittedValues.change) {
       res.redirect(`/admin/users/${id}/confirm`);
     } else {
       res.redirect(`/admin/users/${id}/role/edit`);
@@ -129,7 +128,7 @@ function getBackLink(
   request: RequestWithAppSession,
   values: Record<string, any>,
 ): string {
-  const change = values.change === 'true';
+  const change = values.change;
   const serviceOwner = getActingUser(request).serviceOwner;
 
   if (change) {

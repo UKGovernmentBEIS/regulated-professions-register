@@ -41,7 +41,6 @@ export class LegislationController {
   async edit(
     @Res() res: Response,
     @Param('professionId') professionId: string,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     @Param('versionId') versionId: string,
     @Query('change') change: string,
   ): Promise<void> {
@@ -77,6 +76,7 @@ export class LegislationController {
     @Body() legislationDto,
   ): Promise<void> {
     const validator = await Validator.validate(LegislationDto, legislationDto);
+    const submittedValues = validator.obj;
 
     const profession = await this.professionsService.findWithVersions(
       professionId,
@@ -85,8 +85,6 @@ export class LegislationController {
     const version = await this.professionVersionsService.findWithProfession(
       versionId,
     );
-
-    const submittedValues: LegislationDto = legislationDto;
 
     const updatedLegislation: Legislation = {
       ...version.legislations[0],
@@ -112,7 +110,7 @@ export class LegislationController {
         updatedLegislation,
         updatedSecondLegislation,
         isConfirmed(profession),
-        submittedValues.change === 'true',
+        submittedValues.change,
         errors,
       );
     }

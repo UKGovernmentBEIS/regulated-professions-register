@@ -1,4 +1,6 @@
+import { Transform } from 'class-transformer';
 import { IsEnum, IsNotEmpty } from 'class-validator';
+import { parseBoolean } from '../../../helpers/parse-boolean.helper';
 import { Role } from '../../role';
 
 export class RoleDto {
@@ -8,5 +10,6 @@ export class RoleDto {
   @IsEnum(Role)
   role: Role;
 
-  change: string;
+  @Transform(({ value }) => parseBoolean(value))
+  change: boolean;
 }

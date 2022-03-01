@@ -42,7 +42,7 @@ export class RegulatedActivitiesController {
     @Res() res: Response,
     @Param('professionId') professionId: string,
     @Param('versionId') versionId: string,
-    @Query('change') change: boolean,
+    @Query('change') change: string,
   ): Promise<void> {
     const profession = await this.professionsService.findWithVersions(
       professionId,
@@ -59,7 +59,7 @@ export class RegulatedActivitiesController {
       version.protectedTitles,
       version.regulationUrl,
       isConfirmed(profession),
-      change,
+      change === 'true',
     );
   }
 
@@ -80,6 +80,7 @@ export class RegulatedActivitiesController {
       RegulatedActivitiesDto,
       regulatedActivitiesDto,
     );
+    const submittedValues = validator.obj;
 
     const profession = await this.professionsService.findWithVersions(
       professionId,
@@ -88,8 +89,6 @@ export class RegulatedActivitiesController {
     const version = await this.professionVersionsService.findWithProfession(
       versionId,
     );
-
-    const submittedValues: RegulatedActivitiesDto = regulatedActivitiesDto;
 
     if (!validator.valid()) {
       const errors = new ValidationFailedError(validator.errors).fullMessages();

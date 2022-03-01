@@ -1,6 +1,7 @@
 import { escapeOf } from '../testutils/escape-of';
 import { escape } from './escape.helper';
 import { formatMultilineString } from './format-multiline-string.helper';
+
 jest.mock('./escape.helper');
 
 describe('formatMultilineString', () => {

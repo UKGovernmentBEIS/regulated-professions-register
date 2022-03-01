@@ -75,8 +75,7 @@ export class RoleController {
     const user = await this.usersService.find(id);
 
     const validator = await Validator.validate(RoleDto, permissionsDto);
-
-    const submittedValues: RoleDto = permissionsDto;
+    const submittedValues = validator.obj;
 
     const role = submittedValues.role;
 
@@ -86,7 +85,7 @@ export class RoleController {
         res,
         user.serviceOwner,
         role,
-        submittedValues.change === 'true',
+        submittedValues.change,
         getActionTypeFromUser(user),
         errors,
       );

@@ -156,7 +156,7 @@ describe(QualificationsController, () => {
             routesToObtain: 'General secondary education',
             mostCommonRouteToObtain: 'General secondary education',
             duration: '3.0 Years',
-            moreInformationUrl: 'www.example.com/more-info',
+            moreInformationUrl: 'http://www.example.com/more-info',
             mandatoryProfessionalExperience: '1',
             ukRecognition: 'ukRecognition',
             ukRecognitionUrl: 'http://example.com/uk',
@@ -179,7 +179,7 @@ describe(QualificationsController, () => {
                 mostCommonRouteToObtain: 'General secondary education',
                 educationDuration: '3.0 Years',
                 level: 'Qualification level',
-                url: 'www.example.com/more-info',
+                url: 'http://www.example.com/more-info',
                 mandatoryProfessionalExperience: true,
                 ukRecognition: 'ukRecognition',
                 ukRecognitionUrl: 'http://example.com/uk',
@@ -210,7 +210,7 @@ describe(QualificationsController, () => {
             routesToObtain: 'General secondary education',
             mostCommonRouteToObtain: 'General secondary education',
             duration: '3.0 Years',
-            moreInformationUrl: 'www.example.com/more-info',
+            moreInformationUrl: 'http://www.example.com/more-info',
             mandatoryProfessionalExperience: '1',
             ukRecognition: 'ukRecognition',
             ukRecognitionUrl: 'http://example.com/uk',
@@ -233,7 +233,7 @@ describe(QualificationsController, () => {
                 mostCommonRouteToObtain: 'General secondary education',
                 educationDuration: '3.0 Years',
                 level: 'Qualification level',
-                url: 'www.example.com/more-info',
+                url: 'http://www.example.com/more-info',
                 mandatoryProfessionalExperience: true,
                 ukRecognition: 'ukRecognition',
                 ukRecognitionUrl: 'http://example.com/uk',
@@ -247,6 +247,58 @@ describe(QualificationsController, () => {
             '/admin/professions/profession-id/versions/version-id/check-your-answers',
           );
         });
+      });
+    });
+
+    describe('when provided URLs are mis-formatted', () => {
+      it('correctly formats the URLs before saving', async () => {
+        const profession = professionFactory.build({ id: 'profession-id' });
+
+        const version = professionVersionFactory.build({
+          id: 'version-id',
+          profession: profession,
+          qualification: qualificationFactory.build(),
+        });
+
+        const dto: QualificationsDto = {
+          level: 'Qualification level',
+          routesToObtain: 'General secondary education',
+          mostCommonRouteToObtain: 'General secondary education',
+          duration: '3.0 Years',
+          moreInformationUrl: 'www.example.com/more-info ',
+          mandatoryProfessionalExperience: '1',
+          ukRecognition: 'ukRecognition',
+          ukRecognitionUrl: 'example.com/uk',
+          otherCountriesRecognition: 'otherCountriesRecognition',
+          otherCountriesRecognitionUrl: '\nhttp://example.com/other',
+          change: true,
+        };
+
+        professionsService.findWithVersions.mockResolvedValue(profession);
+        professionVersionsService.findWithProfession.mockResolvedValue(version);
+
+        await controller.update(response, 'profession-id', 'version-id', dto);
+
+        expect(professionVersionsService.save).toHaveBeenCalledWith(
+          expect.objectContaining({
+            qualification: expect.objectContaining({
+              routesToObtain: 'General secondary education',
+              mostCommonRouteToObtain: 'General secondary education',
+              educationDuration: '3.0 Years',
+              level: 'Qualification level',
+              url: 'http://www.example.com/more-info',
+              mandatoryProfessionalExperience: true,
+              ukRecognition: 'ukRecognition',
+              ukRecognitionUrl: 'http://example.com/uk',
+              otherCountriesRecognition: 'otherCountriesRecognition',
+              otherCountriesRecognitionUrl: 'http://example.com/other',
+            }),
+          }),
+        );
+
+        expect(response.redirect).toHaveBeenCalledWith(
+          '/admin/professions/profession-id/versions/version-id/check-your-answers',
+        );
       });
     });
 

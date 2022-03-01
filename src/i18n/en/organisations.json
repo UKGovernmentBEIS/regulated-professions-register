@@ -95,7 +95,7 @@
       },
       "errors": {
         "name": {
-          "empty": "Enter the name of the regulated profession"
+          "empty": "Enter the name of the regulatory authority"
         },
         "email": {
           "invalid": "Please enter a valid email address"

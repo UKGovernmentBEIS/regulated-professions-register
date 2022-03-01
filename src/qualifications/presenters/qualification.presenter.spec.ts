@@ -4,8 +4,11 @@ import { formatMultilineString } from '../../helpers/format-multiline-string.hel
 import { multilineOf } from '../../testutils/multiline-of';
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 import { translationOf } from '../../testutils/translation-of';
+import { formatLink } from '../../helpers/format-link.helper';
+import { linkOf } from '../../testutils/link-of';
 
 jest.mock('../../helpers/format-multiline-string.helper');
+jest.mock('../../helpers/format-link.helper');
 
 describe(QualificationPresenter, () => {
   describe('when the Qualification is defined', () => {
@@ -97,101 +100,59 @@ describe(QualificationPresenter, () => {
     });
 
     describe('moreInformationUrl', () => {
-      describe('when a blank string is provided', () => {
-        it('returns null', () => {
-          const qualification = qualificationFactory.build({
-            url: '',
-          });
+      it('returns a link', () => {
+        (formatLink as jest.Mock).mockImplementation(linkOf);
 
-          const presenter = new QualificationPresenter(
-            qualification,
-            createMockI18nService(),
-          );
-
-          expect(presenter.moreInformationUrl).toEqual(null);
+        const qualification = qualificationFactory.build({
+          url: 'http://example.com',
         });
-      });
-      describe('when a URL is provided', () => {
-        it('returns a link', () => {
-          const qualification = qualificationFactory.build({
-            url: 'http://example.com',
-          });
 
-          const presenter = new QualificationPresenter(
-            qualification,
-            createMockI18nService(),
-          );
+        const presenter = new QualificationPresenter(
+          qualification,
+          createMockI18nService(),
+        );
 
-          expect(presenter.moreInformationUrl).toEqual(
-            '<a class="govuk-link" href="http://example.com">http://example.com</a>',
-          );
-        });
+        expect(presenter.moreInformationUrl).toEqual(
+          linkOf('http://example.com'),
+        );
       });
     });
 
     describe('ukRecognitionUrl', () => {
-      describe('when a blank string is provided', () => {
-        it('returns null', () => {
-          const qualification = qualificationFactory.build({
-            ukRecognitionUrl: '',
-          });
+      it('returns a link', () => {
+        (formatLink as jest.Mock).mockImplementation(linkOf);
 
-          const presenter = new QualificationPresenter(
-            qualification,
-            createMockI18nService(),
-          );
-
-          expect(presenter.ukRecognitionUrl).toEqual(null);
+        const qualification = qualificationFactory.build({
+          ukRecognitionUrl: 'http://example.com',
         });
-      });
-      describe('when a URL is provided', () => {
-        it('returns a link', () => {
-          const qualification = qualificationFactory.build({
-            ukRecognitionUrl: 'http://example.com',
-          });
 
-          const presenter = new QualificationPresenter(
-            qualification,
-            createMockI18nService(),
-          );
+        const presenter = new QualificationPresenter(
+          qualification,
+          createMockI18nService(),
+        );
 
-          expect(presenter.ukRecognitionUrl).toEqual(
-            '<a class="govuk-link" href="http://example.com">http://example.com</a>',
-          );
-        });
+        expect(presenter.ukRecognitionUrl).toEqual(
+          linkOf('http://example.com'),
+        );
       });
     });
 
     describe('otherCountriesRecognitionUrl', () => {
-      describe('when a blank string is provided', () => {
-        it('returns null', () => {
-          const qualification = qualificationFactory.build({
-            otherCountriesRecognitionUrl: '',
-          });
+      it('returns a link', () => {
+        (formatLink as jest.Mock).mockImplementation(linkOf);
 
-          const presenter = new QualificationPresenter(
-            qualification,
-            createMockI18nService(),
-          );
-
-          expect(presenter.otherCountriesRecognitionUrl).toEqual(null);
+        const qualification = qualificationFactory.build({
+          otherCountriesRecognitionUrl: 'http://example.com',
         });
-      });
-      describe('when a URL is provided', () => {
-        it('returns a link', () => {
-          const qualification = qualificationFactory.build({
-            otherCountriesRecognitionUrl: 'http://example.com',
-          });
 
-          const presenter = new QualificationPresenter(
-            qualification,
-            createMockI18nService(),
-          );
+        const presenter = new QualificationPresenter(
+          qualification,
+          createMockI18nService(),
+        );
 
-          expect(presenter.otherCountriesRecognitionUrl).toEqual(
-            '<a class="govuk-link" href="http://example.com">http://example.com</a>',
-          );
-        });
+        expect(presenter.otherCountriesRecognitionUrl).toEqual(
+          linkOf('http://example.com'),
+        );
       });
     });
 
@@ -274,6 +235,7 @@ describe(QualificationPresenter, () => {
   describe('when the Qualification is undefined', () => {
     it('presents empty values', () => {
       (formatMultilineString as jest.Mock).mockImplementation(multilineOf);
+      (formatLink as jest.Mock).mockImplementation(linkOf);
 
       expect(
         new QualificationPresenter(undefined, createMockI18nService()),
@@ -281,14 +243,14 @@ describe(QualificationPresenter, () => {
         expect.objectContaining({
           duration: undefined,
           level: undefined,
-          moreInformationUrl: null,
+          moreInformationUrl: linkOf(undefined),
           mostCommonRouteToObtain: multilineOf(undefined),
           otherCountriesRecognition: undefined,
-          otherCountriesRecognitionUrl: null,
+          otherCountriesRecognitionUrl: linkOf(undefined),
           qualification: undefined,
           routesToObtain: multilineOf(undefined),
           ukRecognition: undefined,
-          ukRecognitionUrl: null,
+          ukRecognitionUrl: linkOf(undefined),
         }),
       );
     });

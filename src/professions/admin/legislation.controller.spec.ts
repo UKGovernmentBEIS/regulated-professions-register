@@ -40,7 +40,7 @@ describe(LegislationController, () => {
       it('renders the Legislation page, passing in any values on the Profession that have already been set', async () => {
         const legislation = legislationFactory.build({
           name: 'Legal Services Act 2007',
-          url: 'www.example.com',
+          url: 'http://www.example.com',
         });
         const profession = professionFactory.build({
           id: 'profession-id',
@@ -69,12 +69,12 @@ describe(LegislationController, () => {
       it('renders the Legislation page, passing in any values on the Profession that have already been set', async () => {
         const legislation1 = legislationFactory.build({
           name: 'Legal Services Act 2007',
-          url: 'www.example.com',
+          url: 'http://www.example.com',
         });
 
         const legislation2 = legislationFactory.build({
           name: 'Another Legal Services Act 2007',
-          url: 'www.another-example.com',
+          url: 'http://www.another-example.com',
         });
 
         const profession = professionFactory.build({
@@ -114,7 +114,7 @@ describe(LegislationController, () => {
         const dto: LegislationDto = {
           link: 'www.legal-legislation.com',
           nationalLegislation: 'Legal Services Act 2008',
-          change: 'false',
+          change: false,
         };
 
         professionsService.findWithVersions.mockResolvedValue(profession);
@@ -126,7 +126,7 @@ describe(LegislationController, () => {
           expect.objectContaining({
             legislations: [
               expect.objectContaining({
-                url: 'www.legal-legislation.com',
+                url: 'http://www.legal-legislation.com',
                 name: 'Legal Services Act 2008',
               }),
             ],
@@ -149,11 +149,11 @@ describe(LegislationController, () => {
         });
 
         const dto: LegislationDto = {
-          link: 'www.legal-legislation.com',
+          link: 'http://www.legal-legislation.com',
           nationalLegislation: 'Legal Services Act 2008',
-          secondLink: 'www.another-legal-legislation.com',
+          secondLink: 'http://www.another-legal-legislation.com',
           secondNationalLegislation: 'Another Legal Services Act 2008',
-          change: 'false',
+          change: false,
         };
 
         professionsService.findWithVersions.mockResolvedValue(profession);
@@ -165,11 +165,54 @@ describe(LegislationController, () => {
           expect.objectContaining({
             legislations: [
               expect.objectContaining({
-                url: 'www.legal-legislation.com',
+                url: 'http://www.legal-legislation.com',
                 name: 'Legal Services Act 2008',
               }),
               expect.objectContaining({
-                url: 'www.another-legal-legislation.com',
+                url: 'http://www.another-legal-legislation.com',
+                name: 'Another Legal Services Act 2008',
+              }),
+            ],
+            profession: profession,
+          }),
+        );
+
+        expect(response.redirect).toHaveBeenCalledWith(
+          '/admin/professions/profession-id/versions/version-id/check-your-answers',
+        );
+      });
+    });
+
+    describe('when provided URLs are mis-formatted', () => {
+      it('correctly formats the URLs before saving', async () => {
+        const profession = professionFactory.build({ id: 'profession-id' });
+        const version = professionVersionFactory.build({
+          id: 'version-id',
+          profession: profession,
+        });
+
+        const dto: LegislationDto = {
+          link: 'www.legal-legislation.com',
+          nationalLegislation: 'Legal Services Act 2008',
+          secondLink: 'www.another-legal-legislation.com   ',
+          secondNationalLegislation: 'Another Legal Services Act 2008',
+          change: false,
+        };
+
+        professionsService.findWithVersions.mockResolvedValue(profession);
+        professionVersionsService.findWithProfession.mockResolvedValue(version);
+
+        await controller.update(response, 'profession-id', 'version-id', dto);
+
+        expect(professionVersionsService.save).toHaveBeenCalledWith(
+          expect.objectContaining({
+            legislations: [
+              expect.objectContaining({
+                url: 'http://www.legal-legislation.com',
+                name: 'Legal Services Act 2008',
+              }),
+              expect.objectContaining({
+                url: 'http://www.another-legal-legislation.com',
                 name: 'Another Legal Services Act 2008',
               }),
             ],
@@ -194,7 +237,7 @@ describe(LegislationController, () => {
         const dto: LegislationDto = {
           link: undefined,
           nationalLegislation: undefined,
-          change: 'false',
+          change: false,
         };
 
         professionsService.findWithVersions.mockResolvedValue(profession);

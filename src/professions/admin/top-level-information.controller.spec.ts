@@ -210,7 +210,7 @@ describe('TopLevelInformationController', () => {
           const topLevelDetailsDtoWithChangeParam = {
             name: 'A new profession',
             regulatoryBody: 'example-org-id',
-            change: 'true',
+            change: true,
           };
 
           const organisation = organisationFactory.build();

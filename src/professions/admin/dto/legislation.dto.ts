@@ -1,4 +1,10 @@
+import { Transform } from 'class-transformer';
 import { IsNotEmpty, IsUrl, ValidateIf } from 'class-validator';
+import { parseBoolean } from '../../../helpers/parse-boolean.helper';
+import {
+  preprocessUrl,
+  urlOptions,
+} from '../../../helpers/preprocess-url.helper';
 
 export default class LegislationDto {
   @IsNotEmpty({
@@ -6,12 +12,10 @@ export default class LegislationDto {
   })
   nationalLegislation: string;
 
-  @IsUrl(
-    {},
-    {
-      message: 'professions.form.errors.legislation.link.invalid',
-    },
-  )
+  @IsUrl(urlOptions, {
+    message: 'professions.form.errors.legislation.link.invalid',
+  })
+  @Transform(({ value }) => preprocessUrl(value))
   link: string;
 
   @IsNotEmpty({
@@ -21,14 +25,13 @@ export default class LegislationDto {
   @ValidateIf((e) => e.secondLink || e.secondNationalLegislation)
   secondNationalLegislation?: string;
 
-  @IsUrl(
-    {},
-    {
-      message: 'professions.form.errors.legislation.secondLink.invalid',
-    },
-  )
+  @IsUrl(urlOptions, {
+    message: 'professions.form.errors.legislation.secondLink.invalid',
+  })
+  @Transform(({ value }) => preprocessUrl(value))
   @ValidateIf((e) => e.secondLink || e.secondNationalLegislation)
   secondLink?: string;
 
-  change: string;
+  @Transform(({ value }) => parseBoolean(value))
+  change: boolean;
 }

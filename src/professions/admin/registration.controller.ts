@@ -55,7 +55,7 @@ export class RegistrationController {
     @Res() res: Response,
     @Param('professionId') professionId: string,
     @Param('versionId') versionId: string,
-    @Query('change') change: boolean,
+    @Query('change') change: string,
   ): Promise<void> {
     const profession = await this.professionsService.findWithVersions(
       professionId,
@@ -65,7 +65,12 @@ export class RegistrationController {
       versionId,
     );
 
-    return this.renderForm(res, version, isConfirmed(profession), change);
+    return this.renderForm(
+      res,
+      version,
+      isConfirmed(profession),
+      change === 'true',
+    );
   }
 
   @Post('/:professionId/versions/:versionId/registration')
@@ -85,12 +90,12 @@ export class RegistrationController {
       RegistrationDto,
       registrationDto,
     );
+    const submittedValues = validator.obj;
 
     const version = await this.professionVersionsService.findWithProfession(
       versionId,
     );
 
-    const submittedValues: RegistrationDto = registrationDto;
     const selectedMandatoryRegistration = submittedValues.mandatoryRegistration;
 
     const profession = await this.professionsService.findWithVersions(
@@ -103,7 +108,7 @@ export class RegistrationController {
         res,
         submittedValues,
         isConfirmed(profession),
-        registrationDto.change,
+        submittedValues.change,
         errors,
       );
     }
@@ -111,15 +116,15 @@ export class RegistrationController {
     const updatedVersion: ProfessionVersion = {
       ...version,
       ...{
-        registrationRequirements: registrationDto.registrationRequirements,
-        registrationUrl: registrationDto.registrationUrl,
+        registrationRequirements: submittedValues.registrationRequirements,
+        registrationUrl: submittedValues.registrationUrl,
         mandatoryRegistration: selectedMandatoryRegistration,
       },
     };
 
     await this.professionVersionsService.save(updatedVersion);
 
-    if (registrationDto.change) {
+    if (submittedValues.change) {
       return res.redirect(
         `/admin/professions/${version.profession.id}/versions/${versionId}/check-your-answers`,
       );

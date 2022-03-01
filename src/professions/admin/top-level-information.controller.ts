@@ -79,8 +79,7 @@ export class TopLevelInformationController {
       TopLevelDetailsDto,
       topLevelDetailsDto,
     );
-
-    const submittedValues: TopLevelDetailsDto = topLevelDetailsDto;
+    const submittedValues = validator.obj;
 
     const selectedOrganisation = submittedValues.regulatoryBody
       ? await this.organisationsService.find(submittedValues.regulatoryBody)
@@ -105,7 +104,7 @@ export class TopLevelInformationController {
         selectedOrganisation,
         selectedAdditionalOrganisation,
         isConfirmed(profession),
-        submittedValues.change === 'true',
+        submittedValues.change,
         errors,
       );
     }
@@ -121,7 +120,7 @@ export class TopLevelInformationController {
 
     await this.professionsService.save(updatedProfession);
 
-    if (submittedValues.change === 'true') {
+    if (submittedValues.change) {
       return res.redirect(
         `/admin/professions/${professionId}/versions/${versionId}/check-your-answers`,
       );

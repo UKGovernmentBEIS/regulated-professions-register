@@ -16,10 +16,13 @@ import { multilineOf } from '../../testutils/multiline-of';
 import userFactory from '../../testutils/factories/user';
 import { formatDate } from '../../common/utils';
 import { translationOf } from '../../testutils/translation-of';
+import { formatLink } from '../../helpers/format-link.helper';
+import { linkOf } from '../../testutils/link-of';
 
 jest.mock('../../helpers/escape.helper');
 jest.mock('../../helpers/format-multiline-string.helper');
 jest.mock('../../common/utils');
+jest.mock('../../helpers/format-link.helper');
 
 describe('OrganisationPresenter', () => {
   let organisation: Organisation;
@@ -458,7 +461,7 @@ describe('OrganisationPresenter', () => {
   describe('contactUrl', () => {
     it('makes the url into a link', () => {
       const i18nService = createMockI18nService();
-      (escape as jest.Mock).mockImplementation(escapeOf);
+      (formatLink as jest.Mock).mockImplementation(linkOf);
 
       organisation = organisationFactory.build({
         contactUrl: 'http://www.example.com',
@@ -466,13 +469,9 @@ describe('OrganisationPresenter', () => {
 
       const presenter = new OrganisationPresenter(organisation, i18nService);
 
-      expect(presenter.contactUrl()).toEqual(
-        `<a href="${escapeOf(
-          'http://www.example.com',
-        )}" class="govuk-link">${escapeOf('http://www.example.com')}</a>`,
-      );
+      expect(presenter.contactUrl()).toEqual(linkOf('http://www.example.com'));
 
-      expect(escape).toBeCalledWith('http://www.example.com');
+      expect(formatLink).toBeCalledWith('http://www.example.com');
     });
   });
 

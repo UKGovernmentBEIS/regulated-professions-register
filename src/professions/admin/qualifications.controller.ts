@@ -83,6 +83,7 @@ export class QualificationsController {
       QualificationsDto,
       qualificationsDto,
     );
+    const submittedValues = validator.obj;
 
     const profession = await this.professionsService.findWithVersions(
       professionId,
@@ -91,8 +92,6 @@ export class QualificationsController {
     const version = await this.professionVersionsService.findWithProfession(
       versionId,
     );
-
-    const submittedValues: QualificationsDto = qualificationsDto;
 
     const mandatoryProfessionalExperience =
       submittedValues.mandatoryProfessionalExperience === undefined

@@ -1,4 +1,6 @@
+import { Transform } from 'class-transformer';
 import { IsNotEmpty, ValidateIf } from 'class-validator';
+import { parseBoolean } from '../../../helpers/parse-boolean.helper';
 
 export class OrganisationDto {
   @IsNotEmpty({
@@ -12,5 +14,6 @@ export class OrganisationDto {
   @ValidateIf((e) => e.serviceOwner === '0')
   organisation: string;
 
-  change: string;
+  @Transform(({ value }) => parseBoolean(value))
+  change: boolean;
 }

@@ -87,10 +87,9 @@ export class OrganisationController {
       OrganisationDto,
       organisationDto,
     );
+    const submittedValues = validator.obj;
 
     const user = await this.usersService.find(id);
-
-    const submittedValues: OrganisationDto = organisationDto;
 
     const serviceOwner =
       submittedValues.serviceOwner === undefined
@@ -109,7 +108,7 @@ export class OrganisationController {
         res,
         organisation,
         serviceOwner,
-        submittedValues.change === 'true',
+        submittedValues.change,
         getActionTypeFromUser(user),
         errors,
       );
@@ -123,7 +122,7 @@ export class OrganisationController {
 
     await this.usersService.save(updatedUser);
 
-    if (organisationDto.change === 'true') {
+    if (submittedValues.change) {
       return res.redirect(`/admin/users/${id}/confirm`);
     }
 

@@ -92,8 +92,8 @@ export class ScopeController {
     @Param('versionId') versionId: string,
   ): Promise<void> {
     const validator = await Validator.validate(ScopeDto, scopeDto);
+    const submittedValues = validator.obj;
 
-    const submittedValues: ScopeDto = scopeDto;
     const coversUK = Boolean(Number(submittedValues.coversUK));
 
     const profession = await this.professionsService.findWithVersions(
@@ -116,7 +116,7 @@ export class ScopeController {
         submittedIndustries,
         submittedValues.nations || [],
         isConfirmed(profession),
-        submittedValues.change === 'true',
+        submittedValues.change,
         errors,
       );
     }
@@ -135,7 +135,7 @@ export class ScopeController {
 
     await this.professionVersionsService.save(updatedVersion);
 
-    if (submittedValues.change === 'true') {
+    if (submittedValues.change) {
       return res.redirect(
         `/admin/professions/${professionId}/versions/${versionId}/check-your-answers`,
       );
