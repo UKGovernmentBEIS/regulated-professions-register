@@ -22,14 +22,32 @@ describe(ViewUtils, () => {
     });
 
     describe('when passed a profession that has not yet been confirmed', () => {
-      it("returns the 'add' text", async () => {
-        const profession = professionFactory.build();
+      describe('when the profession has a name set', () => {
+        it("returns the 'add' text with the Profession's name", async () => {
+          const profession = professionFactory.build({
+            name: 'Example profession',
+          });
 
-        (isConfirmed as jest.Mock).mockReturnValue(false);
+          (isConfirmed as jest.Mock).mockReturnValue(false);
 
-        expect(
-          await ViewUtils.captionText(mockI18nService, profession),
-        ).toEqual(translationOf('professions.form.captions.add'));
+          expect(
+            await ViewUtils.captionText(mockI18nService, profession),
+          ).toEqual(translationOf('professions.form.captions.addWithName'));
+        });
+
+        describe('when the profession has no name set', () => {
+          it("returns the 'add' text", async () => {
+            const profession = professionFactory.build({
+              name: null,
+            });
+
+            (isConfirmed as jest.Mock).mockReturnValue(false);
+
+            expect(
+              await ViewUtils.captionText(mockI18nService, profession),
+            ).toEqual(translationOf('professions.form.captions.add'));
+          });
+        });
       });
     });
   });

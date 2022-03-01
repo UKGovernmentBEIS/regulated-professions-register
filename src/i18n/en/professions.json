@@ -16,6 +16,7 @@
     },
     "captions": {
       "add": "Adding a new profession",
+      "addWithName": "Adding a new profession - {professionName}",
       "edit": "Amending a profession - {professionName}",
       "publish": "Publishing a profession"
     },

@@ -13,6 +13,12 @@ export default class ViewUtils {
       });
     }
 
+    if (profession.name) {
+      return i18nService.translate('professions.form.captions.addWithName', {
+        args: { professionName: profession.name },
+      });
+    }
+
     return i18nService.translate('professions.form.captions.add');
   }
 }
