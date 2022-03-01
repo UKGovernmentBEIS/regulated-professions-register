@@ -18,11 +18,14 @@ import { formatDate } from '../../common/utils';
 import { translationOf } from '../../testutils/translation-of';
 import { formatLink } from '../../helpers/format-link.helper';
 import { linkOf } from '../../testutils/link-of';
+import { emailOf } from '../../testutils/email-of';
+import { formatEmail } from '../../helpers/format-email.helper';
 
 jest.mock('../../helpers/escape.helper');
 jest.mock('../../helpers/format-multiline-string.helper');
 jest.mock('../../common/utils');
 jest.mock('../../helpers/format-link.helper');
+jest.mock('../../helpers/format-email.helper');
 
 describe('OrganisationPresenter', () => {
   let organisation: Organisation;
@@ -440,7 +443,7 @@ describe('OrganisationPresenter', () => {
   describe('email', () => {
     it('makes the email into a link', () => {
       const i18nService = createMockI18nService();
-      (escape as jest.Mock).mockImplementation(escapeOf);
+      (formatEmail as jest.Mock).mockImplementation(emailOf);
 
       organisation = organisationFactory.build({
         email: 'foo@example.com',
@@ -448,13 +451,9 @@ describe('OrganisationPresenter', () => {
 
       const presenter = new OrganisationPresenter(organisation, i18nService);
 
-      expect(presenter.email()).toEqual(
-        `<a href="mailto:${escapeOf(
-          'foo@example.com',
-        )}" class="govuk-link">${escapeOf('foo@example.com')}</a>`,
-      );
+      expect(presenter.email()).toEqual(emailOf('foo@example.com'));
 
-      expect(escape).toBeCalledWith('foo@example.com');
+      expect(formatEmail).toBeCalledWith('foo@example.com');
     });
   });
 
