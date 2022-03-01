@@ -94,7 +94,32 @@ describe('Editing organisations', () => {
       );
     });
 
-    it('allows me to update an organisation', () => {
+    it('Corrects mis-formatted data', () => {
+      cy.get('input[name="contactUrl"]')
+        .invoke('val', '')
+        .type('example.com/missing-protocol');
+
+      cy.get('input[name="email"]')
+        .invoke('val', '')
+        .type('   padded-address@example.com');
+
+      cy.translate('app.continue').then((buttonText) => {
+        cy.get('button').contains(buttonText).click();
+      });
+      cy.checkAccessibility();
+
+      cy.checkSummaryListRowValue(
+        'organisations.label.contactUrl',
+        'http://example.com/missing-protocol',
+      );
+
+      cy.checkSummaryListRowValue(
+        'organisations.label.email',
+        'padded-address@example.com',
+      );
+    });
+
+    it('Allows me to update an organisation', () => {
       cy.get('input[name="alternateName"]')
         .invoke('val', '')
         .type('New Alternate Name');
