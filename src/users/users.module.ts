@@ -5,6 +5,7 @@ import { PersonalDetailsController } from './personal-details/personal-details.c
 import { RoleController } from './role/role.controller';
 
 import { UsersController } from './users.controller';
+import { UsersArchiveController } from './users-archive.controller';
 
 import { User } from './user.entity';
 import { UsersService } from './users.service';
@@ -35,6 +36,7 @@ import { Organisation } from '../organisations/organisation.entity';
   ],
   controllers: [
     UsersController,
+    UsersArchiveController,
     OrganisationController,
     PersonalDetailsController,
     RoleController,
