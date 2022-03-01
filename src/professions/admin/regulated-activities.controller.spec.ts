@@ -52,7 +52,7 @@ describe(RegulatedActivitiesController, () => {
       professionsService.findWithVersions.mockResolvedValue(profession);
       professionVersionsService.findWithProfession.mockResolvedValue(version);
 
-      await controller.edit(response, 'profession-id', 'version-id', false);
+      await controller.edit(response, 'profession-id', 'version-id', 'false');
 
       expect(response.render).toHaveBeenCalledWith(
         'admin/professions/regulated-activities',
@@ -88,7 +88,7 @@ describe(RegulatedActivitiesController, () => {
             reservedActivities: 'Example reserved activities',
             protectedTitles: 'Example protected titles',
             regulationUrl: 'https://example.com/regulation',
-            change: false,
+            change: 'false',
           };
 
           await controller.update(
@@ -136,7 +136,7 @@ describe(RegulatedActivitiesController, () => {
             reservedActivities: 'Example reserved activities',
             protectedTitles: 'Example protected titles',
             regulationUrl: 'https://example.com/regulation',
-            change: true,
+            change: 'true',
           };
 
           await controller.update(
@@ -184,7 +184,7 @@ describe(RegulatedActivitiesController, () => {
           reservedActivities: undefined,
           protectedTitles: undefined,
           regulationUrl: undefined,
-          change: false,
+          change: 'false',
         };
 
         await controller.update(

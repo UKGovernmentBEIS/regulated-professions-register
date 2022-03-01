@@ -10,5 +10,5 @@ export class RegulatedActivitiesDto {
   protectedTitles: string;
   regulationUrl: string;
 
-  change: boolean;
+  change: string;
 }

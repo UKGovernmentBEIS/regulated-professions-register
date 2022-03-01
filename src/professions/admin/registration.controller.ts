@@ -55,7 +55,7 @@ export class RegistrationController {
     @Res() res: Response,
     @Param('professionId') professionId: string,
     @Param('versionId') versionId: string,
-    @Query('change') change: boolean,
+    @Query('change') change: string,
   ): Promise<void> {
     const profession = await this.professionsService.findWithVersions(
       professionId,
@@ -65,7 +65,12 @@ export class RegistrationController {
       versionId,
     );
 
-    return this.renderForm(res, version, isConfirmed(profession), change);
+    return this.renderForm(
+      res,
+      version,
+      isConfirmed(profession),
+      change === 'true',
+    );
   }
 
   @Post('/:professionId/versions/:versionId/registration')
@@ -103,7 +108,7 @@ export class RegistrationController {
         res,
         submittedValues,
         isConfirmed(profession),
-        registrationDto.change,
+        submittedValues.change === 'true',
         errors,
       );
     }
@@ -119,7 +124,7 @@ export class RegistrationController {
 
     await this.professionVersionsService.save(updatedVersion);
 
-    if (registrationDto.change) {
+    if (submittedValues.change === 'true') {
       return res.redirect(
         `/admin/professions/${version.profession.id}/versions/${versionId}/check-your-answers`,
       );

@@ -62,7 +62,7 @@ describe(RegistrationController, () => {
         const mandatoryRegistrationRadioButtonsPresenter =
           new MandatoryRegistrationRadioButtonsPresenter(null, i18nService);
 
-        await controller.edit(response, 'profession-id', 'version-id', false);
+        await controller.edit(response, 'profession-id', 'version-id', 'false');
 
         expect(response.render).toHaveBeenCalledWith(
           'admin/professions/registration',
@@ -95,7 +95,7 @@ describe(RegistrationController, () => {
             i18nService,
           );
 
-        await controller.edit(response, 'profession-id', 'version-id', false);
+        await controller.edit(response, 'profession-id', 'version-id', 'false');
 
         expect(response.render).toHaveBeenCalledWith(
           'admin/professions/registration',
@@ -205,7 +205,7 @@ describe(RegistrationController, () => {
           const registrationDtoWithChangeParam = {
             mandatoryRegistration: MandatoryRegistration.Voluntary,
             registrationUrl: '',
-            change: true,
+            change: 'true',
           };
 
           await controller.update(
@@ -240,7 +240,7 @@ describe(RegistrationController, () => {
           const registrationDtoWithFalseChangeParam = {
             mandatoryRegistration: MandatoryRegistration.Voluntary,
             registrationUrl: '',
-            change: false,
+            change: 'false',
           };
 
           await controller.update(

@@ -42,7 +42,7 @@ export class RegulatedActivitiesController {
     @Res() res: Response,
     @Param('professionId') professionId: string,
     @Param('versionId') versionId: string,
-    @Query('change') change: boolean,
+    @Query('change') change: string,
   ): Promise<void> {
     const profession = await this.professionsService.findWithVersions(
       professionId,
@@ -59,7 +59,7 @@ export class RegulatedActivitiesController {
       version.protectedTitles,
       version.regulationUrl,
       isConfirmed(profession),
-      change,
+      change === 'true',
     );
   }
 
@@ -101,7 +101,7 @@ export class RegulatedActivitiesController {
         submittedValues.protectedTitles,
         submittedValues.regulationUrl,
         isConfirmed(profession),
-        submittedValues.change,
+        submittedValues.change === 'true',
         errors,
       );
     }
@@ -118,7 +118,7 @@ export class RegulatedActivitiesController {
 
     await this.professionVersionsService.save(updatedVersion);
 
-    if (submittedValues.change) {
+    if (submittedValues.change === 'true') {
       return res.redirect(
         `/admin/professions/${professionId}/versions/${versionId}/check-your-answers`,
       );

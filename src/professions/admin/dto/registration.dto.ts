@@ -17,4 +17,6 @@ export class RegistrationDto {
   )
   @ValidateIf((e) => e.registrationUrl)
   registrationUrl: string;
+
+  change: string;
 }
