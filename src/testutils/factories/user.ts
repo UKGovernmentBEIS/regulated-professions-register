@@ -13,6 +13,7 @@ export default Factory.define<User>(({ sequence }) => ({
   organisation: undefined,
   serviceOwner: false,
   confirmed: false,
+  archived: false,
   created_at: new Date(),
   updated_at: new Date(),
 }));
