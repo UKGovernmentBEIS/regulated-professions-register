@@ -108,6 +108,7 @@ describe('OrganisationArchiveController', () => {
 
       expect(organisationVersionsService.archive).toHaveBeenCalledWith(
         versionToArchive,
+        user,
       );
 
       expect(flashMock).toHaveBeenCalledWith(

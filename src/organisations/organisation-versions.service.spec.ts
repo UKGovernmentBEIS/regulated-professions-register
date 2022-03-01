@@ -14,20 +14,27 @@ import {
   OrganisationVersionStatus,
 } from './organisation-version.entity';
 import { Organisation } from './organisation.entity';
+import { User } from '../users/user.entity';
 import { OrganisationVersionsService } from './organisation-versions.service';
 
 import organisationVersionFactory from '../testutils/factories/organisation-version';
 import organisationFactory from '../testutils/factories/organisation';
+import professionVersionFactory from '../testutils/factories/profession-version';
+import professionFactory from '../testutils/factories/profession';
 import userFactory from '../testutils/factories/user';
+
 import { ProfessionVersionStatus } from '../professions/profession-version.entity';
+import { ProfessionVersionsService } from '../professions/profession-versions.service';
 
 describe('OrganisationVersionsService', () => {
   let service: OrganisationVersionsService;
   let repo: Repository<OrganisationVersion>;
   let connection: DeepMocked<Connection>;
+  let professionVersionsService: DeepMocked<ProfessionVersionsService>;
 
   beforeEach(async () => {
     connection = createMock<Connection>();
+    professionVersionsService = createMock<ProfessionVersionsService>();
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -35,6 +42,10 @@ describe('OrganisationVersionsService', () => {
         {
           provide: getRepositoryToken(OrganisationVersion),
           useValue: createMock<Repository<OrganisationVersion>>(),
+        },
+        {
+          provide: ProfessionVersionsService,
+          useValue: professionVersionsService,
         },
         {
           provide: Connection,
@@ -447,6 +458,7 @@ describe('OrganisationVersionsService', () => {
 
   describe('archive', () => {
     let queryRunner: DeepMocked<QueryRunner>;
+    const user: User = userFactory.build();
 
     beforeEach(() => {
       queryRunner = createMock<QueryRunner>();
@@ -459,13 +471,15 @@ describe('OrganisationVersionsService', () => {
     it('archives the draft version', async () => {
       const version = organisationVersionFactory.build({
         status: OrganisationVersionStatus.Draft,
+        organisation: organisationFactory.build({
+          professions: [],
+        }),
       });
 
       const findSpy = jest.spyOn(repo, 'findOne');
-
       const saveSpy = jest.spyOn(repo, 'save').mockResolvedValue(version);
 
-      const result = await service.archive(version);
+      const result = await service.archive(version, user);
 
       expect(result.status).toBe(OrganisationVersionStatus.Archived);
 
@@ -490,6 +504,7 @@ describe('OrganisationVersionsService', () => {
 
       const organisation = organisationFactory.build({
         versions: [liveVersion],
+        professions: [],
       });
 
       const draftVersion = organisationVersionFactory.build({
@@ -502,7 +517,7 @@ describe('OrganisationVersionsService', () => {
         .spyOn(repo, 'findOne')
         .mockResolvedValue(liveVersion);
 
-      const result = await service.archive(draftVersion);
+      const result = await service.archive(draftVersion, user);
 
       expect(result.status).toBe(OrganisationVersionStatus.Archived);
 
@@ -534,10 +549,73 @@ describe('OrganisationVersionsService', () => {
         throw Error;
       });
 
-      await service.archive(version);
+      await service.archive(version, user);
 
       expect(queryRunner.rollbackTransaction).toHaveBeenCalled();
       expect(queryRunner.commitTransaction).not.toHaveBeenCalled();
+    });
+
+    it('archives any associated professions when they have a latest version available', async () => {
+      const profession1 = professionFactory.build({
+        name: 'draft-profession',
+        versions: [professionVersionFactory.build()],
+      });
+      const profession2 = professionFactory.build({
+        name: 'live-profession',
+        versions: [professionVersionFactory.build()],
+      });
+      const profession3 = professionFactory.build({
+        name: 'archived-profession',
+        versions: [],
+      });
+
+      const organisation = organisationFactory.build({
+        professions: [profession1, profession2, profession3],
+      });
+
+      // Mock the `latestVersion` method to only return a version when one is available
+      professionVersionsService.latestVersion.mockImplementation(
+        async (profession) => {
+          return profession.versions[0];
+        },
+      );
+
+      // Mock the `create` call to pass the version straight through for ease of testing
+      professionVersionsService.create.mockImplementation(
+        async (professionVersion) => {
+          return professionVersion;
+        },
+      );
+
+      const version = organisationVersionFactory.build({
+        status: OrganisationVersionStatus.Draft,
+        organisation: organisation,
+      });
+
+      const result = await service.archive(version, user);
+
+      expect(result.status).toBe(OrganisationVersionStatus.Archived);
+
+      expect(professionVersionsService.create).toHaveBeenCalledTimes(2);
+      expect(professionVersionsService.archive).toHaveBeenCalledTimes(2);
+
+      expect(professionVersionsService.create).toHaveBeenCalledWith(
+        profession1.versions[0],
+        user,
+      );
+
+      expect(professionVersionsService.create).toHaveBeenCalledWith(
+        profession2.versions[0],
+        user,
+      );
+
+      expect(professionVersionsService.archive).toHaveBeenCalledWith(
+        profession1.versions[0],
+      );
+
+      expect(professionVersionsService.archive).toHaveBeenCalledWith(
+        profession2.versions[0],
+      );
     });
   });
 });

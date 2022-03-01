@@ -61,7 +61,7 @@ export class ProfessionVersionsController {
     const profession = Profession.withVersion(version.profession, version);
     const presenter = new ProfessionPresenter(profession, this.i18nService);
 
-    const organisation = Organisation.withLatestLiveVersion(
+    const organisation = Organisation.withLatestVersion(
       profession.organisation,
     );
 

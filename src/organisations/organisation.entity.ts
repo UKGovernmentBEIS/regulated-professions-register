@@ -68,13 +68,28 @@ export class Organisation {
   public static withLatestLiveVersion(
     organisation: Organisation,
   ): Organisation {
-    const liveVersions = organisation.versions
-      .filter((v) => v.status == OrganisationVersionStatus.Live)
-      .sort((a, b) => a.updated_at.getTime() - b.updated_at.getTime());
+    const liveVersions = Organisation.sortedVersions(organisation).filter(
+      (v) => v.status == OrganisationVersionStatus.Live,
+    );
 
     const latestVersion = liveVersions[0];
 
     return Organisation.withVersion(organisation, latestVersion);
+  }
+
+  public static withLatestVersion(organisation: Organisation): Organisation {
+    const versions = Organisation.sortedVersions(organisation);
+
+    return Organisation.withVersion(organisation, versions[0]);
+  }
+
+  private static sortedVersions(
+    organisation: Organisation,
+  ): OrganisationVersion[] {
+    return organisation.versions.sort(
+      (a: OrganisationVersion, b: OrganisationVersion) =>
+        b.updated_at.getTime() - a.updated_at.getTime(),
+    );
   }
 
   public static withVersion(

@@ -9,11 +9,13 @@ import { Organisation } from './organisation.entity';
 import { User } from '../users/user.entity';
 import { ProfessionVersionStatus } from '../professions/profession-version.entity';
 
+import { ProfessionVersionsService } from '../professions/profession-versions.service';
 @Injectable()
 export class OrganisationVersionsService {
   constructor(
     @InjectRepository(OrganisationVersion)
     private repository: Repository<OrganisationVersion>,
+    private professionVersionsService: ProfessionVersionsService,
     private connection: Connection,
   ) {}
 
@@ -158,7 +160,10 @@ export class OrganisationVersionsService {
     return version;
   }
 
-  async archive(version: OrganisationVersion): Promise<OrganisationVersion> {
+  async archive(
+    version: OrganisationVersion,
+    user: User,
+  ): Promise<OrganisationVersion> {
     const queryRunner = this.connection.createQueryRunner();
     const organisation = version.organisation;
 
@@ -174,6 +179,23 @@ export class OrganisationVersionsService {
       if (liveVersion) {
         liveVersion.status = OrganisationVersionStatus.Draft;
         await this.repository.save(liveVersion);
+      }
+
+      for (const profession of version.organisation.professions) {
+        const professionVersion =
+          await this.professionVersionsService.latestVersion(profession);
+
+        if (professionVersion) {
+          const professionVersionToBeArchived =
+            await this.professionVersionsService.create(
+              professionVersion,
+              user,
+            );
+
+          await this.professionVersionsService.archive(
+            professionVersionToBeArchived,
+          );
+        }
       }
 
       version.status = OrganisationVersionStatus.Archived;
