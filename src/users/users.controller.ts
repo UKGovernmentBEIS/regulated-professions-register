@@ -7,8 +7,6 @@ import {
   Res,
   Req,
   UseGuards,
-  Delete,
-  Redirect,
 } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
 
@@ -22,7 +20,6 @@ import { IndexTemplate } from './interfaces/index-template';
 import { ShowTemplate } from './interfaces/show-template';
 import { ConfirmTemplate } from './interfaces/confirm-template';
 import { Permissions } from '../common/permissions.decorator';
-import { flashMessage } from '../common/flash-message';
 import { getActionTypeFromUser } from './helpers/get-action-type-from-user';
 
 import { UserMailer } from './user.mailer';
@@ -142,23 +139,6 @@ export class UsersController {
       ...user,
       action,
     } as CompleteTemplate);
-  }
-
-  @Delete('/admin/users/:id')
-  @Permissions(UserPermission.DeleteUser)
-  @Redirect('/admin/users')
-  async delete(@Req() req, @Param('id') id): Promise<void> {
-    const messageTitle = await this.i18nService.translate(
-      'users.form.delete.successMessage',
-    );
-    const user = await this.usersService.find(id);
-    const successMessage = flashMessage(messageTitle);
-
-    req.flash('success', successMessage);
-
-    await this.auth0Service.deleteUser(user.externalIdentifier).performLater();
-
-    await this.usersService.delete(id);
   }
 
   async createUserInAuth0(user: User): Promise<void> {
