@@ -63,6 +63,7 @@ export class OrganisationController {
       res,
       user.organisation,
       user.serviceOwner,
+      user.name,
       change,
       getActionTypeFromUser(user),
     );
@@ -108,6 +109,7 @@ export class OrganisationController {
         res,
         organisation,
         serviceOwner,
+        user.name,
         submittedValues.change,
         getActionTypeFromUser(user),
         errors,
@@ -133,6 +135,7 @@ export class OrganisationController {
     res: Response,
     organisation: Organisation | null,
     serviceOwner: boolean | null,
+    name: string,
     change: boolean,
     action: ActionType,
 
@@ -154,6 +157,7 @@ export class OrganisationController {
     const templateArgs: EditTemplate = {
       organisationsSelectArgs,
       serviceOwnerRadioButtonArgs,
+      name,
       change,
       errors,
       action,

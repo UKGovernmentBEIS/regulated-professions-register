@@ -38,8 +38,8 @@
       }
     },
     "headings": {
-      "new": "Creating RPR user",
-      "edit": "Editing RPR user",
+      "new": "Creating RPR user {name}",
+      "edit": "Editing RPR user {name}",
       "checkAnswers": "Check your answers",
       "organisation": "Organisation",
       "personalDetails": "Personal details",

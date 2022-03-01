@@ -138,6 +138,7 @@ describe('OrganisationController', () => {
             action: 'edit',
             organisationsSelectArgs,
             serviceOwnerRadioButtonArgs,
+            name: user.name,
           }),
         );
 
@@ -290,6 +291,7 @@ describe('OrganisationController', () => {
             action: 'edit',
             organisationsSelectArgs,
             serviceOwnerRadioButtonArgs,
+            name: user.name,
           }),
         );
 

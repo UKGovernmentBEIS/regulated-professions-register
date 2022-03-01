@@ -10,7 +10,12 @@
   <div class="govuk-grid-column-two-thirds">
     {% include "../../../shared/_errors.njk" %}
 
-    <span class="govuk-caption-xl">{{ ("users.form.headings." + action) | t }}</span>
+    {% if name %}
+      <span class="govuk-caption-xl">{{ ("users.form.headings." + action) | t({ name: "- " + name}) }}</span>
+    {% else %}
+      <span class="govuk-caption-xl">{{ ("users.form.headings." + action) | t }}</span>
+    {% endif %}
+
     <h1 class="govuk-heading-xl">{{ "users.form.headings.organisation" | t }}</h1>
 
     <form method="post" action="./">

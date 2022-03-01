@@ -22,7 +22,11 @@
 
     {% endif %}
 
-    <span class="govuk-caption-xl">{{ ("users.form.headings." + action) | t }}</span>
+    {% if name %}
+      <span class="govuk-caption-xl">{{ ("users.form.headings." + action) | t({ name: "- " + name}) }}</span>
+    {% else %}
+      <span class="govuk-caption-xl">{{ ("users.form.headings." + action) | t }}</span>
+    {% endif %}
     <h1 class="govuk-heading-xl">{{ "users.form.headings.checkAnswers" | t }}</h1>
 
     <h2 class="govuk-heading-m">{{ "users.form.headings.personalDetails" | t }}</h2>

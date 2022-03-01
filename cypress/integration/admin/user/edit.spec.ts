@@ -20,9 +20,11 @@ describe('Editing a user', () => {
       cy.contains('Change Organisation').click();
       cy.checkAccessibility();
 
-      cy.translate('users.form.headings.edit').then((heading) => {
-        cy.get('body').should('contain', heading);
-      });
+      cy.translate('users.form.headings.edit', { name: '- Editor' }).then(
+        (heading) => {
+          cy.get('body').should('contain', heading);
+        },
+      );
 
       cy.get('input[name="serviceOwner"][value="0"]').check();
 
