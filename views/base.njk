@@ -2,6 +2,13 @@
 {% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 
+{% block pageTitle %}
+  {{ "app.name" | t }}
+  {% if title %}
+    | {{ title }}
+  {% endif %}
+{% endblock %}
+
 {% block header %}
   {{
     govukHeader({
