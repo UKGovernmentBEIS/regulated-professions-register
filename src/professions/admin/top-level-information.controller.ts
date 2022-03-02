@@ -25,6 +25,7 @@ import { OrganisationsService } from '../../organisations/organisations.service'
 import { RegulatedAuthoritiesSelectPresenter } from './regulated-authorities-select-presenter';
 import { Organisation } from '../../organisations/organisation.entity';
 import { I18nService } from 'nestjs-i18n';
+import { OrganisationVersionsService } from '../../organisations/organisation-versions.service';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
@@ -32,6 +33,7 @@ export class TopLevelInformationController {
   constructor(
     private readonly professionsService: ProfessionsService,
     private readonly organisationsService: OrganisationsService,
+    private readonly organisationVersionsService: OrganisationVersionsService,
     private readonly i18nService: I18nService,
   ) {}
 
@@ -141,7 +143,8 @@ export class TopLevelInformationController {
     change: boolean,
     errors: object | undefined = undefined,
   ): Promise<void> {
-    const regulatedAuthorities = await this.organisationsService.all();
+    const regulatedAuthorities =
+      await this.organisationVersionsService.allLiveAndDraft();
 
     const regulatedAuthoritiesSelectArgs =
       new RegulatedAuthoritiesSelectPresenter(

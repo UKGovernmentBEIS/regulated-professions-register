@@ -11,17 +11,20 @@ import { when } from 'jest-when';
 import { I18nService } from 'nestjs-i18n';
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 import { translationOf } from '../../testutils/translation-of';
+import { OrganisationVersionsService } from '../../organisations/organisation-versions.service';
 
 describe('TopLevelInformationController', () => {
   let controller: TopLevelInformationController;
   let professionsService: DeepMocked<ProfessionsService>;
   let organisationsService: DeepMocked<OrganisationsService>;
+  let organisationVersionsService: DeepMocked<OrganisationVersionsService>;
   let response: DeepMocked<Response>;
   let i18nService: I18nService;
 
   beforeEach(async () => {
     professionsService = createMock<ProfessionsService>();
     organisationsService = createMock<OrganisationsService>();
+    organisationVersionsService = createMock<OrganisationVersionsService>();
     i18nService = createMockI18nService();
 
     const module: TestingModule = await Test.createTestingModule({
@@ -29,6 +32,10 @@ describe('TopLevelInformationController', () => {
       providers: [
         { provide: ProfessionsService, useValue: professionsService },
         { provide: OrganisationsService, useValue: organisationsService },
+        {
+          provide: OrganisationVersionsService,
+          useValue: organisationVersionsService,
+        },
         { provide: I18nService, useValue: i18nService },
       ],
     }).compile();
@@ -50,7 +57,9 @@ describe('TopLevelInformationController', () => {
         professionsService.findWithVersions.mockResolvedValue(blankProfession);
 
         const organisations = organisationFactory.buildList(2);
-        organisationsService.all.mockResolvedValue(organisations);
+        organisationVersionsService.allLiveAndDraft.mockResolvedValue(
+          organisations,
+        );
 
         const regulatedAuthoritiesSelectPresenter =
           new RegulatedAuthoritiesSelectPresenter(organisations, null);
@@ -95,8 +104,9 @@ describe('TopLevelInformationController', () => {
           additionalOrganisation,
           organisationFactory.build(),
         ];
-        organisationsService.all.mockResolvedValue(organisations);
-
+        organisationVersionsService.allLiveAndDraft.mockResolvedValue(
+          organisations,
+        );
         const regulatedAuthoritiesSelectPresenterWithSelectedOrganisation =
           new RegulatedAuthoritiesSelectPresenter(organisations, organisation);
 

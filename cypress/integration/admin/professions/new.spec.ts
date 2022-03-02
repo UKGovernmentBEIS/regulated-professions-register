@@ -48,6 +48,10 @@ describe('Adding a new profession', () => {
       cy.get('select[name="regulatoryBody"]').select(
         'Department for Education',
       );
+      cy.get('select[name="regulatoryBody"]').should(
+        'not.contain',
+        'Unconfirmed Organisation',
+      );
       cy.get('select[name="additionalRegulatoryBody"]').select(
         'General Medical Council',
       );
