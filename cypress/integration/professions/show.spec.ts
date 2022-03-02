@@ -35,6 +35,29 @@ describe('Showing a profession', () => {
         );
       });
 
+    cy.get('h3').should('contain', 'Alternative Law Society');
+    cy.get('h3')
+      .contains('Alternative Law Society')
+      .parent()
+      .within(() => {
+        cy.checkSummaryListRowMultilineValue(
+          'professions.show.bodies.address',
+          ['123 Example Street', 'London', 'WC1 1AB'],
+        );
+        cy.checkSummaryListRowValue(
+          'professions.show.bodies.emailAddress',
+          'alt-law@example.com',
+        );
+        cy.checkSummaryListRowValue(
+          'professions.show.bodies.url',
+          'www.alt-lawsociety.org.uk',
+        );
+        cy.checkSummaryListRowValue(
+          'professions.show.bodies.phoneNumber',
+          '+44 0123 987654',
+        );
+      });
+
     cy.translate('professions.show.regulatedActivities.heading').then(
       (heading) => {
         cy.get('body h2').should('contain', heading);
