@@ -200,6 +200,10 @@ export class ProfessionVersionsService {
   async findLiveBySlug(slug: string): Promise<Profession> {
     const version = await this.versionsWithJoins()
       .leftJoinAndSelect('organisation.versions', 'organisationVersions')
+      .leftJoinAndSelect(
+        'additionalOrganisation.versions',
+        'additionalOrganisationVersions',
+      )
       .where('professionVersion.status = :status AND profession.slug = :slug', {
         status: ProfessionVersionStatus.Live,
         slug: slug,
@@ -215,6 +219,10 @@ export class ProfessionVersionsService {
   ): Promise<ProfessionVersion> {
     const version = await this.versionsWithJoins()
       .leftJoinAndSelect('organisation.versions', 'organisationVersions')
+      .leftJoinAndSelect(
+        'additionalOrganisation.versions',
+        'additionalOrganisationVersions',
+      )
       .where({ profession: { id: professionId }, id })
       .getOne();
 
@@ -226,6 +234,10 @@ export class ProfessionVersionsService {
       .createQueryBuilder('professionVersion')
       .leftJoinAndSelect('professionVersion.profession', 'profession')
       .leftJoinAndSelect('profession.organisation', 'organisation')
+      .leftJoinAndSelect(
+        'profession.additionalOrganisation',
+        'additionalOrganisation',
+      )
       .leftJoinAndSelect('professionVersion.industries', 'industries')
       .leftJoinAndSelect('professionVersion.qualification', 'qualification')
       .leftJoinAndSelect('professionVersion.user', 'user')
