@@ -10,6 +10,7 @@ import { ProfessionPresenter } from '../presenters/profession.presenter';
 import professionVersionFactory from '../../testutils/factories/profession-version';
 import { Profession } from '../profession.entity';
 import { ProfessionVersionStatus } from '../profession-version.entity';
+import * as getOrganisationsFromProfessionModule from '../helpers/get-organisations-from-profession.helper';
 
 jest.mock('../presenters/profession.presenter');
 
@@ -23,6 +24,9 @@ describe('ListEntryPresenter', () => {
           occupationLocations: ['GB-SCT', 'GB-NIR'],
           organisation: organisationFactory.build({
             name: 'Example Organisation',
+          }),
+          additionalOrganisation: organisationFactory.build({
+            name: 'Additional Example Organisation',
           }),
           industries: [
             industryFactory.build({ name: 'industries.law' }),
@@ -39,6 +43,11 @@ describe('ListEntryPresenter', () => {
           lastModified: '12-08-2003',
         });
 
+        const getOrganisationsFromProfessionSpy = jest.spyOn(
+          getOrganisationsFromProfessionModule,
+          'getOrganisationsFromProfession',
+        );
+
         const presenter = new ListEntryPresenter(
           profession,
           createMockI18nService(),
@@ -53,7 +62,7 @@ describe('ListEntryPresenter', () => {
           },
           { text: '12-08-2003' },
           { text: 'Administrator' },
-          { text: 'Example Organisation' },
+          { text: 'Example Organisation, Additional Example Organisation' },
           {
             text: `${translationOf('industries.law')}, ${translationOf(
               'industries.finance',
@@ -68,6 +77,7 @@ describe('ListEntryPresenter', () => {
         ];
 
         await expect(presenter.tableRow(`overview`)).resolves.toEqual(expected);
+        expect(getOrganisationsFromProfessionSpy).toBeCalledWith(profession);
       });
 
       it('returns a table row when called with `single-organisation`', async () => {
@@ -214,5 +224,6 @@ describe('ListEntryPresenter', () => {
 
   afterEach(() => {
     jest.resetAllMocks();
+    jest.restoreAllMocks();
   });
 });
