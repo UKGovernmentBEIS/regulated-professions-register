@@ -1,7 +1,4 @@
 import { OrganisationPresenter } from './organisation.presenter';
-import { Organisation } from '../organisation.entity';
-import { Industry } from '../../industries/industry.entity';
-import { Profession } from '../../professions/profession.entity';
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 
 import organisationFactory from '../../testutils/factories/organisation';
@@ -28,34 +25,27 @@ jest.mock('../../helpers/format-link.helper');
 jest.mock('../../helpers/format-email.helper');
 
 describe('OrganisationPresenter', () => {
-  let organisation: Organisation;
-  let industries: Industry[];
-  let professions: Profession[];
-
   describe('tableRow', () => {
     describe('when all relations are present', () => {
       describe('when the professions share one industry', () => {
-        beforeEach(() => {
-          industries = [industryFactory.build({ name: 'Industry 1' })];
+        const industries = [industryFactory.build({ name: 'Industry 1' })];
 
-          professions = [
-            professionFactory.buildList(4, { industries: [industries[0]] }),
-          ].flat();
+        const professions = [
+          professionFactory.buildList(4, { industries: [industries[0]] }),
+        ].flat();
 
-          organisation = organisationFactory.build({
-            professions: professions,
-            lastModified: new Date('01-01-2022'),
-            changedByUser: userFactory.build({ name: 'beis-rpr' }),
-          });
+        const organisation = organisationFactory.build({
+          professions: professions,
+          lastModified: new Date('01-01-2022'),
+          changedByUser: userFactory.build({ name: 'beis-rpr' }),
         });
 
         it('returns the table row data', async () => {
-          const i18nService = createMockI18nService();
           (escape as jest.Mock).mockImplementation(escapeOf);
 
           const presenter = new OrganisationPresenter(
             organisation,
-            i18nService,
+            createMockI18nService(),
           );
           const tableRow = await presenter.tableRow();
 
@@ -91,34 +81,30 @@ describe('OrganisationPresenter', () => {
       });
 
       describe('when the professions share multiple industries', () => {
-        beforeEach(() => {
-          industries = [
+        it('returns the table row data', async () => {
+          const industries = [
             industryFactory.build({ name: 'industry.1' }),
             industryFactory.build({ name: 'industry.2' }),
             industryFactory.build({ name: 'industry.3' }),
           ];
 
-          professions = [
+          const professions = [
             professionFactory.buildList(4, { industries: [industries[0]] }),
             professionFactory.buildList(2, {
               industries: [industries[1], industries[2]],
             }),
           ].flat();
 
-          organisation = organisationFactory.build({
+          const organisation = organisationFactory.build({
             professions: professions,
             lastModified: new Date('01-01-2022'),
             changedByUser: userFactory.build({ name: 'beis-rpr' }),
           });
-        });
-
-        it('returns the table row data', async () => {
-          const i18nService = createMockI18nService();
           (escape as jest.Mock).mockImplementation(escapeOf);
 
           const presenter = new OrganisationPresenter(
             organisation,
-            i18nService,
+            createMockI18nService(),
           );
           const tableRow = await presenter.tableRow();
 
@@ -148,15 +134,14 @@ describe('OrganisationPresenter', () => {
     });
 
     describe('when the professions relation is not loaded', () => {
-      beforeEach(() => {
-        organisation = organisationFactory.build({
+      it('should raise an error', async () => {
+        const organisation = organisationFactory.build({
           professions: undefined,
         });
-      });
-
-      it('should raise an error', async () => {
-        const i18nService = createMockI18nService();
-        const presenter = new OrganisationPresenter(organisation, i18nService);
+        const presenter = new OrganisationPresenter(
+          organisation,
+          createMockI18nService(),
+        );
 
         expect(async () => {
           await presenter.tableRow();
@@ -167,15 +152,15 @@ describe('OrganisationPresenter', () => {
     });
 
     describe('when the industries relation is not loaded', () => {
-      beforeEach(() => {
-        organisation = organisationFactory.build({
+      it('should raise an error', async () => {
+        const organisation = organisationFactory.build({
           professions: [professionFactory.build({ industries: undefined })],
         });
-      });
 
-      it('should raise an error', async () => {
-        const i18nService = createMockI18nService();
-        const presenter = new OrganisationPresenter(organisation, i18nService);
+        const presenter = new OrganisationPresenter(
+          organisation,
+          createMockI18nService(),
+        );
 
         expect(async () => {
           await presenter.tableRow();
@@ -192,7 +177,7 @@ describe('OrganisationPresenter', () => {
         const i18nService = createMockI18nService();
         (escape as jest.Mock).mockImplementation(escapeOf);
 
-        organisation = organisationFactory.withVersion().build();
+        const organisation = organisationFactory.withVersion().build();
 
         const presenter = new OrganisationPresenter(organisation, i18nService);
 
@@ -250,7 +235,7 @@ describe('OrganisationPresenter', () => {
           const i18nService = createMockI18nService();
           (escape as jest.Mock).mockImplementation(escapeOf);
 
-          organisation = organisationFactory
+          const organisation = organisationFactory
             .withVersion()
             .build({ alternateName: '' });
 
@@ -276,7 +261,7 @@ describe('OrganisationPresenter', () => {
           const i18nService = createMockI18nService();
           (escape as jest.Mock).mockImplementation(escapeOf);
 
-          organisation = organisationFactory
+          const organisation = organisationFactory
             .withVersion()
             .build({ alternateName: '' });
 
@@ -305,7 +290,7 @@ describe('OrganisationPresenter', () => {
         const i18nService = createMockI18nService();
         (escape as jest.Mock).mockImplementation(escapeOf);
 
-        organisation = organisationFactory
+        const organisation = organisationFactory
           .withVersion()
           .build({ name: 'My Organisation' });
 
@@ -332,7 +317,7 @@ describe('OrganisationPresenter', () => {
 
         const version = organisationVersionFactory.build();
 
-        organisation = organisationFactory
+        const organisation = organisationFactory
           .withVersion(version)
           .build({ name: 'My Organisation' });
 
@@ -361,6 +346,8 @@ describe('OrganisationPresenter', () => {
         const i18nService = createMockI18nService();
         (escape as jest.Mock).mockImplementation(escapeOf);
 
+        const organisation = organisationFactory.build();
+
         const presenter = new OrganisationPresenter(organisation, i18nService);
         const list = await presenter.summaryList({ classes: 'foo' });
 
@@ -374,7 +361,7 @@ describe('OrganisationPresenter', () => {
       const i18nService = createMockI18nService();
       (formatMultilineString as jest.Mock).mockImplementation(multilineOf);
 
-      organisation = organisationFactory.build({
+      const organisation = organisationFactory.build({
         address: '123 Fake Street, London, SW1A 1AA',
       });
 
@@ -445,7 +432,7 @@ describe('OrganisationPresenter', () => {
       const i18nService = createMockI18nService();
       (formatEmail as jest.Mock).mockImplementation(emailOf);
 
-      organisation = organisationFactory.build({
+      const organisation = organisationFactory.build({
         email: 'foo@example.com',
       });
 
@@ -462,7 +449,7 @@ describe('OrganisationPresenter', () => {
       const i18nService = createMockI18nService();
       (formatLink as jest.Mock).mockImplementation(linkOf);
 
-      organisation = organisationFactory.build({
+      const organisation = organisationFactory.build({
         url: 'http://www.example.com',
       });
 
