@@ -1,13 +1,14 @@
 {% extends "admin/base.njk" %}
 
 {% from "govuk/components/panel/macro.njk" import govukPanel %}
+{% set title = (("users.headings." + action + ".done") | t) %}
 
 {% block content %}
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     {{ govukPanel({
-      titleText: (("users.headings." + action + ".done") | t),
+      titleText: title,
       html: ("users.body." + action + ".panel") | t({email: (email | escape)})
     }) }}
 

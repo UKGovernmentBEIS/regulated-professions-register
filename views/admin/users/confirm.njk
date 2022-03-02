@@ -5,6 +5,16 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
+{% if name %}
+  {% set caption = ("users.form.headings." + action) | t({ name: "- " + name}) %}
+{% else %}
+  {% set caption = (("users.form.headings." + action) | t) %}
+{% endif %}
+
+{% set heading = ("users.form.headings.checkAnswers" | t) %}
+{% set title =  caption + " | " + heading %}
+
+
 {% block content %}
 
 <div class="govuk-grid-row">
@@ -22,12 +32,8 @@
 
     {% endif %}
 
-    {% if name %}
-      <span class="govuk-caption-xl">{{ ("users.form.headings." + action) | t({ name: "- " + name}) }}</span>
-    {% else %}
-      <span class="govuk-caption-xl">{{ ("users.form.headings." + action) | t }}</span>
-    {% endif %}
-    <h1 class="govuk-heading-xl">{{ "users.form.headings.checkAnswers" | t }}</h1>
+    <span class="govuk-caption-xl">{{ caption }}</span>
+    <h1 class="govuk-heading-xl">{{ heading }}</h1>
 
     <h2 class="govuk-heading-m">{{ "users.form.headings.personalDetails" | t }}</h2>
 
