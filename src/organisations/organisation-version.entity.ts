@@ -51,9 +51,6 @@ export class OrganisationVersion {
   email: string;
 
   @Column({ nullable: true })
-  contactUrl: string;
-
-  @Column({ nullable: true })
   telephone: string;
 
   @Column({ nullable: true })
@@ -78,7 +75,6 @@ export class OrganisationVersion {
       address: dto.address,
       url: dto.url,
       email: dto.email,
-      contactUrl: dto.contactUrl,
       telephone: dto.telephone,
       fax: dto.fax,
     } as OrganisationVersion;

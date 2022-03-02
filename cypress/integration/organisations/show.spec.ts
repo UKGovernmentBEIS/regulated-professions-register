@@ -20,7 +20,7 @@ describe('Showing organisations', () => {
 
         cy.get('body').should('contain', organisation.name);
         cy.get('body').should('contain', version.email);
-        cy.get('body').should('contain', version.contactUrl);
+        cy.get('body').should('contain', version.url);
 
         const professionsForOrganisation = professions.filter(
           (profession: any) => profession.organisation == organisation.name,
@@ -55,7 +55,7 @@ describe('Showing organisations', () => {
 
         cy.get('body').should('contain', councilOfRegisteredGasInstallers.name);
         cy.get('body').should('contain', version.email);
-        cy.get('body').should('contain', version.contactUrl);
+        cy.get('body').should('contain', version.url);
 
         const draftProfessionsForOrganisation = professions.filter(
           (profession: any) =>

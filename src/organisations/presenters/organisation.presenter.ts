@@ -81,12 +81,10 @@ export class OrganisationPresenter {
       },
       {
         key: {
-          text: await this.i18nService.translate(
-            'organisations.label.contactUrl',
-          ),
+          text: await this.i18nService.translate('organisations.label.url'),
         },
         value: {
-          html: this.contactUrl(),
+          html: this.url(),
         },
       },
       {
@@ -177,8 +175,8 @@ export class OrganisationPresenter {
     return formatEmail(this.organisation.email);
   }
 
-  public contactUrl(): string {
-    return formatLink(this.organisation.contactUrl);
+  public url(): string {
+    return formatLink(this.organisation.url);
   }
 
   private async industries(): Promise<string> {

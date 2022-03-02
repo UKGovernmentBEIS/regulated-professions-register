@@ -209,10 +209,10 @@ describe('OrganisationPresenter', () => {
             },
             {
               key: {
-                text: 'Translation of `organisations.label.contactUrl`',
+                text: 'Translation of `organisations.label.url`',
               },
               value: {
-                html: presenter.contactUrl(),
+                html: presenter.url(),
               },
             },
             {
@@ -457,18 +457,18 @@ describe('OrganisationPresenter', () => {
     });
   });
 
-  describe('contactUrl', () => {
+  describe('url', () => {
     it('makes the url into a link', () => {
       const i18nService = createMockI18nService();
       (formatLink as jest.Mock).mockImplementation(linkOf);
 
       organisation = organisationFactory.build({
-        contactUrl: 'http://www.example.com',
+        url: 'http://www.example.com',
       });
 
       const presenter = new OrganisationPresenter(organisation, i18nService);
 
-      expect(presenter.contactUrl()).toEqual(linkOf('http://www.example.com'));
+      expect(presenter.url()).toEqual(linkOf('http://www.example.com'));
 
       expect(formatLink).toBeCalledWith('http://www.example.com');
     });

@@ -12,7 +12,6 @@ class OrganisationFactory extends Factory<Organisation> {
       address: organisationVersion.address,
       url: organisationVersion.url,
       email: organisationVersion.email,
-      contactUrl: organisationVersion.contactUrl,
       telephone: organisationVersion.telephone,
       fax: organisationVersion.fax,
       versionId: organisationVersion.id,

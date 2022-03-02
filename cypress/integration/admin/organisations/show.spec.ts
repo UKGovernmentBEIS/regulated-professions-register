@@ -24,7 +24,7 @@ describe('Showing organisations', () => {
               cy.checkAccessibility();
               cy.get('body').should('contain', organisation.name);
               cy.get('body').should('contain', version.email);
-              cy.get('body').should('contain', version.contactUrl);
+              cy.get('body').should('contain', version.url);
 
               const professionsForOrganisation = professions.filter(
                 (profession: any) =>

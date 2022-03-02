@@ -31,13 +31,6 @@ export class OrganisationDto {
   @Transform(({ value }) => preprocessUrl(value))
   url: string;
 
-  @IsUrl(urlOptions, {
-    message: 'organisations.admin.form.errors.contactUrl.invalid',
-  })
-  @Transform(({ value }) => preprocessUrl(value))
-  @ValidateIf((e) => e.contactUrl)
-  contactUrl: string;
-
   telephone: string;
   fax: string;
 
