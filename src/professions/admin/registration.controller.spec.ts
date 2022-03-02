@@ -16,6 +16,7 @@ import { ProfessionVersionsService } from '../profession-versions.service';
 import { ProfessionsService } from '../professions.service';
 
 import { MandatoryRegistrationRadioButtonsPresenter } from './mandatory-registration-radio-buttons-presenter';
+import { translationOf } from '../../testutils/translation-of';
 
 describe(RegistrationController, () => {
   let controller: RegistrationController;
@@ -69,6 +70,7 @@ describe(RegistrationController, () => {
           expect.objectContaining({
             mandatoryRegistrationRadioButtonArgs:
               await mandatoryRegistrationRadioButtonsPresenter.radioButtonArgs(),
+            captionText: translationOf('professions.form.captions.add'),
           }),
         );
       });
@@ -104,6 +106,7 @@ describe(RegistrationController, () => {
             registrationUrl: 'http://example.com',
             mandatoryRegistrationRadioButtonArgs:
               await mandatoryRegistrationRadioButtonsPresenterWithSelectedValue.radioButtonArgs(),
+            captionText: translationOf('professions.form.captions.edit'),
           }),
         );
       });

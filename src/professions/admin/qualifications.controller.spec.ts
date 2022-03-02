@@ -14,6 +14,7 @@ import { isUK } from '../../helpers/nations.helper';
 import professionVersionFactory from '../../testutils/factories/profession-version';
 import qualificationFactory from '../../testutils/factories/qualification';
 import organisationFactory from '../../testutils/factories/organisation';
+import { translationOf } from '../../testutils/translation-of';
 
 jest.mock('../../helpers/nations.helper');
 
@@ -74,7 +75,7 @@ describe(QualificationsController, () => {
               profession.qualification.mostCommonRouteToObtain,
             duration: profession.qualification.educationDuration,
             moreInformationUrl: profession.qualification.url,
-            captionText: 'professions.form.captions.edit',
+            captionText: translationOf('professions.form.captions.edit'),
             ukRecognition: profession.qualification.ukRecognition,
             ukRecognitionUrl: profession.qualification.ukRecognitionUrl,
             otherCountriesRecognition:
@@ -122,7 +123,7 @@ describe(QualificationsController, () => {
             mostCommonRouteToObtain: undefined,
             duration: undefined,
             moreInformationUrl: undefined,
-            captionText: 'professions.form.captions.edit',
+            captionText: translationOf('professions.form.captions.edit'),
             ukRecognition: undefined,
             ukRecognitionUrl: undefined,
             otherCountriesRecognition: undefined,

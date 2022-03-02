@@ -25,7 +25,6 @@ import { BackLink } from '../../common/decorators/back-link.decorator';
 
 import { ValidationFailedError } from '../../common/validation/validation-failed.error';
 
-import { isConfirmed } from '../../helpers/is-confirmed';
 import { Validator } from '../../helpers/validator';
 
 import { RegistrationDto } from './dto/registration.dto';
@@ -34,6 +33,7 @@ import { MandatoryRegistrationRadioButtonsPresenter } from './mandatory-registra
 import { RegistrationTemplate } from './interfaces/registration.template';
 
 import ViewUtils from './viewUtils';
+import { Profession } from '../profession.entity';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
@@ -65,12 +65,7 @@ export class RegistrationController {
       versionId,
     );
 
-    return this.renderForm(
-      res,
-      version,
-      isConfirmed(profession),
-      change === 'true',
-    );
+    return this.renderForm(res, version, profession, change === 'true');
   }
 
   @Post('/:professionId/versions/:versionId/registration')
@@ -107,7 +102,7 @@ export class RegistrationController {
       return this.renderForm(
         res,
         submittedValues,
-        isConfirmed(profession),
+        profession,
         submittedValues.change,
         errors,
       );
@@ -138,7 +133,7 @@ export class RegistrationController {
   private async renderForm(
     res: Response,
     submittedValues: ProfessionVersion | RegistrationDto,
-    isEditing: boolean,
+    profession: Profession,
     change: boolean,
     errors: object | undefined = undefined,
   ): Promise<void> {
@@ -153,7 +148,7 @@ export class RegistrationController {
     const templateArgs: RegistrationTemplate = {
       ...submittedValues,
       mandatoryRegistrationRadioButtonArgs,
-      captionText: ViewUtils.captionText(isEditing),
+      captionText: await ViewUtils.captionText(this.i18nService, profession),
       change,
       errors,
     };

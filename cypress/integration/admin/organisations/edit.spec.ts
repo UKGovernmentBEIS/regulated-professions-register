@@ -36,7 +36,9 @@ describe('Editing organisations', () => {
 
     it('Renders the form successfully', () => {
       cy.get('@organisation').then((organisation: any) => {
-        cy.translate('organisations.admin.edit.heading').then((editHeading) => {
+        cy.translate('organisations.admin.edit.heading', {
+          organisationName: organisation.name,
+        }).then((editHeading) => {
           cy.get('body').should('contain', editHeading);
 
           cy.checkInputValue(

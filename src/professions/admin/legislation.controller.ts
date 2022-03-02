@@ -21,7 +21,8 @@ import { LegislationTemplate } from './interfaces/legislation.template';
 import ViewUtils from './viewUtils';
 import { BackLink } from '../../common/decorators/back-link.decorator';
 import { ProfessionVersionsService } from '../profession-versions.service';
-import { isConfirmed } from '../../helpers/is-confirmed';
+import { I18nService } from 'nestjs-i18n';
+import { Profession } from '../profession.entity';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
@@ -29,6 +30,7 @@ export class LegislationController {
   constructor(
     private readonly professionsService: ProfessionsService,
     private readonly professionVersionsService: ProfessionVersionsService,
+    private readonly i18nService: I18nService,
   ) {}
 
   @Get('/:professionId/versions/:versionId/legislation/edit')
@@ -52,12 +54,11 @@ export class LegislationController {
       versionId,
     );
 
-    // We currently only show one legislation here, but we'll be showing multiple in future
-    this.renderForm(
+    return this.renderForm(
       res,
       version.legislations[0],
       version.legislations[1],
-      isConfirmed(profession),
+      profession,
       change === 'true',
     );
   }
@@ -109,7 +110,7 @@ export class LegislationController {
         res,
         updatedLegislation,
         updatedSecondLegislation,
-        isConfirmed(profession),
+        profession,
         submittedValues.change,
         errors,
       );
@@ -134,14 +135,14 @@ export class LegislationController {
     res: Response,
     legislation: Legislation,
     secondLegislation: Legislation,
-    isEditing: boolean,
+    profession: Profession,
     change: boolean,
     errors: object | undefined = undefined,
   ): Promise<void> {
     const templateArgs: LegislationTemplate = {
       legislation,
       secondLegislation,
-      captionText: ViewUtils.captionText(isEditing),
+      captionText: await ViewUtils.captionText(this.i18nService, profession),
       change,
       errors,
     };

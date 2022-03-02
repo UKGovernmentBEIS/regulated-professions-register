@@ -21,10 +21,10 @@ import { UserPermission } from '../../users/user-permission';
 import { BackLink } from '../../common/decorators/back-link.decorator';
 
 import ViewUtils from './viewUtils';
-import { isConfirmed } from '../../helpers/is-confirmed';
 import { OrganisationsService } from '../../organisations/organisations.service';
 import { RegulatedAuthoritiesSelectPresenter } from './regulated-authorities-select-presenter';
 import { Organisation } from '../../organisations/organisation.entity';
+import { I18nService } from 'nestjs-i18n';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
@@ -32,6 +32,7 @@ export class TopLevelInformationController {
   constructor(
     private readonly professionsService: ProfessionsService,
     private readonly organisationsService: OrganisationsService,
+    private readonly i18nService: I18nService,
   ) {}
 
   @Get('/:professionId/versions/:versionId/top-level-information/edit')
@@ -56,7 +57,7 @@ export class TopLevelInformationController {
       profession.name,
       profession.organisation,
       profession.additionalOrganisation,
-      isConfirmed(profession),
+      profession,
       change === 'true',
       errors,
     );
@@ -103,7 +104,7 @@ export class TopLevelInformationController {
         submittedValues.name,
         selectedOrganisation,
         selectedAdditionalOrganisation,
-        isConfirmed(profession),
+        profession,
         submittedValues.change,
         errors,
       );
@@ -136,7 +137,7 @@ export class TopLevelInformationController {
     name: string,
     selectedRegulatoryAuthority: Organisation | null,
     selectedAdditionalRegulatoryAuthority: Organisation | null,
-    isEditing: boolean,
+    profession: Profession,
     change: boolean,
     errors: object | undefined = undefined,
   ): Promise<void> {
@@ -158,7 +159,7 @@ export class TopLevelInformationController {
       name,
       regulatedAuthoritiesSelectArgs,
       additionalRegulatedAuthoritiesSelectArgs,
-      captionText: ViewUtils.captionText(isEditing),
+      captionText: await ViewUtils.captionText(this.i18nService, profession),
       change,
       errors,
     };

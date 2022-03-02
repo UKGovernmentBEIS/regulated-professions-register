@@ -96,7 +96,10 @@ export class CheckYourAnswersController {
       qualification,
       legislations,
       confirmed: isConfirmed(draftProfession),
-      captionText: ViewUtils.captionText(isConfirmed(draftProfession)),
+      captionText: await ViewUtils.captionText(
+        this.i18nService,
+        draftProfession,
+      ),
       isUK: version.occupationLocations
         ? isUK(version.occupationLocations)
         : false,

@@ -23,6 +23,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Add "more information url" to Qualification detail entry page
 - Display message in search results when no professions match filter criteria
 - Add a confirmation page before publishing an organisation or a profession
+- Display name of entity being edited (profession or organisation) when editing for context
 
 ### Changed
 

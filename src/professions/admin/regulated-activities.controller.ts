@@ -22,13 +22,15 @@ import { BackLink } from '../../common/decorators/back-link.decorator';
 import ViewUtils from './viewUtils';
 import { ProfessionVersionsService } from '../profession-versions.service';
 import { ProfessionVersion } from '../profession-version.entity';
-import { isConfirmed } from '../../helpers/is-confirmed';
+import { Profession } from '../profession.entity';
+import { I18nService } from 'nestjs-i18n';
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
 export class RegulatedActivitiesController {
   constructor(
     private readonly professionsService: ProfessionsService,
     private readonly professionVersionsService: ProfessionVersionsService,
+    private readonly i18nService: I18nService,
   ) {}
 
   @Get('/:professionId/versions/:versionId/regulated-activities/edit')
@@ -52,13 +54,13 @@ export class RegulatedActivitiesController {
       versionId,
     );
 
-    this.renderForm(
+    return this.renderForm(
       res,
       version.description,
       version.reservedActivities,
       version.protectedTitles,
       version.regulationUrl,
-      isConfirmed(profession),
+      profession,
       change === 'true',
     );
   }
@@ -99,7 +101,7 @@ export class RegulatedActivitiesController {
         submittedValues.reservedActivities,
         submittedValues.protectedTitles,
         submittedValues.regulationUrl,
-        isConfirmed(profession),
+        profession,
         submittedValues.change,
         errors,
       );
@@ -134,7 +136,7 @@ export class RegulatedActivitiesController {
     reservedActivities: string | null,
     protectedTitles: string | null,
     regulationUrl: string | null,
-    isEditing: boolean,
+    profession: Profession,
     change: boolean,
     errors: object | undefined = undefined,
   ): Promise<void> {
@@ -143,7 +145,7 @@ export class RegulatedActivitiesController {
       reservedActivities,
       protectedTitles,
       regulationUrl,
-      captionText: ViewUtils.captionText(isEditing),
+      captionText: await ViewUtils.captionText(this.i18nService, profession),
       change,
       errors,
     };

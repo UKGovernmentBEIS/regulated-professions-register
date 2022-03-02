@@ -58,6 +58,11 @@ describe('Adding a new profession', () => {
       // Conditional radio buttons add an additional `aria-expanded` field,
       // so ignore that rule on this page
       cy.checkAccessibility({ 'aria-allowed-attr': { enabled: false } });
+      cy.translate('professions.form.captions.addWithName', {
+        professionName: 'Example Profession',
+      }).then((addCaption) => {
+        cy.get('body').contains(addCaption);
+      });
       cy.translate('professions.form.label.scope.certainNations').then(
         (certainNations) => {
           cy.get('label').contains(certainNations).click();
@@ -75,7 +80,9 @@ describe('Adding a new profession', () => {
       });
 
       cy.checkAccessibility();
-      cy.translate('professions.form.captions.add').then((addCaption) => {
+      cy.translate('professions.form.captions.addWithName', {
+        professionName: 'Example Profession',
+      }).then((addCaption) => {
         cy.get('body').contains(addCaption);
       });
       cy.get('input[name="registrationRequirements"]').type('Requirements');
@@ -108,7 +115,9 @@ describe('Adding a new profession', () => {
           cy.get('body').should('contain', heading);
         },
       );
-      cy.translate('professions.form.captions.add').then((addCaption) => {
+      cy.translate('professions.form.captions.addWithName', {
+        professionName: 'Example Profession',
+      }).then((addCaption) => {
         cy.get('body').contains(addCaption);
       });
       cy.get('textarea[name="regulationSummary"]').type(
@@ -132,7 +141,9 @@ describe('Adding a new profession', () => {
           cy.get('body').should('contain', heading);
         },
       );
-      cy.translate('professions.form.captions.add').then((addCaption) => {
+      cy.translate('professions.form.captions.addWithName', {
+        professionName: 'Example Profession',
+      }).then((addCaption) => {
         cy.get('body').contains(addCaption);
       });
       cy.get('textarea[name="routesToObtain"]').type(
@@ -167,7 +178,9 @@ describe('Adding a new profession', () => {
       cy.translate('professions.form.headings.legislation').then((heading) => {
         cy.get('body').should('contain', heading);
       });
-      cy.translate('professions.form.captions.add').then((addCaption) => {
+      cy.translate('professions.form.captions.addWithName', {
+        professionName: 'Example Profession',
+      }).then((addCaption) => {
         cy.get('body').contains(addCaption);
       });
       cy.get('textarea[name="nationalLegislation"]').type(
@@ -183,7 +196,9 @@ describe('Adding a new profession', () => {
       cy.translate('professions.form.headings.checkAnswers').then((heading) => {
         cy.get('body').should('contain', heading);
       });
-      cy.translate('professions.form.captions.add').then((addCaption) => {
+      cy.translate('professions.form.captions.addWithName', {
+        professionName: 'Example Profession',
+      }).then((addCaption) => {
         cy.get('body').contains(addCaption);
       });
 

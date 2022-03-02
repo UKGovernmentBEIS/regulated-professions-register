@@ -8,22 +8,28 @@ import { ProfessionsService } from '../professions.service';
 import { RegulatedAuthoritiesSelectPresenter } from './regulated-authorities-select-presenter';
 import { TopLevelInformationController } from './top-level-information.controller';
 import { when } from 'jest-when';
+import { I18nService } from 'nestjs-i18n';
+import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
+import { translationOf } from '../../testutils/translation-of';
 
 describe('TopLevelInformationController', () => {
   let controller: TopLevelInformationController;
   let professionsService: DeepMocked<ProfessionsService>;
   let organisationsService: DeepMocked<OrganisationsService>;
   let response: DeepMocked<Response>;
+  let i18nService: I18nService;
 
   beforeEach(async () => {
     professionsService = createMock<ProfessionsService>();
     organisationsService = createMock<OrganisationsService>();
+    i18nService = createMockI18nService();
 
     const module: TestingModule = await Test.createTestingModule({
       controllers: [TopLevelInformationController],
       providers: [
         { provide: ProfessionsService, useValue: professionsService },
         { provide: OrganisationsService, useValue: organisationsService },
+        { provide: I18nService, useValue: i18nService },
       ],
     }).compile();
 
@@ -59,6 +65,7 @@ describe('TopLevelInformationController', () => {
               regulatedAuthoritiesSelectPresenter.selectArgs(),
             additionalRegulatedAuthoritiesSelectArgs:
               regulatedAuthoritiesSelectPresenter.selectArgs(),
+            captionText: translationOf('professions.form.captions.add'),
           }),
         );
       });
@@ -109,6 +116,7 @@ describe('TopLevelInformationController', () => {
               regulatedAuthoritiesSelectPresenterWithSelectedOrganisation.selectArgs(),
             additionalRegulatedAuthoritiesSelectArgs:
               regulatedAuthoritiesSelectPresenterWithSelectedAdditionalOrganisation.selectArgs(),
+            captionText: translationOf('professions.form.captions.edit'),
           }),
         );
       });

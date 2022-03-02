@@ -1,8 +1,11 @@
 import { createMock, DeepMocked } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Response } from 'express';
+import { I18nService } from 'nestjs-i18n';
+import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 import professionFactory from '../../testutils/factories/profession';
 import professionVersionFactory from '../../testutils/factories/profession-version';
+import { translationOf } from '../../testutils/translation-of';
 import { ProfessionVersionsService } from '../profession-versions.service';
 import { ProfessionsService } from '../professions.service';
 import { RegulatedActivitiesDto } from './dto/regulated-activities.dto';
@@ -13,10 +16,12 @@ describe(RegulatedActivitiesController, () => {
   let professionsService: DeepMocked<ProfessionsService>;
   let professionVersionsService: DeepMocked<ProfessionVersionsService>;
   let response: DeepMocked<Response>;
+  let i18nService: I18nService;
 
   beforeEach(async () => {
     professionsService = createMock<ProfessionsService>();
     professionVersionsService = createMock<ProfessionVersionsService>();
+    i18nService = createMockI18nService();
 
     const module: TestingModule = await Test.createTestingModule({
       controllers: [RegulatedActivitiesController],
@@ -25,6 +30,10 @@ describe(RegulatedActivitiesController, () => {
         {
           provide: ProfessionVersionsService,
           useValue: professionVersionsService,
+        },
+        {
+          provide: I18nService,
+          useValue: i18nService,
         },
       ],
     }).compile();
@@ -59,6 +68,7 @@ describe(RegulatedActivitiesController, () => {
         expect.objectContaining({
           regulationSummary: 'Example regulation summary',
           reservedActivities: 'Example reserved activities',
+          captionText: translationOf('professions.form.captions.edit'),
         }),
       );
     });
