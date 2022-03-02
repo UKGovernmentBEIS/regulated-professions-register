@@ -3,8 +3,10 @@
 
 {% set bodyClasses = "rpr-internal__page" %}
 
+{% set title = ("organisations.admin.publish.caption" | t) %}
+
 {% block content %}
-  <span class="govuk-caption-l">{{ 'organisations.admin.publish.caption' | t }}</span>
+  <span class="govuk-caption-l">{{ title }}</span>
   <h1 class="govuk-heading-l">{{ ('organisations.admin.publish.heading' | t({organisationName: organisation.name})) }}</h1>
 
   <div class="govuk-grid-row">

@@ -3,10 +3,11 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% set bodyClasses = "rpr-internal__listing rpr-internal__page" %}
+{% set title = ("organisations.admin.heading" | t) %}
 
 {% block content %}
   <h1 class="govuk-heading-xl">
-    {{ "organisations.admin.heading" | t }}
+    {{ title }}
   </h1>
 
   {% include "../../_messages.njk" %}

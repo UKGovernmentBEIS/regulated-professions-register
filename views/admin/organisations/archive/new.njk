@@ -2,6 +2,11 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% set bodyClasses = "rpr-internal__page" %}
+{% set title = ("organisations.admin.archive.heading" | t) %}
+
+{% block title %}
+  {{ "organisations.admin.archive.heading" | t }}
+{% endblock %}
 
 {% block content %}
   <span class="govuk-caption-l">{{ 'organisations.admin.archive.caption' | t }}</span>
