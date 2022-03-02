@@ -9,5 +9,5 @@ export interface ShowTemplate {
   qualificationSummaryList: SummaryList;
   nations: string[];
   industries: string[];
-  organisation: Organisation;
+  organisations: Organisation[];
 }

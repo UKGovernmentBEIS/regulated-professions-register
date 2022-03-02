@@ -631,12 +631,19 @@ describe('Editing an existing profession', () => {
       cy.get('select[name="regulatoryBody"]').select(
         'Department for Education',
       );
+      cy.get('select[name="additionalRegulatoryBody"]').select(
+        'Council of Registered Gas Installers',
+      );
       cy.translate('app.continue').then((buttonText) => {
         cy.get('button').contains(buttonText).click();
       });
       cy.checkSummaryListRowValue(
         'professions.form.label.topLevelInformation.regulatedAuthority',
         'Department for Education',
+      );
+      cy.checkSummaryListRowValue(
+        'professions.form.label.topLevelInformation.additionalAuthority',
+        'Council of Registered Gas Installers',
       );
 
       cy.translate('professions.form.button.saveAsDraft').then((buttonText) => {
@@ -649,6 +656,9 @@ describe('Editing an existing profession', () => {
         'contain',
         format(new Date(), 'dd-MM-yyyy'),
       );
+
+      cy.get('h3').should('contain', 'Department for Education');
+      cy.get('h3').should('contain', 'Council of Registered Gas Installers');
 
       cy.translate('professions.admin.update.confirmation.heading').then(
         (flashHeading) => {
