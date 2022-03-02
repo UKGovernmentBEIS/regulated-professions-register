@@ -24,6 +24,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Improve email address validation
 - Fixed Regulatory Authorities showing in internal listing before being saved as draft or published
 - Remove "Contact URL" from Regulator Authority editing page
+- Dispaly a second Regulatory Authority if specified for a profession
 
 ## [release-005] - 2022-02-24
 
