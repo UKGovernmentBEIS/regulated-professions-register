@@ -17,6 +17,8 @@ import { formatLink } from '../../helpers/format-link.helper';
 import { linkOf } from '../../testutils/link-of';
 import { emailOf } from '../../testutils/email-of';
 import { formatEmail } from '../../helpers/format-email.helper';
+import { ProfessionVersionStatus } from '../../professions/profession-version.entity';
+import professionVersionFactory from '../../testutils/factories/profession-version';
 
 jest.mock('../../helpers/escape.helper');
 jest.mock('../../helpers/format-multiline-string.helper');
@@ -28,19 +30,24 @@ describe('OrganisationPresenter', () => {
   describe('tableRow', () => {
     describe('when all relations are present', () => {
       describe('when the professions share one industry', () => {
-        const industries = [industryFactory.build({ name: 'Industry 1' })];
-
-        const professions = [
-          professionFactory.buildList(4, { industries: [industries[0]] }),
-        ].flat();
-
-        const organisation = organisationFactory.build({
-          professions: professions,
-          lastModified: new Date('01-01-2022'),
-          changedByUser: userFactory.build({ name: 'beis-rpr' }),
-        });
-
         it('returns the table row data', async () => {
+          const industries = [industryFactory.build({ name: 'Industry 1' })];
+
+          const professions = professionFactory.buildList(4, {
+            versions: [
+              professionVersionFactory.build({
+                industries: [industries[0]],
+                status: ProfessionVersionStatus.Draft,
+              }),
+            ],
+          });
+
+          const organisation = organisationFactory.build({
+            professions: professions,
+            lastModified: new Date('01-01-2022'),
+            changedByUser: userFactory.build({ name: 'beis-rpr' }),
+          });
+
           (escape as jest.Mock).mockImplementation(escapeOf);
 
           const presenter = new OrganisationPresenter(
@@ -89,9 +96,21 @@ describe('OrganisationPresenter', () => {
           ];
 
           const professions = [
-            professionFactory.buildList(4, { industries: [industries[0]] }),
+            professionFactory.buildList(4, {
+              versions: [
+                professionVersionFactory.build({
+                  industries: [industries[0]],
+                  status: ProfessionVersionStatus.Draft,
+                }),
+              ],
+            }),
             professionFactory.buildList(2, {
-              industries: [industries[1], industries[2]],
+              versions: [
+                professionVersionFactory.build({
+                  industries: [industries[1], industries[2]],
+                  status: ProfessionVersionStatus.Draft,
+                }),
+              ],
             }),
           ].flat();
 
@@ -130,43 +149,6 @@ describe('OrganisationPresenter', () => {
             html: `Translation of \`organisations.status.${organisation.status}\``,
           });
         });
-      });
-    });
-
-    describe('when the professions relation is not loaded', () => {
-      it('should raise an error', async () => {
-        const organisation = organisationFactory.build({
-          professions: undefined,
-        });
-        const presenter = new OrganisationPresenter(
-          organisation,
-          createMockI18nService(),
-        );
-
-        expect(async () => {
-          await presenter.tableRow();
-        }).rejects.toThrowError(
-          'You must eagerly load professions to show industries. Try calling a "WithProfessions" method on the `OrganisationsService` class',
-        );
-      });
-    });
-
-    describe('when the industries relation is not loaded', () => {
-      it('should raise an error', async () => {
-        const organisation = organisationFactory.build({
-          professions: [professionFactory.build({ industries: undefined })],
-        });
-
-        const presenter = new OrganisationPresenter(
-          organisation,
-          createMockI18nService(),
-        );
-
-        expect(async () => {
-          await presenter.tableRow();
-        }).rejects.toThrowError(
-          'You must eagerly load industries to show industries. Try calling a "WithProfessions" method on the `OrganisationsService` class',
-        );
       });
     });
   });

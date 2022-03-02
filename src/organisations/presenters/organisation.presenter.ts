@@ -7,6 +7,7 @@ import { formatMultilineString } from '../../helpers/format-multiline-string.hel
 import { formatDate } from '../../common/utils';
 import { formatLink } from '../../helpers/format-link.helper';
 import { formatEmail } from '../../helpers/format-email.helper';
+import { Profession } from '../../professions/profession.entity';
 
 interface OrganisationSummaryListOptions {
   classes?: string;
@@ -180,24 +181,12 @@ export class OrganisationPresenter {
   }
 
   private async industries(): Promise<string> {
-    const professions = this.organisation.professions;
-
-    if (professions === undefined) {
-      throw new Error(
-        'You must eagerly load professions to show industries. Try calling a "WithProfessions" method on the `OrganisationsService` class',
-      );
-    }
+    const professions = this.organisation.professions.map((profession) =>
+      Profession.withLatestLiveOrDraftVersion(profession),
+    );
 
     const industries = professions
-      .map((profession) => {
-        if (profession.industries === undefined) {
-          throw new Error(
-            'You must eagerly load industries to show industries. Try calling a "WithProfessions" method on the `OrganisationsService` class',
-          );
-        }
-
-        return profession.industries;
-      })
+      .map((profession) => profession.industries)
       .flat();
 
     const industryNames = await Promise.all(

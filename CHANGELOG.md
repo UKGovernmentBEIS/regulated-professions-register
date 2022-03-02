@@ -10,6 +10,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 
+- Fix bug where industries weren't being shown in the Admin Organisations index page
+
 ## [release-006] - 2022-03-02
 
 ### Added
