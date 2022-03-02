@@ -22,40 +22,44 @@ describe('Listing organisations', () => {
             const latestVersion =
               organisation.versions[organisation.versions.length - 1];
 
-            cy.get('tr')
-              .contains(organisation.name)
-              .then(($header) => {
-                const $row = $header.parent();
+            if (latestVersion.status === 'unconfirmed') {
+              cy.get('tr').should('not.contain', organisation.name);
+            } else {
+              cy.get('tr')
+                .contains(organisation.name)
+                .then(($header) => {
+                  const $row = $header.parent();
 
-                cy.wrap($row).should('contain', organisation.name);
-                cy.wrap($row).should('contain', latestVersion.alternateName);
-                cy.get('[data-cy=changed-by-user]').should('contain', '');
-                cy.wrap($row).should(
-                  'contain',
-                  format(new Date(), 'dd-MM-yyyy'),
-                );
-
-                cy.translate(
-                  `organisations.status.${latestVersion.status}`,
-                ).then((status) => {
-                  cy.wrap($row).should('contain', status);
-                });
-
-                const professionsForOrganisation = professions.filter(
-                  (profession: any) =>
-                    profession.organisation == organisation.name,
-                );
-
-                professionsForOrganisation.forEach((profession: any) => {
-                  (profession.versions[0].industries || []).forEach(
-                    (industry: any) => {
-                      cy.translate(industry).then((industry) => {
-                        cy.wrap($row).should('contain', industry);
-                      });
-                    },
+                  cy.wrap($row).should('contain', organisation.name);
+                  cy.wrap($row).should('contain', latestVersion.alternateName);
+                  cy.get('[data-cy=changed-by-user]').should('contain', '');
+                  cy.wrap($row).should(
+                    'contain',
+                    format(new Date(), 'dd-MM-yyyy'),
                   );
+
+                  cy.translate(
+                    `organisations.status.${latestVersion.status}`,
+                  ).then((status) => {
+                    cy.wrap($row).should('contain', status);
+                  });
+
+                  const professionsForOrganisation = professions.filter(
+                    (profession: any) =>
+                      profession.organisation == organisation.name,
+                  );
+
+                  professionsForOrganisation.forEach((profession: any) => {
+                    (profession.versions[0].industries || []).forEach(
+                      (industry: any) => {
+                        cy.translate(industry).then((industry) => {
+                          cy.wrap($row).should('contain', industry);
+                        });
+                      },
+                    );
+                  });
                 });
-              });
+            }
           });
         });
       });
