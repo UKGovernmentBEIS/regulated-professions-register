@@ -63,6 +63,9 @@
         "findAuthority": "Find a regulatory authority",
         "viewFigures": "View annual figures regarding applications"
       }
+    },
+    "admin": {
+      "heading": "Admin"
     }
   },
   "ukcpq": "UK Centre for Professional Qualifications"

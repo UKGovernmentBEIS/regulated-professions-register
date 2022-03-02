@@ -1,12 +1,14 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% extends "base.njk" %}
 
+{% set title = ("app.pages.index.heading" | t) %}
+
 {% block content %}
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
 
       <h1 class="govuk-heading-xl">
-        {{ "app.pages.index.heading" | t }}
+        {{ title }}
       </h1>
 
       {% for _i, paragraph in ("app.pages.index.intro" | t) %}
