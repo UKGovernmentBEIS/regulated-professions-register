@@ -8,7 +8,6 @@
         "address": "123 Example Street\nLondon\nEC1 1AB",
         "url": "https://www.gov.uk/guidance/early-years-qualifications-finder#overseas-qualifications",
         "email": "dfe@example.com",
-        "contactUrl": "def@example.com/contact-us",
         "telephone": "+44 0123 456789",
         "fax": "+44 0123 456780",
         "status": "live"
@@ -18,7 +17,6 @@
         "address": "345 Example Street\nLondon\nEC1 1AB",
         "url": "https://www.gov.uk/guidance/early-years-qualifications-finder#overseas-qualifications",
         "email": "old@example.com",
-        "contactUrl": "def@example.com/contact-us",
         "telephone": "+44 0123 456789",
         "fax": "+44 0123 456780",
         "status": "draft"
@@ -34,7 +32,6 @@
         "address": "123 Fake Street\nLondon\nEC1 1AB",
         "url": "www.corgi-gas-safety.com",
         "email": "gas@example.com",
-        "contactUrl": "gas@example.com/contact-us",
         "telephone": "+44 0123 456789",
         "fax": "+44 0123 456780",
         "status": "live"
@@ -50,7 +47,6 @@
         "address": "456 Example Street\nLondon\nEC1 1AB",
         "url": "www.lawsociety.org.uk",
         "email": "law@example.com",
-        "contactUrl": "law@example.com/contact-us",
         "telephone": "+44 0123 456789",
         "fax": "+44 0123 456780",
         "status": "live"
@@ -66,7 +62,6 @@
         "address": "456 Fake Street\nLondon\nEC1 1AB",
         "url": "www.gmc.com",
         "email": "gmc@example.com",
-        "contactUrl": "gmc@example.com/contact-us",
         "telephone": "+44 0123 456789",
         "fax": "+44 0123 456780",
         "status": "live"
