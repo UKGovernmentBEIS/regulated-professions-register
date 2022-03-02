@@ -2,12 +2,16 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
-
 {% set bodyClasses = "rpr-internal__page" %}
 
+{% set caption = ("organisations.admin.edit.heading" | t({ organisationName: name })) %}
+{% set heading = ("app.headings.checkAnswers" | t) %}
+
+{% set title =  caption + " | " + heading %}
+
 {% block content %}
-<span class="govuk-caption-l">{{ "organisations.admin.edit.heading" | t({ organisationName: name }) }}</span>
-<h1 class="govuk-heading-xl">{{ "app.headings.checkAnswers" | t }}</h1>
+<span class="govuk-caption-l">{{ caption }}</span>
+<h1 class="govuk-heading-xl">{{ heading }}</h1>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">

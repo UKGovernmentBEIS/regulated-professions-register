@@ -5,13 +5,15 @@
 
 {% set bodyClasses = "rpr-internal__page" %}
 
+{% if slug|length == 0 %}
+  {% set title = ("organisations.admin.create.heading" | t) %}
+{% else %}
+  {% set title = ("organisations.admin.edit.heading" | t({ organisationName: name })) %}
+{% endif %}
+
 {% block content %}
   <h1 class="govuk-heading-xl">
-    {% if slug|length == 0 %}
-      {{ "organisations.admin.create.heading" | t }}
-    {% else %}
-      {{ "organisations.admin.edit.heading" | t({ organisationName: name }) }}
-    {% endif %}
+    {{ title }}
   </h1>
 
   <div class="govuk-grid-row">

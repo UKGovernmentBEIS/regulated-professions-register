@@ -7,11 +7,12 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 
 {% set bodyClasses = "rpr-internal__listing rpr-internal__page" %}
+{% set title = ("professions.admin.heading" | t) %}
 
 {% block content %}
   <h1 class="govuk-heading-xl">
     <span class="govuk-caption-l">{{ organisation }}</span>
-    {{ "professions.admin.heading" | t }}
+    {{ title }}
   </h1>
 
   <div class="govuk-grid-row">

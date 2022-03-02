@@ -2,6 +2,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% set bodyClasses = "rpr-internal__page rpr-details__page" %}
+{% set title = organisation.name %}
 
 {% block content %}
   {% include "../../_messages.njk" %}

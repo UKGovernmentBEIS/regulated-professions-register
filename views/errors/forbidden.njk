@@ -1,7 +1,9 @@
 {% extends "../base.njk" %}
 
+{% set title = ("errors.forbidden.heading" | t) %}
+
 {% block content %}
-<h1 class="govuk-heading-l">{{ "errors.forbidden.heading" | t }}</h1>
+<h1 class="govuk-heading-l">{{ title }}</h1>
 
 <p class="govuk-body">{{ "errors.forbidden.message" | t }}</p>
 

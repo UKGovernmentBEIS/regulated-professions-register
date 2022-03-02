@@ -4,19 +4,25 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 
+{% set title = (("users.form.headings." + action) | t ) %}
+
+{% if name %}
+  {% set caption = ("users.form.headings." + action) | t({ name: "- " + name}) %}
+{% else %}
+  {% set caption = (("users.form.headings." + action) | t) %}
+{% endif %}
+
+{% set heading = ("users.form.headings.organisation" | t) %}
+{% set title =  caption + " | " + heading %}
+
 {% block content %}
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     {% include "../../../shared/_errors.njk" %}
 
-    {% if name %}
-      <span class="govuk-caption-xl">{{ ("users.form.headings." + action) | t({ name: "- " + name}) }}</span>
-    {% else %}
-      <span class="govuk-caption-xl">{{ ("users.form.headings." + action) | t }}</span>
-    {% endif %}
-
-    <h1 class="govuk-heading-xl">{{ "users.form.headings.organisation" | t }}</h1>
+    <span class="govuk-caption-xl">{{ caption }}</span>
+    <h1 class="govuk-heading-xl">{{ heading }}</h1>
 
     <form method="post" action="./">
 

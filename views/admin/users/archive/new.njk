@@ -2,9 +2,10 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% set bodyClasses = "rpr-internal__page" %}
+{% set title = ("users.archive.caption" | t) %}
 
 {% block content %}
-  <span class="govuk-caption-l">{{ 'users.archive.caption' | t }}</span>
+  <span class="govuk-caption-l">{{ title }}</span>
   <h1 class="govuk-heading-l">{{ ('users.archive.heading' | t({email: email})) }}</h1>
 
   <div class="govuk-grid-row">
