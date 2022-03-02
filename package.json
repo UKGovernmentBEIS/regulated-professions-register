@@ -55,7 +55,7 @@
     "@types/connect-flash": "^0.0.37",
     "@types/express-session": "^1.17.4",
     "auth0": "^2.40.0",
-    "bull": "^4.6.2",
+    "bull": "^4.7.0",
     "bull-repl": "^0.27.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
