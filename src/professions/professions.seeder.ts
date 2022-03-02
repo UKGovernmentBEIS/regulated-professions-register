@@ -18,23 +18,9 @@ import {
 
 type SeedProfession = {
   name: string;
-  alternateName: string;
   slug: string;
-  description: string;
-  occupationLocations: string[];
-  regulationType: string;
-  industries: string[];
-  qualification: string;
-  reservedActivities: string;
-  protectedTitles: string;
-  regulationUrl: string;
-  legislation: string;
   organisation: string;
   additionalOrganisation: string;
-  socCode: number;
-  keywords: string;
-  mandatoryRegistration: MandatoryRegistration;
-  confirmed: boolean;
   versions: SeedVersion[];
 };
 
@@ -98,7 +84,6 @@ export class ProfessionsSeeder implements Seeder {
 
         const newProfession = {
           name: seedProfession.name,
-          alternateName: seedProfession.alternateName,
           slug: seedProfession.slug,
           organisation: organisation,
           additionalOrganisation: additionalOrganisation,
