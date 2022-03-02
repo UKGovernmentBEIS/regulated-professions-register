@@ -4,16 +4,23 @@
 
 {% set bodyClasses = "rpr-internal__page" %}
 
+{% set heading = ("app.headings.checkAnswers" | t) %}
+
+{% if edit %}
+  {% set heading =("professions.form.headings.originalAnswers" | t) %}
+{% else %}
+  {% set heading =("professions.form.headings.checkAnswers" | t) %}
+{% endif %}
+
+{% set title =  captionText + " | " + heading %}
+
 {% block content %}
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <span class="govuk-caption-l">{{ captionText }}</span>
-      {% if edit %}
-        <h1 class="govuk-heading-l">{{ ("professions.form.headings.originalAnswers" | t) }}</h1>
-      {% else %}
-        <h1 class="govuk-heading-l">{{ ("professions.form.headings.checkAnswers" | t) }}</h1>
-      {% endif %}
+      <h1 class="govuk-heading-l">{{ heading }}</h1>
+
 
         <h2 class="govuk-heading-m">{{ ("professions.form.headings.topLevelInformation" | t) }}</h2>
 

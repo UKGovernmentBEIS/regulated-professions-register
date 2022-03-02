@@ -3,12 +3,13 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% set bodyClasses = "rpr-internal__page" %}
+{% set title = ("professions.admin.archive.caption" | t) %}
 
 {% block content %}
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-      <span class="govuk-caption-l">{{ 'professions.admin.archive.caption' | t }}</span>
+      <span class="govuk-caption-l">{{ title }}</span>
       <h1 class="govuk-heading-l">{{ ('professions.admin.archive.heading' | t({professionName: profession.name})) }}</h1>
 
       <form action="/admin/professions/{{ profession.id }}/versions/{{ profession.versionId }}/archive?_method=DELETE" method="post">

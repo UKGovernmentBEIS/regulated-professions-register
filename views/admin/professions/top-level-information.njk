@@ -5,6 +5,8 @@
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 
 {% set bodyClasses = "rpr-internal__page" %}
+{% set heading = ("professions.form.headings.topLevelInformation" | t) %}
+{% set title =  captionText + " | " + heading %}
 
 {% block content %}
 
@@ -14,7 +16,7 @@
   <div class="govuk-grid-column-two-thirds">
 
     <span class="govuk-caption-l">{{ captionText }}</span>
-    <h1 class="govuk-heading-l">{{ ("professions.form.headings.topLevelInformation" | t) }}</h1>
+    <h1 class="govuk-heading-l">{{ heading }}</h1>
 
     <form method="post" action="./">
       <input type="hidden" name="change" value="{{ change }}" />
@@ -27,7 +29,7 @@
             isPageHeading: false
           },
           hint: {
-            text: ("professions.form.label.topLevelInformation.nameHint" | t) 
+            text: ("professions.form.label.topLevelInformation.nameHint" | t)
           },
           id: "name",
           name: "name",

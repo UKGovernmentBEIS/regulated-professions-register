@@ -6,6 +6,8 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 
 {% set bodyClasses = "rpr-internal__page" %}
+{% set heading = ("professions.form.headings.regulatedActivities" | t) %}
+{% set title =  captionText + " | " + heading %}
 
 {% block content %}
   {% include "../../shared/_errors.njk" %}
@@ -14,7 +16,7 @@
     <div class="govuk-grid-column-two-thirds">
 
       <span class="govuk-caption-l">{{ captionText }}</span>
-      <h1 class="govuk-heading-l">{{ ("professions.form.headings.regulatedActivities" | t) }}</h1>
+      <h1 class="govuk-heading-l">{{ title }}</h1>
 
       <form method="post" action="./">
         <input type="hidden" name="change" value="{{ change }}" />
