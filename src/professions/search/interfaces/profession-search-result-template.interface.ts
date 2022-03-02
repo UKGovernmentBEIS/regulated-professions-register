@@ -1,7 +1,7 @@
 export interface ProfessionSearchResultTemplate {
   name: string;
   slug: string;
-  organisation: string;
+  organisations: string[];
   nations: string;
   industries: string[];
 }

@@ -39,6 +39,12 @@
             {% endfor %}
           {% endset %}
 
+          {% set organisationsHtml %}
+            {% for organisation in profession.organisations %}
+              <p class="govuk-body-m">{{ organisation }}</p>
+            {% endfor %}
+          {% endset %}
+
           <div>
             <h2>
               <a class="govuk-link govuk-heading-l rpr-listing__profession-title" href="/professions/{{ profession.slug }}">{{ profession.name }}<br>
@@ -53,7 +59,7 @@
                       text: ("professions.search.profession.regulators" | t)
                     },
                     value: {
-                      text: profession.organisation
+                      html: organisationsHtml
                     }
                   },
                   {
