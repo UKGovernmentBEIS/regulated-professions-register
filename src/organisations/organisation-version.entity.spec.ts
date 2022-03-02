@@ -10,7 +10,6 @@ describe('OrganisationVersion', () => {
       dto.address = 'address';
       dto.url = 'url';
       dto.email = 'email';
-      dto.contactUrl = 'contactUrl';
       dto.telephone = 'telephone';
       dto.fax = 'fax';
 
@@ -19,7 +18,6 @@ describe('OrganisationVersion', () => {
         address: 'address',
         url: 'url',
         email: 'email',
-        contactUrl: 'contactUrl',
         telephone: 'telephone',
         fax: 'fax',
       });

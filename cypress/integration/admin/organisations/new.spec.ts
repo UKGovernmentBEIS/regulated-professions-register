@@ -35,9 +35,7 @@ describe('Creating organisations', () => {
     it('Shows errors when I input data incorrectly', () => {
       cy.get('input[name="name"]').invoke('val', '');
 
-      cy.get('input[name="contactUrl"]')
-        .invoke('val', '')
-        .type('this is not a url');
+      cy.get('input[name="url"]').invoke('val', '').type('this is not a url');
 
       cy.get('input[name="email"]')
         .invoke('val', '')
@@ -59,7 +57,7 @@ describe('Creating organisations', () => {
         },
       );
 
-      cy.translate('organisations.admin.form.errors.contactUrl.invalid').then(
+      cy.translate('organisations.admin.form.errors.url.invalid').then(
         (error) => {
           cy.get('body').should('contain', error);
         },
@@ -76,7 +74,6 @@ describe('Creating organisations', () => {
       cy.get('input[name="alternateName"]').type('Alternate Name');
 
       cy.get('input[name="url"]').type('http://example.com');
-      cy.get('input[name="contactUrl"]').type('http://example.com');
 
       cy.get('textarea[name="address"]').type('123 Fake Street');
 
@@ -96,7 +93,7 @@ describe('Creating organisations', () => {
         'Alternate Name',
       );
       cy.checkSummaryListRowValue(
-        'organisations.label.contactUrl',
+        'organisations.label.url',
         'http://example.com',
       );
       cy.checkSummaryListRowValue(

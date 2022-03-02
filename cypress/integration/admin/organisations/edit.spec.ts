@@ -47,8 +47,8 @@ describe('Editing organisations', () => {
           );
 
           cy.checkInputValue(
-            'organisations.admin.form.label.contactUrl',
-            organisation.contactUrl,
+            'organisations.admin.form.label.url',
+            organisation.url,
           );
 
           cy.checkTextareaValue(
@@ -70,9 +70,7 @@ describe('Editing organisations', () => {
     });
 
     it('Shows errors when I input data incorrectly', () => {
-      cy.get('input[name="contactUrl"]')
-        .invoke('val', '')
-        .type('this is not a url');
+      cy.get('input[name="url"]').invoke('val', '').type('this is not a url');
 
       cy.get('input[name="email"]')
         .invoke('val', '')
@@ -89,7 +87,7 @@ describe('Editing organisations', () => {
         },
       );
 
-      cy.translate('organisations.admin.form.errors.contactUrl.invalid').then(
+      cy.translate('organisations.admin.form.errors.url.invalid').then(
         (error) => {
           cy.get('body').should('contain', error);
         },
@@ -97,7 +95,7 @@ describe('Editing organisations', () => {
     });
 
     it('Corrects mis-formatted data', () => {
-      cy.get('input[name="contactUrl"]')
+      cy.get('input[name="url"]')
         .invoke('val', '')
         .type('example.com/missing-protocol');
 
@@ -111,7 +109,7 @@ describe('Editing organisations', () => {
       cy.checkAccessibility();
 
       cy.checkSummaryListRowValue(
-        'organisations.label.contactUrl',
+        'organisations.label.url',
         'http://example.com/missing-protocol',
       );
 
@@ -126,9 +124,7 @@ describe('Editing organisations', () => {
         .invoke('val', '')
         .type('New Alternate Name');
 
-      cy.get('input[name="contactUrl"]')
-        .invoke('val', '')
-        .type('http://example.com');
+      cy.get('input[name="url"]').invoke('val', '').type('http://example.com');
 
       cy.get('textarea[name="address"]')
         .invoke('val', '')
@@ -147,7 +143,7 @@ describe('Editing organisations', () => {
         'New Alternate Name',
       );
       cy.checkSummaryListRowValue(
-        'organisations.label.contactUrl',
+        'organisations.label.url',
         'http://example.com',
       );
       cy.checkSummaryListRowValue(

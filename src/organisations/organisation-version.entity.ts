@@ -78,7 +78,6 @@ export class OrganisationVersion {
       address: dto.address,
       url: dto.url,
       email: dto.email,
-      contactUrl: dto.contactUrl,
       telephone: dto.telephone,
       fax: dto.fax,
     } as OrganisationVersion;
