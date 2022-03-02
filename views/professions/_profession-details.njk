@@ -69,7 +69,7 @@
         text: ("professions.show.bodies.emailAddress" | t)
       },
       value: {
-        html: ["<a class=\"govuk-link\" href=\"mailto:", (organisation.email | escape), "\">", (organisation.email | escape),  "</a>" ] | join
+        html: organisation.email | email
       }
     },
     {

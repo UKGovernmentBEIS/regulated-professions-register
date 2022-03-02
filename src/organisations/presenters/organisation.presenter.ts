@@ -6,6 +6,7 @@ import { escape } from '../../helpers/escape.helper';
 import { formatMultilineString } from '../../helpers/format-multiline-string.helper';
 import { formatDate } from '../../common/utils';
 import { formatLink } from '../../helpers/format-link.helper';
+import { formatEmail } from '../../helpers/format-email.helper';
 
 interface OrganisationSummaryListOptions {
   classes?: string;
@@ -173,9 +174,7 @@ export class OrganisationPresenter {
   }
 
   public email(): string {
-    return `<a href="mailto:${escape(
-      this.organisation.email,
-    )}" class="govuk-link">${escape(this.organisation.email)}</a>`;
+    return formatEmail(this.organisation.email);
   }
 
   public contactUrl(): string {
