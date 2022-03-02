@@ -19,12 +19,6 @@ import {
   ProfessionVersionStatus,
 } from './profession-version.entity';
 
-export enum MandatoryRegistration {
-  Mandatory = 'mandatory',
-  Voluntary = 'voluntary',
-  Unknown = 'unknown',
-}
-
 @Entity({ name: 'professions' })
 export class Profession {
   @PrimaryGeneratedColumn('uuid')
@@ -69,7 +63,6 @@ export class Profession {
   description?: string;
   occupationLocations?: string[];
   regulationType?: string;
-  mandatoryRegistration?: MandatoryRegistration;
   industries?: Industry[];
   qualification?: Qualification;
   protectedTitles?: string;
@@ -88,7 +81,6 @@ export class Profession {
     description?: string,
     occupationLocations?: string[],
     regulationType?: string,
-    mandatoryRegistration?: MandatoryRegistration,
     industries?: Industry[],
     qualification?: Qualification,
     reservedActivities?: string,
@@ -102,7 +94,6 @@ export class Profession {
     this.description = description || null;
     this.occupationLocations = occupationLocations || null;
     this.regulationType = regulationType || null;
-    this.mandatoryRegistration = mandatoryRegistration || null;
     this.industries = industries || null;
     this.qualification = qualification || null;
     this.reservedActivities = reservedActivities || null;
@@ -157,7 +148,6 @@ export class Profession {
       description: version.description,
       occupationLocations: version.occupationLocations,
       regulationType: version.regulationType,
-      mandatoryRegistration: version.mandatoryRegistration,
       industries: version.industries,
       qualification: version.qualification,
       reservedActivities: version.reservedActivities,

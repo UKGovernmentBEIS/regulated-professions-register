@@ -1,8 +1,5 @@
 import { Factory } from 'fishery';
-import {
-  MandatoryRegistration,
-  Profession,
-} from '../../professions/profession.entity';
+import { Profession } from '../../professions/profession.entity';
 import industryFactory from './industry';
 import organisationFactory from './organisation';
 import qualificationFactory from './qualification';
@@ -18,7 +15,6 @@ class ProfessionFactory extends Factory<Profession> {
       description: undefined,
       occupationLocations: undefined,
       regulationType: undefined,
-      mandatoryRegistration: undefined,
       industries: undefined,
       qualification: undefined,
       legislations: undefined,
@@ -38,7 +34,6 @@ export default ProfessionFactory.define(({ sequence }) => ({
     'A description of the profession that will be displayed to users',
   occupationLocations: ['GB-ENG'],
   regulationType: 'Reserves of activities',
-  mandatoryRegistration: MandatoryRegistration.Mandatory,
   industries: [
     industryFactory.build({ name: 'Example industry', id: 'example-industry' }),
   ],

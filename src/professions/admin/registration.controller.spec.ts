@@ -10,12 +10,9 @@ import { createMockI18nService } from '../../testutils/create-mock-i18n-service'
 import professionFactory from '../../testutils/factories/profession';
 import professionVersionFactory from '../../testutils/factories/profession-version';
 
-import { MandatoryRegistration } from '../profession-version.entity';
-
 import { ProfessionVersionsService } from '../profession-versions.service';
 import { ProfessionsService } from '../professions.service';
 
-import { MandatoryRegistrationRadioButtonsPresenter } from './mandatory-registration-radio-buttons-presenter';
 import { translationOf } from '../../testutils/translation-of';
 
 describe(RegistrationController, () => {
@@ -60,16 +57,11 @@ describe(RegistrationController, () => {
         professionsService.findWithVersions.mockResolvedValue(profession);
         professionVersionsService.findWithProfession.mockResolvedValue(version);
 
-        const mandatoryRegistrationRadioButtonsPresenter =
-          new MandatoryRegistrationRadioButtonsPresenter(null, i18nService);
-
         await controller.edit(response, 'profession-id', 'version-id', 'false');
 
         expect(response.render).toHaveBeenCalledWith(
           'admin/professions/registration',
           expect.objectContaining({
-            mandatoryRegistrationRadioButtonArgs:
-              await mandatoryRegistrationRadioButtonsPresenter.radioButtonArgs(),
             captionText: translationOf('professions.form.captions.add'),
           }),
         );
@@ -77,25 +69,18 @@ describe(RegistrationController, () => {
     });
 
     describe('when an existing Profession is found', () => {
-      it('should pre-select the mandatory registration in the radio buttons and pre-populate the other values', async () => {
+      it('should pre-populate the registration values', async () => {
         const profession = professionFactory.build({
           id: 'profession-id',
         });
         const version = professionVersionFactory.build({
           profession: profession,
-          mandatoryRegistration: MandatoryRegistration.Mandatory,
           registrationRequirements: 'Something',
           registrationUrl: 'http://example.com',
         });
 
         professionsService.findWithVersions.mockResolvedValue(profession);
         professionVersionsService.findWithProfession.mockResolvedValue(version);
-
-        const mandatoryRegistrationRadioButtonsPresenterWithSelectedValue =
-          new MandatoryRegistrationRadioButtonsPresenter(
-            MandatoryRegistration.Mandatory,
-            i18nService,
-          );
 
         await controller.edit(response, 'profession-id', 'version-id', 'false');
 
@@ -104,8 +89,6 @@ describe(RegistrationController, () => {
           expect.objectContaining({
             registrationRequirements: 'Something',
             registrationUrl: 'http://example.com',
-            mandatoryRegistrationRadioButtonArgs:
-              await mandatoryRegistrationRadioButtonsPresenterWithSelectedValue.radioButtonArgs(),
             captionText: translationOf('professions.form.captions.edit'),
           }),
         );
@@ -122,14 +105,12 @@ describe(RegistrationController, () => {
         const version = professionVersionFactory.build({
           id: 'version-id',
           profession: profession,
-          mandatoryRegistration: MandatoryRegistration.Mandatory,
         });
 
         professionsService.findWithVersions.mockResolvedValue(profession);
         professionVersionsService.findWithProfession.mockResolvedValue(version);
 
         const registrationDto = {
-          mandatoryRegistration: MandatoryRegistration.Voluntary,
           registrationRequirements: 'Something',
           registrationUrl: 'http://example.com',
         };
@@ -143,7 +124,6 @@ describe(RegistrationController, () => {
 
         expect(professionVersionsService.save).toHaveBeenCalledWith(
           expect.objectContaining({
-            mandatoryRegistration: MandatoryRegistration.Voluntary,
             registrationRequirements: 'Something',
             registrationUrl: 'http://example.com',
             profession: profession,
@@ -164,14 +144,12 @@ describe(RegistrationController, () => {
         const version = professionVersionFactory.build({
           id: 'version-id',
           profession: profession,
-          mandatoryRegistration: MandatoryRegistration.Mandatory,
         });
 
         professionsService.findWithVersions.mockResolvedValue(profession);
         professionVersionsService.findWithProfession.mockResolvedValue(version);
 
         const registrationDto = {
-          mandatoryRegistration: MandatoryRegistration.Voluntary,
           registrationRequirements: 'Something',
           registrationUrl: 'example.com',
         };
@@ -185,7 +163,6 @@ describe(RegistrationController, () => {
 
         expect(professionVersionsService.save).toHaveBeenCalledWith(
           expect.objectContaining({
-            mandatoryRegistration: MandatoryRegistration.Voluntary,
             registrationRequirements: 'Something',
             registrationUrl: 'http://example.com',
             profession: profession,
@@ -200,7 +177,7 @@ describe(RegistrationController, () => {
 
     describe('when required parameters are not entered', () => {
       it('does not update the profession, and re-renders the regulatory body form page with errors', async () => {
-        const registrationDtoWithoutMandatoryRegistration = {
+        const registrationDtoWithInvalidURL = {
           mandatoryRegistration: undefined,
           registrationUrl: 'not a url',
         };
@@ -209,7 +186,7 @@ describe(RegistrationController, () => {
           response,
           'profession-id',
           'version-id',
-          registrationDtoWithoutMandatoryRegistration,
+          registrationDtoWithInvalidURL,
         );
 
         expect(professionVersionsService.save).not.toHaveBeenCalled();
@@ -218,9 +195,6 @@ describe(RegistrationController, () => {
           'admin/professions/registration',
           expect.objectContaining({
             errors: {
-              mandatoryRegistration: {
-                text: 'professions.form.errors.mandatoryRegistration.empty',
-              },
               registrationUrl: {
                 text: 'professions.form.errors.registrationUrl.invalid',
               },
@@ -239,7 +213,6 @@ describe(RegistrationController, () => {
           const version = professionVersionFactory.build({
             id: 'version-id',
             profession: profession,
-            mandatoryRegistration: MandatoryRegistration.Mandatory,
           });
 
           professionsService.findWithVersions.mockResolvedValue(profession);
@@ -248,7 +221,6 @@ describe(RegistrationController, () => {
           );
 
           const registrationDtoWithChangeParam = {
-            mandatoryRegistration: MandatoryRegistration.Voluntary,
             registrationUrl: '',
             change: true,
           };
@@ -274,7 +246,6 @@ describe(RegistrationController, () => {
           const version = professionVersionFactory.build({
             id: 'version-id',
             profession: profession,
-            mandatoryRegistration: MandatoryRegistration.Mandatory,
           });
 
           professionsService.findWithVersions.mockResolvedValue(profession);
@@ -283,7 +254,6 @@ describe(RegistrationController, () => {
           );
 
           const registrationDtoWithFalseChangeParam = {
-            mandatoryRegistration: MandatoryRegistration.Voluntary,
             registrationUrl: '',
             change: false,
           };

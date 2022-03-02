@@ -24,12 +24,6 @@ export enum ProfessionVersionStatus {
   Unconfirmed = 'unconfirmed',
 }
 
-export enum MandatoryRegistration {
-  Mandatory = 'mandatory',
-  Voluntary = 'voluntary',
-  Unknown = 'unknown',
-}
-
 @Entity({ name: 'professionVersions' })
 export class ProfessionVersion {
   @PrimaryGeneratedColumn('uuid')
@@ -59,9 +53,6 @@ export class ProfessionVersion {
 
   @Column({ nullable: true })
   regulationType: string;
-
-  @Column({ nullable: true, type: 'enum', enum: MandatoryRegistration })
-  mandatoryRegistration: MandatoryRegistration;
 
   @Column({ nullable: true })
   registrationRequirements: string;

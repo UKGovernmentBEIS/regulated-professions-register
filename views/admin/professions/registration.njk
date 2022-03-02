@@ -21,25 +21,6 @@
         <input type="hidden" name="change" value="{{ change }}" />
 
         {{
-          govukRadios({
-            id: "mandatoryRegistration",
-            name: "mandatoryRegistration",
-            fieldset: {
-              legend: {
-                text: ("professions.form.label.registration.mandatoryRegistration" | t),
-                isPageHeading: false,
-                classes: "govuk-fieldset__legend--m"
-              }
-            },
-            hint: {
-              text: ("professions.form.label.registration.mandatoryRegistrationHint" | t)
-            },
-            items: mandatoryRegistrationRadioButtonArgs,
-            errorMessage: errors.mandatoryRegistration | tError
-          })
-        }}
-
-        {{
           govukInput({
             id: "registrationRequirements",
             name: "registrationRequirements",

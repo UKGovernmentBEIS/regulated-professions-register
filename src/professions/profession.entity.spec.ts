@@ -19,7 +19,6 @@ describe('Profession', () => {
         description: professionVersion.description,
         occupationLocations: professionVersion.occupationLocations,
         regulationType: professionVersion.regulationType,
-        mandatoryRegistration: professionVersion.mandatoryRegistration,
         industries: professionVersion.industries,
         qualification: professionVersion.qualification,
         reservedActivities: professionVersion.reservedActivities,
