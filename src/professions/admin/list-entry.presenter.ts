@@ -4,6 +4,7 @@ import { TableRow } from '../../common/interfaces/table-row';
 import { escape } from '../../helpers/escape.helper';
 import { stringifyNations } from '../../nations/helpers/stringifyNations';
 import { Nation } from '../../nations/nation';
+import { getOrganisationsFromProfession } from '../helpers/get-organisations-from-profession.helper';
 import { ProfessionPresenter } from '../presenters/profession.presenter';
 import { Profession } from '../profession.entity';
 import { ProfessionsPresenterView } from './professions.presenter';
@@ -90,15 +91,17 @@ export class ListEntryPresenter {
       { args: { name: escape(this.profession.name) } },
     )}</a>`;
 
+    const organisations = getOrganisationsFromProfession(this.profession)
+      .map((organisation) => organisation.name)
+      .join(', ');
+
     const entries: { [K in Field]: TableCell } = {
       profession: { text: this.profession.name },
       nations: { text: nations },
       lastModified: { text: presenter.lastModified },
       changedBy: { text: presenter.changedBy },
       organisation: {
-        text: this.profession.organisation
-          ? this.profession.organisation.name
-          : '',
+        text: organisations,
       },
       industry: { text: industries },
       status: {
