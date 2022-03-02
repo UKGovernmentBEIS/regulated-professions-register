@@ -11,15 +11,30 @@ describe('Searching an organisation', () => {
   });
 
   it('I can view an unfiltered list of organisations', () => {
-    cy.translate('organisations.search.foundPlural', { count: 4 }).then(
-      (foundText) => {
-        cy.get('body').should('contain.text', foundText);
-      },
-    );
-    cy.get('body').should('contain', 'Department for Education');
-    cy.get('body').should('contain', 'General Medical Council');
+    cy.readFile('./seeds/test/organisations.json').then((organisations) => {
+      let confirmedCount = 0;
 
-    checkResultLength(4);
+      organisations.forEach((organisation) => {
+        const latestVersion =
+          organisation.versions[organisation.versions.length - 1];
+
+        if (latestVersion.status === 'unconfirmed') {
+          cy.get('body').should('not.contain', organisation.name);
+        } else {
+          confirmedCount++;
+
+          cy.get('body').should('contain', organisation.name);
+        }
+      });
+
+      cy.translate('organisations.search.foundPlural', {
+        count: confirmedCount,
+      }).then((foundText) => {
+        cy.get('body').should('contain.text', foundText);
+      });
+
+      checkResultLength(5);
+    });
   });
 
   it('Organisations are sorted alphabetically', () => {
