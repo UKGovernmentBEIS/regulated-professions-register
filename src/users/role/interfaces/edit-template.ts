@@ -6,4 +6,5 @@ export interface EditTemplate {
   change: boolean;
   errors: object | undefined;
   action: ActionType;
+  name: string;
 }

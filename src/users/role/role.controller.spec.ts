@@ -70,6 +70,7 @@ describe('RoleController', () => {
           action: 'edit',
           roleRadioButtonArgs,
           change: false,
+          name: user.name,
         }),
       );
 

@@ -4,6 +4,7 @@ import { ActionType } from '../../helpers/get-action-type-from-user';
 export class EditTemplate {
   organisationsSelectArgs: SelectItemArgs[];
   serviceOwnerRadioButtonArgs: RadioButtonArgs[];
+  name: string;
   change: boolean;
   action: ActionType;
   errors: object | undefined;

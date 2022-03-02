@@ -34,6 +34,9 @@ describe('Creating a new user', () => {
 
       cy.checkAccessibility();
 
+      cy.translate('users.form.headings.new', { name: '' }).then((heading) => {
+        cy.get('body').should('contain', heading);
+      });
       cy.translate('users.form.hint.organisation').then((organisationHint) => {
         cy.get('body').should('contain', organisationHint);
       });
@@ -51,6 +54,12 @@ describe('Creating a new user', () => {
       cy.get('input[name="email"]').type('name@example.com');
       cy.get('button').click();
       cy.checkAccessibility();
+
+      cy.translate('users.form.headings.new', { name: '- Example Name' }).then(
+        (heading) => {
+          cy.get('body').should('contain', heading);
+        },
+      );
 
       cy.translate(
         'users.roleDescriptions.manageProfessionsAndOrganisations',
@@ -197,6 +206,10 @@ describe('Creating a new user', () => {
 
       cy.checkAccessibility();
 
+      cy.translate('users.form.headings.new', { name: '' }).then((heading) => {
+        cy.get('body').should('contain', heading);
+      });
+
       cy.translate('users.form.label.email').then((emailLabel) => {
         cy.get('body').should('contain', emailLabel);
       });
@@ -205,6 +218,12 @@ describe('Creating a new user', () => {
       cy.get('input[name="email"]').type('organisation@example.com');
       cy.get('button').click();
       cy.checkAccessibility();
+
+      cy.translate('users.form.headings.new', { name: '- Example Name' }).then(
+        (heading) => {
+          cy.get('body').should('contain', heading);
+        },
+      );
 
       cy.translate(
         'users.roleDescriptions.manageProfessionsAndOrganisations',

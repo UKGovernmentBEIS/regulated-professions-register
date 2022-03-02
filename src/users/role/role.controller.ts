@@ -55,6 +55,7 @@ export class RoleController {
       res,
       user.serviceOwner,
       user.role,
+      user.name,
       change,
       getActionTypeFromUser(user),
     );
@@ -85,6 +86,7 @@ export class RoleController {
         res,
         user.serviceOwner,
         role,
+        user.name,
         submittedValues.change,
         getActionTypeFromUser(user),
         errors,
@@ -109,6 +111,7 @@ export class RoleController {
     res: Response,
     serviceOwner: boolean,
     role: Role | null,
+    name: string,
     change: boolean,
     action: ActionType,
     errors: object | undefined = undefined,
@@ -125,6 +128,7 @@ export class RoleController {
       change,
       errors,
       action,
+      name,
     };
 
     res.render('admin/users/role/edit', templateArgs);
