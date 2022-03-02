@@ -51,9 +51,6 @@ export class OrganisationVersion {
   email: string;
 
   @Column({ nullable: true })
-  contactUrl: string;
-
-  @Column({ nullable: true })
   telephone: string;
 
   @Column({ nullable: true })

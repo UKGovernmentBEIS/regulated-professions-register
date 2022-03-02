@@ -86,7 +86,6 @@ describe('OrganisationsService', () => {
         address: '123 Fake Street, London, AB1 2AB, England',
         url: 'https://www.example-org.com',
         email: 'hello@example-org.com',
-        contactUrl: 'https://www.example-org.com/contact-us',
         telephone: '+441234567890',
         fax: '+441234567891',
       };
