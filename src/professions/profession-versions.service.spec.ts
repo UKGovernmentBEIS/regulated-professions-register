@@ -436,6 +436,7 @@ describe('ProfessionVersionsService', () => {
         'professionVersion.profession',
         'professionVersion.industries',
         'profession.organisation',
+        'profession.additionalOrganisation',
         'professionVersion.user',
         'professionVersion.qualification',
         'professionVersion.legislations',
@@ -480,6 +481,7 @@ describe('ProfessionVersionsService', () => {
       expect(queryBuilder).toHaveJoined([
         'professionVersion.profession',
         'profession.organisation',
+        'profession.additionalOrganisation',
         'professionVersion.industries',
         'professionVersion.user',
         'professionVersion.qualification',
@@ -533,6 +535,7 @@ describe('ProfessionVersionsService', () => {
       expect(queryBuilder).toHaveJoined([
         'professionVersion.profession',
         'profession.organisation',
+        'profession.additionalOrganisation',
         'professionVersion.industries',
         'professionVersion.user',
         'professionVersion.qualification',
@@ -582,6 +585,7 @@ describe('ProfessionVersionsService', () => {
         'professionVersion.profession',
         'professionVersion.industries',
         'profession.organisation',
+        'profession.additionalOrganisation',
         'professionVersion.user',
         'professionVersion.qualification',
         'professionVersion.legislations',
@@ -590,6 +594,11 @@ describe('ProfessionVersionsService', () => {
       expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
         'organisation.versions',
         'organisationVersions',
+      );
+
+      expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
+        'additionalOrganisation.versions',
+        'additionalOrganisationVersions',
       );
 
       expect(queryBuilder.where).toHaveBeenCalledWith(
@@ -626,6 +635,7 @@ describe('ProfessionVersionsService', () => {
         'professionVersion.profession',
         'professionVersion.industries',
         'profession.organisation',
+        'profession.additionalOrganisation',
         'professionVersion.user',
         'professionVersion.qualification',
         'professionVersion.legislations',
@@ -634,6 +644,11 @@ describe('ProfessionVersionsService', () => {
       expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
         'organisation.versions',
         'organisationVersions',
+      );
+
+      expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
+        'additionalOrganisation.versions',
+        'additionalOrganisationVersions',
       );
 
       expect(queryBuilder.where).toHaveBeenCalledWith({
