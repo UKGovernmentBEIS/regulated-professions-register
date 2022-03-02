@@ -22,7 +22,7 @@ resource "cloudfoundry_app" "beis-rpr-app" {
     "AUTH0_DOMAIN"        = var.auth0_domain
     "AUTH0_REDIRECT_URL"  = var.auth0_redirect_url
     "APP_SECRET"          = var.app_secret
-    "HOST_URL"            = "https://${var.custom_domain}.${var.custom_hostname}/"
+    "HOST_URL"            = "https://${var.custom_hostname}.${var.custom_domain}/"
     "NOTIFY_TEMPLATE_ID"  = var.notify_template_id
     "NOTIFY_API_KEY"      = var.notify_api_key
     "ENVIRONMENT"         = var.environment
