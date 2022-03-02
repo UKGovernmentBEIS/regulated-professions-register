@@ -45,51 +45,48 @@
 
 <h2 class="govuk-heading-m rpr-details__section-title">{{ "professions.show.bodies.heading" | t }}</h2>
 
-{{ govukSummaryList({
-  classes: 'govuk-summary-list--no-border',
-  rows: [
-    {
-      key: {
-        text: ("professions.show.bodies.regulatedAuthority" | t)
-      },
-      value: {
-        text: organisation.name
-      }
-    },
-    {
-      key: {
-        text: ("professions.show.bodies.address" | t)
-      },
-      value: {
-        html: organisation.address | multiline
-      }
-    },
-    {
-      key: {
-        text: ("professions.show.bodies.emailAddress" | t)
-      },
-      value: {
-        html: organisation.email | email
-      }
-    },
-    {
-      key: {
-        text: ("professions.show.bodies.url" | t)
-      },
-      value: {
-        html: organisation.url | link
-      }
-    },
-    {
-      key: {
-        text: ("professions.show.bodies.phoneNumber" | t)
-      },
-      value: {
-        text: organisation.telephone
-      }
-    }
-  ]
-}) }}
+{% for organisation in organisations %}
+  <div class="rpr-details__sub-group">
+    <h3 class="govuk-heading-m rpr-details__sub-group-title">{{ organisation.name | escape }}</h3>
+    {{ govukSummaryList({
+      classes: 'govuk-summary-list--no-border',
+      rows: [
+        {
+          key: {
+            text: ("professions.show.bodies.address" | t)
+          },
+          value: {
+            html: organisation.address | multiline
+          }
+        },
+        {
+          key: {
+            text: ("professions.show.bodies.emailAddress" | t)
+          },
+          value: {
+            html: organisation.email | email
+          }
+        },
+        {
+          key: {
+            text: ("professions.show.bodies.url" | t)
+          },
+          value: {
+            html: organisation.url | link
+          }
+        },
+        {
+          key: {
+            text: ("professions.show.bodies.phoneNumber" | t)
+          },
+          value: {
+            text: organisation.telephone
+          }
+        }
+      ]
+    }) }}
+  </div>
+{% endfor %}
 
 <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
 

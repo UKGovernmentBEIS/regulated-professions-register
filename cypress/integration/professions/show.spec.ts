@@ -11,27 +11,29 @@ describe('Showing a profession', () => {
     cy.translate('professions.show.bodies.heading').then((heading) => {
       cy.get('body').should('contain', heading);
     });
-    cy.checkSummaryListRowValue(
-      'professions.show.bodies.regulatedAuthority',
-      'Law Society of England and Wales',
-    );
-    cy.checkSummaryListRowMultilineValue('professions.show.bodies.address', [
-      '456 Example Street',
-      'London',
-      'EC1 1AB',
-    ]);
-    cy.checkSummaryListRowValue(
-      'professions.show.bodies.emailAddress',
-      'law@example.com',
-    );
-    cy.checkSummaryListRowValue(
-      'professions.show.bodies.url',
-      'www.lawsociety.org.uk',
-    );
-    cy.checkSummaryListRowValue(
-      'professions.show.bodies.phoneNumber',
-      '+44 0123 456789',
-    );
+
+    cy.get('h3').should('contain', 'Law Society of England and Wales');
+    cy.get('h3')
+      .contains('Law Society of England and Wales')
+      .parent()
+      .within(() => {
+        cy.checkSummaryListRowMultilineValue(
+          'professions.show.bodies.address',
+          ['456 Example Street', 'London', 'EC1 1AB'],
+        );
+        cy.checkSummaryListRowValue(
+          'professions.show.bodies.emailAddress',
+          'law@example.com',
+        );
+        cy.checkSummaryListRowValue(
+          'professions.show.bodies.url',
+          'www.lawsociety.org.uk',
+        );
+        cy.checkSummaryListRowValue(
+          'professions.show.bodies.phoneNumber',
+          '+44 0123 456789',
+        );
+      });
 
     cy.translate('professions.show.regulatedActivities.heading').then(
       (heading) => {

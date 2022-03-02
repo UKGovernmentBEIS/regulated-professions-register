@@ -16,6 +16,16 @@ $govuk-assets-path: '~govuk-frontend/govuk/assets/';
   &__section-title {
     text-transform: uppercase;
   }
+
+  &__sub-group {
+    padding: 1em 0 0 0;
+    margin: 0;
+  }
+
+  &__sub-group-title {
+    border-left: 0.5em solid govuk-colour('black');
+    padding-left: 0.5em;
+  }
 }
 
 .rpr-listing {
