@@ -8,6 +8,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
+### Changed
+
+## [release-006] - 2022-03-02
+
+### Added
+
 - Allow organisations to be archived
 - Allow professions to be archived
 
@@ -141,7 +147,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fix links in error messages when adding a new profession
 - Make validation errors more human readable
 
-[unreleased]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-003...HEAD
+[unreleased]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-006...HEAD
+[release-006]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release005...release-006
 [release-005]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release004...release-005
 [release-004]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release003...release-004
 [release-003]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release002...release-003
