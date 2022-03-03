@@ -15,19 +15,30 @@
   <div class="govuk-grid-column-two-thirds">
       {{ govukSummaryList(summaryList) }}
 
-      <form action="{{ currentUrl }}" method="post">
-        <input type="hidden" name="confirm" value="true" />
-
-        {{
-          govukButton({
-            text: "organisations.admin.button.saveAsDraft" | t,
-            id: "submit-button",
-            classes: "govuk-button--secondary",
-            type: "Submit",
-            preventDoubleClick: true
-          })
-        }}
-      </form>
+      <div class="govuk-button-group rpr-internal__buttons-container">
+        <form action="{{ currentUrl }}" method="post">
+          <input type="hidden" name="confirm" value="true" />
+          {{
+            govukButton({
+              text: "organisations.admin.button.saveAsDraft" | t,
+              id: "submit-button",
+              classes: "govuk-button--secondary",
+              type: "Submit",
+              preventDoubleClick: true
+            })
+          }}
+        </form>
+        {% if 'publishOrganisation' in permissions %}
+          {{
+            govukButton({
+              text: ("organisations.admin.button.publish" | t),
+              classes: "govuk-button",
+              id: "publish-button",
+              href: "/admin/organisations/" + id + "/versions/" + versionId + "/publish?fromEdit=true"
+            })
+          }}
+        {% endif %}
+      </div>
   </div>
 </div>
 {% endblock %}

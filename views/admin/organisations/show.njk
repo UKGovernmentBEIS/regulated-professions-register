@@ -39,7 +39,9 @@
                   govukButton({
                     text: ("organisations.admin.button.publish" | t),
                     classes: "govuk-button",
-                    id: "publish-button",
+                    attributes: {
+                      "data-cy": "publish-button"
+                    },
                     href: "/admin/organisations/" + organisation.id + "/versions/" + organisation.versionId + "/publish"
                   })
                 }}

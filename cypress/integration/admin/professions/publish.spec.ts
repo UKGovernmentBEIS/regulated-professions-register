@@ -177,7 +177,7 @@ describe('Publishing professions', () => {
       cy.get('[data-cy=changed-by-user]').should('contain', 'Editor');
       cy.get('[data-cy=last-modified]').should(
         'contain',
-        format(new Date(), 'dd-MM-yyyy'),
+        format(new Date(), 'd MMM yyyy'),
       );
 
       cy.visitAndCheckAccessibility('/admin/professions');

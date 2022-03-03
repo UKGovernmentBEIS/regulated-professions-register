@@ -1,5 +1,5 @@
 import { Controller, Get, Param, Put, Render, Req, Res } from '@nestjs/common';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { I18nService } from 'nestjs-i18n';
 import { BackLink } from '../../common/decorators/back-link.decorator';
 import { flashMessage } from '../../common/flash-message';
@@ -20,7 +20,11 @@ export class OrganisationPublicationController {
   @Get('/:organisationId/versions/:versionId/publish')
   @Permissions(UserPermission.PublishOrganisation)
   @Render('admin/organisations/publication/new')
-  @BackLink('/admin/organisations/:organisationId/versions/:versionId')
+  @BackLink((request: Request) =>
+    request.query.fromEdit === 'true'
+      ? '/admin/organisations/:organisationId/versions/:versionId/edit'
+      : '/admin/organisations/:organisationId/versions/:versionId',
+  )
   async new(
     @Param('organisationId') organisationId: string,
     @Param('versionId') versionId: string,
