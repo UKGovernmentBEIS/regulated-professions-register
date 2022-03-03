@@ -20,7 +20,11 @@
 
         {{
           govukButton({
-            text: "organisations.admin.button.amend" | t
+            text: "organisations.admin.button.saveAsDraft" | t,
+            id: "submit-button",
+            classes: "govuk-button--secondary",
+            type: "Submit",
+            preventDoubleClick: true
           })
         }}
       </form>
