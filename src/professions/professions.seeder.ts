@@ -124,7 +124,7 @@ export class ProfessionsSeeder implements Seeder {
         let qualification: Qualification =
           version.qualification &&
           (await this.qualificationsRepository.findOne({
-            where: { level: version.qualification },
+            where: { routesToObtain: version.qualification },
           }));
 
         if (qualification) {
@@ -133,14 +133,7 @@ export class ProfessionsSeeder implements Seeder {
           // each time. We need to fix this, but in the interests of getting
           // seed data in, we'll just create a new entry each time
           qualification = await this.qualificationsRepository.save(
-            new Qualification(
-              qualification.level,
-              qualification.routesToObtain,
-              qualification.mostCommonRouteToObtain,
-              qualification.educationDuration,
-              qualification.mandatoryProfessionalExperience,
-              qualification.url,
-            ),
+            new Qualification(qualification.routesToObtain, qualification.url),
           );
         }
 

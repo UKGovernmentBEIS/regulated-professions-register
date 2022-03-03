@@ -9,32 +9,9 @@ export default class QualificationPresenter {
     private readonly i18nService: I18nService,
   ) {}
 
-  readonly level = this.qualification?.level;
-
   readonly routesToObtain = formatMultilineString(
     this.qualification && this.qualification.routesToObtain,
   );
-
-  readonly mostCommonRouteToObtain = formatMultilineString(
-    this.qualification && this.qualification.mostCommonRouteToObtain,
-  );
-
-  readonly duration =
-    this.qualification && this.qualification.educationDuration;
-
-  get mandatoryProfessionalExperience(): string {
-    if (!this.qualification) {
-      return '';
-    }
-
-    if (this.qualification.mandatoryProfessionalExperience === null) {
-      return '';
-    }
-
-    return this.qualification.mandatoryProfessionalExperience
-      ? 'app.yes'
-      : 'app.no';
-  }
 
   readonly moreInformationUrl = formatLink(
     this.qualification && this.qualification.url,
@@ -61,53 +38,11 @@ export default class QualificationPresenter {
         {
           key: {
             text: await this.i18nService.translate(
-              'professions.show.qualification.level',
-            ),
-          },
-          value: {
-            html: formatMultilineString(this.level),
-          },
-        },
-        {
-          key: {
-            text: await this.i18nService.translate(
               'professions.show.qualification.routesToObtain',
             ),
           },
           value: {
             html: this.routesToObtain,
-          },
-        },
-        {
-          key: {
-            text: await this.i18nService.translate(
-              'professions.show.qualification.mostCommonRouteToObtain',
-            ),
-          },
-          value: {
-            html: this.mostCommonRouteToObtain,
-          },
-        },
-        {
-          key: {
-            text: await this.i18nService.translate(
-              'professions.show.qualification.duration',
-            ),
-          },
-          value: {
-            text: this.duration,
-          },
-        },
-        {
-          key: {
-            text: await this.i18nService.translate(
-              'professions.show.qualification.mandatoryExperience',
-            ),
-          },
-          value: {
-            text: await this.i18nService.translate(
-              this.mandatoryProfessionalExperience,
-            ),
           },
         },
         {

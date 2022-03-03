@@ -69,11 +69,6 @@ describe('Editing an existing profession', () => {
       );
 
       cy.checkSummaryListRowValue(
-        'professions.form.label.qualifications.qualificationLevel',
-        'DSE - Diploma (post-secondary education), including Annex II (ex 92/51, Annex C,D) , Art. 11 c',
-      );
-
-      cy.checkSummaryListRowValue(
         'professions.form.label.legislation.nationalLegislation',
         'The Trade Marks Act 1994',
       );
@@ -158,7 +153,7 @@ describe('Editing an existing profession', () => {
       );
 
       cy.clickSummaryListRowAction(
-        'professions.form.label.qualifications.qualificationLevel',
+        'professions.form.label.qualifications.routesToObtain',
         'Change',
       );
 
@@ -168,15 +163,15 @@ describe('Editing an existing profession', () => {
       }).then((editCaption) => {
         cy.get('body').contains(editCaption);
       });
-      cy.get('textarea[name="level"]')
+      cy.get('textarea[name="routesToObtain"]')
         .clear()
-        .type('Updated qualification level');
+        .type('Updated routes to obtain qualification');
       cy.translate('app.continue').then((buttonText) => {
         cy.get('button').contains(buttonText).click();
       });
       cy.checkSummaryListRowValue(
-        'professions.form.label.qualifications.qualificationLevel',
-        'Updated qualification level',
+        'professions.form.label.qualifications.routesToObtain',
+        'Updated routes to obtain qualification',
       );
 
       cy.clickSummaryListRowAction(
@@ -419,24 +414,12 @@ describe('Editing an existing profession', () => {
           '',
         );
         cy.checkSummaryListRowValue(
-          'professions.form.label.qualifications.mostCommonRouteToObtain',
-          '',
-        );
-        cy.checkSummaryListRowValue(
-          'professions.form.label.qualifications.duration',
-          '',
-        );
-        cy.checkSummaryListRowValue(
-          'professions.form.label.qualifications.mandatoryProfessionalExperience',
-          '',
-        );
-        cy.checkSummaryListRowValue(
           'professions.form.label.qualifications.moreInformationUrl',
           '',
         );
 
         cy.clickSummaryListRowAction(
-          'professions.form.label.qualifications.qualificationLevel',
+          'professions.form.label.qualifications.routesToObtain',
           'Change',
         );
 
@@ -445,14 +428,6 @@ describe('Editing an existing profession', () => {
         cy.get('textarea[name="routesToObtain"]').type(
           'General secondary education',
         );
-        cy.get('textarea[name="mostCommonRouteToObtain"]').type(
-          'A 4 year degree',
-        );
-        cy.get('input[name="duration"]').type('4.0 Years');
-        cy.get(
-          'input[name="mandatoryProfessionalExperience"][value="1"]',
-        ).check();
-        cy.get('textarea[name="level"]').type('An example Qualification level');
         cy.get('input[name="moreInformationUrl"]').type(
           'http://example.com/more-info',
         );
@@ -471,31 +446,9 @@ describe('Editing an existing profession', () => {
         cy.checkAccessibility();
 
         cy.checkSummaryListRowValue(
-          'professions.form.label.qualifications.qualificationLevel',
-          'An example Qualification level',
-        );
-
-        cy.checkSummaryListRowValue(
           'professions.form.label.qualifications.routesToObtain',
           'General secondary education',
         );
-
-        cy.checkSummaryListRowValue(
-          'professions.form.label.qualifications.mostCommonRouteToObtain',
-          'A 4 year degree',
-        );
-
-        cy.checkSummaryListRowValue(
-          'professions.form.label.qualifications.duration',
-          '4.0 Years',
-        );
-
-        cy.translate('app.yes').then((yes) => {
-          cy.checkSummaryListRowValue(
-            'professions.form.label.qualifications.mandatoryProfessionalExperience',
-            yes,
-          );
-        });
 
         cy.checkSummaryListRowValue(
           'professions.form.label.qualifications.moreInformationUrl',

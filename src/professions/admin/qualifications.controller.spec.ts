@@ -5,7 +5,6 @@ import { I18nService } from 'nestjs-i18n';
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 import professionFactory from '../../testutils/factories/profession';
 import { ProfessionsService } from '../professions.service';
-import { YesNoRadioButtonArgsPresenter } from './yes-no-radio-buttons-presenter';
 import { QualificationsDto } from './dto/qualifications.dto';
 import { QualificationsController } from './qualifications.controller';
 import { ProfessionVersionsService } from '../profession-versions.service';
@@ -69,11 +68,7 @@ describe(QualificationsController, () => {
         expect(response.render).toHaveBeenCalledWith(
           'admin/professions/qualifications',
           expect.objectContaining({
-            level: profession.qualification.level,
             routesToObtain: profession.qualification.routesToObtain,
-            mostCommonRouteToObtain:
-              profession.qualification.mostCommonRouteToObtain,
-            duration: profession.qualification.educationDuration,
             moreInformationUrl: profession.qualification.url,
             captionText: translationOf('professions.form.captions.edit'),
             ukRecognition: profession.qualification.ukRecognition,
@@ -82,11 +77,6 @@ describe(QualificationsController, () => {
               profession.qualification.otherCountriesRecognition,
             otherCountriesRecognitionUrl:
               profession.qualification.otherCountriesRecognitionUrl,
-            mandatoryProfessionalExperienceRadioButtonArgs:
-              await new YesNoRadioButtonArgsPresenter(
-                version.qualification.mandatoryProfessionalExperience,
-                i18nService,
-              ).radioButtonArgs(),
             isUK: false,
           }),
         );
@@ -118,21 +108,13 @@ describe(QualificationsController, () => {
         expect(response.render).toHaveBeenCalledWith(
           'admin/professions/qualifications',
           expect.objectContaining({
-            level: undefined,
             routesToObtain: undefined,
-            mostCommonRouteToObtain: undefined,
-            duration: undefined,
             moreInformationUrl: undefined,
             captionText: translationOf('professions.form.captions.edit'),
             ukRecognition: undefined,
             ukRecognitionUrl: undefined,
             otherCountriesRecognition: undefined,
             otherCountriesRecognitionUrl: undefined,
-            mandatoryProfessionalExperienceRadioButtonArgs:
-              await new YesNoRadioButtonArgsPresenter(
-                null,
-                i18nService,
-              ).radioButtonArgs(),
             isUK: false,
           }),
         );
@@ -153,12 +135,8 @@ describe(QualificationsController, () => {
           });
 
           const dto: QualificationsDto = {
-            level: 'Qualification level',
             routesToObtain: 'General secondary education',
-            mostCommonRouteToObtain: 'General secondary education',
-            duration: '3.0 Years',
             moreInformationUrl: 'http://www.example.com/more-info',
-            mandatoryProfessionalExperience: '1',
             ukRecognition: 'ukRecognition',
             ukRecognitionUrl: 'http://example.com/uk',
             otherCountriesRecognition: 'otherCountriesRecognition',
@@ -177,11 +155,7 @@ describe(QualificationsController, () => {
             expect.objectContaining({
               qualification: expect.objectContaining({
                 routesToObtain: 'General secondary education',
-                mostCommonRouteToObtain: 'General secondary education',
-                educationDuration: '3.0 Years',
-                level: 'Qualification level',
                 url: 'http://www.example.com/more-info',
-                mandatoryProfessionalExperience: true,
                 ukRecognition: 'ukRecognition',
                 ukRecognitionUrl: 'http://example.com/uk',
                 otherCountriesRecognition: 'otherCountriesRecognition',
@@ -207,12 +181,8 @@ describe(QualificationsController, () => {
           });
 
           const dto: QualificationsDto = {
-            level: 'Qualification level',
             routesToObtain: 'General secondary education',
-            mostCommonRouteToObtain: 'General secondary education',
-            duration: '3.0 Years',
             moreInformationUrl: 'http://www.example.com/more-info',
-            mandatoryProfessionalExperience: '1',
             ukRecognition: 'ukRecognition',
             ukRecognitionUrl: 'http://example.com/uk',
             otherCountriesRecognition: 'otherCountriesRecognition',
@@ -231,11 +201,7 @@ describe(QualificationsController, () => {
             expect.objectContaining({
               qualification: expect.objectContaining({
                 routesToObtain: 'General secondary education',
-                mostCommonRouteToObtain: 'General secondary education',
-                educationDuration: '3.0 Years',
-                level: 'Qualification level',
                 url: 'http://www.example.com/more-info',
-                mandatoryProfessionalExperience: true,
                 ukRecognition: 'ukRecognition',
                 ukRecognitionUrl: 'http://example.com/uk',
                 otherCountriesRecognition: 'otherCountriesRecognition',
@@ -262,12 +228,8 @@ describe(QualificationsController, () => {
         });
 
         const dto: QualificationsDto = {
-          level: 'Qualification level',
           routesToObtain: 'General secondary education',
-          mostCommonRouteToObtain: 'General secondary education',
-          duration: '3.0 Years',
           moreInformationUrl: 'www.example.com/more-info ',
-          mandatoryProfessionalExperience: '1',
           ukRecognition: 'ukRecognition',
           ukRecognitionUrl: 'example.com/uk',
           otherCountriesRecognition: 'otherCountriesRecognition',
@@ -284,11 +246,7 @@ describe(QualificationsController, () => {
           expect.objectContaining({
             qualification: expect.objectContaining({
               routesToObtain: 'General secondary education',
-              mostCommonRouteToObtain: 'General secondary education',
-              educationDuration: '3.0 Years',
-              level: 'Qualification level',
               url: 'http://www.example.com/more-info',
-              mandatoryProfessionalExperience: true,
               ukRecognition: 'ukRecognition',
               ukRecognitionUrl: 'http://example.com/uk',
               otherCountriesRecognition: 'otherCountriesRecognition',
@@ -314,12 +272,8 @@ describe(QualificationsController, () => {
         });
 
         const dto: QualificationsDto = {
-          level: undefined,
           routesToObtain: '',
-          mostCommonRouteToObtain: '',
-          duration: '',
           moreInformationUrl: 'not a url',
-          mandatoryProfessionalExperience: undefined,
           change: false,
           ukRecognition: '',
           ukRecognitionUrl: 'not a url',
@@ -336,30 +290,13 @@ describe(QualificationsController, () => {
         expect(response.render).toHaveBeenCalledWith(
           'admin/professions/qualifications',
           expect.objectContaining({
-            mandatoryProfessionalExperienceRadioButtonArgs:
-              await new YesNoRadioButtonArgsPresenter(
-                undefined,
-                i18nService,
-              ).radioButtonArgs(),
             isUK: false,
             errors: {
-              level: {
-                text: 'professions.form.errors.qualification.level.empty',
-              },
-              mandatoryProfessionalExperience: {
-                text: 'professions.form.errors.qualification.mandatoryProfessionalExperience.empty',
-              },
               routesToObtain: {
                 text: 'professions.form.errors.qualification.routesToObtain.empty',
               },
-              duration: {
-                text: 'professions.form.errors.qualification.duration.empty',
-              },
               moreInformationUrl: {
                 text: 'professions.form.errors.qualification.moreInformationUrl.invalid',
-              },
-              mostCommonRouteToObtain: {
-                text: 'professions.form.errors.qualification.mostCommonRouteToObtain.empty',
               },
               ukRecognitionUrl: {
                 text: 'professions.form.errors.qualification.ukRecognitionUrl.invalid',
