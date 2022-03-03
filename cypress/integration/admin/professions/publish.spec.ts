@@ -23,11 +23,9 @@ describe('Publishing professions', () => {
 
       cy.get('[data-cy=changed-by-user]').should('contain', '');
 
-      cy.translate('professions.form.button.publishNow').then(
-        (publishButton) => {
-          cy.get('a').contains(publishButton).click();
-        },
-      );
+      cy.translate('professions.form.button.publish').then((publishButton) => {
+        cy.get('a').contains(publishButton).click();
+      });
 
       cy.checkAccessibility();
 
@@ -38,7 +36,7 @@ describe('Publishing professions', () => {
 
       cy.get('h1').should('contain', 'Gas Safe Engineer');
 
-      cy.translate('professions.form.button.publishNow').then((buttonText) => {
+      cy.translate('professions.form.button.publish').then((buttonText) => {
         cy.get('[data-cy=publish-button]').contains(buttonText).click();
       });
 
@@ -54,7 +52,7 @@ describe('Publishing professions', () => {
         cy.contains(heading);
       });
 
-      cy.translate('professions.form.button.publishNow').then((buttonText) => {
+      cy.translate('professions.form.button.publish').then((buttonText) => {
         cy.get('button').contains(buttonText).click();
       });
 
@@ -130,7 +128,7 @@ describe('Publishing professions', () => {
         1,
       );
 
-      cy.translate('professions.form.button.publishNow').then((buttonText) => {
+      cy.translate('professions.form.button.publish').then((buttonText) => {
         cy.get('a').contains(buttonText).click();
       });
 
@@ -142,7 +140,7 @@ describe('Publishing professions', () => {
         cy.get('body').should('contain', heading);
       });
 
-      cy.translate('professions.form.button.publishNow').then((buttonText) => {
+      cy.translate('professions.form.button.publish').then((buttonText) => {
         cy.get('a').contains(buttonText).click();
       });
 
@@ -160,7 +158,7 @@ describe('Publishing professions', () => {
         cy.contains(heading);
       });
 
-      cy.translate('professions.form.button.publishNow').then((buttonText) => {
+      cy.translate('professions.form.button.publish').then((buttonText) => {
         cy.get('button').contains(buttonText).click();
       });
 

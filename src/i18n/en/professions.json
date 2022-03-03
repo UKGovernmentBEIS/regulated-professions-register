@@ -82,7 +82,7 @@
     "button": {
       "create": "Create profession",
       "edit": "Yes, continue",
-      "publishNow": "Publish now",
+      "publish": "Publish to register",
       "saveAsDraft": "Save as draft"
     },
     "select": {
