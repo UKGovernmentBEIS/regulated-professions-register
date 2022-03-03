@@ -6,7 +6,6 @@ import { createMockI18nService } from '../../testutils/create-mock-i18n-service'
 import { IndustriesService } from '../../industries/industries.service';
 import { Nation } from '../../nations/nation';
 import { Organisation } from '../../organisations/organisation.entity';
-import { OrganisationsService } from '../../organisations/organisations.service';
 import { FilterInput } from '../../common/interfaces/filter-input.interface';
 import { Profession } from '../profession.entity';
 import { ProfessionsService } from '../professions.service';
@@ -21,6 +20,7 @@ import userFactory from '../../testutils/factories/user';
 import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
 import { getActingUser } from '../../users/helpers/get-acting-user.helper';
 import { createDefaultMockRequest } from '../../testutils/factories/create-default-mock-request';
+import { OrganisationVersionsService } from '../../organisations/organisation-versions.service';
 
 jest.mock('../../users/helpers/get-acting-user.helper');
 
@@ -82,14 +82,14 @@ describe('ProfessionsController', () => {
   let professionsService: DeepMocked<ProfessionsService>;
   let professionVersionsService: DeepMocked<ProfessionVersionsService>;
   let industriesService: DeepMocked<IndustriesService>;
-  let organisationsService: DeepMocked<OrganisationsService>;
+  let organisationVersionsService: DeepMocked<OrganisationVersionsService>;
 
   beforeEach(async () => {
     request = createDefaultMockRequest();
 
     professionsService = createMock<ProfessionsService>();
     professionVersionsService = createMock<ProfessionVersionsService>();
-    organisationsService = createMock<OrganisationsService>();
+    organisationVersionsService = createMock<OrganisationVersionsService>();
     industriesService = createMock<IndustriesService>();
     i18nService = createMockI18nService();
 
@@ -99,9 +99,9 @@ describe('ProfessionsController', () => {
       profession3,
     ]);
 
-    organisationsService.all.mockImplementation(async () => {
-      return organisations;
-    });
+    organisationVersionsService.allWithLatestVersion.mockResolvedValue(
+      organisations,
+    );
 
     industriesService.all.mockImplementation(async () => {
       return industries;
@@ -118,8 +118,8 @@ describe('ProfessionsController', () => {
           useValue: professionVersionsService,
         },
         {
-          provide: OrganisationsService,
-          useValue: organisationsService,
+          provide: OrganisationVersionsService,
+          useValue: organisationVersionsService,
         },
         {
           provide: IndustriesService,

@@ -22,6 +22,8 @@ import { RegistrationController } from './admin/registration.controller';
 import { ScopeController } from './admin/scope.controller';
 import { ProfessionPublicationController } from './admin/profession-publication.controller';
 import { ProfessionArchiveController } from './admin/profession-archive.controller';
+import { OrganisationVersionsService } from '../organisations/organisation-versions.service';
+import { OrganisationVersion } from '../organisations/organisation-version.entity';
 
 @Module({
   imports: [
@@ -29,11 +31,13 @@ import { ProfessionArchiveController } from './admin/profession-archive.controll
     TypeOrmModule.forFeature([ProfessionVersion]),
     TypeOrmModule.forFeature([Industry]),
     TypeOrmModule.forFeature([Organisation]),
+    TypeOrmModule.forFeature([OrganisationVersion]),
   ],
   providers: [
     ProfessionsService,
     IndustriesService,
     OrganisationsService,
+    OrganisationVersionsService,
     ProfessionVersionsService,
   ],
   controllers: [

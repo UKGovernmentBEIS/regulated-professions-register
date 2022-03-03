@@ -21,7 +21,6 @@ import {
 } from './professions.presenter';
 import { AuthenticationGuard } from '../../common/authentication.guard';
 import { FilterDto } from './dto/filter.dto';
-import { OrganisationsService } from '../../organisations/organisations.service';
 import { Profession } from '../profession.entity';
 import { BackLink } from '../../common/decorators/back-link.decorator';
 import { createFilterInput } from '../../helpers/create-filter-input.helper';
@@ -31,6 +30,7 @@ import { RequestWithAppSession } from '../../common/interfaces/request-with-app-
 import { UserPermission } from '../../users/user-permission';
 import { Permissions } from '../../common/permissions.decorator';
 import { getActingUser } from '../../users/helpers/get-acting-user.helper';
+import { OrganisationVersionsService } from '../../organisations/organisation-versions.service';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
@@ -38,7 +38,7 @@ export class ProfessionsController {
   constructor(
     private readonly professionsService: ProfessionsService,
     private readonly professionVersionsService: ProfessionVersionsService,
-    private readonly organisationsService: OrganisationsService,
+    private readonly organisationVersionsService: OrganisationVersionsService,
     private readonly industriesService: IndustriesService,
     private readonly i18Service: I18nService,
   ) {}
@@ -88,7 +88,8 @@ export class ProfessionsController {
     request: RequestWithAppSession,
   ): Promise<IndexTemplate> {
     const allNations = Nation.all();
-    const allOrganisations = await this.organisationsService.all();
+    const allOrganisations =
+      await this.organisationVersionsService.allWithLatestVersion();
     const allIndustries = await this.industriesService.all();
 
     const allProfessions =

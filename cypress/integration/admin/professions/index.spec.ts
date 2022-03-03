@@ -115,8 +115,10 @@ describe('Listing professions', () => {
       );
     });
 
-    it('I can filter by organisation', () => {
+    it('I can filter by live, draft and archived organisation', () => {
       expandFilters();
+
+      cy.get('label').should('not.contain', 'Unconfirmed Organisation');
 
       cy.get('label')
         .contains('Law Society of England and Wales')

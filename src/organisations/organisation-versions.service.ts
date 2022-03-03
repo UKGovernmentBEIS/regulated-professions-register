@@ -82,6 +82,23 @@ export class OrganisationVersionsService {
     );
   }
 
+  async allLiveAndDraft(): Promise<Organisation[]> {
+    const versions = await this.versionsWithJoins()
+      .distinctOn(['organisation.name'])
+      .where('organisationVersion.status IN(:...status)', {
+        status: [
+          OrganisationVersionStatus.Live,
+          OrganisationVersionStatus.Draft,
+        ],
+      })
+      .orderBy('organisation.name')
+      .getMany();
+
+    return versions.map((version) =>
+      Organisation.withVersion(version.organisation, version),
+    );
+  }
+
   async allWithLatestVersion(): Promise<Organisation[]> {
     const versions = await this.versionsWithJoins()
       .distinctOn(['organisationVersion.organisation', 'professions.id'])
