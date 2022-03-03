@@ -1,5 +1,5 @@
 import { Controller, Get, Param, Put, Render, Req, Res } from '@nestjs/common';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { I18nService } from 'nestjs-i18n';
 import { BackLink } from '../../common/decorators/back-link.decorator';
 import { flashMessage } from '../../common/flash-message';
@@ -20,7 +20,11 @@ export class ProfessionPublicationController {
   @Get('/:professionId/versions/:versionId/publish')
   @Permissions(UserPermission.PublishProfession)
   @Render('admin/professions/publication/new')
-  @BackLink('/admin/professions/:professionId/versions/:versionId')
+  @BackLink((request: Request) =>
+    request.query.fromEdit === 'true'
+      ? '/admin/professions/:professionId/versions/:versionId/check-your-answers'
+      : '/admin/professions/:professionId/versions/:versionId',
+  )
   async new(
     @Param('professionId') professionId: string,
     @Param('versionId') versionId: string,

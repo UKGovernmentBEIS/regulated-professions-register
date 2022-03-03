@@ -37,7 +37,7 @@
                     govukButton({
                       text: ('professions.form.button.publishNow' | t),
                       classes: "govuk-button",
-                      id: "publish-button",
+                      attributes: { "data-cy": "publish-button" },
                       href: "/admin/professions/" + profession.id + "/versions/" + profession.versionId + "/publish"
                     })
                   }}

@@ -437,17 +437,33 @@
     <div class="govuk-grid-column-one-third">
       {% if not edit and confirmed %}
         <aside class="app-related-items rpr-internal__details-page-sidebar" role="complementary">
-          <form method="post" action="confirmation">
-            {{
-              govukButton({
-                id: "submit-button",
-                classes: "govuk-button--secondary",
-                type: "Submit",
-                preventDoubleClick: true,
-                text: ("professions.form.button.saveAsDraft" | t)
-              })
-            }}
-          </form>
+          <ul class="govuk-list">
+            <li>
+              <form method="post" action="confirmation">
+                {{
+                  govukButton({
+                    id: "submit-button",
+                    classes: "govuk-button--secondary",
+                    type: "Submit",
+                    preventDoubleClick: true,
+                    text: ("professions.form.button.saveAsDraft" | t)
+                  })
+                }}
+              </form>
+            </li>
+            {% if 'publishProfession' in permissions %}
+              <li>
+                {{
+                  govukButton({
+                    text: ('professions.form.button.publishNow' | t),
+                    classes: "govuk-button",
+                    id: "publish-button",
+                    href: "/admin/professions/" + professionId + "/versions/" + versionId + "/publish?fromEdit=true"
+                  })
+                }}
+              </li>
+            {% endif %}
+          </ul>
         </aside>
       {% endif %}
     </div>
