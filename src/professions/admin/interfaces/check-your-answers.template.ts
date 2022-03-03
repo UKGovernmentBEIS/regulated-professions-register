@@ -9,7 +9,6 @@ export interface CheckYourAnswersTemplate {
   versionId: string;
   organisation: string;
   additionalOrganisation: string;
-  mandatoryRegistration: string;
   registrationRequirements: string;
   registrationUrl: string;
   regulationSummary: string;

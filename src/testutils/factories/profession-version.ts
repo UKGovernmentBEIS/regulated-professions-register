@@ -1,6 +1,5 @@
 import { Factory } from 'fishery';
 import {
-  MandatoryRegistration,
   ProfessionVersion,
   ProfessionVersionStatus,
 } from '../../professions/profession-version.entity';
@@ -18,7 +17,6 @@ class ProfessionVersionFactory extends Factory<ProfessionVersion> {
       description: undefined,
       occupationLocations: undefined,
       regulationType: undefined,
-      mandatoryRegistration: undefined,
       registrationRequirements: undefined,
       registrationUrl: undefined,
       industries: undefined,
@@ -43,7 +41,6 @@ export default ProfessionVersionFactory.define(({ sequence }) => ({
     'A description of the profession that will be displayed to users',
   occupationLocations: ['GB-ENG'],
   regulationType: 'Reserves of activities',
-  mandatoryRegistration: MandatoryRegistration.Mandatory,
   registrationRequirements: 'Some Requirements',
   registrationUrl: 'http://example.com/required',
   industries: [

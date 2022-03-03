@@ -29,7 +29,6 @@ import { Validator } from '../../helpers/validator';
 
 import { RegistrationDto } from './dto/registration.dto';
 
-import { MandatoryRegistrationRadioButtonsPresenter } from './mandatory-registration-radio-buttons-presenter';
 import { RegistrationTemplate } from './interfaces/registration.template';
 
 import ViewUtils from './viewUtils';
@@ -91,8 +90,6 @@ export class RegistrationController {
       versionId,
     );
 
-    const selectedMandatoryRegistration = submittedValues.mandatoryRegistration;
-
     const profession = await this.professionsService.findWithVersions(
       professionId,
     );
@@ -113,7 +110,6 @@ export class RegistrationController {
       ...{
         registrationRequirements: submittedValues.registrationRequirements,
         registrationUrl: submittedValues.registrationUrl,
-        mandatoryRegistration: selectedMandatoryRegistration,
       },
     };
 
@@ -137,17 +133,8 @@ export class RegistrationController {
     change: boolean,
     errors: object | undefined = undefined,
   ): Promise<void> {
-    const mandatoryRegistration = submittedValues.mandatoryRegistration;
-
-    const mandatoryRegistrationRadioButtonArgs =
-      await new MandatoryRegistrationRadioButtonsPresenter(
-        mandatoryRegistration,
-        this.i18nService,
-      ).radioButtonArgs();
-
     const templateArgs: RegistrationTemplate = {
       ...submittedValues,
-      mandatoryRegistrationRadioButtonArgs,
       captionText: await ViewUtils.captionText(this.i18nService, profession),
       change,
       errors,

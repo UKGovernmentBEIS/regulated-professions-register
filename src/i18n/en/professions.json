@@ -39,8 +39,6 @@
         "industryHint": "The sectors this profession is part of. Select all that apply."
       },
       "registration": {
-        "mandatoryRegistration": "Registration with authority",
-        "mandatoryRegistrationHint": "Is registration with a regulator or professional body mandatory or voluntary.",
         "registrationRequirements": "Registration requirements",
         "registrationRequirementsHint": "The body professionals should register with and other requirements for registration.",
         "registrationUrl": "More about registration",
@@ -95,12 +93,6 @@
         "text": "Reserved activities means a form of regulating a profession where the access to a professional activity or group of professional activities is reserved, directly or indirectly, by virtue of legislative, regulatory or administrative provisions to members of a regulated profession holding a specific professional qualification, including where the activity is shared with other regulated professions."
       }
     },
-    "radioButtons": {
-      "mandatoryRegistration": {
-        "mandatory": "Mandatory",
-        "voluntary": "Voluntary"
-      }
-    },
     "button": {
       "create": "Create profession",
       "edit": "Yes, continue",
@@ -137,9 +129,6 @@
       },
       "regulatoryBody": {
         "empty": "Select a regulatory authority for the profession"
-      },
-      "mandatoryRegistration": {
-        "empty": "Select whether registration with the regulatory authority is mandatory"
       },
       "regulationSummary": {
         "empty": "Enter a regulation summary"
@@ -231,11 +220,6 @@
       "nationalLegislation": "National legislation",
       "legislationLink": "Legislation link"
     }
-  },
-  "mandatoryRegistration": {
-    "mandatory": "Mandatory",
-    "voluntary": "Voluntary",
-    "unknown": "Unknown"
   },
   "admin": {
     "heading": "Regulated professions",

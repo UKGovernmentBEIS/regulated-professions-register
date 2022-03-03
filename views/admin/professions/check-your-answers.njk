@@ -148,23 +148,6 @@
             rows: [
               {
                 key: {
-                  text: ("professions.form.label.registration.mandatoryRegistration" | t)
-                },
-                value: {
-                  text: (("professions.mandatoryRegistration." + mandatoryRegistration) | t) if mandatoryRegistration else ''
-                },
-                actions: {
-                  items: [
-                    {
-                      href: "/admin/professions/" + professionId + "/versions/" + versionId + "/registration/edit?change=true",
-                      text: ("app.change" | t),
-                      visuallyHiddenText: ("professions.form.label.registration.mandatoryRegistration" | t)
-                    }
-                  ]
-                }
-              },
-              {
-                key: {
                   text: ("professions.form.label.registration.registrationRequirements" | t)
                 },
                 value: {

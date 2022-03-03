@@ -11,7 +11,6 @@ import professionVersionFactory from '../../testutils/factories/profession-versi
 import qualificationFactory from '../../testutils/factories/qualification';
 import { translationOf } from '../../testutils/translation-of';
 import { ProfessionVersionsService } from '../profession-versions.service';
-import { MandatoryRegistration } from '../profession-version.entity';
 import { ProfessionsService } from '../professions.service';
 import { CheckYourAnswersController } from './check-your-answers.controller';
 
@@ -73,7 +72,6 @@ describe('CheckYourAnswersController', () => {
           industries: [
             industryFactory.build({ name: 'industries.construction' }),
           ],
-          mandatoryRegistration: MandatoryRegistration.Voluntary,
           description: 'A summary of the regulation',
           reservedActivities: 'Some reserved activities',
           protectedTitles: 'Some protected titles',
@@ -101,9 +99,6 @@ describe('CheckYourAnswersController', () => {
         ]);
         expect(templateParams.organisation).toEqual(
           'Council of Gas Registered Engineers',
-        );
-        expect(templateParams.mandatoryRegistration).toEqual(
-          MandatoryRegistration.Voluntary,
         );
         expect(templateParams.registrationRequirements).toEqual('Requirements');
         expect(templateParams.registrationUrl).toEqual(
@@ -203,7 +198,6 @@ describe('CheckYourAnswersController', () => {
         expect(templateParams.organisation).toEqual(
           'Council of Gas Registered Engineers',
         );
-        expect(templateParams.mandatoryRegistration).toEqual(undefined);
         expect(templateParams.registrationRequirements).toEqual(undefined);
         expect(templateParams.registrationUrl).toEqual(undefined);
         expect(templateParams.regulationSummary).toEqual(undefined);

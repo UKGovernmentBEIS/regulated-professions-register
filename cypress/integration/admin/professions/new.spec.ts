@@ -92,8 +92,6 @@ describe('Adding a new profession', () => {
       cy.get('input[name="registrationRequirements"]').type('Requirements');
       cy.get('input[name="registrationUrl"]').type('this is not a url');
 
-      cy.get('input[name="mandatoryRegistration"][value="mandatory"]').check();
-
       cy.translate('app.continue').then((buttonText) => {
         cy.get('button').contains(buttonText).click();
       });
@@ -231,15 +229,6 @@ describe('Adding a new profession', () => {
         'professions.form.label.scope.industry',
         'Construction & Engineering',
       );
-
-      cy.translate(
-        'professions.form.radioButtons.mandatoryRegistration.mandatory',
-      ).then((mandatoryRegistration) => {
-        cy.checkSummaryListRowValue(
-          'professions.form.label.registration.mandatoryRegistration',
-          mandatoryRegistration,
-        );
-      });
 
       cy.checkSummaryListRowValue(
         'professions.form.label.registration.registrationRequirements',
