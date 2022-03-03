@@ -16,6 +16,7 @@ import { globalLocals } from './common/global-locals';
 
 import { ValidationFailedError } from './common/validation/validation-failed.error';
 import { GlobalExceptionFilter } from './common/global-exception.filter';
+import { redirectToCanonicalHostname } from './middleware/redirect-to-canonical-hostname';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -79,6 +80,10 @@ async function bootstrap() {
         realm: process.env['HOST_URL'],
       }),
     );
+  }
+
+  if (process.env['CANONICAL_HOSTNAME']) {
+    app.use(redirectToCanonicalHostname);
   }
 
   await app.listen(process.env.PORT || 3000);
