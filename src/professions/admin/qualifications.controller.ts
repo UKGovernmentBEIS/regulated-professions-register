@@ -17,7 +17,6 @@ import { Qualification } from '../../qualifications/qualification.entity';
 import { UserPermission } from '../../users/user-permission';
 import { ValidationFailedError } from '../../common/validation/validation-failed.error';
 import { ProfessionsService } from '../professions.service';
-import { YesNoRadioButtonArgsPresenter } from './yes-no-radio-buttons-presenter';
 import { QualificationsDto } from './dto/qualifications.dto';
 import { QualificationsTemplate } from './interfaces/qualifications.template';
 import { BackLink } from '../../common/decorators/back-link.decorator';
@@ -93,19 +92,10 @@ export class QualificationsController {
       versionId,
     );
 
-    const mandatoryProfessionalExperience =
-      submittedValues.mandatoryProfessionalExperience === undefined
-        ? undefined
-        : Boolean(Number(submittedValues.mandatoryProfessionalExperience));
-
     const updatedQualification: Qualification = {
       ...version.qualification,
       ...{
-        level: submittedValues.level,
         routesToObtain: submittedValues.routesToObtain,
-        mostCommonRouteToObtain: submittedValues.mostCommonRouteToObtain,
-        educationDuration: submittedValues.duration,
-        mandatoryProfessionalExperience,
         url: submittedValues.moreInformationUrl,
         ukRecognition: submittedValues.ukRecognition,
         ukRecognitionUrl: submittedValues.ukRecognitionUrl,
@@ -151,19 +141,9 @@ export class QualificationsController {
     change: boolean,
     errors: object | undefined = undefined,
   ) {
-    const mandatoryProfessionalExperienceRadioButtonArgs =
-      await new YesNoRadioButtonArgsPresenter(
-        qualification?.mandatoryProfessionalExperience,
-        this.i18nService,
-      ).radioButtonArgs();
-
     const templateArgs: QualificationsTemplate = {
-      level: qualification?.level,
       routesToObtain: qualification?.routesToObtain,
-      mostCommonRouteToObtain: qualification?.mostCommonRouteToObtain,
-      mandatoryProfessionalExperienceRadioButtonArgs,
       moreInformationUrl: qualification?.url,
-      duration: qualification?.educationDuration,
       captionText: await ViewUtils.captionText(this.i18nService, profession),
       ukRecognition: qualification?.ukRecognition,
       ukRecognitionUrl: qualification?.ukRecognitionUrl,

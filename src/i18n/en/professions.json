@@ -55,16 +55,8 @@
         "regulationUrlHint": "Website link to more information."
       },
       "qualifications": {
-        "qualificationLevel": "Qualification level",
-        "qualificationLevelHint": "Equivalent qualification level against a recognised framework",
         "routesToObtain": "Routes to qualification",
         "routesToObtainHint": "The ways that a new professional can become qualified",
-        "mostCommonRouteToObtain": "Most common route",
-        "mostCommonRouteToObtainHint": "If there are many ways to qualify, the most common way",
-        "duration": "How long to qualify",
-        "durationHint": "The number of months or years it takes to qualify. For example, 2 years.\nIf the length of time varies, provide the most typical or a range. For example, 6 to 12 months",
-        "mandatoryProfessionalExperience": "Professional experience requirement",
-        "mandatoryProfessionalExperienceHint": "Is a period of professional practice require to become qualified?",
         "moreInformationUrl": "More about qualification",
         "moreInformationUrlHint": "Website link to more information",
         "ukRecognition": "Recognition of qualifications in the UK",
@@ -143,20 +135,8 @@
         "invalid": "Please enter a valid website address"
       },
       "qualification": {
-        "level": {
-          "empty": "Enter the qualification level"
-        },
         "routesToObtain": {
           "empty": "Enter routes to obtain the qualification"
-        },
-        "mostCommonRouteToObtain": {
-          "empty": "Enter the most common route to obtain the qualification"
-        },
-        "duration": {
-          "empty": "Enter the duration of the qualification"
-        },
-        "mandatoryProfessionalExperience": {
-          "empty": "Select whether existence of professional experience is mandatory"
         },
         "moreInformationUrl": {
           "invalid": "Please enter a valid website address"
@@ -208,11 +188,7 @@
     },
     "qualification": {
       "heading": "Qualification information",
-      "level": "Qualification level",
       "routesToObtain": "Routes to qualification",
-      "mostCommonRouteToObtain": "Most common route",
-      "duration": "Duration of qualification",
-      "mandatoryExperience": "Existence of mandatory professional experience",
       "moreInformationUrl": "More about qualification"
     },
     "legislation": {

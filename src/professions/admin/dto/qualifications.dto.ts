@@ -7,30 +7,10 @@ import {
 } from '../../../helpers/preprocess-url.helper';
 
 export class QualificationsDto {
-  @IsNotEmpty({ message: 'professions.form.errors.qualification.level.empty' })
-  level: string;
-
   @IsNotEmpty({
     message: 'professions.form.errors.qualification.routesToObtain.empty',
   })
   routesToObtain: string;
-
-  @IsNotEmpty({
-    message:
-      'professions.form.errors.qualification.mostCommonRouteToObtain.empty',
-  })
-  mostCommonRouteToObtain: string;
-
-  @IsNotEmpty({
-    message: 'professions.form.errors.qualification.duration.empty',
-  })
-  duration: string;
-
-  @IsNotEmpty({
-    message:
-      'professions.form.errors.qualification.mandatoryProfessionalExperience.empty',
-  })
-  mandatoryProfessionalExperience: string;
 
   @IsUrl(urlOptions, {
     message: 'professions.form.errors.qualification.moreInformationUrl.invalid',

@@ -8,11 +8,7 @@ import { Qualification } from './qualification.entity';
 import { InjectData } from '../common/decorators/seeds.decorator';
 
 type SeedQualification = {
-  level: string;
   routesToObtain: string;
-  mostCommonRouteToObtain: string;
-  educationDuration: string;
-  mandatoryProfessionalExperience: boolean;
   url: string;
 };
 
@@ -28,14 +24,7 @@ export class QualificationsSeeder implements Seeder {
 
   async seed(): Promise<any> {
     const qualifications = this.data.map((qualification) => {
-      return new Qualification(
-        qualification.level,
-        qualification.routesToObtain,
-        qualification.mostCommonRouteToObtain,
-        qualification.educationDuration,
-        qualification.mandatoryProfessionalExperience,
-        qualification.url,
-      );
+      return new Qualification(qualification.routesToObtain, qualification.url);
     });
 
     return this.qualificationsRepository.save(qualifications);

@@ -77,35 +77,12 @@ describe('Showing a profession', () => {
       cy.get('body').should('contain', heading);
     });
     cy.checkSummaryListRowValue(
-      'professions.show.qualification.level',
-      'DSE - Diploma (post-secondary education), including Annex II (ex 92/51, Annex C,D) , Art. 11 c',
-    );
-
-    cy.checkSummaryListRowValue(
       'professions.show.qualification.routesToObtain',
-      'General secondary education',
+      'Have a degree in any subject that is equivalent to a UK degree or level 6 qualification, or other qualification and/or experience equivalent to this.',
     );
-
-    cy.checkSummaryListRowValue(
-      'professions.show.qualification.mostCommonRouteToObtain',
-      'General secondary education',
-    );
-
-    cy.checkSummaryListRowValue(
-      'professions.show.qualification.duration',
-      '5.0 Year',
-    );
-
-    cy.translate('app.yes').then((value) => {
-      cy.checkSummaryListRowValue(
-        'professions.show.qualification.mandatoryExperience',
-        value,
-      );
-    });
-
     cy.checkSummaryListRowValue(
       'professions.show.qualification.moreInformationUrl',
-      'http://www.example.com',
+      'https://www.sra.org.uk/become-solicitor/qualified-lawyers/',
     );
 
     cy.translate('professions.show.legislation.heading').then((heading) => {

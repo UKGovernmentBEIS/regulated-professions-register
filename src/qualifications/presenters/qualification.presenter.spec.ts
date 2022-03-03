@@ -31,74 +31,6 @@ describe(QualificationPresenter, () => {
       });
     });
 
-    describe('mostCommonRouteToObtain', () => {
-      it('returns the a multiline string of the text value', () => {
-        (formatMultilineString as jest.Mock).mockImplementation(multilineOf);
-
-        const qualification = qualificationFactory.build({
-          mostCommonRouteToObtain: 'other value',
-        });
-
-        const presenter = new QualificationPresenter(
-          qualification,
-          createMockI18nService(),
-        );
-
-        expect(presenter.mostCommonRouteToObtain).toEqual(
-          multilineOf('other value'),
-        );
-
-        expect(formatMultilineString).toBeCalledWith('other value');
-      });
-    });
-
-    describe('mandatoryProfessionalExperience', () => {
-      describe('when true', () => {
-        it('returns the localisation id for "Yes"', () => {
-          const qualification = qualificationFactory.build({
-            mandatoryProfessionalExperience: true,
-          });
-
-          const presenter = new QualificationPresenter(
-            qualification,
-            createMockI18nService(),
-          );
-
-          expect(presenter.mandatoryProfessionalExperience).toEqual('app.yes');
-        });
-      });
-
-      describe('when false', () => {
-        it('returns the localisation id for "No"', () => {
-          const qualification = qualificationFactory.build({
-            mandatoryProfessionalExperience: false,
-          });
-
-          const presenter = new QualificationPresenter(
-            qualification,
-            createMockI18nService(),
-          );
-
-          expect(presenter.mandatoryProfessionalExperience).toEqual('app.no');
-        });
-      });
-
-      describe('when not set at all on a blank Qualification', () => {
-        it('returns an empty string', () => {
-          const qualification = qualificationFactory.build({
-            mandatoryProfessionalExperience: null,
-          });
-
-          const presenter = new QualificationPresenter(
-            qualification,
-            createMockI18nService(),
-          );
-
-          expect(presenter.mandatoryProfessionalExperience).toEqual('');
-        });
-      });
-    });
-
     describe('moreInformationUrl', () => {
       it('returns a link', () => {
         (formatLink as jest.Mock).mockImplementation(linkOf);
@@ -172,48 +104,12 @@ describe(QualificationPresenter, () => {
           rows: [
             {
               key: {
-                text: translationOf('professions.show.qualification.level'),
-              },
-              value: {
-                html: formatMultilineString(presenter.level),
-              },
-            },
-            {
-              key: {
                 text: translationOf(
                   'professions.show.qualification.routesToObtain',
                 ),
               },
               value: {
                 html: presenter.routesToObtain,
-              },
-            },
-            {
-              key: {
-                text: translationOf(
-                  'professions.show.qualification.mostCommonRouteToObtain',
-                ),
-              },
-              value: {
-                html: presenter.mostCommonRouteToObtain,
-              },
-            },
-            {
-              key: {
-                text: translationOf('professions.show.qualification.duration'),
-              },
-              value: {
-                text: presenter.duration,
-              },
-            },
-            {
-              key: {
-                text: translationOf(
-                  'professions.show.qualification.mandatoryExperience',
-                ),
-              },
-              value: {
-                text: translationOf(presenter.mandatoryProfessionalExperience),
               },
             },
             {
@@ -241,14 +137,11 @@ describe(QualificationPresenter, () => {
         new QualificationPresenter(undefined, createMockI18nService()),
       ).toEqual(
         expect.objectContaining({
-          duration: undefined,
-          level: undefined,
+          routesToObtain: multilineOf(undefined),
           moreInformationUrl: linkOf(undefined),
-          mostCommonRouteToObtain: multilineOf(undefined),
           otherCountriesRecognition: undefined,
           otherCountriesRecognitionUrl: linkOf(undefined),
           qualification: undefined,
-          routesToObtain: multilineOf(undefined),
           ukRecognition: undefined,
           ukRecognitionUrl: linkOf(undefined),
         }),

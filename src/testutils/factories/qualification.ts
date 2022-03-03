@@ -3,12 +3,8 @@ import { Qualification } from '../../qualifications/qualification.entity';
 
 export default Factory.define<Qualification>(({ sequence }) => ({
   id: sequence.toString(),
-  level: 'Diploma from post-secondary level (more than 4 years)',
-  mostCommonRouteToObtain: '',
-  educationDuration: '1.0 Year',
-  mandatoryProfessionalExperience: true,
-  url: 'http://www.example.com',
   routesToObtain: '',
+  url: 'http://www.example.com',
   professionVersion: undefined,
   ukRecognition: undefined,
   ukRecognitionUrl: undefined,
