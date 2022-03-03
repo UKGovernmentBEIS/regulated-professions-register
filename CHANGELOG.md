@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fix bug where industries weren't being shown in the Admin Organisations index page
 - Don't display unconfirmed organisations in selects or filters
 - Remove Mandatory Registration field and radio buttons
+- Remove redundant fields and form inputs from Qualifications
 
 ## [release-006] - 2022-03-02
 
