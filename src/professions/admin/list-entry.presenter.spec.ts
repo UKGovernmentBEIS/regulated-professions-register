@@ -55,19 +55,19 @@ describe('ListEntryPresenter', () => {
 
         const expected: TableRow = [
           { text: 'Example Profession' },
+          { text: 'Example Organisation, Additional Example Organisation' },
           {
             text: `${translationOf('nations.scotland')}, ${translationOf(
               'nations.northernIreland',
             )}`,
           },
-          { text: '12-08-2003' },
-          { text: 'Administrator' },
-          { text: 'Example Organisation, Additional Example Organisation' },
           {
             text: `${translationOf('industries.law')}, ${translationOf(
               'industries.finance',
             )}`,
           },
+          { text: '12-08-2003' },
+
           { text: translationOf('professions.admin.status.live') },
           {
             html: `<a href="/admin/professions/profession-id/versions/version-id">${translationOf(
@@ -113,6 +113,11 @@ describe('ListEntryPresenter', () => {
           {
             text: `${translationOf('nations.scotland')}, ${translationOf(
               'nations.northernIreland',
+            )}`,
+          },
+          {
+            text: `${translationOf('industries.law')}, ${translationOf(
+              'industries.finance',
             )}`,
           },
           { text: '12-08-2003' },
@@ -168,6 +173,9 @@ describe('ListEntryPresenter', () => {
           {
             text: '',
           },
+          {
+            text: '',
+          },
           { text: '12-08-2003' },
           { text: 'Editor' },
           { text: translationOf('professions.admin.status.draft') },
@@ -189,11 +197,10 @@ describe('ListEntryPresenter', () => {
     it('returns a table row of headings when called with `overview`', async () => {
       const expected = [
         { text: translationOf('professions.admin.tableHeading.profession') },
-        { text: translationOf('professions.admin.tableHeading.nations') },
-        { text: translationOf('professions.admin.tableHeading.lastModified') },
-        { text: translationOf('professions.admin.tableHeading.changedBy') },
         { text: translationOf('professions.admin.tableHeading.organisation') },
+        { text: translationOf('professions.admin.tableHeading.nations') },
         { text: translationOf('professions.admin.tableHeading.industry') },
+        { text: translationOf('professions.admin.tableHeading.lastModified') },
         { text: translationOf('professions.admin.tableHeading.status') },
         { text: translationOf('professions.admin.tableHeading.actions') },
       ];
@@ -207,6 +214,7 @@ describe('ListEntryPresenter', () => {
       const expected = [
         { text: translationOf('professions.admin.tableHeading.profession') },
         { text: translationOf('professions.admin.tableHeading.nations') },
+        { text: translationOf('professions.admin.tableHeading.industry') },
         { text: translationOf('professions.admin.tableHeading.lastModified') },
         { text: translationOf('professions.admin.tableHeading.changedBy') },
         { text: translationOf('professions.admin.tableHeading.status') },
