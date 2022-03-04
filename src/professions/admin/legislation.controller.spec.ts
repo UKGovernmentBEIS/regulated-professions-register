@@ -234,40 +234,77 @@ describe(LegislationController, () => {
       });
     });
 
-    describe('when required parameters are not entered', () => {
-      it('renders the edit page with errors and does not update the Profession', async () => {
-        const profession = professionFactory.build({ id: 'profession-id' });
-        const version = professionVersionFactory.build({
-          id: 'version-id',
-          profession: profession,
+    describe('when there is a validation error', () => {
+      describe('when required parameters are not entered', () => {
+        it('renders the edit page with errors and does not update the Profession', async () => {
+          const profession = professionFactory.build({ id: 'profession-id' });
+          const version = professionVersionFactory.build({
+            id: 'version-id',
+            profession: profession,
+          });
+
+          const dto: LegislationDto = {
+            link: undefined,
+            nationalLegislation: undefined,
+            change: false,
+          };
+
+          professionsService.findWithVersions.mockResolvedValue(profession);
+          professionVersionsService.findWithProfession.mockResolvedValue(
+            version,
+          );
+
+          await controller.update(response, 'profession-id', 'version-id', dto);
+
+          expect(professionVersionsService.save).not.toHaveBeenCalled();
+
+          expect(response.render).toHaveBeenCalledWith(
+            'admin/professions/legislation',
+            expect.objectContaining({
+              errors: {
+                nationalLegislation: {
+                  text: 'professions.form.errors.legislation.nationalLegislation.empty',
+                },
+              },
+            }),
+          );
         });
+      });
 
-        const dto: LegislationDto = {
-          link: undefined,
-          nationalLegislation: undefined,
-          change: false,
-        };
+      describe('when the link is invalid', () => {
+        it('renders the edit page with errors and does not update the Profession', async () => {
+          const profession = professionFactory.build({ id: 'profession-id' });
+          const version = professionVersionFactory.build({
+            id: 'version-id',
+            profession: profession,
+          });
 
-        professionsService.findWithVersions.mockResolvedValue(profession);
-        professionVersionsService.findWithProfession.mockResolvedValue(version);
+          const dto: LegislationDto = {
+            link: 'bad link',
+            nationalLegislation: 'national legislation value',
+            change: false,
+          };
 
-        await controller.update(response, 'profession-id', 'version-id', dto);
+          professionsService.findWithVersions.mockResolvedValue(profession);
+          professionVersionsService.findWithProfession.mockResolvedValue(
+            version,
+          );
 
-        expect(professionVersionsService.save).not.toHaveBeenCalled();
+          await controller.update(response, 'profession-id', 'version-id', dto);
 
-        expect(response.render).toHaveBeenCalledWith(
-          'admin/professions/legislation',
-          expect.objectContaining({
-            errors: {
-              link: {
-                text: 'professions.form.errors.legislation.link.invalid',
+          expect(professionVersionsService.save).not.toHaveBeenCalled();
+
+          expect(response.render).toHaveBeenCalledWith(
+            'admin/professions/legislation',
+            expect.objectContaining({
+              errors: {
+                link: {
+                  text: 'professions.form.errors.legislation.link.invalid',
+                },
               },
-              nationalLegislation: {
-                text: 'professions.form.errors.legislation.nationalLegislation.empty',
-              },
-            },
-          }),
-        );
+            }),
+          );
+        });
       });
     });
   });

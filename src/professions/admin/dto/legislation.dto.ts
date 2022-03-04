@@ -15,6 +15,7 @@ export default class LegislationDto {
   @IsUrl(urlOptions, {
     message: 'professions.form.errors.legislation.link.invalid',
   })
+  @ValidateIf((e) => e.link)
   @Transform(({ value }) => preprocessUrl(value))
   link: string;
 
