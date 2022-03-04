@@ -8,7 +8,6 @@ import { BullModule } from '@nestjs/bull';
 import * as path from 'path';
 
 import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { MailerConsumer } from './common/mailer.consumer';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
@@ -56,6 +55,6 @@ import redisConfiguration from './config/redis.config';
     IndustriesModule,
   ],
   controllers: [AppController],
-  providers: [AppService, MailerConsumer],
+  providers: [MailerConsumer],
 })
 export class AppModule {}
