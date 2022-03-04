@@ -11,26 +11,37 @@ describe('Listing professions', () => {
           cy.get('body').should('contain', foundText);
         },
       );
-      cy.get('tr')
-        .contains('Registered Trademark Attorney')
-        .then(($header) => {
-          const $row = $header.parent();
-          cy.wrap($row).contains('Live');
+
+      cy.translate('professions.admin.tableHeading.changedBy').then(
+        (changedBy) => {
+          cy.get('tr').eq(0).should('not.contain', changedBy);
+        },
+      );
+
+      cy.translate('professions.admin.status.live').then((liveText) => {
+        cy.translate('professions.admin.status.draft').then((draftText) => {
+          cy.get('tr')
+            .contains('Registered Trademark Attorney')
+            .then(($header) => {
+              const $row = $header.parent();
+              cy.wrap($row).contains(liveText);
+            });
+          cy.get('tr')
+            .contains(
+              'Secondary School Teacher in State maintained schools (England)',
+            )
+            .then(($header) => {
+              const $row = $header.parent();
+              cy.wrap($row).contains(liveText);
+            });
+          cy.get('tr')
+            .contains('Gas Safe Engineer')
+            .then(($header) => {
+              const $row = $header.parent();
+              cy.wrap($row).contains(draftText);
+            });
         });
-      cy.get('tr')
-        .contains(
-          'Secondary School Teacher in State maintained schools (England)',
-        )
-        .then(($header) => {
-          const $row = $header.parent();
-          cy.wrap($row).contains('Live');
-        });
-      cy.get('tr')
-        .contains('Gas Safe Engineer')
-        .then(($header) => {
-          const $row = $header.parent();
-          cy.wrap($row).contains('Draft');
-        });
+      });
     });
 
     it('Professions are sorted alphabetically', () => {
@@ -41,11 +52,21 @@ describe('Listing professions', () => {
     });
 
     it('The list page contains the expected columns', () => {
+      cy.translate('professions.admin.tableHeading.changedBy').then(
+        (changedBy) => {
+          cy.get('tr').eq(0).should('not.contain', changedBy);
+        },
+      );
+
       cy.translate('professions.admin.tableHeading.organisation').then(
         (organisation) => {
           cy.get('tr').eq(0).should('contain', organisation);
         },
       );
+
+      cy.translate('professions.admin.tableHeading.nations').then((nations) => {
+        cy.get('tr').eq(0).should('contain', nations);
+      });
 
       cy.translate('professions.admin.tableHeading.industry').then(
         (industry) => {
@@ -53,21 +74,15 @@ describe('Listing professions', () => {
         },
       );
 
-      cy.translate('professions.admin.tableHeading.status').then((status) => {
-        cy.get('tr').eq(0).should('contain', status);
-      });
-
       cy.translate('professions.admin.tableHeading.lastModified').then(
         (lastModified) => {
           cy.get('tr').eq(0).should('contain', lastModified);
         },
       );
 
-      cy.translate('professions.admin.tableHeading.changedBy').then(
-        (changedBy) => {
-          cy.get('tr').eq(0).should('contain', changedBy);
-        },
-      );
+      cy.translate('professions.admin.tableHeading.status').then((status) => {
+        cy.get('tr').eq(0).should('contain', status);
+      });
     });
 
     it('I can click a profession to be taken to its details page', () => {
@@ -183,9 +198,13 @@ describe('Listing professions', () => {
         },
       );
 
+      cy.translate('professions.admin.tableHeading.nations').then((nations) => {
+        cy.get('tr').eq(0).should('contain', nations);
+      });
+
       cy.translate('professions.admin.tableHeading.industry').then(
         (industry) => {
-          cy.get('tr').eq(0).should('not.contain', industry);
+          cy.get('tr').eq(0).should('contain', industry);
         },
       );
 
@@ -200,6 +219,10 @@ describe('Listing professions', () => {
           cy.get('tr').eq(0).should('contain', changedBy);
         },
       );
+
+      cy.translate('professions.admin.tableHeading.status').then((status) => {
+        cy.get('tr').eq(0).should('contain', status);
+      });
     });
 
     it("The list page is filtered by the user's organisation", () => {

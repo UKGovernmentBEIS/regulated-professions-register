@@ -246,7 +246,7 @@
     "tableHeading": {
       "profession": "Profession",
       "nations": "Nations",
-      "lastModified": "Last modified",
+      "lastModified": "Last updated",
       "changedBy": "Changed by",
       "organisation": "Regulators",
       "industry": "Sectors",
@@ -275,7 +275,7 @@
     },
     "status": {
       "heading": "Status",
-      "live": "Live",
+      "live": "Published",
       "draft": "Draft",
       "archived": "Archived"
     },
