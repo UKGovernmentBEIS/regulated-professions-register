@@ -3,6 +3,8 @@ $govuk-assets-path: '~govuk-frontend/govuk/assets/';
 @import 'govuk/all';
 @import './admin.scss';
 
+$small-screen: 768px;
+
 .rpr-sidebar {
   border-top: 2px solid #1d70b8;
   padding-top: 10px;
@@ -80,10 +82,29 @@ $govuk-assets-path: '~govuk-frontend/govuk/assets/';
   }
 
   &-listing {
+    &__manage-professions-container {
+      margin: 0;
+    }
+
+    &__manage-professions-container-left {
+      float: left;
+      @media screen and (max-width: $small-screen) {
+        float: none;
+      }
+    }
+
+    &__manage-professions-container-right {
+      float: right;
+      @media screen and (max-width: $small-screen) {
+        float: none;
+      }
+    }
+
     &__filters-container {
       background-color: govuk-colour('light-grey');
       padding: 1rem;
-  
+      clear: both;
+
       .govuk-details__text {
         border: 0;
       }

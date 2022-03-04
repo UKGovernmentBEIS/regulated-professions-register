@@ -18,20 +18,20 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
 
-      {% if 'createProfession' in permissions %}
-        <h2 class="govuk-heading-l">{{ "professions.admin.addHeading" | t }} </h2>
-
-        <p class="govuk-body-m">{{ "professions.admin.addText" | t }}</p>
-        <form action="/admin/professions" method="post" class="form">
-          {{ govukButton({
-            text: "professions.admin.addButtonLabel" | t
-          }) }}
-        </form>
-
-        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
-      {% endif %}
-
-      <h2 class="govuk-heading-l">{{ "professions.admin.manageHeading" | t }} </h2>
+      <div class="rpr-internal-listing__manage-professions-container">
+        <div class="rpr-internal-listing__manage-professions-container-left">
+          <h2 class="govuk-heading-l">Manage existing professions</h2>
+        </div>
+        <div class="rpr-internal-listing__manage-professions-container-right">
+          {% if 'createProfession' in permissions %}
+            <form action="/admin/professions" method="post" class="form">
+              {{ govukButton({
+                text: "professions.admin.addButtonLabel" | t
+              }) }}
+            </form>
+          {% endif %}    
+        </div>
+      </div>
 
       {% if view === 'overview' %}
         {% set changedByCheckboxItems = false %}
