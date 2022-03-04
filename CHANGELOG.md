@@ -10,6 +10,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 
+## [release-007] - 2022-03-04
+
+### Changed
+
 - Fix bug where industries weren't being shown in the Admin Organisations index page
 - Don't display unconfirmed organisations in selects or filters
 - Remove Mandatory Registration field and radio buttons
@@ -153,7 +157,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fix links in error messages when adding a new profession
 - Make validation errors more human readable
 
-[unreleased]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-006...HEAD
+[unreleased]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-007...HEAD
+[release-007]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release006...release-007
 [release-006]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release005...release-006
 [release-005]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release004...release-005
 [release-004]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release003...release-004
