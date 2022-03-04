@@ -12,6 +12,7 @@ import { ShowTemplate } from './interfaces/show-template.interface';
 import { BackLink } from '../common/decorators/back-link.decorator';
 import { Organisation } from '../organisations/organisation.entity';
 import { ProfessionVersionsService } from './profession-versions.service';
+import { getOrganisationsFromProfession } from './helpers/get-organisations-from-profession.helper';
 
 @Controller()
 export class ProfessionsController {
@@ -34,17 +35,9 @@ export class ProfessionsController {
       );
     }
 
-    const organisation = Organisation.withLatestLiveVersion(
-      profession.organisation,
+    const organisations = getOrganisationsFromProfession(profession).map(
+      (organisation) => Organisation.withLatestLiveVersion(organisation),
     );
-
-    const additionalOrganisation =
-      profession.additionalOrganisation &&
-      Organisation.withLatestLiveVersion(profession.additionalOrganisation);
-
-    const organisations = additionalOrganisation
-      ? [organisation, additionalOrganisation]
-      : [organisation];
 
     const nations = await Promise.all(
       profession.occupationLocations.map(async (code) =>
