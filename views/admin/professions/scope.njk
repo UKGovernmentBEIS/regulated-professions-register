@@ -55,8 +55,9 @@
                 html: nationHtml
               }
             }
-          ]
-        })
+          ],
+          errorMessage: (errors.coversUK | tError) or (errors.nations | tError)
+         })
       }}
 
       {{
