@@ -49,9 +49,9 @@
         "regulationSummaryHint": "Brief description of the profession and how it is regulated.",
         "reservedActivities": "Reserved activities",
         "reservedActivitiesHint": "Any activities that only qualified professionals can do.",
-        "protectedTitles": "Protected titles",
+        "protectedTitles": "Protected titles (optional)",
         "protectedTitlesHint": "Professional titles and letters that only qualified professionals can use.",
-        "regulationUrl": "More about regulated activities and titles",
+        "regulationUrl": "More about regulated activities and titles (optional)",
         "regulationUrlHint": "Website link to more information."
       },
       "qualifications": {
