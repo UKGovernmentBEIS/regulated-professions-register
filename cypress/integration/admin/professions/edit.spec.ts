@@ -464,7 +464,7 @@ describe('Editing an existing profession', () => {
         cy.checkAccessibility();
 
         cy.checkSummaryListRowValue(
-          'professions.form.label.qualifications.moreInformationUrl',
+          'professions.show.qualification.moreInformationUrl',
           'http://example.com/more-info',
         );
       });

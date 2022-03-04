@@ -57,15 +57,15 @@
       "qualifications": {
         "routesToObtain": "Routes to qualification",
         "routesToObtainHint": "The ways that a new professional can become qualified",
-        "moreInformationUrl": "More about qualification",
+        "moreInformationUrl": "More about qualification (optional)",
         "moreInformationUrlHint": "Website link to more information",
-        "ukRecognition": "Recognition of qualifications in the UK",
+        "ukRecognition": "Recognition of qualifications in the UK (optional)",
         "ukRecognitionHint": "Routes to recognition for existing professionals from other UK nations",
-        "ukRecognitionUrl": "More about recognition within the UK",
+        "ukRecognitionUrl": "More about recognition within the UK (optional)",
         "ukRecognitionUrlHint": "Website link to more information",
-        "otherCountriesRecognition": "Recognition of qualifications from other countries",
+        "otherCountriesRecognition": "Recognition of qualifications from other countries (optional)",
         "otherCountriesRecognitionHint": "Routes to recognition for existing professionals from outside the UK",
-        "otherCountriesRecognitionUrl": "More about recognition from other countries",
+        "otherCountriesRecognitionUrl": "More about recognition from other countries (optional)",
         "otherCountriesRecognitionUrlHint": "Website link to more information"
       },
       "legislation": {
