@@ -25,6 +25,7 @@ import { Profession } from '../profession.entity';
 import { ProfessionsService } from '../professions.service';
 import { ProfessionPresenter } from '../presenters/profession.presenter';
 import { getActingUser } from '../../users/helpers/get-acting-user.helper';
+import { getOrganisationsFromProfession } from '../helpers/get-organisations-from-profession.helper';
 
 @UseGuards(AuthenticationGuard)
 @Controller('/admin/professions')
@@ -61,17 +62,9 @@ export class ProfessionVersionsController {
     const profession = Profession.withVersion(version.profession, version);
     const presenter = new ProfessionPresenter(profession, this.i18nService);
 
-    const organisation = Organisation.withLatestVersion(
-      profession.organisation,
+    const organisations = getOrganisationsFromProfession(profession).map(
+      (organisation) => Organisation.withLatestVersion(organisation),
     );
-
-    const additionalOrganisation =
-      profession.additionalOrganisation &&
-      Organisation.withLatestVersion(profession.additionalOrganisation);
-
-    const organisations = additionalOrganisation
-      ? [organisation, additionalOrganisation]
-      : [organisation];
 
     const nations = await Promise.all(
       (profession.occupationLocations || []).map(async (code) =>
