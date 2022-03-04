@@ -12,6 +12,7 @@ import { ProfessionVersionsService } from './profession-versions.service';
 import { ProfessionsController } from './professions.controller';
 
 import { Organisation } from '../organisations/organisation.entity';
+import organisationFactory from '../testutils/factories/organisation';
 
 jest.mock('../organisations/organisation.entity');
 
@@ -39,45 +40,86 @@ describe('ProfessionsController', () => {
   });
 
   describe('show', () => {
-    it('should return populated template params', async () => {
-      const industry = industryFactory.build({ name: 'industries.example' });
-      const profession = professionFactory.build({
-        id: 'profession-id',
-        name: 'Example Profession',
-        occupationLocations: ['GB-ENG'],
-        industries: [industry],
-      });
-
-      professionVersionsService.findLiveBySlug.mockResolvedValue(profession);
-
-      (Organisation.withLatestLiveVersion as jest.Mock).mockImplementation(
-        () => profession.organisation,
-      );
-
-      const result = await controller.show('example-slug');
-
-      expect(result).toEqual({
-        profession: profession,
-        qualificationSummaryList: await new QualificationPresenter(
-          profession.qualification,
-          createMockI18nService(),
-        ).summaryList(),
-        nations: [translationOf('nations.england')],
-        industries: [translationOf('industries.example')],
-        organisation: profession.organisation,
-      });
-
-      expect(professionVersionsService.findLiveBySlug).toBeCalledWith(
-        'example-slug',
-      );
-    });
-
     it('should throw an error when the slug does not match a profession', () => {
       professionVersionsService.findLiveBySlug.mockResolvedValue(null);
 
       expect(async () => {
         await controller.show('example-invalid-slug');
       }).rejects.toThrowError(NotFoundException);
+    });
+
+    describe('when the Profession has a single Organisation', () => {
+      it('should return populated template params', async () => {
+        const industry = industryFactory.build({ name: 'industries.example' });
+        const profession = professionFactory.build({
+          id: 'profession-id',
+          name: 'Example Profession',
+          occupationLocations: ['GB-ENG'],
+          industries: [industry],
+        });
+
+        professionVersionsService.findLiveBySlug.mockResolvedValue(profession);
+
+        (Organisation.withLatestLiveVersion as jest.Mock).mockImplementation(
+          (organisation) => organisation,
+        );
+
+        const result = await controller.show('example-slug');
+
+        expect(result).toEqual({
+          profession: profession,
+          qualificationSummaryList: await new QualificationPresenter(
+            profession.qualification,
+            createMockI18nService(),
+          ).summaryList(),
+          nations: [translationOf('nations.england')],
+          industries: [translationOf('industries.example')],
+          organisations: [profession.organisation],
+        });
+
+        expect(professionVersionsService.findLiveBySlug).toBeCalledWith(
+          'example-slug',
+        );
+      });
+    });
+
+    describe('when the Profession has an additional Organisation', () => {
+      it('should return populated template params', async () => {
+        const industry = industryFactory.build({ name: 'industries.example' });
+        const profession = professionFactory.build({
+          id: 'profession-id',
+          name: 'Example Profession',
+          occupationLocations: ['GB-ENG'],
+          industries: [industry],
+          additionalOrganisation: organisationFactory.build(),
+        });
+
+        professionVersionsService.findLiveBySlug.mockResolvedValue(profession);
+
+        (Organisation.withLatestLiveVersion as jest.Mock).mockImplementation(
+          (organisation) => organisation,
+        );
+
+        const result = await controller.show('example-slug');
+
+        expect(result).toEqual({
+          profession: profession,
+          qualificationSummaryList: await new QualificationPresenter(
+            profession.qualification,
+            createMockI18nService(),
+          ).summaryList(),
+          nations: [translationOf('nations.england')],
+          industries: [translationOf('industries.example')],
+          organisations: [
+            profession.organisation,
+            profession.additionalOrganisation,
+          ],
+        });
+
+        expect(professionVersionsService.findLiveBySlug).toBeCalledWith(
+          'example-slug',
+        );
+      });
     });
 
     describe('when the Profession has no qualification set', () => {
@@ -91,7 +133,7 @@ describe('ProfessionsController', () => {
         professionVersionsService.findLiveBySlug.mockResolvedValue(profession);
 
         (Organisation.withLatestLiveVersion as jest.Mock).mockImplementation(
-          () => profession.organisation,
+          (organisation) => organisation,
         );
 
         const result = await controller.show('example-slug');
@@ -101,7 +143,7 @@ describe('ProfessionsController', () => {
           qualificationSummaryList: null,
           nations: [translationOf('nations.england')],
           industries: [translationOf('industries.example')],
-          organisation: profession.organisation,
+          organisations: [profession.organisation],
         });
       });
     });

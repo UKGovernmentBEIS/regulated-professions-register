@@ -56,6 +56,21 @@
     ]
   },
   {
+    "name": "Alternative Law Society",
+    "slug": "alternative-law-society",
+    "versions": [
+      {
+        "alternateName": "",
+        "address": "123 Example Street\nLondon\nWC1 1AB",
+        "url": "www.alt-lawsociety.org.uk",
+        "email": "alt-law@example.com",
+        "telephone": "+44 0123 987654",
+        "fax": "+44 0123 087654",
+        "status": "live"
+      }
+    ]
+  },
+  {
     "name": "General Medical Council",
     "slug": "general-medical-council",
     "versions": [

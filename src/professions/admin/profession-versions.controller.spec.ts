@@ -89,58 +89,110 @@ describe('ProfessionVersionsController', () => {
   });
 
   describe('show', () => {
+    it('should throw an error when the slug does not match a profession', () => {
+      professionVersionsService.findByIdWithProfession.mockResolvedValue(
+        undefined,
+      );
+
+      expect(async () => {
+        await controller.show('profession-id', 'version-id');
+      }).rejects.toThrowError(NotFoundException);
+    });
+
     describe('when the Profession is complete', () => {
-      it('should return populated template params', async () => {
-        const profession = professionFactory.build();
+      describe('when the Profession has a single Organisation', () => {
+        it('should return populated template params', async () => {
+          const profession = professionFactory.build();
 
-        const version = professionVersionFactory.build({
-          profession: profession,
-          occupationLocations: ['GB-ENG'],
-          industries: [industryFactory.build({ name: 'industries.example' })],
+          const version = professionVersionFactory.build({
+            profession: profession,
+            occupationLocations: ['GB-ENG'],
+            industries: [industryFactory.build({ name: 'industries.example' })],
+          });
+
+          const professionWithVersion = Profession.withVersion(
+            profession,
+            version,
+          );
+
+          professionVersionsService.findByIdWithProfession.mockResolvedValue(
+            version,
+          );
+
+          (ProfessionPresenter as jest.Mock).mockReturnValue({});
+
+          (Organisation.withLatestVersion as jest.Mock).mockImplementation(
+            (organisation) => organisation,
+          );
+
+          const result = await controller.show('profession-id', 'version-id');
+
+          expect(result).toEqual({
+            profession: professionWithVersion,
+            presenter: {},
+            qualificationSummaryList: await new QualificationPresenter(
+              professionWithVersion.qualification,
+              createMockI18nService(),
+            ).summaryList(),
+            nations: ['Translation of `nations.england`'],
+            industries: ['Translation of `industries.example`'],
+            organisations: [profession.organisation],
+          });
+
+          expect(
+            professionVersionsService.findByIdWithProfession,
+          ).toHaveBeenCalledWith('profession-id', 'version-id');
         });
-
-        const professionWithVersion = Profession.withVersion(
-          profession,
-          version,
-        );
-
-        professionVersionsService.findByIdWithProfession.mockResolvedValue(
-          version,
-        );
-
-        (ProfessionPresenter as jest.Mock).mockReturnValue({});
-
-        (Organisation.withLatestVersion as jest.Mock).mockImplementation(
-          () => profession.organisation,
-        );
-
-        const result = await controller.show('profession-id', 'version-id');
-
-        expect(result).toEqual({
-          profession: professionWithVersion,
-          presenter: {},
-          qualificationSummaryList: await new QualificationPresenter(
-            professionWithVersion.qualification,
-            createMockI18nService(),
-          ).summaryList(),
-          nations: ['Translation of `nations.england`'],
-          industries: ['Translation of `industries.example`'],
-          organisation: profession.organisation,
-        });
-
-        expect(
-          professionVersionsService.findByIdWithProfession,
-        ).toHaveBeenCalledWith('profession-id', 'version-id');
       });
 
-      it('should throw an error when the slug does not match a profession', () => {
-        professionVersionsService.findByIdWithProfession.mockResolvedValue(
-          undefined,
-        );
+      describe('when the Profession has an additional Organisation', () => {
+        it('should return populated template params', async () => {
+          const profession = professionFactory.build({
+            additionalOrganisation: organisationFactory.build(),
+          });
 
-        expect(async () => {
-          await controller.show('profession-id', 'version-id');
-        }).rejects.toThrowError(NotFoundException);
+          const version = professionVersionFactory.build({
+            profession: profession,
+            occupationLocations: ['GB-ENG'],
+            industries: [industryFactory.build({ name: 'industries.example' })],
+          });
+
+          const professionWithVersion = Profession.withVersion(
+            profession,
+            version,
+          );
+
+          professionVersionsService.findByIdWithProfession.mockResolvedValue(
+            version,
+          );
+
+          (ProfessionPresenter as jest.Mock).mockReturnValue({});
+
+          (Organisation.withLatestVersion as jest.Mock).mockImplementation(
+            (organisation) => organisation,
+          );
+
+          const result = await controller.show('profession-id', 'version-id');
+
+          expect(result).toEqual({
+            profession: professionWithVersion,
+            presenter: {},
+            qualificationSummaryList: await new QualificationPresenter(
+              professionWithVersion.qualification,
+              createMockI18nService(),
+            ).summaryList(),
+            nations: ['Translation of `nations.england`'],
+            industries: ['Translation of `industries.example`'],
+            organisations: [
+              profession.organisation,
+              profession.additionalOrganisation,
+            ],
+          });
+
+          expect(
+            professionVersionsService.findByIdWithProfession,
+          ).toHaveBeenCalledWith('profession-id', 'version-id');
+        });
       });
     });
 
@@ -167,7 +219,7 @@ describe('ProfessionVersionsController', () => {
         (ProfessionPresenter as jest.Mock).mockReturnValue({});
 
         (Organisation.withLatestVersion as jest.Mock).mockImplementation(
-          () => profession.organisation,
+          (organisation) => organisation,
         );
 
         const result = await controller.show('profession-id', 'version-id');
@@ -178,7 +230,7 @@ describe('ProfessionVersionsController', () => {
           qualificationSummaryList: null,
           nations: [translationOf('nations.england')],
           industries: [translationOf('industries.example')],
-          organisation: profession.organisation,
+          organisations: [profession.organisation],
         });
       });
     });
@@ -212,7 +264,7 @@ describe('ProfessionVersionsController', () => {
         (ProfessionPresenter as jest.Mock).mockReturnValue({});
 
         (Organisation.withLatestVersion as jest.Mock).mockImplementation(
-          () => profession.organisation,
+          (organisation) => organisation,
         );
 
         const result = await controller.show('profession-id', 'version-id');
@@ -223,7 +275,7 @@ describe('ProfessionVersionsController', () => {
           qualificationSummaryList: null,
           nations: [],
           industries: [],
-          organisation: profession.organisation,
+          organisations: [profession.organisation],
         });
 
         expect(

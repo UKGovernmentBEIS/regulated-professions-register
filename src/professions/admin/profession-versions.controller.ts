@@ -65,6 +65,14 @@ export class ProfessionVersionsController {
       profession.organisation,
     );
 
+    const additionalOrganisation =
+      profession.additionalOrganisation &&
+      Organisation.withLatestVersion(profession.additionalOrganisation);
+
+    const organisations = additionalOrganisation
+      ? [organisation, additionalOrganisation]
+      : [organisation];
+
     const nations = await Promise.all(
       (profession.occupationLocations || []).map(async (code) =>
         Nation.find(code).translatedName(this.i18nService),
@@ -89,7 +97,7 @@ export class ProfessionVersionsController {
         : null,
       nations,
       industries,
-      organisation,
+      organisations,
     };
   }
 
