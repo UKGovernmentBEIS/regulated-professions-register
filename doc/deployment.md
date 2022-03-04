@@ -41,7 +41,9 @@ The heading should link to a Github URL at the bottom of the file, which shows t
 1. Confirm the release candidate and perform any prerequisites
    - Confirm the release with any relevant people (product owner, delivery manager, etc)
    - Think about any dependencies that also need considering: dependent parts of the service that also need updating; environment variables that need changing/adding; third-party services that need to be set up/updated; data migrations to be run
-1. Update your local main branch and run the `script/release` command
+1. Update your local main branch `git pull`
+1. Delete your local release branch `git branch -d release-x`
+1. Run the `script/release` command
 1. Production smoke test
    Once the code has been deployed to production, carry out a quick smoke test to confirm that the changes have been successfully deployed.
 1. Move all the Azure DevOps cards from "Awaiting deployment" to "Done"
