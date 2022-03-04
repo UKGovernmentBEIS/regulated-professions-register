@@ -79,12 +79,6 @@
         "secondLinkHint": "Website link to the legislation."
       }
     },
-    "details": {
-      "regulatedActivities": {
-        "summaryText": "What are reserved activities?",
-        "text": "Reserved activities means a form of regulating a profession where the access to a professional activity or group of professional activities is reserved, directly or indirectly, by virtue of legislative, regulatory or administrative provisions to members of a regulated profession holding a specific professional qualification, including where the activity is shared with other regulated professions."
-      }
-    },
     "button": {
       "create": "Create profession",
       "edit": "Yes, continue",

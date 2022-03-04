@@ -39,26 +39,21 @@
           })
         }}
 
-        <label class="govuk-label govuk-label--m" for="reservedActivities">{{ "professions.form.label.regulatedActivities.reservedActivities" | t }}</label>
-        <div class="govuk-hint">
-          {{ "professions.form.label.regulatedActivities.reservedActivitiesHint" | t }}
-        </div>
-
-        {{
-          govukDetails({
-            summaryText: ("professions.form.details.regulatedActivities.summaryText" | t),
-            text: ("professions.form.details.regulatedActivities.text" | t),
-            classes: "govuk-!-margin-bottom-2"
-          })
-        }}
-
         {{
           govukTextarea({
+            label: {
+              text: ("professions.form.label.regulatedActivities.reservedActivities" | t),
+              classes: "govuk-label--m",
+              isPageHeading: false
+            },
             id: "reservedActivities",
             name: "reservedActivities",
             value: reservedActivities,
             rows: "7",
-            errorMessage: errors.reservedActivities | tError
+            errorMessage: (errors.reservedActivities | tError),
+            hint: {
+              text: ("professions.form.label.regulatedActivities.reservedActivitiesHint" | t)
+            }
           })
         }}
 
