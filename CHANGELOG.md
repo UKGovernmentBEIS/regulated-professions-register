@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
+- Allow users to publish professions and organisations when editing
+
 ### Changed
 
 - Display a second Regulatory Authority if specified for a profession
