@@ -39,9 +39,9 @@
         "industryHint": "The sectors this profession is part of. Select all that apply."
       },
       "registration": {
-        "registrationRequirements": "Registration requirements",
+        "registrationRequirements": "Registration requirements (optional)",
         "registrationRequirementsHint": "The body professionals should register with and other requirements for registration.",
-        "registrationUrl": "More about registration",
+        "registrationUrl": "More about registration (optional)",
         "registrationUrlHint": "Website link to more information."
       },
       "regulatedActivities": {
