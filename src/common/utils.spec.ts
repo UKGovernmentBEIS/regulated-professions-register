@@ -50,9 +50,10 @@ describe('utils', () => {
   });
 
   describe('formatDate', () => {
-    it('returns a date in DD-MM-YYYY format', () => {
+    it('returns a date in a friendly format', () => {
       // Months are zero-indexed
-      expect(formatDate(new Date(1999, 5, 23))).toEqual('23-06-1999');
+      expect(formatDate(new Date(1999, 5, 23))).toEqual('23 Jun 1999');
+      expect(formatDate(new Date(2003, 7, 2))).toEqual('2 Aug 2003');
     });
   });
 });

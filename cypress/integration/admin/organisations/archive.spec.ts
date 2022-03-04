@@ -61,7 +61,7 @@ describe('Archiving organisations', () => {
       cy.get('[data-cy=changed-by-user]').should('contain', 'Registrar');
       cy.get('[data-cy=last-modified]').should(
         'contain',
-        format(new Date(), 'dd-MM-yyyy'),
+        format(new Date(), 'd MMM yyyy'),
       );
 
       cy.visitAndCheckAccessibility('/admin/organisations');
@@ -118,7 +118,7 @@ describe('Archiving organisations', () => {
       cy.get('[data-cy=changed-by-user]').should('contain', 'Registrar');
       cy.get('[data-cy=last-modified]').should(
         'contain',
-        format(new Date(), 'dd-MM-yyyy'),
+        format(new Date(), 'd MMM yyyy'),
       );
 
       cy.visit('/admin/organisations');
