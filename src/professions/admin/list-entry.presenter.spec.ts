@@ -16,7 +16,7 @@ jest.mock('../presenters/profession.presenter');
 describe('ListEntryPresenter', () => {
   describe('tableRow', () => {
     describe('when the Profession is complete', () => {
-      it('returns a table row when called with `overview`', () => {
+      it('returns a table row when called with `overview`', async () => {
         const profession = professionFactory.build({
           name: 'Example Profession',
           id: 'profession-id',
@@ -67,10 +67,10 @@ describe('ListEntryPresenter', () => {
           },
         ];
 
-        expect(presenter.tableRow(`overview`)).resolves.toEqual(expected);
+        await expect(presenter.tableRow(`overview`)).resolves.toEqual(expected);
       });
 
-      it('returns a table row when called with `single-organisation`', () => {
+      it('returns a table row when called with `single-organisation`', async () => {
         const profession = professionFactory.build({
           name: 'Example Profession',
           id: 'profession-id',
@@ -115,14 +115,14 @@ describe('ListEntryPresenter', () => {
           },
         ];
 
-        expect(presenter.tableRow(`single-organisation`)).resolves.toEqual(
-          expected,
-        );
+        await expect(
+          presenter.tableRow(`single-organisation`),
+        ).resolves.toEqual(expected);
       });
     });
 
     describe('when the Profession has just been created by a service owner user', () => {
-      it('returns a mostly empty table row', () => {
+      it('returns a mostly empty table row', async () => {
         const profession = professionFactory
           .justCreated('profession-id')
           .build({
@@ -168,15 +168,15 @@ describe('ListEntryPresenter', () => {
           },
         ];
 
-        expect(presenter.tableRow(`single-organisation`)).resolves.toEqual(
-          expected,
-        );
+        await expect(
+          presenter.tableRow(`single-organisation`),
+        ).resolves.toEqual(expected);
       });
     });
   });
 
   describe('headers', () => {
-    it('returns a table row of headings when called with `overview`', () => {
+    it('returns a table row of headings when called with `overview`', async () => {
       const expected = [
         { text: translationOf('professions.admin.tableHeading.profession') },
         { text: translationOf('professions.admin.tableHeading.nations') },
@@ -188,12 +188,12 @@ describe('ListEntryPresenter', () => {
         { text: translationOf('professions.admin.tableHeading.actions') },
       ];
 
-      expect(
+      await expect(
         ListEntryPresenter.headings(createMockI18nService(), 'overview'),
       ).resolves.toEqual(expected);
     });
 
-    it('returns a table row of headings when called with `single-organisation`', () => {
+    it('returns a table row of headings when called with `single-organisation`', async () => {
       const expected = [
         { text: translationOf('professions.admin.tableHeading.profession') },
         { text: translationOf('professions.admin.tableHeading.nations') },
@@ -203,12 +203,16 @@ describe('ListEntryPresenter', () => {
         { text: translationOf('professions.admin.tableHeading.actions') },
       ];
 
-      expect(
+      await expect(
         ListEntryPresenter.headings(
           createMockI18nService(),
           'single-organisation',
         ),
       ).resolves.toEqual(expected);
     });
+  });
+
+  afterEach(() => {
+    jest.resetAllMocks();
   });
 });

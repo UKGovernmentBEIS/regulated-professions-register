@@ -148,4 +148,8 @@ describe('ProfessionsController', () => {
       });
     });
   });
+
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
 });
