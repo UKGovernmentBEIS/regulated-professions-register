@@ -75,24 +75,24 @@ $govuk-assets-path: '~govuk-frontend/govuk/assets/';
     }
   }
 
-  &__filters-container {
-    background-color: govuk-colour('light-grey');
-    padding: 1rem;
-
-    .govuk-details__text {
-      border: 0;
-    }
-
-    .govuk-details {
-      margin-bottom: 0;
-    }
-  }
-
   &__table-container {
     overflow-x: scroll;
   }
 
   &-listing {
+    &__filters-container {
+      background-color: govuk-colour('light-grey');
+      padding: 1rem;
+  
+      .govuk-details__text {
+        border: 0;
+      }
+
+      .govuk-details {
+        margin-bottom: 0;
+      }
+    }
+
     &__filter {
       background-color: govuk-colour('white');
       height: 180px;
@@ -103,6 +103,10 @@ $govuk-assets-path: '~govuk-frontend/govuk/assets/';
       margin-bottom: 10px;
       background-color: govuk-colour('black');
       color: govuk-colour('white');
+    }
+
+    &__fitlers-details-summary {
+      display: block;
     }
   }
 
