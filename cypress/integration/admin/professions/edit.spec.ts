@@ -215,15 +215,13 @@ describe('Editing an existing profession', () => {
       cy.translate('app.continue').then((buttonText) => {
         cy.get('button').contains(buttonText).click();
       });
-      cy.checkIndexedSummaryListRowValue(
+      cy.checkSummaryListRowValue(
         'professions.form.label.legislation.nationalLegislation',
         'Updated legislation',
-        1,
       );
-      cy.checkIndexedSummaryListRowValue(
-        'professions.form.label.legislation.nationalLegislation',
+      cy.checkSummaryListRowValue(
+        'professions.form.label.legislation.optionalNationalLegislation',
         'Second legislation',
-        2,
       );
       cy.checkIndexedSummaryListRowValue(
         'professions.form.label.legislation.link',
