@@ -39,10 +39,15 @@ export class ProfessionPresenter {
     };
   }
 
-  get changedBy(): string {
-    return this.profession.changedByUser
-      ? this.profession.changedByUser.name
-      : '';
+  get changedBy(): { name: string; email: string } {
+    const user = this.profession.changedByUser;
+
+    return user
+      ? {
+          name: user.name,
+          email: user.email,
+        }
+      : null;
   }
 
   get lastModified(): string {

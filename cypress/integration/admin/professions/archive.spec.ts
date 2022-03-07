@@ -53,7 +53,11 @@ describe('Archiving professions', () => {
       cy.translate('professions.admin.status.archived').then((status) => {
         cy.get('h2[data-status]').should('contain', status);
       });
-      cy.get('[data-cy=changed-by-user]').should('contain', 'Registrar');
+      cy.get('[data-cy=changed-by-user-name]').should('contain', 'Registrar');
+      cy.get('[data-cy=changed-by-user-email]').should(
+        'contain',
+        'beis-rpr+registrar@dxw.com',
+      );
       cy.get('[data-cy=last-modified]').should(
         'contain',
         format(new Date(), 'd MMM yyyy'),
@@ -116,7 +120,11 @@ describe('Archiving professions', () => {
       cy.translate('professions.admin.status.archived').then((status) => {
         cy.get('h2[data-status]').should('contain', status);
       });
-      cy.get('[data-cy=changed-by-user]').should('contain', 'Registrar');
+      cy.get('[data-cy=changed-by-user-name]').should('contain', 'Registrar');
+      cy.get('[data-cy=changed-by-user-email]').should(
+        'contain',
+        'beis-rpr+registrar@dxw.com',
+      );
       cy.get('[data-cy=last-modified]').should(
         'contain',
         format(new Date(), 'd MMM yyyy'),

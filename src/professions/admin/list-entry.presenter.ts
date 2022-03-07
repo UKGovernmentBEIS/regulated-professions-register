@@ -99,7 +99,7 @@ export class ListEntryPresenter {
       profession: { text: this.profession.name },
       nations: { text: nations },
       lastModified: { text: presenter.lastModified },
-      changedBy: { text: presenter.changedBy },
+      changedBy: { text: presenter.changedBy?.name },
       organisation: {
         text: organisations,
       },

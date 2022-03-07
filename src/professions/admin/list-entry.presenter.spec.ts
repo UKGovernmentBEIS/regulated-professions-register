@@ -99,7 +99,7 @@ describe('ListEntryPresenter', () => {
         });
 
         (ProfessionPresenter as jest.Mock).mockReturnValue({
-          changedBy: 'Editor',
+          changedBy: { name: 'Editor' },
           lastModified: '12-08-2003',
         });
 
@@ -159,7 +159,7 @@ describe('ListEntryPresenter', () => {
         );
 
         (ProfessionPresenter as jest.Mock).mockReturnValue({
-          changedBy: 'Editor',
+          changedBy: { name: 'Editor' },
           lastModified: '12-08-2003',
         });
 
