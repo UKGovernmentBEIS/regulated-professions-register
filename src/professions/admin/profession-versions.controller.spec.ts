@@ -13,7 +13,6 @@ import { translationOf } from '../../testutils/translation-of';
 import userFactory from '../../testutils/factories/user';
 import { ProfessionVersionsController } from './profession-versions.controller';
 import { ProfessionVersionsService } from '../profession-versions.service';
-import { ProfessionsService } from '../professions.service';
 import { Profession } from '../profession.entity';
 import { ProfessionPresenter } from '../presenters/profession.presenter';
 import { getActingUser } from '../../users/helpers/get-acting-user.helper';
@@ -29,21 +28,15 @@ describe('ProfessionVersionsController', () => {
   let controller: ProfessionVersionsController;
 
   let professionVersionsService: DeepMocked<ProfessionVersionsService>;
-  let professionsService: DeepMocked<ProfessionsService>;
   let i18nService: DeepMocked<I18nService>;
 
   beforeEach(async () => {
-    professionsService = createMock<ProfessionsService>();
     professionVersionsService = createMock<ProfessionVersionsService>();
     i18nService = createMockI18nService();
 
     const module: TestingModule = await Test.createTestingModule({
       controllers: [ProfessionVersionsController],
       providers: [
-        {
-          provide: ProfessionsService,
-          useValue: professionsService,
-        },
         {
           provide: ProfessionVersionsService,
           useValue: professionVersionsService,

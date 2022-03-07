@@ -22,7 +22,6 @@ import { ShowTemplate } from '../interfaces/show-template.interface';
 import { Permissions } from '../../common/permissions.decorator';
 import { ProfessionVersionsService } from '../profession-versions.service';
 import { Profession } from '../profession.entity';
-import { ProfessionsService } from '../professions.service';
 import { ProfessionPresenter } from '../presenters/profession.presenter';
 import { getActingUser } from '../../users/helpers/get-acting-user.helper';
 import { getOrganisationsFromProfession } from '../helpers/get-organisations-from-profession.helper';
@@ -31,7 +30,6 @@ import { getOrganisationsFromProfession } from '../helpers/get-organisations-fro
 @Controller('/admin/professions')
 export class ProfessionVersionsController {
   constructor(
-    private readonly professionsService: ProfessionsService,
     private readonly professionVersionsService: ProfessionVersionsService,
     private readonly i18nService: I18nService,
   ) {}
