@@ -21,7 +21,7 @@ describe('Publishing professions', () => {
         cy.get('h2[data-status]').should('contain', status);
       });
 
-      cy.get('[data-cy=changed-by-user]').should('contain', '');
+      cy.get('[data-cy=changed-by-text]').should('not.exist');
       cy.get('[data-cy=currently-published-version-text]').should('not.exist');
 
       cy.translate('professions.form.button.publish').then((publishButton) => {
@@ -69,7 +69,14 @@ describe('Publishing professions', () => {
         cy.get('html').should('contain', buttonText);
       });
 
-      cy.get('[data-cy=changed-by-user]').should('contain', 'Editor');
+      cy.translate('professions.admin.changed.by').then((changedByText) => {
+        cy.get('[data-cy=changed-by-text]').should('contain', changedByText);
+      });
+      cy.get('[data-cy=changed-by-user-name]').should('contain', 'Editor');
+      cy.get('[data-cy=changed-by-user-email]').should(
+        'contain',
+        'beis-rpr+editor@dxw.com',
+      );
       cy.get('[data-cy=last-modified]').should(
         'contain',
         format(new Date(), 'd MMM yyyy'),
@@ -120,7 +127,7 @@ describe('Publishing professions', () => {
         cy.get('h2[data-status]').should('contain', status);
       });
 
-      cy.get('[data-cy=changed-by-user]').should('contain', '');
+      cy.get('[data-cy=changed-by-text]').should('not.exist');
 
       cy.translate('professions.admin.button.edit.draft').then((buttonText) => {
         cy.contains(buttonText).click();
@@ -193,7 +200,14 @@ describe('Publishing professions', () => {
         cy.get('html').should('contain', buttonText);
       });
 
-      cy.get('[data-cy=changed-by-user]').should('contain', 'Editor');
+      cy.translate('professions.admin.changed.by').then((changedByText) => {
+        cy.get('[data-cy=changed-by-text]').should('contain', changedByText);
+      });
+      cy.get('[data-cy=changed-by-user-name]').should('contain', 'Editor');
+      cy.get('[data-cy=changed-by-user-email]').should(
+        'contain',
+        'beis-rpr+editor@dxw.com',
+      );
       cy.get('[data-cy=last-modified]').should(
         'contain',
         format(new Date(), 'd MMM yyyy'),
@@ -397,7 +411,11 @@ describe('Publishing professions', () => {
         },
       );
 
-      cy.get('[data-cy=changed-by-user]').should('contain', 'Registrar');
+      cy.get('[data-cy=changed-by-user-name]').should('contain', 'Registrar');
+      cy.get('[data-cy=changed-by-user-email]').should(
+        'contain',
+        'beis-rpr+registrar@dxw.com',
+      );
       cy.get('[data-cy=last-modified]').should(
         'contain',
         format(new Date(), 'd MMM yyyy'),

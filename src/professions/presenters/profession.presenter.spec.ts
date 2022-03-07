@@ -52,9 +52,12 @@ describe('ProfessionPresenter', () => {
 
   describe('changedBy', () => {
     describe('when the Profession has been edited by a user', () => {
-      it('returns the name of the user', () => {
+      it('returns the details of the user', () => {
         const profession = professionFactory.build({
-          changedByUser: userFactory.build({ name: 'beis-rpr' }),
+          changedByUser: userFactory.build({
+            name: 'beis-rpr',
+            email: 'beis-rpr@example.com',
+          }),
         });
 
         const presenter = new ProfessionPresenter(
@@ -62,12 +65,15 @@ describe('ProfessionPresenter', () => {
           createMockI18nService(),
         );
 
-        expect(presenter.changedBy).toEqual('beis-rpr');
+        expect(presenter.changedBy).toEqual({
+          name: 'beis-rpr',
+          email: 'beis-rpr@example.com',
+        });
       });
     });
 
     describe("when the Profession hasn't yet been edited by a user", () => {
-      it('returns an empty string', () => {
+      it('returns `null`', () => {
         const profession = professionFactory.build({
           changedByUser: undefined,
         });
@@ -77,7 +83,7 @@ describe('ProfessionPresenter', () => {
           createMockI18nService(),
         );
 
-        expect(presenter.changedBy).toEqual('');
+        expect(presenter.changedBy).toEqual(null);
       });
     });
   });
