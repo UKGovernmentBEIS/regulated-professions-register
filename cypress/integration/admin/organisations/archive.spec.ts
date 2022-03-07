@@ -174,7 +174,7 @@ describe('Archiving organisations', () => {
         .then(($header) => {
           const $row = $header.parent();
 
-          cy.translate('professions.admin.status.archived').then((status) => {
+          cy.translate('app.status.archived').then((status) => {
             cy.wrap($row).should('contain', status);
           });
         });
@@ -184,7 +184,7 @@ describe('Archiving organisations', () => {
         .then(($header) => {
           const $row = $header.parent();
 
-          cy.translate('professions.admin.status.archived').then((status) => {
+          cy.translate('app.status.archived').then((status) => {
             cy.wrap($row).should('contain', status);
           });
         });

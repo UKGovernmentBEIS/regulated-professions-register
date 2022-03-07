@@ -4,6 +4,7 @@ import { SummaryList } from '../../common/interfaces/summary-list';
 import { stringifyNations } from '../../nations/helpers/stringifyNations';
 import { Nation } from '../../nations/nation';
 import { formatDate } from '../../common/utils';
+import { formatStatus } from '../../helpers/format-status.helper';
 
 export class ProfessionPresenter {
   constructor(
@@ -52,6 +53,10 @@ export class ProfessionPresenter {
 
   get lastModified(): string {
     return formatDate(this.profession.lastModified);
+  }
+
+  get status(): Promise<string> {
+    return formatStatus(this.profession.status, this.i18nService);
   }
 
   public async occupationLocations(): Promise<string> {

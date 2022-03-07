@@ -17,7 +17,7 @@ describe('Publishing professions', () => {
           cy.get('a').contains('View details').click();
         });
 
-      cy.translate('professions.admin.status.draft').then((status) => {
+      cy.translate('app.status.draft').then((status) => {
         cy.get('h2[data-status]').should('contain', status);
       });
 
@@ -107,7 +107,7 @@ describe('Publishing professions', () => {
         .then(($header) => {
           const $row = $header.parent();
 
-          cy.translate('professions.admin.status.live').then((status) => {
+          cy.translate('app.status.live').then((status) => {
             cy.wrap($row).should('contain', status);
           });
         });
@@ -123,7 +123,7 @@ describe('Publishing professions', () => {
           cy.get('a').contains('View details').click();
         });
 
-      cy.translate('professions.admin.status.draft').then((status) => {
+      cy.translate('app.status.draft').then((status) => {
         cy.get('h2[data-status]').should('contain', status);
       });
 
@@ -220,7 +220,7 @@ describe('Publishing professions', () => {
         .then(($header) => {
           const $row = $header.parent();
 
-          cy.translate('professions.admin.status.live').then((status) => {
+          cy.translate('app.status.live').then((status) => {
             cy.wrap($row).should('contain', status);
           });
         });

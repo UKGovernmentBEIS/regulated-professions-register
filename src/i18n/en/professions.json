@@ -273,10 +273,7 @@
       }
     },
     "status": {
-      "heading": "Status",
-      "live": "Published",
-      "draft": "Draft",
-      "archived": "Archived"
+      "heading": "Status"
     },
     "changed": {
       "by": "Changed by",
