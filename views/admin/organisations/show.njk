@@ -40,6 +40,18 @@
 
           <nav role="navigation" data-cy="actions">
             <ul class="govuk-list">
+              {% if 'editOrganisation' in permissions %}
+              <li>
+                <form method="post" action="/admin/organisations/{{ organisation.id }}/versions">
+                  {{ govukButton({
+                    id: "submit-button",
+                    type: "Submit",
+                    classes: "govuk-button--secondary",
+                    text: (('organisations.admin.button.edit.' + organisation.status) | t)
+                  }) }}
+                </form>
+              </li>
+              {% endif %}
               {% if organisation.status === 'draft' and 'publishOrganisation' in permissions %}
               <li>
                 {{
@@ -52,18 +64,6 @@
                     href: "/admin/organisations/" + organisation.id + "/versions/" + organisation.versionId + "/publish"
                   })
                 }}
-              </li>
-              {% endif %}
-              {% if 'editOrganisation' in permissions %}
-              <li>
-                <form method="post" action="/admin/organisations/{{ organisation.id }}/versions">
-                  {{ govukButton({
-                    id: "submit-button",
-                    type: "Submit",
-                    classes: "govuk-button--secondary",
-                    text: (('organisations.admin.button.edit.' + organisation.status) | t)
-                  }) }}
-                </form>
               </li>
               {% endif %}
               {% if 'deleteOrganisation' in permissions %}
