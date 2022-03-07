@@ -77,7 +77,7 @@ describe('ProfessionsController', () => {
           qualificationSummaryList: await new QualificationPresenter(
             profession.qualification,
             createMockI18nService(),
-          ).summaryList(),
+          ).summaryList(false),
           nations: [translationOf('nations.england')],
           industries: [translationOf('industries.example')],
           organisations: [profession.organisation],
@@ -119,7 +119,7 @@ describe('ProfessionsController', () => {
           qualificationSummaryList: await new QualificationPresenter(
             profession.qualification,
             createMockI18nService(),
-          ).summaryList(),
+          ).summaryList(false),
           nations: [translationOf('nations.england')],
           industries: [translationOf('industries.example')],
           organisations: [

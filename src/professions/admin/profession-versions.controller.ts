@@ -80,17 +80,16 @@ export class ProfessionVersionsController {
       ),
     );
 
-    const qualification = profession.qualification
-      ? new QualificationPresenter(profession.qualification, this.i18nService)
-      : null;
+    const qualification = new QualificationPresenter(
+      profession.qualification,
+      this.i18nService,
+    );
 
     return {
       profession,
       presenter,
       hasLiveVersion,
-      qualificationSummaryList: qualification
-        ? await qualification.summaryList()
-        : null,
+      qualificationSummaryList: await qualification.summaryList(true),
       nations,
       industries,
       organisations,

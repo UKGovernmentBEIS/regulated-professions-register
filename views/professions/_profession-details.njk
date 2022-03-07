@@ -58,7 +58,9 @@
           value: {
             html: organisation.address | multiline
           }
-        },
+        } if (organisation.address or showEmptyProfessionDetails) else undefined,
+        undefined,
+        undefined,
         {
           key: {
             text: ("professions.show.bodies.emailAddress" | t)
@@ -66,7 +68,7 @@
           value: {
             html: organisation.email | email
           }
-        },
+        } if (organisation.email or showEmptyProfessionDetails) else undefined,
         {
           key: {
             text: ("professions.show.bodies.url" | t)
@@ -74,7 +76,7 @@
           value: {
             html: organisation.url | link
           }
-        },
+        } if (organisation.url or showEmptyProfessionDetails) else undefined,
         {
           key: {
             text: ("professions.show.bodies.phoneNumber" | t)
@@ -82,7 +84,7 @@
           value: {
             text: organisation.telephone
           }
-        }
+        } if (organisation.telephone or showEmptyProfessionDetails) else undefined
       ]
     }) }}
   </div>
@@ -93,25 +95,28 @@
 <div>
   <h2 class="govuk-heading-m rpr-details__section-title">{{ "professions.show.regulatedActivities.heading" | t }}</h2>
 
-  <div>
-    <h3 class="govuk-heading-s">{{ "professions.show.regulatedActivities.regulationSummary" | t }}</h3>
-    {{ profession.description | multiline('govuk-body') }}
-  </div>
+  {% if profession.description or showEmptyProfessionDetails %}
+    <div>
+      <h3 class="govuk-heading-s">{{ "professions.show.regulatedActivities.regulationSummary" | t }}</h3>
+      {{ profession.description | multiline('govuk-body') }}
+    </div>
+  {% endif %}
 
-  <div>
-    <h3 class="govuk-heading-s">{{ "professions.show.regulatedActivities.reservedActivities" | t }}</h3>
-    {{ profession.reservedActivities | multiline('govuk-body') }}
-  </div>
+  {% if profession.reservedActivities or showEmptyProfessionDetails %}
+    <div>
+      <h3 class="govuk-heading-s">{{ "professions.show.regulatedActivities.reservedActivities" | t }}</h3>
+      {{ profession.reservedActivities | multiline('govuk-body') }}
+    </div>
+  {% endif %}
 
-  {% if profession.protectedTitles %}
+  {% if profession.protectedTitles or showEmptyProfessionDetails %}
     <div>
       <h3 class="govuk-heading-s">{{ "professions.show.regulatedActivities.protectedTitles" | t }}</h3>
       {{ profession.protectedTitles | multiline('govuk-body') }}
     </div>
   {% endif %}
 
-  {% if profession.regulationUrl %}
-
+  {% if profession.regulationUrl or showEmptyProfessionDetails %}
     {{ govukSummaryList({
       classes: 'govuk-summary-list--no-border',
       rows: [
@@ -125,7 +130,6 @@
         }
       ]
     }) }}
-
   {% endif %}
 </div>
 
@@ -139,13 +143,13 @@
 
 {% endif %}
 
-{% if profession.legislations %}
+{% if profession.legislations or showEmptyProfessionDetails %}
 
 <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
 
 <h2 class="govuk-heading-m rpr-details__section-title">{{ "professions.show.legislation.heading" | t}}</h2>
 
-{% for legislation in profession.legislations %}
+{% for legislation in ((profession.legislations | pad(2)) if showEmptyProfessionDetails else profession.legislations) %}
   {{ govukSummaryList({
     classes: 'govuk-summary-list--no-border',
     rows: [
@@ -164,10 +168,9 @@
         value: {
           html: legislation.url | link
         }
-      }
+      } if (legislation.url or showEmptyProfessionDetails) else undefined
     ]
   }) }}
 {% endfor %}
-
 
 {% endif %}

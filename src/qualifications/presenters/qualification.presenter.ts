@@ -31,7 +31,7 @@ export default class QualificationPresenter {
     this.qualification && this.qualification.otherCountriesRecognitionUrl,
   );
 
-  async summaryList(): Promise<SummaryList> {
+  async summaryList(showEmptyFields: boolean): Promise<SummaryList> {
     return {
       classes: 'govuk-summary-list--no-border',
       rows: [
@@ -45,16 +45,18 @@ export default class QualificationPresenter {
             html: this.routesToObtain,
           },
         },
-        {
-          key: {
-            text: await this.i18nService.translate(
-              'professions.show.qualification.moreInformationUrl',
-            ),
-          },
-          value: {
-            html: this.moreInformationUrl,
-          },
-        },
+        showEmptyFields || this.moreInformationUrl
+          ? {
+              key: {
+                text: await this.i18nService.translate(
+                  'professions.show.qualification.moreInformationUrl',
+                ),
+              },
+              value: {
+                html: this.moreInformationUrl,
+              },
+            }
+          : undefined,
       ],
     };
   }

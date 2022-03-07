@@ -9,6 +9,7 @@
   {% include "../../_messages.njk" %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
+      {% set showEmptyProfessionDetails = true %}
       {% include "../../professions/_profession-details.njk" %}
     </div>
     <div class="govuk-grid-column-one-third">
