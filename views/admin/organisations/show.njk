@@ -16,7 +16,7 @@
 
         <h2 class="govuk-heading-s" data-status>
           {{ "organisations.headings.status" | t }}<br>
-          <span class="govuk-body">{{ ("organisations.status." + organisation.status) | t }}</span>
+          {{ organisation.status | status }}
         </h2>
 
         <h2 class="govuk-heading-s" data-cy="last-modified-text">

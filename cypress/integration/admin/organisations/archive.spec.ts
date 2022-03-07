@@ -17,7 +17,7 @@ describe('Archiving organisations', () => {
           cy.get('a').contains('View details').click();
         });
 
-      cy.translate('organisations.status.draft').then((status) => {
+      cy.translate('app.status.draft').then((status) => {
         cy.get('h2[data-status]').should('contain', status);
       });
 
@@ -55,7 +55,7 @@ describe('Archiving organisations', () => {
 
       cy.get('[data-cy=actions]').should('not.exist');
 
-      cy.translate('organisations.status.archived').then((status) => {
+      cy.translate('app.status.archived').then((status) => {
         cy.get('h2[data-status]').should('contain', status);
       });
       cy.get('[data-cy=changed-by-user-name]').should('contain', 'Registrar');
@@ -75,7 +75,7 @@ describe('Archiving organisations', () => {
         .then(($header) => {
           const $row = $header.parent();
 
-          cy.translate(`organisations.status.archived`).then((status) => {
+          cy.translate(`app.status.archived`).then((status) => {
             cy.wrap($row).should('contain', status);
           });
         });
@@ -94,7 +94,7 @@ describe('Archiving organisations', () => {
           cy.get('a').contains('View details').click();
         });
 
-      cy.translate('organisations.status.live').then((status) => {
+      cy.translate('app.status.live').then((status) => {
         cy.get('h2[data-status]').should('contain', status);
       });
 
@@ -134,7 +134,7 @@ describe('Archiving organisations', () => {
 
       cy.get('[data-cy=actions]').should('not.exist');
 
-      cy.translate('organisations.status.archived').then((status) => {
+      cy.translate('app.status.archived').then((status) => {
         cy.get('h2[data-status]').should('contain', status);
       });
       cy.get('[data-cy=changed-by-user-name]').should('contain', 'Registrar');
@@ -155,7 +155,7 @@ describe('Archiving organisations', () => {
         .then(($header) => {
           const $row = $header.parent();
 
-          cy.translate(`organisations.status.archived`).then((status) => {
+          cy.translate(`app.status.archived`).then((status) => {
             cy.wrap($row).should('contain', status);
           });
         });

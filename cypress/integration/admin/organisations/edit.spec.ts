@@ -182,7 +182,7 @@ describe('Editing organisations', () => {
           'New Alternate Name',
         );
 
-        cy.translate(`organisations.status.draft`).then((status) => {
+        cy.translate('app.status.draft').then((status) => {
           cy.get('h2[data-status]').should('contain', status);
         });
 

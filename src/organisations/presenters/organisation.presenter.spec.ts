@@ -19,12 +19,16 @@ import { emailOf } from '../../testutils/email-of';
 import { formatEmail } from '../../helpers/format-email.helper';
 import { ProfessionVersionStatus } from '../../professions/profession-version.entity';
 import professionVersionFactory from '../../testutils/factories/profession-version';
+import { OrganisationVersionStatus } from '../organisation-version.entity';
+import { statusOf } from '../../testutils/status-of';
+import { formatStatus } from '../../helpers/format-status.helper';
 
 jest.mock('../../helpers/escape.helper');
 jest.mock('../../helpers/format-multiline-string.helper');
 jest.mock('../../common/utils');
 jest.mock('../../helpers/format-link.helper');
 jest.mock('../../helpers/format-email.helper');
+jest.mock('../../helpers/format-status.helper');
 
 describe('OrganisationPresenter', () => {
   describe('tableRow', () => {
@@ -46,9 +50,11 @@ describe('OrganisationPresenter', () => {
             professions: professions,
             lastModified: new Date('01-01-2022'),
             changedByUser: userFactory.build({ name: 'beis-rpr' }),
+            status: OrganisationVersionStatus.Draft,
           });
 
           (escape as jest.Mock).mockImplementation(escapeOf);
+          (formatStatus as jest.Mock).mockImplementation(statusOf);
 
           const presenter = new OrganisationPresenter(
             organisation,
@@ -71,7 +77,7 @@ describe('OrganisationPresenter', () => {
             },
           });
           expect(tableRow[5]).toEqual({
-            html: `Translation of \`organisations.status.${organisation.status}\``,
+            html: statusOf(OrganisationVersionStatus.Draft),
           });
           expect(tableRow[6]).toEqual({
             html: expect.stringContaining(
@@ -118,8 +124,10 @@ describe('OrganisationPresenter', () => {
             professions: professions,
             lastModified: new Date('01-01-2022'),
             changedByUser: userFactory.build({ name: 'beis-rpr' }),
+            status: OrganisationVersionStatus.Draft,
           });
           (escape as jest.Mock).mockImplementation(escapeOf);
+          (formatStatus as jest.Mock).mockImplementation(statusOf);
 
           const presenter = new OrganisationPresenter(
             organisation,
@@ -146,7 +154,7 @@ describe('OrganisationPresenter', () => {
             },
           });
           expect(tableRow[5]).toEqual({
-            html: `Translation of \`organisations.status.${organisation.status}\``,
+            html: statusOf(OrganisationVersionStatus.Draft),
           });
         });
       });

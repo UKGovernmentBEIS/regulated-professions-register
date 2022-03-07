@@ -126,7 +126,7 @@ describe('Creating organisations', () => {
 
       cy.get('body').should('contain', 'New Organisation');
 
-      cy.translate(`organisations.status.draft`).then((status) => {
+      cy.translate(`app.status.draft`).then((status) => {
         cy.get('h2[data-status]').should('contain', status);
       });
 

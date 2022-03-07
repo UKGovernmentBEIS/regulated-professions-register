@@ -8,6 +8,7 @@ import { formatDate } from '../../common/utils';
 import { formatLink } from '../../helpers/format-link.helper';
 import { formatEmail } from '../../helpers/format-email.helper';
 import { Profession } from '../../professions/profession.entity';
+import { formatStatus } from '../../helpers/format-status.helper';
 
 interface OrganisationSummaryListOptions {
   classes?: string;
@@ -43,9 +44,7 @@ export class OrganisationPresenter {
         },
       },
       {
-        html: await this.i18nService.translate(
-          `organisations.status.${this.organisation.status}`,
-        ),
+        html: await formatStatus(this.organisation.status, this.i18nService),
       },
       {
         html: `<a class="govuk-link" href="/admin/organisations/${
