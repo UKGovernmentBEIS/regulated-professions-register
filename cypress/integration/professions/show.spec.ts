@@ -166,7 +166,7 @@ describe('Showing a profession', () => {
         cy.get('body h2')
           .contains(heading)
           .parent()
-          .within(() => {
+          .within(($div) => {
             cy.translate(
               'professions.show.regulatedActivities.regulationSummary',
             ).then((summaryHeading) => {
@@ -181,6 +181,18 @@ describe('Showing a profession', () => {
                     'A description of the profession',
                   );
                 });
+            });
+
+            cy.translate(
+              'professions.show.regulatedActivities.protectedTitles',
+            ).then((protectedTitlesHeading) => {
+              cy.wrap($div).should('not.contain', protectedTitlesHeading);
+            });
+
+            cy.translate(
+              'professions.show.regulatedActivities.regulationUrl',
+            ).then((regulationUrlHeading) => {
+              cy.wrap($div).should('not.contain', regulationUrlHeading);
             });
           });
       },

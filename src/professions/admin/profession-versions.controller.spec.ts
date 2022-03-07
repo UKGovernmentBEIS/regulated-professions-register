@@ -134,7 +134,7 @@ describe('ProfessionVersionsController', () => {
             qualificationSummaryList: await new QualificationPresenter(
               professionWithVersion.qualification,
               createMockI18nService(),
-            ).summaryList(),
+            ).summaryList(true),
             nations: ['Translation of `nations.england`'],
             industries: ['Translation of `industries.example`'],
             organisations: [profession.organisation],
@@ -194,7 +194,7 @@ describe('ProfessionVersionsController', () => {
             qualificationSummaryList: await new QualificationPresenter(
               professionWithVersion.qualification,
               createMockI18nService(),
-            ).summaryList(),
+            ).summaryList(true),
             nations: ['Translation of `nations.england`'],
             industries: ['Translation of `industries.example`'],
             organisations: [
@@ -249,7 +249,10 @@ describe('ProfessionVersionsController', () => {
           profession: professionWithVersion,
           presenter: {},
           hasLiveVersion: true,
-          qualificationSummaryList: null,
+          qualificationSummaryList: await new QualificationPresenter(
+            professionWithVersion.qualification,
+            createMockI18nService(),
+          ).summaryList(true),
           nations: [translationOf('nations.england')],
           industries: [translationOf('industries.example')],
           organisations: [profession.organisation],
@@ -296,7 +299,10 @@ describe('ProfessionVersionsController', () => {
           profession: professionWithVersion,
           presenter: {},
           hasLiveVersion: true,
-          qualificationSummaryList: null,
+          qualificationSummaryList: await new QualificationPresenter(
+            null,
+            createMockI18nService(),
+          ).summaryList(true),
           nations: [],
           industries: [],
           organisations: [profession.organisation],
