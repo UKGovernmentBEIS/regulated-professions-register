@@ -34,7 +34,7 @@ describe('Listing organisations', () => {
                   cy.get('[data-cy=changed-by-user]').should('contain', '');
                   cy.wrap($row).should(
                     'contain',
-                    format(new Date(), 'dd-MM-yyyy'),
+                    format(new Date(), 'd MMM yyyy'),
                   );
 
                   cy.translate(
@@ -133,7 +133,7 @@ describe('Listing organisations', () => {
       cy.get('tbody tr').should('have.length', 1);
       cy.get('tbody tr').should('contain', 'Department for Education');
       cy.get('[data-cy=changed-by-user]').should('contain', '');
-      cy.get('tbody tr').should('contain', format(new Date(), 'dd-MM-yyyy'));
+      cy.get('tbody tr').should('contain', format(new Date(), 'd MMM yyyy'));
     });
   });
 

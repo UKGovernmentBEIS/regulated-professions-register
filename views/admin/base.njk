@@ -1,4 +1,7 @@
-{% set bodyClasses="rpr-internal__page" %}
+{% if not bodyClasses %}
+  {% set bodyClasses="rpr-internal__page" %}
+{% endif %}
+
 {% extends "base.njk" %}
 
 {% block header %}

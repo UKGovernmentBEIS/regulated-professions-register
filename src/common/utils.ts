@@ -11,5 +11,5 @@ export function getReferrer(req: Request): string {
 }
 
 export function formatDate(date: Date): string {
-  return format(date, 'dd-MM-yyyy');
+  return format(date, 'd MMM yyyy');
 }

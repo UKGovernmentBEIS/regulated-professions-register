@@ -193,9 +193,7 @@
   },
   "admin": {
     "heading": "Regulated professions",
-    "addHeading": "Add a new profession",
     "addButtonLabel": "Add a new profession",
-    "addText": "You can add a new profession for your organisation here.",
     "manageHeading": "Manage existing professions",
     "showFilters": "Show filters",
     "button": {
@@ -246,7 +244,7 @@
     "tableHeading": {
       "profession": "Profession",
       "nations": "Nations",
-      "lastModified": "Last modified",
+      "lastModified": "Last updated",
       "changedBy": "Changed by",
       "organisation": "Regulators",
       "industry": "Sectors",
@@ -275,7 +273,7 @@
     },
     "status": {
       "heading": "Status",
-      "live": "Live",
+      "live": "Published",
       "draft": "Draft",
       "archived": "Archived"
     },

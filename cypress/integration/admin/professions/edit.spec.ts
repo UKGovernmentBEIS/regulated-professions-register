@@ -239,7 +239,7 @@ describe('Editing an existing profession', () => {
       cy.get('[data-cy=changed-by-user]').should('contain', 'Editor');
       cy.get('[data-cy=last-modified]').should(
         'contain',
-        format(new Date(), 'dd-MM-yyyy'),
+        format(new Date(), 'd MMM yyyy'),
       );
 
       cy.translate('professions.admin.update.confirmation.heading').then(
@@ -607,7 +607,7 @@ describe('Editing an existing profession', () => {
       cy.get('[data-cy=changed-by-user]').should('contain', 'Registrar');
       cy.get('[data-cy=last-modified]').should(
         'contain',
-        format(new Date(), 'dd-MM-yyyy'),
+        format(new Date(), 'd MMM yyyy'),
       );
 
       cy.get('h3').should('contain', 'Department for Education');

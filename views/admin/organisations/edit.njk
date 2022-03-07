@@ -3,8 +3,6 @@
 {% from "govuk/components/textarea/macro.njk" import govukTextarea %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
-{% set bodyClasses = "rpr-internal__page" %}
-
 {% if slug|length == 0 %}
   {% set title = ("organisations.admin.create.heading" | t) %}
 {% else %}

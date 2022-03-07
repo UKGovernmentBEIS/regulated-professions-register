@@ -22,17 +22,17 @@ type Field =
 const fields = {
   overview: [
     'profession',
-    'nations',
-    'lastModified',
-    'changedBy',
     'organisation',
+    'nations',
     'industry',
+    'lastModified',
     'status',
     'actions',
   ],
   'single-organisation': [
     'profession',
     'nations',
+    'industry',
     'lastModified',
     'changedBy',
     'status',

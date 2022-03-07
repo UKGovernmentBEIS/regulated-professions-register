@@ -77,9 +77,9 @@
     "tableHeading": {
       "name": "Name",
       "alternateName": "Alternate name",
-      "industries": "Industry/Sector(s)",
+      "industries": "Sectors",
       "status": "Status",
-      "lastModified": "Last modified",
+      "lastModified": "Last updated",
       "changedBy": "Changed by",
       "actions": "Actions"
     },
@@ -143,7 +143,7 @@
     "professions": "Regulated professions",
     "status": "Status",
     "changed": {
-      "on": "Last modified",
+      "on": "Last updated",
       "by": "Changed by"
     }
   },
@@ -156,7 +156,7 @@
     "telephone": "Phone number"
   },
   "status": {
-    "live": "Live",
+    "live": "Published",
     "draft": "Draft",
     "archived": "Archived"
   }
