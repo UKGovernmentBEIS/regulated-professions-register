@@ -216,6 +216,9 @@ describe('OrganisationPresenter', () => {
         it('should filter out empty fields', async () => {
           const i18nService = createMockI18nService();
           (escape as jest.Mock).mockImplementation(escapeOf);
+          (formatMultilineString as jest.Mock).mockImplementation(multilineOf);
+          (formatEmail as jest.Mock).mockImplementation(emailOf);
+          (formatLink as jest.Mock).mockImplementation(linkOf);
 
           const organisation = organisationFactory
             .withVersion()
@@ -232,7 +235,7 @@ describe('OrganisationPresenter', () => {
             list.rows.filter(
               (item) =>
                 item.key ===
-                { text: 'Translation of `organisations.label.alternateName`' },
+                { text: translationOf('organisations.label.alternateName') },
             ).length,
           ).toEqual(0);
         });

@@ -25,6 +25,6 @@ export class OrganisationsController {
       this.i18nService,
     );
 
-    return organisationSummaryPresenter.present();
+    return organisationSummaryPresenter.present(false);
   }
 }

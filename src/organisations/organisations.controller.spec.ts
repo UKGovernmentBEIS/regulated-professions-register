@@ -54,7 +54,7 @@ describe('OrganisationsController', () => {
       const expected = await new OrganisationSummaryPresenter(
         organisation,
         i18nService,
-      ).present();
+      ).present(false);
 
       expect(await controller.show('slug')).toEqual(expected);
 

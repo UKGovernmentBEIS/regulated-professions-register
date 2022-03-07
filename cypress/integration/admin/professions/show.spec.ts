@@ -156,26 +156,23 @@ describe('Listing professions', () => {
         cy.get('body').should('contain', heading);
       });
 
-      cy.get('h3').should('contain', 'Department for Education');
+      cy.get('h3').should('contain', 'Organisation with no optional fields');
       cy.get('h3')
-        .contains('Department for Education')
+        .contains('Organisation with no optional fields')
         .parent()
         .within(() => {
-          cy.checkSummaryListRowMultilineValue(
-            'professions.show.bodies.address',
-            ['345 Example Street', 'London', 'EC1 1AB'],
-          );
+          cy.checkSummaryListRowValue('professions.show.bodies.address', '');
           cy.checkSummaryListRowValue(
             'professions.show.bodies.emailAddress',
-            'old@example.com',
+            '',
           );
           cy.checkSummaryListRowValue(
             'professions.show.bodies.url',
-            'https://www.gov.uk/guidance/early-years-qualifications-finder#overseas-qualifications',
+            'http://www.example.com',
           );
           cy.checkSummaryListRowValue(
             'professions.show.bodies.phoneNumber',
-            '+44 0123 456789',
+            '',
           );
         });
 
