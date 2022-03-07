@@ -38,18 +38,6 @@
         {% if profession.status !== 'archived' %}
           <nav role="navigation" data-cy="actions">
             <ul class="govuk-list">
-              {% if profession.status === 'draft' and 'publishProfession' in permissions %}
-                <li>
-                  {{
-                    govukButton({
-                      text: ('professions.form.button.publish' | t),
-                      classes: "govuk-button",
-                      attributes: { "data-cy": "publish-button" },
-                      href: "/admin/professions/" + profession.id + "/versions/" + profession.versionId + "/publish"
-                    })
-                  }}
-                </li>
-              {% endif %}
               {% if 'editProfession' in permissions %}
               <li>
                   <form method="post" action="/admin/professions/{{ profession.id }}/versions">
@@ -64,6 +52,18 @@
                     }}
                   </form>
               </li>
+              {% endif %}
+              {% if profession.status === 'draft' and 'publishProfession' in permissions %}
+                <li>
+                  {{
+                    govukButton({
+                      text: ('professions.form.button.publish' | t),
+                      classes: "govuk-button",
+                      attributes: { "data-cy": "publish-button" },
+                      href: "/admin/professions/" + profession.id + "/versions/" + profession.versionId + "/publish"
+                    })
+                  }}
+                </li>
               {% endif %}
               {% if 'deleteProfession' in permissions %}
               <li>
