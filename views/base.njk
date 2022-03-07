@@ -24,10 +24,6 @@
 {% block head %}
   {{ encore_entry_link_tags }}
 
-  {% if environment === 'production' %}
-    <script defer data-domain="{{ site_domain }}" src="https://plausible.io/js/plausible.js"></script>
-  {% endif %}
-
   {# For Internet Explorer 8, you need to compile specific stylesheet #}
   {# see https://frontend.design-system.service.gov.uk/supporting-ie8/#support-internet-explorer-8 #}
   <!--[if IE 8]>
