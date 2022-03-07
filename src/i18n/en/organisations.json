@@ -112,6 +112,10 @@
       "archive": "Archive this regulatory authority",
       "saveAsDraft": "Save as draft",
       "publish": "Publish to register"
+    },
+    "publicFacingLink": {
+      "heading": "Currently published version",
+      "label": "Public facing link"
     }
   },
   "search": {

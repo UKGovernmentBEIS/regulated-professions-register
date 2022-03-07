@@ -11,7 +11,7 @@ import { Organisation } from '../organisation.entity';
 
 import { OrganisationSummaryPresenter } from '../presenters/organisation-summary.presenter';
 
-import { ShowTemplate } from '../interfaces/show-template.interface';
+import { ShowTemplate } from './interfaces/show-template.interface';
 
 import organisationFactory from '../../testutils/factories/organisation';
 import organisationVersionFactory from '../../testutils/factories/organisation-version';
@@ -105,10 +105,12 @@ describe('OrganisationVersionsController', () => {
       organisationVersionsService.findByIdWithOrganisation.mockResolvedValue(
         version,
       );
+      organisationVersionsService.hasLiveVersion.mockResolvedValue(true);
 
       const showTemplate: ShowTemplate = {
         organisation,
         presenter: {} as OrganisationPresenter,
+        hasLiveVersion: true,
         summaryList: {
           classes: 'govuk-summary-list--no-border',
           rows: [],
@@ -127,6 +129,9 @@ describe('OrganisationVersionsController', () => {
       expect(
         organisationVersionsService.findByIdWithOrganisation,
       ).toHaveBeenCalledWith('org-uuid', 'version-uuid');
+      expect(organisationVersionsService.hasLiveVersion).toHaveBeenCalledWith(
+        organisationWithVersion,
+      );
 
       expect(OrganisationSummaryPresenter).toHaveBeenCalledWith(
         organisationWithVersion,

@@ -21,7 +21,7 @@ import { RequestWithAppSession } from '../../common/interfaces/request-with-app-
 
 import { Organisation } from '../organisation.entity';
 
-import { ShowTemplate } from '../interfaces/show-template.interface';
+import { ShowTemplate } from './interfaces/show-template.interface';
 
 import { OrganisationSummaryPresenter } from '../presenters/organisation-summary.presenter';
 import { Permissions } from '../../common/permissions.decorator';
@@ -82,11 +82,17 @@ export class OrganisationVersionsController {
       true,
     );
 
+    const hasLiveVersion =
+      await this.organisationVersionsService.hasLiveVersion(organisation);
+
     const organisationSummaryPresenter = new OrganisationSummaryPresenter(
       organisation,
       this.i18nService,
     );
 
-    return organisationSummaryPresenter.present();
+    return {
+      ...organisationSummaryPresenter.present(),
+      hasLiveVersion,
+    };
   }
 }

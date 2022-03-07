@@ -11,7 +11,7 @@ describe('Publishing organisations', () => {
       cy.get('a').contains('Regulatory authorities').click();
       cy.checkAccessibility();
 
-      cy.contains('Department for Education')
+      cy.contains('Draft Organisation')
         .parent('tr')
         .within(() => {
           cy.get('a').contains('View details').click();
@@ -36,7 +36,7 @@ describe('Publishing organisations', () => {
       );
 
       cy.translate('organisations.admin.publish.heading', {
-        organisationName: 'Department for Education',
+        organisationName: 'Draft Organisation',
       }).then((heading) => {
         cy.contains(heading);
       });
@@ -46,7 +46,7 @@ describe('Publishing organisations', () => {
         cy.get('a').contains(backLink).click();
       });
       cy.checkAccessibility();
-      cy.get('h1').should('contain', 'Department for Education');
+      cy.get('h1').should('contain', 'Draft Organisation');
 
       cy.translate('organisations.admin.button.publish').then(
         (publishButton) => {
@@ -84,7 +84,7 @@ describe('Publishing organisations', () => {
       cy.visitAndCheckAccessibility('/admin/organisations');
 
       cy.get('tr')
-        .contains('Department for Education')
+        .contains('Draft Organisation')
         .then(($header) => {
           const $row = $header.parent();
 
@@ -98,7 +98,7 @@ describe('Publishing organisations', () => {
       cy.get('a').contains('Regulatory authorities').click();
       cy.checkAccessibility();
 
-      cy.contains('Department for Education')
+      cy.contains('Draft Organisation')
         .parent('tr')
         .within(() => {
           cy.get('a').contains('View details').click();
@@ -136,7 +136,7 @@ describe('Publishing organisations', () => {
         cy.get('a').contains(backLink).click();
       });
       cy.translate('organisations.admin.edit.heading', {
-        organisationName: 'Department for Education',
+        organisationName: 'Draft Organisation',
       }).then((editHeading) => {
         cy.get('body').should('contain', editHeading);
       });
@@ -157,7 +157,7 @@ describe('Publishing organisations', () => {
       );
 
       cy.translate('organisations.admin.publish.heading', {
-        organisationName: 'Department for Education',
+        organisationName: 'Draft Organisation',
       }).then((heading) => {
         cy.contains(heading);
       });
@@ -189,7 +189,7 @@ describe('Publishing organisations', () => {
       cy.visitAndCheckAccessibility('/admin/organisations');
 
       cy.get('tr')
-        .contains('Department for Education')
+        .contains('Draft Organisation')
         .then(($header) => {
           const $row = $header.parent();
 
