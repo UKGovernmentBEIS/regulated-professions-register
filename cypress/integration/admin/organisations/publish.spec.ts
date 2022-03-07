@@ -21,6 +21,9 @@ describe('Publishing organisations', () => {
         cy.get('h2[data-status]').should('contain', status);
       });
 
+      cy.get('[data-cy=changed-by-text]').should('not.exist');
+      cy.get('[data-cy=currently-published-version-text]').should('not.exist');
+
       cy.translate('organisations.admin.button.publish').then(
         (publishButton) => {
           cy.get('a').contains(publishButton).click();
@@ -75,11 +78,38 @@ describe('Publishing organisations', () => {
         },
       );
 
-      cy.get('[data-cy=changed-by-user]').should('contain', 'Editor');
+      cy.translate('organisations.headings.changed.by').then(
+        (changedByText) => {
+          cy.get('[data-cy=changed-by-text]').should('contain', changedByText);
+        },
+      );
+      cy.get('[data-cy=changed-by-user-name]').should('contain', 'Editor');
+      cy.get('[data-cy=changed-by-user-email]').should(
+        'contain',
+        'beis-rpr+editor@dxw.com',
+      );
       cy.get('[data-cy=last-modified]').should(
         'contain',
         format(new Date(), 'd MMM yyyy'),
       );
+
+      cy.get('[data-cy=currently-published-version-text]').within(($h2) => {
+        cy.translate('organisations.admin.publicFacingLink.heading').then(
+          (publicFacingLinkHeading) => {
+            cy.wrap($h2).should('contain', publicFacingLinkHeading);
+          },
+        );
+
+        cy.translate('organisations.admin.publicFacingLink.label').then(
+          (publicFacingLinkLabel) => {
+            cy.get('a').should('contain', publicFacingLinkLabel);
+          },
+        );
+
+        cy.get('a').click();
+      });
+      cy.get('body').should('contain', 'Draft Organisation');
+      cy.go('back');
 
       cy.visitAndCheckAccessibility('/admin/organisations');
 
@@ -180,7 +210,11 @@ describe('Publishing organisations', () => {
         },
       );
 
-      cy.get('[data-cy=changed-by-user]').should('contain', 'Editor');
+      cy.get('[data-cy=changed-by-user-name]').should('contain', 'Editor');
+      cy.get('[data-cy=changed-by-user-email]').should(
+        'contain',
+        'beis-rpr+editor@dxw.com',
+      );
       cy.get('[data-cy=last-modified]').should(
         'contain',
         format(new Date(), 'd MMM yyyy'),

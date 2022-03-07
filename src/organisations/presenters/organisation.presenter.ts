@@ -37,7 +37,7 @@ export class OrganisationPresenter {
         text: this.lastModified,
       },
       {
-        text: this.changedBy,
+        text: this.changedBy?.name,
         attributes: {
           'data-cy': 'changed-by-user',
         },
@@ -158,10 +158,15 @@ export class OrganisationPresenter {
     };
   }
 
-  get changedBy(): string {
-    return this.organisation.changedByUser
-      ? this.organisation.changedByUser.name
-      : '';
+  get changedBy(): { name: string; email: string } {
+    const user = this.organisation.changedByUser;
+
+    return user
+      ? {
+          name: user.name,
+          email: user.email,
+        }
+      : null;
   }
 
   get lastModified(): string {
