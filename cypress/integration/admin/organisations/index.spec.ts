@@ -31,7 +31,7 @@ describe('Listing organisations', () => {
 
                   cy.wrap($row).should('contain', organisation.name);
                   cy.wrap($row).should('contain', latestVersion.alternateName);
-                  cy.get('[data-cy=changed-by-user]').should('contain', '');
+                  cy.get('[data-cy=changed-by-text]').should('not.exist');
                   cy.wrap($row).should(
                     'contain',
                     format(new Date(), 'd MMM yyyy'),

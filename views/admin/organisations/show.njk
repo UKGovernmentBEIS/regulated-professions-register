@@ -24,10 +24,13 @@
           <span class="govuk-body" data-cy="last-modified">{{ presenter.lastModified }}</span>
         </h2>
 
-        <h2 class="govuk-heading-s" data-cy="changed-by-text">
-          {{ "organisations.headings.changed.by" | t }}<br>
-          <span class="govuk-body" data-cy="changed-by-user">{{ presenter.changedBy }}</span>
-        </h2>
+        {% if presenter.changedBy %}
+          <h2 class="govuk-heading-s" data-cy="changed-by-text">
+            {{ "organisations.headings.changed.by" | t }}<br>
+            <span class="govuk-body" data-cy="changed-by-user-name">{{ presenter.changedBy.name }}</span><br>
+            <span class="govuk-body" data-cy="changed-by-user-email">{{ presenter.changedBy.email | email }}</span>
+          </h2>
+        {% endif %}
 
         {% if hasLiveVersion %}
           <h2 class="govuk-heading-s" data-cy="currently-published-version-text">

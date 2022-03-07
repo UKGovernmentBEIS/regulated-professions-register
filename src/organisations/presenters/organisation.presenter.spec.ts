@@ -65,7 +65,7 @@ describe('OrganisationPresenter', () => {
             text: presenter.lastModified,
           });
           expect(tableRow[4]).toEqual({
-            text: presenter.changedBy,
+            text: presenter.changedBy.name,
             attributes: {
               'data-cy': 'changed-by-user',
             },
@@ -140,7 +140,7 @@ describe('OrganisationPresenter', () => {
             text: presenter.lastModified,
           });
           expect(tableRow[4]).toEqual({
-            text: presenter.changedBy,
+            text: presenter.changedBy.name,
             attributes: {
               'data-cy': 'changed-by-user',
             },
@@ -361,9 +361,12 @@ describe('OrganisationPresenter', () => {
 
   describe('changedBy', () => {
     describe('when the Profession has been edited by a user', () => {
-      it('returns the name of the user', () => {
+      it('returns the details of the user', () => {
         const organisation = organisationFactory.build({
-          changedByUser: userFactory.build({ name: 'beis-rpr' }),
+          changedByUser: userFactory.build({
+            name: 'beis-rpr',
+            email: 'beis-rpr@example.com',
+          }),
         });
 
         const presenter = new OrganisationPresenter(
@@ -371,12 +374,15 @@ describe('OrganisationPresenter', () => {
           createMockI18nService(),
         );
 
-        expect(presenter.changedBy).toEqual('beis-rpr');
+        expect(presenter.changedBy).toEqual({
+          name: 'beis-rpr',
+          email: 'beis-rpr@example.com',
+        });
       });
     });
 
     describe("when the Profession hasn't yet been edited by a user", () => {
-      it('returns an empty string', () => {
+      it('returns `null`', () => {
         const organisation = organisationFactory.build({
           changedByUser: undefined,
         });
@@ -386,7 +392,7 @@ describe('OrganisationPresenter', () => {
           createMockI18nService(),
         );
 
-        expect(presenter.changedBy).toEqual('');
+        expect(presenter.changedBy).toEqual(null);
       });
     });
   });
