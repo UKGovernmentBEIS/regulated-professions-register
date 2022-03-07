@@ -95,6 +95,16 @@
     ]
   },
   {
+    "name": "Organisation with no optional fields",
+    "slug": "no-optional-fields",
+    "versions": [
+      {
+        "url": "www.example.com",
+        "status": "live"
+      }
+    ]
+  },
+  {
     "name": "Draft Organisation",
     "slug": "draft-organisation",
     "versions": [

@@ -28,6 +28,7 @@ import { Permissions } from '../../common/permissions.decorator';
 import { UserPermission } from '../../users/user-permission';
 
 import { getActingUser } from '../../users/helpers/get-acting-user.helper';
+
 @UseGuards(AuthenticationGuard)
 @Controller('/admin/organisations')
 export class OrganisationVersionsController {
@@ -91,7 +92,7 @@ export class OrganisationVersionsController {
     );
 
     return {
-      ...organisationSummaryPresenter.present(),
+      ...await organisationSummaryPresenter.present(true),
       hasLiveVersion,
     };
   }

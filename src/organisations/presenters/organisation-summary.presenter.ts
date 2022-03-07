@@ -10,7 +10,7 @@ export class OrganisationSummaryPresenter {
     private readonly i18nService: I18nService,
   ) {}
 
-  async present(): Promise<ShowTemplate> {
+  async present(showEmptyFields: boolean): Promise<ShowTemplate> {
     const organisationPresenter = new OrganisationPresenter(
       this.organisation,
       this.i18nService,
@@ -32,7 +32,7 @@ export class OrganisationSummaryPresenter {
       organisation: this.organisation,
       presenter: organisationPresenter,
       summaryList: await organisationPresenter.summaryList({
-        removeBlank: true,
+        removeBlank: !showEmptyFields,
       }),
       professions: await Promise.all(
         professionPresenters.map(async (presenter) => {

@@ -118,7 +118,7 @@ export class OrganisationPresenter {
 
     rows = removeBlank
       ? rows.filter((item) => {
-          return item.value.text !== '' && item.value.html !== '';
+          return !!item.value.text || !!item.value.html;
         })
       : rows;
 

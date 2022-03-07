@@ -136,26 +136,30 @@ describe('Showing a profession', () => {
       cy.get('body').should('contain', heading);
     });
 
-    cy.get('h3').should('contain', 'Department for Education');
+    cy.get('h3').should('contain', 'Organisation with no optional fields');
     cy.get('h3')
-      .contains('Department for Education')
+      .contains('Organisation with no optional fields')
       .parent()
-      .within(() => {
-        cy.checkSummaryListRowMultilineValue(
-          'professions.show.bodies.address',
-          ['123 Example Street', 'London', 'EC1 1AB'],
+      .within(($div) => {
+        cy.translate('professions.show.bodies.address').then((addressLabel) => {
+          cy.wrap($div).should('not.contain', addressLabel);
+        });
+
+        cy.translate('professions.show.bodies.emailAddress').then(
+          (emailAddressLabel) => {
+            cy.wrap($div).should('not.contain', emailAddressLabel);
+          },
         );
-        cy.checkSummaryListRowValue(
-          'professions.show.bodies.emailAddress',
-          'dfe@example.com',
+
+        cy.translate('professions.show.bodies.phoneNumber').then(
+          (phoneNumberLabel) => {
+            cy.wrap($div).should('not.contain', phoneNumberLabel);
+          },
         );
+
         cy.checkSummaryListRowValue(
           'professions.show.bodies.url',
-          'https://www.gov.uk/guidance/early-years-qualifications-finder#overseas-qualifications',
-        );
-        cy.checkSummaryListRowValue(
-          'professions.show.bodies.phoneNumber',
-          '+44 0123 456789',
+          'http://www.example.com',
         );
       });
 

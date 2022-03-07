@@ -30,7 +30,13 @@ describe('Listing organisations', () => {
                   const $row = $header.parent();
 
                   cy.wrap($row).should('contain', organisation.name);
-                  cy.wrap($row).should('contain', latestVersion.alternateName);
+
+                  if (latestVersion.alternateName) {
+                    cy.wrap($row).should(
+                      'contain',
+                      latestVersion.alternateName,
+                    );
+                  }
                   cy.get('[data-cy=changed-by-text]').should('not.exist');
                   cy.wrap($row).should(
                     'contain',
