@@ -5,41 +5,49 @@ describe('Listing professions', () => {
       cy.visitAndCheckAccessibility('/admin/professions');
     });
 
-    it('I can view an unfiltered list of draft and live Professions', () => {
-      cy.translate('professions.search.foundPlural', { count: 5 }).then(
-        (foundText) => {
+    it('I can view an unfiltered list of draft, live and archived Professions', () => {
+      cy.readFile('./seeds/test/professions.json').then((professions) => {
+        const professionsToShow = professions.filter((profession) =>
+          profession.versions.some((version) =>
+            ['live', 'draft', 'archived'].includes(version.status),
+          ),
+        );
+
+        cy.translate('professions.search.foundPlural', {
+          count: professionsToShow.length,
+        }).then((foundText) => {
           cy.get('body').should('contain', foundText);
-        },
-      );
+        });
 
-      cy.translate('professions.admin.tableHeading.changedBy').then(
-        (changedBy) => {
-          cy.get('tr').eq(0).should('not.contain', changedBy);
-        },
-      );
+        cy.translate('professions.admin.tableHeading.changedBy').then(
+          (changedBy) => {
+            cy.get('tr').eq(0).should('not.contain', changedBy);
+          },
+        );
 
-      cy.translate('professions.admin.status.live').then((liveText) => {
-        cy.translate('professions.admin.status.draft').then((draftText) => {
-          cy.get('tr')
-            .contains('Registered Trademark Attorney')
-            .then(($header) => {
-              const $row = $header.parent();
-              cy.wrap($row).contains(liveText);
-            });
-          cy.get('tr')
-            .contains(
-              'Secondary School Teacher in State maintained schools (England)',
-            )
-            .then(($header) => {
-              const $row = $header.parent();
-              cy.wrap($row).contains(liveText);
-            });
-          cy.get('tr')
-            .contains('Gas Safe Engineer')
-            .then(($header) => {
-              const $row = $header.parent();
-              cy.wrap($row).contains(draftText);
-            });
+        cy.translate('professions.admin.status.live').then((liveText) => {
+          cy.translate('professions.admin.status.draft').then((draftText) => {
+            cy.get('tr')
+              .contains('Registered Trademark Attorney')
+              .then(($header) => {
+                const $row = $header.parent();
+                cy.wrap($row).contains(liveText);
+              });
+            cy.get('tr')
+              .contains(
+                'Secondary School Teacher in State maintained schools (England)',
+              )
+              .then(($header) => {
+                const $row = $header.parent();
+                cy.wrap($row).contains(liveText);
+              });
+            cy.get('tr')
+              .contains('Gas Safe Engineer')
+              .then(($header) => {
+                const $row = $header.parent();
+                cy.wrap($row).contains(draftText);
+              });
+          });
         });
       });
     });
@@ -83,19 +91,6 @@ describe('Listing professions', () => {
       cy.translate('professions.admin.tableHeading.status').then((status) => {
         cy.get('tr').eq(0).should('contain', status);
       });
-    });
-
-    it('I can click a profession to be taken to its details page', () => {
-      cy.get('tr')
-        .contains(
-          'Secondary School Teacher in State maintained schools (England)',
-        )
-        .parent()
-        .within(() => {
-          cy.get('a').contains('View details').click();
-        });
-
-      cy.checkAccessibility();
     });
 
     it('I can filter by keyword', () => {

@@ -122,4 +122,88 @@ describe('Showing a profession', () => {
       cy.get('body').should('contain', heading);
     });
   });
+
+  it('I can view a profession with the bare minimum fields', () => {
+    cy.visitAndCheckAccessibility('/professions/no-optional-fields');
+
+    cy.get('body').should('contain', 'Profession with no optional fields');
+
+    cy.translate('professions.show.overview.heading').then((heading) => {
+      cy.get('body').should('contain', heading);
+    });
+
+    cy.translate('professions.show.bodies.heading').then((heading) => {
+      cy.get('body').should('contain', heading);
+    });
+
+    cy.get('h3').should('contain', 'Department for Education');
+    cy.get('h3')
+      .contains('Department for Education')
+      .parent()
+      .within(() => {
+        cy.checkSummaryListRowMultilineValue(
+          'professions.show.bodies.address',
+          ['123 Example Street', 'London', 'EC1 1AB'],
+        );
+        cy.checkSummaryListRowValue(
+          'professions.show.bodies.emailAddress',
+          'dfe@example.com',
+        );
+        cy.checkSummaryListRowValue(
+          'professions.show.bodies.url',
+          'https://www.gov.uk/guidance/early-years-qualifications-finder#overseas-qualifications',
+        );
+        cy.checkSummaryListRowValue(
+          'professions.show.bodies.phoneNumber',
+          '+44 0123 456789',
+        );
+      });
+
+    cy.translate('professions.show.regulatedActivities.heading').then(
+      (heading) => {
+        cy.get('body h2').should('contain', heading);
+
+        cy.get('body h2')
+          .contains(heading)
+          .parent()
+          .within(() => {
+            cy.translate(
+              'professions.show.regulatedActivities.regulationSummary',
+            ).then((summaryHeading) => {
+              cy.get('h3').should('contain', summaryHeading);
+
+              cy.get('h3')
+                .contains(summaryHeading)
+                .parent()
+                .within(() => {
+                  cy.get('p').should(
+                    'contain',
+                    'A description of the profession',
+                  );
+                });
+            });
+          });
+      },
+    );
+
+    cy.translate('professions.show.qualification.heading').then((heading) => {
+      cy.get('body').should('contain', heading);
+    });
+    cy.checkSummaryListRowValue(
+      'professions.show.qualification.routesToObtain',
+      'General post-secondary education',
+    );
+
+    cy.translate('professions.show.legislation.heading').then((heading) => {
+      cy.get('body').should('contain', heading);
+    });
+    cy.checkSummaryListRowValue(
+      'professions.show.legislation.nationalLegislation',
+      "The Education (School Teachers' Qualifications) (England) Regulations 2003/1662 (as amended)",
+    );
+
+    cy.translate('professions.show.overview.heading').then((heading) => {
+      cy.get('body').should('contain', heading);
+    });
+  });
 });

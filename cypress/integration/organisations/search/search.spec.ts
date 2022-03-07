@@ -55,35 +55,50 @@ describe('Searching an organisation', () => {
   });
 
   it('I can filter by nation', () => {
-    cy.get('input[name="nations[]"][value="GB-SCT"]').check();
+    cy.readFile('./seeds/test/professions.json').then((professions) => {
+      const scottishProfessions = professions.filter((profession) =>
+        profession.versions.some(
+          (version) =>
+            version.status === 'live' &&
+            version.occupationLocations.includes('GB-SCT'),
+        ),
+      );
 
-    cy.get('button').click();
-    cy.checkAccessibility();
+      cy.get('input[name="nations[]"][value="GB-SCT"]').check();
 
-    cy.get('input[name="nations[]"][value="GB-SCT"]').should('be.checked');
+      cy.get('button').click();
+      cy.checkAccessibility();
 
-    cy.get('body').should('contain', 'Law Society of England and Wales');
-    checkResultLength(1);
+      cy.get('input[name="nations[]"][value="GB-SCT"]').should('be.checked');
+
+      cy.get('body').should('contain', 'Law Society of England and Wales');
+      checkResultLength(scottishProfessions.length);
+    });
   });
 
   it('I can filter by industry', () => {
-    cy.translate('industries.law').then((nameLabel) => {
-      cy.get('label').contains(nameLabel).parent().find('input').check();
+    cy.readFile('./seeds/test/organisations.json').then((organisations) => {
+      const lawOrganisations = organisations.filter(
+        (org) => org.name === 'Law Society of England and Wales',
+      );
+      cy.translate('industries.law').then((nameLabel) => {
+        cy.get('label').contains(nameLabel).parent().find('input').check();
+      });
+
+      cy.get('button').click();
+      cy.checkAccessibility();
+
+      cy.translate('industries.law').then((nameLabel) => {
+        cy.get('label')
+          .contains(nameLabel)
+          .parent()
+          .find('input')
+          .should('be.checked');
+      });
+
+      cy.get('body').should('contain', 'Law Society of England and Wales');
+      checkResultLength(lawOrganisations.length);
     });
-
-    cy.get('button').click();
-    cy.checkAccessibility();
-
-    cy.translate('industries.law').then((nameLabel) => {
-      cy.get('label')
-        .contains(nameLabel)
-        .parent()
-        .find('input')
-        .should('be.checked');
-    });
-
-    cy.get('body').should('contain', 'Law Society of England and Wales');
-    checkResultLength(1);
   });
 
   it('I can filter by keyword', () => {
