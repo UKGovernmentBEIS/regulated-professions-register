@@ -17,6 +17,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Change visible columns in internal Professions listing
 - Audit optional fields and ensure correct messaging is used
 - Move registration section further down the edit page to encourage more detail elsewhere
+- Improve sidebar in the internal Organisation and Profession views
+- Hide empty fields in public Organisation and Profession views
 
 ## [release-007] - 2022-03-04
 
