@@ -413,6 +413,82 @@ describe('OrganisationVersionsService', () => {
     });
   });
 
+  describe('hasLiveVersion', () => {
+    describe('when the Organisation has a live version', () => {
+      it('returns `true`', async () => {
+        const queryBuilder = createMock<
+          SelectQueryBuilder<OrganisationVersion>
+        >({
+          leftJoinAndSelect: () => queryBuilder,
+          where: () => queryBuilder,
+          getCount: async () => 1,
+        });
+
+        jest
+          .spyOn(repo, 'createQueryBuilder')
+          .mockImplementation(() => queryBuilder);
+
+        const organisation = organisationFactory.build();
+
+        const result = await service.hasLiveVersion(organisation);
+
+        expect(result).toEqual(true);
+
+        expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
+          'organisationVersion.organisation',
+          'organisation',
+        );
+
+        expect(queryBuilder.where).toHaveBeenCalledWith(
+          'organisationVersion.status = :status AND organisation.id = :id',
+          {
+            status: ProfessionVersionStatus.Live,
+            id: organisation.id,
+          },
+        );
+
+        expect(queryBuilder.getCount).toBeCalled();
+      });
+    });
+
+    describe('when the Organisation does not have a live version', () => {
+      it('returns `false`', async () => {
+        const queryBuilder = createMock<
+          SelectQueryBuilder<OrganisationVersion>
+        >({
+          leftJoinAndSelect: () => queryBuilder,
+          where: () => queryBuilder,
+          getCount: async () => 0,
+        });
+
+        jest
+          .spyOn(repo, 'createQueryBuilder')
+          .mockImplementation(() => queryBuilder);
+
+        const organisation = organisationFactory.build();
+
+        const result = await service.hasLiveVersion(organisation);
+
+        expect(result).toEqual(false);
+
+        expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
+          'organisationVersion.organisation',
+          'organisation',
+        );
+
+        expect(queryBuilder.where).toHaveBeenCalledWith(
+          'organisationVersion.status = :status AND organisation.id = :id',
+          {
+            status: ProfessionVersionStatus.Live,
+            id: organisation.id,
+          },
+        );
+
+        expect(queryBuilder.getCount).toBeCalled();
+      });
+    });
+  });
+
   describe('publish', () => {
     let queryRunner: DeepMocked<QueryRunner>;
 
@@ -671,5 +747,9 @@ describe('OrganisationVersionsService', () => {
         profession2.versions[0],
       );
     });
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
   });
 });

@@ -94,6 +94,24 @@ describe('Archiving organisations', () => {
         cy.get('h2[data-status]').should('contain', status);
       });
 
+      cy.get('[data-cy=currently-published-version-text]').within(($h2) => {
+        cy.translate('organisations.admin.publicFacingLink.heading').then(
+          (publicFacingLinkHeading) => {
+            cy.wrap($h2).should('contain', publicFacingLinkHeading);
+          },
+        );
+
+        cy.translate('organisations.admin.publicFacingLink.label').then(
+          (publicFacingLinkLabel) => {
+            cy.get('a').should('contain', publicFacingLinkLabel);
+          },
+        );
+
+        cy.get('a').click();
+      });
+      cy.get('body').should('contain', 'Council of Registered Gas Installers');
+      cy.go('back');
+
       cy.translate('organisations.admin.button.archive').then(
         (archiveButton) => {
           cy.get('a').contains(archiveButton).click();
@@ -120,6 +138,7 @@ describe('Archiving organisations', () => {
         'contain',
         format(new Date(), 'd MMM yyyy'),
       );
+      cy.get('[data-cy=currently-published-version-text]').should('not.exist');
 
       cy.visit('/admin/organisations');
 

@@ -141,6 +141,22 @@ export class OrganisationVersionsService {
     return Organisation.withVersion(version.organisation, version);
   }
 
+  async hasLiveVersion(organisation: Organisation): Promise<boolean> {
+    return (
+      (await this.repository
+        .createQueryBuilder('organisationVersion')
+        .leftJoinAndSelect('organisationVersion.organisation', 'organisation')
+        .where(
+          'organisationVersion.status = :status AND organisation.id = :id',
+          {
+            status: OrganisationVersionStatus.Live,
+            id: organisation.id,
+          },
+        )
+        .getCount()) > 0
+    );
+  }
+
   async confirm(version: OrganisationVersion): Promise<OrganisationVersion> {
     version.status = OrganisationVersionStatus.Draft;
 
