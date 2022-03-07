@@ -85,6 +85,24 @@ describe('Archiving professions', () => {
           cy.get('a').contains('View details').click();
         });
 
+      cy.get('[data-cy=currently-published-version-text]').within(($h2) => {
+        cy.translate('professions.admin.publicFacingLink.heading').then(
+          (publicFacingLinkHeading) => {
+            cy.wrap($h2).should('contain', publicFacingLinkHeading);
+          },
+        );
+
+        cy.translate('professions.admin.publicFacingLink.label').then(
+          (publicFacingLinkLabel) => {
+            cy.get('a').should('contain', publicFacingLinkLabel);
+          },
+        );
+
+        cy.get('a').click();
+      });
+      cy.get('body').should('contain', 'Registered Trademark Attorney');
+      cy.go('back');
+
       cy.translate('professions.admin.button.archive').then((button) => {
         cy.get('a').contains(button).click();
       });
@@ -103,6 +121,7 @@ describe('Archiving professions', () => {
         'contain',
         format(new Date(), 'd MMM yyyy'),
       );
+      cy.get('[data-cy=currently-published-version-text]').should('not.exist');
 
       cy.visit('/admin/professions');
 

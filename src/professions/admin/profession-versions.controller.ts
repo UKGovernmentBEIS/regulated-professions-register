@@ -18,13 +18,13 @@ import { Nation } from '../../nations/nation';
 import { Organisation } from '../../organisations/organisation.entity';
 import QualificationPresenter from '../../qualifications/presenters/qualification.presenter';
 import { UserPermission } from '../../users/user-permission';
-import { ShowTemplate } from '../interfaces/show-template.interface';
 import { Permissions } from '../../common/permissions.decorator';
 import { ProfessionVersionsService } from '../profession-versions.service';
 import { Profession } from '../profession.entity';
 import { ProfessionPresenter } from '../presenters/profession.presenter';
 import { getActingUser } from '../../users/helpers/get-acting-user.helper';
 import { getOrganisationsFromProfession } from '../helpers/get-organisations-from-profession.helper';
+import { ShowTemplate } from './interfaces/show-template.interface';
 
 @UseGuards(AuthenticationGuard)
 @Controller('/admin/professions')
@@ -60,6 +60,10 @@ export class ProfessionVersionsController {
     const profession = Profession.withVersion(version.profession, version);
     const presenter = new ProfessionPresenter(profession, this.i18nService);
 
+    const hasLiveVersion = await this.professionVersionsService.hasLiveVersion(
+      profession,
+    );
+
     const organisations = getOrganisationsFromProfession(profession).map(
       (organisation) => Organisation.withLatestVersion(organisation),
     );
@@ -83,6 +87,7 @@ export class ProfessionVersionsController {
     return {
       profession,
       presenter,
+      hasLiveVersion,
       qualificationSummaryList: qualification
         ? await qualification.summaryList()
         : null,

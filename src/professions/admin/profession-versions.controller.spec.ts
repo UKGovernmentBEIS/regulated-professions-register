@@ -112,6 +112,7 @@ describe('ProfessionVersionsController', () => {
           professionVersionsService.findByIdWithProfession.mockResolvedValue(
             version,
           );
+          professionVersionsService.hasLiveVersion.mockResolvedValue(true);
 
           (ProfessionPresenter as jest.Mock).mockReturnValue({});
 
@@ -129,6 +130,7 @@ describe('ProfessionVersionsController', () => {
           expect(result).toEqual({
             profession: professionWithVersion,
             presenter: {},
+            hasLiveVersion: true,
             qualificationSummaryList: await new QualificationPresenter(
               professionWithVersion.qualification,
               createMockI18nService(),
@@ -141,6 +143,9 @@ describe('ProfessionVersionsController', () => {
           expect(
             professionVersionsService.findByIdWithProfession,
           ).toHaveBeenCalledWith('profession-id', 'version-id');
+          expect(professionVersionsService.hasLiveVersion).toHaveBeenCalledWith(
+            professionWithVersion,
+          );
           expect(getOrganisationsFromProfessionSpy).toHaveBeenCalledWith(
             professionWithVersion,
           );
@@ -167,6 +172,7 @@ describe('ProfessionVersionsController', () => {
           professionVersionsService.findByIdWithProfession.mockResolvedValue(
             version,
           );
+          professionVersionsService.hasLiveVersion.mockResolvedValue(true);
 
           (ProfessionPresenter as jest.Mock).mockReturnValue({});
 
@@ -184,6 +190,7 @@ describe('ProfessionVersionsController', () => {
           expect(result).toEqual({
             profession: professionWithVersion,
             presenter: {},
+            hasLiveVersion: true,
             qualificationSummaryList: await new QualificationPresenter(
               professionWithVersion.qualification,
               createMockI18nService(),
@@ -199,6 +206,9 @@ describe('ProfessionVersionsController', () => {
           expect(
             professionVersionsService.findByIdWithProfession,
           ).toHaveBeenCalledWith('profession-id', 'version-id');
+          expect(professionVersionsService.hasLiveVersion).toHaveBeenCalledWith(
+            professionWithVersion,
+          );
           expect(getOrganisationsFromProfessionSpy).toHaveBeenCalledWith(
             professionWithVersion,
           );
@@ -225,6 +235,7 @@ describe('ProfessionVersionsController', () => {
         professionVersionsService.findByIdWithProfession.mockResolvedValue(
           version,
         );
+        professionVersionsService.hasLiveVersion.mockResolvedValue(true);
 
         (ProfessionPresenter as jest.Mock).mockReturnValue({});
 
@@ -237,6 +248,7 @@ describe('ProfessionVersionsController', () => {
         expect(result).toEqual({
           profession: professionWithVersion,
           presenter: {},
+          hasLiveVersion: true,
           qualificationSummaryList: null,
           nations: [translationOf('nations.england')],
           industries: [translationOf('industries.example')],
@@ -270,6 +282,7 @@ describe('ProfessionVersionsController', () => {
         professionVersionsService.findByIdWithProfession.mockResolvedValue(
           version,
         );
+        professionVersionsService.hasLiveVersion.mockResolvedValue(true);
 
         (ProfessionPresenter as jest.Mock).mockReturnValue({});
 
@@ -282,6 +295,7 @@ describe('ProfessionVersionsController', () => {
         expect(result).toEqual({
           profession: professionWithVersion,
           presenter: {},
+          hasLiveVersion: true,
           qualificationSummaryList: null,
           nations: [],
           industries: [],
@@ -291,6 +305,9 @@ describe('ProfessionVersionsController', () => {
         expect(
           professionVersionsService.findByIdWithProfession,
         ).toHaveBeenCalledWith('profession-id', 'version-id');
+        expect(professionVersionsService.hasLiveVersion).toHaveBeenCalledWith(
+          professionWithVersion,
+        );
       });
     });
   });
