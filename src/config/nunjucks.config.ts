@@ -1,5 +1,3 @@
-/* eslint @typescript-eslint/no-var-requires: "off" */
-
 import { NestExpressApplication } from '@nestjs/platform-express';
 
 import * as nunjucks from 'nunjucks';
@@ -15,6 +13,7 @@ export const nunjucksConfig = async (
   views: any,
 ): Promise<nunjucks.ConfigureOptions> => {
   const express = app.getHttpAdapter().getInstance();
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
   const entrypoints = require('../../public/entrypoints.json');
   const assetsHelper = new AssetsHelper(entrypoints);
   const i18nHelper = new I18nHelper(app);
