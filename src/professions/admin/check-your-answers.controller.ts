@@ -74,8 +74,6 @@ export class CheckYourAnswersController {
       this.i18nService,
     );
 
-    const legislations = [version.legislations[0], version.legislations[1]];
-
     return {
       professionId,
       versionId,
@@ -93,7 +91,7 @@ export class CheckYourAnswersController {
       protectedTitles: version.protectedTitles,
       regulationUrl: version.regulationUrl,
       qualification,
-      legislations,
+      legislations: version.legislations,
       confirmed: isConfirmed(draftProfession),
       captionText: await ViewUtils.captionText(
         this.i18nService,

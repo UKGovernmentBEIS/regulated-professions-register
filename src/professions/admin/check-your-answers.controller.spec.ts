@@ -137,34 +137,6 @@ describe('CheckYourAnswersController', () => {
       });
     });
 
-    describe('when the Profession has only one legislation', () => {
-      it('the legislations array passed to the template is padded to length 2', async () => {
-        const legislation = legislationFactory.build({
-          url: 'www.gas-legislation.com',
-          name: 'Gas Safety Legislation',
-        });
-
-        const profession = professionFactory.build({
-          organisation: organisationFactory.build(),
-        });
-
-        const version = professionVersionFactory.build({
-          legislations: [legislation],
-        });
-
-        professionsService.findWithVersions.mockResolvedValue(profession);
-        professionVersionsService.findWithProfession.mockResolvedValue(version);
-
-        const templateParams = await controller.show(
-          'profession-id',
-          'version-id',
-          'false',
-        );
-
-        expect(templateParams.legislations).toEqual([legislation, undefined]);
-      });
-    });
-
     describe('when the Profession has just been created by a service owner user', () => {
       it('renders a mostly blank check your answers page', async () => {
         const profession = professionFactory
@@ -207,7 +179,7 @@ describe('CheckYourAnswersController', () => {
         expect(templateParams.qualification).toEqual(
           new QualificationPresenter(undefined, i18nService),
         );
-        expect(templateParams.legislations).toEqual([undefined, undefined]);
+        expect(templateParams.legislations).toEqual([]);
         expect(templateParams.confirmed).toEqual(false);
 
         expect(professionsService.findWithVersions).toHaveBeenCalledWith(

@@ -7,6 +7,7 @@ import { formatMultilineString } from '../helpers/format-multiline-string.helper
 import { formatLink } from '../helpers/format-link.helper';
 import { I18nHelper } from '../helpers/i18n.helper';
 import { formatEmail } from '../helpers/format-email.helper';
+import { pad } from '../helpers/pad.helper';
 
 export const nunjucksConfig = async (
   app: NestExpressApplication,
@@ -85,6 +86,10 @@ export const nunjucksConfig = async (
 
   env.addFilter('email', (text) => {
     return new nunjucks.runtime.SafeString(formatEmail(text));
+  });
+
+  env.addFilter('pad', (array, minimumLength) => {
+    return pad(array, minimumLength);
   });
 
   return env;
