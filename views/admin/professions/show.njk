@@ -16,7 +16,7 @@
       <aside class="app-related-items rpr-internal__details-page-sidebar" role="complementary">
         <h2 class="govuk-heading-s" data-status>
           {{ "professions.admin.status.heading" | t }}<br>
-          <span class="govuk-body">{{ ("professions.admin.status." + profession.status) | t }}</span>
+          {{ profession.status | status }}
         </h2>
 
         <h2 class="govuk-heading-s" data-cy="last-modified-text">

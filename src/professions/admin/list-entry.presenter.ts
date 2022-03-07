@@ -104,11 +104,7 @@ export class ListEntryPresenter {
         text: organisations,
       },
       industry: { text: industries },
-      status: {
-        text: await this.i18nService.translate(
-          `professions.admin.status.${this.profession.status}`,
-        ),
-      },
+      status: { html: await presenter.status },
       actions: { html: viewDetails },
     };
 

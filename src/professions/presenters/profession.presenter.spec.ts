@@ -10,10 +10,14 @@ import { createMockI18nService } from '../../testutils/create-mock-i18n-service'
 import { translationOf } from '../../testutils/translation-of';
 import userFactory from '../../testutils/factories/user';
 import { formatDate } from '../../common/utils';
+import { ProfessionVersionStatus } from '../profession-version.entity';
+import { statusOf } from '../../testutils/status-of';
+import { formatStatus } from '../../helpers/format-status.helper';
 
 jest.mock('../../nations/helpers/stringifyNations');
 jest.mock('../../helpers/format-multiline-string.helper');
 jest.mock('../../common/utils');
+jest.mock('../../helpers/format-status.helper');
 
 describe('ProfessionPresenter', () => {
   let profession: Profession;
@@ -89,7 +93,7 @@ describe('ProfessionPresenter', () => {
   });
 
   describe('lastModified', () => {
-    it('should format the lastModified date on a profession', () => {
+    it('should format the lastModified date on a Profession', () => {
       const profession = professionFactory.build({
         lastModified: new Date('01-01-2022'),
       });
@@ -102,6 +106,30 @@ describe('ProfessionPresenter', () => {
       presenter.lastModified;
       expect(formatDate as jest.Mock).toHaveBeenCalledWith(
         new Date('01-01-2022'),
+      );
+    });
+  });
+
+  describe('status', () => {
+    it('should format the status on a Profession', async () => {
+      const profession = professionFactory.build({
+        status: ProfessionVersionStatus.Draft,
+      });
+
+      const i18nService = createMockI18nService();
+
+      const presenter = new ProfessionPresenter(profession, i18nService);
+
+      (formatStatus as jest.Mock).mockImplementation(async (status) =>
+        statusOf(status),
+      );
+
+      const result = await presenter.status;
+
+      expect(result).toEqual(statusOf(ProfessionVersionStatus.Draft));
+      expect(formatStatus).toBeCalledWith(
+        ProfessionVersionStatus.Draft,
+        i18nService,
       );
     });
   });

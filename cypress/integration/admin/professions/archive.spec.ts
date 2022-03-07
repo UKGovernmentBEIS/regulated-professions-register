@@ -17,7 +17,7 @@ describe('Archiving professions', () => {
           cy.get('a').contains('View details').click();
         });
 
-      cy.translate('professions.admin.status.draft').then((status) => {
+      cy.translate('app.status.draft').then((status) => {
         cy.get('h2[data-status]').should('contain', status);
       });
 
@@ -50,7 +50,7 @@ describe('Archiving professions', () => {
 
       cy.get('[data-cy=actions]').should('not.exist');
 
-      cy.translate('professions.admin.status.archived').then((status) => {
+      cy.translate('app.status.archived').then((status) => {
         cy.get('h2[data-status]').should('contain', status);
       });
       cy.get('[data-cy=changed-by-user-name]').should('contain', 'Registrar');
@@ -70,7 +70,7 @@ describe('Archiving professions', () => {
         .then(($header) => {
           const $row = $header.parent();
 
-          cy.translate('professions.admin.status.archived').then((status) => {
+          cy.translate('app.status.archived').then((status) => {
             cy.wrap($row).should('contain', status);
           });
         });
@@ -117,7 +117,7 @@ describe('Archiving professions', () => {
 
       cy.get('[data-cy=actions]').should('not.exist');
 
-      cy.translate('professions.admin.status.archived').then((status) => {
+      cy.translate('app.status.archived').then((status) => {
         cy.get('h2[data-status]').should('contain', status);
       });
       cy.get('[data-cy=changed-by-user-name]').should('contain', 'Registrar');
@@ -138,7 +138,7 @@ describe('Archiving professions', () => {
         .then(($header) => {
           const $row = $header.parent();
 
-          cy.translate('professions.admin.status.archived').then((status) => {
+          cy.translate('app.status.archived').then((status) => {
             cy.wrap($row).should('contain', status);
           });
         });

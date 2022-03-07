@@ -25,8 +25,8 @@ describe('Listing professions', () => {
           },
         );
 
-        cy.translate('professions.admin.status.live').then((liveText) => {
-          cy.translate('professions.admin.status.draft').then((draftText) => {
+        cy.translate('app.status.live').then((liveText) => {
+          cy.translate('app.status.draft').then((draftText) => {
             cy.get('tr')
               .contains('Registered Trademark Attorney')
               .then(($header) => {
