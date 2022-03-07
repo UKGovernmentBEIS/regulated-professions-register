@@ -68,5 +68,10 @@
       "heading": "Admin"
     }
   },
-  "ukcpq": "UK Centre for Professional Qualifications"
+  "ukcpq": "UK Centre for Professional Qualifications",
+  "status": {
+    "live": "Published",
+    "draft": "Draft",
+    "archived": "Archived"
+  }
 }

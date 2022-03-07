@@ -8,6 +8,7 @@ import { formatLink } from '../helpers/format-link.helper';
 import { I18nHelper } from '../helpers/i18n.helper';
 import { formatEmail } from '../helpers/format-email.helper';
 import { pad } from '../helpers/pad.helper';
+import { formatStatus } from '../helpers/format-status.helper';
 
 export const nunjucksConfig = async (
   app: NestExpressApplication,
@@ -91,6 +92,23 @@ export const nunjucksConfig = async (
   env.addFilter('pad', (array, minimumLength) => {
     return pad(array, minimumLength);
   });
+
+  env.addFilter(
+    'status',
+    async (...args) => {
+      const callback = args.pop();
+      const status = args[0];
+      try {
+        const result = new nunjucks.runtime.SafeString(
+          await formatStatus(status, i18nHelper.i18nService),
+        );
+        callback(null, result);
+      } catch (error) {
+        callback(error);
+      }
+    },
+    true,
+  );
 
   return env;
 };
