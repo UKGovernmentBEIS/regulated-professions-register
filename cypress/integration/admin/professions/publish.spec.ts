@@ -22,6 +22,7 @@ describe('Publishing professions', () => {
       });
 
       cy.get('[data-cy=changed-by-user]').should('contain', '');
+      cy.get('[data-cy=currently-published-version-text]').should('not.exist');
 
       cy.translate('professions.form.button.publish').then((publishButton) => {
         cy.get('a').contains(publishButton).click();
@@ -73,6 +74,24 @@ describe('Publishing professions', () => {
         'contain',
         format(new Date(), 'd MMM yyyy'),
       );
+
+      cy.get('[data-cy=currently-published-version-text]').within(($h2) => {
+        cy.translate('professions.admin.publicFacingLink.heading').then(
+          (publicFacingLinkHeading) => {
+            cy.wrap($h2).should('contain', publicFacingLinkHeading);
+          },
+        );
+
+        cy.translate('professions.admin.publicFacingLink.label').then(
+          (publicFacingLinkLabel) => {
+            cy.get('a').should('contain', publicFacingLinkLabel);
+          },
+        );
+
+        cy.get('a').click();
+      });
+      cy.get('body').should('contain', 'Gas Safe Engineer');
+      cy.go('back');
 
       cy.visitAndCheckAccessibility('/admin/professions');
 
