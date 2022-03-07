@@ -19,6 +19,7 @@ import { ProfessionPresenter } from '../presenters/profession.presenter';
 import { getActingUser } from '../../users/helpers/get-acting-user.helper';
 import { createDefaultMockRequest } from '../../testutils/factories/create-default-mock-request';
 import organisationFactory from '../../testutils/factories/organisation';
+import * as getOrganisationsFromProfessionModule from '../helpers/get-organisations-from-profession.helper';
 
 jest.mock('../../organisations/organisation.entity');
 jest.mock('../presenters/profession.presenter');
@@ -125,6 +126,11 @@ describe('ProfessionVersionsController', () => {
             (organisation) => organisation,
           );
 
+          const getOrganisationsFromProfessionSpy = jest.spyOn(
+            getOrganisationsFromProfessionModule,
+            'getOrganisationsFromProfession',
+          );
+
           const result = await controller.show('profession-id', 'version-id');
 
           expect(result).toEqual({
@@ -142,6 +148,9 @@ describe('ProfessionVersionsController', () => {
           expect(
             professionVersionsService.findByIdWithProfession,
           ).toHaveBeenCalledWith('profession-id', 'version-id');
+          expect(getOrganisationsFromProfessionSpy).toHaveBeenCalledWith(
+            professionWithVersion,
+          );
         });
       });
 
@@ -172,6 +181,11 @@ describe('ProfessionVersionsController', () => {
             (organisation) => organisation,
           );
 
+          const getOrganisationsFromProfessionSpy = jest.spyOn(
+            getOrganisationsFromProfessionModule,
+            'getOrganisationsFromProfession',
+          );
+
           const result = await controller.show('profession-id', 'version-id');
 
           expect(result).toEqual({
@@ -192,6 +206,9 @@ describe('ProfessionVersionsController', () => {
           expect(
             professionVersionsService.findByIdWithProfession,
           ).toHaveBeenCalledWith('profession-id', 'version-id');
+          expect(getOrganisationsFromProfessionSpy).toHaveBeenCalledWith(
+            professionWithVersion,
+          );
         });
       });
     });
@@ -287,5 +304,6 @@ describe('ProfessionVersionsController', () => {
 
   afterEach(() => {
     jest.resetAllMocks();
+    jest.restoreAllMocks();
   });
 });

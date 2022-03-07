@@ -13,6 +13,7 @@ import { ProfessionsController } from './professions.controller';
 
 import { Organisation } from '../organisations/organisation.entity';
 import organisationFactory from '../testutils/factories/organisation';
+import * as getOrganisationsFromProfessionModule from './helpers/get-organisations-from-profession.helper';
 
 jest.mock('../organisations/organisation.entity');
 
@@ -64,6 +65,11 @@ describe('ProfessionsController', () => {
           (organisation) => organisation,
         );
 
+        const getOrganisationsFromProfessionSpy = jest.spyOn(
+          getOrganisationsFromProfessionModule,
+          'getOrganisationsFromProfession',
+        );
+
         const result = await controller.show('example-slug');
 
         expect(result).toEqual({
@@ -80,6 +86,7 @@ describe('ProfessionsController', () => {
         expect(professionVersionsService.findLiveBySlug).toBeCalledWith(
           'example-slug',
         );
+        expect(getOrganisationsFromProfessionSpy).toBeCalledWith(profession);
       });
     });
 
@@ -98,6 +105,11 @@ describe('ProfessionsController', () => {
 
         (Organisation.withLatestLiveVersion as jest.Mock).mockImplementation(
           (organisation) => organisation,
+        );
+
+        const getOrganisationsFromProfessionSpy = jest.spyOn(
+          getOrganisationsFromProfessionModule,
+          'getOrganisationsFromProfession',
         );
 
         const result = await controller.show('example-slug');
@@ -119,6 +131,7 @@ describe('ProfessionsController', () => {
         expect(professionVersionsService.findLiveBySlug).toBeCalledWith(
           'example-slug',
         );
+        expect(getOrganisationsFromProfessionSpy).toBeCalledWith(profession);
       });
     });
 
@@ -147,5 +160,10 @@ describe('ProfessionsController', () => {
         });
       });
     });
+  });
+
+  afterEach(() => {
+    jest.resetAllMocks();
+    jest.restoreAllMocks();
   });
 });

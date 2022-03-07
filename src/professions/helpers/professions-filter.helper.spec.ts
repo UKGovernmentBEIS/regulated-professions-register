@@ -6,6 +6,7 @@ import { Profession } from '../profession.entity';
 import industryFactory from '../../testutils/factories/industry';
 import professionFactory from '../../testutils/factories/profession';
 import organisationFactory from '../../testutils/factories/organisation';
+import * as getOrganisationsFromProfessionModule from './get-organisations-from-profession.helper';
 
 describe('ProfessionsFilterHelper', () => {
   describe('filter', () => {
@@ -68,21 +69,36 @@ describe('ProfessionsFilterHelper', () => {
 
     it('can filter professions by organisation', () => {
       const exampleProfessions = [
-        createProfessionWithOrganisation('law-society'),
-        createProfessionWithOrganisation('department-for-education'),
-        createProfessionWithOrganisation('general-medical-council'),
+        createProfessionWithOrganisations('law-society'),
+        createProfessionWithOrganisations('department-for-education'),
+        createProfessionWithOrganisations('general-medical-council'),
+        createProfessionWithOrganisations(
+          'law-society',
+          'alternative-law-society',
+        ),
       ];
 
       const filterHelper = new ProfessionsFilterHelper(exampleProfessions);
+
+      const getOrganisationsFromProfessionSpy = jest.spyOn(
+        getOrganisationsFromProfessionModule,
+        'getOrganisationsFromProfession',
+      );
 
       const results = filterHelper.filter({
         organisations: [
           createOrganisationWithId('general-medical-council'),
           createOrganisationWithId('department-for-education'),
+          createOrganisationWithId('alternative-law-society'),
         ],
       });
 
-      expect(results).toEqual([exampleProfessions[1], exampleProfessions[2]]);
+      expect(results).toEqual([
+        exampleProfessions[1],
+        exampleProfessions[2],
+        exampleProfessions[3],
+      ]);
+      expect(getOrganisationsFromProfessionSpy).toBeCalledTimes(4);
     });
 
     it('can filter professions by industry', () => {
@@ -105,15 +121,25 @@ describe('ProfessionsFilterHelper', () => {
       expect(results).toEqual([exampleProfessions[0], exampleProfessions[3]]);
     });
   });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
 });
 
 function createProfessionWithNations(...nationCodes: string[]): Profession {
   return professionFactory.build({ occupationLocations: nationCodes });
 }
 
-function createProfessionWithOrganisation(organisationId: string): Profession {
+function createProfessionWithOrganisations(
+  organisationId: string,
+  additionalOrganisation: string = undefined,
+): Profession {
   return professionFactory.build({
     organisation: organisationFactory.build({ id: organisationId }),
+    additionalOrganisation:
+      additionalOrganisation &&
+      organisationFactory.build({ id: additionalOrganisation }),
   });
 }
 

@@ -6,6 +6,7 @@ import organisationFactory from '../../testutils/factories/organisation';
 import professionFactory from '../../testutils/factories/profession';
 import { translationOf } from '../../testutils/translation-of';
 import { ProfessionSearchResultPresenter } from './profession-search-result.presenter';
+import * as getOrganisationsFromProfessionModule from '../helpers/get-organisations-from-profession.helper';
 
 describe('ProfessionSearchResultPresenter', () => {
   let i18nService: DeepMocked<I18nService>;
@@ -22,12 +23,20 @@ describe('ProfessionSearchResultPresenter', () => {
         organisation: organisationFactory.build({
           name: 'Example Organisation',
         }),
+        additionalOrganisation: organisationFactory.build({
+          name: 'Additional Example Organisation',
+        }),
         occupationLocations: ['GB-ENG', 'GB-WLS'],
         industries: [
           industryFactory.build({ id: 'industries.health', name: 'health' }),
           industryFactory.build({ id: 'industries.law', name: 'law' }),
         ],
       });
+
+      const getOrganisationsFromProfessionSpy = jest.spyOn(
+        getOrganisationsFromProfessionModule,
+        'getOrganisationsFromProfession',
+      );
 
       const result = await new ProfessionSearchResultPresenter(
         exampleProfession,
@@ -37,12 +46,23 @@ describe('ProfessionSearchResultPresenter', () => {
       expect(result).toEqual({
         name: 'Example Profession',
         slug: 'example-profession',
-        organisation: 'Example Organisation',
+        organisations: [
+          'Example Organisation',
+          'Additional Example Organisation',
+        ],
         nations: `${translationOf('nations.england')}, ${translationOf(
           'nations.wales',
         )}`,
         industries: [translationOf('health'), translationOf('law')],
       });
+
+      expect(getOrganisationsFromProfessionSpy).toBeCalledWith(
+        exampleProfession,
+      );
     });
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
   });
 });

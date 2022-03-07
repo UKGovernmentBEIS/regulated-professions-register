@@ -1,6 +1,7 @@
 import { I18nService } from 'nestjs-i18n';
 import { stringifyNations } from '../../nations/helpers/stringifyNations';
 import { Nation } from '../../nations/nation';
+import { getOrganisationsFromProfession } from '../helpers/get-organisations-from-profession.helper';
 import { Profession } from '../profession.entity';
 import { ProfessionSearchResultTemplate } from './interfaces/profession-search-result-template.interface';
 
@@ -22,10 +23,12 @@ export class ProfessionSearchResultPresenter {
       ),
     );
 
+    const organisations = getOrganisationsFromProfession(this.profession);
+
     return {
       name: this.profession.name,
       slug: this.profession.slug,
-      organisation: this.profession.organisation.name,
+      organisations: organisations.map((organisation) => organisation.name),
       nations,
       industries,
     };

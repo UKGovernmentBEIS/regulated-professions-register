@@ -5,7 +5,7 @@ export function redirectToCanonicalHostname(
   response: Response,
   next: NextFunction,
 ) {
-  var host = request.header('host');
+  const host = request.header('host');
   if (host === process.env['CANONICAL_HOSTNAME']) {
     next();
   } else {
