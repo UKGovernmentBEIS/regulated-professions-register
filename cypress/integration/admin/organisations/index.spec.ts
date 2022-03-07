@@ -43,11 +43,11 @@ describe('Listing organisations', () => {
                     format(new Date(), 'd MMM yyyy'),
                   );
 
-                  cy.translate(
-                    `organisations.status.${latestVersion.status}`,
-                  ).then((status) => {
-                    cy.wrap($row).should('contain', status);
-                  });
+                  cy.translate(`app.status.${latestVersion.status}`).then(
+                    (status) => {
+                      cy.wrap($row).should('contain', status);
+                    },
+                  );
 
                   const professionsForOrganisation = professions.filter(
                     (profession: any) =>

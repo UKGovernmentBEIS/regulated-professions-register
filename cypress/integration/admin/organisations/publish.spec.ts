@@ -17,7 +17,7 @@ describe('Publishing organisations', () => {
           cy.get('a').contains('View details').click();
         });
 
-      cy.translate('organisations.status.draft').then((status) => {
+      cy.translate('app.status.draft').then((status) => {
         cy.get('h2[data-status]').should('contain', status);
       });
 
@@ -118,7 +118,7 @@ describe('Publishing organisations', () => {
         .then(($header) => {
           const $row = $header.parent();
 
-          cy.translate(`organisations.status.live`).then((status) => {
+          cy.translate(`app.status.live`).then((status) => {
             cy.wrap($row).should('contain', status);
           });
         });
@@ -227,7 +227,7 @@ describe('Publishing organisations', () => {
         .then(($header) => {
           const $row = $header.parent();
 
-          cy.translate(`organisations.status.live`).then((status) => {
+          cy.translate(`app.status.live`).then((status) => {
             cy.wrap($row).should('contain', status);
           });
         });
@@ -331,7 +331,7 @@ describe('Publishing organisations', () => {
 
         cy.get('body').should('contain', 'New Organisation');
 
-        cy.translate(`organisations.status.live`).then((status) => {
+        cy.translate(`app.status.live`).then((status) => {
           cy.get('h2[data-status]').should('contain', status);
         });
 

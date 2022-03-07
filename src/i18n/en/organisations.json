@@ -158,10 +158,5 @@
     "address": "Address",
     "email": "Email",
     "telephone": "Phone number"
-  },
-  "status": {
-    "live": "Published",
-    "draft": "Draft",
-    "archived": "Archived"
   }
 }
