@@ -72,6 +72,9 @@ describe('Editing organisations', () => {
     it('Shows errors when I input data incorrectly', () => {
       cy.get('input[name="url"]').invoke('val', '').type('this is not a url');
 
+      cy.get('textarea[name="address"]').clear();
+      cy.get('input[name="telephone"]').clear();
+
       cy.get('input[name="email"]')
         .invoke('val', '')
         .type('this is not an email');
@@ -81,7 +84,13 @@ describe('Editing organisations', () => {
       });
       cy.checkAccessibility();
 
-      cy.translate('organisations.admin.form.errors.email.invalid').then(
+      cy.translate('organisations.admin.form.errors.address.empty').then(
+        (error) => {
+          cy.get('body').should('contain', error);
+        },
+      );
+
+      cy.translate('organisations.admin.form.errors.phone.empty').then(
         (error) => {
           cy.get('body').should('contain', error);
         },

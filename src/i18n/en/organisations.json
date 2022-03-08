@@ -96,6 +96,12 @@
         "name": {
           "empty": "Enter the name of the regulatory authority"
         },
+        "address": {
+          "empty": "Enter the address for the regulatory authority"
+        },
+        "phone": {
+          "empty": "Enter the phone number for the regulatory authority"
+        },
         "email": {
           "invalid": "Please enter a valid email address"
         },

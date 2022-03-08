@@ -13,6 +13,10 @@ export class OrganisationDto {
   name: string;
 
   alternateName: string;
+
+  @IsNotEmpty({
+    message: 'organisations.admin.form.errors.address.empty',
+  })
   address: string;
 
   @IsEmail(
@@ -31,8 +35,11 @@ export class OrganisationDto {
   @Transform(({ value }) => preprocessUrl(value))
   url: string;
 
+  @IsNotEmpty({
+    message: 'organisations.admin.form.errors.phone.empty',
+  })
   telephone: string;
-  fax: string;
+  fax?: string;
 
   confirm?: boolean;
 }
