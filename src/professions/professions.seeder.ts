@@ -161,7 +161,7 @@ export class ProfessionsSeeder implements Seeder {
           alternateName: version.alternateName,
           description: version.description,
           occupationLocations: version.occupationLocations,
-          regulationType: version.regulationType,
+          regulationType: version.regulationType as RegulationType,
           reservedActivities: version.reservedActivities,
           protectedTitles: version.protectedTitles,
           regulationUrl: version.regulationUrl,
