@@ -99,7 +99,7 @@ describe(QualificationPresenter, () => {
           createMockI18nService(),
         );
 
-        expect(presenter.summaryList()).resolves.toEqual({
+        await expect(presenter.summaryList()).resolves.toEqual({
           classes: 'govuk-summary-list--no-border',
           rows: [
             {

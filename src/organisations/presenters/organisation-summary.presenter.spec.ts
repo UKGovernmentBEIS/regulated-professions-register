@@ -124,7 +124,7 @@ describe('OrganisationSummaryPresenter', () => {
           organisation,
           i18nService,
         );
-        expect(async () => {
+        await expect(async () => {
           await presenter.present();
         }).rejects.toThrowError(
           'You must eagerly load professions to show professions. Try calling a "WithProfessions" method on the `OrganisationsService` class',

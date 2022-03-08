@@ -90,12 +90,12 @@ describe('ProfessionVersionsController', () => {
   });
 
   describe('show', () => {
-    it('should throw an error when the slug does not match a profession', () => {
+    it('should throw an error when the slug does not match a profession', async () => {
       professionVersionsService.findByIdWithProfession.mockResolvedValue(
         undefined,
       );
 
-      expect(async () => {
+      await expect(async () => {
         await controller.show('profession-id', 'version-id');
       }).rejects.toThrowError(NotFoundException);
     });

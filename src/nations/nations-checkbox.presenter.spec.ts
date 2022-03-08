@@ -25,7 +25,7 @@ describe('NationsCheckboxPresenter', () => {
         i18nService,
       );
 
-      expect(presenter.checkboxItems()).resolves.toEqual([
+      await expect(presenter.checkboxItems()).resolves.toEqual([
         {
           text: 'England',
           value: 'GB-ENG',
@@ -57,7 +57,7 @@ describe('NationsCheckboxPresenter', () => {
         i18nService,
       );
 
-      expect(presenter.checkboxItems()).resolves.toEqual([
+      await expect(presenter.checkboxItems()).resolves.toEqual([
         {
           text: 'England',
           value: 'GB-ENG',
