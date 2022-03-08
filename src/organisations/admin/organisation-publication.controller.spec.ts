@@ -3,6 +3,7 @@ import { TestingModule, Test } from '@nestjs/testing';
 import { Response } from 'express';
 import { I18nService } from 'nestjs-i18n';
 import { flashMessage } from '../../common/flash-message';
+import { escape } from '../../helpers/escape.helper';
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 import { createDefaultMockRequest } from '../../testutils/factories/create-default-mock-request';
 import organisationFactory from '../../testutils/factories/organisation';
@@ -16,6 +17,7 @@ import { OrganisationPublicationController } from './organisation-publication.co
 
 jest.mock('../../common/flash-message');
 jest.mock('../../users/helpers/get-acting-user.helper');
+jest.mock('../../helpers/escape.helper');
 
 describe('OrganisationPublicationController', () => {
   let controller: OrganisationPublicationController;
@@ -114,6 +116,8 @@ describe('OrganisationPublicationController', () => {
         translationOf('organisations.admin.publish.confirmation.heading'),
         translationOf('organisations.admin.publish.confirmation.body'),
       );
+
+      expect(escape).toHaveBeenCalledWith(organisation.name);
 
       expect(req.flash).toHaveBeenCalledWith('success', 'STUB_FLASH_MESSAGE');
 

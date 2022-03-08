@@ -41,6 +41,7 @@ import { isConfirmed } from '../../helpers/is-confirmed';
 import { UserPermission } from '../../users/user-permission';
 import { Permissions } from '../../common/permissions.decorator';
 import { getActingUser } from '../../users/helpers/get-acting-user.helper';
+import { escape } from '../../helpers/escape.helper';
 
 @UseGuards(AuthenticationGuard)
 @Controller('/admin/organisations')
@@ -215,7 +216,7 @@ export class OrganisationsController {
 
     const messageBody = await this.i18nService.translate(
       `organisations.admin.${action}.confirmation.body`,
-      { args: { name: organisation.name } },
+      { args: { name: escape(organisation.name) } },
     );
 
     req.flash('info', flashMessage(messageTitle, messageBody));

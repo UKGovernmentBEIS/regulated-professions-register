@@ -13,6 +13,7 @@ import { BackLink } from '../../common/decorators/back-link.decorator';
 import { flashMessage } from '../../common/flash-message';
 import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
 import { Permissions } from '../../common/permissions.decorator';
+import { escape } from '../../helpers/escape.helper';
 import { getActingUser } from '../../users/helpers/get-acting-user.helper';
 import { UserPermission } from '../../users/user-permission';
 import { ProfessionVersionsService } from '../profession-versions.service';
@@ -69,7 +70,7 @@ export class ProfessionArchiveController {
 
     const messageBody = await this.i18nService.translate(
       'professions.admin.archive.confirmation.body',
-      { args: { name: version.profession.name } },
+      { args: { name: escape(version.profession.name) } },
     );
 
     req.flash('success', flashMessage(messageTitle, messageBody));

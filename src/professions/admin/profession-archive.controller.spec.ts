@@ -3,6 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { Response } from 'express';
 import { I18nService } from 'nestjs-i18n';
 import { flashMessage } from '../../common/flash-message';
+import { escape } from '../../helpers/escape.helper';
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 import { createDefaultMockRequest } from '../../testutils/factories/create-default-mock-request';
 import professionFactory from '../../testutils/factories/profession';
@@ -16,6 +17,7 @@ import { ProfessionArchiveController } from './profession-archive.controller';
 
 jest.mock('../../common/flash-message');
 jest.mock('../../users/helpers/get-acting-user.helper');
+jest.mock('../../helpers/escape.helper');
 
 describe('ProfessionArchiveController', () => {
   let controller: ProfessionArchiveController;
@@ -114,6 +116,8 @@ describe('ProfessionArchiveController', () => {
         translationOf('professions.admin.archive.confirmation.heading'),
         translationOf('professions.admin.archive.confirmation.body'),
       );
+
+      expect(escape).toHaveBeenCalledWith(profession.name);
 
       expect(req.flash).toHaveBeenCalledWith('success', 'STUB_FLASH_MESSAGE');
 

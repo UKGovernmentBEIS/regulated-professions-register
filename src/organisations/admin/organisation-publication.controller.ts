@@ -5,6 +5,7 @@ import { BackLink } from '../../common/decorators/back-link.decorator';
 import { flashMessage } from '../../common/flash-message';
 import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
 import { Permissions } from '../../common/permissions.decorator';
+import { escape } from '../../helpers/escape.helper';
 import { getActingUser } from '../../users/helpers/get-acting-user.helper';
 import { UserPermission } from '../../users/user-permission';
 import { OrganisationVersionsService } from '../organisation-versions.service';
@@ -70,7 +71,7 @@ export class OrganisationPublicationController {
 
     const messageBody = await this.i18nService.translate(
       'organisations.admin.publish.confirmation.body',
-      { args: { name: version.organisation.name } },
+      { args: { name: escape(version.organisation.name) } },
     );
 
     req.flash('success', flashMessage(messageTitle, messageBody));
