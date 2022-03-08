@@ -287,7 +287,7 @@ describe('Adding a new profession', () => {
         'www.example-legislation.com',
       );
 
-      cy.translate('professions.form.button.create').then((buttonText) => {
+      cy.translate('professions.form.button.saveAsDraft').then((buttonText) => {
         cy.get('button').contains(buttonText).click();
       });
 
