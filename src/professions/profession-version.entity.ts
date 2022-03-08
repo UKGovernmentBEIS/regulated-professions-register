@@ -24,6 +24,12 @@ export enum ProfessionVersionStatus {
   Unconfirmed = 'unconfirmed',
 }
 
+export enum RegulationType {
+  Licensing = 'licensing',
+  Certification = 'certification',
+  Accreditation = 'accreditation',
+}
+
 @Entity({ name: 'professionVersions' })
 export class ProfessionVersion {
   @PrimaryGeneratedColumn('uuid')
@@ -51,8 +57,8 @@ export class ProfessionVersion {
   @Column('text', { array: true, nullable: true })
   occupationLocations: string[];
 
-  @Column({ nullable: true })
-  regulationType: string;
+  @Column({ type: 'enum', nullable: true, enum: RegulationType })
+  regulationType: RegulationType;
 
   @Column({ nullable: true })
   registrationRequirements: string;

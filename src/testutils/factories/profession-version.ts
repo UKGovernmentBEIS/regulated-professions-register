@@ -2,6 +2,7 @@ import { Factory } from 'fishery';
 import {
   ProfessionVersion,
   ProfessionVersionStatus,
+  RegulationType,
 } from '../../professions/profession-version.entity';
 import industryFactory from './industry';
 import legislationFactory from './legislation';
@@ -40,7 +41,7 @@ export default ProfessionVersionFactory.define(({ sequence }) => ({
   description:
     'A description of the profession that will be displayed to users',
   occupationLocations: ['GB-ENG'],
-  regulationType: 'Reserves of activities',
+  regulationType: RegulationType.Licensing,
   registrationRequirements: 'Some Requirements',
   registrationUrl: 'http://example.com/required',
   industries: [

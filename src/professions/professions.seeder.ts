@@ -14,6 +14,7 @@ import { OrganisationVersion } from '../organisations/organisation-version.entit
 import {
   ProfessionVersion,
   ProfessionVersionStatus,
+  RegulationType,
 } from './profession-version.entity';
 
 type SeedProfession = {
@@ -28,7 +29,7 @@ type SeedVersion = {
   alternateName: string;
   description: string;
   occupationLocations: string[];
-  regulationType: string;
+  regulationType: RegulationType;
   industries: string[];
   qualification: string;
   reservedActivities: string;
@@ -160,7 +161,7 @@ export class ProfessionsSeeder implements Seeder {
           alternateName: version.alternateName,
           description: version.description,
           occupationLocations: version.occupationLocations,
-          regulationType: version.regulationType,
+          regulationType: version.regulationType as RegulationType,
           reservedActivities: version.reservedActivities,
           protectedTitles: version.protectedTitles,
           regulationUrl: version.regulationUrl,
