@@ -6,14 +6,17 @@ import { flashMessage } from '../../common/flash-message';
 import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
 import { Permissions } from '../../common/permissions.decorator';
 import { escape } from '../../helpers/escape.helper';
+import { isConfirmed } from '../../helpers/is-confirmed';
 import { getActingUser } from '../../users/helpers/get-acting-user.helper';
 import { UserPermission } from '../../users/user-permission';
 import { ProfessionVersionsService } from '../profession-versions.service';
 import { Profession } from '../profession.entity';
+import { ProfessionsService } from '../professions.service';
 
 @Controller('/admin/professions')
 export class ProfessionPublicationController {
   constructor(
+    private professionsService: ProfessionsService,
     private professionVersionsService: ProfessionVersionsService,
     private i18nService: I18nService,
   ) {}
@@ -48,6 +51,8 @@ export class ProfessionPublicationController {
     @Param('professionId') professionId: string,
     @Param('versionId') versionId: string,
   ): Promise<void> {
+    const profession = await this.professionsService.find(professionId);
+
     const version = await this.professionVersionsService.findByIdWithProfession(
       professionId,
       versionId,
@@ -57,6 +62,10 @@ export class ProfessionPublicationController {
       version,
       getActingUser(req),
     );
+
+    if (!isConfirmed(profession)) {
+      await this.professionsService.setSlug(profession);
+    }
 
     await this.professionVersionsService.publish(newVersion);
 

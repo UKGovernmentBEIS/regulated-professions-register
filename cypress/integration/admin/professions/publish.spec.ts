@@ -193,4 +193,201 @@ describe('Publishing professions', () => {
         });
     });
   });
+
+  context('When I am logged in as a registrar', () => {
+    beforeEach(() => {
+      cy.loginAuth0('registrar');
+      cy.visitAndCheckAccessibility('/admin');
+    });
+
+    it('I can create and publish a new profession from the Check your answers page', () => {
+      cy.visitAndCheckAccessibility('/admin/professions');
+
+      cy.translate('professions.admin.addButtonLabel').then((buttonText) => {
+        cy.get('button').contains(buttonText).click();
+      });
+
+      cy.checkAccessibility();
+      cy.translate('professions.form.headings.topLevelInformation').then(
+        (heading) => {
+          cy.get('body').should('contain', heading);
+        },
+      );
+      cy.translate('professions.form.captions.add').then((addCaption) => {
+        cy.get('body').contains(addCaption);
+      });
+      cy.get('input[name="name"]').type('Example Profession');
+      cy.get('select[name="regulatoryBody"]').select(
+        'Department for Education',
+      );
+      cy.get('select[name="regulatoryBody"]').should(
+        'not.contain',
+        'Unconfirmed Organisation',
+      );
+      cy.get('select[name="additionalRegulatoryBody"]').select(
+        'General Medical Council',
+      );
+      cy.translate('app.continue').then((buttonText) => {
+        cy.get('button').contains(buttonText).click();
+      });
+
+      // Conditional radio buttons add an additional `aria-expanded` field,
+      // so ignore that rule on this page
+      cy.checkAccessibility({ 'aria-allowed-attr': { enabled: false } });
+      cy.translate('professions.form.captions.addWithName', {
+        professionName: 'Example Profession',
+      }).then((addCaption) => {
+        cy.get('body').contains(addCaption);
+      });
+      cy.translate('professions.form.label.scope.certainNations').then(
+        (certainNations) => {
+          cy.get('label').contains(certainNations).click();
+          cy.get('[type="checkbox"]').check('GB-ENG');
+        },
+      );
+
+      cy.translate('industries.constructionAndEngineering').then(
+        (constructionAndEngineering) => {
+          cy.contains(constructionAndEngineering).click();
+        },
+      );
+      cy.translate('app.continue').then((buttonText) => {
+        cy.get('button').contains(buttonText).click();
+      });
+
+      cy.checkAccessibility();
+      cy.translate('professions.form.captions.addWithName', {
+        professionName: 'Example Profession',
+      }).then((addCaption) => {
+        cy.get('body').contains(addCaption);
+      });
+      cy.get('input[name="registrationRequirements"]').type('Requirements');
+
+      cy.get('input[name="registrationUrl"]')
+        .invoke('val', '')
+        .type('https://example.com/requirement');
+
+      cy.translate('app.continue').then((buttonText) => {
+        cy.get('button').contains(buttonText).click();
+      });
+
+      cy.checkAccessibility();
+
+      cy.translate('professions.form.headings.regulatedActivities').then(
+        (heading) => {
+          cy.get('body').should('contain', heading);
+        },
+      );
+      cy.translate('professions.form.captions.addWithName', {
+        professionName: 'Example Profession',
+      }).then((addCaption) => {
+        cy.get('body').contains(addCaption);
+      });
+      cy.get('textarea[name="regulationSummary"]').type(
+        'A summary of the regulation',
+      );
+      cy.get('textarea[name="reservedActivities"]').type('An example activity');
+      cy.get('textarea[name="protectedTitles"]').type(
+        'An example protected title',
+      );
+      cy.get('input[name="regulationUrl"]').type(
+        'https://example.com/regulation',
+      );
+
+      cy.translate('app.continue').then((buttonText) => {
+        cy.get('button').contains(buttonText).click();
+      });
+
+      cy.checkAccessibility();
+      cy.translate('professions.form.headings.qualifications').then(
+        (heading) => {
+          cy.get('body').should('contain', heading);
+        },
+      );
+      cy.translate('professions.form.captions.addWithName', {
+        professionName: 'Example Profession',
+      }).then((addCaption) => {
+        cy.get('body').contains(addCaption);
+      });
+      cy.get('textarea[name="routesToObtain"]').type(
+        'General secondary education',
+      );
+      cy.get('input[name="moreInformationUrl"]').type(
+        'http://example.com/more-info',
+      );
+
+      cy.get('input[name="ukRecognition"]').type('Recognition in the UK');
+      cy.get('input[name="ukRecognitionUrl"]').type('http://example.com/uk');
+      cy.get('input[name="otherCountriesRecognition"]').type(
+        'Recognition in other countries',
+      );
+      cy.get('input[name="otherCountriesRecognitionUrl"]').type(
+        'http://example.com/other',
+      );
+
+      cy.translate('app.continue').then((buttonText) => {
+        cy.get('button').contains(buttonText).click();
+      });
+
+      cy.checkAccessibility();
+      cy.translate('professions.form.headings.legislation').then((heading) => {
+        cy.get('body').should('contain', heading);
+      });
+      cy.translate('professions.form.captions.addWithName', {
+        professionName: 'Example Profession',
+      }).then((addCaption) => {
+        cy.get('body').contains(addCaption);
+      });
+      cy.get('textarea[name="nationalLegislation"]').type(
+        'National legislation description',
+      );
+      cy.get('input[name="link"]').type('www.example-legislation.com');
+
+      cy.translate('app.continue').then((buttonText) => {
+        cy.get('button').contains(buttonText).click();
+      });
+
+      cy.checkAccessibility();
+
+      cy.translate('professions.form.captions.addWithName', {
+        professionName: 'Example Profession',
+      }).then((addCaption) => {
+        cy.get('body').contains(addCaption);
+      });
+
+      cy.translate('professions.form.button.publish').then((buttonText) => {
+        cy.get('a').contains(buttonText).click();
+      });
+
+      cy.checkAccessibility();
+
+      cy.translate('professions.form.headings.publish', {
+        professionName: 'Example Profession',
+      }).then((heading) => {
+        cy.contains(heading);
+      });
+
+      cy.translate('professions.form.button.publish').then((buttonText) => {
+        cy.get('button').contains(buttonText).click();
+      });
+      cy.checkAccessibility();
+
+      cy.translate('professions.admin.publish.confirmation.heading').then(
+        (confirmation) => {
+          cy.get('html').should('contain', confirmation);
+        },
+      );
+
+      cy.get('[data-cy=changed-by-user]').should('contain', 'Registrar');
+      cy.get('[data-cy=last-modified]').should(
+        'contain',
+        format(new Date(), 'd MMM yyyy'),
+      );
+
+      cy.visitAndCheckAccessibility('/professions/search');
+      cy.get('a').contains('Example Profession').click();
+
+      cy.get('h1').should('contain', 'Example Profession');
+    });
+  });
 });
