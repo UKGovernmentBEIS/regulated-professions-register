@@ -15,7 +15,6 @@ import { BackLink } from '../../common/decorators/back-link.decorator';
 
 import { AuthenticationGuard } from '../../common/authentication.guard';
 
-import { OrganisationsService } from '../organisations.service';
 import { OrganisationVersionsService } from '../organisation-versions.service';
 
 import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
@@ -33,7 +32,6 @@ import { getActingUser } from '../../users/helpers/get-acting-user.helper';
 @Controller('/admin/organisations')
 export class OrganisationVersionsController {
   constructor(
-    private readonly organisationsService: OrganisationsService,
     private readonly organisationVersionsService: OrganisationVersionsService,
     private readonly i18nService: I18nService,
   ) {}
