@@ -15,6 +15,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Display a second Regulatory Authority if specified for a profession
 - Inpsect a second Regulatory Authority when searching, if specified for a profession
 - Change visible columns in internal Professions listing
+- Audit optional fields and ensure correct messaging is used
 
 ## [release-007] - 2022-03-04
 

@@ -11,17 +11,25 @@ describe('Searching a profession', () => {
   });
 
   it('I can view an unfiltered list of live professions', () => {
-    cy.translate('professions.search.foundPlural', { count: 2 }).then(
-      (foundText) => {
+    cy.readFile('./seeds/test/professions.json').then((professions) => {
+      const professionsToShow = professions.filter((profession) =>
+        profession.versions.some((version) =>
+          ['live'].includes(version.status),
+        ),
+      );
+
+      cy.translate('professions.search.foundPlural', {
+        count: professionsToShow.length,
+      }).then((foundText) => {
         cy.get('body').should('contain.text', foundText);
-      },
-    );
-    cy.get('body').should('contain', 'Registered Trademark Attorney');
-    cy.get('body').should(
-      'contain',
-      'Secondary School Teacher in State maintained schools (England)',
-    );
-    cy.get('body').should('not.contain', 'Gas Safe Engineer');
+      });
+      cy.get('body').should('contain', 'Registered Trademark Attorney');
+      cy.get('body').should(
+        'contain',
+        'Secondary School Teacher in State maintained schools (England)',
+      );
+      cy.get('body').should('not.contain', 'Gas Safe Engineer');
+    });
   });
 
   it('Organisations are sorted alphabetically', () => {
