@@ -110,8 +110,8 @@
         "live": "Edit this regulatory authority"
       },
       "archive": "Archive this regulatory authority",
-      "amend": "Amend regulatory authority",
-      "publish": "Publish regulatory authority"
+      "saveAsDraft": "Save as draft",
+      "publish": "Publish to register"
     }
   },
   "search": {

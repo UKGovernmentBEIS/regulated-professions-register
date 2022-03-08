@@ -145,6 +145,10 @@ $small-screen: 768px;
       }
     }
   }
+
+  &__buttons-container {
+    align-items: center;
+  }
 }
 
 @media print {

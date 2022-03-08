@@ -106,9 +106,11 @@ describe('Creating organisations', () => {
       );
       cy.checkSummaryListRowValue('organisations.label.telephone', '1234');
 
-      cy.translate('organisations.admin.button.amend').then((buttonText) => {
-        cy.get('button').contains(buttonText).click();
-      });
+      cy.translate('organisations.admin.button.saveAsDraft').then(
+        (buttonText) => {
+          cy.get('button').contains(buttonText).click();
+        },
+      );
 
       cy.translate('organisations.admin.create.confirmation.heading').then(
         (confirmationHeading) => {

@@ -14,7 +14,7 @@
         <form action="/admin/professions/{{ profession.id }}/versions/{{ profession.versionId }}/publish?_method=PUT" method="post">
           {{
             govukButton({
-              text: ('professions.form.button.publishNow' | t),
+              text: ('professions.form.button.publish' | t),
               classes: "govuk-button",
               id: "publish-button"
             })

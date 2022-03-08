@@ -13,7 +13,10 @@
       <form action="/admin/organisations/{{ organisation.id }}/versions/{{ organisation.versionId }}/publish?_method=PUT" method="post">
         {{
           govukButton({
-            text: ("organisations.admin.button.publish" | t)
+            text: ("organisations.admin.button.publish" | t),
+            attributes: {
+              "data-cy": "publish-button"
+            }
           })
         }}
       </form>
