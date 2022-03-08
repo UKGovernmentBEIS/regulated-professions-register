@@ -86,7 +86,7 @@
     "form": {
       "label": {
         "name": "Name of the regulatory authority",
-        "alternateName": "Alternate name",
+        "alternateName": "Alternate name (optional)",
         "url": "Website",
         "address": "Address",
         "email": "Email",
