@@ -1,5 +1,6 @@
 import { Factory } from 'fishery';
 import { Profession } from '../../professions/profession.entity';
+import { RegulationType } from '../../professions/profession-version.entity';
 import industryFactory from './industry';
 import organisationFactory from './organisation';
 import qualificationFactory from './qualification';
@@ -33,7 +34,7 @@ export default ProfessionFactory.define(({ sequence }) => ({
   description:
     'A description of the profession that will be displayed to users',
   occupationLocations: ['GB-ENG'],
-  regulationType: 'Reserves of activities',
+  regulationType: RegulationType.Licensing,
   industries: [
     industryFactory.build({ name: 'Example industry', id: 'example-industry' }),
   ],

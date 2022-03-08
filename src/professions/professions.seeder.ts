@@ -14,6 +14,7 @@ import { OrganisationVersion } from '../organisations/organisation-version.entit
 import {
   ProfessionVersion,
   ProfessionVersionStatus,
+  RegulationType,
 } from './profession-version.entity';
 
 type SeedProfession = {
@@ -28,7 +29,7 @@ type SeedVersion = {
   alternateName: string;
   description: string;
   occupationLocations: string[];
-  regulationType: string;
+  regulationType: RegulationType;
   industries: string[];
   qualification: string;
   reservedActivities: string;

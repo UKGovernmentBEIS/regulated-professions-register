@@ -17,6 +17,7 @@ import { User } from '../users/user.entity';
 import {
   ProfessionVersion,
   ProfessionVersionStatus,
+  RegulationType,
 } from './profession-version.entity';
 
 @Entity({ name: 'professions' })
@@ -62,7 +63,7 @@ export class Profession {
   alternateName?: string;
   description?: string;
   occupationLocations?: string[];
-  regulationType?: string;
+  regulationType?: RegulationType;
   industries?: Industry[];
   qualification?: Qualification;
   protectedTitles?: string;
@@ -80,7 +81,7 @@ export class Profession {
     slug?: string,
     description?: string,
     occupationLocations?: string[],
-    regulationType?: string,
+    regulationType?: RegulationType,
     industries?: Industry[],
     qualification?: Qualification,
     reservedActivities?: string,
