@@ -61,18 +61,6 @@
         }}
 
         {{
-          govukTextarea({
-            label: {
-              text: ("organisations.admin.form.label.address" | t),
-              classes: "govuk-label--m"
-            },
-            id: "address",
-            name: "address",
-            value: address
-          })
-        }}
-
-        {{
           govukInput({
             label: {
               text: ("organisations.admin.form.label.email" | t),
@@ -93,6 +81,18 @@
             id: "telephone",
             name: "telephone",
             value: telephone
+          })
+        }}
+
+        {{
+          govukTextarea({
+            label: {
+              text: ("organisations.admin.form.label.address" | t),
+              classes: "govuk-label--m"
+            },
+            id: "address",
+            name: "address",
+            value: address
           })
         }}
 
