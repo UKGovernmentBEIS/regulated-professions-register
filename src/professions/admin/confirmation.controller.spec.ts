@@ -3,6 +3,7 @@ import { TestingModule, Test } from '@nestjs/testing';
 import { Request, Response } from 'express';
 import { I18nService } from 'nestjs-i18n';
 import { flashMessage } from '../../common/flash-message';
+import { escape } from '../../helpers/escape.helper';
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 import professionFactory from '../../testutils/factories/profession';
 import professionVersionFactory from '../../testutils/factories/profession-version';
@@ -12,6 +13,7 @@ import { ProfessionsService } from '../professions.service';
 import { ConfirmationController } from './confirmation.controller';
 
 jest.mock('../../common/flash-message');
+jest.mock('../../helpers/escape.helper');
 
 describe('ConfirmationController', () => {
   let controller: ConfirmationController;
@@ -44,6 +46,7 @@ describe('ConfirmationController', () => {
       it('"Confirms" the Profession and the Profession Version, then displays a confirmation flash message on the Profession version page', async () => {
         const res = createMock<Response>();
         const req = createMock<Request>();
+
         const flashMock = flashMessage as jest.Mock;
         flashMock.mockImplementation(() => 'STUB_FLASH_MESSAGE');
 
@@ -69,6 +72,8 @@ describe('ConfirmationController', () => {
           translationOf('professions.admin.create.confirmation.body'),
         );
 
+        expect(escape).toHaveBeenCalledWith(profession.name);
+
         expect(req.flash).toHaveBeenCalledWith('success', 'STUB_FLASH_MESSAGE');
 
         expect(res.redirect).toHaveBeenCalledWith(
@@ -81,6 +86,8 @@ describe('ConfirmationController', () => {
       it("redirects with the 'amended' query param, 'confirming' the version, but not updating the Profession", async () => {
         const res = createMock<Response>();
         const req = createMock<Request>();
+
+        (escape as jest.Mock).mockImplementation();
         const flashMock = flashMessage as jest.Mock;
         flashMock.mockImplementation(() => 'STUB_FLASH_MESSAGE');
 
@@ -111,6 +118,8 @@ describe('ConfirmationController', () => {
           translationOf('professions.admin.update.confirmation.heading'),
           translationOf('professions.admin.update.confirmation.body'),
         );
+
+        expect(escape).toHaveBeenCalledWith(existingProfession.name);
 
         expect(req.flash).toHaveBeenCalledWith('info', 'STUB_FLASH_MESSAGE');
       });

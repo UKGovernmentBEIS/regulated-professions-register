@@ -7,6 +7,7 @@ import { UserPermission } from '../../users/user-permission';
 import { ProfessionVersionsService } from '../profession-versions.service';
 import { I18nService } from 'nestjs-i18n';
 import { flashMessage } from '../../common/flash-message';
+import { escape } from '../../helpers/escape.helper';
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
 export class ConfirmationController {
@@ -51,7 +52,7 @@ export class ConfirmationController {
 
     const messageBody = await this.i18nService.translate(
       `professions.admin.${action}.confirmation.body`,
-      { args: { name: profession.name } },
+      { args: { name: escape(profession.name) } },
     );
 
     req.flash(bannerType, flashMessage(messageTitle, messageBody));

@@ -29,12 +29,14 @@ import { FilterInput } from '../../common/interfaces/filter-input.interface';
 import { flashMessage } from '../../common/flash-message';
 import { createDefaultMockRequest } from '../../testutils/factories/create-default-mock-request';
 import { getActingUser } from '../../users/helpers/get-acting-user.helper';
+import { escape } from '../../helpers/escape.helper';
 
 jest.mock('./presenters/organisations.presenter');
 jest.mock('../presenters/organisation.presenter');
 jest.mock('../helpers/organisations-filter.helper');
 jest.mock('../../common/flash-message');
 jest.mock('../../users/helpers/get-acting-user.helper');
+jest.mock('../../helpers/escape.helper');
 
 describe('OrganisationsController', () => {
   let controller: OrganisationsController;
@@ -516,6 +518,8 @@ describe('OrganisationsController', () => {
             'Translation of `organisations.admin.create.confirmation.body`',
           );
 
+          expect(escape).toHaveBeenCalledWith(organisation.name);
+
           expect(request.flash).toHaveBeenCalledWith(
             'info',
             'STUB_FLASH_MESSAGE',
@@ -540,6 +544,8 @@ describe('OrganisationsController', () => {
 
           organisationsService.find.mockResolvedValue(organisation);
           organisationVersionsService.find.mockResolvedValue(version);
+
+          (escape as jest.Mock).mockImplementation();
 
           flashMock = flashMessage as jest.Mock;
           flashMock.mockImplementation(() => 'STUB_FLASH_MESSAGE');
@@ -567,6 +573,8 @@ describe('OrganisationsController', () => {
             'Translation of `organisations.admin.edit.confirmation.heading`',
             'Translation of `organisations.admin.edit.confirmation.body`',
           );
+
+          expect(escape).toHaveBeenCalledWith(organisation.name);
 
           expect(request.flash).toHaveBeenCalledWith(
             'info',
