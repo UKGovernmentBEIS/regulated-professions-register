@@ -17,16 +17,16 @@ describe('stringifyNations', () => {
     });
   });
 
-  it('translates a single nation', () => {
-    expect(
+  it('translates a single nation', async () => {
+    await expect(
       stringifyNations([Nation.find('GB-SCT')], i18nService),
     ).resolves.toEqual('Scotland');
 
     expect(i18nService.translate).toHaveBeenCalledWith('nations.scotland');
   });
 
-  it('concatenates multiple nations', () => {
-    expect(
+  it('concatenates multiple nations', async () => {
+    await expect(
       stringifyNations(
         [Nation.find('GB-ENG'), Nation.find('GB-WLS')],
         i18nService,

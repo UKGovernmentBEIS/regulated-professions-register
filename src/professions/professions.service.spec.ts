@@ -47,7 +47,7 @@ describe('Profession', () => {
       const professions = professionFactory.buildList(2);
       const repoSpy = jest.spyOn(repo, 'find').mockResolvedValue(professions);
 
-      expect(service.all()).resolves.toEqual(professions);
+      await expect(service.all()).resolves.toEqual(professions);
       expect(repoSpy).toHaveBeenCalledWith(
         expect.objectContaining({
           order: { name: 'ASC' },
@@ -61,7 +61,7 @@ describe('Profession', () => {
       const professions = professionFactory.buildList(2);
       const repoSpy = jest.spyOn(repo, 'find').mockResolvedValue(professions);
 
-      expect(service.allConfirmed()).resolves.toEqual(professions);
+      await expect(service.allConfirmed()).resolves.toEqual(professions);
       expect(repoSpy).toHaveBeenCalledWith(
         expect.objectContaining({
           where: { confirmed: true },
@@ -76,7 +76,7 @@ describe('Profession', () => {
       const profession = professionFactory.build({ id: 'some-uuid' });
       const repoSpy = jest.spyOn(repo, 'findOne').mockResolvedValue(profession);
 
-      expect(service.find('some-uuid')).resolves.toEqual(profession);
+      await expect(service.find('some-uuid')).resolves.toEqual(profession);
       expect(repoSpy).toHaveBeenCalledWith('some-uuid');
     });
   });
@@ -86,7 +86,9 @@ describe('Profession', () => {
       const profession = professionFactory.build({ slug: 'some-slug' });
       const repoSpy = jest.spyOn(repo, 'findOne').mockResolvedValue(profession);
 
-      expect(service.findBySlug('some-slug')).resolves.toEqual(profession);
+      await expect(service.findBySlug('some-slug')).resolves.toEqual(
+        profession,
+      );
       expect(repoSpy).toHaveBeenCalledWith({ where: { slug: 'some-slug' } });
     });
   });
@@ -99,7 +101,7 @@ describe('Profession', () => {
       });
       const repoSpy = jest.spyOn(repo, 'findOne').mockResolvedValue(profession);
 
-      expect(service.findWithVersions('profession-id')).resolves.toEqual(
+      await expect(service.findWithVersions('profession-id')).resolves.toEqual(
         profession,
       );
       expect(repoSpy).toHaveBeenCalledWith('profession-id', {

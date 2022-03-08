@@ -41,10 +41,10 @@ describe('ProfessionsController', () => {
   });
 
   describe('show', () => {
-    it('should throw an error when the slug does not match a profession', () => {
+    it('should throw an error when the slug does not match a profession', async () => {
       professionVersionsService.findLiveBySlug.mockResolvedValue(null);
 
-      expect(async () => {
+      await expect(async () => {
         await controller.show('example-invalid-slug');
       }).rejects.toThrowError(NotFoundException);
     });
