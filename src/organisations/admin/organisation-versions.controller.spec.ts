@@ -6,7 +6,6 @@ import { I18nService } from 'nestjs-i18n';
 import { OrganisationVersionsController } from './organisation-versions.controller';
 
 import { OrganisationVersionsService } from '../organisation-versions.service';
-import { OrganisationsService } from '../organisations.service';
 
 import { Organisation } from '../organisation.entity';
 
@@ -35,20 +34,14 @@ describe('OrganisationVersionsController', () => {
   let i18nService: I18nService;
 
   let organisationVersionsService: DeepMocked<OrganisationVersionsService>;
-  let organisationsService: DeepMocked<OrganisationsService>;
 
   beforeEach(async () => {
-    organisationsService = createMock<OrganisationsService>();
     organisationVersionsService = createMock<OrganisationVersionsService>();
     i18nService = createMockI18nService();
 
     const module: TestingModule = await Test.createTestingModule({
       controllers: [OrganisationVersionsController],
       providers: [
-        {
-          provide: OrganisationsService,
-          useValue: organisationsService,
-        },
         {
           provide: OrganisationVersionsService,
           useValue: organisationVersionsService,
