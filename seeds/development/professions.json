@@ -72,6 +72,46 @@
     ]
   },
   {
+    "name": "Orthodontic Therapist",
+    "slug": "orthodontic-therapist",
+    "organisation": "General Medical Council",
+    "additionalOrganisation": null,
+    "versions": [
+      {
+        "alternateName": "Orthodontic Auxiliary",
+        "description": "Orthodontic therapists are registered dental professionals who carry out certain parts of orthodontic treatment under prescription from a dentist.",
+        "occupationLocations": ["GB-ENG", "GB-SCT", "GB-WLS", "GB-NIR"],
+        "regulationType": "licensing",
+        "industries": ["industries.health"],
+        "reservedActivities": "",
+        "legislations": ["Dentists Act 1984"],
+        "mandatoryRegistration": "voluntary",
+        "status": "draft",
+        "socCode": 3213,
+        "keywords": "Associate, nursing"
+      }
+    ]
+  },
+  {
+    "name": "Profession with no optional fields",
+    "slug": "no-optional-fields",
+    "organisation": "Department for Education",
+    "additionalOrganisation": null,
+    "versions": [
+      {
+        "occupationLocations": ["GB-ENG", "GB-SCT", "GB-WLS", "GB-NIR"],
+        "industries": ["industries.education"],
+        "description": "A description of the profession",
+        "reservedActivities": "Some reserved activities",
+        "legislations": [
+          "The Education (School Teachers' Qualifications) (England) Regulations 2003/1662 (as amended)"
+        ],
+        "qualification": "General post-secondary education",
+        "status": "live"
+      }
+    ]
+  },
+  {
     "name": "Draft Profession",
     "slug": "draft-profession",
     "organisation": "Council of Registered Gas Installers",
