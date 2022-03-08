@@ -139,49 +139,6 @@
           })
         }}
 
-        <h2 class="govuk-heading-m">{{ ("professions.form.headings.registration" | t) }}</h2>
-
-        {{
-          govukSummaryList({
-            rows: [
-              {
-                key: {
-                  text: ("professions.form.label.registration.registrationRequirements" | t)
-                },
-                value: {
-                  text: registrationRequirements
-                },
-                actions: {
-                  items: [
-                    {
-                      href: "/admin/professions/" + professionId + "/versions/" + versionId + "/registration/edit?change=true",
-                      text: ("app.change" | t),
-                      visuallyHiddenText: ("professions.form.label.registration.registrationRequirements" | t)
-                    }
-                  ]
-                }
-              },
-              {
-                key: {
-                  text: ("professions.form.label.registration.registrationUrl" | t)
-                },
-                value: {
-                  html: registrationUrl | link
-                },
-                actions: {
-                  items: [
-                    {
-                      href: "/admin/professions/" + professionId + "/versions/" + versionId + "/registration/edit?change=true",
-                      text: ("app.change" | t),
-                      visuallyHiddenText: ("professions.form.label.registration.registrationUrl" | t)
-                    }
-                  ]
-                }
-              }
-            ]
-          })
-        }}
-
         <h2 class="govuk-heading-m">{{ ("professions.form.headings.regulatedActivities" | t) }}</h2>
 
         {{
@@ -373,6 +330,49 @@
           })
         }}
         {% endif %}
+
+        <h2 class="govuk-heading-m">{{ ("professions.form.headings.registration" | t) }}</h2>
+
+        {{
+          govukSummaryList({
+            rows: [
+              {
+                key: {
+                  text: ("professions.form.label.registration.registrationRequirements" | t)
+                },
+                value: {
+                  text: registrationRequirements
+                },
+                actions: {
+                  items: [
+                    {
+                      href: "/admin/professions/" + professionId + "/versions/" + versionId + "/registration/edit?change=true",
+                      text: ("app.change" | t),
+                      visuallyHiddenText: ("professions.form.label.registration.registrationRequirements" | t)
+                    }
+                  ]
+                }
+              },
+              {
+                key: {
+                  text: ("professions.form.label.registration.registrationUrl" | t)
+                },
+                value: {
+                  html: registrationUrl | link
+                },
+                actions: {
+                  items: [
+                    {
+                      href: "/admin/professions/" + professionId + "/versions/" + versionId + "/registration/edit?change=true",
+                      text: ("app.change" | t),
+                      visuallyHiddenText: ("professions.form.label.registration.registrationUrl" | t)
+                    }
+                  ]
+                }
+              }
+            ]
+          })
+        }}
 
         <h2 class="govuk-heading-m">{{ ("professions.form.headings.legislation" | t) }}</h2>
 
