@@ -257,7 +257,6 @@
                 }
               },
               {
-                classes: ("govuk-visually-hidden" if isUK else ""),
                 key: {
                   text: ("professions.form.label.qualifications.ukRecognition" | t)
                 },
@@ -273,9 +272,8 @@
                     }
                   ]
                 }
-              },
+              } if not isUK else undefined,
               {
-                classes: ("govuk-visually-hidden" if isUK else ""),
                 key: {
                   text: ("professions.form.label.qualifications.ukRecognitionUrl" | t)
                 },
@@ -291,7 +289,7 @@
                     }
                   ]
                 }
-              }
+              } if not isUK else undefined
             ]
           })
         }}
