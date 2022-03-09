@@ -19,6 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Move registration section further down the edit page to encourage more detail elsewhere
 - Improve sidebar in the internal Organisation and Profession views
 - Hide empty fields in public Organisation and Profession views
+- Replace UKCPQ text with BEIS organisation name
 
 ## [release-007] - 2022-03-04
 
