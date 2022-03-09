@@ -13,7 +13,7 @@ describe('/', () => {
       cy.visitAndCheckAccessibility('/admin');
     });
 
-    it('shows my username', () => {
+    it('shows my name', () => {
       cy.translate('app.welcome', { name: 'beis-rpr' }).then(
         (welcomeMessage) => {
           cy.get('body').should('contain', welcomeMessage);

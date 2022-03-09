@@ -1,6 +1,5 @@
-import { Controller, Get, Render, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Render, UseGuards } from '@nestjs/common';
 import { AuthenticationGuard } from './common/authentication.guard';
-import { Request } from 'express';
 @Controller()
 export class AppController {
   @Get()
@@ -12,10 +11,8 @@ export class AppController {
   @Get('/admin')
   @UseGuards(AuthenticationGuard)
   @Render('admin/dashboard')
-  admin(@Req() req: Request): object {
-    return {
-      name: req.oidc.user.nickname,
-    };
+  admin() {
+    // do nothing.
   }
 
   @Get('/health-check')

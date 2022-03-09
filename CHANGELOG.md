@@ -20,6 +20,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Improve sidebar in the internal Organisation and Profession views
 - Hide empty fields in public Organisation and Profession views
 - Replace UKCPQ text with BEIS organisation name
+- Show user's name rather than username in welcome message
 
 ## [release-007] - 2022-03-04
 
