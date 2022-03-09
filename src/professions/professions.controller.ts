@@ -13,6 +13,7 @@ import { BackLink } from '../common/decorators/back-link.decorator';
 import { Organisation } from '../organisations/organisation.entity';
 import { ProfessionVersionsService } from './profession-versions.service';
 import { getOrganisationsFromProfession } from './helpers/get-organisations-from-profession.helper';
+import { isUK } from '../helpers/nations.helper';
 
 @Controller()
 export class ProfessionsController {
@@ -58,7 +59,12 @@ export class ProfessionsController {
     return {
       profession,
       qualificationSummaryList: qualification
-        ? await qualification.summaryList(false)
+        ? await qualification.summaryList(
+            false,
+            profession.occupationLocations
+              ? !isUK(profession.occupationLocations)
+              : true,
+          )
         : null,
       nations,
       industries,
