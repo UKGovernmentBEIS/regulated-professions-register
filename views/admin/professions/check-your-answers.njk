@@ -376,7 +376,7 @@
 
         <h2 class="govuk-heading-m">{{ ("professions.form.headings.legislation" | t) }}</h2>
 
-        {% for legislation in legislations %}
+        {% for legislation in legislations | pad(2) %}
           {{
             govukSummaryList({
               rows: [

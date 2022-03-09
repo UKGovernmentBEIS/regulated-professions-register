@@ -126,11 +126,15 @@ describe('Creating organisations', () => {
 
       cy.get('body').should('contain', 'New Organisation');
 
-      cy.translate(`organisations.status.draft`).then((status) => {
+      cy.translate(`app.status.draft`).then((status) => {
         cy.get('h2[data-status]').should('contain', status);
       });
 
-      cy.get('[data-cy=changed-by-user]').should('contain', 'Registrar');
+      cy.get('[data-cy=changed-by-user-name]').should('contain', 'Registrar');
+      cy.get('[data-cy=changed-by-user-email]').should(
+        'contain',
+        'beis-rpr+registrar@dxw.com',
+      );
       cy.get('[data-cy=last-modified]').should(
         'contain',
         format(new Date(), 'd MMM yyyy'),

@@ -93,5 +93,30 @@
         "status": "unconfirmed"
       }
     ]
+  },
+  {
+    "name": "Organisation with no optional fields",
+    "slug": "no-optional-fields",
+    "versions": [
+      {
+        "url": "www.example.com",
+        "status": "live"
+      }
+    ]
+  },
+  {
+    "name": "Draft Organisation",
+    "slug": "draft-organisation",
+    "versions": [
+      {
+        "alternateName": "",
+        "address": "789 Fake Street\nLondon\nEC1 1AB",
+        "url": "www.gmc.com",
+        "email": "gmc@example.com",
+        "telephone": "+44 0123 456789",
+        "fax": "+44 0123 456780",
+        "status": "draft"
+      }
+    ]
   }
 ]

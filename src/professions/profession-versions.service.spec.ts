@@ -611,6 +611,78 @@ describe('ProfessionVersionsService', () => {
     });
   });
 
+  describe('hasLiveVersion', () => {
+    describe('when the Profession has a live version', () => {
+      it('returns `true`', async () => {
+        const queryBuilder = createMock<SelectQueryBuilder<ProfessionVersion>>({
+          leftJoinAndSelect: () => queryBuilder,
+          where: () => queryBuilder,
+          getCount: async () => 1,
+        });
+
+        jest
+          .spyOn(repo, 'createQueryBuilder')
+          .mockImplementation(() => queryBuilder);
+
+        const profession = professionFactory.build();
+
+        const result = await service.hasLiveVersion(profession);
+
+        expect(result).toEqual(true);
+
+        expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
+          'professionVersion.profession',
+          'profession',
+        );
+
+        expect(queryBuilder.where).toHaveBeenCalledWith(
+          'professionVersion.status = :status AND profession.id = :id',
+          {
+            status: ProfessionVersionStatus.Live,
+            id: profession.id,
+          },
+        );
+
+        expect(queryBuilder.getCount).toBeCalled();
+      });
+    });
+
+    describe('when the Profession does not have a live version', () => {
+      it('returns `false`', async () => {
+        const queryBuilder = createMock<SelectQueryBuilder<ProfessionVersion>>({
+          leftJoinAndSelect: () => queryBuilder,
+          where: () => queryBuilder,
+          getCount: async () => 0,
+        });
+
+        jest
+          .spyOn(repo, 'createQueryBuilder')
+          .mockImplementation(() => queryBuilder);
+
+        const profession = professionFactory.build();
+
+        const result = await service.hasLiveVersion(profession);
+
+        expect(result).toEqual(false);
+
+        expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
+          'professionVersion.profession',
+          'profession',
+        );
+
+        expect(queryBuilder.where).toHaveBeenCalledWith(
+          'professionVersion.status = :status AND profession.id = :id',
+          {
+            status: ProfessionVersionStatus.Live,
+            id: profession.id,
+          },
+        );
+
+        expect(queryBuilder.getCount).toBeCalled();
+      });
+    });
+  });
+
   describe('findByIdWithProfession', () => {
     it('returns an Profession with a version', async () => {
       const version = professionVersionFactory.build();
@@ -656,5 +728,9 @@ describe('ProfessionVersionsService', () => {
         id: 'version-uuid',
       });
     });
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
   });
 });

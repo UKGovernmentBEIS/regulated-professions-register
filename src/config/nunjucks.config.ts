@@ -1,5 +1,3 @@
-/* eslint @typescript-eslint/no-var-requires: "off" */
-
 import { NestExpressApplication } from '@nestjs/platform-express';
 
 import * as nunjucks from 'nunjucks';
@@ -9,12 +7,15 @@ import { formatMultilineString } from '../helpers/format-multiline-string.helper
 import { formatLink } from '../helpers/format-link.helper';
 import { I18nHelper } from '../helpers/i18n.helper';
 import { formatEmail } from '../helpers/format-email.helper';
+import { pad } from '../helpers/pad.helper';
+import { formatStatus } from '../helpers/format-status.helper';
 
 export const nunjucksConfig = async (
   app: NestExpressApplication,
   views: any,
 ): Promise<nunjucks.ConfigureOptions> => {
   const express = app.getHttpAdapter().getInstance();
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
   const entrypoints = require('../../public/entrypoints.json');
   const assetsHelper = new AssetsHelper(entrypoints);
   const i18nHelper = new I18nHelper(app);
@@ -87,6 +88,27 @@ export const nunjucksConfig = async (
   env.addFilter('email', (text) => {
     return new nunjucks.runtime.SafeString(formatEmail(text));
   });
+
+  env.addFilter('pad', (array, minimumLength) => {
+    return pad(array, minimumLength);
+  });
+
+  env.addFilter(
+    'status',
+    async (...args) => {
+      const callback = args.pop();
+      const status = args[0];
+      try {
+        const result = new nunjucks.runtime.SafeString(
+          await formatStatus(status, i18nHelper.i18nService),
+        );
+        callback(null, result);
+      } catch (error) {
+        callback(error);
+      }
+    },
+    true,
+  );
 
   return env;
 };

@@ -13,7 +13,6 @@ import { translationOf } from '../../testutils/translation-of';
 import userFactory from '../../testutils/factories/user';
 import { ProfessionVersionsController } from './profession-versions.controller';
 import { ProfessionVersionsService } from '../profession-versions.service';
-import { ProfessionsService } from '../professions.service';
 import { Profession } from '../profession.entity';
 import { ProfessionPresenter } from '../presenters/profession.presenter';
 import { getActingUser } from '../../users/helpers/get-acting-user.helper';
@@ -29,21 +28,15 @@ describe('ProfessionVersionsController', () => {
   let controller: ProfessionVersionsController;
 
   let professionVersionsService: DeepMocked<ProfessionVersionsService>;
-  let professionsService: DeepMocked<ProfessionsService>;
   let i18nService: DeepMocked<I18nService>;
 
   beforeEach(async () => {
-    professionsService = createMock<ProfessionsService>();
     professionVersionsService = createMock<ProfessionVersionsService>();
     i18nService = createMockI18nService();
 
     const module: TestingModule = await Test.createTestingModule({
       controllers: [ProfessionVersionsController],
       providers: [
-        {
-          provide: ProfessionsService,
-          useValue: professionsService,
-        },
         {
           provide: ProfessionVersionsService,
           useValue: professionVersionsService,
@@ -90,12 +83,12 @@ describe('ProfessionVersionsController', () => {
   });
 
   describe('show', () => {
-    it('should throw an error when the slug does not match a profession', () => {
+    it('should throw an error when the slug does not match a profession', async () => {
       professionVersionsService.findByIdWithProfession.mockResolvedValue(
         undefined,
       );
 
-      expect(async () => {
+      await expect(async () => {
         await controller.show('profession-id', 'version-id');
       }).rejects.toThrowError(NotFoundException);
     });
@@ -119,6 +112,7 @@ describe('ProfessionVersionsController', () => {
           professionVersionsService.findByIdWithProfession.mockResolvedValue(
             version,
           );
+          professionVersionsService.hasLiveVersion.mockResolvedValue(true);
 
           (ProfessionPresenter as jest.Mock).mockReturnValue({});
 
@@ -136,10 +130,11 @@ describe('ProfessionVersionsController', () => {
           expect(result).toEqual({
             profession: professionWithVersion,
             presenter: {},
+            hasLiveVersion: true,
             qualificationSummaryList: await new QualificationPresenter(
               professionWithVersion.qualification,
               createMockI18nService(),
-            ).summaryList(),
+            ).summaryList(true),
             nations: ['Translation of `nations.england`'],
             industries: ['Translation of `industries.example`'],
             organisations: [profession.organisation],
@@ -148,6 +143,9 @@ describe('ProfessionVersionsController', () => {
           expect(
             professionVersionsService.findByIdWithProfession,
           ).toHaveBeenCalledWith('profession-id', 'version-id');
+          expect(professionVersionsService.hasLiveVersion).toHaveBeenCalledWith(
+            professionWithVersion,
+          );
           expect(getOrganisationsFromProfessionSpy).toHaveBeenCalledWith(
             professionWithVersion,
           );
@@ -174,6 +172,7 @@ describe('ProfessionVersionsController', () => {
           professionVersionsService.findByIdWithProfession.mockResolvedValue(
             version,
           );
+          professionVersionsService.hasLiveVersion.mockResolvedValue(true);
 
           (ProfessionPresenter as jest.Mock).mockReturnValue({});
 
@@ -191,10 +190,11 @@ describe('ProfessionVersionsController', () => {
           expect(result).toEqual({
             profession: professionWithVersion,
             presenter: {},
+            hasLiveVersion: true,
             qualificationSummaryList: await new QualificationPresenter(
               professionWithVersion.qualification,
               createMockI18nService(),
-            ).summaryList(),
+            ).summaryList(true),
             nations: ['Translation of `nations.england`'],
             industries: ['Translation of `industries.example`'],
             organisations: [
@@ -206,6 +206,9 @@ describe('ProfessionVersionsController', () => {
           expect(
             professionVersionsService.findByIdWithProfession,
           ).toHaveBeenCalledWith('profession-id', 'version-id');
+          expect(professionVersionsService.hasLiveVersion).toHaveBeenCalledWith(
+            professionWithVersion,
+          );
           expect(getOrganisationsFromProfessionSpy).toHaveBeenCalledWith(
             professionWithVersion,
           );
@@ -232,6 +235,7 @@ describe('ProfessionVersionsController', () => {
         professionVersionsService.findByIdWithProfession.mockResolvedValue(
           version,
         );
+        professionVersionsService.hasLiveVersion.mockResolvedValue(true);
 
         (ProfessionPresenter as jest.Mock).mockReturnValue({});
 
@@ -244,7 +248,11 @@ describe('ProfessionVersionsController', () => {
         expect(result).toEqual({
           profession: professionWithVersion,
           presenter: {},
-          qualificationSummaryList: null,
+          hasLiveVersion: true,
+          qualificationSummaryList: await new QualificationPresenter(
+            professionWithVersion.qualification,
+            createMockI18nService(),
+          ).summaryList(true),
           nations: [translationOf('nations.england')],
           industries: [translationOf('industries.example')],
           organisations: [profession.organisation],
@@ -277,6 +285,7 @@ describe('ProfessionVersionsController', () => {
         professionVersionsService.findByIdWithProfession.mockResolvedValue(
           version,
         );
+        professionVersionsService.hasLiveVersion.mockResolvedValue(true);
 
         (ProfessionPresenter as jest.Mock).mockReturnValue({});
 
@@ -289,7 +298,11 @@ describe('ProfessionVersionsController', () => {
         expect(result).toEqual({
           profession: professionWithVersion,
           presenter: {},
-          qualificationSummaryList: null,
+          hasLiveVersion: true,
+          qualificationSummaryList: await new QualificationPresenter(
+            null,
+            createMockI18nService(),
+          ).summaryList(true),
           nations: [],
           industries: [],
           organisations: [profession.organisation],
@@ -298,6 +311,9 @@ describe('ProfessionVersionsController', () => {
         expect(
           professionVersionsService.findByIdWithProfession,
         ).toHaveBeenCalledWith('profession-id', 'version-id');
+        expect(professionVersionsService.hasLiveVersion).toHaveBeenCalledWith(
+          professionWithVersion,
+        );
       });
     });
   });

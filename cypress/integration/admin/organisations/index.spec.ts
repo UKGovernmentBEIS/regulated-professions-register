@@ -30,18 +30,24 @@ describe('Listing organisations', () => {
                   const $row = $header.parent();
 
                   cy.wrap($row).should('contain', organisation.name);
-                  cy.wrap($row).should('contain', latestVersion.alternateName);
-                  cy.get('[data-cy=changed-by-user]').should('contain', '');
+
+                  if (latestVersion.alternateName) {
+                    cy.wrap($row).should(
+                      'contain',
+                      latestVersion.alternateName,
+                    );
+                  }
+                  cy.get('[data-cy=changed-by-text]').should('not.exist');
                   cy.wrap($row).should(
                     'contain',
                     format(new Date(), 'd MMM yyyy'),
                   );
 
-                  cy.translate(
-                    `organisations.status.${latestVersion.status}`,
-                  ).then((status) => {
-                    cy.wrap($row).should('contain', status);
-                  });
+                  cy.translate(`app.status.${latestVersion.status}`).then(
+                    (status) => {
+                      cy.wrap($row).should('contain', status);
+                    },
+                  );
 
                   const professionsForOrganisation = professions.filter(
                     (profession: any) =>

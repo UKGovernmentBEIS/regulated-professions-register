@@ -99,16 +99,12 @@ export class ListEntryPresenter {
       profession: { text: this.profession.name },
       nations: { text: nations },
       lastModified: { text: presenter.lastModified },
-      changedBy: { text: presenter.changedBy },
+      changedBy: { text: presenter.changedBy?.name },
       organisation: {
         text: organisations,
       },
       industry: { text: industries },
-      status: {
-        text: await this.i18nService.translate(
-          `professions.admin.status.${this.profession.status}`,
-        ),
-      },
+      status: { html: await presenter.status },
       actions: { html: viewDetails },
     };
 

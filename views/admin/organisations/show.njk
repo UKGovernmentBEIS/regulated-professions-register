@@ -16,7 +16,7 @@
 
         <h2 class="govuk-heading-s" data-status>
           {{ "organisations.headings.status" | t }}<br>
-          <span class="govuk-body">{{ ("organisations.status." + organisation.status) | t }}</span>
+          {{ organisation.status | status }}
         </h2>
 
         <h2 class="govuk-heading-s" data-cy="last-modified-text">
@@ -24,15 +24,37 @@
           <span class="govuk-body" data-cy="last-modified">{{ presenter.lastModified }}</span>
         </h2>
 
-        <h2 class="govuk-heading-s" data-cy="changed-by-text">
-          {{ "organisations.headings.changed.by" | t }}<br>
-          <span class="govuk-body" data-cy="changed-by-user">{{ presenter.changedBy }}</span>
-        </h2>
+        {% if presenter.changedBy %}
+          <h2 class="govuk-heading-s" data-cy="changed-by-text">
+            {{ "organisations.headings.changed.by" | t }}<br>
+            <span class="govuk-body" data-cy="changed-by-user-name">{{ presenter.changedBy.name }}</span><br>
+            <span class="govuk-body" data-cy="changed-by-user-email">{{ presenter.changedBy.email | email }}</span>
+          </h2>
+        {% endif %}
+
+        {% if hasLiveVersion %}
+          <h2 class="govuk-heading-s" data-cy="currently-published-version-text">
+            {{ "organisations.admin.publicFacingLink.heading" | t }}<br>
+            <span class="govuk-body" data-cy="currently-published-version"><a href="/regulatory-authorities/{{ organisation.slug }}">{{ "organisations.admin.publicFacingLink.label" | t }}</a></span>
+          </h2>
+        {% endif %}
 
         {% if organisation.status !== 'archived' %}
 
           <nav role="navigation" data-cy="actions">
             <ul class="govuk-list">
+              {% if 'editOrganisation' in permissions %}
+              <li>
+                <form method="post" action="/admin/organisations/{{ organisation.id }}/versions">
+                  {{ govukButton({
+                    id: "submit-button",
+                    type: "Submit",
+                    classes: "govuk-button--secondary",
+                    text: (('organisations.admin.button.edit.' + organisation.status) | t)
+                  }) }}
+                </form>
+              </li>
+              {% endif %}
               {% if organisation.status === 'draft' and 'publishOrganisation' in permissions %}
               <li>
                 {{
@@ -45,18 +67,6 @@
                     href: "/admin/organisations/" + organisation.id + "/versions/" + organisation.versionId + "/publish"
                   })
                 }}
-              </li>
-              {% endif %}
-              {% if 'editOrganisation' in permissions %}
-              <li>
-                <form method="post" action="/admin/organisations/{{ organisation.id }}/versions">
-                  {{ govukButton({
-                    id: "submit-button",
-                    type: "Submit",
-                    classes: "govuk-button--secondary",
-                    text: (('organisations.admin.button.edit.' + organisation.status) | t)
-                  }) }}
-                </form>
               </li>
               {% endif %}
               {% if 'deleteOrganisation' in permissions %}

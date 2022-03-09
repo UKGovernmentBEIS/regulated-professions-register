@@ -68,4 +68,31 @@ describe('Showing organisations', () => {
       });
     });
   });
+
+  it('Shows the detail of an organisation with the bare minimum fields', () => {
+    cy.visitAndCheckAccessibility('/regulatory-authorities/no-optional-fields');
+
+    cy.checkSummaryListRowValue(
+      'organisations.label.url',
+      'http://www.example.com',
+    );
+
+    cy.translate('organisations.label.alternateName').then(
+      (alternativeNameHeading) => {
+        cy.get('body').should('not.contain', alternativeNameHeading);
+      },
+    );
+
+    cy.translate('organisations.label.address').then((addressHeading) => {
+      cy.get('body').should('not.contain', addressHeading);
+    });
+
+    cy.translate('organisations.label.email').then((emailHeading) => {
+      cy.get('body').should('not.contain', emailHeading);
+    });
+
+    cy.translate('organisations.label.telephone').then((telephoneHeading) => {
+      cy.get('body').should('not.contain', telephoneHeading);
+    });
+  });
 });

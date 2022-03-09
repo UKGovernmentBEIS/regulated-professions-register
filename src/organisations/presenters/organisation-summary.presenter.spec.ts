@@ -8,12 +8,12 @@ import { Organisation } from '../organisation.entity';
 import { OrganisationSummaryPresenter } from './organisation-summary.presenter';
 import { OrganisationPresenter } from './organisation.presenter';
 
-const mockSummaryList = (): SummaryList => {
+const mockSummaryList = jest.fn((): SummaryList => {
   return {
     classes: 'govuk-summary-list--no-border',
     rows: [],
   };
-};
+});
 
 jest.mock('../presenters/organisation.presenter', () => {
   return {
@@ -45,68 +45,140 @@ describe('OrganisationSummaryPresenter', () => {
 
   describe('present', () => {
     describe('when all relations are present on the organisation', () => {
-      it("should return template variables contraining an organisation's summary", async () => {
-        const organisation = organisationFactory.build({
-          professions: [
-            professionsFactory.build({
-              slug: 'slug-1',
-            }),
-            professionsFactory.build({
-              slug: 'slug-2',
-            }),
-            professionsFactory.build({
-              slug: null,
-            }),
-          ],
+      describe('when `showEmptyFields` is true', () => {
+        it("should return template variables contraining an organisation's summary, with blank fields preserved", async () => {
+          const organisation = organisationFactory.build({
+            professions: [
+              professionsFactory.build({
+                slug: 'slug-1',
+              }),
+              professionsFactory.build({
+                slug: 'slug-2',
+              }),
+              professionsFactory.build({
+                slug: null,
+              }),
+            ],
+          });
+
+          const presenter = new OrganisationSummaryPresenter(
+            organisation,
+            i18nService,
+          );
+
+          const organisationPresenter = new OrganisationPresenter(
+            organisation,
+            i18nService,
+          );
+
+          expect(await presenter.present(true)).toEqual({
+            organisation: organisation,
+            presenter: organisationPresenter,
+            summaryList: mockSummaryList(),
+            professions: [
+              {
+                name: organisation.professions[0].name,
+                id: organisation.professions[0].id,
+                versionId: organisation.professions[0].versionId,
+                slug: organisation.professions[0].slug,
+                summaryList: mockSummaryList(),
+              },
+              {
+                name: organisation.professions[1].name,
+                id: organisation.professions[1].id,
+                versionId: organisation.professions[1].versionId,
+                slug: organisation.professions[1].slug,
+                summaryList: mockSummaryList(),
+              },
+            ],
+          });
+
+          expect(mockSummaryList).toHaveBeenCalledWith({ removeBlank: false });
+
+          expect(OrganisationPresenter).toHaveBeenNthCalledWith(
+            2,
+            organisation,
+            i18nService,
+          );
+
+          expect(ProfessionPresenter).toHaveBeenCalledWith(
+            organisation.professions[0],
+            i18nService,
+          );
+
+          expect(ProfessionPresenter).toHaveBeenCalledWith(
+            organisation.professions[1],
+            i18nService,
+          );
         });
+      });
 
-        const presenter = new OrganisationSummaryPresenter(
-          organisation,
-          i18nService,
-        );
+      describe('when `showEmptyFields` is false', () => {
+        it("should return template variables contraining an organisation's summary, with blank fields removed", async () => {
+          const organisation = organisationFactory.build({
+            professions: [
+              professionsFactory.build({
+                slug: 'slug-1',
+              }),
+              professionsFactory.build({
+                slug: 'slug-2',
+              }),
+              professionsFactory.build({
+                slug: null,
+              }),
+            ],
+          });
 
-        const organisationPresenter = new OrganisationPresenter(
-          organisation,
-          i18nService,
-        );
+          const presenter = new OrganisationSummaryPresenter(
+            organisation,
+            i18nService,
+          );
 
-        expect(await presenter.present()).toEqual({
-          organisation: organisation,
-          presenter: organisationPresenter,
-          summaryList: mockSummaryList(),
-          professions: [
-            {
-              name: organisation.professions[0].name,
-              id: organisation.professions[0].id,
-              versionId: organisation.professions[0].versionId,
-              slug: organisation.professions[0].slug,
-              summaryList: mockSummaryList(),
-            },
-            {
-              name: organisation.professions[1].name,
-              id: organisation.professions[1].id,
-              versionId: organisation.professions[1].versionId,
-              slug: organisation.professions[1].slug,
-              summaryList: mockSummaryList(),
-            },
-          ],
+          const organisationPresenter = new OrganisationPresenter(
+            organisation,
+            i18nService,
+          );
+
+          expect(await presenter.present(false)).toEqual({
+            organisation: organisation,
+            presenter: organisationPresenter,
+            summaryList: mockSummaryList(),
+            professions: [
+              {
+                name: organisation.professions[0].name,
+                id: organisation.professions[0].id,
+                versionId: organisation.professions[0].versionId,
+                slug: organisation.professions[0].slug,
+                summaryList: mockSummaryList(),
+              },
+              {
+                name: organisation.professions[1].name,
+                id: organisation.professions[1].id,
+                versionId: organisation.professions[1].versionId,
+                slug: organisation.professions[1].slug,
+                summaryList: mockSummaryList(),
+              },
+            ],
+          });
+
+          expect(mockSummaryList).toHaveBeenCalledWith({ removeBlank: true });
+
+          expect(OrganisationPresenter).toHaveBeenNthCalledWith(
+            2,
+            organisation,
+            i18nService,
+          );
+
+          expect(ProfessionPresenter).toHaveBeenCalledWith(
+            organisation.professions[0],
+            i18nService,
+          );
+
+          expect(ProfessionPresenter).toHaveBeenCalledWith(
+            organisation.professions[1],
+            i18nService,
+          );
         });
-
-        expect(OrganisationPresenter).toHaveBeenNthCalledWith(
-          2,
-          organisation,
-          i18nService,
-        );
-
-        expect(ProfessionPresenter).toHaveBeenCalledWith(
-          organisation.professions[0],
-          i18nService,
-        );
-
-        expect(ProfessionPresenter).toHaveBeenCalledWith(
-          organisation.professions[1],
-          i18nService,
-        );
       });
     });
 
@@ -124,12 +196,16 @@ describe('OrganisationSummaryPresenter', () => {
           organisation,
           i18nService,
         );
-        expect(async () => {
-          await presenter.present();
+        await expect(async () => {
+          await presenter.present(false);
         }).rejects.toThrowError(
           'You must eagerly load professions to show professions. Try calling a "WithProfessions" method on the `OrganisationsService` class',
         );
       });
     });
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 });

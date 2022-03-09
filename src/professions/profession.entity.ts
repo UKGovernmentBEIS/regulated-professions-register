@@ -72,7 +72,7 @@ export class Profession {
   legislations?: Legislation[];
   changedByUser?: User;
   versionId?: string;
-  status?: string;
+  status?: ProfessionVersionStatus;
   lastModified?: Date;
 
   constructor(

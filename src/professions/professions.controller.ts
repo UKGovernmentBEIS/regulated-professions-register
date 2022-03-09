@@ -58,7 +58,7 @@ export class ProfessionsController {
     return {
       profession,
       qualificationSummaryList: qualification
-        ? await qualification.summaryList()
+        ? await qualification.summaryList(false)
         : null,
       nations,
       industries,

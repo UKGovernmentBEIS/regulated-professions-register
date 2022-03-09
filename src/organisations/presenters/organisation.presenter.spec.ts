@@ -19,12 +19,16 @@ import { emailOf } from '../../testutils/email-of';
 import { formatEmail } from '../../helpers/format-email.helper';
 import { ProfessionVersionStatus } from '../../professions/profession-version.entity';
 import professionVersionFactory from '../../testutils/factories/profession-version';
+import { OrganisationVersionStatus } from '../organisation-version.entity';
+import { statusOf } from '../../testutils/status-of';
+import { formatStatus } from '../../helpers/format-status.helper';
 
 jest.mock('../../helpers/escape.helper');
 jest.mock('../../helpers/format-multiline-string.helper');
 jest.mock('../../common/utils');
 jest.mock('../../helpers/format-link.helper');
 jest.mock('../../helpers/format-email.helper');
+jest.mock('../../helpers/format-status.helper');
 
 describe('OrganisationPresenter', () => {
   describe('tableRow', () => {
@@ -46,9 +50,11 @@ describe('OrganisationPresenter', () => {
             professions: professions,
             lastModified: new Date('01-01-2022'),
             changedByUser: userFactory.build({ name: 'beis-rpr' }),
+            status: OrganisationVersionStatus.Draft,
           });
 
           (escape as jest.Mock).mockImplementation(escapeOf);
+          (formatStatus as jest.Mock).mockImplementation(statusOf);
 
           const presenter = new OrganisationPresenter(
             organisation,
@@ -65,13 +71,13 @@ describe('OrganisationPresenter', () => {
             text: presenter.lastModified,
           });
           expect(tableRow[4]).toEqual({
-            text: presenter.changedBy,
+            text: presenter.changedBy.name,
             attributes: {
               'data-cy': 'changed-by-user',
             },
           });
           expect(tableRow[5]).toEqual({
-            html: `Translation of \`organisations.status.${organisation.status}\``,
+            html: statusOf(OrganisationVersionStatus.Draft),
           });
           expect(tableRow[6]).toEqual({
             html: expect.stringContaining(
@@ -118,8 +124,10 @@ describe('OrganisationPresenter', () => {
             professions: professions,
             lastModified: new Date('01-01-2022'),
             changedByUser: userFactory.build({ name: 'beis-rpr' }),
+            status: OrganisationVersionStatus.Draft,
           });
           (escape as jest.Mock).mockImplementation(escapeOf);
+          (formatStatus as jest.Mock).mockImplementation(statusOf);
 
           const presenter = new OrganisationPresenter(
             organisation,
@@ -140,13 +148,13 @@ describe('OrganisationPresenter', () => {
             text: presenter.lastModified,
           });
           expect(tableRow[4]).toEqual({
-            text: presenter.changedBy,
+            text: presenter.changedBy.name,
             attributes: {
               'data-cy': 'changed-by-user',
             },
           });
           expect(tableRow[5]).toEqual({
-            html: `Translation of \`organisations.status.${organisation.status}\``,
+            html: statusOf(OrganisationVersionStatus.Draft),
           });
         });
       });
@@ -216,6 +224,9 @@ describe('OrganisationPresenter', () => {
         it('should filter out empty fields', async () => {
           const i18nService = createMockI18nService();
           (escape as jest.Mock).mockImplementation(escapeOf);
+          (formatMultilineString as jest.Mock).mockImplementation(multilineOf);
+          (formatEmail as jest.Mock).mockImplementation(emailOf);
+          (formatLink as jest.Mock).mockImplementation(linkOf);
 
           const organisation = organisationFactory
             .withVersion()
@@ -232,7 +243,7 @@ describe('OrganisationPresenter', () => {
             list.rows.filter(
               (item) =>
                 item.key ===
-                { text: 'Translation of `organisations.label.alternateName`' },
+                { text: translationOf('organisations.label.alternateName') },
             ).length,
           ).toEqual(0);
         });
@@ -361,9 +372,12 @@ describe('OrganisationPresenter', () => {
 
   describe('changedBy', () => {
     describe('when the Profession has been edited by a user', () => {
-      it('returns the name of the user', () => {
+      it('returns the details of the user', () => {
         const organisation = organisationFactory.build({
-          changedByUser: userFactory.build({ name: 'beis-rpr' }),
+          changedByUser: userFactory.build({
+            name: 'beis-rpr',
+            email: 'beis-rpr@example.com',
+          }),
         });
 
         const presenter = new OrganisationPresenter(
@@ -371,12 +385,15 @@ describe('OrganisationPresenter', () => {
           createMockI18nService(),
         );
 
-        expect(presenter.changedBy).toEqual('beis-rpr');
+        expect(presenter.changedBy).toEqual({
+          name: 'beis-rpr',
+          email: 'beis-rpr@example.com',
+        });
       });
     });
 
     describe("when the Profession hasn't yet been edited by a user", () => {
-      it('returns an empty string', () => {
+      it('returns `null`', () => {
         const organisation = organisationFactory.build({
           changedByUser: undefined,
         });
@@ -386,7 +403,7 @@ describe('OrganisationPresenter', () => {
           createMockI18nService(),
         );
 
-        expect(presenter.changedBy).toEqual('');
+        expect(presenter.changedBy).toEqual(null);
       });
     });
   });

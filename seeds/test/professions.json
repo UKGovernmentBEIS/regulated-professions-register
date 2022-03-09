@@ -95,7 +95,7 @@
   {
     "name": "Profession with no optional fields",
     "slug": "no-optional-fields",
-    "organisation": "Department for Education",
+    "organisation": "Organisation with no optional fields",
     "additionalOrganisation": null,
     "versions": [
       {

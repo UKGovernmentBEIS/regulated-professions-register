@@ -272,16 +272,17 @@
       }
     },
     "status": {
-      "heading": "Status",
-      "live": "Published",
-      "draft": "Draft",
-      "archived": "Archived"
+      "heading": "Status"
     },
     "changed": {
       "by": "Changed by",
       "on": "Last updated"
     },
-    "viewDetails": "View details <span class='govuk-visually-hidden'>about {name}</span>"
+    "viewDetails": "View details <span class='govuk-visually-hidden'>about {name}</span>",
+    "publicFacingLink": {
+      "heading": "Currently published version",
+      "label": "Public facing link"
+    }
   },
   "search": {
     "heading": "Find a regulated profession",

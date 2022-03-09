@@ -213,6 +213,19 @@ export class ProfessionVersionsService {
     return Profession.withVersion(version.profession, version);
   }
 
+  async hasLiveVersion(profession: Profession): Promise<boolean> {
+    return (
+      (await this.repository
+        .createQueryBuilder('professionVersion')
+        .leftJoinAndSelect('professionVersion.profession', 'profession')
+        .where('professionVersion.status = :status AND profession.id = :id', {
+          status: ProfessionVersionStatus.Live,
+          id: profession.id,
+        })
+        .getCount()) > 0
+    );
+  }
+
   async findByIdWithProfession(
     professionId: string,
     id: string,

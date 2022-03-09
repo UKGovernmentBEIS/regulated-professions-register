@@ -9,13 +9,14 @@
   {% include "../../_messages.njk" %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
+      {% set showEmptyProfessionDetails = true %}
       {% include "../../professions/_profession-details.njk" %}
     </div>
     <div class="govuk-grid-column-one-third">
       <aside class="app-related-items rpr-internal__details-page-sidebar" role="complementary">
         <h2 class="govuk-heading-s" data-status>
           {{ "professions.admin.status.heading" | t }}<br>
-          <span class="govuk-body">{{ ("professions.admin.status." + profession.status) | t }}</span>
+          {{ profession.status | status }}
         </h2>
 
         <h2 class="govuk-heading-s" data-cy="last-modified-text">
@@ -23,26 +24,24 @@
           <span class="govuk-body" data-cy="last-modified">{{ presenter.lastModified }}</span>
         </h2>
 
-        <h2 class="govuk-heading-s" data-cy="changed-by-text">
-          {{ "professions.admin.changed.by" | t }}<br>
-          <span class="govuk-body" data-cy="changed-by-user">{{ presenter.changedBy }}</span>
-        </h2>
+        {% if presenter.changedBy %}
+          <h2 class="govuk-heading-s" data-cy="changed-by-text">
+            {{ "professions.admin.changed.by" | t }}<br>
+            <span class="govuk-body" data-cy="changed-by-user-name">{{ presenter.changedBy.name }}</span><br>
+            <span class="govuk-body" data-cy="changed-by-user-email">{{ presenter.changedBy.email | email }}</span>
+          </h2>
+        {% endif %}
+
+        {% if hasLiveVersion %}
+          <h2 class="govuk-heading-s" data-cy="currently-published-version-text">
+            {{ "professions.admin.publicFacingLink.heading" | t }}<br>
+            <span class="govuk-body" data-cy="currently-published-version"><a href="/professions/{{ profession.slug }}">{{ "professions.admin.publicFacingLink.label" | t }}</a></span>
+          </h2>
+        {% endif %}
 
         {% if profession.status !== 'archived' %}
           <nav role="navigation" data-cy="actions">
             <ul class="govuk-list">
-              {% if profession.status === 'draft' and 'publishProfession' in permissions %}
-                <li>
-                  {{
-                    govukButton({
-                      text: ('professions.form.button.publish' | t),
-                      classes: "govuk-button",
-                      attributes: { "data-cy": "publish-button" },
-                      href: "/admin/professions/" + profession.id + "/versions/" + profession.versionId + "/publish"
-                    })
-                  }}
-                </li>
-              {% endif %}
               {% if 'editProfession' in permissions %}
               <li>
                   <form method="post" action="/admin/professions/{{ profession.id }}/versions">
@@ -57,6 +56,18 @@
                     }}
                   </form>
               </li>
+              {% endif %}
+              {% if profession.status === 'draft' and 'publishProfession' in permissions %}
+                <li>
+                  {{
+                    govukButton({
+                      text: ('professions.form.button.publish' | t),
+                      classes: "govuk-button",
+                      attributes: { "data-cy": "publish-button" },
+                      href: "/admin/professions/" + profession.id + "/versions/" + profession.versionId + "/publish"
+                    })
+                  }}
+                </li>
               {% endif %}
               {% if 'deleteProfession' in permissions %}
               <li>

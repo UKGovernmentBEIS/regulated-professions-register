@@ -89,40 +89,114 @@ describe(QualificationPresenter, () => {
     });
 
     describe('summaryList', () => {
-      it('returns a summary list of all Qualification fields', async () => {
-        const qualification = qualificationFactory.build({
-          otherCountriesRecognitionUrl: 'http://example.com',
+      describe('when a Qualification has all fields', () => {
+        it('returns a summary list of all Qualification fields', async () => {
+          const qualification = qualificationFactory.build({
+            otherCountriesRecognitionUrl: 'http://example.com',
+          });
+
+          const presenter = new QualificationPresenter(
+            qualification,
+            createMockI18nService(),
+          );
+
+          await expect(presenter.summaryList(true)).resolves.toEqual({
+            classes: 'govuk-summary-list--no-border',
+            rows: [
+              {
+                key: {
+                  text: translationOf(
+                    'professions.show.qualification.routesToObtain',
+                  ),
+                },
+                value: {
+                  html: presenter.routesToObtain,
+                },
+              },
+              {
+                key: {
+                  text: translationOf(
+                    'professions.show.qualification.moreInformationUrl',
+                  ),
+                },
+                value: {
+                  html: presenter.moreInformationUrl,
+                },
+              },
+            ],
+          });
         });
+      });
 
-        const presenter = new QualificationPresenter(
-          qualification,
-          createMockI18nService(),
-        );
+      describe('when a Qualification is missing fields', () => {
+        describe('when `showEmptyFields` is true', () => {
+          it('returns a summary list of all Qualification fields', async () => {
+            const qualification = qualificationFactory.build({
+              otherCountriesRecognitionUrl: 'http://example.com',
+              url: '',
+            });
 
-        expect(presenter.summaryList()).resolves.toEqual({
-          classes: 'govuk-summary-list--no-border',
-          rows: [
-            {
-              key: {
-                text: translationOf(
-                  'professions.show.qualification.routesToObtain',
-                ),
-              },
-              value: {
-                html: presenter.routesToObtain,
-              },
-            },
-            {
-              key: {
-                text: translationOf(
-                  'professions.show.qualification.moreInformationUrl',
-                ),
-              },
-              value: {
-                html: presenter.moreInformationUrl,
-              },
-            },
-          ],
+            const presenter = new QualificationPresenter(
+              qualification,
+              createMockI18nService(),
+            );
+
+            await expect(presenter.summaryList(true)).resolves.toEqual({
+              classes: 'govuk-summary-list--no-border',
+              rows: [
+                {
+                  key: {
+                    text: translationOf(
+                      'professions.show.qualification.routesToObtain',
+                    ),
+                  },
+                  value: {
+                    html: presenter.routesToObtain,
+                  },
+                },
+                {
+                  key: {
+                    text: translationOf(
+                      'professions.show.qualification.moreInformationUrl',
+                    ),
+                  },
+                  value: {
+                    html: presenter.moreInformationUrl,
+                  },
+                },
+              ],
+            });
+          });
+        });
+        describe('when `showEmptyFields` is false', () => {
+          it('returns a summary list of all non-empty Qualification fields', async () => {
+            const qualification = qualificationFactory.build({
+              otherCountriesRecognitionUrl: 'http://example.com',
+              url: '',
+            });
+
+            const presenter = new QualificationPresenter(
+              qualification,
+              createMockI18nService(),
+            );
+
+            await expect(presenter.summaryList(false)).resolves.toEqual({
+              classes: 'govuk-summary-list--no-border',
+              rows: [
+                {
+                  key: {
+                    text: translationOf(
+                      'professions.show.qualification.routesToObtain',
+                    ),
+                  },
+                  value: {
+                    html: presenter.routesToObtain,
+                  },
+                },
+                undefined,
+              ],
+            });
+          });
         });
       });
     });

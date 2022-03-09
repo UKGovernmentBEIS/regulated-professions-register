@@ -6,13 +6,12 @@ import { I18nService } from 'nestjs-i18n';
 import { OrganisationVersionsController } from './organisation-versions.controller';
 
 import { OrganisationVersionsService } from '../organisation-versions.service';
-import { OrganisationsService } from '../organisations.service';
 
 import { Organisation } from '../organisation.entity';
 
 import { OrganisationSummaryPresenter } from '../presenters/organisation-summary.presenter';
 
-import { ShowTemplate } from '../interfaces/show-template.interface';
+import { ShowTemplate } from './interfaces/show-template.interface';
 
 import organisationFactory from '../../testutils/factories/organisation';
 import organisationVersionFactory from '../../testutils/factories/organisation-version';
@@ -35,20 +34,14 @@ describe('OrganisationVersionsController', () => {
   let i18nService: I18nService;
 
   let organisationVersionsService: DeepMocked<OrganisationVersionsService>;
-  let organisationsService: DeepMocked<OrganisationsService>;
 
   beforeEach(async () => {
-    organisationsService = createMock<OrganisationsService>();
     organisationVersionsService = createMock<OrganisationVersionsService>();
     i18nService = createMockI18nService();
 
     const module: TestingModule = await Test.createTestingModule({
       controllers: [OrganisationVersionsController],
       providers: [
-        {
-          provide: OrganisationsService,
-          useValue: organisationsService,
-        },
         {
           provide: OrganisationVersionsService,
           useValue: organisationVersionsService,
@@ -112,10 +105,12 @@ describe('OrganisationVersionsController', () => {
       organisationVersionsService.findByIdWithOrganisation.mockResolvedValue(
         version,
       );
+      organisationVersionsService.hasLiveVersion.mockResolvedValue(true);
 
       const showTemplate: ShowTemplate = {
         organisation,
         presenter: {} as OrganisationPresenter,
+        hasLiveVersion: true,
         summaryList: {
           classes: 'govuk-summary-list--no-border',
           rows: [],
@@ -134,6 +129,9 @@ describe('OrganisationVersionsController', () => {
       expect(
         organisationVersionsService.findByIdWithOrganisation,
       ).toHaveBeenCalledWith('org-uuid', 'version-uuid');
+      expect(organisationVersionsService.hasLiveVersion).toHaveBeenCalledWith(
+        organisationWithVersion,
+      );
 
       expect(OrganisationSummaryPresenter).toHaveBeenCalledWith(
         organisationWithVersion,

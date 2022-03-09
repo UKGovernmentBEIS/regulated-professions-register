@@ -17,7 +17,7 @@ describe('Archiving professions', () => {
           cy.get('a').contains('View details').click();
         });
 
-      cy.translate('professions.admin.status.draft').then((status) => {
+      cy.translate('app.status.draft').then((status) => {
         cy.get('h2[data-status]').should('contain', status);
       });
 
@@ -50,10 +50,14 @@ describe('Archiving professions', () => {
 
       cy.get('[data-cy=actions]').should('not.exist');
 
-      cy.translate('professions.admin.status.archived').then((status) => {
+      cy.translate('app.status.archived').then((status) => {
         cy.get('h2[data-status]').should('contain', status);
       });
-      cy.get('[data-cy=changed-by-user]').should('contain', 'Registrar');
+      cy.get('[data-cy=changed-by-user-name]').should('contain', 'Registrar');
+      cy.get('[data-cy=changed-by-user-email]').should(
+        'contain',
+        'beis-rpr+registrar@dxw.com',
+      );
       cy.get('[data-cy=last-modified]').should(
         'contain',
         format(new Date(), 'd MMM yyyy'),
@@ -66,7 +70,7 @@ describe('Archiving professions', () => {
         .then(($header) => {
           const $row = $header.parent();
 
-          cy.translate('professions.admin.status.archived').then((status) => {
+          cy.translate('app.status.archived').then((status) => {
             cy.wrap($row).should('contain', status);
           });
         });
@@ -85,6 +89,24 @@ describe('Archiving professions', () => {
           cy.get('a').contains('View details').click();
         });
 
+      cy.get('[data-cy=currently-published-version-text]').within(($h2) => {
+        cy.translate('professions.admin.publicFacingLink.heading').then(
+          (publicFacingLinkHeading) => {
+            cy.wrap($h2).should('contain', publicFacingLinkHeading);
+          },
+        );
+
+        cy.translate('professions.admin.publicFacingLink.label').then(
+          (publicFacingLinkLabel) => {
+            cy.get('a').should('contain', publicFacingLinkLabel);
+          },
+        );
+
+        cy.get('a').click();
+      });
+      cy.get('body').should('contain', 'Registered Trademark Attorney');
+      cy.go('back');
+
       cy.translate('professions.admin.button.archive').then((button) => {
         cy.get('a').contains(button).click();
       });
@@ -95,14 +117,19 @@ describe('Archiving professions', () => {
 
       cy.get('[data-cy=actions]').should('not.exist');
 
-      cy.translate('professions.admin.status.archived').then((status) => {
+      cy.translate('app.status.archived').then((status) => {
         cy.get('h2[data-status]').should('contain', status);
       });
-      cy.get('[data-cy=changed-by-user]').should('contain', 'Registrar');
+      cy.get('[data-cy=changed-by-user-name]').should('contain', 'Registrar');
+      cy.get('[data-cy=changed-by-user-email]').should(
+        'contain',
+        'beis-rpr+registrar@dxw.com',
+      );
       cy.get('[data-cy=last-modified]').should(
         'contain',
         format(new Date(), 'd MMM yyyy'),
       );
+      cy.get('[data-cy=currently-published-version-text]').should('not.exist');
 
       cy.visit('/admin/professions');
 
@@ -111,7 +138,7 @@ describe('Archiving professions', () => {
         .then(($header) => {
           const $row = $header.parent();
 
-          cy.translate('professions.admin.status.archived').then((status) => {
+          cy.translate('app.status.archived').then((status) => {
             cy.wrap($row).should('contain', status);
           });
         });

@@ -10,10 +10,14 @@ import { createMockI18nService } from '../../testutils/create-mock-i18n-service'
 import { translationOf } from '../../testutils/translation-of';
 import userFactory from '../../testutils/factories/user';
 import { formatDate } from '../../common/utils';
+import { ProfessionVersionStatus } from '../profession-version.entity';
+import { statusOf } from '../../testutils/status-of';
+import { formatStatus } from '../../helpers/format-status.helper';
 
 jest.mock('../../nations/helpers/stringifyNations');
 jest.mock('../../helpers/format-multiline-string.helper');
 jest.mock('../../common/utils');
+jest.mock('../../helpers/format-status.helper');
 
 describe('ProfessionPresenter', () => {
   let profession: Profession;
@@ -52,9 +56,12 @@ describe('ProfessionPresenter', () => {
 
   describe('changedBy', () => {
     describe('when the Profession has been edited by a user', () => {
-      it('returns the name of the user', () => {
+      it('returns the details of the user', () => {
         const profession = professionFactory.build({
-          changedByUser: userFactory.build({ name: 'beis-rpr' }),
+          changedByUser: userFactory.build({
+            name: 'beis-rpr',
+            email: 'beis-rpr@example.com',
+          }),
         });
 
         const presenter = new ProfessionPresenter(
@@ -62,12 +69,15 @@ describe('ProfessionPresenter', () => {
           createMockI18nService(),
         );
 
-        expect(presenter.changedBy).toEqual('beis-rpr');
+        expect(presenter.changedBy).toEqual({
+          name: 'beis-rpr',
+          email: 'beis-rpr@example.com',
+        });
       });
     });
 
     describe("when the Profession hasn't yet been edited by a user", () => {
-      it('returns an empty string', () => {
+      it('returns `null`', () => {
         const profession = professionFactory.build({
           changedByUser: undefined,
         });
@@ -77,13 +87,13 @@ describe('ProfessionPresenter', () => {
           createMockI18nService(),
         );
 
-        expect(presenter.changedBy).toEqual('');
+        expect(presenter.changedBy).toEqual(null);
       });
     });
   });
 
   describe('lastModified', () => {
-    it('should format the lastModified date on a profession', () => {
+    it('should format the lastModified date on a Profession', () => {
       const profession = professionFactory.build({
         lastModified: new Date('01-01-2022'),
       });
@@ -96,6 +106,30 @@ describe('ProfessionPresenter', () => {
       presenter.lastModified;
       expect(formatDate as jest.Mock).toHaveBeenCalledWith(
         new Date('01-01-2022'),
+      );
+    });
+  });
+
+  describe('status', () => {
+    it('should format the status on a Profession', async () => {
+      const profession = professionFactory.build({
+        status: ProfessionVersionStatus.Draft,
+      });
+
+      const i18nService = createMockI18nService();
+
+      const presenter = new ProfessionPresenter(profession, i18nService);
+
+      (formatStatus as jest.Mock).mockImplementation(async (status) =>
+        statusOf(status),
+      );
+
+      const result = await presenter.status;
+
+      expect(result).toEqual(statusOf(ProfessionVersionStatus.Draft));
+      expect(formatStatus).toBeCalledWith(
+        ProfessionVersionStatus.Draft,
+        i18nService,
       );
     });
   });

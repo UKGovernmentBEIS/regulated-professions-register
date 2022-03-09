@@ -182,11 +182,24 @@ describe('Editing organisations', () => {
           'New Alternate Name',
         );
 
-        cy.translate(`organisations.status.draft`).then((status) => {
+        cy.translate('app.status.draft').then((status) => {
           cy.get('h2[data-status]').should('contain', status);
         });
 
-        cy.get('[data-cy=changed-by-user]').should('contain', 'Editor');
+        cy.translate('organisations.headings.changed.by').then(
+          (changedByText) => {
+            cy.get('[data-cy=changed-by-text]').should(
+              'contain',
+              changedByText,
+            );
+          },
+        );
+        cy.get('[data-cy=changed-by-user-name]').should('contain', 'Editor');
+        cy.get('[data-cy=changed-by-user-email]').should(
+          'contain',
+          'beis-rpr+editor@dxw.com',
+        );
+
         cy.get('[data-cy=last-modified]').should(
           'contain',
           format(new Date(), 'd MMM yyyy'),

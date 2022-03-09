@@ -32,7 +32,7 @@ describe('ListEntryPresenter', () => {
             industryFactory.build({ name: 'industries.law' }),
             industryFactory.build({ name: 'industries.finance' }),
           ],
-          status: 'live',
+          status: ProfessionVersionStatus.Live,
           changedByUser: userFactory.build({ name: 'Administrator' }),
           lastModified: new Date('12-08-2003'),
           versionId: 'version-id',
@@ -41,6 +41,7 @@ describe('ListEntryPresenter', () => {
         (ProfessionPresenter as jest.Mock).mockReturnValue({
           changedBy: 'Administrator',
           lastModified: '12-08-2003',
+          status: new Promise((res) => res('Published')),
         });
 
         const getOrganisationsFromProfessionSpy = jest.spyOn(
@@ -68,7 +69,7 @@ describe('ListEntryPresenter', () => {
           },
           { text: '12-08-2003' },
 
-          { text: translationOf('professions.admin.status.live') },
+          { html: 'Published' },
           {
             html: `<a href="/admin/professions/profession-id/versions/version-id">${translationOf(
               'professions.admin.viewDetails',
@@ -92,15 +93,16 @@ describe('ListEntryPresenter', () => {
             industryFactory.build({ name: 'industries.law' }),
             industryFactory.build({ name: 'industries.finance' }),
           ],
-          status: 'draft',
+          status: ProfessionVersionStatus.Draft,
           lastModified: new Date('12-08-2003'),
           changedByUser: userFactory.build({ name: 'Editor' }),
           versionId: 'version-id',
         });
 
         (ProfessionPresenter as jest.Mock).mockReturnValue({
-          changedBy: 'Editor',
+          changedBy: { name: 'Editor' },
           lastModified: '12-08-2003',
+          status: new Promise((res) => res('Draft')),
         });
 
         const presenter = new ListEntryPresenter(
@@ -122,7 +124,7 @@ describe('ListEntryPresenter', () => {
           },
           { text: '12-08-2003' },
           { text: 'Editor' },
-          { text: translationOf('professions.admin.status.draft') },
+          { html: 'Draft' },
           {
             html: `<a href="/admin/professions/profession-id/versions/version-id">${translationOf(
               'professions.admin.viewDetails',
@@ -159,8 +161,9 @@ describe('ListEntryPresenter', () => {
         );
 
         (ProfessionPresenter as jest.Mock).mockReturnValue({
-          changedBy: 'Editor',
+          changedBy: { name: 'Editor' },
           lastModified: '12-08-2003',
+          status: new Promise((res) => res('Archived')),
         });
 
         const presenter = new ListEntryPresenter(
@@ -178,7 +181,7 @@ describe('ListEntryPresenter', () => {
           },
           { text: '12-08-2003' },
           { text: 'Editor' },
-          { text: translationOf('professions.admin.status.draft') },
+          { html: 'Archived' },
           {
             html: `<a href="/admin/professions/profession-id/versions/version-id">${translationOf(
               'professions.admin.viewDetails',

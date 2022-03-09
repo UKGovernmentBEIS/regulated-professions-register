@@ -8,6 +8,7 @@ import { formatDate } from '../../common/utils';
 import { formatLink } from '../../helpers/format-link.helper';
 import { formatEmail } from '../../helpers/format-email.helper';
 import { Profession } from '../../professions/profession.entity';
+import { formatStatus } from '../../helpers/format-status.helper';
 
 interface OrganisationSummaryListOptions {
   classes?: string;
@@ -37,15 +38,13 @@ export class OrganisationPresenter {
         text: this.lastModified,
       },
       {
-        text: this.changedBy,
+        text: this.changedBy?.name,
         attributes: {
           'data-cy': 'changed-by-user',
         },
       },
       {
-        html: await this.i18nService.translate(
-          `organisations.status.${this.organisation.status}`,
-        ),
+        html: await formatStatus(this.organisation.status, this.i18nService),
       },
       {
         html: `<a class="govuk-link" href="/admin/organisations/${
@@ -118,7 +117,7 @@ export class OrganisationPresenter {
 
     rows = removeBlank
       ? rows.filter((item) => {
-          return item.value.text !== '' && item.value.html !== '';
+          return !!item.value.text || !!item.value.html;
         })
       : rows;
 
@@ -158,10 +157,15 @@ export class OrganisationPresenter {
     };
   }
 
-  get changedBy(): string {
-    return this.organisation.changedByUser
-      ? this.organisation.changedByUser.name
-      : '';
+  get changedBy(): { name: string; email: string } {
+    const user = this.organisation.changedByUser;
+
+    return user
+      ? {
+          name: user.name,
+          email: user.email,
+        }
+      : null;
   }
 
   get lastModified(): string {

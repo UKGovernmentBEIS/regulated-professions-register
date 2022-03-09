@@ -15,25 +15,24 @@ import { BackLink } from '../../common/decorators/back-link.decorator';
 
 import { AuthenticationGuard } from '../../common/authentication.guard';
 
-import { OrganisationsService } from '../organisations.service';
 import { OrganisationVersionsService } from '../organisation-versions.service';
 
 import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
 
 import { Organisation } from '../organisation.entity';
 
-import { ShowTemplate } from '../interfaces/show-template.interface';
+import { ShowTemplate } from './interfaces/show-template.interface';
 
 import { OrganisationSummaryPresenter } from '../presenters/organisation-summary.presenter';
 import { Permissions } from '../../common/permissions.decorator';
 import { UserPermission } from '../../users/user-permission';
 
 import { getActingUser } from '../../users/helpers/get-acting-user.helper';
+
 @UseGuards(AuthenticationGuard)
 @Controller('/admin/organisations')
 export class OrganisationVersionsController {
   constructor(
-    private readonly organisationsService: OrganisationsService,
     private readonly organisationVersionsService: OrganisationVersionsService,
     private readonly i18nService: I18nService,
   ) {}
@@ -84,11 +83,17 @@ export class OrganisationVersionsController {
       true,
     );
 
+    const hasLiveVersion =
+      await this.organisationVersionsService.hasLiveVersion(organisation);
+
     const organisationSummaryPresenter = new OrganisationSummaryPresenter(
       organisation,
       this.i18nService,
     );
 
-    return organisationSummaryPresenter.present();
+    return {
+      ...(await organisationSummaryPresenter.present(true)),
+      hasLiveVersion,
+    };
   }
 }

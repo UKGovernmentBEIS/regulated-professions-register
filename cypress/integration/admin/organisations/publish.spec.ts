@@ -11,15 +11,18 @@ describe('Publishing organisations', () => {
       cy.get('a').contains('Regulatory authorities').click();
       cy.checkAccessibility();
 
-      cy.contains('Department for Education')
+      cy.contains('Draft Organisation')
         .parent('tr')
         .within(() => {
           cy.get('a').contains('View details').click();
         });
 
-      cy.translate('organisations.status.draft').then((status) => {
+      cy.translate('app.status.draft').then((status) => {
         cy.get('h2[data-status]').should('contain', status);
       });
+
+      cy.get('[data-cy=changed-by-text]').should('not.exist');
+      cy.get('[data-cy=currently-published-version-text]').should('not.exist');
 
       cy.translate('organisations.admin.button.publish').then(
         (publishButton) => {
@@ -36,7 +39,7 @@ describe('Publishing organisations', () => {
       );
 
       cy.translate('organisations.admin.publish.heading', {
-        organisationName: 'Department for Education',
+        organisationName: 'Draft Organisation',
       }).then((heading) => {
         cy.contains(heading);
       });
@@ -46,7 +49,7 @@ describe('Publishing organisations', () => {
         cy.get('a').contains(backLink).click();
       });
       cy.checkAccessibility();
-      cy.get('h1').should('contain', 'Department for Education');
+      cy.get('h1').should('contain', 'Draft Organisation');
 
       cy.translate('organisations.admin.button.publish').then(
         (publishButton) => {
@@ -75,20 +78,47 @@ describe('Publishing organisations', () => {
         },
       );
 
-      cy.get('[data-cy=changed-by-user]').should('contain', 'Editor');
+      cy.translate('organisations.headings.changed.by').then(
+        (changedByText) => {
+          cy.get('[data-cy=changed-by-text]').should('contain', changedByText);
+        },
+      );
+      cy.get('[data-cy=changed-by-user-name]').should('contain', 'Editor');
+      cy.get('[data-cy=changed-by-user-email]').should(
+        'contain',
+        'beis-rpr+editor@dxw.com',
+      );
       cy.get('[data-cy=last-modified]').should(
         'contain',
         format(new Date(), 'd MMM yyyy'),
       );
 
+      cy.get('[data-cy=currently-published-version-text]').within(($h2) => {
+        cy.translate('organisations.admin.publicFacingLink.heading').then(
+          (publicFacingLinkHeading) => {
+            cy.wrap($h2).should('contain', publicFacingLinkHeading);
+          },
+        );
+
+        cy.translate('organisations.admin.publicFacingLink.label').then(
+          (publicFacingLinkLabel) => {
+            cy.get('a').should('contain', publicFacingLinkLabel);
+          },
+        );
+
+        cy.get('a').click();
+      });
+      cy.get('body').should('contain', 'Draft Organisation');
+      cy.go('back');
+
       cy.visitAndCheckAccessibility('/admin/organisations');
 
       cy.get('tr')
-        .contains('Department for Education')
+        .contains('Draft Organisation')
         .then(($header) => {
           const $row = $header.parent();
 
-          cy.translate(`organisations.status.live`).then((status) => {
+          cy.translate(`app.status.live`).then((status) => {
             cy.wrap($row).should('contain', status);
           });
         });
@@ -98,7 +128,7 @@ describe('Publishing organisations', () => {
       cy.get('a').contains('Regulatory authorities').click();
       cy.checkAccessibility();
 
-      cy.contains('Department for Education')
+      cy.contains('Draft Organisation')
         .parent('tr')
         .within(() => {
           cy.get('a').contains('View details').click();
@@ -136,7 +166,7 @@ describe('Publishing organisations', () => {
         cy.get('a').contains(backLink).click();
       });
       cy.translate('organisations.admin.edit.heading', {
-        organisationName: 'Department for Education',
+        organisationName: 'Draft Organisation',
       }).then((editHeading) => {
         cy.get('body').should('contain', editHeading);
       });
@@ -157,7 +187,7 @@ describe('Publishing organisations', () => {
       );
 
       cy.translate('organisations.admin.publish.heading', {
-        organisationName: 'Department for Education',
+        organisationName: 'Draft Organisation',
       }).then((heading) => {
         cy.contains(heading);
       });
@@ -180,7 +210,11 @@ describe('Publishing organisations', () => {
         },
       );
 
-      cy.get('[data-cy=changed-by-user]').should('contain', 'Editor');
+      cy.get('[data-cy=changed-by-user-name]').should('contain', 'Editor');
+      cy.get('[data-cy=changed-by-user-email]').should(
+        'contain',
+        'beis-rpr+editor@dxw.com',
+      );
       cy.get('[data-cy=last-modified]').should(
         'contain',
         format(new Date(), 'd MMM yyyy'),
@@ -189,11 +223,11 @@ describe('Publishing organisations', () => {
       cy.visitAndCheckAccessibility('/admin/organisations');
 
       cy.get('tr')
-        .contains('Department for Education')
+        .contains('Draft Organisation')
         .then(($header) => {
           const $row = $header.parent();
 
-          cy.translate(`organisations.status.live`).then((status) => {
+          cy.translate(`app.status.live`).then((status) => {
             cy.wrap($row).should('contain', status);
           });
         });
@@ -297,11 +331,15 @@ describe('Publishing organisations', () => {
 
         cy.get('body').should('contain', 'New Organisation');
 
-        cy.translate(`organisations.status.live`).then((status) => {
+        cy.translate(`app.status.live`).then((status) => {
           cy.get('h2[data-status]').should('contain', status);
         });
 
-        cy.get('[data-cy=changed-by-user]').should('contain', 'Registrar');
+        cy.get('[data-cy=changed-by-user-name]').should('contain', 'Registrar');
+        cy.get('[data-cy=changed-by-user-email]').should(
+          'contain',
+          'beis-rpr+registrar@dxw.com',
+        );
         cy.get('[data-cy=last-modified]').should(
           'contain',
           format(new Date(), 'd MMM yyyy'),
