@@ -90,40 +90,6 @@
 
         {% endif %}
 
-        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
-
-        {{
-          govukInput({
-            label: {
-              text: ("professions.form.label.qualifications.otherCountriesRecognition" | t),
-              classes: "govuk-label--m"
-            },
-            id: "otherCountriesRecognition",
-            name: "otherCountriesRecognition",
-            value: otherCountriesRecognition,
-            hint: {
-              text: ("professions.form.label.qualifications.otherCountriesRecognitionHint" | t)
-            },
-            errorMessage: errors.otherCountriesRecognition | tError
-          })
-        }}
-
-        {{
-          govukInput({
-            label: {
-              text: ("professions.form.label.qualifications.otherCountriesRecognitionUrl" | t),
-              classes: "govuk-label--m"
-            },
-            id: "otherCountriesRecognitionUrl",
-            name: "otherCountriesRecognitionUrl",
-            value: otherCountriesRecognitionUrl,
-            hint: {
-              text: ("professions.form.label.qualifications.otherCountriesRecognitionUrlHint" | t)
-            },
-            errorMessage: errors.otherCountriesRecognitionUrl | tError
-          })
-        }}
-
         {{
           govukButton({
             id: "submit-button",
