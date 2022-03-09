@@ -2,6 +2,7 @@ import { CheckboxItems } from '../../../common/interfaces/checkbox-items.interfa
 import { Table } from '../../../common/interfaces/table';
 
 export interface IndexTemplate {
+  userOrganisation: string;
   organisationsTable: Table;
 
   filters: {

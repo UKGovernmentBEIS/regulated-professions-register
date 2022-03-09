@@ -76,19 +76,22 @@ export class OrganisationsController {
 
     const filter = query || new FilterDto();
 
-    const userOrganisation = showAllOrgs ? null : actingUser.organisation;
-
     const filterInput = createFilterInput({ ...filter, allIndustries });
 
-    if (userOrganisation) {
-      filterInput.organisations = [userOrganisation];
+    if (!showAllOrgs) {
+      filterInput.organisations = [actingUser.organisation];
     }
 
     const filteredOrganisations = new OrganisationsFilterHelper(
       allOrganisations,
     ).filter(filterInput);
 
+    const userOrganisation = showAllOrgs
+      ? await this.i18nService.translate('app.beis')
+      : actingUser.organisation.name;
+
     const presenter = new OrganisationsPresenter(
+      userOrganisation,
       allIndustries,
       filterInput,
       filteredOrganisations,

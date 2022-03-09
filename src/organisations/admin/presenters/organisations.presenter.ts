@@ -28,6 +28,7 @@ const fields = [
 
 export class OrganisationsPresenter {
   constructor(
+    private readonly userOrganisation: string,
     private readonly allIndustries: Industry[],
     private readonly filterInput: FilterInput,
     private readonly filteredOrganisations: Organisation[],
@@ -42,6 +43,7 @@ export class OrganisationsPresenter {
     ).checkboxItems();
 
     return {
+      userOrganisation: this.userOrganisation,
       industriesCheckboxItems,
       organisationsTable: await this.table(),
       filters: {
