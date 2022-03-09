@@ -86,7 +86,7 @@
     "form": {
       "label": {
         "name": "Name of the regulatory authority",
-        "alternateName": "Alternate name",
+        "alternateName": "Alternate name (optional)",
         "url": "Website",
         "address": "Address",
         "email": "Email",
@@ -95,6 +95,12 @@
       "errors": {
         "name": {
           "empty": "Enter the name of the regulatory authority"
+        },
+        "address": {
+          "empty": "Enter the address for the regulatory authority"
+        },
+        "phone": {
+          "empty": "Enter the phone number for the regulatory authority"
         },
         "email": {
           "invalid": "Please enter a valid email address"
