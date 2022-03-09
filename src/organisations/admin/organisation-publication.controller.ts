@@ -6,14 +6,17 @@ import { flashMessage } from '../../common/flash-message';
 import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
 import { Permissions } from '../../common/permissions.decorator';
 import { escape } from '../../helpers/escape.helper';
+import { isConfirmed } from '../../helpers/is-confirmed';
 import { getActingUser } from '../../users/helpers/get-acting-user.helper';
 import { UserPermission } from '../../users/user-permission';
 import { OrganisationVersionsService } from '../organisation-versions.service';
 import { Organisation } from '../organisation.entity';
+import { OrganisationsService } from '../organisations.service';
 
 @Controller('/admin/organisations')
 export class OrganisationPublicationController {
   constructor(
+    private organisationsService: OrganisationsService,
     private organisationVersionsService: OrganisationVersionsService,
     private i18nService: I18nService,
   ) {}
@@ -52,6 +55,8 @@ export class OrganisationPublicationController {
     @Param('organisationId') organisationId: string,
     @Param('versionId') versionId: string,
   ): Promise<void> {
+    const organisation = await this.organisationsService.find(organisationId);
+
     const version =
       await this.organisationVersionsService.findByIdWithOrganisation(
         organisationId,
@@ -62,6 +67,10 @@ export class OrganisationPublicationController {
       version,
       getActingUser(req),
     );
+
+    if (!isConfirmed(organisation)) {
+      await this.organisationsService.setSlug(organisation);
+    }
 
     await this.organisationVersionsService.publish(newVersion);
 

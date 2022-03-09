@@ -420,18 +420,30 @@
         {% endfor %}
 
         {% if not edit and not confirmed %}
-          <form method="post" action="confirmation">
-            {{
-              govukButton({
-                id: "submit-button",
-                type: "Submit",
-                preventDoubleClick: true,
-                text: ("professions.form.button.create" | t)
-              })
-            }}
-          </form>
+          <div class="govuk-button-group rpr-internal__buttons-container">
+            <form method="post" action="confirmation">
+              {{
+                govukButton({
+                  id: "submit-button",
+                  classes: "govuk-button--secondary",
+                  type: "Submit",
+                  preventDoubleClick: true,
+                  text: ("professions.form.button.saveAsDraft" | t)
+                })
+              }}
+            </form>
+            {% if 'publishProfession' in permissions %}
+              {{
+                govukButton({
+                  text: ('professions.form.button.publish' | t),
+                  classes: "govuk-button",
+                  id: "publish-button",
+                  href: "/admin/professions/" + professionId + "/versions/" + versionId + "/publish?fromEdit=true"
+                })
+              }}
+            {% endif %}
+          </div>
         {% endif %}
-
     </div>
 
     <div class="govuk-grid-column-one-third">

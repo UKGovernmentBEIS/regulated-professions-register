@@ -13,6 +13,7 @@ import { translationOf } from '../../testutils/translation-of';
 import { getActingUser } from '../../users/helpers/get-acting-user.helper';
 import { ProfessionVersionsService } from '../profession-versions.service';
 import { Profession } from '../profession.entity';
+import { ProfessionsService } from '../professions.service';
 import { ProfessionPublicationController } from './profession-publication.controller';
 
 jest.mock('../../common/flash-message');
@@ -22,16 +23,22 @@ jest.mock('../../helpers/escape.helper');
 describe('ProfessionPublicationController', () => {
   let controller: ProfessionPublicationController;
 
+  let professionsService: DeepMocked<ProfessionsService>;
   let professionVersionsService: DeepMocked<ProfessionVersionsService>;
   let i18nService: DeepMocked<I18nService>;
 
   beforeEach(async () => {
+    professionsService = createMock<ProfessionsService>();
     professionVersionsService = createMock<ProfessionVersionsService>();
     i18nService = createMockI18nService();
 
     const module: TestingModule = await Test.createTestingModule({
       controllers: [ProfessionPublicationController],
       providers: [
+        {
+          provide: ProfessionsService,
+          useValue: professionsService,
+        },
         {
           provide: ProfessionVersionsService,
           useValue: professionVersionsService,
@@ -71,59 +78,129 @@ describe('ProfessionPublicationController', () => {
   });
 
   describe('create', () => {
-    it('should publish the current version', async () => {
-      const profession = professionFactory.build();
-      const version = professionVersionFactory.build({
-        profession,
+    describe('when publishing a brand new Profession', () => {
+      it('should set the slug and publish the version', async () => {
+        const brandNewProfession = professionFactory.build({ slug: null });
+        const version = professionVersionFactory.build({
+          profession: brandNewProfession,
+        });
+        const user = userFactory.build();
+
+        const req = createDefaultMockRequest();
+        (getActingUser as jest.Mock).mockReturnValue(user);
+
+        const res = createMock<Response>({});
+
+        const flashMock = flashMessage as jest.Mock;
+        flashMock.mockImplementation(() => 'STUB_FLASH_MESSAGE');
+
+        professionVersionsService.findByIdWithProfession.mockResolvedValue(
+          version,
+        );
+
+        const newVersion = professionVersionFactory.build({
+          profession: brandNewProfession,
+          user,
+        });
+
+        professionsService.find.mockResolvedValue(brandNewProfession);
+        professionVersionsService.create.mockResolvedValue(newVersion);
+
+        await controller.create(req, res, brandNewProfession.id, version.id);
+
+        expect(
+          professionVersionsService.findByIdWithProfession,
+        ).toHaveBeenCalledWith(brandNewProfession.id, version.id);
+
+        expect(professionVersionsService.create).toHaveBeenCalledWith(
+          version,
+          user,
+        );
+
+        expect(professionVersionsService.publish).toHaveBeenCalledWith(
+          newVersion,
+        );
+
+        expect(professionsService.setSlug).toHaveBeenCalledWith(
+          brandNewProfession,
+        );
+
+        expect(flashMock).toHaveBeenCalledWith(
+          translationOf('professions.admin.publish.confirmation.heading'),
+          translationOf('professions.admin.publish.confirmation.body'),
+        );
+
+        expect(escape).toHaveBeenCalledWith(brandNewProfession.name);
+
+        expect(req.flash).toHaveBeenCalledWith('success', 'STUB_FLASH_MESSAGE');
+
+        expect(res.redirect).toHaveBeenCalledWith(
+          `/admin/professions/${brandNewProfession.id}/versions/${newVersion.id}`,
+        );
       });
-      const user = userFactory.build();
+    });
 
-      const req = createDefaultMockRequest();
-      (getActingUser as jest.Mock).mockReturnValue(user);
+    describe('when publishing an existing Profession', () => {
+      it('should publish the current version', async () => {
+        const existingProfession = professionFactory.build({
+          slug: 'existing-profession',
+        });
+        const version = professionVersionFactory.build({
+          profession: existingProfession,
+        });
+        const user = userFactory.build();
 
-      const res = createMock<Response>({});
+        const req = createDefaultMockRequest();
+        (getActingUser as jest.Mock).mockReturnValue(user);
 
-      const flashMock = flashMessage as jest.Mock;
-      flashMock.mockImplementation(() => 'STUB_FLASH_MESSAGE');
+        const res = createMock<Response>({});
 
-      professionVersionsService.findByIdWithProfession.mockResolvedValue(
-        version,
-      );
+        const flashMock = flashMessage as jest.Mock;
+        flashMock.mockImplementation(() => 'STUB_FLASH_MESSAGE');
 
-      const newVersion = professionVersionFactory.build({
-        profession,
-        user,
+        professionVersionsService.findByIdWithProfession.mockResolvedValue(
+          version,
+        );
+
+        const newVersion = professionVersionFactory.build({
+          profession: existingProfession,
+          user,
+        });
+
+        professionsService.find.mockResolvedValue(existingProfession);
+
+        professionVersionsService.create.mockResolvedValue(newVersion);
+
+        await controller.create(req, res, existingProfession.id, version.id);
+
+        expect(
+          professionVersionsService.findByIdWithProfession,
+        ).toHaveBeenCalledWith(existingProfession.id, version.id);
+
+        expect(professionVersionsService.create).toHaveBeenCalledWith(
+          version,
+          user,
+        );
+
+        expect(professionVersionsService.publish).toHaveBeenCalledWith(
+          newVersion,
+        );
+
+        expect(professionsService.setSlug).not.toHaveBeenCalled();
+
+        expect(flashMock).toHaveBeenCalledWith(
+          translationOf('professions.admin.publish.confirmation.heading'),
+          translationOf('professions.admin.publish.confirmation.body'),
+        );
+
+        expect(escape).toHaveBeenCalledWith(existingProfession.name);
+
+        expect(req.flash).toHaveBeenCalledWith('success', 'STUB_FLASH_MESSAGE');
+
+        expect(res.redirect).toHaveBeenCalledWith(
+          `/admin/professions/${existingProfession.id}/versions/${newVersion.id}`,
+        );
       });
-
-      professionVersionsService.create.mockResolvedValue(newVersion);
-
-      await controller.create(req, res, profession.id, version.id);
-
-      expect(
-        professionVersionsService.findByIdWithProfession,
-      ).toHaveBeenCalledWith(profession.id, version.id);
-
-      expect(professionVersionsService.create).toHaveBeenCalledWith(
-        version,
-        user,
-      );
-
-      expect(professionVersionsService.publish).toHaveBeenCalledWith(
-        newVersion,
-      );
-
-      expect(flashMock).toHaveBeenCalledWith(
-        translationOf('professions.admin.publish.confirmation.heading'),
-        translationOf('professions.admin.publish.confirmation.body'),
-      );
-
-      expect(escape).toHaveBeenCalledWith(profession.name);
-
-      expect(req.flash).toHaveBeenCalledWith('success', 'STUB_FLASH_MESSAGE');
-
-      expect(res.redirect).toHaveBeenCalledWith(
-        `/admin/professions/${profession.id}/versions/${newVersion.id}`,
-      );
     });
   });
 });
