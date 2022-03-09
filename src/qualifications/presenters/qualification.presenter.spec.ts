@@ -69,25 +69,6 @@ describe(QualificationPresenter, () => {
       });
     });
 
-    describe('otherCountriesRecognitionUrl', () => {
-      it('returns a link', () => {
-        (formatLink as jest.Mock).mockImplementation(linkOf);
-
-        const qualification = qualificationFactory.build({
-          otherCountriesRecognitionUrl: 'http://example.com',
-        });
-
-        const presenter = new QualificationPresenter(
-          qualification,
-          createMockI18nService(),
-        );
-
-        expect(presenter.otherCountriesRecognitionUrl).toEqual(
-          linkOf('http://example.com'),
-        );
-      });
-    });
-
     describe('summaryList', () => {
       describe('when a Qualification has all fields', () => {
         describe('when the Qualifications are from a UK profession', () => {
@@ -297,8 +278,6 @@ describe(QualificationPresenter, () => {
         expect.objectContaining({
           routesToObtain: multilineOf(undefined),
           moreInformationUrl: linkOf(undefined),
-          otherCountriesRecognition: undefined,
-          otherCountriesRecognitionUrl: linkOf(undefined),
           qualification: undefined,
           ukRecognition: undefined,
           ukRecognitionUrl: linkOf(undefined),
