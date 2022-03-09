@@ -73,10 +73,6 @@ describe(QualificationsController, () => {
             captionText: translationOf('professions.form.captions.edit'),
             ukRecognition: profession.qualification.ukRecognition,
             ukRecognitionUrl: profession.qualification.ukRecognitionUrl,
-            otherCountriesRecognition:
-              profession.qualification.otherCountriesRecognition,
-            otherCountriesRecognitionUrl:
-              profession.qualification.otherCountriesRecognitionUrl,
             isUK: false,
           }),
         );
@@ -113,8 +109,6 @@ describe(QualificationsController, () => {
             captionText: translationOf('professions.form.captions.edit'),
             ukRecognition: undefined,
             ukRecognitionUrl: undefined,
-            otherCountriesRecognition: undefined,
-            otherCountriesRecognitionUrl: undefined,
             isUK: false,
           }),
         );
@@ -139,8 +133,6 @@ describe(QualificationsController, () => {
             moreInformationUrl: 'http://www.example.com/more-info',
             ukRecognition: 'ukRecognition',
             ukRecognitionUrl: 'http://example.com/uk',
-            otherCountriesRecognition: 'otherCountriesRecognition',
-            otherCountriesRecognitionUrl: 'http://example.com/other',
             change: false,
           };
 
@@ -158,8 +150,6 @@ describe(QualificationsController, () => {
                 url: 'http://www.example.com/more-info',
                 ukRecognition: 'ukRecognition',
                 ukRecognitionUrl: 'http://example.com/uk',
-                otherCountriesRecognition: 'otherCountriesRecognition',
-                otherCountriesRecognitionUrl: 'http://example.com/other',
               }),
             }),
           );
@@ -185,8 +175,6 @@ describe(QualificationsController, () => {
             moreInformationUrl: 'http://www.example.com/more-info',
             ukRecognition: 'ukRecognition',
             ukRecognitionUrl: 'http://example.com/uk',
-            otherCountriesRecognition: 'otherCountriesRecognition',
-            otherCountriesRecognitionUrl: 'http://example.com/other',
             change: true,
           };
 
@@ -204,8 +192,6 @@ describe(QualificationsController, () => {
                 url: 'http://www.example.com/more-info',
                 ukRecognition: 'ukRecognition',
                 ukRecognitionUrl: 'http://example.com/uk',
-                otherCountriesRecognition: 'otherCountriesRecognition',
-                otherCountriesRecognitionUrl: 'http://example.com/other',
               }),
             }),
           );
@@ -232,8 +218,6 @@ describe(QualificationsController, () => {
           moreInformationUrl: 'www.example.com/more-info ',
           ukRecognition: 'ukRecognition',
           ukRecognitionUrl: 'example.com/uk',
-          otherCountriesRecognition: 'otherCountriesRecognition',
-          otherCountriesRecognitionUrl: '\nhttp://example.com/other',
           change: true,
         };
 
@@ -249,8 +233,6 @@ describe(QualificationsController, () => {
               url: 'http://www.example.com/more-info',
               ukRecognition: 'ukRecognition',
               ukRecognitionUrl: 'http://example.com/uk',
-              otherCountriesRecognition: 'otherCountriesRecognition',
-              otherCountriesRecognitionUrl: 'http://example.com/other',
             }),
           }),
         );
@@ -277,8 +259,6 @@ describe(QualificationsController, () => {
           change: false,
           ukRecognition: '',
           ukRecognitionUrl: 'not a url',
-          otherCountriesRecognition: '',
-          otherCountriesRecognitionUrl: 'not a url',
         };
 
         professionsService.findWithVersions.mockResolvedValue(profession);
@@ -300,9 +280,6 @@ describe(QualificationsController, () => {
               },
               ukRecognitionUrl: {
                 text: 'professions.form.errors.qualification.ukRecognitionUrl.invalid',
-              },
-              otherCountriesRecognitionUrl: {
-                text: 'professions.form.errors.qualification.otherCountriesRecognitionUrl.invalid',
               },
             },
           }),

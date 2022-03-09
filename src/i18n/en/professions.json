@@ -62,11 +62,7 @@
         "ukRecognition": "Recognition of qualifications in the UK (optional)",
         "ukRecognitionHint": "Routes to recognition for existing professionals from other UK nations",
         "ukRecognitionUrl": "More about recognition within the UK (optional)",
-        "ukRecognitionUrlHint": "Website link to more information",
-        "otherCountriesRecognition": "Recognition of qualifications from other countries (optional)",
-        "otherCountriesRecognitionHint": "Routes to recognition for existing professionals from outside the UK",
-        "otherCountriesRecognitionUrl": "More about recognition from other countries (optional)",
-        "otherCountriesRecognitionUrlHint": "Website link to more information"
+        "ukRecognitionUrlHint": "Website link to more information"
       },
       "legislation": {
         "nationalLegislation": "Legislation title",
@@ -136,9 +132,6 @@
           "invalid": "Please enter a valid website address"
         },
         "ukRecognitionUrl": {
-          "invalid": "Please enter a valid website address"
-        },
-        "otherCountriesRecognitionUrl": {
           "invalid": "Please enter a valid website address"
         }
       },

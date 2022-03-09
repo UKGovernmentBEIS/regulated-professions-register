@@ -437,13 +437,6 @@ describe('Editing an existing profession', () => {
         cy.get('input[name="ukRecognition"]').type('Recognition in UK');
         cy.get('input[name="ukRecognitionUrl"]').type('http://example.com/uk');
 
-        cy.get('input[name="otherCountriesRecognition"]').type(
-          'Recognition in other countries',
-        );
-        cy.get('input[name="otherCountriesRecognitionUrl"]').type(
-          'http://example.com/other',
-        );
-
         cy.translate('app.continue').then((buttonText) => {
           cy.get('button').contains(buttonText).click();
         });

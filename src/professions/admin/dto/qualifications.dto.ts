@@ -28,16 +28,6 @@ export class QualificationsDto {
   @ValidateIf((e) => e.ukRecognitionUrl)
   ukRecognitionUrl: string;
 
-  otherCountriesRecognition: string;
-
-  @IsUrl(urlOptions, {
-    message:
-      'professions.form.errors.qualification.otherCountriesRecognitionUrl.invalid',
-  })
-  @Transform(({ value }) => preprocessUrl(value))
-  @ValidateIf((e) => e.otherCountriesRecognitionUrl)
-  otherCountriesRecognitionUrl: string;
-
   @Transform(({ value }) => parseBoolean(value))
   change: boolean;
 }
