@@ -211,9 +211,13 @@ describe('Adding a new profession', () => {
         cy.get('body').should('contain', england);
       });
 
-      cy.checkSummaryListRowValue(
-        'professions.form.label.scope.industry',
-        'Construction & Engineering',
+      cy.translate('industries.constructionAndEngineering').then(
+        (constructionAndEngineering) => {
+          cy.checkSummaryListRowValue(
+            'professions.form.label.scope.industry',
+            constructionAndEngineering,
+          );
+        },
       );
 
       cy.checkSummaryListRowValue(
