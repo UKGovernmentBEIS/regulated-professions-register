@@ -30,6 +30,7 @@ import { flashMessage } from '../../common/flash-message';
 import { createDefaultMockRequest } from '../../testutils/factories/create-default-mock-request';
 import { getActingUser } from '../../users/helpers/get-acting-user.helper';
 import { escape } from '../../helpers/escape.helper';
+import { translationOf } from '../../testutils/translation-of';
 
 jest.mock('./presenters/organisations.presenter');
 jest.mock('../presenters/organisation.presenter');
@@ -90,6 +91,7 @@ describe('OrganisationsController', () => {
           );
 
           const templateParams: IndexTemplate = {
+            userOrganisation: translationOf('app.beis'),
             organisationsTable: {
               firstCellIsHeader: true,
               head: [{ text: 'Headers' }],
@@ -130,6 +132,7 @@ describe('OrganisationsController', () => {
           } as FilterInput);
 
           expect(OrganisationsPresenter).toHaveBeenCalledWith(
+            translationOf('app.beis'),
             industries,
             {
               keywords: '',
@@ -149,6 +152,7 @@ describe('OrganisationsController', () => {
           );
 
           const templateParams: IndexTemplate = {
+            userOrganisation: translationOf('app.beis'),
             organisationsTable: {
               firstCellIsHeader: true,
               head: [{ text: 'Headers' }],
@@ -194,6 +198,7 @@ describe('OrganisationsController', () => {
           } as FilterInput);
 
           expect(OrganisationsPresenter).toHaveBeenCalledWith(
+            translationOf('app.beis'),
             industries,
             {
               keywords: 'example keywords',
@@ -208,7 +213,11 @@ describe('OrganisationsController', () => {
 
     describe('when the user is not a service owner', () => {
       it("should return template params for the user's organisation", async () => {
+        const organisations = createOrganisations();
+        const userOrganisation = organisations[0];
+
         const templateParams: IndexTemplate = {
+          userOrganisation: userOrganisation.name,
           organisationsTable: {
             firstCellIsHeader: true,
             head: [{ text: 'Headers' }],
@@ -225,10 +234,7 @@ describe('OrganisationsController', () => {
           industriesCheckboxItems: [],
         };
 
-        const organisations = createOrganisations();
         const industries = industryFactory.buildList(5);
-
-        const userOrganisation = organisations[0];
 
         const request = createDefaultMockRequest();
         (getActingUser as jest.Mock).mockReturnValue(
@@ -260,6 +266,7 @@ describe('OrganisationsController', () => {
         } as FilterInput);
 
         expect(OrganisationsPresenter).toHaveBeenCalledWith(
+          userOrganisation.name,
           industries,
           {
             keywords: '',

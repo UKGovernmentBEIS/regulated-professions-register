@@ -63,10 +63,7 @@ describe('ProfessionsPresenter', () => {
   let i18nService: DeepMocked<I18nService>;
 
   beforeEach(() => {
-    i18nService = createMockI18nService({
-      'app.ukcpq': 'UK Centre for Professional Qualifications',
-    });
-
+    i18nService = createMockI18nService();
     const filterInput: FilterInput = {
       keywords: 'Nuclear',
       nations: [Nation.find('GB-ENG')],
@@ -93,7 +90,7 @@ describe('ProfessionsPresenter', () => {
 
       const expected: IndexTemplate = {
         view: 'overview',
-        organisation: 'UK Centre for Professional Qualifications',
+        organisation: translationOf('app.beis'),
         professionsTable: {
           caption: `${translationOf('professions.search.foundPlural')}`,
           captionClasses: 'govuk-table__caption--m',

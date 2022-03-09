@@ -27,7 +27,7 @@ export class ProfessionsPresenter {
   async present(view: ProfessionsPresenterView): Promise<IndexTemplate> {
     const organisation =
       view === 'overview'
-        ? await this.i18nService.translate('app.ukcpq')
+        ? await this.i18nService.translate('app.beis')
         : this.userOrganisaiton.name;
 
     const nationsCheckboxItems = await new NationsCheckboxPresenter(

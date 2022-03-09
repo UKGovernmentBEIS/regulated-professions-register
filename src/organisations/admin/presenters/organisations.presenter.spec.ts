@@ -56,6 +56,7 @@ describe('OrganisationsPresenter', () => {
         const filterInput: FilterInput = {};
 
         const presenter = new OrganisationsPresenter(
+          'Organisation Name',
           industries,
           filterInput,
           organisations,
@@ -68,6 +69,8 @@ describe('OrganisationsPresenter', () => {
           organisations[4],
           i18nService,
         );
+
+        expect(result.userOrganisation).toEqual('Organisation Name');
 
         expect(result.organisationsTable.firstCellIsHeader).toEqual(true);
         expect(result.organisationsTable.head).toEqual([
@@ -116,6 +119,7 @@ describe('OrganisationsPresenter', () => {
         const filterInput: FilterInput = {};
 
         const presenter = new OrganisationsPresenter(
+          'Organisation name',
           industries,
           filterInput,
           organisations,
@@ -153,6 +157,7 @@ describe('OrganisationsPresenter', () => {
         };
 
         const presenter = new OrganisationsPresenter(
+          'Organisation name',
           industries,
           filterInput,
           organisations,
@@ -198,6 +203,7 @@ describe('OrganisationsPresenter', () => {
           const foundOrganisations = organisationFactory.buildList(1);
 
           const presenter = new OrganisationsPresenter(
+            'Organisation name',
             industries,
             filterInput,
             foundOrganisations,
@@ -234,6 +240,7 @@ describe('OrganisationsPresenter', () => {
           const foundOrganisations = organisationFactory.buildList(5);
 
           const presenter = new OrganisationsPresenter(
+            'Organisation name',
             industries,
             filterInput,
             foundOrganisations,
