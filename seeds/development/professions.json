@@ -80,7 +80,7 @@
       {
         "alternateName": "Orthodontic Auxiliary",
         "description": "Orthodontic therapists are registered dental professionals who carry out certain parts of orthodontic treatment under prescription from a dentist.",
-        "occupationLocations": ["GB-ENG", "GB-SCT", "GB-WLS", "GB-NIR"],
+        "occupationLocations": ["GB-ENG", "GB-SCT"],
         "regulationType": "licensing",
         "industries": ["industries.health"],
         "reservedActivities": "",

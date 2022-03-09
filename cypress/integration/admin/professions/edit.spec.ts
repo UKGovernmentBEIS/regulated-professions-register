@@ -434,6 +434,9 @@ describe('Editing an existing profession', () => {
           'http://example.com/more-info',
         );
 
+        cy.get('input[name="ukRecognition"]').type('Recognition in UK');
+        cy.get('input[name="ukRecognitionUrl"]').type('http://example.com/uk');
+
         cy.get('input[name="otherCountriesRecognition"]').type(
           'Recognition in other countries',
         );
@@ -451,10 +454,25 @@ describe('Editing an existing profession', () => {
           'professions.form.label.qualifications.routesToObtain',
           'General secondary education',
         );
-
         cy.checkSummaryListRowValue(
           'professions.form.label.qualifications.moreInformationUrl',
           'http://example.com/more-info',
+        );
+        cy.checkSummaryListRowValue(
+          'professions.form.label.qualifications.ukRecognition',
+          'Recognition in UK',
+        );
+        cy.checkSummaryListRowValue(
+          'professions.form.label.qualifications.ukRecognitionUrl',
+          'http://example.com/uk',
+        );
+        cy.checkSummaryListRowValue(
+          'professions.form.label.qualifications.otherCountriesRecognition',
+          'Recognition in other countries',
+        );
+        cy.checkSummaryListRowValue(
+          'professions.form.label.qualifications.otherCountriesRecognitionUrl',
+          'http://example.com/other',
         );
 
         cy.translate('professions.form.button.saveAsDraft').then(
