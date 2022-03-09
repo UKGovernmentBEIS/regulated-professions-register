@@ -25,6 +25,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Remove non-UK qualification data
 - Show user's organisation on dashboard
 - Internal Orgnaisation listing can be filtered by nation
+- Reorganise sector list and add missing sectors
 
 ## [release-007] - 2022-03-04
 

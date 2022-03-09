@@ -86,5 +86,48 @@ describe('IndustriesCheckboxPresenter', () => {
         },
       ]);
     });
+
+    describe('if there is an  "other" industry', () => {
+      it('should be placed at the end of the list', async () => {
+        const exampleIndustry1 = industry.build({
+          name: 'industries.example1',
+          id: 'example-industry-1',
+        });
+
+        const exampleIndustry2 = industry.build({
+          name: 'industries.example2',
+          id: 'example-industry-2',
+        });
+
+        const otherIndustry = industry.build({
+          name: 'industries.other',
+          id: 'other-industry',
+        });
+
+        const presenter = new IndustriesCheckboxPresenter(
+          [otherIndustry, exampleIndustry1, exampleIndustry2],
+          [otherIndustry],
+          createMockI18nService(),
+        );
+
+        await expect(presenter.checkboxItems()).resolves.toEqual([
+          {
+            text: translationOf('industries.example1'),
+            value: 'example-industry-1',
+            checked: false,
+          },
+          {
+            text: translationOf('industries.example2'),
+            value: 'example-industry-2',
+            checked: false,
+          },
+          {
+            text: translationOf('industries.other'),
+            value: 'other-industry',
+            checked: true,
+          },
+        ]);
+      });
+    });
   });
 });
