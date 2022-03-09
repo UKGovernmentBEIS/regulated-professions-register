@@ -183,7 +183,11 @@
     "qualification": {
       "heading": "Qualification information",
       "routesToObtain": "Routes to qualification",
-      "moreInformationUrl": "More about qualification"
+      "moreInformationUrl": "More about qualification",
+      "ukRecognition": "Recognition of qualifications in the UK",
+      "ukRecognitionUrl": "More about recognition within the UK",
+      "otherCountriesRecognition": "Recognition of qualifications from other countries",
+      "otherCountriesRecognitionUrl": "More about recognition from other countries"
     },
     "legislation": {
       "heading": "Legislation",

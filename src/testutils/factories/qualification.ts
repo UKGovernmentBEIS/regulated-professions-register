@@ -3,7 +3,7 @@ import { Qualification } from '../../qualifications/qualification.entity';
 
 export default Factory.define<Qualification>(({ sequence }) => ({
   id: sequence.toString(),
-  routesToObtain: '',
+  routesToObtain: 'Route to obtain',
   url: 'http://www.example.com',
   professionVersion: undefined,
   ukRecognition: undefined,

@@ -25,6 +25,7 @@ import { ProfessionPresenter } from '../presenters/profession.presenter';
 import { getActingUser } from '../../users/helpers/get-acting-user.helper';
 import { getOrganisationsFromProfession } from '../helpers/get-organisations-from-profession.helper';
 import { ShowTemplate } from './interfaces/show-template.interface';
+import { isUK } from '../../helpers/nations.helper';
 
 @UseGuards(AuthenticationGuard)
 @Controller('/admin/professions')
@@ -89,7 +90,12 @@ export class ProfessionVersionsController {
       profession,
       presenter,
       hasLiveVersion,
-      qualificationSummaryList: await qualification.summaryList(true),
+      qualificationSummaryList: await qualification.summaryList(
+        true,
+        profession.occupationLocations
+          ? isUK(profession.occupationLocations)
+          : false,
+      ),
       nations,
       industries,
       organisations,

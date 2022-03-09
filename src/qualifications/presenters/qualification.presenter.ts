@@ -31,33 +31,87 @@ export default class QualificationPresenter {
     this.qualification && this.qualification.otherCountriesRecognitionUrl,
   );
 
-  async summaryList(showEmptyFields: boolean): Promise<SummaryList> {
-    return {
+  async summaryList(
+    showEmptyFields: boolean,
+    isUK: boolean,
+  ): Promise<SummaryList> {
+    const summaryList: SummaryList = {
       classes: 'govuk-summary-list--no-border',
-      rows: [
-        {
-          key: {
-            text: await this.i18nService.translate(
-              'professions.show.qualification.routesToObtain',
-            ),
-          },
-          value: {
-            html: this.routesToObtain,
-          },
-        },
-        showEmptyFields || this.moreInformationUrl
-          ? {
-              key: {
-                text: await this.i18nService.translate(
-                  'professions.show.qualification.moreInformationUrl',
-                ),
-              },
-              value: {
-                html: this.moreInformationUrl,
-              },
-            }
-          : undefined,
-      ],
+      rows: [],
     };
+
+    if (showEmptyFields || this.routesToObtain) {
+      await this.addHtmlRow(
+        summaryList,
+        'professions.show.qualification.routesToObtain',
+        this.routesToObtain,
+      );
+    }
+
+    if (showEmptyFields || this.moreInformationUrl) {
+      await this.addHtmlRow(
+        summaryList,
+        'professions.show.qualification.moreInformationUrl',
+        this.moreInformationUrl,
+      );
+    }
+
+    if (!isUK) {
+      if (showEmptyFields || this.ukRecognition) {
+        await this.addTextRow(
+          summaryList,
+          'professions.show.qualification.ukRecognition',
+          this.ukRecognition,
+        );
+      }
+
+      if (showEmptyFields || this.ukRecognitionUrl) {
+        await this.addHtmlRow(
+          summaryList,
+          'professions.show.qualification.ukRecognitionUrl',
+          this.ukRecognitionUrl,
+        );
+      }
+    }
+
+    if (showEmptyFields || this.otherCountriesRecognition) {
+      await this.addTextRow(
+        summaryList,
+        'professions.show.qualification.otherCountriesRecognition',
+        this.otherCountriesRecognition,
+      );
+    }
+
+    if (showEmptyFields || this.otherCountriesRecognitionUrl) {
+      await this.addHtmlRow(
+        summaryList,
+        'professions.show.qualification.otherCountriesRecognitionUrl',
+        this.otherCountriesRecognitionUrl,
+      );
+    }
+
+    return summaryList;
+  }
+
+  private async addTextRow(
+    summaryList: SummaryList,
+    key: string,
+    value: string,
+  ): Promise<void> {
+    summaryList.rows.push({
+      key: { text: await this.i18nService.translate(key) },
+      value: { text: value },
+    });
+  }
+
+  private async addHtmlRow(
+    summaryList: SummaryList,
+    key: string,
+    value: string,
+  ): Promise<void> {
+    summaryList.rows.push({
+      key: { text: await this.i18nService.translate(key) },
+      value: { html: value },
+    });
   }
 }
