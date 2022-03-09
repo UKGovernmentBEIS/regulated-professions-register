@@ -1,4 +1,5 @@
 {
+  "architecture": "Architecture",
   "constructionAndEngineering": "Construction & Engineering",
   "education": "Education",
   "finance": "Finance",
@@ -6,5 +7,7 @@
   "law": "Law",
   "other": "Other",
   "security": "Security",
-  "transport": "Transport"
+  "transport": "Transport",
+  "science": "Science",
+  "surveying": "Surveying"
 }

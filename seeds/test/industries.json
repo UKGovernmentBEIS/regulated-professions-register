@@ -1,5 +1,8 @@
 [
   {
+    "name": "industries.architecture"
+  },
+  {
     "name": "industries.constructionAndEngineering"
   },
   {
@@ -19,6 +22,12 @@
   },
   {
     "name": "industries.security"
+  },
+  {
+    "name": "industries.science"
+  },
+  {
+    "name": "industries.surveying"
   },
   {
     "name": "industries.transport"
