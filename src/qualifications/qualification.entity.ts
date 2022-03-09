@@ -23,12 +23,6 @@ export class Qualification {
   @Column({ nullable: true })
   ukRecognitionUrl: string;
 
-  @Column({ nullable: true })
-  otherCountriesRecognition: string;
-
-  @Column({ nullable: true })
-  otherCountriesRecognitionUrl: string;
-
   @CreateDateColumn({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP(6)',
@@ -47,14 +41,10 @@ export class Qualification {
     url?: string,
     ukRecognition?: string,
     ukRecognitionUrl?: string,
-    otherCountriesRecognition?: string,
-    otherCountriesRecognitionUrl?: string,
   ) {
     this.routesToObtain = routesToObtain || '';
     this.url = url || '';
     this.ukRecognition = ukRecognition || '';
     this.ukRecognitionUrl = ukRecognitionUrl || '';
-    this.otherCountriesRecognition = otherCountriesRecognition || '';
-    this.otherCountriesRecognitionUrl = otherCountriesRecognitionUrl || '';
   }
 }
