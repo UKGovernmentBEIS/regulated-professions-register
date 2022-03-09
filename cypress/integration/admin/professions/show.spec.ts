@@ -222,6 +222,10 @@ describe('Listing professions', () => {
         'professions.show.qualification.routesToObtain',
         'General post-secondary education',
       );
+      cy.checkSummaryListRowValue(
+        'professions.show.qualification.moreInformationUrl',
+        '',
+      );
 
       cy.translate('professions.show.legislation.heading').then((heading) => {
         cy.get('body').should('contain', heading);
