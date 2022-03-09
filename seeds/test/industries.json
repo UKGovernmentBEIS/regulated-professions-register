@@ -6,6 +6,9 @@
     "name": "industries.education"
   },
   {
+    "name": "industries.environmentAndFood"
+  },
+  {
     "name": "industries.finance"
   },
   {
@@ -15,12 +18,12 @@
     "name": "industries.law"
   },
   {
-    "name": "industries.other"
-  },
-  {
     "name": "industries.security"
   },
   {
     "name": "industries.transport"
+  },
+  {
+    "name": "industries.other"
   }
 ]
