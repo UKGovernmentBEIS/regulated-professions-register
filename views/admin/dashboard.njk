@@ -4,30 +4,6 @@
 
 {% block content %}
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-one-third">
-    <nav role="navigation">
-      <ul class="govuk-list">
-        {% if 'editProfession' in permissions %}
-          <li>
-            <a class="govuk-link" href="/admin/professions">{{ "professions.admin.heading" | t }}</a>
-          </li>
-        {% endif %}
-        {% if 'editOrganisation' in permissions %}
-          <li>
-            <a class="govuk-link" href="/admin/organisations">{{ "organisations.admin.heading" | t }}</a>
-          </li>
-        {% endif %}
-        {% if 'editUser' in permissions %}
-          <li>
-            <a class="govuk-link" href="/admin/users">{{ "users.headings.index" | t }}</a>
-          </li>
-        {% endif %}
-        <li>
-          <a class="govuk-link" href="/logout">{{ "app.logout" | t }}</a>
-        </li>
-      </ul>
-    </nav>
-  </div>
   <div class="govuk-grid-column-two-thirds">
     <span class="govuk-caption-l">{{ organisation | t }}</span>
     <h1 class="govuk-heading-l">{{ "app.welcome" | t({name: user.name}) }}</h1>
