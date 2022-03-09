@@ -24,13 +24,6 @@ export default class QualificationPresenter {
     this.qualification && this.qualification.ukRecognitionUrl,
   );
 
-  readonly otherCountriesRecognition =
-    this.qualification && this.qualification.otherCountriesRecognition;
-
-  readonly otherCountriesRecognitionUrl = formatLink(
-    this.qualification && this.qualification.otherCountriesRecognitionUrl,
-  );
-
   async summaryList(
     showEmptyFields: boolean,
     showUKRecognitionFields: boolean,
