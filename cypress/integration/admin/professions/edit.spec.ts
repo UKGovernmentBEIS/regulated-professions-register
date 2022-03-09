@@ -286,9 +286,7 @@ describe('Editing an existing profession', () => {
 
       cy.translate('professions.form.label.qualifications.ukRecognition').then(
         (ukRecognition) => {
-          cy.contains('.govuk-summary-list__row', ukRecognition).should(
-            'be.visible',
-          );
+          cy.get('body').should('not.contain', ukRecognition);
         },
       );
 
