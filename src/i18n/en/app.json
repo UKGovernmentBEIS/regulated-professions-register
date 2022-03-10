@@ -74,12 +74,12 @@
       "heading": "Admin",
       "dashboard": {
         "subHeading": "What can you do from this page",
-        "editProfessionsCentralAdmin": "Edit information about professions.",
-        "editProfessionsRegulators": "Edit information about the professions you regulate.",
-        "editRegulatorsCentralAdmin": "Edit information about regulators.",
-        "editRegulatorsRegulators": "Edit information about your regulator.",
-        "manageAccessCentralAdmin": "Manage access to this service.",
-        "manageAccessRegulators": "Manage access to this service."
+        "editProfessionsCentralAdmin": "Edit information about professions",
+        "editProfessionsRegulators": "Edit information about the professions you regulate",
+        "editRegulatorsCentralAdmin": "Edit information about regulators",
+        "editRegulatorsRegulators": "Edit information about your regulator",
+        "manageAccessCentralAdmin": "Manage access to this service",
+        "manageAccessRegulators": "Manage access to this service"
       }
     }
   },
