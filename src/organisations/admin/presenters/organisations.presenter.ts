@@ -10,7 +10,7 @@ import { IndustriesCheckboxPresenter } from '../../../industries/industries-chec
 
 type Field =
   | 'name'
-  | 'alternateName'
+  | 'nations'
   | 'industries'
   | 'lastModified'
   | 'changedBy'
@@ -18,7 +18,7 @@ type Field =
   | 'actions';
 const fields = [
   'name',
-  'alternateName',
+  'nations',
   'industries',
   'lastModified',
   'changedBy',

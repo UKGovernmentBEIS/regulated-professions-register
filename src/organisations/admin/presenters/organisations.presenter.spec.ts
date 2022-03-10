@@ -76,9 +76,7 @@ describe('OrganisationsPresenter', () => {
         expect(result.organisationsTable.head).toEqual([
           { text: translationOf('organisations.admin.tableHeading.name') },
           {
-            text: translationOf(
-              'organisations.admin.tableHeading.alternateName',
-            ),
+            text: translationOf('organisations.admin.tableHeading.nations'),
           },
           {
             text: translationOf('organisations.admin.tableHeading.industries'),

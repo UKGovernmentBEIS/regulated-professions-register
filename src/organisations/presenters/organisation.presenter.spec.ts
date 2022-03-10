@@ -40,6 +40,7 @@ describe('OrganisationPresenter', () => {
           const professions = professionFactory.buildList(4, {
             versions: [
               professionVersionFactory.build({
+                occupationLocations: ['GB-ENG', 'GB-WLS'],
                 industries: [industries[0]],
                 status: ProfessionVersionStatus.Draft,
               }),
@@ -63,7 +64,11 @@ describe('OrganisationPresenter', () => {
           const tableRow = await presenter.tableRow();
 
           expect(tableRow[0]).toEqual({ text: organisation.name });
-          expect(tableRow[1]).toEqual({ text: organisation.alternateName });
+          expect(tableRow[1]).toEqual({
+            text: `${translationOf('nations.england')}, ${translationOf(
+              'nations.wales',
+            )}`,
+          });
           expect(tableRow[2]).toEqual({
             html: `Translation of \`${industries[0].name}\``,
           });
@@ -105,6 +110,7 @@ describe('OrganisationPresenter', () => {
             professionFactory.buildList(4, {
               versions: [
                 professionVersionFactory.build({
+                  occupationLocations: ['GB-WLS'],
                   industries: [industries[0]],
                   status: ProfessionVersionStatus.Draft,
                 }),
@@ -113,6 +119,7 @@ describe('OrganisationPresenter', () => {
             professionFactory.buildList(2, {
               versions: [
                 professionVersionFactory.build({
+                  occupationLocations: ['GB-SCT'],
                   industries: [industries[1], industries[2]],
                   status: ProfessionVersionStatus.Draft,
                 }),
@@ -136,7 +143,11 @@ describe('OrganisationPresenter', () => {
           const tableRow = await presenter.tableRow();
 
           expect(tableRow[0]).toEqual({ text: organisation.name });
-          expect(tableRow[1]).toEqual({ text: organisation.alternateName });
+          expect(tableRow[1]).toEqual({
+            text: `${translationOf('nations.wales')}, ${translationOf(
+              'nations.scotland',
+            )}`,
+          });
           expect(tableRow[2]).toEqual({
             html: [
               `Translation of \`${industries[0].name}\``,
