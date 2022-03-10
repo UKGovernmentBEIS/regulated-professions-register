@@ -1,0 +1,91 @@
+{% extends "base.njk" %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% set title = "Details about cookies on the Regulated Professions Register" %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h1 class="govuk-heading-xl">
+      {{ title }}
+    </h1>
+
+    <p class="govuk-body">
+      The Regulated Professions Register (RPR) puts small files (known as 'cookies') onto
+      your computer to allow the site to operate. Find out more about the cookies we use,
+       what they're for and when they expire.
+    </p>
+
+    <h2 class="govuk-heading-m">
+      Strictly necessary cookies
+    </h2>
+
+    <p class="govuk-body">
+      These cookies do not store your personal data but are required for the service to operate:
+    </p>
+
+    {{
+      govukTable({
+        caption: "Strictly necessary cookies",
+        captionClasses: "govuk-visually-hidden",
+        firstCellIsHeader: true,
+        head: [
+          {
+            text: "Name"
+          },
+          {
+            text: "Purpose"
+          },
+          {
+            text: "Expiry"
+          }
+        ],
+        rows: [
+          [
+            {
+              text: "auth_verification"
+            },
+            {
+              text: "Identifies a logged in user"
+            },
+            {
+              text: "24 hours"
+            }
+          ],
+          [
+            {
+              text: "connect.sid"
+            },
+            {
+              text: "Identifies a user's session"
+            },
+            {
+              text: "When the browser is closed"
+            }
+          ],
+          [
+            {
+              text: "skipSilentLogin"
+            },
+            {
+              text: "Tells Auth0 whether or not to attempt a login without a prompt (set to false on logout)"
+            },
+            {
+              text: "When the browser is closed"
+            }
+          ]
+        ]
+      })
+    }}
+
+    <h2 class="govuk-heading-m">
+      Gathering your feedback
+    </h2>
+
+    <p class="govuk-body">
+      We use Google Forms software to collect information about what you think of the RPR service. We do this to make sure the site is meeting the needs of its users and to help us make improvements.
+    </p>
+  </div>
+</div>
+{% endblock %}

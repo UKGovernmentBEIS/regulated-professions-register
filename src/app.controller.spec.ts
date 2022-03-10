@@ -91,4 +91,10 @@ describe('AppController', () => {
       });
     });
   });
+
+  describe('cookies', () => {
+    it('should be defined', () => {
+      expect(appController.cookies).toBeDefined();
+    });
+  });
 });

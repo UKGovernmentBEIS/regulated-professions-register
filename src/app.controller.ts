@@ -22,6 +22,12 @@ export class AppController {
     };
   }
 
+  @Get('/cookies')
+  @Render('pages/cookies')
+  cookies() {
+    // do nothing.
+  }
+
   @Get('/health-check')
   healthCheck() {
     return {
