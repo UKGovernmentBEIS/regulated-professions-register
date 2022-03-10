@@ -34,15 +34,19 @@
         {% for profession in professions %}
 
           {% set industriesHtml %}
-            {% for industry in profession.industries %}
-              <p class="govuk-body-m">{{ industry }}</p>
-            {% endfor %}
+            <ul class="govuk-list">
+              {% for industry in profession.industries %}
+                <li>{{ industry }}</li>
+              {% endfor %}
+            </ul>
           {% endset %}
 
           {% set organisationsHtml %}
-            {% for organisation in profession.organisations %}
-              <p class="govuk-body-m">{{ organisation }}</p>
-            {% endfor %}
+            <ul class="govuk-list">
+              {% for organisation in profession.organisations %}
+                <li>{{ organisation }}</li>
+              {% endfor %}
+            </ul>
           {% endset %}
 
           <div>
