@@ -286,9 +286,7 @@ describe('Editing an existing profession', () => {
 
       cy.translate('professions.form.label.qualifications.ukRecognition').then(
         (ukRecognition) => {
-          cy.contains('.govuk-summary-list__row', ukRecognition).should(
-            'be.visible',
-          );
+          cy.get('body').should('not.contain', ukRecognition);
         },
       );
 
@@ -434,12 +432,8 @@ describe('Editing an existing profession', () => {
           'http://example.com/more-info',
         );
 
-        cy.get('input[name="otherCountriesRecognition"]').type(
-          'Recognition in other countries',
-        );
-        cy.get('input[name="otherCountriesRecognitionUrl"]').type(
-          'http://example.com/other',
-        );
+        cy.get('input[name="ukRecognition"]').type('Recognition in UK');
+        cy.get('input[name="ukRecognitionUrl"]').type('http://example.com/uk');
 
         cy.translate('app.continue').then((buttonText) => {
           cy.get('button').contains(buttonText).click();
@@ -451,10 +445,17 @@ describe('Editing an existing profession', () => {
           'professions.form.label.qualifications.routesToObtain',
           'General secondary education',
         );
-
         cy.checkSummaryListRowValue(
           'professions.form.label.qualifications.moreInformationUrl',
           'http://example.com/more-info',
+        );
+        cy.checkSummaryListRowValue(
+          'professions.form.label.qualifications.ukRecognition',
+          'Recognition in UK',
+        );
+        cy.checkSummaryListRowValue(
+          'professions.form.label.qualifications.ukRecognitionUrl',
+          'http://example.com/uk',
         );
 
         cy.translate('professions.form.button.saveAsDraft').then(

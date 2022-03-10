@@ -3,8 +3,6 @@ export interface QualificationsTemplate {
   moreInformationUrl: string;
   ukRecognition: string;
   ukRecognitionUrl: string;
-  otherCountriesRecognition: string;
-  otherCountriesRecognitionUrl: string;
   captionText: string;
   isUK: boolean;
   change: boolean;

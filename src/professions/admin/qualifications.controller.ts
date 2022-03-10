@@ -99,9 +99,6 @@ export class QualificationsController {
         url: submittedValues.moreInformationUrl,
         ukRecognition: submittedValues.ukRecognition,
         ukRecognitionUrl: submittedValues.ukRecognitionUrl,
-        otherCountriesRecognition: submittedValues.otherCountriesRecognition,
-        otherCountriesRecognitionUrl:
-          submittedValues.otherCountriesRecognitionUrl,
       },
     };
 
@@ -147,8 +144,6 @@ export class QualificationsController {
       captionText: await ViewUtils.captionText(this.i18nService, profession),
       ukRecognition: qualification?.ukRecognition,
       ukRecognitionUrl: qualification?.ukRecognitionUrl,
-      otherCountriesRecognition: qualification?.otherCountriesRecognition,
-      otherCountriesRecognitionUrl: qualification?.otherCountriesRecognitionUrl,
       isUK: version.occupationLocations
         ? isUK(version.occupationLocations)
         : false,

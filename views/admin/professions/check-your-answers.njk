@@ -257,7 +257,6 @@
                 }
               },
               {
-                classes: ("govuk-visually-hidden" if isUK else ""),
                 key: {
                   text: ("professions.form.label.qualifications.ukRecognition" | t)
                 },
@@ -273,9 +272,8 @@
                     }
                   ]
                 }
-              },
+              } if not isUK else undefined,
               {
-                classes: ("govuk-visually-hidden" if isUK else ""),
                 key: {
                   text: ("professions.form.label.qualifications.ukRecognitionUrl" | t)
                 },
@@ -291,41 +289,7 @@
                     }
                   ]
                 }
-              },
-              {
-                key: {
-                  text: ("professions.form.label.qualifications.otherCountriesRecognition" | t)
-                },
-                value: {
-                  text: qualification.otherCountriesRecognition
-                },
-                actions: {
-                  items: [
-                    {
-                      href: "/admin/professions/" + professionId + "/versions/" + versionId + "/qualifications/edit?change=true",
-                      text: ("app.change" | t),
-                      visuallyHiddenText: ("professions.form.label.qualifications.otherCountriesRecognition" | t)
-                    }
-                  ]
-                }
-              },
-              {
-                key: {
-                  text: ("professions.form.label.qualifications.otherCountriesRecognitionUrl" | t)
-                },
-                value: {
-                  html: qualification.otherCountriesRecognitionUrl
-                },
-                actions: {
-                  items: [
-                    {
-                      href: "/admin/professions/" + professionId + "/versions/" + versionId + "/qualifications/edit?change=true",
-                      text: ("app.change" | t),
-                      visuallyHiddenText: ("professions.form.label.qualifications.otherCountriesRecognitionUrl" | t)
-                    }
-                  ]
-                }
-              }
+              } if not isUK else undefined
             ]
           })
         }}
