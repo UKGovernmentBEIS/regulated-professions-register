@@ -30,6 +30,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Change the sidenav to a topnav
 - Update dashboard content
 - Update content on the public facing start page
+- Display Profession registration data
 
 ## [release-007] - 2022-03-04
 
