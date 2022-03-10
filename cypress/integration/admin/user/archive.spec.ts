@@ -1,7 +1,9 @@
 function createUser(name: string, email: string): void {
   cy.visitAndCheckAccessibility('/admin/users');
 
-  cy.get('button').click();
+  cy.translate('users.form.button.add').then((addLabel) => {
+    cy.get('button').contains(addLabel).click();
+  });
 
   cy.translate('users.form.hint.organisation').then((organisationHint) => {
     cy.get('body').should('contain', organisationHint);
@@ -9,16 +11,24 @@ function createUser(name: string, email: string): void {
 
   cy.get('input[name="serviceOwner"][value="1"]').check();
 
-  cy.get('button').click();
+  cy.translate('app.continue').then((continueLabel) => {
+    cy.get('button').contains(continueLabel).click();
+  });
 
   cy.get('input[name="name"]').type(name);
   cy.get('input[name="email"]').type(email);
-  cy.get('button').click();
+  cy.translate('app.continue').then((continueLabel) => {
+    cy.get('button').contains(continueLabel).click();
+  });
 
   cy.get('input[name="role"][value="editor"]').check();
 
-  cy.get('button').click();
-  cy.get('button').click();
+  cy.translate('app.continue').then((continueLabel) => {
+    cy.get('button').contains(continueLabel).click();
+  });
+  cy.translate('users.form.button.create').then((createLabel) => {
+    cy.get('button').contains(createLabel).click();
+  });
 }
 
 describe('Archiving a user', () => {

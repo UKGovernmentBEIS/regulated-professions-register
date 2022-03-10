@@ -9,7 +9,29 @@
     govukHeader({
       homepageUrl: "/admin",
       serviceName: ("app.name" | t),
-      serviceUrl: "/admin"
+      serviceUrl: "/admin",
+      navigation: [
+        {
+          href: "/admin",
+          text: ("app.home" | t)
+        },
+        {
+          href: "/admin/professions",
+          text: ("professions.admin.heading" | t)
+        } if 'editProfession' in permissions else undefined,
+        {
+          href: "/admin/organisations",
+          text: ("organisations.admin.heading" | t )
+        } if 'editOrganisation' in permissions else undefined,
+        {
+          href: "/admin/users",
+          text: ("users.headings.index" | t)
+        } if 'editUser' in permissions else undefined,
+        {
+          href: "/logout",
+          text: ("app.logout" | t)
+        }
+      ]
     })
   }}
 

@@ -30,7 +30,9 @@ describe('Editing a user', () => {
 
       cy.get('select[name="organisation"]').select('Department for Education');
 
-      cy.get('button').click();
+      cy.translate('app.continue').then((continueLabel) => {
+        cy.get('button').contains(continueLabel).click();
+      });
       cy.checkAccessibility();
 
       cy.translate('users.form.label.organisation').then(
@@ -45,7 +47,9 @@ describe('Editing a user', () => {
         },
       );
 
-      cy.get('button').click();
+      cy.translate('users.form.button.edit').then((editLabel) => {
+        cy.get('button').contains(editLabel).click();
+      });
       cy.checkAccessibility();
 
       cy.translate('users.headings.edit.done').then((successMessage) => {

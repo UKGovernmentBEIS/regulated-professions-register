@@ -4,33 +4,45 @@
 
 {% block content %}
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-one-third">
-    <nav role="navigation">
-      <ul class="govuk-list">
-        {% if 'editProfession' in permissions %}
-          <li>
-            <a class="govuk-link" href="/admin/professions">{{ "professions.admin.heading" | t }}</a>
-          </li>
-        {% endif %}
-        {% if 'editOrganisation' in permissions %}
-          <li>
-            <a class="govuk-link" href="/admin/organisations">{{ "organisations.admin.heading" | t }}</a>
-          </li>
-        {% endif %}
-        {% if 'editUser' in permissions %}
-          <li>
-            <a class="govuk-link" href="/admin/users">{{ "users.headings.index" | t }}</a>
-          </li>
-        {% endif %}
-        <li>
-          <a class="govuk-link" href="/logout">{{ "app.logout" | t }}</a>
-        </li>
-      </ul>
-    </nav>
-  </div>
   <div class="govuk-grid-column-two-thirds">
-    <span class="govuk-caption-l">{{ organisation | t }}</span>
-    <h1 class="govuk-heading-l">{{ "app.welcome" | t({name: user.name}) }}</h1>
+    <h1 class="govuk-heading-xl">
+      <span class="govuk-caption-l">{{ organisation | t }}</span>
+      {{ user.name }}
+    </h1>
+    <h2 class="govuk-heading-m">{{("app.pages.admin.dashboard.subHeading" | t)}}</h2>
+    <ul class="govuk-list">
+
+      {% if 'editProfession' in permissions %}
+        <li>
+          {% if (user.serviceOwner) %}
+            <a class="govuk-link" href="/admin/professions">{{ "app.pages.admin.dashboard.editProfessionsCentralAdmin" | t }}</a>
+          {% else %}
+            <a class="govuk-link" href="/admin/professions">{{ "app.pages.admin.dashboard.editProfessionsRegulators" | t }}</a>
+          {% endif %}
+        </li>        
+      {% endif %}
+
+      {% if 'editOrganisation' in permissions %}
+        <li>
+          {% if (user.serviceOwner) %}
+            <a class="govuk-link" href="/admin/organisations">{{ "app.pages.admin.dashboard.editRegulatorsCentralAdmin" | t }}</a>
+          {% else %}
+            <a class="govuk-link" href="/admin/professions">{{ "app.pages.admin.dashboard.editRegulatorsRegulators" | t }}</a>
+          {% endif %}
+        </li>
+      {% endif %}
+
+      {% if 'editUser' in permissions %}
+        <li>
+          {% if (user.serviceOwner) %}
+            <a class="govuk-link" href="/admin/users">{{ "app.pages.admin.dashboard.manageAccessCentralAdmin" | t }}</a>
+          {% else %}
+            <a class="govuk-link" href="/admin/professions">{{ "app.pages.admin.dashboard.manageAccessRegulators" | t }}</a>
+          {% endif %}
+        </li>
+      {% endif %}
+
+    </ul>
   </div>
 </div>
 {% endblock %}

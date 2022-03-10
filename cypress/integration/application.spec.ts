@@ -14,13 +14,10 @@ describe('/', () => {
     });
 
     it('shows my name and the BEIS organisation name', () => {
-      cy.translate('app.welcome', { name: 'beis-rpr' }).then(
-        (welcomeMessage) => {
-          cy.get('body').should('contain', welcomeMessage);
-        },
-      );
+      cy.get('h1').should('contain', 'beis-rpr');
+
       cy.translate('app.beis').then((beis) => {
-        cy.get('span').should('contain', beis);
+        cy.get('h1 span').should('contain', beis);
       });
     });
   });
@@ -32,12 +29,8 @@ describe('/', () => {
     });
 
     it('shows my name and organisation', () => {
-      cy.translate('app.welcome', { name: 'Organisation Admin' }).then(
-        (welcomeMessage) => {
-          cy.get('body').should('contain', welcomeMessage);
-        },
-      );
-      cy.get('span').should('contain', 'Department for Education');
+      cy.get('h1').should('contain', 'Organisation Admin');
+      cy.get('h1 span').should('contain', 'Department for Education');
     });
   });
 });
