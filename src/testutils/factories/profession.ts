@@ -16,6 +16,8 @@ class ProfessionFactory extends Factory<Profession> {
       description: undefined,
       occupationLocations: undefined,
       regulationType: undefined,
+      registrationRequirements: undefined,
+      registrationUrl: undefined,
       industries: undefined,
       qualification: undefined,
       legislations: undefined,
@@ -35,6 +37,8 @@ export default ProfessionFactory.define(({ sequence }) => ({
     'A description of the profession that will be displayed to users',
   occupationLocations: ['GB-ENG'],
   regulationType: RegulationType.Licensing,
+  registrationRequirements: 'Some Requirements',
+  registrationUrl: 'http://example.com/required',
   industries: [
     industryFactory.build({ name: 'Example industry', id: 'example-industry' }),
   ],

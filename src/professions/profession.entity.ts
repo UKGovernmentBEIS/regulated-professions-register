@@ -64,6 +64,8 @@ export class Profession {
   description?: string;
   occupationLocations?: string[];
   regulationType?: RegulationType;
+  registrationRequirements: string;
+  registrationUrl: string;
   industries?: Industry[];
   qualification?: Qualification;
   protectedTitles?: string;
@@ -82,6 +84,8 @@ export class Profession {
     description?: string,
     occupationLocations?: string[],
     regulationType?: RegulationType,
+    registrationRequirements?: string,
+    registrationUrl?: string,
     industries?: Industry[],
     qualification?: Qualification,
     reservedActivities?: string,
@@ -95,6 +99,8 @@ export class Profession {
     this.description = description || null;
     this.occupationLocations = occupationLocations || null;
     this.regulationType = regulationType || null;
+    this.registrationRequirements = registrationRequirements || null;
+    this.registrationUrl = registrationUrl || null;
     this.industries = industries || null;
     this.qualification = qualification || null;
     this.reservedActivities = reservedActivities || null;
@@ -149,6 +155,8 @@ export class Profession {
       description: version.description,
       occupationLocations: version.occupationLocations,
       regulationType: version.regulationType,
+      registrationRequirements: version.registrationRequirements,
+      registrationUrl: version.registrationUrl,
       industries: version.industries,
       qualification: version.qualification,
       reservedActivities: version.reservedActivities,
