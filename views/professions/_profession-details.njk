@@ -7,15 +7,19 @@
 <h2 class="govuk-heading-m rpr-details__section-title">{{ "professions.show.overview.heading" | t }}</h2>
 
 {% set nationsHtml %}
+  <ul class="govuk-list">
     {% for nation in nations %}
-      <p class="govuk-body-m"> {{ nation }}</p>
+      <li>{{ nation }}</li>
     {% endfor %}
+  </ul>
 {% endset %}
 
 {% set industriesHtml %}
-  {% for industry in industries %}
-    <p class="govuk-body-m"> {{ industry }}</p>
+  <ul class="govuk-list">
+    {% for industry in industries %}
+    <li>{{ industry }}</li>
   {% endfor %}
+  </ul>
 {% endset %}
 
 {{

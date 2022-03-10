@@ -83,17 +83,17 @@
         <h2 class="govuk-heading-m">{{ ("professions.form.headings.scope" | t) }}</h2>
 
         {% set selectedNationsSummaryListHtml %}
-          <ul>
+          <ul class="govuk-list">
             {% for nation in nations %}
-              <li class='govuk-body-m'>{{ nation }}</li>
+              <li>{{ nation }}</li>
             {% endfor %}
           </ul>
         {% endset %}
 
         {% set selectedIndustriesSummaryListHtml %}
-          <ul>
+          <ul class="govuk-list">
             {% for industry in industries %}
-              <li class='govuk-body-m'>{{ industry }}</li>
+              <li>{{ industry }}</li>
             {% endfor %}
           </ul>
         {% endset %}
