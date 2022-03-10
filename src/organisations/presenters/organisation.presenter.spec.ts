@@ -70,7 +70,7 @@ describe('OrganisationPresenter', () => {
             )}`,
           });
           expect(tableRow[2]).toEqual({
-            html: `Translation of \`${industries[0].name}\``,
+            text: translationOf(industries[0].name),
           });
           expect(tableRow[3]).toEqual({
             text: presenter.lastModified,
@@ -149,11 +149,11 @@ describe('OrganisationPresenter', () => {
             )}`,
           });
           expect(tableRow[2]).toEqual({
-            html: [
-              `Translation of \`${industries[0].name}\``,
-              `Translation of \`${industries[1].name}\``,
-              `Translation of \`${industries[2].name}\``,
-            ].join('<br />'),
+            text: [
+              translationOf(industries[0].name),
+              translationOf(industries[1].name),
+              translationOf(industries[2].name),
+            ].join(', '),
           });
           expect(tableRow[3]).toEqual({
             text: presenter.lastModified,

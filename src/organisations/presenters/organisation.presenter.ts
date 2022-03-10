@@ -34,7 +34,7 @@ export class OrganisationPresenter {
         text: await this.nations(),
       },
       {
-        html: await this.industries(),
+        text: await this.industries(),
       },
       {
         text: this.lastModified,
@@ -202,7 +202,7 @@ export class OrganisationPresenter {
       ),
     );
 
-    return [...new Set(industryNames)].join('<br />');
+    return [...new Set(industryNames)].join(', ');
   }
 
   public async nations(): Promise<string> {
