@@ -40,3 +40,22 @@
 {% block bodyEnd %}
   {{ encore_entry_script_tags }}
 {% endblock %}
+
+{% block footer %}
+  {{
+    govukFooter({
+      meta: {
+        items: [
+          {
+            href: "/privacy-policy",
+            text: ("app.privacyPolicy" | t)
+          },
+          {
+            href: "/cookies",
+            text: ("app.cookies" | t)
+          }
+        ]
+      }
+    })
+  }}
+{% endblock %}

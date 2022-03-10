@@ -91,4 +91,16 @@ describe('AppController', () => {
       });
     });
   });
+
+  describe('cookies', () => {
+    it('should be defined', () => {
+      expect(appController.cookies).toBeDefined();
+    });
+  });
+
+  describe('privacyPolicy', () => {
+    it('should be defined', () => {
+      expect(appController.privacyPolicy).toBeDefined();
+    });
+  });
 });

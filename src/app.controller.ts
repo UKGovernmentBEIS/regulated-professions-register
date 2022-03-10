@@ -22,6 +22,18 @@ export class AppController {
     };
   }
 
+  @Get('/cookies')
+  @Render('pages/cookies')
+  cookies() {
+    // do nothing.
+  }
+
+  @Get('/privacy-policy')
+  @Render('pages/privacy-policy')
+  privacyPolicy() {
+    // do nothing.
+  }
+
   @Get('/health-check')
   healthCheck() {
     return {
