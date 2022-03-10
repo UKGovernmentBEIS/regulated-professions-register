@@ -171,7 +171,7 @@
 
 {% endif %}
 
-{% if profession.legislations or showEmptyProfessionDetails %}
+{% if (profession.legislations | length) or showEmptyProfessionDetails %}
 
 <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
 
