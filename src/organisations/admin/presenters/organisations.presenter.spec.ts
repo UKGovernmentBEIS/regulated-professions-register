@@ -6,6 +6,8 @@ import industryFactory from '../../../testutils/factories/industry';
 import { FilterInput } from '../../../common/interfaces/filter-input.interface';
 import { IndustriesCheckboxPresenter } from '../../../industries/industries-checkbox.presenter';
 import { OrganisationPresenter } from '../../presenters/organisation.presenter';
+import { Nation } from '../../../nations/nation';
+import { NationsCheckboxPresenter } from '../../../nations/nations-checkbox.presenter';
 
 const mockTableRow = jest.fn();
 const mockCheckboxItems = jest.fn();
@@ -23,6 +25,16 @@ jest.mock('../../presenters/organisation.presenter', () => {
 jest.mock('../../../industries/industries-checkbox.presenter', () => {
   return {
     IndustriesCheckboxPresenter: jest.fn().mockImplementation(() => {
+      return {
+        checkboxItems: mockCheckboxItems,
+      };
+    }),
+  };
+});
+
+jest.mock('../../../nations/nations-checkbox.presenter', () => {
+  return {
+    NationsCheckboxPresenter: jest.fn().mockImplementation(() => {
       return {
         checkboxItems: mockCheckboxItems,
       };
@@ -50,6 +62,7 @@ describe('OrganisationsPresenter', () => {
 
         const i18nService = createMockI18nService();
 
+        const nations = Nation.all();
         const industries = industryFactory.buildList(3);
         const organisations = organisationFactory.buildList(5);
 
@@ -57,6 +70,7 @@ describe('OrganisationsPresenter', () => {
 
         const presenter = new OrganisationsPresenter(
           'Organisation Name',
+          nations,
           industries,
           filterInput,
           organisations,
@@ -76,9 +90,7 @@ describe('OrganisationsPresenter', () => {
         expect(result.organisationsTable.head).toEqual([
           { text: translationOf('organisations.admin.tableHeading.name') },
           {
-            text: translationOf(
-              'organisations.admin.tableHeading.alternateName',
-            ),
+            text: translationOf('organisations.admin.tableHeading.nations'),
           },
           {
             text: translationOf('organisations.admin.tableHeading.industries'),
@@ -113,6 +125,7 @@ describe('OrganisationsPresenter', () => {
 
         const i18nService = createMockI18nService();
 
+        const nations = Nation.all();
         const industries = industryFactory.buildList(3);
         const organisations = organisationFactory.buildList(5);
 
@@ -120,6 +133,7 @@ describe('OrganisationsPresenter', () => {
 
         const presenter = new OrganisationsPresenter(
           'Organisation name',
+          nations,
           industries,
           filterInput,
           organisations,
@@ -127,6 +141,12 @@ describe('OrganisationsPresenter', () => {
         );
 
         const result = await presenter.present();
+
+        expect(NationsCheckboxPresenter).toBeCalledWith(
+          nations,
+          [],
+          i18nService,
+        );
 
         expect(IndustriesCheckboxPresenter).toBeCalledWith(
           industries,
@@ -136,6 +156,7 @@ describe('OrganisationsPresenter', () => {
 
         expect(result.filters).toEqual({
           keywords: '',
+          nations: [],
           industries: [],
         });
       });
@@ -148,16 +169,19 @@ describe('OrganisationsPresenter', () => {
 
         const i18nService = createMockI18nService();
 
+        const nations = Nation.all();
         const industries = industryFactory.buildList(3);
         const organisations = organisationFactory.buildList(5);
 
         const filterInput: FilterInput = {
           keywords: 'example keywords',
+          nations: [nations[1], nations[3]],
           industries: [industries[0], industries[2]],
         };
 
         const presenter = new OrganisationsPresenter(
           'Organisation name',
+          nations,
           industries,
           filterInput,
           organisations,
@@ -165,6 +189,12 @@ describe('OrganisationsPresenter', () => {
         );
 
         const result = await presenter.present();
+
+        expect(NationsCheckboxPresenter).toBeCalledWith(
+          nations,
+          [nations[1], nations[3]],
+          i18nService,
+        );
 
         expect(IndustriesCheckboxPresenter).toBeCalledWith(
           industries,
@@ -174,6 +204,7 @@ describe('OrganisationsPresenter', () => {
 
         expect(result.filters).toEqual({
           keywords: 'example keywords',
+          nations: [nations[1].name, nations[3].name],
           industries: [industries[0].name, industries[2].name],
         });
       });
@@ -197,6 +228,8 @@ describe('OrganisationsPresenter', () => {
           ]);
 
           const i18nService = createMockI18nService();
+
+          const nations = Nation.all();
           const industries = industryFactory.buildList(3);
           const filterInput: FilterInput = {};
 
@@ -204,6 +237,7 @@ describe('OrganisationsPresenter', () => {
 
           const presenter = new OrganisationsPresenter(
             'Organisation name',
+            nations,
             industries,
             filterInput,
             foundOrganisations,
@@ -234,6 +268,8 @@ describe('OrganisationsPresenter', () => {
           ]);
 
           const i18nService = createMockI18nService();
+
+          const nations = Nation.all();
           const industries = industryFactory.buildList(3);
           const filterInput: FilterInput = {};
 
@@ -241,6 +277,7 @@ describe('OrganisationsPresenter', () => {
 
           const presenter = new OrganisationsPresenter(
             'Organisation name',
+            nations,
             industries,
             filterInput,
             foundOrganisations,

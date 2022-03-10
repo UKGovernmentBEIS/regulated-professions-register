@@ -6,6 +6,7 @@
     "viewDetails": "View details <span class='govuk-visually-hidden'>about {name}</span>",
     "labels": {
       "keywords": "Keywords:",
+      "nations": "Nations:",
       "industries": "Industries:"
     },
     "filter": {
@@ -76,7 +77,7 @@
     },
     "tableHeading": {
       "name": "Name",
-      "alternateName": "Alternate name",
+      "nations": "Nations",
       "industries": "Sectors",
       "status": "Status",
       "lastModified": "Last updated",

@@ -9,6 +9,8 @@ import { formatLink } from '../../helpers/format-link.helper';
 import { formatEmail } from '../../helpers/format-email.helper';
 import { Profession } from '../../professions/profession.entity';
 import { formatStatus } from '../../helpers/format-status.helper';
+import { Nation } from '../../nations/nation';
+import { stringifyNations } from '../../nations/helpers/stringifyNations';
 
 interface OrganisationSummaryListOptions {
   classes?: string;
@@ -29,10 +31,10 @@ export class OrganisationPresenter {
         text: this.organisation.name,
       },
       {
-        text: this.organisation.alternateName,
+        text: await this.nations(),
       },
       {
-        html: await this.industries(),
+        text: await this.industries(),
       },
       {
         text: this.lastModified,
@@ -200,6 +202,19 @@ export class OrganisationPresenter {
       ),
     );
 
-    return [...new Set(industryNames)].join('<br />');
+    return [...new Set(industryNames)].join(', ');
+  }
+
+  public async nations(): Promise<string> {
+    const professions = this.organisation.professions.map((profession) =>
+      Profession.withLatestLiveOrDraftVersion(profession),
+    );
+
+    const nationCodes = professions
+      .map((profession) => profession.occupationLocations || [])
+      .flat();
+    const nations = [...new Set(nationCodes)].map((code) => Nation.find(code));
+
+    return await stringifyNations(nations, this.i18nService);
   }
 }

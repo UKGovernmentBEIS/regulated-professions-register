@@ -31,12 +31,6 @@ describe('Listing organisations', () => {
 
                   cy.wrap($row).should('contain', organisation.name);
 
-                  if (latestVersion.alternateName) {
-                    cy.wrap($row).should(
-                      'contain',
-                      latestVersion.alternateName,
-                    );
-                  }
                   cy.get('[data-cy=changed-by-text]').should('not.exist');
                   cy.wrap($row).should(
                     'contain',
@@ -95,6 +89,45 @@ describe('Listing organisations', () => {
       });
 
       cy.get('tbody tr').should('have.length.at.least', 1);
+    });
+
+    it('I can filter by nation', () => {
+      expandFilters();
+
+      cy.translate('nations.wales').then((wales) => {
+        cy.translate('app.unitedKingdom').then((unitedKingdom) => {
+          cy.get('label')
+            .contains(wales)
+            .parent()
+            .within(() => {
+              cy.get('input[name="nations[]"]').check();
+            });
+
+          clickFilterButtonAndCheckAccessibility();
+
+          cy.get('label')
+            .contains(wales)
+            .parent()
+            .within(() => {
+              cy.get('input[name="nations[]"]').should('be.checked');
+            });
+
+          cy.get('tbody tr').each(($tr) => {
+            cy.wrap($tr).within(() => {
+              cy.get('td')
+                .eq(0)
+                .invoke('text')
+                .then((cellText) => {
+                  expect(cellText).to.match(
+                    new RegExp(`(${wales}|${unitedKingdom})`, 'g'),
+                  );
+                });
+            });
+          });
+
+          cy.get('tbody tr').should('have.length.at.least', 1);
+        });
+      });
     });
 
     it('I can filter by industry', () => {

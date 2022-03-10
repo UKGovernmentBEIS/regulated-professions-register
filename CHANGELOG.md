@@ -24,6 +24,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Display additional UK qualification data where the Profession itself is not a whole-UK Profession
 - Remove non-UK qualification data
 - Show user's organisation on dashboard
+- Internal Orgnaisation listing can be filtered by nation
 
 ## [release-007] - 2022-03-04
 

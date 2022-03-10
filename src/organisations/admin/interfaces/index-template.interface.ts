@@ -7,8 +7,10 @@ export interface IndexTemplate {
 
   filters: {
     keywords: string;
+    nations: string[];
     industries: string[];
   };
 
+  nationsCheckboxItems: CheckboxItems[];
   industriesCheckboxItems: CheckboxItems[];
 }
