@@ -34,26 +34,30 @@
   },
   "pages": {
     "index": {
-      "heading": "Work in a regulated profession in the UK",
+      "heading": "Check which professions are regulated in the UK",
       "intro": [
-        "Some professions, jobs and trades in the UK are ‘regulated’. This means you must have certain qualifications or experience to work in them.",
-        "If you want to work in a regulated profession in the UK, you need to contact the regulatory authority for it.",
-        "The regulatory authority sets the requirements for qualifying for your profession, so it will check your experience and qualifications. If they’re recognised, the regulatory authority will register you."
+        "Some professions in the UK are regulated. This can mean there is a legal requirement to have certain qualifications or experience. Other professions are regulated by chartered bodies granting a certain status.",
+        "If a profession is regulated, you may need certain professional qualifications or experience to:"
       ],
+      "ifAProfessionIsRegulated": {
+        "professionalActivities": "carry out certain professional activities",
+        "professionalTitle": "use a professional title, like ‘architect’"
+      },
+      "intro2": "For many professions, the bodies that decide if you are qualified to work in a regulated profession are known as ‘regulators’. Some professions are also regulated through chartered professional bodies.",
       "useThisService": {
-        "heading": "Use this service to:",
+        "heading": "You can use the Regulated Professions Register (RPR) service to: ",
         "checkProfessions": {
-          "text": "check if your profession is regulated and the qualifications and experience needed",
+          "text": "search a list of regulated professions and find out what qualifications or experience you may need to work",
           "link": "/professions/search"
         },
         "findContactDetails": {
-          "text": "find contact details for your profession’s regulatory authority",
+          "text": "find contact details for the regulators of regulated profession in the UK",
           "link": "/regulatory-authorities/search"
         }
       },
       "help": {
         "heading": "Get help checking a regulated profession",
-        "body": "Contact the <a class='govuk-link' href='#'>UK Centre for Professional Qualifications (UK CPQ)</a> If you need support checking a regulated profession."
+        "body": "If you cannot find the information you need on the RPR, you may wish to <a class='govuk-link' href='https://cpq.ecctis.com/'>contact the UK Centre for Professional Qualifications (UK CPQ)</a>. The UK CPQ can also help you understand how to get your professional qualifications recognised outside the UK."
       }
     },
     "selectService": {

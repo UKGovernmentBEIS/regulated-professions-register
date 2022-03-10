@@ -15,6 +15,17 @@
         <p class="govuk-body">{{ paragraph }}</p>
       {% endfor %}
 
+      <ul class="govuk-list govuk-list--bullet">
+        <li>
+          {{ "app.pages.index.ifAProfessionIsRegulated.professionalActivities" | t }}
+        </li>
+        <li>
+          {{ "app.pages.index.ifAProfessionIsRegulated.professionalTitle" | t }}
+        </li>
+      </ul>
+
+      <p class="govuk-body">{{ "app.pages.index.intro2" | t }}</p>
+
       <p class="govuk-body">{{ "app.pages.index.useThisService.heading" | t }}</p>
 
       <ul class="govuk-list govuk-list--bullet">
