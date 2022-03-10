@@ -1,6 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
 import { AppController } from './app.controller';
+import { createMockRequest } from './testutils/create-mock-request';
+import organisationFactory from './testutils/factories/organisation';
+import userFactory from './testutils/factories/user';
+import { getActingUser } from './users/helpers/get-acting-user.helper';
+
+jest.mock('./users/helpers/get-acting-user.helper');
 
 describe('AppController', () => {
   let appController: AppController;
@@ -11,6 +17,47 @@ describe('AppController', () => {
     }).compile();
 
     appController = app.get<AppController>(AppController);
+  });
+
+  describe('admin', () => {
+    describe('when the user is a service owner', () => {
+      it('returns the BEIS user', () => {
+        const user = userFactory.build({ serviceOwner: true });
+
+        const request = createMockRequest(
+          'http://example.com/some/path',
+          'example.com',
+          { user },
+        );
+
+        (getActingUser as jest.Mock).mockReturnValue(user);
+
+        expect(appController.admin(request)).toEqual({
+          organisation: 'app.beis',
+        });
+      });
+    });
+
+    describe('when the user is not a service owner', () => {
+      it("fetches the user's organisation", () => {
+        const organisation = organisationFactory.build({
+          name: 'Department for Education',
+        });
+        const user = userFactory.build({ serviceOwner: false, organisation });
+
+        const request = createMockRequest(
+          'http://example.com/some/path',
+          'example.com',
+          { user },
+        );
+
+        (getActingUser as jest.Mock).mockReturnValue(user);
+
+        expect(appController.admin(request)).toEqual({
+          organisation: 'Department for Education',
+        });
+      });
+    });
   });
 
   describe('healthCheck', () => {

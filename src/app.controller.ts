@@ -1,5 +1,8 @@
-import { Controller, Get, Render, UseGuards } from '@nestjs/common';
+import { Controller, Get, Render, Req, UseGuards } from '@nestjs/common';
 import { AuthenticationGuard } from './common/authentication.guard';
+import { RequestWithAppSession } from './common/interfaces/request-with-app-session.interface';
+import { getActingUser } from './users/helpers/get-acting-user.helper';
+import { getUserOrganisation } from './users/helpers/get-user-organisation';
 @Controller()
 export class AppController {
   @Get()
@@ -11,8 +14,12 @@ export class AppController {
   @Get('/admin')
   @UseGuards(AuthenticationGuard)
   @Render('admin/dashboard')
-  admin() {
-    // do nothing.
+  admin(@Req() request: RequestWithAppSession) {
+    const actingUser = getActingUser(request);
+
+    return {
+      organisation: getUserOrganisation(actingUser),
+    };
   }
 
   @Get('/health-check')
