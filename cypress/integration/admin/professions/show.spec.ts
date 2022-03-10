@@ -123,6 +123,18 @@ describe('Listing professions', () => {
         'https://www.sra.org.uk/become-solicitor/qualified-lawyers/',
       );
 
+      cy.translate('professions.show.registration.heading').then((heading) => {
+        cy.get('body').should('contain', heading);
+      });
+      cy.checkSummaryListRowValue(
+        'professions.show.registration.registrationRequirements',
+        'Example registration requirements',
+      );
+      cy.checkSummaryListRowValue(
+        'professions.show.registration.registrationUrl',
+        'http://www.example.com/law-society-registration',
+      );
+
       cy.translate('professions.show.legislation.heading').then((heading) => {
         cy.get('body').should('contain', heading);
       });
@@ -224,6 +236,18 @@ describe('Listing professions', () => {
       );
       cy.checkSummaryListRowValue(
         'professions.show.qualification.moreInformationUrl',
+        '',
+      );
+
+      cy.translate('professions.show.registration.heading').then((heading) => {
+        cy.get('body').should('contain', heading);
+      });
+      cy.checkSummaryListRowValue(
+        'professions.show.registration.registrationRequirements',
+        '',
+      );
+      cy.checkSummaryListRowValue(
+        'professions.show.registration.registrationUrl',
         '',
       );
 

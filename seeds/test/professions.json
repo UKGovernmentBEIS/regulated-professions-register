@@ -10,6 +10,8 @@
         "description": "Registration protection and exploitation of trade marks",
         "occupationLocations": ["GB-ENG", "GB-SCT", "GB-WLS", "GB-NIR"],
         "regulationType": "certification",
+        "registrationRequirements": "Example registration requirements",
+        "registrationUrl": "http://www.example.com/law-society-registration",
         "industries": ["industries.law"],
         "qualification": "Have a degree in any subject that is equivalent to a UK degree or level 6 qualification, or other qualification and/or experience equivalent to this.",
         "reservedActivities": "England and Wales: the exercise of a right of audience; the conduct of litigation; reserved instrument activities; probate activities; the administration of oaths (see section 12 Legal Services Act 2007).",

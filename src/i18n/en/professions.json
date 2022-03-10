@@ -180,6 +180,11 @@
       "ukRecognition": "Routes to recognition within the UK",
       "ukRecognitionUrl": "More about recognition within the UK"
     },
+    "registration": {
+      "heading": "Registration",
+      "registrationRequirements": "Registration requirements",
+      "registrationUrl": "More about registration"
+    },
     "legislation": {
       "heading": "Legislation",
       "nationalLegislation": "National legislation",
