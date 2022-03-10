@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 - Allow users to publish professions and organisations when editing
 - Add link to feedback form for internal and public users
+- Add cookie and privacy policies
 
 ### Changed
 
