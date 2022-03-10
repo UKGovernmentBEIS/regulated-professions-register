@@ -3,6 +3,8 @@
 {% from "govuk/components/textarea/macro.njk" import govukTextarea %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
+{% set name = name or submittedName %}
+
 {% if slug|length == 0 %}
   {% set title = ("organisations.admin.create.heading" | t) %}
 {% else %}
@@ -22,6 +24,8 @@
       {% set targetUrl = ( currentUrl if errors else "/admin/organisations/"+ id +"/versions/" + versionId + "?_method=PUT" ) %}
 
       <form method="post" action="{{ targetUrl }}">
+        <input type="hidden" name="slug" value="{{ slug }}" />
+        <input type="hidden" name="submittedName" value="{{ name or submittedName }}"/>
         {% if slug|length == 0 %}
           {{
             govukInput({
