@@ -29,6 +29,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Reorganise sector list and add missing sectors
 - Change the sidenav to a topnav
 - Update dashboard content
+- Update content on the public facing start page
 
 ## [release-007] - 2022-03-04
 
