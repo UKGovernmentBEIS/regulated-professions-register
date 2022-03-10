@@ -6,7 +6,7 @@ import {
   HttpStatus,
   Logger,
 } from '@nestjs/common';
-import { Response } from 'express';
+import { Response, Request } from 'express';
 import Rollbar from 'rollbar';
 
 /**
@@ -25,6 +25,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
   async catch(exception: any, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
+    const request = ctx.getRequest<Request>();
 
     const status =
       exception instanceof HttpException
@@ -46,7 +47,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       }
       default: {
         if (process.env['NODE_ENV'] === 'production') {
-          this.sendErrorToRollbar(exception);
+          this.sendErrorToRollbar(exception, request);
         }
 
         Logger.error(exception.stack);
@@ -56,9 +57,9 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     }
   }
 
-  private sendErrorToRollbar(exception: any): void {
+  private sendErrorToRollbar(exception: any, request: Request): void {
     const rollbarClient = this.getRollbarClient();
-    rollbarClient.error(exception);
+    rollbarClient.error(exception, request);
   }
 
   private getRollbarClient(): Rollbar {

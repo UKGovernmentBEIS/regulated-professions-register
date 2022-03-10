@@ -252,7 +252,7 @@ describe('GlobalExceptionFilter', () => {
           exception = new InternalServerErrorException();
           service.catch(exception, host);
 
-          expect(rollbarClient.error).toHaveBeenCalledWith(exception);
+          expect(rollbarClient.error).toHaveBeenCalledWith(exception, request);
         });
 
         it('should log the error', () => {
