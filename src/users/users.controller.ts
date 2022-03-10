@@ -28,6 +28,7 @@ import { Response } from 'express';
 import { RequestWithAppSession } from '../common/interfaces/request-with-app-session.interface';
 import { getActingUser } from './helpers/get-acting-user.helper';
 import { CompleteTemplate } from './interfaces/complete-template';
+import { getUserOrganisation } from './helpers/get-user-organisation';
 
 class UserAlreadyExistsError extends Error {}
 
@@ -56,9 +57,12 @@ export class UsersController {
       ? this.usersService.allConfirmed()
       : this.usersService.allConfirmedForOrganisation(actingUser.organisation));
 
+    const organisation = getUserOrganisation(actingUser);
+
     const usersPresenter = new UsersPresenter(users);
 
     return {
+      organisation,
       ...users,
       rows: usersPresenter.tableRows(),
     };

@@ -7,6 +7,10 @@ describe('Listing professions', () => {
     it('All users are listed', () => {
       cy.visitAndCheckAccessibility('/admin/users');
 
+      cy.translate('app.beis').then((beis) => {
+        cy.get('h1 span').should('contain', beis);
+      });
+
       cy.readFile('./seeds/test/users.json').then((users) => {
         users.forEach((user) => {
           cy.get('tbody th').should('contain', user.name);
@@ -25,6 +29,8 @@ describe('Listing professions', () => {
 
     it('Users for the organisation are listed', () => {
       cy.visitAndCheckAccessibility('/admin/users');
+
+      cy.get('h1 span').should('contain', 'Department for Education');
 
       cy.readFile('./seeds/test/users.json').then((users) => {
         const organisationUsers = users.filter(
