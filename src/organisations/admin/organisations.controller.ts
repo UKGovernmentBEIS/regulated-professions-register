@@ -42,6 +42,7 @@ import { UserPermission } from '../../users/user-permission';
 import { Permissions } from '../../common/permissions.decorator';
 import { getActingUser } from '../../users/helpers/get-acting-user.helper';
 import { escape } from '../../helpers/escape.helper';
+import { Nation } from '../../nations/nation';
 
 @UseGuards(AuthenticationGuard)
 @Controller('/admin/organisations')
@@ -70,13 +71,18 @@ export class OrganisationsController {
 
     const showAllOrgs = actingUser.serviceOwner;
 
+    const allNations = Nation.all();
     const allOrganisations =
       await this.organisationVersionsService.allWithLatestVersion();
     const allIndustries = await this.industriesService.all();
 
     const filter = query || new FilterDto();
 
-    const filterInput = createFilterInput({ ...filter, allIndustries });
+    const filterInput = createFilterInput({
+      ...filter,
+      allNations,
+      allIndustries,
+    });
 
     if (!showAllOrgs) {
       filterInput.organisations = [actingUser.organisation];
@@ -92,6 +98,7 @@ export class OrganisationsController {
 
     const presenter = new OrganisationsPresenter(
       userOrganisation,
+      allNations,
       allIndustries,
       filterInput,
       filteredOrganisations,

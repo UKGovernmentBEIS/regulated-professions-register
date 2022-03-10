@@ -31,6 +31,7 @@ import { createDefaultMockRequest } from '../../testutils/factories/create-defau
 import { getActingUser } from '../../users/helpers/get-acting-user.helper';
 import { escape } from '../../helpers/escape.helper';
 import { translationOf } from '../../testutils/translation-of';
+import { Nation } from '../../nations/nation';
 
 jest.mock('./presenters/organisations.presenter');
 jest.mock('../presenters/organisation.presenter');
@@ -103,12 +104,15 @@ describe('OrganisationsController', () => {
             },
             filters: {
               keywords: '',
+              nations: [],
               industries: [],
             },
+            nationsCheckboxItems: [],
             industriesCheckboxItems: [],
           };
 
           const organisations = createOrganisations();
+          const nations = Nation.all();
           const industries = industryFactory.buildList(5);
 
           (
@@ -128,14 +132,17 @@ describe('OrganisationsController', () => {
           expect(OrganisationsFilterHelper).toBeCalledWith(organisations);
           expect(OrganisationsFilterHelper.prototype.filter).toBeCalledWith({
             keywords: '',
+            nations: [],
             industries: [],
           } as FilterInput);
 
           expect(OrganisationsPresenter).toHaveBeenCalledWith(
             translationOf('app.beis'),
+            nations,
             industries,
             {
               keywords: '',
+              nations: [],
               industries: [],
             },
             organisations,
@@ -164,12 +171,15 @@ describe('OrganisationsController', () => {
             },
             filters: {
               keywords: '',
+              nations: [],
               industries: [],
             },
+            nationsCheckboxItems: [],
             industriesCheckboxItems: [],
           };
 
           const organisations = createOrganisations();
+          const nations = Nation.all();
           const industries = industryFactory.buildList(5);
 
           (
@@ -183,6 +193,7 @@ describe('OrganisationsController', () => {
           expect(
             await controller.index(request, {
               keywords: 'example keywords',
+              nations: [nations[2].code],
               industries: [industries[1].id],
             } as FilterDto),
           ).toEqual(templateParams);
@@ -194,14 +205,17 @@ describe('OrganisationsController', () => {
           expect(OrganisationsFilterHelper).toBeCalledWith(organisations);
           expect(OrganisationsFilterHelper.prototype.filter).toBeCalledWith({
             keywords: 'example keywords',
+            nations: [nations[2]],
             industries: [industries[1]],
           } as FilterInput);
 
           expect(OrganisationsPresenter).toHaveBeenCalledWith(
             translationOf('app.beis'),
+            nations,
             industries,
             {
               keywords: 'example keywords',
+              nations: [nations[2]],
               industries: [industries[1]],
             },
             [organisations[1], organisations[3]],
@@ -229,11 +243,14 @@ describe('OrganisationsController', () => {
           },
           filters: {
             keywords: '',
+            nations: [],
             industries: [],
           },
+          nationsCheckboxItems: [],
           industriesCheckboxItems: [],
         };
 
+        const nations = Nation.all();
         const industries = industryFactory.buildList(5);
 
         const request = createDefaultMockRequest();
@@ -261,15 +278,18 @@ describe('OrganisationsController', () => {
         expect(OrganisationsFilterHelper).toBeCalledWith(organisations);
         expect(OrganisationsFilterHelper.prototype.filter).toBeCalledWith({
           keywords: '',
+          nations: [],
           industries: [],
           organisations: [userOrganisation],
         } as FilterInput);
 
         expect(OrganisationsPresenter).toHaveBeenCalledWith(
           userOrganisation.name,
+          nations,
           industries,
           {
             keywords: '',
+            nations: [],
             industries: [],
             organisations: [userOrganisation],
           },

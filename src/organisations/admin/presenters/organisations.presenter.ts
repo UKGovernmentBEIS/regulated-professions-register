@@ -7,6 +7,8 @@ import { Industry } from '../../../industries/industry.entity';
 import { FilterInput } from '../../../common/interfaces/filter-input.interface';
 import { IndexTemplate } from '../interfaces/index-template.interface';
 import { IndustriesCheckboxPresenter } from '../../../industries/industries-checkbox.presenter';
+import { Nation } from '../../../nations/nation';
+import { NationsCheckboxPresenter } from '../../../nations/nations-checkbox.presenter';
 
 type Field =
   | 'name'
@@ -29,6 +31,7 @@ const fields = [
 export class OrganisationsPresenter {
   constructor(
     private readonly userOrganisation: string,
+    private readonly allNations: Nation[],
     private readonly allIndustries: Industry[],
     private readonly filterInput: FilterInput,
     private readonly filteredOrganisations: Organisation[],
@@ -36,6 +39,12 @@ export class OrganisationsPresenter {
   ) {}
 
   async present(): Promise<IndexTemplate> {
+    const nationsCheckboxItems = await new NationsCheckboxPresenter(
+      this.allNations,
+      this.filterInput.nations || [],
+      this.i18nService,
+    ).checkboxItems();
+
     const industriesCheckboxItems = await new IndustriesCheckboxPresenter(
       this.allIndustries,
       this.filterInput.industries || [],
@@ -44,10 +53,12 @@ export class OrganisationsPresenter {
 
     return {
       userOrganisation: this.userOrganisation,
+      nationsCheckboxItems,
       industriesCheckboxItems,
       organisationsTable: await this.table(),
       filters: {
         keywords: this.filterInput.keywords || '',
+        nations: (this.filterInput.nations || []).map((nation) => nation.name),
         industries: (this.filterInput.industries || []).map(
           (industry) => industry.name,
         ),
