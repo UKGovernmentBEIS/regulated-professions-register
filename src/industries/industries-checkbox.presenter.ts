@@ -9,8 +9,24 @@ export class IndustriesCheckboxPresenter {
     private readonly i18nService: I18nService,
   ) {}
   async checkboxItems(): Promise<CheckboxItems[]> {
+    let industries: Industry[];
+
+    const other = this.allIndustries.find(
+      (industry) => industry.name === 'industries.other',
+    );
+
+    const standardIndustries = this.allIndustries.filter(
+      (industry) => industry.name !== 'industries.other',
+    );
+
+    if (other) {
+      industries = [...standardIndustries, other];
+    } else {
+      industries = standardIndustries;
+    }
+
     return Promise.all(
-      this.allIndustries.map(async (industry) => ({
+      industries.map(async (industry) => ({
         text: await this.i18nService.translate(industry.name),
         value: industry.id,
         checked: !!this.checkedIndustries.find(
