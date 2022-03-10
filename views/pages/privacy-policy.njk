@@ -1,0 +1,250 @@
+{% extends "base.njk" %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% set title = "Privacy policy" %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h1 class="govuk-heading-xl">
+      {{ title }}
+    </h1>
+
+    <p class="govuk-body">The Regulated Professions Register (RPR) is provided by the
+    Department for Business, Energy & Industrial Strategy (BEIS).</p>
+
+    <p class="govuk-body">BEIS is the data controller for the service.</p>
+
+    <h2 class="govuk-heading-m">What data we collect</h2>
+
+    <p class="govuk-body">This service collects non-personal data from logged in users
+    about regulated professions and who regulates them.</p>
+
+    <p class="govuk-body">To help us manage the service, we will collect personal data from
+    you. This includes:</p>
+
+    <ul class="govuk-list govuk-list--bullet">
+      <li>questions, queries or feedback you leave, including your email address if you
+      contact us</li>
+
+      <li>your name and email address to grant access to the site</li>
+
+      <li>the name and contact details of your organisation</li>
+
+      <li>your Internet Protocol (IP) address, which is anonymised before it's stored in
+      our server logs</li>
+    </ul>
+
+    <p class="govuk-body">We use <a href="http://www.plausible.io" class=
+    "govuk-link">Plausible</a> to collect information about how you use the service.
+    Plausible is a simple web analytics tool, similar to Google Analytics. The data is
+    anonymised before being used for analytics processing.</p>
+
+    <p class="govuk-body">Plausible processes anonymised information about:</p>
+
+    <ul class="govuk-list govuk-list--bullet">
+      <li>the pages you visit on RPR</li>
+
+      <li>how you got to the site</li>
+
+      <li>the device you are using</li>
+
+      <li>your nearest town/city</li>
+    </ul>
+
+    <p class="govuk-body">Plausible does not place tracking cookies on your computer and
+    does not collect or store any personal details about you.</p>
+
+    <p class="govuk-body">We will not identify you through analytics information, and we
+    will not combine analytics information with other data sets in a way that would
+    identify who you are.</p>
+
+    <p class="govuk-body">Further information can be found in the Plausible <a href=
+    "https://plausible.io/data-policy" class="govuk-link">data policy</a>.</p>
+
+    <p class="govuk-body">We continuously test and monitor our data protection controls to
+    make sure they're effective and to detect any weaknesses.</p>
+
+    <p class="govuk-body">This data can be viewed by authorised people in the BEIS and our
+    suppliers, to:</p>
+
+    <ul class="govuk-list govuk-list--bullet">
+      <li>grant access to the service</li>
+
+      <li>gather feedback to improve our services</li>
+
+      <li>respond to any feedback you send us</li>
+    </ul>
+
+    <p class="govuk-body">We will not:</p>
+
+    <ul class="govuk-list govuk-list--bullet">
+      <li>sell or rent your personal data to third parties</li>
+
+      <li>share your data with third parties for marketing purposes</li>
+
+      <li>use your data in analytics</li>
+    </ul>
+
+    <p class="govuk-body">We will share your data if we are required to do so by law - for
+    example, by court order, or to prevent fraud or other crime.</p>
+
+    <h2 class="govuk-heading-m">Why we need your data</h2>
+
+    <p class="govuk-body">We collect information through Plausible to see how you use the
+    service. We do this to help:</p>
+
+    <ul class="govuk-list govuk-list--bullet">
+      <li>make sure the site is meeting the needs of its users</li>
+
+      <li>make improvements</li>
+    </ul>
+
+    <p class="govuk-body">We also collect your personal data in order to:</p>
+
+    <ul class="govuk-list govuk-list--bullet">
+      <li>fulfill the primary function of the service</li>
+
+      <li>gather feedback to improve our services</li>
+
+      <li>respond to any feedback you send us, if you've asked us to</li>
+
+      <li>send email alerts to users who request them</li>
+
+      <li>monitor use of the site to identify security threats</li>
+    </ul>
+
+    <h2 class="govuk-heading-m">Our legal basis for processing your data</h2>
+
+    <p class="govuk-body">The legal basis for processing personal data in relation to site
+    security is our legitimate interests, and the legitimate interests of our users, in
+    ensuring the security and integrity of RPR.</p>
+
+    <p class="govuk-body">The legal basis for processing anonymised data for Plausible is
+    to monitor and improve the service.</p>
+
+    <p class="govuk-body">The legal basis for processing all other personal data is that
+    it's necessary:</p>
+
+    <ul class="govuk-list govuk-list--bullet">
+      <li>to perform a task in the public interest</li>
+
+      <li>in the exercise of our functions as a government department</li>
+    </ul>
+
+    <h2 class="govuk-heading-m">How long we keep your data</h2>
+
+    <p class="govuk-body">We will only retain your personal data for as long as:</p>
+
+    <ul class="govuk-list govuk-list--bullet">
+      <li>it is needed for the purposes set out in this document</li>
+
+      <li>the law requires us to</li>
+    </ul>
+
+    <p class="govuk-body">We will keep your email data until your access to the service is
+    no longer required.</p>
+
+    <h2 class="govuk-heading-m">Where your data is processed and stored</h2>
+
+    <p class="govuk-body">We design, build and run our systems to make sure that your data
+    is as safe as possible at all stages, both while it's processed and when it's
+    stored.</p>
+
+    <p class="govuk-body">All personal data is stored in the European Economic Area
+    (EEA).</p>
+
+    <h2 class="govuk-heading-m">How we protect your data and keep it secure</h2>
+
+    <p class="govuk-body">We are committed to doing all that we can to keep your data
+    secure. We have set up systems and processes to prevent unauthorised access or
+    disclosure of your data - for example, we protect your data using varying levels of
+    encryption.</p>
+
+    <p class="govuk-body">We also make sure that any third parties that we deal with keep
+    all personal data they process on our behalf secure.</p>
+
+    <h2 class="govuk-heading-m">Links to and from other websites</h2>
+
+    <p class="govuk-body">RPR contains links to other websites.</p>
+
+    <p class="govuk-body">This privacy notice only applies to RPR, and does not cover other
+    websites that we link to.</p>
+
+    <h2 class="govuk-heading-m">Following a link to another website</h2>
+
+    <p class="govuk-body">If you go to another website from this one, read the privacy
+    policy on that website to find out what it does with your information.</p>
+
+    <h2 class="govuk-heading-m">Following a link to RPR from another website</h2>
+
+    <p class="govuk-body">If you come to RPR from another website, we may receive personal
+    information from the other website. You should read the privacy policy of the website
+    you came from to find out more about this.</p>
+
+    <h2 class="govuk-heading-m">Your rights</h2>
+
+    <p class="govuk-body">You have the right to request:</p>
+
+    <ul class="govuk-list govuk-list--bullet">
+      <li>information about how your personal data is processed</li>
+
+      <li>a copy of that personal data</li>
+
+      <li>that anything inaccurate in your personal data is corrected immediately</li>
+    </ul>
+
+    <p class="govuk-body">You can also:</p>
+
+    <ul class="govuk-list govuk-list--bullet">
+      <li>raise an objection about how your personal data is processed</li>
+
+      <li>request that your personal data is erased if there is no longer a justification
+      for it</li>
+
+      <li>ask that the processing of your personal data is restricted in certain
+      circumstances</li>
+    </ul>
+
+    <p class="govuk-body">If you have any of these requests, get in contact with our RPR
+    Support Team.</p>
+
+    <h2 class="govuk-heading-m">Contact us or make a complaint</h2>
+
+    <p class="govuk-body">Contact the RPR Support Team if you:</p>
+
+    <ul class="govuk-list govuk-list--bullet">
+      <li>have a question about anything in this privacy notice</li>
+
+      <li>think that your personal data has been misused or mishandled</li>
+    </ul>
+
+    <p class="govuk-body">RPR Support Team<br />
+    1 Victoria Street<br />
+    London<br />
+    SW1H 0ET<br />
+    United Kingdom</p>
+
+    <p class="govuk-body">Email: <a href=
+    "mailto:enquiries@beis.gov.uk" class="govuk-link">enquiries@beis.gov.uk</a></p>
+
+    <p class="govuk-body">Telephone: <a href="tel:+442072155000" class="govuk-link">020 7215
+    5000</a></p>
+
+    <p class="govuk-body">Monday to Friday, 9am to 4:30pm</p>
+
+    <h2 class="govuk-heading-m">Changes to this policy</h2>
+
+    <p class="govuk-body">We may change this privacy policy. In that case, the 'last
+    updated' date at the bottom of this page will also change. Any changes to this privacy
+    policy will apply to you and your data immediately.</p>
+
+    <p class="govuk-body">If these changes affect how your personal data is processed, BEIS
+    will take reasonable steps to let you know.</p>
+
+    <p class="govuk-body">Last updated: 10 March 2022</p>
+
+  </div>
+</div>
+{% endblock %}
