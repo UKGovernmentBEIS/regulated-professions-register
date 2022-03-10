@@ -66,6 +66,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     return new Rollbar({
       accessToken: process.env['ROLLBAR_TOKEN'],
       captureUncaught: true,
+      captureIp: false,
       captureUnhandledRejections: true,
       payload: {
         environment: process.env['ENVIRONMENT'],
