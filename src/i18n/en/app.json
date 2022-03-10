@@ -9,6 +9,8 @@
   "home": "Home",
   "logout": "Logout",
   "or": "Or",
+  "privacyPolicy": "Privacy policy",
+  "cookies": "Cookies",
   "errors": {
     "heading": "There is a problem"
   },
