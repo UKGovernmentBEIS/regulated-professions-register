@@ -30,6 +30,8 @@ type SeedVersion = {
   description: string;
   occupationLocations: string[];
   regulationType: RegulationType;
+  registrationRequirements: string;
+  registrationUrl: string;
   industries: string[];
   qualification: string;
   reservedActivities: string;
@@ -162,6 +164,8 @@ export class ProfessionsSeeder implements Seeder {
           description: version.description,
           occupationLocations: version.occupationLocations,
           regulationType: version.regulationType as RegulationType,
+          registrationRequirements: version.registrationRequirements,
+          registrationUrl: version.registrationUrl,
           reservedActivities: version.reservedActivities,
           protectedTitles: version.protectedTitles,
           regulationUrl: version.regulationUrl,
