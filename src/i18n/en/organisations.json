@@ -93,6 +93,10 @@
         "email": "Email",
         "telephone": "Phone number"
       },
+      "hint": {
+        "alternateName": "Where the regulator or professional body is also known by a different name or abbreviation",
+        "address": "Use a new line for each line of the address"
+      },
       "errors": {
         "name": {
           "empty": "Enter the name of the regulatory authority"
