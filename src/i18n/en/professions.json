@@ -28,12 +28,11 @@
         "additionalAuthority": "Additional regulator or professional body (optional)"
       },
       "scope": {
-        "nations": "Nations",
-        "nationsHint": "The nations where you regulate this profession.",
-        "certainNations": "Certain nations",
+        "nations": "Where you regulate this profession",
+        "certainNations": "One or more nations",
         "certainNationsHint": "Select all that apply.",
-        "industry": "Sectors",
-        "industryHint": "The sectors this profession is part of. Select all that apply."
+        "industry": "Sectors this profession is part of",
+        "industryHint": "Select all that apply."
       },
       "registration": {
         "registrationRequirements": "Registration requirements (optional)",
