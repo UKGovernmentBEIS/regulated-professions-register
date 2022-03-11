@@ -91,6 +91,7 @@ describe('UsersController', () => {
         usersService.allConfirmed.mockResolvedValue([user]);
 
         expect(await controller.index(request)).toEqual({
+          organisation: 'app.beis',
           ...[user],
           rows: tableRows,
         });
@@ -123,6 +124,7 @@ describe('UsersController', () => {
         usersService.allConfirmedForOrganisation.mockResolvedValue([user]);
 
         expect(await controller.index(request)).toEqual({
+          organisation: actingUser.organisation.name,
           ...[user],
           rows: tableRows,
         });
