@@ -98,7 +98,7 @@ describe('ScopeController', () => {
               name: 'nations[]',
               hint: {
                 text: translationOf(
-                  'professions.form.label.scope.certainNationsHint',
+                  'professions.form.hint.scope.certainNations',
                 ),
               },
               items: [
@@ -181,7 +181,7 @@ describe('ScopeController', () => {
               name: 'nations[]',
               hint: {
                 text: translationOf(
-                  'professions.form.label.scope.certainNationsHint',
+                  'professions.form.hint.scope.certainNations',
                 ),
               },
               items: [

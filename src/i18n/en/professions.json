@@ -21,59 +21,61 @@
       "publish": "Publishing a profession"
     },
     "editProfession": "Use this section of the site to add a new profession",
+    "hint": {
+      "scope": {
+        "certainNations": "Select all that apply",
+        "industry": "Select all that apply"
+      },
+      "registration": {
+        "registrationRequirements": "Include which body professionals should register with",
+        "registrationUrl": "Website link to more information"
+      },
+      "regulatedActivities": {
+        "regulationSummary": "Brief description of the profession and how it is regulated",
+        "reservedActivities": "Activities that only recognised professionals can do",
+        "protectedTitles": "Professional titles and letters that only qualified professionals can use",
+        "regulationUrl": "Website link to more information"
+      },
+      "qualifications": {
+        "routesToObtain": "How people in the UK normally become qualified to practise this profession",
+        "moreInformationUrl": "Website link to more information",
+        "ukRecognition": "Routes for professionals who practise a corresponding profession that is regulated differently in other parts of the UK",
+        "ukRecognitionUrl": "Website link to more information"
+      }
+    },
     "label": {
       "topLevelInformation": {
-        "name": "Name",
-        "nameHint": "The official name for the profession.",
-        "regulatedAuthority": "Main regulator",
-        "regulatedAuthorityHint": "The main authority that regulates this profession.",
-        "additionalAuthority": "Additional regulator (optional)",
-        "additionalAuthorityHint": "Another authority or professional body involved in regulating this profession."
+        "name": "Name of profession",
+        "regulatedAuthority": "Main authority regulating this profession",
+        "additionalAuthority": "Additional regulator or professional body (optional)"
       },
       "scope": {
-        "nations": "Nations",
-        "nationsHint": "The nations where you regulate this profession.",
-        "certainNations": "Certain nations",
-        "certainNationsHint": "Select all that apply.",
-        "industry": "Sectors",
-        "industryHint": "The sectors this profession is part of. Select all that apply."
+        "nations": "Where you regulate this profession",
+        "certainNations": "One or more nations",
+        "industry": "Sectors this profession is part of"
       },
       "registration": {
         "registrationRequirements": "Registration requirements (optional)",
-        "registrationRequirementsHint": "The body professionals should register with and other requirements for registration.",
-        "registrationUrl": "More about registration (optional)",
-        "registrationUrlHint": "Website link to more information."
+        "registrationUrl": "More about registration (optional)"
       },
       "regulatedActivities": {
-        "regulationSummary": "Regulation summary",
-        "regulationSummaryHint": "Brief description of the profession and how it is regulated.",
+        "regulationSummary": "Introduction",
         "reservedActivities": "Reserved activities",
-        "reservedActivitiesHint": "Any activities that only qualified professionals can do.",
         "protectedTitles": "Protected titles (optional)",
-        "protectedTitlesHint": "Professional titles and letters that only qualified professionals can use.",
-        "regulationUrl": "More about regulated activities and titles (optional)",
-        "regulationUrlHint": "Website link to more information."
+        "regulationUrl": "More about regulated activities and titles (optional)"
       },
       "qualifications": {
-        "routesToObtain": "Routes to qualification",
-        "routesToObtainHint": "The ways that a new professional can become qualified",
+        "routesToObtain": "Routes to qualification for new professionals",
         "moreInformationUrl": "More about qualification (optional)",
-        "moreInformationUrlHint": "Website link to more information",
         "ukRecognition": "Routes to recognition within the UK (optional)",
-        "ukRecognitionHint": "Routes for professionals who practise a corresponding profession that is regulated differently in other parts of the UK",
-        "ukRecognitionUrl": "More about recognition within the UK (optional)",
-        "ukRecognitionUrlHint": "Website link to more information"
+        "ukRecognitionUrl": "More about recognition within the UK (optional)"
       },
       "legislation": {
-        "nationalLegislation": "Legislation title",
+        "nationalLegislation": "Title of relevant act or charter",
         "optionalNationalLegislation": "Legislation title (optional)",
-        "nationalLegislationHint": "Title of the relevant act or charter.",
-        "link": "Legislation link (optional)",
-        "linkHint": "Website link to the legislation.",
-        "secondNationalLegislation": "Second legislation title (optional)",
-        "secondNationalLegislationHint": "Title of the relevant act or charter.",
-        "secondLink": "Second legislation link (optional)",
-        "secondLinkHint": "Website link to the legislation."
+        "link": "Website link to legislation (optional)",
+        "secondNationalLegislation": "Title of other act or charter (optional)",
+        "secondLink": "Website link to other legislation (optional)"
       }
     },
     "button": {
