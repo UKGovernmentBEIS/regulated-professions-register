@@ -36,6 +36,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Display Profession registration data
 - Make consistent the formatting of lists of Organisations, nations, and sectors
 - Ensure missing data doesn't break public pages, if it somehow slips through
+- Fix wrong links on dashboard
 
 ## [release-007] - 2022-03-04
 
