@@ -29,7 +29,7 @@
           {% if (user.serviceOwner) %}
             <a class="govuk-link" href="/admin/organisations">{{ "app.pages.admin.dashboard.editRegulatorsCentralAdmin" | t }}</a>
           {% else %}
-            <a class="govuk-link" href="/admin/professions">{{ "app.pages.admin.dashboard.editRegulatorsRegulators" | t }}</a>
+            <a class="govuk-link" href="/admin/organisations">{{ "app.pages.admin.dashboard.editRegulatorsRegulators" | t }}</a>
           {% endif %}
         </li>
       {% endif %}
@@ -39,7 +39,7 @@
           {% if (user.serviceOwner) %}
             <a class="govuk-link" href="/admin/users">{{ "app.pages.admin.dashboard.manageAccessCentralAdmin" | t }}</a>
           {% else %}
-            <a class="govuk-link" href="/admin/professions">{{ "app.pages.admin.dashboard.manageAccessRegulators" | t }}</a>
+            <a class="govuk-link" href="/admin/users">{{ "app.pages.admin.dashboard.manageAccessRegulators" | t }}</a>
           {% endif %}
         </li>
       {% endif %}
