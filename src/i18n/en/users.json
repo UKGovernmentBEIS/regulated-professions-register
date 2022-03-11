@@ -71,6 +71,13 @@
     "confirmation": "We have sent the user a confirmation email.",
     "backToDashboard": "Back to the dashboard"
   },
+  "table": {
+    "headings": {
+      "name": "Name",
+      "email": "Email",
+      "actions": "Actions"
+    }
+  },
   "roles": {
     "administrator": "Administrator",
     "registrar": "Registrar",
