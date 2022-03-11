@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [release-009] - 2022-03-11
+
+### Changed
+
+- Fix wrong links on dashboard
+
 ## [release-008] - 2022-03-11
 
 ### Added
@@ -36,7 +42,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Display Profession registration data
 - Make consistent the formatting of lists of Organisations, nations, and sectors
 - Ensure missing data doesn't break public pages, if it somehow slips through
-- Fix wrong links on dashboard
 
 ## [release-007] - 2022-03-04
 
@@ -185,7 +190,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fix links in error messages when adding a new profession
 - Make validation errors more human readable
 
-[unreleased]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-008...HEAD
+[unreleased]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-009...HEAD
+[release-009]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release008...release-009
 [release-008]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release007...release-008
 [release-007]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release006...release-007
 [release-006]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release005...release-006
