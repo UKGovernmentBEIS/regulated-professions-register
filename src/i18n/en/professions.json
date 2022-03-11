@@ -30,29 +30,29 @@
       "scope": {
         "nations": "Where you regulate this profession",
         "certainNations": "One or more nations",
-        "certainNationsHint": "Select all that apply.",
+        "certainNationsHint": "Select all that apply",
         "industry": "Sectors this profession is part of",
-        "industryHint": "Select all that apply."
+        "industryHint": "Select all that apply"
       },
       "registration": {
         "registrationRequirements": "Registration requirements (optional)",
-        "registrationRequirementsHint": "Include which body professionals should register with.",
+        "registrationRequirementsHint": "Include which body professionals should register with",
         "registrationUrl": "More about registration (optional)",
-        "registrationUrlHint": "Website link to more information."
+        "registrationUrlHint": "Website link to more information"
       },
       "regulatedActivities": {
         "regulationSummary": "Introduction",
-        "regulationSummaryHint": "Brief description of the profession and how it is regulated.",
+        "regulationSummaryHint": "Brief description of the profession and how it is regulated",
         "reservedActivities": "Reserved activities",
-        "reservedActivitiesHint": "Activities that only recognised professionals can do.",
+        "reservedActivitiesHint": "Activities that only recognised professionals can do",
         "protectedTitles": "Protected titles (optional)",
-        "protectedTitlesHint": "Professional titles and letters that only qualified professionals can use.",
+        "protectedTitlesHint": "Professional titles and letters that only qualified professionals can use",
         "regulationUrl": "More about regulated activities and titles (optional)",
-        "regulationUrlHint": "Website link to more information."
+        "regulationUrlHint": "Website link to more information"
       },
       "qualifications": {
         "routesToObtain": "Routes to qualification for new professionals",
-        "routesToObtainHint": "How people in the UK normally become qualified to practise this profession.",
+        "routesToObtainHint": "How people in the UK normally become qualified to practise this profession",
         "moreInformationUrl": "More about qualification (optional)",
         "moreInformationUrlHint": "Website link to more information",
         "ukRecognition": "Routes to recognition within the UK (optional)",
