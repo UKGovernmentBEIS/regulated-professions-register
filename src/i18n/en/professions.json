@@ -23,12 +23,9 @@
     "editProfession": "Use this section of the site to add a new profession",
     "label": {
       "topLevelInformation": {
-        "name": "Name",
-        "nameHint": "The official name for the profession.",
-        "regulatedAuthority": "Main regulator",
-        "regulatedAuthorityHint": "The main authority that regulates this profession.",
-        "additionalAuthority": "Additional regulator (optional)",
-        "additionalAuthorityHint": "Another authority or professional body involved in regulating this profession."
+        "name": "Name of profession",
+        "regulatedAuthority": "Main authority regulating this profession",
+        "additionalAuthority": "Additional regulator or professional body (optional)"
       },
       "scope": {
         "nations": "Nations",
