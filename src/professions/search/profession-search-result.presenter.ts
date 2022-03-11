@@ -13,12 +13,14 @@ export class ProfessionSearchResultPresenter {
 
   async present(): Promise<ProfessionSearchResultTemplate> {
     const nations = await stringifyNations(
-      this.profession.occupationLocations.map((code) => Nation.find(code)),
+      (this.profession.occupationLocations || []).map((code) =>
+        Nation.find(code),
+      ),
       this.i18nService,
     );
 
     const industries = await Promise.all(
-      this.profession.industries.map(
+      (this.profession.industries || []).map(
         async (industry) => await this.i18nService.translate(industry.name),
       ),
     );

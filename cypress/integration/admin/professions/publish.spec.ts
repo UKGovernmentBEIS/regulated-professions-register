@@ -225,6 +225,80 @@ describe('Publishing professions', () => {
           });
         });
     });
+
+    it('Allows me to publish a draft profession with the bare minimum fields, without breaking the view', () => {
+      cy.get('a').contains('Regulated professions').click();
+      cy.checkAccessibility();
+
+      cy.contains('Draft Profession')
+        .parent('tr')
+        .within(() => {
+          cy.get('a').contains('View details').click();
+        });
+
+      cy.translate('app.status.draft').then((status) => {
+        cy.get('h2[data-status]').should('contain', status);
+      });
+
+      cy.translate('professions.form.button.publish').then((publishButton) => {
+        cy.get('a').contains(publishButton).click();
+      });
+
+      cy.checkAccessibility();
+
+      cy.translate('professions.form.button.publish').then((buttonText) => {
+        cy.get('button').contains(buttonText).click();
+      });
+
+      cy.checkAccessibility();
+
+      cy.translate('professions.admin.publish.confirmation.heading').then(
+        (confirmation) => {
+          cy.get('html').should('contain', confirmation);
+        },
+      );
+
+      cy.translate('professions.admin.button.edit.live').then((buttonText) => {
+        cy.get('html').should('contain', buttonText);
+      });
+
+      cy.translate('professions.admin.changed.by').then((changedByText) => {
+        cy.get('[data-cy=changed-by-text]').should('contain', changedByText);
+      });
+      cy.get('[data-cy=changed-by-user-name]').should('contain', 'Editor');
+      cy.get('[data-cy=changed-by-user-email]').should(
+        'contain',
+        'beis-rpr+editor@dxw.com',
+      );
+      cy.get('[data-cy=last-modified]').should(
+        'contain',
+        format(new Date(), 'd MMM yyyy'),
+      );
+
+      cy.get('[data-cy=currently-published-version-text]').within(() => {
+        cy.translate('professions.admin.publicFacingLink.label').then(
+          (publicFacingLinkLabel) => {
+            cy.get('a').should('contain', publicFacingLinkLabel);
+          },
+        );
+
+        cy.get('a').click();
+      });
+      cy.get('body').should('contain', 'Draft Profession');
+      cy.go('back');
+
+      cy.visitAndCheckAccessibility('/admin/professions');
+
+      cy.get('tr')
+        .contains('Draft Profession')
+        .then(($header) => {
+          const $row = $header.parent();
+
+          cy.translate('app.status.live').then((status) => {
+            cy.wrap($row).should('contain', status);
+          });
+        });
+    });
   });
 
   context('When I am logged in as a registrar', () => {

@@ -21,7 +21,6 @@
   {% endfor %}
   </ul>
 {% endset %}
-
 {{
   govukSummaryList({
   classes: 'govuk-summary-list--no-border',
@@ -33,7 +32,7 @@
       value: {
         html: nationsHtml
       }
-    },
+    } if nations | length > 0 or showEmptyProfessionDetails else undefined,
     {
       key: {
         text: ("professions.show.overview.industry" | t)
@@ -41,7 +40,7 @@
       value: {
         html: industriesHtml
       }
-    }
+    } if nations | length > 0 or showEmptyProfessionDetails else undefined
   ]
 }) }}
 
@@ -92,48 +91,48 @@
   </div>
 {% endfor %}
 
-<hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+{% if profession.description or showEmptyProfessionDetails %}
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
 
-<div>
-  <h2 class="govuk-heading-m rpr-details__section-title">{{ "professions.show.regulatedActivities.heading" | t }}</h2>
+  <div>
+    <h2 class="govuk-heading-m rpr-details__section-title">{{ "professions.show.regulatedActivities.heading" | t }}</h2>
 
-  {% if profession.description or showEmptyProfessionDetails %}
     <div>
       <h3 class="govuk-heading-s">{{ "professions.show.regulatedActivities.regulationSummary" | t }}</h3>
       {{ profession.description | multiline('govuk-body') }}
     </div>
-  {% endif %}
 
-  {% if profession.reservedActivities or showEmptyProfessionDetails %}
-    <div>
-      <h3 class="govuk-heading-s">{{ "professions.show.regulatedActivities.reservedActivities" | t }}</h3>
-      {{ profession.reservedActivities | multiline('govuk-body') }}
-    </div>
-  {% endif %}
+    {% if profession.reservedActivities or showEmptyProfessionDetails %}
+      <div>
+        <h3 class="govuk-heading-s">{{ "professions.show.regulatedActivities.reservedActivities" | t }}</h3>
+        {{ profession.reservedActivities | multiline('govuk-body') }}
+      </div>
+    {% endif %}
 
-  {% if profession.protectedTitles or showEmptyProfessionDetails %}
-    <div>
-      <h3 class="govuk-heading-s">{{ "professions.show.regulatedActivities.protectedTitles" | t }}</h3>
-      {{ profession.protectedTitles | multiline('govuk-body') }}
-    </div>
-  {% endif %}
+    {% if profession.protectedTitles or showEmptyProfessionDetails %}
+      <div>
+        <h3 class="govuk-heading-s">{{ "professions.show.regulatedActivities.protectedTitles" | t }}</h3>
+        {{ profession.protectedTitles | multiline('govuk-body') }}
+      </div>
+    {% endif %}
 
-  {% if profession.regulationUrl or showEmptyProfessionDetails %}
-    {{ govukSummaryList({
-      classes: 'govuk-summary-list--no-border',
-      rows: [
-        {
-          key: {
-            text: ("professions.show.regulatedActivities.regulationUrl" | t)
-          },
-          value: {
-            html: profession.regulationUrl | link
+    {% if profession.regulationUrl or showEmptyProfessionDetails %}
+      {{ govukSummaryList({
+        classes: 'govuk-summary-list--no-border',
+        rows: [
+          {
+            key: {
+              text: ("professions.show.regulatedActivities.regulationUrl" | t)
+            },
+            value: {
+              html: profession.regulationUrl | link
+            }
           }
-        }
-      ]
-    }) }}
-  {% endif %}
-</div>
+        ]
+      }) }}
+    {% endif %}
+  </div>
+{% endif %}
 
 {% if qualificationSummaryList %}
 

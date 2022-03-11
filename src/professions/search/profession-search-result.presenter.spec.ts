@@ -60,6 +60,36 @@ describe('ProfessionSearchResultPresenter', () => {
         exampleProfession,
       );
     });
+
+    describe('when the Profession is missing some fields', () => {
+      it('returns empty values', async () => {
+        const exampleProfession = professionFactory.build({
+          occupationLocations: undefined,
+          industries: undefined,
+        });
+
+        const getOrganisationsFromProfessionSpy = jest.spyOn(
+          getOrganisationsFromProfessionModule,
+          'getOrganisationsFromProfession',
+        );
+
+        const result = await new ProfessionSearchResultPresenter(
+          exampleProfession,
+          i18nService,
+        ).present();
+
+        expect(result).toEqual(
+          expect.objectContaining({
+            nations: '',
+            industries: [],
+          }),
+        );
+
+        expect(getOrganisationsFromProfessionSpy).toBeCalledWith(
+          exampleProfession,
+        );
+      });
+    });
   });
 
   afterEach(() => {

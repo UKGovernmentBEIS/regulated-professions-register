@@ -41,13 +41,13 @@ export class ProfessionsController {
     );
 
     const nations = await Promise.all(
-      profession.occupationLocations.map(async (code) =>
+      (profession.occupationLocations || []).map(async (code) =>
         Nation.find(code).translatedName(this.i18nService),
       ),
     );
 
     const industries = await Promise.all(
-      profession.industries.map(
+      (profession.industries || []).map(
         async (industry) => await this.i18nService.translate(industry.name),
       ),
     );
