@@ -61,15 +61,11 @@
         "ukRecognitionUrlHint": "Website link to more information"
       },
       "legislation": {
-        "nationalLegislation": "Legislation title",
+        "nationalLegislation": "Title of relevant act or charter",
         "optionalNationalLegislation": "Legislation title (optional)",
-        "nationalLegislationHint": "Title of the relevant act or charter.",
-        "link": "Legislation link (optional)",
-        "linkHint": "Website link to the legislation.",
-        "secondNationalLegislation": "Second legislation title (optional)",
-        "secondNationalLegislationHint": "Title of the relevant act or charter.",
-        "secondLink": "Second legislation link (optional)",
-        "secondLinkHint": "Website link to the legislation."
+        "link": "Website link to legislation (optional)",
+        "secondNationalLegislation": "Title of other act or charter (optional)",
+        "secondLink": "Website link to other legislation (optional)"
       }
     },
     "button": {
