@@ -135,28 +135,80 @@ describe('ProfessionsController', () => {
       });
     });
 
-    describe('when the Profession has no qualification set', () => {
-      it('passes a null value for the qualification', async () => {
-        const profession = professionFactory.build({
-          qualification: null,
-          occupationLocations: ['GB-ENG'],
-          industries: [industryFactory.build({ name: 'industries.example' })],
+    describe('publishing with missing data', () => {
+      describe('when the Profession has no industries set', () => {
+        it('passes an empty array for the industries', async () => {
+          const profession = professionFactory.build({
+            industries: [],
+          });
+
+          professionVersionsService.findLiveBySlug.mockResolvedValue(
+            profession,
+          );
+
+          (Organisation.withLatestLiveVersion as jest.Mock).mockImplementation(
+            (organisation) => organisation,
+          );
+
+          const result = await controller.show('example-slug');
+
+          expect(result).toEqual(
+            expect.objectContaining({
+              industries: [],
+            }),
+          );
         });
+      });
 
-        professionVersionsService.findLiveBySlug.mockResolvedValue(profession);
+      describe('when the Profession has no nations set', () => {
+        it('passes an empty array for the industries', async () => {
+          const profession = professionFactory.build({
+            occupationLocations: [],
+          });
 
-        (Organisation.withLatestLiveVersion as jest.Mock).mockImplementation(
-          (organisation) => organisation,
-        );
+          professionVersionsService.findLiveBySlug.mockResolvedValue(
+            profession,
+          );
 
-        const result = await controller.show('example-slug');
+          (Organisation.withLatestLiveVersion as jest.Mock).mockImplementation(
+            (organisation) => organisation,
+          );
 
-        expect(result).toEqual({
-          profession: profession,
-          qualificationSummaryList: null,
-          nations: [translationOf('nations.england')],
-          industries: [translationOf('industries.example')],
-          organisations: [profession.organisation],
+          const result = await controller.show('example-slug');
+
+          expect(result).toEqual(
+            expect.objectContaining({
+              nations: [],
+            }),
+          );
+        });
+      });
+
+      describe('when the Profession has no qualification set', () => {
+        it('passes a null value for the qualification', async () => {
+          const profession = professionFactory.build({
+            qualification: null,
+            occupationLocations: ['GB-ENG'],
+            industries: [industryFactory.build({ name: 'industries.example' })],
+          });
+
+          professionVersionsService.findLiveBySlug.mockResolvedValue(
+            profession,
+          );
+
+          (Organisation.withLatestLiveVersion as jest.Mock).mockImplementation(
+            (organisation) => organisation,
+          );
+
+          const result = await controller.show('example-slug');
+
+          expect(result).toEqual({
+            profession: profession,
+            qualificationSummaryList: null,
+            nations: [translationOf('nations.england')],
+            industries: [translationOf('industries.example')],
+            organisations: [profession.organisation],
+          });
         });
       });
     });
