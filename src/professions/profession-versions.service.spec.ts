@@ -10,6 +10,7 @@ import {
   SelectQueryBuilder,
 } from 'typeorm';
 import { ProfessionVersionsService } from './profession-versions.service';
+import { ProfessionsSearchService } from './professions-search.service';
 import professionVersionFactory from '../testutils/factories/profession-version';
 import {
   ProfessionVersion,
@@ -25,9 +26,11 @@ describe('ProfessionVersionsService', () => {
   let service: ProfessionVersionsService;
   let repo: Repository<ProfessionVersion>;
   let connection: DeepMocked<Connection>;
+  let searchService: DeepMocked<ProfessionsSearchService>;
 
   beforeEach(async () => {
     connection = createMock<Connection>();
+    searchService = createMock<ProfessionsSearchService>();
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -39,6 +42,10 @@ describe('ProfessionVersionsService', () => {
         {
           provide: Connection,
           useValue: connection,
+        },
+        {
+          provide: ProfessionsSearchService,
+          useValue: searchService,
         },
       ],
     }).compile();
@@ -206,6 +213,11 @@ describe('ProfessionVersionsService', () => {
       });
 
       expect(saveSpy).toHaveBeenCalledWith({
+        ...version,
+        status: ProfessionVersionStatus.Live,
+      });
+
+      expect(searchService.index).toBeCalledWith({
         ...version,
         status: ProfessionVersionStatus.Live,
       });

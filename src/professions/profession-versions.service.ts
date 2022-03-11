@@ -5,6 +5,7 @@ import {
   ProfessionVersion,
   ProfessionVersionStatus,
 } from './profession-version.entity';
+import { ProfessionsSearchService } from './professions-search.service';
 import { Profession } from './profession.entity';
 import { Legislation } from '../legislations/legislation.entity';
 import { Qualification } from '../qualifications/qualification.entity';
@@ -16,6 +17,7 @@ export class ProfessionVersionsService {
     @InjectRepository(ProfessionVersion)
     private repository: Repository<ProfessionVersion>,
     private connection: Connection,
+    private readonly searchService: ProfessionsSearchService,
   ) {}
 
   async save(professionVersion: ProfessionVersion): Promise<ProfessionVersion> {
@@ -99,6 +101,8 @@ export class ProfessionVersionsService {
     } finally {
       await queryRunner.release();
     }
+
+    await this.searchService.index(version);
 
     return version;
   }
