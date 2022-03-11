@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [release-008] - 2022-03-11
+
 ### Added
 
 - Allow users to publish professions and organisations when editing
@@ -182,7 +184,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fix links in error messages when adding a new profession
 - Make validation errors more human readable
 
-[unreleased]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-007...HEAD
+[unreleased]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-008...HEAD
+[release-008]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release007...release-008
 [release-007]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release006...release-007
 [release-006]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release005...release-006
 [release-005]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release004...release-005
