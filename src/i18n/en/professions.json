@@ -36,7 +36,7 @@
       },
       "registration": {
         "registrationRequirements": "Registration requirements (optional)",
-        "registrationRequirementsHint": "The body professionals should register with and other requirements for registration.",
+        "registrationRequirementsHint": "Include which body professionals should register with.",
         "registrationUrl": "More about registration (optional)",
         "registrationUrlHint": "Website link to more information."
       },
