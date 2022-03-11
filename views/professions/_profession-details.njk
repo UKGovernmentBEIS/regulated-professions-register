@@ -32,7 +32,7 @@
       value: {
         html: nationsHtml
       }
-    } if nations | length > 0 else undefined,
+    } if nations | length > 0 or showEmptyProfessionDetails else undefined,
     {
       key: {
         text: ("professions.show.overview.industry" | t)
@@ -40,7 +40,7 @@
       value: {
         html: industriesHtml
       }
-    } if nations | length > 0 else undefined
+    } if nations | length > 0 or showEmptyProfessionDetails else undefined
   ]
 }) }}
 
