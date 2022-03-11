@@ -25,6 +25,7 @@ import { ProfessionArchiveController } from './admin/profession-archive.controll
 import { OrganisationVersionsService } from '../organisations/organisation-versions.service';
 import { OrganisationVersion } from '../organisations/organisation-version.entity';
 
+import { SearchModule } from '../search/search.module';
 @Module({
   imports: [
     TypeOrmModule.forFeature([Profession]),
@@ -32,6 +33,7 @@ import { OrganisationVersion } from '../organisations/organisation-version.entit
     TypeOrmModule.forFeature([Industry]),
     TypeOrmModule.forFeature([Organisation]),
     TypeOrmModule.forFeature([OrganisationVersion]),
+    SearchModule.register(),
   ],
   providers: [
     ProfessionsService,

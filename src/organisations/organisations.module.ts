@@ -15,6 +15,7 @@ import { OrganisationsController } from './organisations.controller';
 import { OrganisationPublicationController } from './admin/organisation-publication.controller';
 import { OrganisationArchiveController } from './admin/organisation-archive.controller';
 import { ProfessionVersionsService } from '../professions/profession-versions.service';
+import { SearchModule } from '../search/search.module';
 
 @Module({
   providers: [
@@ -36,6 +37,7 @@ import { ProfessionVersionsService } from '../professions/profession-versions.se
     TypeOrmModule.forFeature([OrganisationVersion]),
     TypeOrmModule.forFeature([Industry]),
     TypeOrmModule.forFeature([ProfessionVersion]),
+    SearchModule.register(),
   ],
 })
 export class OrganisationsModule {}
