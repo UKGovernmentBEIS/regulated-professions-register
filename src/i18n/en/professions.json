@@ -51,8 +51,8 @@
         "regulationUrlHint": "Website link to more information."
       },
       "qualifications": {
-        "routesToObtain": "Routes to qualification",
-        "routesToObtainHint": "The ways that a new professional can become qualified",
+        "routesToObtain": "Routes to qualification for new professionals",
+        "routesToObtainHint": "How people in the UK normally become qualified to practise this profession.",
         "moreInformationUrl": "More about qualification (optional)",
         "moreInformationUrlHint": "Website link to more information",
         "ukRecognition": "Routes to recognition within the UK (optional)",
