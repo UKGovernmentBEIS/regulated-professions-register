@@ -4,6 +4,7 @@
 {% from "govuk/components/textarea/macro.njk" import govukTextarea %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
 
 {% set heading = ("professions.form.headings.regulatedActivities" | t) %}
 {% set title =  captionText + " | " + heading %}
@@ -37,6 +38,19 @@
             errorMessage: errors.regulationSummary | tError
           })
         }}
+
+        {{ govukRadios({
+          name: "regulationType",
+          fieldset: {
+            legend: {
+              text: ("professions.form.label.regulatedActivities.regulationType" | t),
+              classes: "govuk-fieldset__legend--m",
+              isPageHeading: false
+            }
+          },
+          items: regulationTypeRadioButtonArgs,
+          errorMessage: errors.regulationType | tError
+        }) }}
 
         {{
           govukTextarea({

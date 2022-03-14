@@ -5,10 +5,14 @@ import {
   preprocessUrl,
   urlOptions,
 } from '../../../helpers/preprocess-url.helper';
+import { RegulationType } from '../../profession-version.entity';
 
 export class RegulatedActivitiesDto {
   @IsNotEmpty({ message: 'professions.form.errors.regulationSummary.empty' })
   regulationSummary: string;
+
+  @IsNotEmpty({ message: 'professions.form.errors.regulationType.empty' })
+  regulationType: RegulationType;
 
   @IsNotEmpty({ message: 'professions.form.errors.reservedActivities.empty' })
   reservedActivities: string;

@@ -21,9 +21,14 @@ import { BackLink } from '../../common/decorators/back-link.decorator';
 
 import ViewUtils from './viewUtils';
 import { ProfessionVersionsService } from '../profession-versions.service';
-import { ProfessionVersion } from '../profession-version.entity';
+import {
+  ProfessionVersion,
+  RegulationType,
+} from '../profession-version.entity';
 import { Profession } from '../profession.entity';
 import { I18nService } from 'nestjs-i18n';
+import { RegulationTypeRadioButtonsPresenter } from './presenters/regulation-type-radio-buttons.presenter';
+
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
 export class RegulatedActivitiesController {
@@ -57,6 +62,7 @@ export class RegulatedActivitiesController {
     return this.renderForm(
       res,
       version.description,
+      version.regulationType,
       version.reservedActivities,
       version.protectedTitles,
       version.regulationUrl,
@@ -98,6 +104,7 @@ export class RegulatedActivitiesController {
       return this.renderForm(
         res,
         submittedValues.regulationSummary,
+        submittedValues.regulationType,
         submittedValues.reservedActivities,
         submittedValues.protectedTitles,
         submittedValues.regulationUrl,
@@ -110,6 +117,7 @@ export class RegulatedActivitiesController {
     const updatedVersion: ProfessionVersion = {
       ...version,
       ...{
+        regulationType: submittedValues.regulationType,
         description: submittedValues.regulationSummary,
         reservedActivities: submittedValues.reservedActivities,
         protectedTitles: submittedValues.protectedTitles,
@@ -133,6 +141,7 @@ export class RegulatedActivitiesController {
   private async renderForm(
     res: Response,
     regulationSummary: string | null,
+    regulationType: RegulationType | null,
     reservedActivities: string | null,
     protectedTitles: string | null,
     regulationUrl: string | null,
@@ -140,8 +149,17 @@ export class RegulatedActivitiesController {
     change: boolean,
     errors: object | undefined = undefined,
   ): Promise<void> {
+    const regulationTypePresenter = new RegulationTypeRadioButtonsPresenter(
+      regulationType,
+      this.i18nService,
+    );
+
+    const regulationTypeRadioButtonArgs =
+      await regulationTypePresenter.radioButtonArgs();
+
     const templateArgs: RegulatedActivitiesTemplate = {
       regulationSummary,
+      regulationTypeRadioButtonArgs,
       reservedActivities,
       protectedTitles,
       regulationUrl,

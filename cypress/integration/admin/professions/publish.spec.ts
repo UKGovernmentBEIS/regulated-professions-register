@@ -393,6 +393,7 @@ describe('Publishing professions', () => {
       cy.get('textarea[name="regulationSummary"]').type(
         'A summary of the regulation',
       );
+      cy.get('input[name="regulationType"][value="certification"]').check();
       cy.get('textarea[name="reservedActivities"]').type('An example activity');
       cy.get('textarea[name="protectedTitles"]').type(
         'An example protected title',

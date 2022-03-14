@@ -59,6 +59,7 @@
         "registrationUrl": "More about registration (optional)"
       },
       "regulatedActivities": {
+        "regulationType": "Regulation type",
         "regulationSummary": "Introduction",
         "reservedActivities": "Reserved activities",
         "protectedTitles": "Protected titles (optional)",
@@ -116,6 +117,9 @@
       },
       "regulationSummary": {
         "empty": "Enter a regulation summary"
+      },
+      "regulationType": {
+        "empty": "Select a regulation type"
       },
       "reservedActivities": {
         "empty": "Enter reserved activities"
