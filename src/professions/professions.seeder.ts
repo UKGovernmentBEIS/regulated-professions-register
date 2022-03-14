@@ -17,6 +17,8 @@ import {
   RegulationType,
 } from './profession-version.entity';
 
+import { ProfessionsSearchService } from './professions-search.service';
+
 type SeedProfession = {
   name: string;
   slug: string;
@@ -64,6 +66,7 @@ export class ProfessionsSeeder implements Seeder {
     private readonly organisationRepository: Repository<Organisation>,
     @InjectRepository(OrganisationVersion)
     private readonly organisationVersionRepository: Repository<OrganisationVersion>,
+    private readonly searchService: ProfessionsSearchService,
   ) {}
 
   async seed(): Promise<void> {
@@ -101,6 +104,14 @@ export class ProfessionsSeeder implements Seeder {
         ).filter(Boolean);
 
         await this.professionVersionsRepository.save(seededVersions);
+
+        const liveVersions = seededVersions.filter(
+          (version) => version.status === ProfessionVersionStatus.Live,
+        );
+
+        for (const version of liveVersions) {
+          await this.searchService.index(version);
+        }
       }),
     );
   }

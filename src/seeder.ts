@@ -21,6 +21,9 @@ import { Organisation } from './organisations/organisation.entity';
 import { OrganisationVersion } from './organisations/organisation-version.entity';
 import { ProfessionVersion } from './professions/profession-version.entity';
 
+import { ProfessionsSearchService } from './professions/professions-search.service';
+import { SearchModule } from './search/search.module';
+
 seeder({
   imports: [
     ConfigModule.forRoot({
@@ -43,7 +46,9 @@ seeder({
       Profession,
       ProfessionVersion,
     ]),
+    SearchModule.register(),
   ],
+  providers: [ProfessionsSearchService],
 }).run([
   IndustriesSeeder,
   QualificationsSeeder,
