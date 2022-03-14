@@ -1,11 +1,11 @@
 # Create the web app.
 
 resource "cloudfoundry_app" "beis-rpr-app" {
-  name                       = "beis-rpr-${var.environment}"
-  space                      = cloudfoundry_space.space.id
-  instances                  = 2
-  disk_quota                 = 3072
-  timeout                    = 300
+  name         = "beis-rpr-${var.environment}"
+  space        = cloudfoundry_space.space.id
+  instances    = 2
+  disk_quota   = 3072
+  timeout      = 300
   docker_image = "thedxw/beis-rpr:${var.docker_tag}"
   docker_credentials = {
     username = var.docker_username
