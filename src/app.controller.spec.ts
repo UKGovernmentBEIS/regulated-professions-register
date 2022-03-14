@@ -103,4 +103,10 @@ describe('AppController', () => {
       expect(appController.privacyPolicy).toBeDefined();
     });
   });
+
+  describe('accessibility', () => {
+    it('should be defined', () => {
+      expect(appController.accessibility).toBeDefined();
+    });
+  });
 });
