@@ -72,5 +72,10 @@ before(() => {
   cy.exec('npm run seed:test');
 });
 
+// Purge the Opensearch index before running the specs
+before(() => {
+  cy.exec('npm run opensearch:test:purge');
+});
+
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
