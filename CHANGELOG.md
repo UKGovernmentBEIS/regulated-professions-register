@@ -19,6 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Allow users to publish professions and organisations when editing
 - Add link to feedback form for internal and public users
 - Add cookie and privacy policies
+- Allow editors to enter a regulation type for a Profession
 
 ### Changed
 
@@ -42,6 +43,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Display Profession registration data
 - Make consistent the formatting of lists of Organisations, nations, and sectors
 - Ensure missing data doesn't break public pages, if it somehow slips through
+- Display regulation type on internal and public Profession pages
 
 ## [release-007] - 2022-03-04
 

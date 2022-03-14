@@ -141,12 +141,21 @@ describe('Editing an existing profession', () => {
       cy.get('textarea[name="regulationSummary"]')
         .clear()
         .type('Updated summary of the regulation');
+      cy.get('input[name="regulationType"][value="licensing"]').check();
       cy.translate('app.continue').then((buttonText) => {
         cy.get('button').contains(buttonText).click();
       });
       cy.checkSummaryListRowValue(
         'professions.form.label.regulatedActivities.regulationSummary',
         'Updated summary of the regulation',
+      );
+      cy.translate('professions.regulationTypes.licensing.name').then(
+        (licensingText) => {
+          cy.checkSummaryListRowValue(
+            'professions.form.label.regulatedActivities.regulationType',
+            licensingText,
+          );
+        },
       );
 
       cy.clickSummaryListRowAction(

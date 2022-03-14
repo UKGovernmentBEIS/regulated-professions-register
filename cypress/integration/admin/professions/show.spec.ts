@@ -96,6 +96,23 @@ describe('Listing professions', () => {
               });
 
               cy.translate(
+                'professions.regulationTypes.certification.name',
+              ).then((certificationText) => {
+                cy.translate(
+                  'professions.show.regulatedActivities.regulationType',
+                ).then((regulationTypeHeading) => {
+                  cy.get('h3').should('contain', regulationTypeHeading);
+
+                  cy.get('h3')
+                    .contains(regulationTypeHeading)
+                    .parent()
+                    .within(() => {
+                      cy.get('p').should('contain', certificationText);
+                    });
+                });
+              });
+
+              cy.translate(
                 'professions.show.regulatedActivities.protectedTitles',
               ).then((protectedTitlesHeading) => {
                 cy.get('h3').should('contain', protectedTitlesHeading);
@@ -210,6 +227,12 @@ describe('Listing professions', () => {
                       'A description of the profession',
                     );
                   });
+              });
+
+              cy.translate(
+                'professions.show.regulatedActivities.regulationType',
+              ).then((regulationTypeHeading) => {
+                cy.wrap($div).should('contain', regulationTypeHeading);
               });
 
               cy.translate(

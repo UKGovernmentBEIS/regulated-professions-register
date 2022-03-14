@@ -1,5 +1,6 @@
 import { Legislation } from '../../../legislations/legislation.entity';
 import QualificationPresenter from '../../../qualifications/presenters/qualification.presenter';
+import { RegulationType } from '../../profession-version.entity';
 
 export interface CheckYourAnswersTemplate {
   name: string;
@@ -12,6 +13,7 @@ export interface CheckYourAnswersTemplate {
   registrationRequirements: string;
   registrationUrl: string;
   regulationSummary: string;
+  regulationType: RegulationType;
   reservedActivities: string;
   protectedTitles: string;
   regulationUrl: string;

@@ -2,14 +2,18 @@ import { createMock, DeepMocked } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Response } from 'express';
 import { I18nService } from 'nestjs-i18n';
+import { RadioButtonArgs } from '../../common/interfaces/radio-button-args.interface';
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 import professionFactory from '../../testutils/factories/profession';
 import professionVersionFactory from '../../testutils/factories/profession-version';
 import { translationOf } from '../../testutils/translation-of';
+import { RegulationType } from '../profession-version.entity';
 import { ProfessionVersionsService } from '../profession-versions.service';
 import { ProfessionsService } from '../professions.service';
 import { RegulatedActivitiesDto } from './dto/regulated-activities.dto';
+import { RegulatedActivitiesTemplate } from './interfaces/regulated-activities.template';
 import { RegulatedActivitiesController } from './regulated-activities.controller';
+import { RegulationTypeRadioButtonsPresenter } from './presenters/regulation-type-radio-buttons.presenter';
 
 describe(RegulatedActivitiesController, () => {
   let controller: RegulatedActivitiesController;
@@ -55,11 +59,24 @@ describe(RegulatedActivitiesController, () => {
         id: 'version-id',
         profession: profession,
         description: 'Example regulation summary',
+        regulationType: RegulationType.Certification,
         reservedActivities: 'Example reserved activities',
       });
 
       professionsService.findWithVersions.mockResolvedValue(profession);
       professionVersionsService.findWithProfession.mockResolvedValue(version);
+
+      const mockRegulationTypeRadioButtonArgs: RadioButtonArgs[] = [
+        {
+          text: 'Example regulation type',
+          value: 'example',
+          checked: false,
+        },
+      ];
+
+      const regulationTypeRadioButtonArgsSpy = jest
+        .spyOn(RegulationTypeRadioButtonsPresenter.prototype, 'radioButtonArgs')
+        .mockResolvedValue(mockRegulationTypeRadioButtonArgs);
 
       await controller.edit(response, 'profession-id', 'version-id', 'false');
 
@@ -67,10 +84,13 @@ describe(RegulatedActivitiesController, () => {
         'admin/professions/regulated-activities',
         expect.objectContaining({
           regulationSummary: 'Example regulation summary',
+          regulationTypeRadioButtonArgs: mockRegulationTypeRadioButtonArgs,
           reservedActivities: 'Example reserved activities',
           captionText: translationOf('professions.form.captions.edit'),
-        }),
+        } as RegulatedActivitiesTemplate),
       );
+
+      expect(regulationTypeRadioButtonArgsSpy).toBeCalled();
     });
   });
 
@@ -95,6 +115,7 @@ describe(RegulatedActivitiesController, () => {
 
           const regulatedActivitiesDto: RegulatedActivitiesDto = {
             regulationSummary: 'Example regulation summary',
+            regulationType: RegulationType.Accreditation,
             reservedActivities: 'Example reserved activities',
             protectedTitles: 'Example protected titles',
             regulationUrl: 'https://example.com/regulation',
@@ -112,6 +133,7 @@ describe(RegulatedActivitiesController, () => {
             expect.objectContaining({
               id: 'version-id',
               description: 'Example regulation summary',
+              regulationType: RegulationType.Accreditation,
               reservedActivities: 'Example reserved activities',
               protectedTitles: 'Example protected titles',
               regulationUrl: 'https://example.com/regulation',
@@ -143,6 +165,7 @@ describe(RegulatedActivitiesController, () => {
 
           const regulatedActivitiesDto: RegulatedActivitiesDto = {
             regulationSummary: 'Example regulation summary',
+            regulationType: RegulationType.Certification,
             reservedActivities: 'Example reserved activities',
             protectedTitles: 'Example protected titles',
             regulationUrl: ' example.com/regulation',
@@ -160,6 +183,7 @@ describe(RegulatedActivitiesController, () => {
             expect.objectContaining({
               id: 'version-id',
               description: 'Example regulation summary',
+              regulationType: RegulationType.Certification,
               reservedActivities: 'Example reserved activities',
               protectedTitles: 'Example protected titles',
               regulationUrl: 'http://example.com/regulation',
@@ -179,6 +203,7 @@ describe(RegulatedActivitiesController, () => {
             id: 'version-id',
             profession: profession,
             description: 'Example regulation summary',
+            regulationType: RegulationType.Licensing,
             reservedActivities: 'Example reserved activities',
             protectedTitles: 'Example protected titles',
             regulationUrl: 'https://example.com/regulation',
@@ -191,6 +216,7 @@ describe(RegulatedActivitiesController, () => {
 
           const regulatedActivitiesDto: RegulatedActivitiesDto = {
             regulationSummary: 'Example regulation summary',
+            regulationType: RegulationType.Licensing,
             reservedActivities: 'Example reserved activities',
             protectedTitles: 'Example protected titles',
             regulationUrl: 'https://example.com/regulation',
@@ -229,6 +255,7 @@ describe(RegulatedActivitiesController, () => {
           id: 'version-id',
           profession: profession,
           description: 'Example regulation summary',
+          regulationType: RegulationType.Accreditation,
           reservedActivities: 'Example reserved activities',
           protectedTitles: 'Example protected titles',
           regulationUrl: 'https://example.com/regulation',
@@ -239,6 +266,7 @@ describe(RegulatedActivitiesController, () => {
 
         const regulatedActivitiesDto: RegulatedActivitiesDto = {
           regulationSummary: undefined,
+          regulationType: undefined,
           reservedActivities: undefined,
           protectedTitles: undefined,
           regulationUrl: undefined,
@@ -258,11 +286,14 @@ describe(RegulatedActivitiesController, () => {
           'admin/professions/regulated-activities',
           expect.objectContaining({
             errors: {
-              reservedActivities: {
-                text: 'professions.form.errors.reservedActivities.empty',
-              },
               regulationSummary: {
                 text: 'professions.form.errors.regulationSummary.empty',
+              },
+              regulationType: {
+                text: 'professions.form.errors.regulationType.empty',
+              },
+              reservedActivities: {
+                text: 'professions.form.errors.reservedActivities.empty',
               },
             },
           }),

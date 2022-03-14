@@ -96,11 +96,17 @@
 
   <div>
     <h2 class="govuk-heading-m rpr-details__section-title">{{ "professions.show.regulatedActivities.heading" | t }}</h2>
-
     <div>
       <h3 class="govuk-heading-s">{{ "professions.show.regulatedActivities.regulationSummary" | t }}</h3>
       {{ profession.description | multiline('govuk-body') }}
     </div>
+
+    {% if profession.regulationType or showEmptyProfessionDetails %}
+      <div>
+        <h3 class="govuk-heading-s">{{ "professions.show.regulatedActivities.regulationType" | t }}</h3>
+        <p class="govuk-body">{{ (("professions.regulationTypes." + profession.regulationType + ".name") | t) if profession.regulationType else "" }}</p>
+      </div>
+    {% endif %}
 
     {% if profession.reservedActivities or showEmptyProfessionDetails %}
       <div>

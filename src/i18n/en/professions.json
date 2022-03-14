@@ -59,6 +59,7 @@
         "registrationUrl": "More about registration (optional)"
       },
       "regulatedActivities": {
+        "regulationType": "Regulation type",
         "regulationSummary": "Introduction",
         "reservedActivities": "Reserved activities",
         "protectedTitles": "Protected titles (optional)",
@@ -117,6 +118,9 @@
       "regulationSummary": {
         "empty": "Enter a regulation summary"
       },
+      "regulationType": {
+        "empty": "Select a regulation type"
+      },
       "reservedActivities": {
         "empty": "Enter reserved activities"
       },
@@ -171,6 +175,7 @@
     "regulatedActivities": {
       "heading": "Regulation",
       "regulationSummary": "Regulation summary",
+      "regulationType": "Regulation type",
       "reservedActivities": "Reserved activities",
       "protectedTitles": "Protected titles",
       "regulationUrl": "More about regulated activities and titles"
@@ -321,6 +326,20 @@
       "relatedWords": "use related words like nurse instead of nursing",
       "removeFilters": "remove any filters you’ve used",
       "sectorOnly": "leave the profession blank and search by sector only"
+    }
+  },
+  "regulationTypes": {
+    "licensing": {
+      "name": "Licence",
+      "hint": "By law, only recognised professionals can carry out reserved activities and use a professional title"
+    },
+    "certification": {
+      "name": "Certification",
+      "hint": "There are no restrictions on who can carry out activities, but by law only certified professionals can use a professional title"
+    },
+    "accreditation": {
+      "name": "Accreditation",
+      "hint": "There are no restrictions on who can carry out activities or use titles, but accreditation may demonstrate that individuals have achieved certain qualifications or experience"
     }
   }
 }
