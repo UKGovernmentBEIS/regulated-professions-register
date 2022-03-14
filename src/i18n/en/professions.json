@@ -175,6 +175,7 @@
     "regulatedActivities": {
       "heading": "Regulation",
       "regulationSummary": "Regulation summary",
+      "regulationType": "Regulation type",
       "reservedActivities": "Reserved activities",
       "protectedTitles": "Protected titles",
       "regulationUrl": "More about regulated activities and titles"
