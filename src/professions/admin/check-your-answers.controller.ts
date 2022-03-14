@@ -87,6 +87,7 @@ export class CheckYourAnswersController {
       registrationRequirements: version.registrationRequirements,
       registrationUrl: version.registrationUrl,
       regulationSummary: version.description,
+      regulationType: version.regulationType,
       reservedActivities: version.reservedActivities,
       protectedTitles: version.protectedTitles,
       regulationUrl: version.regulationUrl,

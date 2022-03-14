@@ -163,6 +163,23 @@
               },
               {
                 key: {
+                  text: ("professions.form.label.regulatedActivities.regulationType" | t)
+                },
+                value: {
+                  text: (("professions.regulationTypes." + regulationType + ".name") | t) if regulationType else ""
+                },
+                actions: {
+                  items: [
+                    {
+                      href: "/admin/professions/" + professionId + "/versions/" + versionId + "/regulated-activities/edit?change=true",
+                      text: ("app.change" | t),
+                      visuallyHiddenText: ("professions.form.label.regulatedActivities.regulationType" | t)
+                    }
+                  ]
+                }
+              },
+              {
+                key: {
                   text: ("professions.form.label.regulatedActivities.reservedActivities" | t)
                 },
                 value: {

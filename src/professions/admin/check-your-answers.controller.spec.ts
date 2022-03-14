@@ -10,6 +10,7 @@ import professionFactory from '../../testutils/factories/profession';
 import professionVersionFactory from '../../testutils/factories/profession-version';
 import qualificationFactory from '../../testutils/factories/qualification';
 import { translationOf } from '../../testutils/translation-of';
+import { RegulationType } from '../profession-version.entity';
 import { ProfessionVersionsService } from '../profession-versions.service';
 import { ProfessionsService } from '../professions.service';
 import { CheckYourAnswersController } from './check-your-answers.controller';
@@ -73,6 +74,7 @@ describe('CheckYourAnswersController', () => {
             industryFactory.build({ name: 'industries.construction' }),
           ],
           description: 'A summary of the regulation',
+          regulationType: RegulationType.Certification,
           reservedActivities: 'Some reserved activities',
           protectedTitles: 'Some protected titles',
           regulationUrl: 'http://example.com/regulations',
@@ -106,6 +108,9 @@ describe('CheckYourAnswersController', () => {
         );
         expect(templateParams.regulationSummary).toEqual(
           'A summary of the regulation',
+        );
+        expect(templateParams.regulationType).toEqual(
+          RegulationType.Certification,
         );
         expect(templateParams.reservedActivities).toEqual(
           'Some reserved activities',
@@ -173,6 +178,7 @@ describe('CheckYourAnswersController', () => {
         expect(templateParams.registrationRequirements).toEqual(undefined);
         expect(templateParams.registrationUrl).toEqual(undefined);
         expect(templateParams.regulationSummary).toEqual(undefined);
+        expect(templateParams.regulationType).toEqual(undefined);
         expect(templateParams.reservedActivities).toEqual(undefined);
         expect(templateParams.protectedTitles).toEqual(undefined);
         expect(templateParams.regulationUrl).toEqual(undefined);

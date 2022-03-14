@@ -236,6 +236,15 @@ describe('Adding a new profession', () => {
         'A summary of the regulation',
       );
 
+      cy.translate('professions.regulationTypes.accreditation.name').then(
+        (accreditationText) => {
+          cy.checkSummaryListRowValue(
+            'professions.form.label.regulatedActivities.regulationType',
+            accreditationText,
+          );
+        },
+      );
+
       cy.checkSummaryListRowValue(
         'professions.form.label.regulatedActivities.reservedActivities',
         'An example activity',
