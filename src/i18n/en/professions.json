@@ -322,5 +322,19 @@
       "removeFilters": "remove any filters you’ve used",
       "sectorOnly": "leave the profession blank and search by sector only"
     }
+  },
+  "regulationTypes": {
+    "licensing": {
+      "name": "Licence",
+      "hint": "By law, only recognised professionals can carry out reserved activities and use a professional title"
+    },
+    "certification": {
+      "name": "Certification",
+      "hint": "There are no restrictions on who can carry out activities, but by law only certified professionals can use a professional title"
+    },
+    "accreditation": {
+      "name": "Accreditation",
+      "hint": "There are no restrictions on who can carry out activities or use titles, but accreditation may demonstrate that individuals have achieved certain qualifications or experience"
+    }
   }
 }
