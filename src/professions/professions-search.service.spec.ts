@@ -25,6 +25,12 @@ describe('ProfessionVersionsService', () => {
     service = module.get<ProfessionsSearchService>(ProfessionsSearchService);
   });
 
+  describe('indexName', () => {
+    it('appends the environment name to the index', () => {
+      expect(service.indexName).toEqual('professions_test');
+    });
+  });
+
   describe('index', () => {
     it('indexes the entity', async () => {
       const professionVersion = professionVersionFactory.build();
@@ -33,7 +39,7 @@ describe('ProfessionVersionsService', () => {
 
       expect(opensearchClient.index).toHaveBeenCalledWith({
         id: professionVersion.id,
-        index: 'professions',
+        index: service.indexName,
         body: {
           name: professionVersion.profession.name,
         },
@@ -48,7 +54,7 @@ describe('ProfessionVersionsService', () => {
       service.delete(professionVersion);
 
       expect(opensearchClient.delete).toHaveBeenCalledWith({
-        index: 'professions',
+        index: service.indexName,
         id: professionVersion.id,
       });
     });

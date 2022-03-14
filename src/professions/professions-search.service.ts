@@ -4,12 +4,14 @@ import { ProfessionVersion } from './profession-version.entity';
 
 @Injectable()
 export class ProfessionsSearchService {
+  readonly indexName: string = `professions_${process.env['NODE_ENV']}`;
+
   public constructor(private readonly client: OpensearchClient) {}
 
   public async index(professionVersion: ProfessionVersion): Promise<any> {
     await this.client.index({
       id: professionVersion.id,
-      index: 'professions',
+      index: this.indexName,
       body: {
         name: professionVersion.profession.name,
       },
@@ -18,7 +20,7 @@ export class ProfessionsSearchService {
 
   public async delete(professionVersion: ProfessionVersion): Promise<any> {
     await this.client.delete({
-      index: 'professions',
+      index: this.indexName,
       id: professionVersion.id,
     });
   }
