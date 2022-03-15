@@ -24,4 +24,19 @@ export class ProfessionsSearchService {
       id: professionVersion.id,
     });
   }
+
+  public async bulkDelete(versions: ProfessionVersion[]): Promise<any> {
+    const ids = versions.map((version) => version.id);
+
+    await this.client.deleteByQuery({
+      index: this.indexName,
+      body: {
+        query: {
+          ids: {
+            values: ids,
+          },
+        },
+      },
+    });
+  }
 }

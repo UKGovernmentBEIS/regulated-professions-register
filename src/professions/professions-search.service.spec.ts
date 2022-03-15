@@ -48,7 +48,7 @@ describe('ProfessionVersionsService', () => {
   });
 
   describe('delete', () => {
-    it('delete the entity', async () => {
+    it('deletes the entity', async () => {
       const professionVersion = professionVersionFactory.build();
 
       service.delete(professionVersion);
@@ -56,6 +56,30 @@ describe('ProfessionVersionsService', () => {
       expect(opensearchClient.delete).toHaveBeenCalledWith({
         index: service.indexName,
         id: professionVersion.id,
+      });
+    });
+  });
+
+  describe('bulkDelete', () => {
+    it('deletes all entities with given ids', async () => {
+      const professionVersion1 = professionVersionFactory.build({
+        id: 'some-uuid',
+      });
+      const professionVersion2 = professionVersionFactory.build({
+        id: 'some-other-uuid',
+      });
+
+      service.bulkDelete([professionVersion1, professionVersion2]);
+
+      expect(opensearchClient.deleteByQuery).toHaveBeenCalledWith({
+        index: service.indexName,
+        body: {
+          query: {
+            ids: {
+              values: ['some-uuid', 'some-other-uuid'],
+            },
+          },
+        },
       });
     });
   });
