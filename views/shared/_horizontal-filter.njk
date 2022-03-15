@@ -14,13 +14,19 @@
 {% if industriesCheckboxItems %}
   {% set filterColumns = filterColumns + 1 %}
 {% endif %}
+{% if regulationTypesCheckboxItems %}
+  {% set filterColumns = filterColumns + 1 %}
+{% endif %}
+{% if changedByCheckboxItems %}
+  {% set filterColumns = filterColumns + 1 %}
+{% endif %}
 
-{% if filterColumns <= 3 %}
-  {% set filterColumnClass = 'govuk-grid-column-one-third' %}
-  {% set filterKeywordsWidthClass = '' %}
-{% else %}
+{% if ((filterColumns / 4) | round(0, "ceil")) < ((filterColumns / 3) | round(0, "ceil")) %}
   {% set filterColumnClass = 'govuk-grid-column-one-quarter' %}
   {% set filterKeywordsWidthClass = 'govuk-input--width-10' %}
+{% else %}
+  {% set filterColumnClass = 'govuk-grid-column-one-third' %}
+  {% set filterKeywordsWidthClass = '' %}
 {% endif %}
 
 <div class="rpr-internal-listing__filters-container">
