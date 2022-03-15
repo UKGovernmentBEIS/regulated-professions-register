@@ -451,6 +451,7 @@ describe('ProfessionVersionsService', () => {
       const queryBuilder = createMock<SelectQueryBuilder<ProfessionVersion>>({
         leftJoinAndSelect: () => queryBuilder,
         where: () => queryBuilder,
+        orderBy: () => queryBuilder,
         getMany: async () => versions,
       });
 
@@ -482,6 +483,7 @@ describe('ProfessionVersionsService', () => {
           status: ProfessionVersionStatus.Live,
         },
       );
+      expect(queryBuilder.orderBy).toHaveBeenCalledWith('profession.name');
     });
   });
 
