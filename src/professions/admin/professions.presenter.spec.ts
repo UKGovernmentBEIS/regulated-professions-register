@@ -13,6 +13,8 @@ import industryFactory from '../../testutils/factories/industry';
 import organisationFactory from '../../testutils/factories/organisation';
 import professionFactory from '../../testutils/factories/profession';
 import { translationOf } from '../../testutils/translation-of';
+import { RegulationType } from '../profession-version.entity';
+import { RegulationTypesCheckboxPresenter } from './presenters/regulation-types-checkbox.presenter';
 
 const transportIndustry = industryFactory.build({
   id: 'transport',
@@ -39,22 +41,25 @@ const organisations = [organisation1, organisation2];
 const profession1 = professionFactory.build({
   name: 'Example Profession 1',
   occupationLocations: ['GB-ENG'],
-  industries: [transportIndustry],
   organisation: organisation1,
+  industries: [transportIndustry],
+  regulationType: RegulationType.Accreditation,
   updated_at: new Date(2011, 11, 1),
 });
 const profession2 = professionFactory.build({
   name: 'Example Profession 2',
   occupationLocations: ['GB-SCT', 'GB-NIR'],
-  industries: [educationIndustry],
   organisation: organisation1,
+  industries: [educationIndustry],
+  regulationType: RegulationType.Certification,
   updated_at: new Date(2023, 1, 4),
 });
 const profession3 = professionFactory.build({
   name: 'Example Profession 3',
   occupationLocations: ['GB-WLS'],
-  industries: [educationIndustry, transportIndustry],
   organisation: organisation2,
+  industries: [educationIndustry, transportIndustry],
+  regulationType: RegulationType.Licensing,
   updated_at: new Date(2019, 6, 4),
 });
 
@@ -69,6 +74,7 @@ describe('ProfessionsPresenter', () => {
       nations: [Nation.find('GB-ENG')],
       organisations: [organisation1],
       industries: [transportIndustry],
+      regulationTypes: [RegulationType.Certification],
     };
 
     professionsPresenter = new ProfessionsPresenter(
@@ -109,6 +115,7 @@ describe('ProfessionsPresenter', () => {
           nations: ['nations.england'],
           organisations: ['Example Organisation 1'],
           industries: ['industries.transport'],
+          regulationTypes: [RegulationType.Certification],
           changedBy: [],
         },
 
@@ -126,6 +133,11 @@ describe('ProfessionsPresenter', () => {
           [transportIndustry],
           i18nService,
         ).checkboxItems(),
+        regulationTypesCheckboxItems:
+          await new RegulationTypesCheckboxPresenter(
+            [RegulationType.Certification],
+            i18nService,
+          ).checkboxItems(),
         changedByCheckboxItems: [],
       };
 
@@ -161,6 +173,7 @@ describe('ProfessionsPresenter', () => {
           nations: ['nations.england'],
           organisations: ['Example Organisation 1'],
           industries: ['industries.transport'],
+          regulationTypes: [RegulationType.Certification],
           changedBy: [],
         },
         nationsCheckboxItems: await new NationsCheckboxPresenter(
@@ -177,6 +190,11 @@ describe('ProfessionsPresenter', () => {
           [transportIndustry],
           i18nService,
         ).checkboxItems(),
+        regulationTypesCheckboxItems:
+          await new RegulationTypesCheckboxPresenter(
+            [RegulationType.Certification],
+            i18nService,
+          ).checkboxItems(),
         changedByCheckboxItems: [],
       };
 
