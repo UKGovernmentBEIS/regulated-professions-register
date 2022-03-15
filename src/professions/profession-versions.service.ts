@@ -90,6 +90,7 @@ export class ProfessionVersionsService {
       if (liveVersion) {
         liveVersion.status = ProfessionVersionStatus.Archived;
         await this.repository.save(liveVersion);
+        await this.searchService.delete(liveVersion);
       }
 
       version.status = ProfessionVersionStatus.Live;

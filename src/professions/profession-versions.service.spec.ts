@@ -259,6 +259,11 @@ describe('ProfessionVersionsService', () => {
         status: ProfessionVersionStatus.Archived,
       });
 
+      expect(searchService.delete).toHaveBeenCalledWith({
+        ...liveVersion,
+        status: ProfessionVersionStatus.Archived,
+      });
+
       expect(saveSpy).toHaveBeenCalledWith({
         ...draftVersion,
         status: ProfessionVersionStatus.Live,
