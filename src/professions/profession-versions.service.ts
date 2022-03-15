@@ -166,6 +166,7 @@ export class ProfessionVersionsService {
       .where('professionVersion.status = :status', {
         status: ProfessionVersionStatus.Live,
       })
+      .orderBy('profession.name')
       .getMany();
 
     return versions.map((version) =>
