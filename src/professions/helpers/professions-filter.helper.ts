@@ -2,6 +2,7 @@ import { BaseFilterHelper } from '../../helpers/base-filter.helper';
 import { Industry } from '../../industries/industry.entity';
 import { Organisation } from '../../organisations/organisation.entity';
 import { Profession } from '../../professions/profession.entity';
+import { RegulationType } from '../profession-version.entity';
 import { getOrganisationsFromProfession } from './get-organisations-from-profession.helper';
 
 export class ProfessionsFilterHelper extends BaseFilterHelper<Profession> {
@@ -19,6 +20,12 @@ export class ProfessionsFilterHelper extends BaseFilterHelper<Profession> {
 
   protected industriesFromSubject(profession: Profession): Industry[] {
     return profession.industries || [];
+  }
+
+  protected regulationTypesFromSubject(
+    profession: Profession,
+  ): RegulationType[] {
+    return profession.regulationType ? [profession.regulationType] : [];
   }
 
   protected nameFromSubject(profession: Profession): string {

@@ -1,6 +1,7 @@
 import { Industry } from '../industries/industry.entity';
 import { Organisation } from '../organisations/organisation.entity';
 import { FilterInput } from '../common/interfaces/filter-input.interface';
+import { RegulationType } from '../professions/profession-version.entity';
 
 export abstract class BaseFilterHelper<TSubject> {
   constructor(private readonly allSubjects: TSubject[]) {}
@@ -23,9 +24,14 @@ export abstract class BaseFilterHelper<TSubject> {
       organisationFilteredSubjects,
     );
 
-    const keywordFilteredSubjects = this.filterByKeyword(
+    const regulationTypeFilteredSubjects = this.filterByRegulationType(
       filterInput,
       industryFilteredSubjects,
+    );
+
+    const keywordFilteredSubjects = this.filterByKeyword(
+      filterInput,
+      regulationTypeFilteredSubjects,
     );
 
     return keywordFilteredSubjects;
@@ -38,6 +44,10 @@ export abstract class BaseFilterHelper<TSubject> {
   ): Organisation[];
 
   protected abstract industriesFromSubject(subject: TSubject): Industry[];
+
+  protected abstract regulationTypesFromSubject(
+    subject: TSubject,
+  ): RegulationType[];
 
   protected abstract nameFromSubject(subject: TSubject): string;
 
@@ -93,6 +103,22 @@ export abstract class BaseFilterHelper<TSubject> {
     }
   }
 
+  private filterByRegulationType(
+    filterInput: FilterInput,
+    subjects: TSubject[],
+  ): TSubject[] {
+    if (filterInput.regulationTypes?.length) {
+      return subjects.filter((subject) =>
+        this.isRegulationTypeOverlap(
+          this.regulationTypesFromSubject(subject),
+          filterInput.regulationTypes,
+        ),
+      );
+    } else {
+      return subjects;
+    }
+  }
+
   private filterByKeyword(
     filterInput: FilterInput,
     subjects: TSubject[],
@@ -132,6 +158,17 @@ export abstract class BaseFilterHelper<TSubject> {
   ): boolean {
     return industries1.some((industry1) => {
       return industries2.some((industry2) => industry1.id === industry2.id);
+    });
+  }
+
+  private isRegulationTypeOverlap(
+    regulationTypes1: RegulationType[],
+    regulationTypes2: RegulationType[],
+  ): boolean {
+    return regulationTypes1.some((regulationType1) => {
+      return regulationTypes2.some(
+        (regulationType2) => regulationType1 === regulationType2,
+      );
     });
   }
 
