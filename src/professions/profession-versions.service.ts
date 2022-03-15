@@ -136,6 +136,12 @@ export class ProfessionVersionsService {
       await queryRunner.release();
     }
 
+    const versions = await this.repository.find({
+      where: { profession: profession },
+    });
+
+    await this.searchService.bulkDelete(versions);
+
     return version;
   }
 
