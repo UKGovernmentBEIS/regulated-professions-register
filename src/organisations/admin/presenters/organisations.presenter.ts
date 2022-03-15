@@ -9,6 +9,7 @@ import { IndexTemplate } from '../interfaces/index-template.interface';
 import { IndustriesCheckboxPresenter } from '../../../industries/industries-checkbox.presenter';
 import { Nation } from '../../../nations/nation';
 import { NationsCheckboxPresenter } from '../../../nations/nations-checkbox.presenter';
+import { RegulationTypesCheckboxPresenter } from '../../../professions/admin/presenters/regulation-types-checkbox.presenter';
 
 type Field =
   | 'name'
@@ -28,6 +29,8 @@ const fields = [
   'actions',
 ] as Field[];
 
+export type OrganisationsPresenterView = 'overview' | 'single-organisation';
+
 export class OrganisationsPresenter {
   constructor(
     private readonly userOrganisation: string,
@@ -38,7 +41,7 @@ export class OrganisationsPresenter {
     private readonly i18nService: I18nService,
   ) {}
 
-  async present(): Promise<IndexTemplate> {
+  async present(view: OrganisationsPresenterView): Promise<IndexTemplate> {
     const nationsCheckboxItems = await new NationsCheckboxPresenter(
       this.allNations,
       this.filterInput.nations || [],
@@ -51,10 +54,18 @@ export class OrganisationsPresenter {
       this.i18nService,
     ).checkboxItems();
 
+    const regulationTypesCheckboxItems =
+      await new RegulationTypesCheckboxPresenter(
+        this.filterInput.regulationTypes || [],
+        this.i18nService,
+      ).checkboxItems();
+
     return {
+      view,
       userOrganisation: this.userOrganisation,
       nationsCheckboxItems,
       industriesCheckboxItems,
+      regulationTypesCheckboxItems,
       organisationsTable: await this.table(),
       filters: {
         keywords: this.filterInput.keywords || '',
@@ -62,6 +73,7 @@ export class OrganisationsPresenter {
         industries: (this.filterInput.industries || []).map(
           (industry) => industry.name,
         ),
+        regulationTypes: this.filterInput.regulationTypes || [],
       },
     };
   }

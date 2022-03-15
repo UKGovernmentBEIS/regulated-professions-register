@@ -8,6 +8,7 @@ import { IndustriesCheckboxPresenter } from '../../../industries/industries-chec
 import { OrganisationPresenter } from '../../presenters/organisation.presenter';
 import { Nation } from '../../../nations/nation';
 import { NationsCheckboxPresenter } from '../../../nations/nations-checkbox.presenter';
+import { RegulationType } from '../../../professions/profession-version.entity';
 
 const mockTableRow = jest.fn();
 const mockCheckboxItems = jest.fn();
@@ -76,7 +77,7 @@ describe('OrganisationsPresenter', () => {
           organisations,
           i18nService,
         );
-        const result = await presenter.present();
+        const result = await presenter.present('overview');
 
         expect(OrganisationPresenter).toHaveBeenCalledTimes(5);
         expect(OrganisationPresenter).toHaveBeenLastCalledWith(
@@ -84,6 +85,7 @@ describe('OrganisationsPresenter', () => {
           i18nService,
         );
 
+        expect(result.view).toEqual('overview');
         expect(result.userOrganisation).toEqual('Organisation Name');
 
         expect(result.organisationsTable.firstCellIsHeader).toEqual(true);
@@ -140,7 +142,7 @@ describe('OrganisationsPresenter', () => {
           i18nService,
         );
 
-        const result = await presenter.present();
+        const result = await presenter.present('overview');
 
         expect(NationsCheckboxPresenter).toBeCalledWith(
           nations,
@@ -158,54 +160,123 @@ describe('OrganisationsPresenter', () => {
           keywords: '',
           nations: [],
           industries: [],
+          regulationTypes: [],
         });
       });
     });
 
     describe('when called with populated `FilterInput`', () => {
-      it('returns populated filter data', async () => {
-        mockTableRow.mockReturnValue([]);
-        mockCheckboxItems.mockReturnValue([]);
+      describe('when called with `overview`', () => {
+        it('returns populated filter data', async () => {
+          mockTableRow.mockReturnValue([]);
+          mockCheckboxItems.mockReturnValue([]);
 
-        const i18nService = createMockI18nService();
+          const i18nService = createMockI18nService();
 
-        const nations = Nation.all();
-        const industries = industryFactory.buildList(3);
-        const organisations = organisationFactory.buildList(5);
+          const nations = Nation.all();
+          const industries = industryFactory.buildList(3);
+          const organisations = organisationFactory.buildList(5);
 
-        const filterInput: FilterInput = {
-          keywords: 'example keywords',
-          nations: [nations[1], nations[3]],
-          industries: [industries[0], industries[2]],
-        };
+          const filterInput: FilterInput = {
+            keywords: 'example keywords',
+            nations: [nations[1], nations[3]],
+            industries: [industries[0], industries[2]],
+            regulationTypes: [
+              RegulationType.Certification,
+              RegulationType.Accreditation,
+            ],
+          };
 
-        const presenter = new OrganisationsPresenter(
-          'Organisation name',
-          nations,
-          industries,
-          filterInput,
-          organisations,
-          i18nService,
-        );
+          const presenter = new OrganisationsPresenter(
+            'Organisation name',
+            nations,
+            industries,
+            filterInput,
+            organisations,
+            i18nService,
+          );
 
-        const result = await presenter.present();
+          const result = await presenter.present('overview');
 
-        expect(NationsCheckboxPresenter).toBeCalledWith(
-          nations,
-          [nations[1], nations[3]],
-          i18nService,
-        );
+          expect(NationsCheckboxPresenter).toBeCalledWith(
+            nations,
+            [nations[1], nations[3]],
+            i18nService,
+          );
 
-        expect(IndustriesCheckboxPresenter).toBeCalledWith(
-          industries,
-          [industries[0], industries[2]],
-          i18nService,
-        );
+          expect(IndustriesCheckboxPresenter).toBeCalledWith(
+            industries,
+            [industries[0], industries[2]],
+            i18nService,
+          );
 
-        expect(result.filters).toEqual({
-          keywords: 'example keywords',
-          nations: [nations[1].name, nations[3].name],
-          industries: [industries[0].name, industries[2].name],
+          expect(result.view).toEqual('overview');
+          expect(result.filters).toEqual({
+            keywords: 'example keywords',
+            nations: [nations[1].name, nations[3].name],
+            industries: [industries[0].name, industries[2].name],
+            regulationTypes: [
+              RegulationType.Certification,
+              RegulationType.Accreditation,
+            ],
+          });
+        });
+      });
+
+      describe('when called with `single-organisation`', () => {
+        it('returns populated filter data', async () => {
+          mockTableRow.mockReturnValue([]);
+          mockCheckboxItems.mockReturnValue([]);
+
+          const i18nService = createMockI18nService();
+
+          const nations = Nation.all();
+          const industries = industryFactory.buildList(3);
+          const organisations = organisationFactory.buildList(5);
+
+          const filterInput: FilterInput = {
+            keywords: 'example keywords',
+            nations: [nations[1], nations[3]],
+            industries: [industries[0], industries[2]],
+            regulationTypes: [
+              RegulationType.Licensing,
+              RegulationType.Accreditation,
+            ],
+          };
+
+          const presenter = new OrganisationsPresenter(
+            'Organisation name',
+            nations,
+            industries,
+            filterInput,
+            organisations,
+            i18nService,
+          );
+
+          const result = await presenter.present('single-organisation');
+
+          expect(NationsCheckboxPresenter).toBeCalledWith(
+            nations,
+            [nations[1], nations[3]],
+            i18nService,
+          );
+
+          expect(IndustriesCheckboxPresenter).toBeCalledWith(
+            industries,
+            [industries[0], industries[2]],
+            i18nService,
+          );
+
+          expect(result.view).toEqual('single-organisation');
+          expect(result.filters).toEqual({
+            keywords: 'example keywords',
+            nations: [nations[1].name, nations[3].name],
+            industries: [industries[0].name, industries[2].name],
+            regulationTypes: [
+              RegulationType.Licensing,
+              RegulationType.Accreditation,
+            ],
+          });
         });
       });
     });
@@ -243,7 +314,7 @@ describe('OrganisationsPresenter', () => {
             foundOrganisations,
             i18nService,
           );
-          const result = await presenter.present();
+          const result = await presenter.present('overview');
 
           expect(result.organisationsTable.caption).toEqual(
             `${translationOf('organisations.search.foundSingular')}`,
@@ -283,7 +354,7 @@ describe('OrganisationsPresenter', () => {
             foundOrganisations,
             i18nService,
           );
-          const result = await presenter.present();
+          const result = await presenter.present('overview');
 
           expect(result.organisationsTable.caption).toEqual(
             `${translationOf('organisations.search.foundPlural')}`,

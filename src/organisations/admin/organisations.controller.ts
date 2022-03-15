@@ -24,7 +24,10 @@ import { Organisation } from '../organisation.entity';
 import { OrganisationVersion } from '../organisation-version.entity';
 
 import { OrganisationPresenter } from '../presenters/organisation.presenter';
-import { OrganisationsPresenter } from './presenters/organisations.presenter';
+import {
+  OrganisationsPresenter,
+  OrganisationsPresenterView,
+} from './presenters/organisations.presenter';
 
 import { ReviewTemplate } from './interfaces/review-template.interface';
 import { BackLink } from '../../common/decorators/back-link.decorator';
@@ -71,6 +74,10 @@ export class OrganisationsController {
 
     const showAllOrgs = actingUser.serviceOwner;
 
+    const view: OrganisationsPresenterView = showAllOrgs
+      ? 'overview'
+      : 'single-organisation';
+
     const allNations = Nation.all();
     const allOrganisations =
       await this.organisationVersionsService.allWithLatestVersion();
@@ -105,7 +112,7 @@ export class OrganisationsController {
       this.i18nService,
     );
 
-    return presenter.present();
+    return presenter.present(view);
   }
 
   @Post('/')

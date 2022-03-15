@@ -32,6 +32,7 @@ import { getActingUser } from '../../users/helpers/get-acting-user.helper';
 import { escape } from '../../helpers/escape.helper';
 import { translationOf } from '../../testutils/translation-of';
 import { Nation } from '../../nations/nation';
+import { RegulationType } from '../../professions/profession-version.entity';
 
 jest.mock('./presenters/organisations.presenter');
 jest.mock('../presenters/organisation.presenter');
@@ -92,6 +93,7 @@ describe('OrganisationsController', () => {
           );
 
           const templateParams: IndexTemplate = {
+            view: 'overview',
             userOrganisation: translationOf('app.beis'),
             organisationsTable: {
               firstCellIsHeader: true,
@@ -106,9 +108,11 @@ describe('OrganisationsController', () => {
               keywords: '',
               nations: [],
               industries: [],
+              regulationTypes: [],
             },
             nationsCheckboxItems: [],
             industriesCheckboxItems: [],
+            regulationTypesCheckboxItems: [],
           };
 
           const organisations = createOrganisations();
@@ -134,6 +138,7 @@ describe('OrganisationsController', () => {
             keywords: '',
             nations: [],
             industries: [],
+            regulationTypes: [],
           } as FilterInput);
 
           expect(OrganisationsPresenter).toHaveBeenCalledWith(
@@ -144,9 +149,13 @@ describe('OrganisationsController', () => {
               keywords: '',
               nations: [],
               industries: [],
+              regulationTypes: [],
             },
             organisations,
             i18nService,
+          );
+          expect(OrganisationsPresenter.prototype.present).toBeCalledWith(
+            'overview',
           );
         });
       });
@@ -159,6 +168,7 @@ describe('OrganisationsController', () => {
           );
 
           const templateParams: IndexTemplate = {
+            view: 'overview',
             userOrganisation: translationOf('app.beis'),
             organisationsTable: {
               firstCellIsHeader: true,
@@ -173,9 +183,11 @@ describe('OrganisationsController', () => {
               keywords: '',
               nations: [],
               industries: [],
+              regulationTypes: [],
             },
             nationsCheckboxItems: [],
             industriesCheckboxItems: [],
+            regulationTypesCheckboxItems: [],
           };
 
           const organisations = createOrganisations();
@@ -195,6 +207,7 @@ describe('OrganisationsController', () => {
               keywords: 'example keywords',
               nations: [nations[2].code],
               industries: [industries[1].id],
+              regulationTypes: [RegulationType.Accreditation],
             } as FilterDto),
           ).toEqual(templateParams);
 
@@ -207,6 +220,7 @@ describe('OrganisationsController', () => {
             keywords: 'example keywords',
             nations: [nations[2]],
             industries: [industries[1]],
+            regulationTypes: [RegulationType.Accreditation],
           } as FilterInput);
 
           expect(OrganisationsPresenter).toHaveBeenCalledWith(
@@ -217,9 +231,13 @@ describe('OrganisationsController', () => {
               keywords: 'example keywords',
               nations: [nations[2]],
               industries: [industries[1]],
+              regulationTypes: [RegulationType.Accreditation],
             },
             [organisations[1], organisations[3]],
             i18nService,
+          );
+          expect(OrganisationsPresenter.prototype.present).toBeCalledWith(
+            'overview',
           );
         });
       });
@@ -231,6 +249,7 @@ describe('OrganisationsController', () => {
         const userOrganisation = organisations[0];
 
         const templateParams: IndexTemplate = {
+          view: 'single-organisation',
           userOrganisation: userOrganisation.name,
           organisationsTable: {
             firstCellIsHeader: true,
@@ -245,9 +264,11 @@ describe('OrganisationsController', () => {
             keywords: '',
             nations: [],
             industries: [],
+            regulationTypes: [],
           },
           nationsCheckboxItems: [],
           industriesCheckboxItems: [],
+          regulationTypesCheckboxItems: [],
         };
 
         const nations = Nation.all();
@@ -279,8 +300,9 @@ describe('OrganisationsController', () => {
         expect(OrganisationsFilterHelper.prototype.filter).toBeCalledWith({
           keywords: '',
           nations: [],
-          industries: [],
           organisations: [userOrganisation],
+          industries: [],
+          regulationTypes: [],
         } as FilterInput);
 
         expect(OrganisationsPresenter).toHaveBeenCalledWith(
@@ -290,11 +312,15 @@ describe('OrganisationsController', () => {
           {
             keywords: '',
             nations: [],
-            industries: [],
             organisations: [userOrganisation],
+            industries: [],
+            regulationTypes: [],
           },
           [userOrganisation],
           i18nService,
+        );
+        expect(OrganisationsPresenter.prototype.present).toBeCalledWith(
+          'single-organisation',
         );
       });
     });

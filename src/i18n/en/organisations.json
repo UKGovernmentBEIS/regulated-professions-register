@@ -7,7 +7,8 @@
     "labels": {
       "keywords": "Keywords:",
       "nations": "Nations:",
-      "industries": "Industries:"
+      "industries": "Industries:",
+      "regulationTypes": "Regulation types:"
     },
     "filter": {
       "keywords": {
@@ -18,16 +19,12 @@
         "label": "Nations",
         "hint": "Select all that apply."
       },
-      "organisations": {
-        "label": "Regulators",
-        "hint": "Select all that apply."
-      },
       "industries": {
         "label": "Sectors",
         "hint": "Select all that apply."
       },
-      "changedBy": {
-        "label": "Changed by",
+      "regulationTypes": {
+        "label": "Regulation types",
         "hint": "Select all that apply."
       },
       "button": "Filter results"
