@@ -2,6 +2,7 @@ import { FilterInput } from '../common/interfaces/filter-input.interface';
 import { Industry } from '../industries/industry.entity';
 import { Nation } from '../nations/nation';
 import { Organisation } from '../organisations/organisation.entity';
+import { RegulationType } from '../professions/profession-version.entity';
 
 type AllOrNone<T> = T | { [K in keyof T]?: never };
 
@@ -11,7 +12,9 @@ export function createFilterInput(
     allNations: Nation[];
   }> &
     AllOrNone<{ organisations?: string[]; allOrganisations: Organisation[] }> &
-    AllOrNone<{ industries?: string[]; allIndustries: Industry[] }>,
+    AllOrNone<{ industries?: string[]; allIndustries: Industry[] }> & {
+      regulationTypes?: RegulationType[];
+    },
 ): FilterInput {
   const nations = filter.allNations
     ? filter.allNations.filter((nation) => filter.nations.includes(nation.code))
@@ -29,5 +32,11 @@ export function createFilterInput(
       )
     : undefined;
 
-  return { keywords: filter.keywords, nations, organisations, industries };
+  return {
+    keywords: filter.keywords,
+    nations,
+    organisations,
+    industries,
+    regulationTypes: filter.regulationTypes,
+  };
 }
