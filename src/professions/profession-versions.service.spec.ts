@@ -368,6 +368,23 @@ describe('ProfessionVersionsService', () => {
       expect(queryRunner.release).toHaveBeenCalled();
     });
 
+    it('deletes all versions from opensearch', async () => {
+      const version = professionVersionFactory.build({
+        status: ProfessionVersionStatus.Draft,
+      });
+
+      const otherVersions = professionVersionFactory.buildList(3);
+
+      (repo.find as jest.Mock).mockReturnValue(otherVersions);
+
+      await service.archive(version);
+
+      expect(searchService.bulkDelete).toHaveBeenCalledWith(otherVersions);
+
+      expect(queryRunner.commitTransaction).toHaveBeenCalled();
+      expect(queryRunner.release).toHaveBeenCalled();
+    });
+
     it('rolls back the transaction if an error occurs', async () => {
       const version = professionVersionFactory.build({
         status: ProfessionVersionStatus.Draft,

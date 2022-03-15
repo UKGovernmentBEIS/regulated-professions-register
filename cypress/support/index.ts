@@ -67,14 +67,11 @@ declare global {
 // Import commands.js using ES2015 syntax:
 import './commands';
 
-// Seed the database before running the specs
-before(() => {
-  cy.exec('npm run seed:test');
-});
-
-// Purge the Opensearch index before running the specs
+// Purge the Opensearch index and seed the database
+// before running the specs
 before(() => {
   cy.exec('npm run opensearch:test:purge');
+  cy.exec('npm run seed:test');
 });
 
 // Alternatively you can use CommonJS syntax:
