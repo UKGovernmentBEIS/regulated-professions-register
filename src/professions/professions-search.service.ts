@@ -15,4 +15,11 @@ export class ProfessionsSearchService {
       },
     });
   }
+
+  public async delete(professionVersion: ProfessionVersion): Promise<any> {
+    await this.client.delete({
+      index: 'professions',
+      id: professionVersion.id,
+    });
+  }
 }

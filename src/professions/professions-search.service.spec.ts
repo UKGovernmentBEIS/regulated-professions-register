@@ -40,4 +40,17 @@ describe('ProfessionVersionsService', () => {
       });
     });
   });
+
+  describe('delete', () => {
+    it('delete the entity', async () => {
+      const professionVersion = professionVersionFactory.build();
+
+      service.delete(professionVersion);
+
+      expect(opensearchClient.delete).toHaveBeenCalledWith({
+        index: 'professions',
+        id: professionVersion.id,
+      });
+    });
+  });
 });
