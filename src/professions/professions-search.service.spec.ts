@@ -83,4 +83,39 @@ describe('ProfessionVersionsService', () => {
       });
     });
   });
+
+  describe('search', () => {
+    it('runs a search query', async () => {
+      (opensearchClient.search as jest.Mock).mockReturnValue({
+        body: {
+          hits: {
+            hits: [
+              {
+                _id: '123',
+              },
+              {
+                _id: '456',
+              },
+            ],
+          },
+        },
+      });
+
+      const result = await service.search('something');
+
+      expect(result).toEqual(['123', '456']);
+
+      expect(opensearchClient.search).toHaveBeenCalledWith({
+        index: service.indexName,
+        body: {
+          query: {
+            multi_match: {
+              query: 'something',
+              fields: ['name'],
+            },
+          },
+        },
+      });
+    });
+  });
 });
