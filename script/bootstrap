@@ -16,6 +16,10 @@ echo "==> Building assets..."
 
 npm run build:assets
 
+echo "==> Running OpenSearch in the background..."
+
+brew services start opensearch
+
 echo "==> Seeding database..."
 
 npm run seed

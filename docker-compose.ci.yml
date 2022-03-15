@@ -34,6 +34,7 @@ services:
       ORGEDITOR_USERNAME: '${ORGEDITOR_USERNAME}'
       ORGEDITOR_PASSWORD: '${ORGEDITOR_PASSWORD}'
       REDIS_URI: redis://redis:6379
+      OPENSEARCH_NODE: http://admin:admin@localhost:9200
     networks:
       - test
     volumes:
@@ -60,6 +61,16 @@ services:
       - '6379:6379'
     volumes:
       - redis-data:/var/lib/redis
+
+  opensearch:
+    image: 'opensearchproject/opensearch'
+    environment:
+      discovery.type: single-node
+      plugins.security.disabled: 1
+    ports:
+      - '9200:9200'
+    networks:
+      - test
 
 networks:
   test:

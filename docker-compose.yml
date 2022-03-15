@@ -16,6 +16,7 @@ services:
     environment:
       DATABASE_URL: postgres://postgres:password@db:5432/regulated-professions-register-development
       REDIS_HOST: redis
+      OPENSEARCH_NODE: http://admin:admin@localhost:9200
     volumes:
       - .:/srv/app
     tty: true
@@ -42,6 +43,16 @@ services:
       - '6379:6379'
     volumes:
       - redis-data:/var/lib/redis
+
+  opensearch:
+    image: 'opensearchproject/opensearch'
+    environment:
+      discovery.type: single-node
+      plugins.security.disabled: true
+    ports:
+      - '9200:9200'
+    networks:
+      - dev
 
 networks:
   dev:

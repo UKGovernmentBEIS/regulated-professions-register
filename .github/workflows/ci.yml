@@ -77,6 +77,19 @@ jobs:
           --health-retries 5
         ports:
           - 6379:6379
+      opensearch:
+        image: opensearchproject/opensearch:latest
+        env:
+          discovery.type: single-node
+          plugins.security.disabled: true
+        options: >-
+          --health-cmd "curl http://admin:admin@localhost:9200/_cluster/health"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+        ports:
+          - 9200:9200
+          - 9600:9600
 
     steps:
       - name: Check out code
@@ -95,6 +108,7 @@ jobs:
           MATRIX: ${{ matrix.container }}
           DATABASE_URL: postgres://postgres:password@localhost:5432/regulated-professions-register-test
           REDIS_URI: redis://localhost:6379
+          OPENSEARCH_NODE: http://admin:admin@localhost:9200
 
       - name: Upload end-to-end-test screenshots
         if: failure() && steps.Test.outcome == 'failure'
