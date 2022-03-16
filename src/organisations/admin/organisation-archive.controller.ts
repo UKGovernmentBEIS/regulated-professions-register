@@ -14,6 +14,7 @@ import { flashMessage } from '../../common/flash-message';
 import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
 import { Permissions } from '../../common/permissions.decorator';
 import { escape } from '../../helpers/escape.helper';
+import { checkCanViewOrganisation } from '../../users/helpers/check-can-view-organisation';
 import { getActingUser } from '../../users/helpers/get-acting-user.helper';
 import { UserPermission } from '../../users/user-permission';
 import { OrganisationVersionsService } from '../organisation-versions.service';
@@ -33,6 +34,7 @@ export class OrganisationArchiveController {
   async new(
     @Param('organisationId') organisationId: string,
     @Param('versionId') versionId: string,
+    @Req() req: RequestWithAppSession,
   ) {
     const version =
       await this.organisationVersionsService.findByIdWithOrganisation(
@@ -44,6 +46,8 @@ export class OrganisationArchiveController {
       version.organisation,
       version,
     );
+
+    checkCanViewOrganisation(req, organisation);
 
     return { organisation };
   }
@@ -61,6 +65,8 @@ export class OrganisationArchiveController {
         organisationId,
         versionId,
       );
+
+    checkCanViewOrganisation(req, version.organisation);
 
     const user = getActingUser(req);
 
