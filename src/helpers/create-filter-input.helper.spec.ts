@@ -1,5 +1,6 @@
 import { FilterInput } from '../common/interfaces/filter-input.interface';
 import { Nation } from '../nations/nation';
+import { RegulationType } from '../professions/profession-version.entity';
 import industryFactory from '../testutils/factories/industry';
 import organisationFactory from '../testutils/factories/organisation';
 import { createFilterInput } from './create-filter-input.helper';
@@ -68,8 +69,29 @@ describe('create-filter-input', () => {
     });
   });
 
-  describe('when given a mixture of keywords, nation codes, organisation IDs, and industry IDs', () => {
-    it('return `FilterInput` for those keywords, nations, organisations, and industries', () => {
+  describe('when given regulation types', () => {
+    it('returns `FilterInput` with the given regulation types', () => {
+      const result = createFilterInput({
+        keywords: '',
+        regulationTypes: [
+          RegulationType.Certification,
+          RegulationType.Licensing,
+        ],
+      });
+      const expected: FilterInput = {
+        keywords: '',
+        regulationTypes: [
+          RegulationType.Certification,
+          RegulationType.Licensing,
+        ],
+      };
+
+      expect(result).toEqual(expected);
+    });
+  });
+
+  describe('when given a mixture of keywords, nation codes, organisation IDs, industry IDs, and regulation types', () => {
+    it('return `FilterInput` for those keywords, nations, organisations, industries, and regulation types', () => {
       const nations = Nation.all();
       const organsiations = organisationFactory.buildList(3);
       const industries = industryFactory.buildList(3);
@@ -86,6 +108,7 @@ describe('create-filter-input', () => {
         allOrganisations: organsiations,
         industries: [industries[0].id],
         allIndustries: industries,
+        regulationTypes: [RegulationType.Licensing],
       });
 
       const expected: FilterInput = {
@@ -93,6 +116,7 @@ describe('create-filter-input', () => {
         nations: [nations[1]],
         organisations: [organsiations[0], organsiations[1], organsiations[2]],
         industries: [industries[0]],
+        regulationTypes: [RegulationType.Licensing],
       };
 
       expect(result).toEqual(expected);

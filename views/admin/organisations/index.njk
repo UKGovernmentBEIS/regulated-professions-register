@@ -41,16 +41,20 @@
     <div class="govuk-grid-column-full">
       <h2 class="govuk-heading-l">{{ "organisations.admin.manageHeading" | t }} </h2>
 
-      {% set filterTextPrefix = "organisations.admin" %}
-      {% include "../../shared/_horizontal-filter.njk" %}
+        {% ifAsync view === 'overview' %}
+          {% set filterTextPrefix = "organisations.admin" %}
+          {% include "../../shared/_horizontal-filter.njk" %}
+        {% endif %}
     </div>
   </div>
 
   <div class="govuk-grid-row">
 
     <div class="govuk-grid-column-full">
-      {% set filterCriteriaTextPrefix = "organisations.admin" %}
-      {% include "../../shared/_filter-criteria.njk" %}
+      {% ifAsync view === 'overview' %}
+        {% set filterCriteriaTextPrefix = "organisations.admin" %}
+        {% include "../../shared/_filter-criteria.njk" %}
+      {% endif %}
 
       <div class='rpr-internal__table-container'>
         {{ govukTable(organisationsTable) }}

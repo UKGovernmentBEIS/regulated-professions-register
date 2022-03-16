@@ -4,6 +4,7 @@ import { Organisation } from '../organisations/organisation.entity';
 import { BaseFilterHelper } from './base-filter.helper';
 import organisationFactory from '../testutils/factories/organisation';
 import industryFactory from '../testutils/factories/industry';
+import { RegulationType } from '../professions/profession-version.entity';
 
 interface DummySubject {
   id: string;
@@ -22,6 +23,12 @@ class DummyFilterHelper extends BaseFilterHelper<DummySubject> {
     return industriesFromSubject(subject);
   }
 
+  protected regulationTypesFromSubject(
+    subject: DummySubject,
+  ): RegulationType[] {
+    return regulationTypesFromSubject(subject);
+  }
+
   protected nameFromSubject(subject: DummySubject): string {
     return nameFromSubject(subject);
   }
@@ -32,20 +39,15 @@ const subject2: DummySubject = { id: 'subject-2' };
 const subject3: DummySubject = { id: 'subject-3' };
 const subject4: DummySubject = { id: 'subject-4' };
 const subject5: DummySubject = { id: 'subject-5' };
+const subject6: DummySubject = { id: 'subject-6' };
 
-let nationCodesFromSubject: jest.Mock;
-let organisationsFromSubject: jest.Mock;
-let industriesFromSubject: jest.Mock;
-let nameFromSubject: jest.Mock;
+const nationCodesFromSubject = jest.fn();
+const organisationsFromSubject = jest.fn();
+const industriesFromSubject = jest.fn();
+const regulationTypesFromSubject = jest.fn();
+const nameFromSubject = jest.fn();
 
 describe('BaseFilterHelper', () => {
-  beforeEach(() => {
-    nationCodesFromSubject = jest.fn();
-    organisationsFromSubject = jest.fn();
-    industriesFromSubject = jest.fn();
-    nameFromSubject = jest.fn();
-  });
-
   describe('filter', () => {
     let filterHelper: DummyFilterHelper;
 
@@ -56,6 +58,7 @@ describe('BaseFilterHelper', () => {
         subject3,
         subject4,
         subject5,
+        subject6,
       ]);
     });
 
@@ -66,6 +69,7 @@ describe('BaseFilterHelper', () => {
         expect(nationCodesFromSubject).not.toBeCalled();
         expect(organisationsFromSubject).not.toBeCalled();
         expect(industriesFromSubject).not.toBeCalled();
+        expect(regulationTypesFromSubject).not.toBeCalled();
         expect(nameFromSubject).not.toBeCalled();
       });
 
@@ -76,6 +80,7 @@ describe('BaseFilterHelper', () => {
           subject3,
           subject4,
           subject5,
+          subject6,
         ]);
       });
     });
@@ -89,6 +94,7 @@ describe('BaseFilterHelper', () => {
         expect(nationCodesFromSubject).not.toBeCalled();
         expect(organisationsFromSubject).not.toBeCalled();
         expect(industriesFromSubject).not.toBeCalled();
+        expect(regulationTypesFromSubject).not.toBeCalled();
         expect(nameFromSubject).not.toBeCalled();
       });
     });
@@ -101,10 +107,12 @@ describe('BaseFilterHelper', () => {
           keywords: 'nuclear',
         });
 
-        expect(nameFromSubject).toBeCalledTimes(5);
+        expect(nameFromSubject).toBeCalledTimes(6);
 
+        expect(nationCodesFromSubject).not.toBeCalled();
         expect(organisationsFromSubject).not.toBeCalled();
         expect(industriesFromSubject).not.toBeCalled();
+        expect(regulationTypesFromSubject).not.toBeCalled();
       });
 
       it('matches against the return value of the name extraction method', () => {
@@ -202,10 +210,11 @@ describe('BaseFilterHelper', () => {
           nations: [Nation.find('GB-NIR')],
         });
 
-        expect(nationCodesFromSubject).toBeCalledTimes(5);
+        expect(nationCodesFromSubject).toBeCalledTimes(6);
 
         expect(organisationsFromSubject).not.toBeCalled();
         expect(industriesFromSubject).not.toBeCalled();
+        expect(regulationTypesFromSubject).not.toBeCalled();
         expect(nameFromSubject).not.toBeCalled();
       });
 
@@ -240,10 +249,11 @@ describe('BaseFilterHelper', () => {
           organisations: [organisationFactory.build()],
         });
 
-        expect(organisationsFromSubject).toBeCalledTimes(5);
+        expect(organisationsFromSubject).toBeCalledTimes(6);
 
         expect(nationCodesFromSubject).not.toBeCalled();
         expect(industriesFromSubject).not.toBeCalled();
+        expect(regulationTypesFromSubject).not.toBeCalled();
         expect(nameFromSubject).not.toBeCalled();
       });
 
@@ -285,10 +295,11 @@ describe('BaseFilterHelper', () => {
           industries: [industryFactory.build()],
         });
 
-        expect(industriesFromSubject).toBeCalledTimes(5);
+        expect(industriesFromSubject).toBeCalledTimes(6);
 
         expect(nationCodesFromSubject).not.toBeCalled();
         expect(organisationsFromSubject).not.toBeCalled();
+        expect(regulationTypesFromSubject).not.toBeCalled();
         expect(nameFromSubject).not.toBeCalled();
       });
 
@@ -301,10 +312,10 @@ describe('BaseFilterHelper', () => {
           if (subject === subject1) {
             return [industry1];
           } else if (subject === subject2) {
-            // Test partial match against provided organisationss
+            // Test partial match against provided industries
             return [industry2];
           } else if (subject === subject3) {
-            // Test complete match against provided organisations
+            // Test complete match against provided industries
             return [industry2, industry3];
           } else {
             return [];
@@ -322,6 +333,48 @@ describe('BaseFilterHelper', () => {
       });
     });
 
+    describe('when filter input has regulation types', () => {
+      it('calls the regulationTypes extractor method', () => {
+        regulationTypesFromSubject.mockReturnValue([]);
+
+        filterHelper.filter({
+          regulationTypes: [RegulationType.Licensing],
+        });
+
+        expect(regulationTypesFromSubject).toBeCalledTimes(6);
+
+        expect(nationCodesFromSubject).not.toBeCalled();
+        expect(organisationsFromSubject).not.toBeCalled();
+        expect(industriesFromSubject).not.toBeCalled();
+        expect(nameFromSubject).not.toBeCalled();
+      });
+
+      it('matches against the return value of the regulation type extractor method', () => {
+        regulationTypesFromSubject.mockImplementation((subject) => {
+          if (subject === subject1) {
+            return [RegulationType.Certification];
+          } else if (subject === subject2) {
+            // Test partial match against provided regulation types
+            return [RegulationType.Licensing];
+          } else if (subject === subject3) {
+            // Test complete match against provided regulation types
+            return [RegulationType.Licensing, RegulationType.Accreditation];
+          } else {
+            return [];
+          }
+        });
+
+        expect(
+          filterHelper.filter({
+            regulationTypes: [
+              RegulationType.Accreditation,
+              RegulationType.Licensing,
+            ],
+          }),
+        ).toEqual([subject2, subject3]);
+      });
+    });
+
     describe('when filter input has multiple criteria', () => {
       it('matches against all critera', () => {
         const matchingNationCode = 'GB-WLS';
@@ -332,6 +385,9 @@ describe('BaseFilterHelper', () => {
 
         const matchingIndustry = industryFactory.build();
         const nonMatchingIndustry = industryFactory.build();
+
+        const matchingRegulationType = RegulationType.Accreditation;
+        const nonMatchingRegulationType = RegulationType.Certification;
 
         const matchingName = 'Teacher';
         const nonMatchingName = 'Dentist';
@@ -360,8 +416,16 @@ describe('BaseFilterHelper', () => {
           }
         });
 
-        nameFromSubject.mockImplementation((subject) => {
+        regulationTypesFromSubject.mockImplementation((subject) => {
           if (subject === subject4) {
+            return [nonMatchingRegulationType];
+          } else {
+            return [matchingRegulationType];
+          }
+        });
+
+        nameFromSubject.mockImplementation((subject) => {
+          if (subject === subject5) {
             return nonMatchingName;
           } else {
             return matchingName;
@@ -376,9 +440,14 @@ describe('BaseFilterHelper', () => {
               organisationFactory.build({ id: matchingOrganisation.id }),
             ],
             industries: [industryFactory.build({ id: matchingIndustry.id })],
+            regulationTypes: [matchingRegulationType],
           }),
-        ).toEqual([subject5]);
+        ).toEqual([subject6]);
       });
     });
+  });
+
+  afterEach(() => {
+    jest.resetAllMocks();
   });
 });

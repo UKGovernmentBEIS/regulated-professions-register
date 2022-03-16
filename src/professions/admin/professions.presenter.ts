@@ -10,6 +10,7 @@ import { ListEntryPresenter } from './list-entry.presenter';
 import { Organisation } from '../../organisations/organisation.entity';
 import { OrganisationsCheckboxPresenter } from '../../organisations/organisations-checkbox-presenter';
 import { Table } from '../../common/interfaces/table';
+import { RegulationTypesCheckboxPresenter } from './presenters/regulation-types-checkbox.presenter';
 
 export type ProfessionsPresenterView = 'overview' | 'single-organisation';
 
@@ -47,6 +48,12 @@ export class ProfessionsPresenter {
       this.i18nService,
     ).checkboxItems();
 
+    const regulationTypesCheckboxItems =
+      await new RegulationTypesCheckboxPresenter(
+        this.filterInput.regulationTypes || [],
+        this.i18nService,
+      ).checkboxItems();
+
     return {
       view,
       organisation,
@@ -54,6 +61,7 @@ export class ProfessionsPresenter {
       nationsCheckboxItems,
       organisationsCheckboxItems,
       industriesCheckboxItems,
+      regulationTypesCheckboxItems,
       changedByCheckboxItems: [],
       filters: {
         keywords: this.filterInput.keywords || '',
@@ -64,6 +72,7 @@ export class ProfessionsPresenter {
         industries: (this.filterInput.industries || []).map(
           (industry) => industry.name,
         ),
+        regulationTypes: this.filterInput.regulationTypes || [],
         changedBy: [],
       },
     };

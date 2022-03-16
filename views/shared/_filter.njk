@@ -96,6 +96,25 @@
       </div>
     {% endif %}
 
+    {% if regulationTypesCheckboxItems %}
+      <div class="{{ filterColumnClass }}">
+        {{ govukCheckboxes({
+          name: "regulationTypes[]",
+          classes: filterCheckboxClasses,
+          fieldset: {
+            legend: {
+            text: (filterTextPrefix + ".filter.regulationTypes.label") | t,
+            classes: "govuk-fieldset__legend--s"
+            }
+          },
+          hint: {
+            text: (filterTextPrefix + ".filter.regulationTypes.hint") | t
+          },
+          items: regulationTypesCheckboxItems
+        }) }}
+      </div>
+    {% endif %}
+
   </div>
 
   <div class="{{ filterRowClass }}">

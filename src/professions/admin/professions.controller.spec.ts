@@ -21,6 +21,7 @@ import { RequestWithAppSession } from '../../common/interfaces/request-with-app-
 import { getActingUser } from '../../users/helpers/get-acting-user.helper';
 import { createDefaultMockRequest } from '../../testutils/factories/create-default-mock-request';
 import { OrganisationVersionsService } from '../../organisations/organisation-versions.service';
+import { RegulationType } from '../profession-version.entity';
 
 jest.mock('../../users/helpers/get-acting-user.helper');
 
@@ -53,22 +54,25 @@ const organisations = [organisation1, organisation2];
 const profession1 = professionFactory.build({
   name: 'Primary School Teacher',
   occupationLocations: ['GB-ENG'],
-  industries: [industry1],
   organisation: organisation1,
+  industries: [industry1],
+  regulationType: RegulationType.Accreditation,
   updated_at: new Date(2013, 4, 23),
 });
 const profession2 = professionFactory.build({
   name: 'Secondary School Teacher',
   occupationLocations: ['GB-NIR'],
-  industries: [industry1],
   organisation: organisation1,
+  industries: [industry1],
+  regulationType: RegulationType.Licensing,
   updated_at: new Date(2011, 7, 27),
 });
 const profession3 = professionFactory.build({
   name: 'Trademark Attorny',
   occupationLocations: ['GB-SCT', 'GB-WLS'],
-  industries: [industry2, industry3],
   organisation: organisation2,
+  industries: [industry2, industry3],
+  regulationType: RegulationType.Certification,
   updated_at: new Date(2021, 12, 1),
 });
 
@@ -203,7 +207,7 @@ describe('ProfessionsController', () => {
             nations: [],
             organisations: [],
             industries: [],
-            changedBy: [],
+            regulationTypes: [],
           },
           null,
           [profession1, profession2, profession3],
@@ -218,6 +222,7 @@ describe('ProfessionsController', () => {
           nations: [],
           organisations: [],
           industries: [],
+          regulationTypes: [],
         });
 
         const expected = await createPresenter(
@@ -225,6 +230,8 @@ describe('ProfessionsController', () => {
             keywords: 'MARK',
             nations: [],
             organisations: [],
+            industries: [],
+            regulationTypes: [],
           },
           null,
           [profession3],
@@ -239,6 +246,7 @@ describe('ProfessionsController', () => {
           nations: ['GB-ENG'],
           organisations: [],
           industries: [],
+          regulationTypes: [],
         });
 
         const expected = await createPresenter(
@@ -247,6 +255,7 @@ describe('ProfessionsController', () => {
             nations: [Nation.find('GB-ENG')],
             organisations: [],
             industries: [],
+            regulationTypes: [],
           },
           null,
           [profession1],
@@ -261,6 +270,7 @@ describe('ProfessionsController', () => {
           nations: [],
           organisations: ['example-organisation-2'],
           industries: [],
+          regulationTypes: [],
         });
 
         const expected = await createPresenter(
@@ -269,6 +279,7 @@ describe('ProfessionsController', () => {
             nations: [],
             organisations: [organisation2],
             industries: [],
+            regulationTypes: [],
           },
           null,
           [profession3],
@@ -283,6 +294,7 @@ describe('ProfessionsController', () => {
           nations: [],
           organisations: [],
           industries: ['example-industry-2'],
+          regulationTypes: [],
         });
 
         const expected = await createPresenter(
@@ -291,9 +303,34 @@ describe('ProfessionsController', () => {
             nations: [],
             organisations: [],
             industries: [industry2],
+            regulationTypes: [],
           },
           null,
           [profession3],
+        ).present('overview');
+
+        expect(result).toEqual(expected);
+      });
+
+      it('returns filtered professions when searching by regulation type', async () => {
+        const result = await controller.index(request, {
+          keywords: '',
+          nations: [],
+          organisations: [],
+          industries: [],
+          regulationTypes: [RegulationType.Accreditation],
+        });
+
+        const expected = await createPresenter(
+          {
+            keywords: '',
+            nations: [],
+            organisations: [],
+            industries: [],
+            regulationTypes: [RegulationType.Accreditation],
+          },
+          null,
+          [profession1],
         ).present('overview');
 
         expect(result).toEqual(expected);
@@ -318,7 +355,6 @@ describe('ProfessionsController', () => {
             keywords: '',
             nations: [],
             organisations: [organisation1],
-            industries: [],
             changedBy: [],
           },
           organisation1,

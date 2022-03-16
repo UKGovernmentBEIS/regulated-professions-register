@@ -174,6 +174,34 @@ describe('Listing professions', () => {
       );
       cy.get('body').should('not.contain', 'Registered Trademark Attorney');
     });
+
+    it('I can filter by regulation type', () => {
+      expandFilters();
+
+      cy.translate('professions.regulationTypes.certification.name').then(
+        (nameLabel) => {
+          cy.get('label').contains(nameLabel).parent().find('input').check();
+        },
+      );
+
+      clickFilterButtonAndCheckAccessibility();
+
+      cy.translate('professions.regulationTypes.certification.name').then(
+        (nameLabel) => {
+          cy.get('label')
+            .contains(nameLabel)
+            .parent()
+            .find('input')
+            .should('be.checked');
+        },
+      );
+
+      cy.get('body').should('contain', 'Registered Trademark Attorney');
+      cy.get('body').should(
+        'not.contain',
+        'Secondary School Teacher in State maintained schools (England)',
+      );
+    });
   });
 
   context('When I am logged in as organisation editor', () => {

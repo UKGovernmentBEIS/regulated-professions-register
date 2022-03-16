@@ -156,6 +156,37 @@ describe('Listing organisations', () => {
 
         cy.get('tbody tr').should('have.length.at.least', 1);
       });
+
+      it('I can filter by regulation type', () => {
+        expandFilters();
+
+        cy.translate('professions.regulationTypes.licensing.name').then(
+          (nameLabel) => {
+            cy.get('label').contains(nameLabel).parent().find('input').check();
+          },
+        );
+
+        clickFilterButtonAndCheckAccessibility();
+
+        cy.translate('professions.regulationTypes.licensing.name').then(
+          (nameLabel) => {
+            cy.get('label')
+              .contains(nameLabel)
+              .parent()
+              .find('input')
+              .should('be.checked');
+          },
+        );
+
+        cy.get('body').should(
+          'contain',
+          'Council of Registered Gas Installers',
+        );
+        cy.get('body').should(
+          'not.contain',
+          'Law Society of England and Wales',
+        );
+      });
     });
   });
 

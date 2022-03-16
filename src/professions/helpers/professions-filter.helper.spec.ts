@@ -7,6 +7,7 @@ import industryFactory from '../../testutils/factories/industry';
 import professionFactory from '../../testutils/factories/profession';
 import organisationFactory from '../../testutils/factories/organisation';
 import * as getOrganisationsFromProfessionModule from './get-organisations-from-profession.helper';
+import { RegulationType } from '../profession-version.entity';
 
 describe('ProfessionsFilterHelper', () => {
   describe('filter', () => {
@@ -17,6 +18,7 @@ describe('ProfessionsFilterHelper', () => {
           occupationLocations: undefined,
           organisation: undefined,
           industries: undefined,
+          regulationType: undefined,
         }),
       ]);
 
@@ -26,6 +28,7 @@ describe('ProfessionsFilterHelper', () => {
           nations: [Nation.find('GB-NIR')],
           organisations: [organisationFactory.build()],
           industries: [industryFactory.build()],
+          regulationTypes: [RegulationType.Licensing],
         }),
       ).toEqual([]);
     });
@@ -119,6 +122,27 @@ describe('ProfessionsFilterHelper', () => {
       });
 
       expect(results).toEqual([exampleProfessions[0], exampleProfessions[3]]);
+    });
+
+    it('can filter professions by regulation type', () => {
+      const exampleProfessions = [
+        professionFactory.build({
+          regulationType: RegulationType.Accreditation,
+        }),
+        professionFactory.build({ regulationType: RegulationType.Licensing }),
+        professionFactory.build({
+          regulationType: RegulationType.Certification,
+        }),
+        professionFactory.build({ regulationType: RegulationType.Licensing }),
+      ];
+
+      const filterHelper = new ProfessionsFilterHelper(exampleProfessions);
+
+      const results = filterHelper.filter({
+        regulationTypes: [RegulationType.Licensing],
+      });
+
+      expect(results).toEqual([exampleProfessions[1], exampleProfessions[3]]);
     });
   });
 

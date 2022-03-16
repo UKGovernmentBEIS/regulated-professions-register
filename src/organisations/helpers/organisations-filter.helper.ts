@@ -1,5 +1,6 @@
 import { BaseFilterHelper } from '../../helpers/base-filter.helper';
 import { Industry } from '../../industries/industry.entity';
+import { RegulationType } from '../../professions/profession-version.entity';
 import { Organisation } from '../organisation.entity';
 
 export class OrganisationsFilterHelper extends BaseFilterHelper<Organisation> {
@@ -53,6 +54,23 @@ export class OrganisationsFilterHelper extends BaseFilterHelper<Organisation> {
     });
 
     return [...industriesMap.values()];
+  }
+
+  protected regulationTypesFromSubject(
+    organisation: Organisation,
+  ): RegulationType[] {
+    if (organisation.professions === undefined) {
+      throw new Error(
+        'You must eagerly load professions to filter by regulation types. Try calling a "WithProfessions" method on the `OrganisationsService` class',
+      );
+    }
+
+    const regulationTypes = organisation.professions
+      .map((profession) => profession.regulationType)
+      .filter((regulationType) => !!regulationType);
+    const uniqueRegulationTypes = [...new Set(regulationTypes)];
+
+    return uniqueRegulationTypes;
   }
 
   protected nameFromSubject(organisation: Organisation): string {

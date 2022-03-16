@@ -3,6 +3,7 @@ import industryFactory from '../../testutils/factories/industry';
 import professionFactory from '../../testutils/factories/profession';
 import organisationFactory from '../../testutils/factories/organisation';
 import { OrganisationsFilterHelper } from './organisations-filter.helper';
+import { RegulationType } from '../../professions/profession-version.entity';
 
 describe('OrganisationsFilterHelper', () => {
   describe('filter', () => {
@@ -97,6 +98,48 @@ describe('OrganisationsFilterHelper', () => {
       expect(results).toEqual([organisations[0], organisations[1]]);
     });
 
+    it('can filter professions by regulation type', () => {
+      const matchingRegulationType = RegulationType.Licensing;
+
+      const organisations = [
+        // Has one matching and one non-matching profession
+        organisationFactory.build({
+          professions: [
+            professionFactory.build({
+              regulationType: matchingRegulationType,
+            }),
+            professionFactory.build({
+              regulationType: RegulationType.Certification,
+            }),
+          ],
+        }),
+        // Has one matching profession
+        organisationFactory.build({
+          professions: [
+            professionFactory.build({
+              regulationType: matchingRegulationType,
+            }),
+          ],
+        }),
+        // Has no professions with matching industries
+        organisationFactory.build({
+          professions: [
+            professionFactory.build({
+              regulationType: RegulationType.Certification,
+            }),
+          ],
+        }),
+      ];
+
+      const filterHelper = new OrganisationsFilterHelper(organisations);
+
+      const results = filterHelper.filter({
+        regulationTypes: [matchingRegulationType],
+      });
+
+      expect(results).toEqual([organisations[0], organisations[1]]);
+    });
+
     describe('when the professions relation is not loaded', () => {
       let filterHelper: OrganisationsFilterHelper;
 
@@ -123,6 +166,16 @@ describe('OrganisationsFilterHelper', () => {
           filterHelper.filter({ industries: [industryFactory.build()] });
         }).toThrowError(
           'You must eagerly load professions to filter by industries. Try calling a "WithProfessions" method on the `OrganisationsService` class',
+        );
+      });
+
+      it('filtering by regulation type raises an error', () => {
+        expect(() => {
+          filterHelper.filter({
+            regulationTypes: [RegulationType.Accreditation],
+          });
+        }).toThrowError(
+          'You must eagerly load professions to filter by regulation types. Try calling a "WithProfessions" method on the `OrganisationsService` class',
         );
       });
     });

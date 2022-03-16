@@ -26,6 +26,14 @@
   </p>
 {% endif %}
 
+{% if filters.regulationTypes | length %}
+  <p class="govuk-body-m rpr-listing__search-criteria-container"><span class="govuk-!-font-weight-bold">{{ (filterCriteriaTextPrefix + ".labels.regulationTypes") | t }}</span>
+    {% for regulationType in filters.regulationTypes %}
+      <strong class="govuk-tag">{{ ('professions.regulationTypes.' + regulationType + '.name') | t }}</strong>
+    {% endfor %}
+  </p>
+{% endif %}
+
 {% if filters.changedBy | length %}
   <p class="govuk-body-m rpr-listing__search-criteria-container"><span class="govuk-!-font-weight-bold">{{ (filterCriteriaTextPrefix + ".labels.changedBy") | t }}</span>
     {% for name in filters.changedBy %}
