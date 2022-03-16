@@ -29,6 +29,7 @@ import { RequestWithAppSession } from '../common/interfaces/request-with-app-ses
 import { getActingUser } from './helpers/get-acting-user.helper';
 import { CompleteTemplate } from './interfaces/complete-template';
 import { getUserOrganisation } from './helpers/get-user-organisation';
+import { checkCanViewUser } from './helpers/check-can-view-user';
 
 class UserAlreadyExistsError extends Error {}
 
@@ -71,8 +72,13 @@ export class UsersController {
   @Get('/admin/users/:id')
   @Permissions(UserPermission.EditUser, UserPermission.DeleteUser)
   @Render('admin/users/show')
-  async show(@Param('id') id): Promise<ShowTemplate> {
+  async show(
+    @Param('id') id,
+    @Req() request: RequestWithAppSession,
+  ): Promise<ShowTemplate> {
     const user = await this.usersService.find(id);
+
+    checkCanViewUser(request, user);
 
     return {
       ...user,
@@ -102,9 +108,14 @@ export class UsersController {
   @Permissions(UserPermission.CreateUser, UserPermission.EditUser)
   @Render('admin/users/confirm')
   @BackLink('/admin/users/:id/permissions/edit')
-  async confirm(@Param('id') id): Promise<ConfirmTemplate> {
+  async confirm(
+    @Req() request: RequestWithAppSession,
+    @Param('id') id,
+  ): Promise<ConfirmTemplate> {
     const user = await this.usersService.find(id);
     const action = getActionTypeFromUser(user);
+
+    checkCanViewUser(request, user);
 
     return {
       ...user,
@@ -114,9 +125,15 @@ export class UsersController {
 
   @Post('/admin/users/:id/confirm')
   @Permissions(UserPermission.CreateUser, UserPermission.EditUser)
-  async complete(@Res() res, @Param('id') id): Promise<void> {
+  async complete(
+    @Res() res,
+    @Param('id') id,
+    @Req() request: RequestWithAppSession,
+  ): Promise<void> {
     const user = await this.usersService.find(id);
     const action = getActionTypeFromUser(user);
+
+    checkCanViewUser(request, user);
 
     if (action == 'new') {
       try {
