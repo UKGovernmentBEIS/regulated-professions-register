@@ -112,4 +112,14 @@ describe('Searching a profession', () => {
       'Secondary School Teacher in State maintained schools (England)',
     );
   });
+
+  it('The search uses a professions keywords to filter', () => {
+    cy.get('input[name="keywords"]').type('Adjudicator');
+    cy.get('button').click();
+    cy.get('body').should('contain', 'Registered Trademark Attorney');
+    cy.get('body').should(
+      'not.contain',
+      'Secondary School Teacher in State maintained schools (England)',
+    );
+  });
 });
