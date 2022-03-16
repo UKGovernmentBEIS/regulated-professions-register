@@ -103,6 +103,10 @@ describe('ProfessionsController', () => {
       profession3,
     ]);
 
+    professionVersionsService.allWithLatestVersionForOrganisation.mockResolvedValue(
+      [profession1, profession2],
+    );
+
     organisationVersionsService.allWithLatestVersion.mockResolvedValue(
       organisations,
     );
@@ -238,6 +242,11 @@ describe('ProfessionsController', () => {
         ).present('overview');
 
         expect(result).toEqual(expected);
+
+        expect(professionVersionsService.allWithLatestVersion).toBeCalled();
+        expect(
+          professionVersionsService.allWithLatestVersionForOrganisation,
+        ).not.toBeCalled();
       });
 
       it('returns filtered professions when searching by nation', async () => {
@@ -262,6 +271,11 @@ describe('ProfessionsController', () => {
         ).present('overview');
 
         expect(result).toEqual(expected);
+
+        expect(professionVersionsService.allWithLatestVersion).toBeCalled();
+        expect(
+          professionVersionsService.allWithLatestVersionForOrganisation,
+        ).not.toBeCalled();
       });
 
       it('returns filtered professions when searching by organisation', async () => {
@@ -286,6 +300,11 @@ describe('ProfessionsController', () => {
         ).present('overview');
 
         expect(result).toEqual(expected);
+
+        expect(professionVersionsService.allWithLatestVersion).toBeCalled();
+        expect(
+          professionVersionsService.allWithLatestVersionForOrganisation,
+        ).not.toBeCalled();
       });
 
       it('returns filtered professions when searching by industry', async () => {
@@ -310,6 +329,11 @@ describe('ProfessionsController', () => {
         ).present('overview');
 
         expect(result).toEqual(expected);
+
+        expect(professionVersionsService.allWithLatestVersion).toBeCalled();
+        expect(
+          professionVersionsService.allWithLatestVersionForOrganisation,
+        ).not.toBeCalled();
       });
 
       it('returns filtered professions when searching by regulation type', async () => {
@@ -354,7 +378,7 @@ describe('ProfessionsController', () => {
           {
             keywords: '',
             nations: [],
-            organisations: [organisation1],
+            organisations: [],
             changedBy: [],
           },
           organisation1,
@@ -362,6 +386,11 @@ describe('ProfessionsController', () => {
         ).present('single-organisation');
 
         expect(result).toEqual(expected);
+
+        expect(
+          professionVersionsService.allWithLatestVersionForOrganisation,
+        ).toBeCalledWith(organisation1);
+        expect(professionVersionsService.allWithLatestVersion).not.toBeCalled();
       });
 
       it('returns filtered professions when searching by keyword', async () => {
@@ -375,7 +404,7 @@ describe('ProfessionsController', () => {
           {
             keywords: 'primary',
             nations: [],
-            organisations: [organisation1],
+            organisations: [],
             changedBy: [],
           },
           organisation1,
@@ -383,6 +412,11 @@ describe('ProfessionsController', () => {
         ).present('single-organisation');
 
         expect(result).toEqual(expected);
+
+        expect(
+          professionVersionsService.allWithLatestVersionForOrganisation,
+        ).toBeCalledWith(organisation1);
+        expect(professionVersionsService.allWithLatestVersion).not.toBeCalled();
       });
 
       it('returns filtered professions when searching by nation', async () => {
@@ -396,7 +430,7 @@ describe('ProfessionsController', () => {
           {
             keywords: '',
             nations: [Nation.find('GB-NIR')],
-            organisations: [organisation1],
+            organisations: [],
             changedBy: [],
           },
           organisation1,
@@ -404,6 +438,11 @@ describe('ProfessionsController', () => {
         ).present('single-organisation');
 
         expect(result).toEqual(expected);
+
+        expect(
+          professionVersionsService.allWithLatestVersionForOrganisation,
+        ).toBeCalledWith(organisation1);
+        expect(professionVersionsService.allWithLatestVersion).not.toBeCalled();
       });
     });
   });

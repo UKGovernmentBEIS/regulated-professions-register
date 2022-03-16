@@ -92,9 +92,6 @@ export class ProfessionsController {
       await this.organisationVersionsService.allWithLatestVersion();
     const allIndustries = await this.industriesService.all();
 
-    const allProfessions =
-      await this.professionVersionsService.allWithLatestVersion();
-
     const actingUser = getActingUser(request);
 
     const showAllOrgs = actingUser.serviceOwner;
@@ -105,16 +102,18 @@ export class ProfessionsController {
 
     const userOrganisation = showAllOrgs ? null : actingUser.organisation;
 
+    const allProfessions = await (showAllOrgs
+      ? this.professionVersionsService.allWithLatestVersion()
+      : this.professionVersionsService.allWithLatestVersionForOrganisation(
+          userOrganisation,
+        ));
+
     const filterInput = createFilterInput({
       ...filter,
       allNations,
       allOrganisations,
       allIndustries,
     });
-
-    if (userOrganisation) {
-      filterInput.organisations = [userOrganisation];
-    }
 
     const filteredProfessions = new ProfessionsFilterHelper(
       allProfessions,
