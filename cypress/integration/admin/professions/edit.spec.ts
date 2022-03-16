@@ -392,7 +392,7 @@ describe('Editing an existing profession', () => {
           },
         );
 
-        cy.checkAccessibility();
+        cy.checkAccessibility({ 'color-contrast': { enabled: false } });
 
         cy.checkSummaryListRowValue(
           'professions.form.label.qualifications.routesToObtain',
@@ -407,7 +407,7 @@ describe('Editing an existing profession', () => {
           'professions.form.label.qualifications.routesToObtain',
         );
 
-        cy.checkAccessibility();
+        cy.checkAccessibility({ 'color-contrast': { enabled: false } });
 
         cy.get('textarea[name="routesToObtain"]').type(
           'General secondary education',
@@ -423,7 +423,7 @@ describe('Editing an existing profession', () => {
           cy.get('button').contains(buttonText).click();
         });
 
-        cy.checkAccessibility();
+        cy.checkAccessibility({ 'color-contrast': { enabled: false } });
 
         cy.checkSummaryListRowValue(
           'professions.form.label.qualifications.routesToObtain',

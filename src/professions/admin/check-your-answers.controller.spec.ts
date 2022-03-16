@@ -13,6 +13,7 @@ import qualificationFactory from '../../testutils/factories/qualification';
 import userFactory from '../../testutils/factories/user';
 import { translationOf } from '../../testutils/translation-of';
 import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
+import * as getPublicationBlockersModule from '../helpers/get-publication-blockers.helper';
 import { RegulationType } from '../profession-version.entity';
 import { ProfessionVersionsService } from '../profession-versions.service';
 import { ProfessionsService } from '../professions.service';
@@ -48,7 +49,7 @@ describe('CheckYourAnswersController', () => {
     );
   });
 
-  describe('view', () => {
+  describe('show', () => {
     describe('when a Profession has been created with the persisted ID', () => {
       it('fetches the draft Profession from the persisted ID, and renders the answers on the page', async () => {
         const qualification = qualificationFactory.build();
@@ -91,6 +92,9 @@ describe('CheckYourAnswersController', () => {
         });
 
         professionVersionsService.findWithProfession.mockResolvedValue(version);
+        const getPublicationBlockersSpy = jest
+          .spyOn(getPublicationBlockersModule, 'getPublicationBlockers')
+          .mockReturnValue([]);
 
         const request = createDefaultMockRequest({
           user: userFactory.build(),
@@ -145,11 +149,12 @@ describe('CheckYourAnswersController', () => {
         expect(templateParams.legislations[1].name).toEqual(
           'Another Gas Safety Legislation',
         );
-        expect(templateParams.confirmed).toEqual(false);
+        expect(templateParams.publicationBlockers).toEqual([]);
 
         expect(professionsService.findWithVersions).toHaveBeenCalledWith(
           'profession-id',
         );
+        expect(getPublicationBlockersSpy).toHaveBeenCalledWith(version);
       });
     });
 
@@ -173,6 +178,14 @@ describe('CheckYourAnswersController', () => {
 
         professionsService.findWithVersions.mockResolvedValue(profession);
         professionVersionsService.findWithProfession.mockResolvedValue(version);
+        const getPublicationBlockersSpy = jest
+          .spyOn(getPublicationBlockersModule, 'getPublicationBlockers')
+          .mockReturnValue([
+            {
+              type: 'incomplete-section',
+              section: 'legislation',
+            },
+          ]);
 
         const request = createDefaultMockRequest({
           user: userFactory.build(),
@@ -202,11 +215,17 @@ describe('CheckYourAnswersController', () => {
           new QualificationPresenter(undefined, i18nService),
         );
         expect(templateParams.legislations).toEqual([]);
-        expect(templateParams.confirmed).toEqual(false);
+        expect(templateParams.publicationBlockers).toEqual([
+          {
+            type: 'incomplete-section',
+            section: 'legislation',
+          },
+        ]);
 
         expect(professionsService.findWithVersions).toHaveBeenCalledWith(
           'profession-id',
         );
+        expect(getPublicationBlockersSpy).toHaveBeenCalledWith(version);
       });
     });
 
@@ -230,5 +249,6 @@ describe('CheckYourAnswersController', () => {
 
   afterEach(() => {
     jest.resetAllMocks();
+    jest.restoreAllMocks();
   });
 });

@@ -399,36 +399,10 @@
             })
           }}
         {% endfor %}
-
-        {% if not edit and not confirmed %}
-          <div class="govuk-button-group rpr-internal__buttons-container">
-            <form method="post" action="confirmation">
-              {{
-                govukButton({
-                  id: "submit-button",
-                  classes: "govuk-button--secondary",
-                  type: "Submit",
-                  preventDoubleClick: true,
-                  text: ("professions.form.button.saveAsDraft" | t)
-                })
-              }}
-            </form>
-            {% if 'publishProfession' in permissions %}
-              {{
-                govukButton({
-                  text: ('professions.form.button.publish' | t),
-                  classes: "govuk-button",
-                  id: "publish-button",
-                  href: "/admin/professions/" + professionId + "/versions/" + versionId + "/publish?fromEdit=true"
-                })
-              }}
-            {% endif %}
-          </div>
-        {% endif %}
     </div>
 
     <div class="govuk-grid-column-one-third">
-      {% if not edit and confirmed %}
+      {% if not edit %}
         <aside class="app-related-items rpr-internal__details-page-sidebar" role="complementary">
           <ul class="govuk-list">
             <li>
@@ -449,9 +423,9 @@
                 {{
                   govukButton({
                     text: ('professions.form.button.publish' | t),
-                    classes: "govuk-button",
                     id: "publish-button",
-                    href: "/admin/professions/" + professionId + "/versions/" + versionId + "/publish?fromEdit=true"
+                    href: "/admin/professions/" + professionId + "/versions/" + versionId + "/publish?fromEdit=true",
+                    disabled: publicationBlockers.length
                   })
                 }}
               </li>
@@ -459,6 +433,7 @@
           </ul>
         </aside>
       {% endif %}
+      {% include '../../shared/_publication-blockers.njk' %}
     </div>
   </div>
 

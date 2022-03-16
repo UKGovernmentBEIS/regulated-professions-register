@@ -1,5 +1,6 @@
 import { Legislation } from '../../../legislations/legislation.entity';
 import QualificationPresenter from '../../../qualifications/presenters/qualification.presenter';
+import { PublicationBlocker } from '../../helpers/get-publication-blockers.helper';
 import { RegulationType } from '../../profession-version.entity';
 
 export interface CheckYourAnswersTemplate {
@@ -21,6 +22,6 @@ export interface CheckYourAnswersTemplate {
   legislations: Legislation[];
   captionText: string;
   isUK: boolean;
-  confirmed: boolean;
+  publicationBlockers: PublicationBlocker[];
   edit: boolean;
 }
