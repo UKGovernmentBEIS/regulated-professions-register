@@ -16,12 +16,10 @@ export interface IndexTemplate {
     organisations: string[];
     industries: string[];
     regulationTypes: RegulationType[];
-    changedBy: string[];
   };
 
   nationsCheckboxItems: CheckboxItems[];
   organisationsCheckboxItems: CheckboxItems[];
   industriesCheckboxItems: CheckboxItems[];
   regulationTypesCheckboxItems: CheckboxItems[];
-  changedByCheckboxItems: CheckboxItems[];
 }

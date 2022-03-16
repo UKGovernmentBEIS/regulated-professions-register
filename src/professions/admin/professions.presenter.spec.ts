@@ -116,7 +116,6 @@ describe('ProfessionsPresenter', () => {
           organisations: ['Example Organisation 1'],
           industries: ['industries.transport'],
           regulationTypes: [RegulationType.Certification],
-          changedBy: [],
         },
 
         nationsCheckboxItems: await new NationsCheckboxPresenter(
@@ -138,7 +137,6 @@ describe('ProfessionsPresenter', () => {
             [RegulationType.Certification],
             i18nService,
           ).checkboxItems(),
-        changedByCheckboxItems: [],
       };
 
       expect(result).toEqual(expected);
@@ -174,7 +172,6 @@ describe('ProfessionsPresenter', () => {
           organisations: ['Example Organisation 1'],
           industries: ['industries.transport'],
           regulationTypes: [RegulationType.Certification],
-          changedBy: [],
         },
         nationsCheckboxItems: await new NationsCheckboxPresenter(
           nations,
@@ -195,7 +192,6 @@ describe('ProfessionsPresenter', () => {
             [RegulationType.Certification],
             i18nService,
           ).checkboxItems(),
-        changedByCheckboxItems: [],
       };
 
       expect(result).toEqual(expected);

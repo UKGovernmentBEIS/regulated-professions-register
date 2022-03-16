@@ -33,9 +33,7 @@
         </div>
       </div>
 
-      {% if view === 'overview' %}
-        {% set changedByCheckboxItems = false %}
-      {% else %}
+      {% if view !== 'overview' %}
         {% set organisationsCheckboxItems = false %}
         {% set industriesCheckboxItems = false %}
         {% set regulationTypesCheckboxItems = false %}
