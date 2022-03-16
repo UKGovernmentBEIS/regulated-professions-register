@@ -51,7 +51,7 @@ export class ProfessionsSearchService {
         query: {
           multi_match: {
             query: query,
-            fields: ['name'],
+            fields: ['name^4', 'keywords'],
           },
         },
       },

@@ -112,7 +112,7 @@ describe('ProfessionVersionsService', () => {
           query: {
             multi_match: {
               query: 'something',
-              fields: ['name'],
+              fields: ['name^4', 'keywords'],
             },
           },
         },
