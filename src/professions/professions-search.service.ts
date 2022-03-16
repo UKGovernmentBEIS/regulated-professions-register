@@ -17,6 +17,7 @@ export class ProfessionsSearchService {
       index: this.indexName,
       body: {
         name: professionVersion.profession.name,
+        keywords: professionVersion.keywords,
       },
     });
   }

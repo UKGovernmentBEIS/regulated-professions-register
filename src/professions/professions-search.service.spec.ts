@@ -42,6 +42,7 @@ describe('ProfessionVersionsService', () => {
         index: service.indexName,
         body: {
           name: professionVersion.profession.name,
+          keywords: professionVersion.keywords,
         },
       });
     });
