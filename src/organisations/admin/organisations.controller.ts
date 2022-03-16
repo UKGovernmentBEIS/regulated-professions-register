@@ -46,6 +46,7 @@ import { Permissions } from '../../common/permissions.decorator';
 import { getActingUser } from '../../users/helpers/get-acting-user.helper';
 import { escape } from '../../helpers/escape.helper';
 import { Nation } from '../../nations/nation';
+import { checkCanViewOrganisation } from '../../users/helpers/check-can-view-organisation';
 
 @UseGuards(AuthenticationGuard)
 @Controller('/admin/organisations')
@@ -146,11 +147,14 @@ export class OrganisationsController {
   async edit(
     @Param('organisationId') organisationId: string,
     @Param('versionId') versionId: string,
+    @Req() request: RequestWithAppSession,
   ): Promise<Organisation> {
     const organisation = await this.organisationsService.findWithVersion(
       organisationId,
       versionId,
     );
+
+    checkCanViewOrganisation(request, organisation);
 
     return organisation;
   }
@@ -166,10 +170,12 @@ export class OrganisationsController {
     @Param('versionId') versionId: string,
     @Body() body: OrganisationDto,
     @Res() res: Response,
-    @Req() req: Request,
+    @Req() req: RequestWithAppSession,
   ): Promise<void> {
     const organisation = await this.organisationsService.find(organisationId);
     const version = await this.organisationVersionsService.find(versionId);
+
+    checkCanViewOrganisation(req, organisation);
 
     if (body.confirm) {
       return this.confirm(res, req, organisation, version);

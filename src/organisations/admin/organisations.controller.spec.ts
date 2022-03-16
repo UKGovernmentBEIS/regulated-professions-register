@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { createMock, DeepMocked } from '@golevelup/ts-jest';
 import { I18nService } from 'nestjs-i18n';
-import { Response, Request } from 'express';
+import { Response } from 'express';
 
 import { OrganisationsController } from './organisations.controller';
 import { OrganisationsService } from '../organisations.service';
@@ -33,6 +33,8 @@ import { escape } from '../../helpers/escape.helper';
 import { translationOf } from '../../testutils/translation-of';
 import { Nation } from '../../nations/nation';
 import { RegulationType } from '../../professions/profession-version.entity';
+import { checkCanViewOrganisation } from '../../users/helpers/check-can-view-organisation';
+import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
 
 jest.mock('./presenters/organisations.presenter');
 jest.mock('../presenters/organisation.presenter');
@@ -40,6 +42,7 @@ jest.mock('../helpers/organisations-filter.helper');
 jest.mock('../../common/flash-message');
 jest.mock('../../users/helpers/get-acting-user.helper');
 jest.mock('../../helpers/escape.helper');
+jest.mock('../../users/helpers/check-can-view-organisation');
 
 describe('OrganisationsController', () => {
   let controller: OrganisationsController;
@@ -367,12 +370,34 @@ describe('OrganisationsController', () => {
 
       organisationsService.findWithVersion.mockResolvedValue(organisation);
 
-      expect(await controller.edit(organisation.id, 'version-uuid')).toEqual(
-        organisation,
-      );
+      const request = createDefaultMockRequest({
+        user: userFactory.build(),
+      });
+
+      expect(
+        await controller.edit(organisation.id, 'version-uuid', request),
+      ).toEqual(organisation);
+
       expect(organisationsService.findWithVersion).toHaveBeenCalledWith(
         organisation.id,
         'version-uuid',
+      );
+    });
+
+    it('should check the acting user has permissions to edit the organisation', async () => {
+      const organisation = createOrganisation();
+
+      organisationsService.findWithVersion.mockResolvedValue(organisation);
+
+      const request = createDefaultMockRequest({
+        user: userFactory.build(),
+      });
+
+      await controller.edit(organisation.id, 'version-uuid', request);
+
+      expect(checkCanViewOrganisation).toHaveBeenCalledWith(
+        request,
+        organisation,
       );
     });
   });
@@ -393,7 +418,9 @@ describe('OrganisationsController', () => {
           const organisationId = 'some-uuid';
           const versionId = 'some-other-uuid';
           const response = createMock<Response>();
-          const request = createDefaultMockRequest();
+          const request = createDefaultMockRequest({
+            user: userFactory.build(),
+          });
 
           const organisationDto: OrganisationDto = {
             name: 'Organisation',
@@ -489,7 +516,9 @@ describe('OrganisationsController', () => {
           });
           const version = organisationVersionFactory.build({});
           const response = createMock<Response>();
-          const request = createDefaultMockRequest();
+          const request = createDefaultMockRequest({
+            user: userFactory.build(),
+          });
 
           organisationsService.find.mockResolvedValue(organisation);
           organisationVersionsService.find.mockResolvedValue(version);
@@ -521,7 +550,7 @@ describe('OrganisationsController', () => {
       let organisation: Organisation;
       let version: OrganisationVersion;
       let response: DeepMocked<Response>;
-      let request: DeepMocked<Request>;
+      let request: DeepMocked<RequestWithAppSession>;
       let organisationDto: DeepMocked<OrganisationDto>;
       let flashMock: jest.Mock;
 
@@ -530,7 +559,9 @@ describe('OrganisationsController', () => {
           organisation = organisationFactory.build({ slug: '' });
           version = organisationVersionFactory.build();
           response = createMock<Response>();
-          request = createDefaultMockRequest();
+          request = createDefaultMockRequest({
+            user: userFactory.build(),
+          });
 
           organisationDto = createMock<OrganisationDto>({
             confirm: true,
@@ -589,7 +620,9 @@ describe('OrganisationsController', () => {
           organisation = organisationFactory.build({ slug: 'some-slug' });
           version = organisationVersionFactory.build();
           response = createMock<Response>();
-          request = createDefaultMockRequest();
+          request = createDefaultMockRequest({
+            user: userFactory.build(),
+          });
 
           organisationDto = createMock<OrganisationDto>({
             confirm: true,
@@ -640,6 +673,41 @@ describe('OrganisationsController', () => {
         });
       });
     });
+  });
+
+  it('should check the acting user has permissions to edit the organisation', async () => {
+    const organisationDto: OrganisationDto = {
+      name: 'Organisation',
+      alternateName: '',
+      email: 'email@example.com',
+      url: 'http://example.com',
+      address: '123 Fake Street',
+      telephone: '122356',
+      fax: '',
+    };
+
+    const organisation = organisationFactory.build();
+    const version = organisationVersionFactory.build({});
+    const response = createMock<Response>();
+    const request = createDefaultMockRequest({
+      user: userFactory.build(),
+    });
+
+    organisationsService.find.mockResolvedValue(organisation);
+    organisationVersionsService.find.mockResolvedValue(version);
+
+    await controller.update(
+      organisation.id,
+      version.id,
+      organisationDto,
+      response,
+      request,
+    );
+
+    expect(checkCanViewOrganisation).toHaveBeenCalledWith(
+      request,
+      organisation,
+    );
   });
 
   afterEach(() => {
