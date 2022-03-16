@@ -241,6 +241,57 @@ Cypress.Commands.add(
   },
 );
 
+Cypress.Commands.add(
+  'checkPublishBlocked',
+  (missingSections: string[], shouldHaveButton = true) => {
+    return cy
+      .translate('professions.admin.publish.blocked.heading')
+      .then((heading) => {
+        cy.get('h2')
+          .contains(heading)
+          .parent()
+          .within(() => {
+            cy.get('li').should('have.length', missingSections.length);
+            missingSections.forEach((missingSection) => {
+              cy.translate(`professions.form.headings.${missingSection}`).then(
+                (section) => {
+                  cy.translate(`professions.admin.publish.blocked.missing`, {
+                    section,
+                  }).then((sectionText) => {
+                    cy.get('li').should('contain', sectionText);
+                  });
+                },
+              );
+            });
+          });
+
+        cy.translate('professions.form.button.publish').then((publishLabel) => {
+          if (shouldHaveButton) {
+            cy.get('a')
+              .contains(publishLabel)
+              .should('have.class', 'govuk-button--disabled');
+          } else {
+            cy.root().should('not.contain', publishLabel);
+          }
+        });
+      });
+  },
+);
+
+Cypress.Commands.add('checkPublishNotBlocked', () => {
+  return cy
+    .translate('professions.admin.publish.blocked.heading')
+    .then((heading) => {
+      cy.get('body').should('not.contain', heading);
+
+      cy.translate('professions.form.button.publish').then((publishLabel) => {
+        cy.get('a')
+          .contains(publishLabel)
+          .should('not.have.class', 'govuk-button--disabled');
+      });
+    });
+});
+
 Cypress.Commands.add('visitAndCheckAccessibility', (url: string) => {
   cy.visit(url);
   cy.checkAccessibility();

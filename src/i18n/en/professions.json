@@ -275,6 +275,10 @@
         "body": "The new profession <strong>{name}</strong> has been published.",
         "next": "What happens next?",
         "backToDashboard": "Back to the dashboard"
+      },
+      "blocked": {
+        "heading": "This page is not ready to publish. Before you can publish, check:",
+        "missing": "{section} is complete"
       }
     },
     "status": {

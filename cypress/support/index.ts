@@ -64,6 +64,11 @@ declare global {
       checkCorrectNumberOfOrganisationsAreShown(
         statuses: ('live' | 'archived' | 'draft')[],
       ): Chainable<string>;
+      checkPublishBlocked(
+        missingSections: string[],
+        shouldHaveButton?: boolean,
+      ): Chainable<string>;
+      checkPublishNotBlocked(): Chainable<string>;
       visitAndCheckAccessibility(url: string): void;
       checkAccessibility(rules?: AxeRules): void;
     }
