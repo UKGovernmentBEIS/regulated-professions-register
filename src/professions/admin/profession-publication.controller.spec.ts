@@ -1,4 +1,5 @@
 import { createMock, DeepMocked } from '@golevelup/ts-jest';
+import { BadRequestException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Response } from 'express';
 import { I18nService } from 'nestjs-i18n';
@@ -12,6 +13,10 @@ import userFactory from '../../testutils/factories/user';
 import { translationOf } from '../../testutils/translation-of';
 import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
 import { getActingUser } from '../../users/helpers/get-acting-user.helper';
+import {
+  getPublicationBlockers,
+  PublicationBlocker,
+} from '../helpers/get-publication-blockers.helper';
 import { ProfessionVersionsService } from '../profession-versions.service';
 import { Profession } from '../profession.entity';
 import { ProfessionsService } from '../professions.service';
@@ -21,6 +26,7 @@ jest.mock('../../common/flash-message');
 jest.mock('../../users/helpers/get-acting-user.helper');
 jest.mock('../../helpers/escape.helper');
 jest.mock('../../users/helpers/check-can-view-profession');
+jest.mock('../helpers/get-publication-blockers.helper');
 
 describe('ProfessionPublicationController', () => {
   let controller: ProfessionPublicationController;
@@ -128,6 +134,8 @@ describe('ProfessionPublicationController', () => {
           version,
         );
 
+        (getPublicationBlockers as jest.Mock).mockReturnValue([]);
+
         const newVersion = professionVersionFactory.build({
           profession: brandNewProfession,
           user,
@@ -141,6 +149,8 @@ describe('ProfessionPublicationController', () => {
         expect(
           professionVersionsService.findByIdWithProfession,
         ).toHaveBeenCalledWith(brandNewProfession.id, version.id);
+
+        expect(getPublicationBlockers).toBeCalledWith(version);
 
         expect(professionVersionsService.create).toHaveBeenCalledWith(
           version,
@@ -201,6 +211,8 @@ describe('ProfessionPublicationController', () => {
 
         professionsService.find.mockResolvedValue(existingProfession);
 
+        (getPublicationBlockers as jest.Mock).mockReturnValue([]);
+
         professionVersionsService.create.mockResolvedValue(newVersion);
 
         await controller.create(req, res, existingProfession.id, version.id);
@@ -208,6 +220,8 @@ describe('ProfessionPublicationController', () => {
         expect(
           professionVersionsService.findByIdWithProfession,
         ).toHaveBeenCalledWith(existingProfession.id, version.id);
+
+        expect(getPublicationBlockers).toBeCalledWith(version);
 
         expect(professionVersionsService.create).toHaveBeenCalledWith(
           version,
@@ -235,6 +249,54 @@ describe('ProfessionPublicationController', () => {
       });
     });
 
+    describe('when the Profession is not ready to publish', () => {
+      it('should throw an error', async () => {
+        const profession = professionFactory.build();
+        const version = professionVersionFactory.build({ profession });
+        const user = userFactory.build();
+
+        const req = createDefaultMockRequest();
+        (getActingUser as jest.Mock).mockReturnValue(user);
+
+        const res = createMock<Response>({});
+
+        const flashMock = flashMessage as jest.Mock;
+
+        professionVersionsService.findByIdWithProfession.mockResolvedValue(
+          version,
+        );
+
+        professionsService.find.mockResolvedValue(profession);
+
+        (getPublicationBlockers as jest.Mock).mockReturnValue([
+          { type: 'incomplete-section', section: 'legislation' },
+        ] as PublicationBlocker[]);
+
+        const newVersion = professionVersionFactory.build({
+          profession,
+          user,
+        });
+
+        professionVersionsService.create.mockResolvedValue(newVersion);
+
+        await expect(
+          controller.create(req, res, profession.id, version.id),
+        ).rejects.toThrowError(BadRequestException);
+
+        expect(
+          professionVersionsService.findByIdWithProfession,
+        ).toHaveBeenCalledWith(profession.id, version.id);
+
+        expect(getPublicationBlockers).toBeCalledWith(version);
+
+        expect(professionVersionsService.create).not.toBeCalled();
+        expect(professionVersionsService.publish).not.toBeCalled();
+        expect(professionsService.setSlug).not.toBeCalled();
+        expect(flashMock).not.toBeCalled();
+        expect(res.redirect).not.toBeCalled();
+      });
+    });
+
     it('checks the acting user has permissions to publish the Profession', async () => {
       const req = createDefaultMockRequest({
         user: userFactory.build(),
@@ -245,6 +307,8 @@ describe('ProfessionPublicationController', () => {
       const profession = professionFactory.build();
       const version = professionVersionFactory.build({ profession });
 
+      (getPublicationBlockers as jest.Mock).mockReturnValue([]);
+
       await controller.create(req, res, profession.id, version.id);
 
       expect(checkCanViewProfession).toHaveBeenCalledWith(
@@ -252,5 +316,9 @@ describe('ProfessionPublicationController', () => {
         Profession.withVersion(profession, version),
       );
     });
+  });
+
+  afterEach(() => {
+    jest.resetAllMocks();
   });
 });
