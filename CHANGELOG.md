@@ -29,6 +29,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 - Fix wrong links on dashboard
 - Sort professions alphabetically in search results
+- Remove unimplemented "changed by" filter from internal filters
 
 ## [release-008] - 2022-03-11
 
