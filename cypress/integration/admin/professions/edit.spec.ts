@@ -384,7 +384,7 @@ describe('Editing an existing profession', () => {
             cy.contains('View details').click();
           });
 
-        cy.checkAccessibility();
+        cy.checkAccessibility({ 'color-contrast': { enabled: false } });
 
         cy.translate('professions.admin.button.edit.draft').then(
           (buttonText) => {
@@ -448,7 +448,7 @@ describe('Editing an existing profession', () => {
           },
         );
 
-        cy.checkAccessibility();
+        cy.checkAccessibility({ 'color-contrast': { enabled: false } });
 
         cy.checkSummaryListRowValue(
           'professions.show.qualification.moreInformationUrl',
@@ -467,7 +467,7 @@ describe('Editing an existing profession', () => {
             cy.contains('View details').click();
           });
 
-        cy.checkAccessibility();
+        cy.checkAccessibility({ 'color-contrast': { enabled: false } });
 
         cy.translate('professions.admin.button.edit.draft').then(
           (buttonText) => {

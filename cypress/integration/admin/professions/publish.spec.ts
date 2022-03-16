@@ -23,6 +23,7 @@ describe('Publishing professions', () => {
 
       cy.get('[data-cy=changed-by-text]').should('not.exist');
       cy.get('[data-cy=currently-published-version-text]').should('not.exist');
+      cy.checkPublishNotBlocked();
 
       cy.translate('professions.form.button.publish').then((publishButton) => {
         cy.get('a').contains(publishButton).click();

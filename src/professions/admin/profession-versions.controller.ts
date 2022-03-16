@@ -27,6 +27,7 @@ import { getOrganisationsFromProfession } from '../helpers/get-organisations-fro
 import { ShowTemplate } from './interfaces/show-template.interface';
 import { isUK } from '../../helpers/nations.helper';
 import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
+import { getPublicationBlockers } from '../helpers/get-publication-blockers.helper';
 
 @UseGuards(AuthenticationGuard)
 @Controller('/admin/professions')
@@ -104,6 +105,7 @@ export class ProfessionVersionsController {
       nations,
       industries,
       organisations,
+      publicationBlockers: getPublicationBlockers(version),
     };
   }
 

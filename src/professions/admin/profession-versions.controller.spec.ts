@@ -20,6 +20,7 @@ import { createDefaultMockRequest } from '../../testutils/factories/create-defau
 import organisationFactory from '../../testutils/factories/organisation';
 import * as getOrganisationsFromProfessionModule from '../helpers/get-organisations-from-profession.helper';
 import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
+import * as getPublicationBlockersModule from '../helpers/get-publication-blockers.helper';
 
 jest.mock('../../organisations/organisation.entity');
 jest.mock('../presenters/profession.presenter');
@@ -175,6 +176,9 @@ describe('ProfessionVersionsController', () => {
             getOrganisationsFromProfessionModule,
             'getOrganisationsFromProfession',
           );
+          const getPublicationBlockersSpy = jest
+            .spyOn(getPublicationBlockersModule, 'getPublicationBlockers')
+            .mockReturnValue([]);
 
           const request = createDefaultMockRequest({
             user: userFactory.build(),
@@ -197,6 +201,7 @@ describe('ProfessionVersionsController', () => {
             nations: ['Translation of `nations.england`'],
             industries: ['Translation of `industries.example`'],
             organisations: [profession.organisation],
+            publicationBlockers: [],
           });
 
           expect(
@@ -208,6 +213,7 @@ describe('ProfessionVersionsController', () => {
           expect(getOrganisationsFromProfessionSpy).toHaveBeenCalledWith(
             professionWithVersion,
           );
+          expect(getPublicationBlockersSpy).toHaveBeenCalledWith(version);
         });
       });
 
@@ -243,6 +249,9 @@ describe('ProfessionVersionsController', () => {
             getOrganisationsFromProfessionModule,
             'getOrganisationsFromProfession',
           );
+          const getPublicationBlockersSpy = jest
+            .spyOn(getPublicationBlockersModule, 'getPublicationBlockers')
+            .mockReturnValue([]);
 
           const request = createDefaultMockRequest({
             user: userFactory.build(),
@@ -268,6 +277,7 @@ describe('ProfessionVersionsController', () => {
               profession.organisation,
               profession.additionalOrganisation,
             ],
+            publicationBlockers: [],
           });
 
           expect(
@@ -279,6 +289,7 @@ describe('ProfessionVersionsController', () => {
           expect(getOrganisationsFromProfessionSpy).toHaveBeenCalledWith(
             professionWithVersion,
           );
+          expect(getPublicationBlockersSpy).toHaveBeenCalledWith(version);
         });
       });
     });
@@ -309,6 +320,14 @@ describe('ProfessionVersionsController', () => {
         (Organisation.withLatestVersion as jest.Mock).mockImplementation(
           (organisation) => organisation,
         );
+        const getPublicationBlockersSpy = jest
+          .spyOn(getPublicationBlockersModule, 'getPublicationBlockers')
+          .mockReturnValue([
+            {
+              type: 'incomplete-section',
+              section: 'qualifications',
+            },
+          ]);
 
         const request = createDefaultMockRequest({ user: userFactory.build() });
 
@@ -329,7 +348,15 @@ describe('ProfessionVersionsController', () => {
           nations: [translationOf('nations.england')],
           industries: [translationOf('industries.example')],
           organisations: [profession.organisation],
+          publicationBlockers: [
+            {
+              type: 'incomplete-section',
+              section: 'qualifications',
+            },
+          ],
         });
+
+        expect(getPublicationBlockersSpy).toHaveBeenCalledWith(version);
       });
     });
 
@@ -368,6 +395,19 @@ describe('ProfessionVersionsController', () => {
 
         const request = createDefaultMockRequest({ user: userFactory.build() });
 
+        const getPublicationBlockersSpy = jest
+          .spyOn(getPublicationBlockersModule, 'getPublicationBlockers')
+          .mockReturnValue([
+            {
+              type: 'incomplete-section',
+              section: 'qualifications',
+            },
+            {
+              type: 'incomplete-section',
+              section: 'legislation',
+            },
+          ]);
+
         const result = await controller.show(
           'profession-id',
           'version-id',
@@ -385,6 +425,16 @@ describe('ProfessionVersionsController', () => {
           nations: [],
           industries: [],
           organisations: [profession.organisation],
+          publicationBlockers: [
+            {
+              type: 'incomplete-section',
+              section: 'qualifications',
+            },
+            {
+              type: 'incomplete-section',
+              section: 'legislation',
+            },
+          ],
         });
 
         expect(
@@ -393,6 +443,7 @@ describe('ProfessionVersionsController', () => {
         expect(professionVersionsService.hasLiveVersion).toHaveBeenCalledWith(
           professionWithVersion,
         );
+        expect(getPublicationBlockersSpy).toHaveBeenCalledWith(version);
       });
     });
   });
