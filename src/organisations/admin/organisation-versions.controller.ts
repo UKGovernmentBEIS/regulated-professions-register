@@ -28,6 +28,7 @@ import { Permissions } from '../../common/permissions.decorator';
 import { UserPermission } from '../../users/user-permission';
 
 import { getActingUser } from '../../users/helpers/get-acting-user.helper';
+import { checkCanViewOrganisation } from '../../users/helpers/check-can-view-organisation';
 
 @UseGuards(AuthenticationGuard)
 @Controller('/admin/organisations')
@@ -48,6 +49,8 @@ export class OrganisationVersionsController {
       await this.organisationVersionsService.findLatestForOrganisationId(
         organisationID,
       );
+
+    checkCanViewOrganisation(req, latestVersion.organisation);
 
     const newVersion = await this.organisationVersionsService.create(
       latestVersion,
@@ -70,6 +73,7 @@ export class OrganisationVersionsController {
   async show(
     @Param('organisationId') organisationId: string,
     @Param('versionId') versionId: string,
+    @Req() req: RequestWithAppSession,
   ): Promise<ShowTemplate> {
     const version =
       await this.organisationVersionsService.findByIdWithOrganisation(
@@ -82,6 +86,8 @@ export class OrganisationVersionsController {
       version,
       true,
     );
+
+    checkCanViewOrganisation(req, organisation);
 
     const hasLiveVersion =
       await this.organisationVersionsService.hasLiveVersion(organisation);
