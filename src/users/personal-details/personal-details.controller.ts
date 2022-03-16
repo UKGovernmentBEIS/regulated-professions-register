@@ -8,6 +8,7 @@ import {
   Res,
   UseGuards,
   Query,
+  Req,
 } from '@nestjs/common';
 
 import { ValidationFailedError } from '../../common/validation/validation-failed.error';
@@ -27,6 +28,7 @@ import {
 } from '../helpers/get-action-type-from-user';
 import { getActingUser } from '../helpers/get-acting-user.helper';
 import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
+import { checkCanViewUser } from '../helpers/check-can-view-user';
 
 @Controller('/admin/users')
 @UseGuards(AuthenticationGuard)
@@ -42,9 +44,12 @@ export class PersonalDetailsController {
   async edit(
     @Param('id') id,
     @Query('change') change: boolean,
+    @Req() request: RequestWithAppSession,
   ): Promise<EditTemplate> {
     const user = await this.usersService.find(id);
     const action = getActionTypeFromUser(user);
+
+    checkCanViewUser(request, user);
 
     return {
       ...user,
@@ -62,6 +67,7 @@ export class PersonalDetailsController {
     @Body() personalDetailsDto,
     @Res() res,
     @Param('id') id,
+    @Req() request: RequestWithAppSession,
   ): Promise<void> {
     // Intentially don't use `ValidationExceptionFilter`, as we have additional
     // parameters to get into our template
@@ -73,6 +79,8 @@ export class PersonalDetailsController {
 
     const user = await this.usersService.find(id);
     const action = getActionTypeFromUser(user);
+
+    checkCanViewUser(request, user);
 
     if (!validator.valid()) {
       const errors = new ValidationFailedError(validator.errors).fullMessages();

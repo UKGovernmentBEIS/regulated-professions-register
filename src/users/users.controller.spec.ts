@@ -17,6 +17,7 @@ import { getActionTypeFromUser } from './helpers/get-action-type-from-user';
 import organisationFactory from '../testutils/factories/organisation';
 import { getActingUser } from './helpers/get-acting-user.helper';
 import { createDefaultMockRequest } from '../testutils/factories/create-default-mock-request';
+import { checkCanViewUser } from './helpers/check-can-view-user';
 
 jest.mock('./presenters/users.presenter');
 jest.mock('./presenters/user.presenter');
@@ -25,6 +26,7 @@ jest.mock('../common/flash-message');
 jest.mock('./helpers/get-action-type-from-user');
 
 jest.mock('./helpers/get-acting-user.helper');
+jest.mock('./helpers/check-can-view-user');
 
 describe('UsersController', () => {
   let controller: UsersController;
@@ -143,11 +145,31 @@ describe('UsersController', () => {
 
       usersService.find.mockResolvedValue(user);
 
-      expect(await controller.show('some-uuid')).toEqual({
+      const request = createDefaultMockRequest({
+        user: userFactory.build(),
+      });
+
+      expect(await controller.show('some-uuid', request)).toEqual({
         ...user,
       });
 
       expect(usersService.find).toHaveBeenCalledWith('some-uuid');
+    });
+
+    it('should ensure the acting user has permissions to view the user', async () => {
+      const user = userFactory.build();
+
+      usersService.find.mockResolvedValue(user);
+
+      const request = createDefaultMockRequest({
+        user: userFactory.build(),
+      });
+
+      expect(await controller.show('some-uuid', request)).toEqual({
+        ...user,
+      });
+
+      expect(checkCanViewUser).toHaveBeenCalledWith(request, user);
     });
   });
 
@@ -209,9 +231,35 @@ describe('UsersController', () => {
       usersService.find.mockResolvedValue(user);
       (getActionTypeFromUser as jest.Mock).mockReturnValue('edit');
 
-      const result = await controller.confirm(user.id);
+      const request = createDefaultMockRequest({
+        user: userFactory.build(),
+      });
+
+      const result = await controller.confirm(request, user.id);
 
       expect(usersService.find).toHaveBeenCalledWith(user.id);
+
+      expect(result).toEqual({
+        ...user,
+        action: 'edit',
+      });
+    });
+
+    it('should check that the acting user has permission to view the user', async () => {
+      const user = userFactory.build();
+
+      usersService.find.mockResolvedValue(user);
+      (getActionTypeFromUser as jest.Mock).mockReturnValue('edit');
+
+      const request = createDefaultMockRequest({
+        user: userFactory.build(),
+      });
+
+      const result = await controller.confirm(request, user.id);
+
+      expect(usersService.find).toHaveBeenCalledWith(user.id);
+
+      expect(checkCanViewUser).toHaveBeenCalledWith(request, user);
 
       expect(result).toEqual({
         ...user,
@@ -238,7 +286,11 @@ describe('UsersController', () => {
           passwordResetLink: 'http://example.org',
         });
 
-        await controller.complete(res, user.id);
+        const request = createDefaultMockRequest({
+          user: userFactory.build(),
+        });
+
+        await controller.complete(res, user.id, request);
 
         expect(auth0Service.createUser).toBeCalledWith(user.email);
         expect(usersService.save).toBeCalledWith(
@@ -278,7 +330,11 @@ describe('UsersController', () => {
           return 'user-exists';
         });
 
-        await controller.complete(res, user.id);
+        const request = createDefaultMockRequest({
+          user: userFactory.build(),
+        });
+
+        await controller.complete(res, user.id, request);
 
         expect(res.render).toBeCalledWith('admin/users/confirm', {
           ...user,
@@ -300,7 +356,11 @@ describe('UsersController', () => {
 
         usersService.attemptAdd.mockResolvedValue('user-created');
 
-        await controller.complete(res, user.id);
+        const request = createDefaultMockRequest({
+          user: userFactory.build(),
+        });
+
+        await controller.complete(res, user.id, request);
 
         expect(usersService.attemptAdd).toBeCalledWith(
           expect.objectContaining({
@@ -330,7 +390,11 @@ describe('UsersController', () => {
 
         usersService.find.mockResolvedValue(user);
 
-        await controller.complete(res, user.id);
+        const request = createDefaultMockRequest({
+          user: userFactory.build(),
+        });
+
+        await controller.complete(res, user.id, request);
 
         expect(auth0Service.createUser).not.toBeCalled();
         expect(userMailer.confirmation).not.toBeCalled();
@@ -350,6 +414,27 @@ describe('UsersController', () => {
           action: 'edit',
         });
       });
+    });
+
+    it('should check that the acting user has permissions to complete the user', async () => {
+      const user = userFactory.build();
+
+      const res = createMock<Response>();
+
+      usersService.find.mockResolvedValue(user);
+      auth0Service.createUser.mockResolvedValue({
+        result: 'user-created',
+        externalIdentifier: 'extid|1234567',
+        passwordResetLink: 'http://example.org',
+      });
+
+      const request = createDefaultMockRequest({
+        user: userFactory.build(),
+      });
+
+      await controller.complete(res, user.id, request);
+
+      expect(checkCanViewUser).toHaveBeenCalledWith(request, user);
     });
   });
 

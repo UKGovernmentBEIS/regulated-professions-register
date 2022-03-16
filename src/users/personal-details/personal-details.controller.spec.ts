@@ -6,11 +6,16 @@ import { User } from '../user.entity';
 import { PersonalDetailsController } from './personal-details.controller';
 import { createMock, DeepMocked } from '@golevelup/ts-jest';
 import { getActionTypeFromUser } from '../helpers/get-action-type-from-user';
+import { createDefaultMockRequest } from '../../testutils/factories/create-default-mock-request';
+import userFactory from '../../testutils/factories/user';
+import { checkCanViewUser } from '../helpers/check-can-view-user';
 
 const name = 'Example Name';
 const email = 'name@example.com';
 
 jest.mock('../helpers/get-action-type-from-user');
+jest.mock('../helpers/get-acting-user.helper');
+jest.mock('../helpers/check-can-view-user');
 
 describe('PersonalDetailsController', () => {
   let controller: PersonalDetailsController;
@@ -54,25 +59,40 @@ describe('PersonalDetailsController', () => {
     it('should get and return the user from an id', async () => {
       (getActionTypeFromUser as jest.Mock).mockReturnValue('edit');
 
-      const result = await controller.edit('user-uuid', false);
+      const request = createDefaultMockRequest({ user: userFactory.build() });
+
+      const result = await controller.edit('user-uuid', false, request);
 
       expect(result).toEqual({
         ...user,
         action: 'edit',
         change: false,
       });
+
+      expect(checkCanViewUser).toHaveBeenCalledWith(request, user.organisation);
     });
 
     it('should set change to true', async () => {
       (getActionTypeFromUser as jest.Mock).mockReturnValue('edit');
 
-      const result = await controller.edit('user-uuid', true);
+      const request = createDefaultMockRequest({ user: userFactory.build() });
+
+      const result = await controller.edit('user-uuid', true, request);
 
       expect(result).toEqual({
         ...user,
         action: 'edit',
         change: true,
       });
+    });
+
+    it('should check that the user has permissions to update the user', async () => {
+      (getActionTypeFromUser as jest.Mock).mockReturnValue('edit');
+      const request = createDefaultMockRequest({ user: userFactory.build() });
+
+      await controller.edit('user-uuid', true, request);
+
+      expect(checkCanViewUser).toHaveBeenCalledWith(request, user.organisation);
     });
   });
 
@@ -88,7 +108,14 @@ describe('PersonalDetailsController', () => {
         return null;
       });
 
-      await controller.update({ name: name, email: email }, res, 'user-uuid');
+      const request = createDefaultMockRequest({ user: userFactory.build() });
+
+      await controller.update(
+        { name: name, email: email },
+        res,
+        'user-uuid',
+        request,
+      );
 
       expect(usersService.save).toHaveBeenCalledWith({
         id: 'user-uuid',
@@ -105,10 +132,13 @@ describe('PersonalDetailsController', () => {
         return null;
       });
 
+      const request = createDefaultMockRequest({ user: userFactory.build() });
+
       await controller.update(
         { name: name, email: ` ${email}  ` },
         res,
         'user-uuid',
+        request,
       );
 
       expect(usersService.save).toHaveBeenCalledWith({
@@ -124,7 +154,9 @@ describe('PersonalDetailsController', () => {
     it('should render an error if the name is empty', async () => {
       (getActionTypeFromUser as jest.Mock).mockReturnValue('edit');
 
-      await controller.update({ name: '', email }, res, 'user-uuid');
+      const request = createDefaultMockRequest({ user: userFactory.build() });
+
+      await controller.update({ name: '', email }, res, 'user-uuid', request);
 
       expect(res.render).toHaveBeenCalledWith(
         'admin/users/personal-details/edit',
@@ -144,7 +176,9 @@ describe('PersonalDetailsController', () => {
     it('should render an error if the email is empty', async () => {
       (getActionTypeFromUser as jest.Mock).mockReturnValue('edit');
 
-      await controller.update({ name, email: '' }, res, 'user-uuid');
+      const request = createDefaultMockRequest({ user: userFactory.build() });
+
+      await controller.update({ name, email: '' }, res, 'user-uuid', request);
 
       expect(res.render).toHaveBeenCalledWith(
         'admin/users/personal-details/edit',
@@ -168,7 +202,9 @@ describe('PersonalDetailsController', () => {
         return new User('name@example.com', name);
       });
 
-      await controller.update({ name, email }, res, 'user-uuid');
+      const request = createDefaultMockRequest({ user: userFactory.build() });
+
+      await controller.update({ name, email }, res, 'user-uuid', request);
 
       expect(usersService.findByEmail).toHaveBeenCalledWith('name@example.com');
 
@@ -195,9 +231,16 @@ describe('PersonalDetailsController', () => {
         return user;
       });
 
-      await controller.update({ name, email }, res, 'user-uuid');
+      const request = createDefaultMockRequest({ user: userFactory.build() });
 
-      await controller.update({ name: name, email: email }, res, 'user-uuid');
+      await controller.update({ name, email }, res, 'user-uuid', request);
+
+      await controller.update(
+        { name: name, email: email },
+        res,
+        'user-uuid',
+        request,
+      );
 
       expect(usersService.save).toHaveBeenCalledWith({
         id: 'user-uuid',
@@ -207,6 +250,21 @@ describe('PersonalDetailsController', () => {
       expect(res.redirect).toHaveBeenCalledWith(
         `/admin/users/user-uuid/role/edit`,
       );
+    });
+
+    it('should check that the user has permissions to update the user', async () => {
+      usersService.findByEmail.mockResolvedValue(null);
+
+      const request = createDefaultMockRequest({ user: userFactory.build() });
+
+      await controller.update(
+        { name: name, email: email },
+        res,
+        'user-uuid',
+        request,
+      );
+
+      expect(checkCanViewUser).toHaveBeenCalledWith(request, user.organisation);
     });
   });
 });
