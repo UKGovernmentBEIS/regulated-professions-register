@@ -10,6 +10,7 @@ import organisationFactory from '../../testutils/factories/organisation';
 import organisationVersionFactory from '../../testutils/factories/organisation-version';
 import userFactory from '../../testutils/factories/user';
 import { translationOf } from '../../testutils/translation-of';
+import { checkCanViewOrganisation } from '../../users/helpers/check-can-view-organisation';
 import { getActingUser } from '../../users/helpers/get-acting-user.helper';
 import { OrganisationVersionStatus } from '../organisation-version.entity';
 import { OrganisationVersionsService } from '../organisation-versions.service';
@@ -20,6 +21,7 @@ import { OrganisationPublicationController } from './organisation-publication.co
 jest.mock('../../common/flash-message');
 jest.mock('../../users/helpers/get-acting-user.helper');
 jest.mock('../../helpers/escape.helper');
+jest.mock('../../users/helpers/check-can-view-organisation');
 
 describe('OrganisationPublicationController', () => {
   let controller: OrganisationPublicationController;
@@ -67,7 +69,11 @@ describe('OrganisationPublicationController', () => {
         version,
       );
 
-      const result = await controller.new(organisation.id, version.id);
+      const request = createDefaultMockRequest({
+        user: userFactory.build(),
+      });
+
+      const result = await controller.new(organisation.id, version.id, request);
 
       expect(
         organisationVersionsService.findByIdWithOrganisation,
@@ -75,6 +81,28 @@ describe('OrganisationPublicationController', () => {
       expect(result).toEqual({
         organisation: Organisation.withVersion(organisation, version),
       });
+    });
+
+    it('checks the acting user has permission to publish', async () => {
+      const organisation = organisationFactory.build();
+      const version = organisationVersionFactory.build({
+        organisation,
+      });
+
+      organisationVersionsService.findByIdWithOrganisation.mockResolvedValue(
+        version,
+      );
+
+      const request = createDefaultMockRequest({
+        user: userFactory.build(),
+      });
+
+      await controller.new(organisation.id, version.id, request);
+
+      expect(checkCanViewOrganisation).toHaveBeenCalledWith(
+        request,
+        Organisation.withVersion(organisation, version),
+      );
     });
   });
 
@@ -90,7 +118,10 @@ describe('OrganisationPublicationController', () => {
         });
         const user = userFactory.build();
 
-        const req = createDefaultMockRequest();
+        const req = createDefaultMockRequest({
+          user: userFactory.build(),
+        });
+
         (getActingUser as jest.Mock).mockReturnValue(user);
 
         const res = createMock<Response>({});
@@ -154,7 +185,9 @@ describe('OrganisationPublicationController', () => {
         });
         const user = userFactory.build();
 
-        const req = createDefaultMockRequest();
+        const req = createDefaultMockRequest({
+          user: userFactory.build(),
+        });
         (getActingUser as jest.Mock).mockReturnValue(user);
 
         const res = createMock<Response>({});
@@ -205,6 +238,25 @@ describe('OrganisationPublicationController', () => {
           `/admin/organisations/${existingOrganisation.id}/versions/${newVersion.id}`,
         );
       });
+    });
+
+    it('checks the acting user has permission to publish', async () => {
+      const organisation = organisationFactory.build({
+        slug: 'org-slug',
+      });
+      const version = organisationVersionFactory.build({
+        organisation: organisation,
+      });
+
+      const res = createMock<Response>({});
+
+      const req = createDefaultMockRequest({
+        user: userFactory.build(),
+      });
+
+      await controller.create(req, res, organisation.id, version.id);
+
+      expect(checkCanViewOrganisation).toHaveBeenCalledWith(req, organisation);
     });
   });
 });
