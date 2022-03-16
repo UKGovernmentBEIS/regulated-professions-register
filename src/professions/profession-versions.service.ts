@@ -10,6 +10,7 @@ import { Profession } from './profession.entity';
 import { Legislation } from '../legislations/legislation.entity';
 import { Qualification } from '../qualifications/qualification.entity';
 import { User } from '../users/user.entity';
+import { FilterInput } from '../common/interfaces/filter-input.interface';
 
 @Injectable()
 export class ProfessionVersionsService {
@@ -159,6 +160,45 @@ export class ProfessionVersionsService {
       order: { created_at: 'DESC' },
       relations: ['profession'],
     });
+  }
+
+  async searchLive(filter: FilterInput): Promise<Profession[]> {
+    let query = this.versionsWithJoins().where(
+      'professionVersion.status = :status',
+      {
+        status: ProfessionVersionStatus.Live,
+      },
+    );
+
+    if (filter.keywords?.length) {
+      const ids = await this.searchService.search(filter.keywords);
+      query = query.andWhere({ id: In(ids) });
+    }
+
+    if (filter.nations?.length) {
+      const nations = filter.nations.map((n) => n.code);
+
+      query = query.andWhere(
+        'professionVersion.occupationLocations @> :nations',
+        {
+          nations: nations,
+        },
+      );
+    }
+
+    if (filter.industries?.length) {
+      const industries = filter.industries.map((i) => i.id);
+
+      query = query.andWhere('industries.id IN(:...industries)', {
+        industries: industries,
+      });
+    }
+
+    const versions = await query.getMany();
+
+    return versions.map((version) =>
+      Profession.withVersion(version.profession, version),
+    );
   }
 
   async allLive(): Promise<Profession[]> {
