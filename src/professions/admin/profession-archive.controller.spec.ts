@@ -10,6 +10,7 @@ import professionFactory from '../../testutils/factories/profession';
 import professionVersionFactory from '../../testutils/factories/profession-version';
 import userFactory from '../../testutils/factories/user';
 import { translationOf } from '../../testutils/translation-of';
+import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
 import { getActingUser } from '../../users/helpers/get-acting-user.helper';
 import { ProfessionVersionsService } from '../profession-versions.service';
 import { Profession } from '../profession.entity';
@@ -18,6 +19,7 @@ import { ProfessionArchiveController } from './profession-archive.controller';
 jest.mock('../../common/flash-message');
 jest.mock('../../users/helpers/get-acting-user.helper');
 jest.mock('../../helpers/escape.helper');
+jest.mock('../../users/helpers/check-can-view-profession');
 
 describe('ProfessionArchiveController', () => {
   let controller: ProfessionArchiveController;
@@ -59,7 +61,11 @@ describe('ProfessionArchiveController', () => {
         version,
       );
 
-      const result = await controller.new(profession.id, version.id);
+      const request = createDefaultMockRequest({
+        user: userFactory.build(),
+      });
+
+      const result = await controller.new(profession.id, version.id, request);
 
       expect(
         professionVersionsService.findByIdWithProfession,
@@ -67,6 +73,28 @@ describe('ProfessionArchiveController', () => {
       expect(result).toEqual({
         profession: Profession.withVersion(profession, version),
       });
+    });
+
+    it('checks the acting user has permission to archive the Profession', async () => {
+      const profession = professionFactory.build();
+      const version = professionVersionFactory.build({
+        profession,
+      });
+
+      professionVersionsService.findByIdWithProfession.mockResolvedValue(
+        version,
+      );
+
+      const request = createDefaultMockRequest({
+        user: userFactory.build(),
+      });
+
+      await controller.new(profession.id, version.id, request);
+
+      expect(checkCanViewProfession).toHaveBeenCalledWith(
+        request,
+        Profession.withVersion(profession, version),
+      );
     });
   });
 
@@ -78,7 +106,9 @@ describe('ProfessionArchiveController', () => {
       });
       const user = userFactory.build();
 
-      const req = createDefaultMockRequest();
+      const req = createDefaultMockRequest({
+        user: userFactory.build(),
+      });
       (getActingUser as jest.Mock).mockReturnValue(user);
 
       const res = createMock<Response>({});
@@ -124,6 +154,27 @@ describe('ProfessionArchiveController', () => {
       expect(res.redirect).toHaveBeenCalledWith(
         `/admin/professions/${profession.id}/versions/${versionToBeArchived.id}`,
       );
+    });
+
+    it('checks the acting user has permission to archive the Profession', async () => {
+      const profession = professionFactory.build();
+      const version = professionVersionFactory.build({
+        profession,
+      });
+
+      professionVersionsService.findByIdWithProfession.mockResolvedValue(
+        version,
+      );
+
+      const request = createDefaultMockRequest({
+        user: userFactory.build(),
+      });
+
+      const res = createMock<Response>({});
+
+      await controller.delete(request, res, profession.id, version.id);
+
+      expect(checkCanViewProfession).toHaveBeenCalledWith(request, profession);
     });
   });
 });
