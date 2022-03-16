@@ -10,9 +10,13 @@ import { I18nService } from 'nestjs-i18n';
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 import { Role } from '../role';
 import { getActionTypeFromUser } from '../helpers/get-action-type-from-user';
+import { createDefaultMockRequest } from '../../testutils/factories/create-default-mock-request';
+import { checkCanViewUser } from '../helpers/check-can-view-user';
 
 jest.mock('../presenters/role-radio-buttons.preseter');
 jest.mock('../helpers/get-action-type-from-user');
+jest.mock('../helpers/get-acting-user.helper');
+jest.mock('../helpers/check-can-view-user');
 
 describe('RoleController', () => {
   let controller: RoleController;
@@ -62,7 +66,9 @@ describe('RoleController', () => {
 
       usersService.find.mockResolvedValue(user);
 
-      await controller.edit(res, user.id, false);
+      const request = createDefaultMockRequest({ user: userFactory.build() });
+
+      await controller.edit(res, user.id, false, request);
 
       expect(res.render).toBeCalledWith(
         'admin/users/role/edit',
@@ -92,7 +98,9 @@ describe('RoleController', () => {
 
       usersService.find.mockResolvedValue(user);
 
-      await controller.edit(res, user.id, true);
+      const request = createDefaultMockRequest({ user: userFactory.build() });
+
+      await controller.edit(res, user.id, true, request);
 
       expect(res.render).toBeCalledWith(
         'admin/users/role/edit',
@@ -109,7 +117,9 @@ describe('RoleController', () => {
 
       usersService.find.mockResolvedValue(user);
 
-      await controller.edit(res, user.id, false);
+      const request = createDefaultMockRequest({ user: userFactory.build() });
+
+      await controller.edit(res, user.id, false, request);
 
       expect(RoleRadioButtonsPresenter).toBeCalledWith(
         [Role.Administrator, Role.Editor],
@@ -126,7 +136,9 @@ describe('RoleController', () => {
 
       usersService.find.mockResolvedValue(user);
 
-      await controller.edit(res, user.id, false);
+      const request = createDefaultMockRequest({ user: userFactory.build() });
+
+      await controller.edit(res, user.id, false, request);
 
       expect(RoleRadioButtonsPresenter).toBeCalledWith(
         [Role.Administrator, Role.Registrar, Role.Editor],
@@ -134,6 +146,20 @@ describe('RoleController', () => {
         expect.anything(),
         i18nService,
       );
+    });
+
+    it('should check that the acting user has permission to view the current user', async () => {
+      const res = createMock<Response>();
+
+      const user = userFactory.build({ serviceOwner: true });
+
+      usersService.find.mockResolvedValue(user);
+
+      const request = createDefaultMockRequest({ user: userFactory.build() });
+
+      await controller.edit(res, user.id, false, request);
+
+      expect(checkCanViewUser).toHaveBeenCalledWith(request, user);
     });
   });
 
@@ -150,7 +176,9 @@ describe('RoleController', () => {
         role: Role.Editor,
       };
 
-      await controller.update(res, user.id, permissionsDto);
+      const request = createDefaultMockRequest({ user: userFactory.build() });
+
+      await controller.update(res, user.id, permissionsDto, request);
 
       expect(usersService.save).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -189,7 +217,9 @@ describe('RoleController', () => {
         role: undefined,
       };
 
-      await controller.update(res, user.id, permissionsDto);
+      const request = createDefaultMockRequest({ user: userFactory.build() });
+
+      await controller.update(res, user.id, permissionsDto, request);
 
       expect(usersService.save).not.toHaveBeenCalled();
 
@@ -222,7 +252,9 @@ describe('RoleController', () => {
         serviceOwner: true,
       };
 
-      await controller.update(res, user.id, permissionsDto);
+      const request = createDefaultMockRequest({ user: userFactory.build() });
+
+      await controller.update(res, user.id, permissionsDto, request);
 
       expect(usersService.save).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -247,9 +279,29 @@ describe('RoleController', () => {
         role: Role.Registrar,
       };
 
+      const request = createDefaultMockRequest({ user: userFactory.build() });
+
       await expect(
-        controller.update(res, user.id, permissionsDto),
+        controller.update(res, user.id, permissionsDto, request),
       ).rejects.toThrowError();
+    });
+
+    it('should check that the acting user has permission to view the current user', async () => {
+      const res = createMock<Response>();
+
+      const user = userFactory.build();
+
+      usersService.find.mockResolvedValue(user);
+      usersService.save.mockResolvedValue(user);
+
+      const permissionsDto = {
+        role: Role.Editor,
+      };
+
+      const request = createDefaultMockRequest({ user: userFactory.build() });
+
+      await controller.update(res, user.id, permissionsDto, request);
+      expect(checkCanViewUser).toHaveBeenCalledWith(request, user);
     });
   });
 

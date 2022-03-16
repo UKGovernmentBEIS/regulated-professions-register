@@ -7,6 +7,7 @@ import {
   Res,
   UseGuards,
   Query,
+  Req,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 
@@ -28,6 +29,8 @@ import {
   getActionTypeFromUser,
   ActionType,
 } from '../helpers/get-action-type-from-user';
+import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
+import { checkCanViewUser } from '../helpers/check-can-view-user';
 
 @UseGuards(AuthenticationGuard)
 @Controller('/admin/users')
@@ -48,8 +51,11 @@ export class RoleController {
     @Res() res: Response,
     @Param('id') id,
     @Query('change') change: boolean,
+    @Req() request: RequestWithAppSession,
   ): Promise<void> {
     const user = await this.usersService.find(id);
+
+    checkCanViewUser(request, user);
 
     return this.renderForm(
       res,
@@ -72,8 +78,11 @@ export class RoleController {
     @Res() res: Response,
     @Param('id') id: string,
     @Body() permissionsDto,
+    @Req() request: RequestWithAppSession,
   ): Promise<void> {
     const user = await this.usersService.find(id);
+
+    checkCanViewUser(request, user);
 
     const validator = await Validator.validate(RoleDto, permissionsDto);
     const submittedValues = validator.obj;
