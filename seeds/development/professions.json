@@ -117,7 +117,7 @@
     "name": "Draft Profession",
     "slug": "draft-profession",
     "organisation": "Council of Registered Gas Installers",
-    "additionalOrganisation": null,
+    "additionalOrganisation": "Department for Education",
     "versions": [
       {
         "status": "draft"
