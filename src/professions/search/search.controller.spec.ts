@@ -56,7 +56,7 @@ describe('SearchController', () => {
         name: 'Trademark Attorney',
         industries: [industry2, industry3],
       });
-      professionVersionsService.allLive.mockResolvedValue([
+      professionVersionsService.searchLive.mockResolvedValue([
         schoolTeacher,
         trademarkAttorney,
       ]);
@@ -85,7 +85,7 @@ describe('SearchController', () => {
         nations: [],
       });
 
-      expect(professionVersionsService.allLive).toHaveBeenCalled();
+      expect(professionVersionsService.searchLive).toHaveBeenCalled();
     });
   });
 
@@ -105,7 +105,8 @@ describe('SearchController', () => {
         name: 'Trademark Attorney',
         industries: [industry2, industry3],
       });
-      professionVersionsService.allLive.mockResolvedValue([
+
+      professionVersionsService.searchLive.mockResolvedValue([
         schoolTeacher,
         trademarkAttorney,
       ]);
@@ -124,178 +125,34 @@ describe('SearchController', () => {
         },
         Nation.all(),
         industries,
-        [],
-        i18nService,
-      ).present();
-
-      expect(result).toEqual(expected);
-    });
-
-    it('should return filtered professions when searching by nation', async () => {
-      const industry1 = industryFactory.build();
-      const industry2 = industryFactory.build();
-      const industry3 = industryFactory.build();
-      const industries = [industry1, industry2, industry3];
-      industriesService.all.mockResolvedValue(industries);
-
-      const professionRegulatedInEngland = professionFactory.build({
-        name: 'Secondary School Teacher',
-        industries: [industry1],
-        occupationLocations: ['GB-ENG'],
-      });
-      const professionRegulatedInWales = professionFactory.build({
-        name: 'Trademark Attorney',
-        industries: [industry2, industry3],
-        occupationLocations: ['GB-WLS'],
-      });
-      professionVersionsService.allLive.mockResolvedValue([
-        professionRegulatedInEngland,
-        professionRegulatedInWales,
-      ]);
-
-      const result = await controller.create({
-        keywords: '',
-        industries: [],
-        nations: ['GB-WLS'],
-      });
-
-      const expected = await new SearchPresenter(
-        {
-          keywords: '',
-          industries: [],
-          nations: [Nation.find('GB-WLS')],
-        },
-        Nation.all(),
-        industries,
-        [professionRegulatedInWales],
-        i18nService,
-      ).present();
-
-      expect(result).toEqual(expected);
-    });
-
-    it('should return filtered professions when searching by industry', async () => {
-      const educationIndustry = industryFactory.build({
-        name: 'industries.education',
-      });
-      const lawIndustry = industryFactory.build({ name: 'industries.law' });
-      const industries = [educationIndustry, lawIndustry];
-      industriesService.all.mockResolvedValue(industries);
-
-      const schoolTeacher = professionFactory.build({
-        name: 'Secondary School Teacher',
-        industries: [educationIndustry],
-      });
-      const trademarkAttorney = professionFactory.build({
-        name: 'Trademark Attorney',
-        industries: [lawIndustry],
-      });
-      professionVersionsService.allLive.mockResolvedValue([
-        schoolTeacher,
-        trademarkAttorney,
-      ]);
-
-      const result = await controller.create({
-        keywords: '',
-        industries: [educationIndustry.id],
-        nations: [],
-      });
-
-      const expected = await new SearchPresenter(
-        {
-          keywords: '',
-          industries: [educationIndustry],
-          nations: [],
-        },
-        Nation.all(),
-        industries,
-        [schoolTeacher],
-        i18nService,
-      ).present();
-
-      expect(result).toEqual(expected);
-    });
-
-    it('should return filtered professions when searching by keyword', async () => {
-      const industry1 = industryFactory.build();
-      const industry2 = industryFactory.build();
-      const industry3 = industryFactory.build();
-      const industries = [industry1, industry2, industry3];
-      industriesService.all.mockResolvedValue(industries);
-
-      const schoolTeacher = professionFactory.build({
-        name: 'Secondary School Teacher',
-        industries: [industry1],
-      });
-      const trademarkAttorney = professionFactory.build({
-        name: 'Trademark Attorney',
-        industries: [industry2, industry3],
-      });
-      professionVersionsService.allLive.mockResolvedValue([
-        schoolTeacher,
-        trademarkAttorney,
-      ]);
-
-      const result = await controller.create({
-        keywords: 'Trademark',
-        industries: [],
-        nations: [],
-      });
-
-      const expected = await new SearchPresenter(
-        {
-          keywords: 'Trademark',
-          industries: [],
-          nations: [],
-        },
-        Nation.all(),
-        industries,
-        [trademarkAttorney],
-        i18nService,
-      ).present();
-
-      expect(result).toEqual(expected);
-    });
-
-    it('should return unfiltered professions when no search parameters are specified', async () => {
-      const industry1 = industryFactory.build();
-      const industry2 = industryFactory.build();
-      const industries = [industry1, industry2];
-      industriesService.all.mockResolvedValue(industries);
-
-      const schoolTeacher = professionFactory.build({
-        name: 'Secondary School Teacher',
-        industries: [industry1],
-      });
-      const trademarkAttorney = professionFactory.build({
-        name: 'Trademark Attorney',
-        industries: [industry2],
-      });
-
-      professionVersionsService.allLive.mockResolvedValue([
-        schoolTeacher,
-        trademarkAttorney,
-      ]);
-
-      const result = await controller.create({
-        keywords: '',
-        industries: [],
-        nations: [],
-      });
-
-      const expected = await new SearchPresenter(
-        {
-          keywords: '',
-          industries: [],
-          nations: [],
-        },
-        Nation.all(),
-        industries,
         [schoolTeacher, trademarkAttorney],
         i18nService,
       ).present();
 
       expect(result).toEqual(expected);
+
+      expect(professionVersionsService.searchLive).toHaveBeenCalledWith({
+        keywords: 'example search',
+        industries: [industry1, industry2],
+        nations: [Nation.find('GB-SCT')],
+      });
+    });
+
+    it('should call the search service with the provided filters', async () => {
+      const industry1 = industryFactory.build();
+      const industry2 = industryFactory.build();
+
+      await controller.create({
+        keywords: 'example search',
+        industries: [industry1.id, industry2.id],
+        nations: ['GB-SCT'],
+      });
+
+      expect(professionVersionsService.searchLive).toHaveBeenCalledWith({
+        keywords: 'example search',
+        industries: [industry1, industry2],
+        nations: [Nation.find('GB-SCT')],
+      });
     });
   });
 });

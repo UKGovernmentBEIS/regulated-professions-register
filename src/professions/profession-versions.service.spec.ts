@@ -18,9 +18,11 @@ import {
 } from './profession-version.entity';
 import professionFactory from '../testutils/factories/profession';
 import { Profession } from './profession.entity';
+import { Nation } from '../nations/nation';
 import legislationFactory from '../testutils/factories/legislation';
 import userFactory from '../testutils/factories/user';
 import qualificationFactory from '../testutils/factories/qualification';
+import industryFactory from '../testutils/factories/industry';
 
 describe('ProfessionVersionsService', () => {
   let service: ProfessionVersionsService;
@@ -763,6 +765,129 @@ describe('ProfessionVersionsService', () => {
         profession: { id: 'profession-uuid' },
         id: 'version-uuid',
       });
+    });
+  });
+
+  describe('searchLive', () => {
+    let versions = professionVersionFactory.buildList(5);
+    let queryBuilder = createMock<SelectQueryBuilder<ProfessionVersion>>({
+      leftJoinAndSelect: () => queryBuilder,
+      where: () => queryBuilder,
+      andWhere: () => queryBuilder,
+      getMany: async () => versions,
+    });
+
+    beforeEach(() => {
+      jest
+        .spyOn(repo, 'createQueryBuilder')
+        .mockImplementation(() => queryBuilder);
+    });
+
+    it('returns all live professions when no arguments are passed', async () => {
+      const filter = {
+        keywords: '',
+        nations: [],
+        industries: [],
+      };
+
+      const result = await service.searchLive(filter);
+
+      const expectedProfessions = versions.map((version) =>
+        Profession.withVersion(version.profession, version),
+      );
+
+      expect(result).toEqual(expectedProfessions);
+
+      expect(queryBuilder).toHaveJoined([
+        'professionVersion.profession',
+        'professionVersion.industries',
+        'profession.organisation',
+        'profession.additionalOrganisation',
+        'professionVersion.user',
+        'professionVersion.qualification',
+        'professionVersion.legislations',
+      ]);
+
+      expect(queryBuilder.where).toHaveBeenCalledWith(
+        'professionVersion.status = :status',
+        {
+          status: ProfessionVersionStatus.Live,
+        },
+      );
+    });
+
+    it('makes a search query to opensearch and filters by the resulting IDs when keywords are provided', async () => {
+      const filter = {
+        keywords: 'some-keyword',
+        nations: [],
+        industries: [],
+      };
+
+      (searchService.search as jest.Mock).mockReturnValue(['123', '456']);
+
+      const result = await service.searchLive(filter);
+
+      const expectedProfessions = versions.map((version) =>
+        Profession.withVersion(version.profession, version),
+      );
+
+      expect(result).toEqual(expectedProfessions);
+
+      expect(searchService.search).toHaveBeenCalledWith('some-keyword');
+
+      expect(queryBuilder.andWhere).toHaveBeenCalledWith({
+        id: In(['123', '456']),
+      });
+    });
+
+    it('filters by nations when provided', async () => {
+      const filter = {
+        keywords: '',
+        nations: [Nation.find('GB-ENG'), Nation.find('GB-NIR')],
+        industries: [],
+      };
+
+      const result = await service.searchLive(filter);
+
+      const expectedProfessions = versions.map((version) =>
+        Profession.withVersion(version.profession, version),
+      );
+
+      expect(result).toEqual(expectedProfessions);
+
+      expect(queryBuilder.andWhere).toHaveBeenCalledWith(
+        'professionVersion.occupationLocations @> :nations',
+        {
+          nations: ['GB-ENG', 'GB-NIR'],
+        },
+      );
+    });
+
+    it('filters by industries when provided', async () => {
+      const industries = [
+        industryFactory.build({ id: 'some-uuid' }),
+        industryFactory.build({ id: 'other-uuid' }),
+      ];
+      const filter = {
+        keywords: '',
+        nations: [],
+        industries: industries,
+      };
+
+      const result = await service.searchLive(filter);
+
+      const expectedProfessions = versions.map((version) =>
+        Profession.withVersion(version.profession, version),
+      );
+
+      expect(result).toEqual(expectedProfessions);
+
+      expect(queryBuilder.andWhere).toHaveBeenCalledWith(
+        'industries.id IN(:...industries)',
+        {
+          industries: ['some-uuid', 'other-uuid'],
+        },
+      );
     });
   });
 

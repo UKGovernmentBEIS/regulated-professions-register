@@ -146,6 +146,14 @@ describe('Archiving professions', () => {
       cy.visitAndCheckAccessibility('/professions/search');
 
       cy.get('body').should('not.contain', 'Registered Trademark Attorney');
+
+      cy.visit('/professions/search');
+
+      cy.get('input[name="keywords"]').type('Attorney');
+
+      cy.get('button').click();
+
+      cy.get('body').should('not.contain', 'Registered Trademark Attorney');
     });
   });
 });

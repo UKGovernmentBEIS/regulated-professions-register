@@ -3,7 +3,6 @@ import { I18nService } from 'nestjs-i18n';
 import { IndustriesService } from '../../industries/industries.service';
 import { Nation } from '../../nations/nation';
 import { FilterDto } from './dto/filter.dto';
-import { ProfessionsFilterHelper } from '../helpers/professions-filter.helper';
 import { IndexTemplate } from './interfaces/index-template.interface';
 import { SearchPresenter } from './search.presenter';
 import { BackLink } from '../../common/decorators/back-link.decorator';
@@ -36,17 +35,15 @@ export class SearchController {
     const allNations = Nation.all();
     const allIndustries = await this.industriesService.all();
 
-    const allProfessions = await this.professionVersionsService.allLive();
-
     const filterInput = createFilterInput({
       ...filter,
       allNations,
       allIndustries,
     });
 
-    const filteredProfessions = new ProfessionsFilterHelper(
-      allProfessions,
-    ).filter(filterInput);
+    const filteredProfessions = await this.professionVersionsService.searchLive(
+      filterInput,
+    );
 
     return new SearchPresenter(
       filterInput,

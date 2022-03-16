@@ -491,6 +491,14 @@ describe('Publishing professions', () => {
       );
 
       cy.visitAndCheckAccessibility('/professions/search');
+
+      cy.visit('/professions/search');
+
+      cy.get('input[name="keywords"]').type('Example');
+      cy.get('button').click();
+
+      cy.get('body').should('contain', 'Example Profession');
+
       cy.get('a').contains('Example Profession').click();
 
       cy.get('h1').should('contain', 'Example Profession');

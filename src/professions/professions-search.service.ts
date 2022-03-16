@@ -1,7 +1,10 @@
 import { OpensearchClient } from 'nestjs-opensearch';
 import { Injectable } from '@nestjs/common';
+import {
+  SearchResponse,
+  SearchHit,
+} from '@opensearch-project/opensearch/api/types';
 import { ProfessionVersion } from './profession-version.entity';
-
 @Injectable()
 export class ProfessionsSearchService {
   readonly indexName: string = `professions_${process.env['NODE_ENV']}`;
@@ -38,5 +41,23 @@ export class ProfessionsSearchService {
         },
       },
     });
+  }
+
+  public async search(query: string): Promise<string[]> {
+    const response = await this.client.search<SearchResponse>({
+      index: this.indexName,
+      body: {
+        query: {
+          multi_match: {
+            query: query,
+            fields: ['name'],
+          },
+        },
+      },
+    });
+
+    const hits = response.body.hits.hits;
+
+    return hits.map((hit: SearchHit) => hit._id);
   }
 }
