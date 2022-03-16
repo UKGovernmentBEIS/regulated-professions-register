@@ -5,11 +5,10 @@ import {
   Param,
   Post,
   Body,
-  Query,
   UseGuards,
   Req,
 } from '@nestjs/common';
-import { Response, Request } from 'express';
+import { Response } from 'express';
 import { AuthenticationGuard } from '../../common/authentication.guard';
 import { Validator } from '../../helpers/validator';
 import { ValidationFailedError } from '../../common/validation/validation-failed.error';
@@ -43,16 +42,13 @@ export class RegulatedActivitiesController {
 
   @Get('/:professionId/versions/:versionId/regulated-activities/edit')
   @Permissions(UserPermission.CreateProfession, UserPermission.EditProfession)
-  @BackLink((request: Request) =>
-    request.query.change === 'true'
-      ? '/admin/professions/:professionId/versions/:versionId/check-your-answers'
-      : '/admin/professions/:professionId/versions/:versionId/registration/edit',
+  @BackLink(
+    '/admin/professions/:professionId/versions/:versionId/check-your-answers',
   )
   async edit(
     @Res() res: Response,
     @Param('professionId') professionId: string,
     @Param('versionId') versionId: string,
-    @Query('change') change: string,
     @Req() req: RequestWithAppSession,
   ): Promise<void> {
     const profession = await this.professionsService.findWithVersions(
@@ -73,16 +69,13 @@ export class RegulatedActivitiesController {
       version.protectedTitles,
       version.regulationUrl,
       profession,
-      change === 'true',
     );
   }
 
   @Post('/:professionId/versions/:versionId/regulated-activities')
   @Permissions(UserPermission.CreateProfession, UserPermission.EditProfession)
-  @BackLink((request: Request) =>
-    request.body.change === 'true'
-      ? '/admin/professions/:professionId/versions/:versionId/check-your-answers'
-      : '/admin/professions/:professionId/versions/:versionId/registration/edit',
+  @BackLink(
+    '/admin/professions/:professionId/versions/:versionId/check-your-answers',
   )
   async update(
     @Res() res: Response,
@@ -118,7 +111,6 @@ export class RegulatedActivitiesController {
         submittedValues.protectedTitles,
         submittedValues.regulationUrl,
         profession,
-        submittedValues.change,
         errors,
       );
     }
@@ -136,14 +128,8 @@ export class RegulatedActivitiesController {
 
     await this.professionVersionsService.save(updatedVersion);
 
-    if (submittedValues.change) {
-      return res.redirect(
-        `/admin/professions/${professionId}/versions/${versionId}/check-your-answers`,
-      );
-    }
-
     return res.redirect(
-      `/admin/professions/${professionId}/versions/${versionId}/qualifications/edit`,
+      `/admin/professions/${professionId}/versions/${versionId}/check-your-answers`,
     );
   }
 
@@ -155,7 +141,6 @@ export class RegulatedActivitiesController {
     protectedTitles: string | null,
     regulationUrl: string | null,
     profession: Profession,
-    change: boolean,
     errors: object | undefined = undefined,
   ): Promise<void> {
     const regulationTypePresenter = new RegulationTypeRadioButtonsPresenter(
@@ -173,7 +158,6 @@ export class RegulatedActivitiesController {
       protectedTitles,
       regulationUrl,
       captionText: await ViewUtils.captionText(this.i18nService, profession),
-      change,
       errors,
     };
 

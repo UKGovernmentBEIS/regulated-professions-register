@@ -5,6 +5,5 @@ export interface QualificationsTemplate {
   ukRecognitionUrl: string;
   captionText: string;
   isUK: boolean;
-  change: boolean;
   errors: object | undefined;
 }

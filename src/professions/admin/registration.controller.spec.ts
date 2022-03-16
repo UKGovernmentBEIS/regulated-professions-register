@@ -66,13 +66,7 @@ describe(RegistrationController, () => {
           user: userFactory.build(),
         });
 
-        await controller.edit(
-          response,
-          'profession-id',
-          'version-id',
-          'false',
-          request,
-        );
+        await controller.edit(response, 'profession-id', 'version-id', request);
 
         expect(response.render).toHaveBeenCalledWith(
           'admin/professions/registration',
@@ -101,13 +95,7 @@ describe(RegistrationController, () => {
         professionsService.findWithVersions.mockResolvedValue(profession);
         professionVersionsService.findWithProfession.mockResolvedValue(version);
 
-        await controller.edit(
-          response,
-          'profession-id',
-          'version-id',
-          'false',
-          request,
-        );
+        await controller.edit(response, 'profession-id', 'version-id', request);
 
         expect(response.render).toHaveBeenCalledWith(
           'admin/professions/registration',
@@ -129,13 +117,7 @@ describe(RegistrationController, () => {
         user: userFactory.build(),
       });
 
-      await controller.edit(
-        response,
-        'profession-id',
-        'version-id',
-        'false',
-        request,
-      );
+      await controller.edit(response, 'profession-id', 'version-id', request);
 
       expect(checkCanViewProfession).toHaveBeenCalledWith(request, profession);
     });
@@ -181,7 +163,7 @@ describe(RegistrationController, () => {
         );
 
         expect(response.redirect).toHaveBeenCalledWith(
-          '/admin/professions/profession-id/versions/version-id/regulated-activities/edit',
+          '/admin/professions/profession-id/versions/version-id/check-your-answers',
         );
       });
     });
@@ -225,7 +207,7 @@ describe(RegistrationController, () => {
         );
 
         expect(response.redirect).toHaveBeenCalledWith(
-          '/admin/professions/profession-id/versions/version-id/regulated-activities/edit',
+          '/admin/professions/profession-id/versions/version-id/check-your-answers',
         );
       });
     });
@@ -260,84 +242,6 @@ describe(RegistrationController, () => {
             },
           }),
         );
-      });
-    });
-
-    describe('the "change" query param', () => {
-      describe('when set to true', () => {
-        it('redirects to check your answers on submit', async () => {
-          const profession = professionFactory.build({
-            id: 'profession-id',
-          });
-          const version = professionVersionFactory.build({
-            id: 'version-id',
-            profession: profession,
-          });
-
-          professionsService.findWithVersions.mockResolvedValue(profession);
-          professionVersionsService.findWithProfession.mockResolvedValue(
-            version,
-          );
-
-          const registrationDtoWithChangeParam = {
-            registrationUrl: '',
-            change: true,
-          };
-
-          const request = createDefaultMockRequest({
-            user: userFactory.build(),
-          });
-
-          await controller.update(
-            response,
-            'profession-id',
-            'version-id',
-            registrationDtoWithChangeParam,
-            request,
-          );
-
-          expect(response.redirect).toHaveBeenCalledWith(
-            '/admin/professions/profession-id/versions/version-id/check-your-answers',
-          );
-        });
-      });
-
-      describe('when false or missing', () => {
-        it('continues to the next step in the journey', async () => {
-          const profession = professionFactory.build({
-            id: 'profession-id',
-          });
-          const version = professionVersionFactory.build({
-            id: 'version-id',
-            profession: profession,
-          });
-
-          professionsService.findWithVersions.mockResolvedValue(profession);
-          professionVersionsService.findWithProfession.mockResolvedValue(
-            version,
-          );
-
-          const registrationDtoWithFalseChangeParam = {
-            registrationUrl: '',
-            change: false,
-          };
-
-          const request = createDefaultMockRequest({
-            user: userFactory.build(),
-          });
-
-          await controller.update(
-            response,
-            'profession-id',
-            'version-id',
-            registrationDtoWithFalseChangeParam,
-            request,
-          );
-
-          expect(response.redirect).toHaveBeenCalledWith(
-            '/admin/professions/profession-id/versions/version-id/regulated-activities/edit',
-          );
-        });
       });
     });
 

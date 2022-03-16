@@ -1,6 +1,5 @@
 import { Transform } from 'class-transformer';
 import { IsUrl, ValidateIf } from 'class-validator';
-import { parseBoolean } from '../../../helpers/parse-boolean.helper';
 import {
   preprocessUrl,
   urlOptions,
@@ -15,7 +14,4 @@ export class RegistrationDto {
   @Transform(({ value }) => preprocessUrl(value))
   @ValidateIf((e) => e.registrationUrl)
   registrationUrl: string;
-
-  @Transform(({ value }) => parseBoolean(value))
-  change: boolean;
 }

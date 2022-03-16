@@ -133,14 +133,8 @@ export class TopLevelInformationController {
 
     await this.professionsService.save(updatedProfession);
 
-    if (submittedValues.change) {
-      return res.redirect(
-        `/admin/professions/${professionId}/versions/${versionId}/check-your-answers`,
-      );
-    }
-
     return res.redirect(
-      `/admin/professions/${professionId}/versions/${versionId}/scope/edit`,
+      `/admin/professions/${professionId}/versions/${versionId}/check-your-answers`,
     );
   }
 

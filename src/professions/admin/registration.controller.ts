@@ -4,13 +4,12 @@ import {
   Get,
   Param,
   Post,
-  Query,
   Req,
   Res,
   UseGuards,
 } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
-import { Response, Request } from 'express';
+import { Response } from 'express';
 
 import { AuthenticationGuard } from '../../common/authentication.guard';
 
@@ -48,16 +47,13 @@ export class RegistrationController {
 
   @Get('/:professionId/versions/:versionId/registration/edit')
   @Permissions(UserPermission.CreateProfession, UserPermission.EditProfession)
-  @BackLink((request: Request) =>
-    request.query.change === 'true'
-      ? '/admin/professions/:professionId/versions/:versionId/check-your-answers'
-      : '/admin/professions/:professionId/versions/:versionId/scope/edit',
+  @BackLink(
+    '/admin/professions/:professionId/versions/:versionId/check-your-answers',
   )
   async edit(
     @Res() res: Response,
     @Param('professionId') professionId: string,
     @Param('versionId') versionId: string,
-    @Query('change') change: string,
     @Req() req: RequestWithAppSession,
   ): Promise<void> {
     const profession = await this.professionsService.findWithVersions(
@@ -70,15 +66,13 @@ export class RegistrationController {
       versionId,
     );
 
-    return this.renderForm(res, version, profession, change === 'true');
+    return this.renderForm(res, version, profession);
   }
 
   @Post('/:professionId/versions/:versionId/registration')
   @Permissions(UserPermission.CreateProfession, UserPermission.EditProfession)
-  @BackLink((request: Request) =>
-    request.body.change === 'true'
-      ? '/admin/professions/:professionId/versions/:versionId/check-your-answers'
-      : '/admin/professions/:professionId/versions/:versionId/scope/edit',
+  @BackLink(
+    '/admin/professions/:professionId/versions/:versionId/check-your-answers',
   )
   async update(
     @Res() res: Response,
@@ -104,13 +98,7 @@ export class RegistrationController {
 
     if (!validator.valid()) {
       const errors = new ValidationFailedError(validator.errors).fullMessages();
-      return this.renderForm(
-        res,
-        submittedValues,
-        profession,
-        submittedValues.change,
-        errors,
-      );
+      return this.renderForm(res, submittedValues, profession, errors);
     }
 
     const updatedVersion: ProfessionVersion = {
@@ -123,14 +111,8 @@ export class RegistrationController {
 
     await this.professionVersionsService.save(updatedVersion);
 
-    if (submittedValues.change) {
-      return res.redirect(
-        `/admin/professions/${version.profession.id}/versions/${versionId}/check-your-answers`,
-      );
-    }
-
     return res.redirect(
-      `/admin/professions/${version.profession.id}/versions/${versionId}/regulated-activities/edit`,
+      `/admin/professions/${version.profession.id}/versions/${versionId}/check-your-answers`,
     );
   }
 
@@ -138,13 +120,11 @@ export class RegistrationController {
     res: Response,
     submittedValues: ProfessionVersion | RegistrationDto,
     profession: Profession,
-    change: boolean,
     errors: object | undefined = undefined,
   ): Promise<void> {
     const templateArgs: RegistrationTemplate = {
       ...submittedValues,
       captionText: await ViewUtils.captionText(this.i18nService, profession),
-      change,
       errors,
     };
 

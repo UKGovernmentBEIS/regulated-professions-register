@@ -6,6 +6,5 @@ export interface ScopeTemplate {
   industriesCheckboxItems: CheckboxItems[];
   nationsCheckboxArgs: CheckboxArgs;
   captionText: string;
-  change: boolean;
   errors: object | undefined;
 }
