@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Index profession versions in Opensearch when publishing
 - Delete previously indexed profession versions from Opensearch when publishing
 - Delete profession versions from Opensearch when archiving
+- Search profession titles using Opensearch
 
 ## [release-009] - 2022-03-11
 
