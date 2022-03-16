@@ -19,10 +19,12 @@ import { getActingUser } from '../../users/helpers/get-acting-user.helper';
 import { createDefaultMockRequest } from '../../testutils/factories/create-default-mock-request';
 import organisationFactory from '../../testutils/factories/organisation';
 import * as getOrganisationsFromProfessionModule from '../helpers/get-organisations-from-profession.helper';
+import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
 
 jest.mock('../../organisations/organisation.entity');
 jest.mock('../presenters/profession.presenter');
 jest.mock('../../users/helpers/get-acting-user.helper');
+jest.mock('../../users/helpers/check-can-view-profession');
 
 describe('ProfessionVersionsController', () => {
   let controller: ProfessionVersionsController;
@@ -59,7 +61,7 @@ describe('ProfessionVersionsController', () => {
       const user = userFactory.build();
 
       const res = createMock<Response>();
-      const req = createDefaultMockRequest();
+      const req = createDefaultMockRequest({ user: userFactory.build() });
       (getActingUser as jest.Mock).mockReturnValue(user);
 
       professionVersionsService.findLatestForProfessionId.mockResolvedValue(
@@ -80,6 +82,27 @@ describe('ProfessionVersionsController', () => {
         `/admin/professions/${newVersion.profession.id}/versions/${newVersion.id}/check-your-answers?edit=true`,
       );
     });
+
+    it('should check the user has permission to create a new version of the Profession', async () => {
+      const profession = professionFactory.build();
+
+      const version = professionVersionFactory.build({
+        profession: profession,
+        occupationLocations: ['GB-ENG'],
+        industries: [industryFactory.build({ name: 'industries.example' })],
+      });
+
+      professionVersionsService.findLatestForProfessionId.mockResolvedValue(
+        version,
+      );
+
+      const res = createMock<Response>();
+      const req = createDefaultMockRequest({ user: userFactory.build() });
+
+      await controller.create(res, req, 'some-uuid');
+
+      expect(checkCanViewProfession).toHaveBeenCalledWith(req, profession);
+    });
   });
 
   describe('show', () => {
@@ -88,9 +111,37 @@ describe('ProfessionVersionsController', () => {
         undefined,
       );
 
+      const request = createDefaultMockRequest({ user: userFactory.build() });
+
       await expect(async () => {
-        await controller.show('profession-id', 'version-id');
+        await controller.show('profession-id', 'version-id', request);
       }).rejects.toThrowError(NotFoundException);
+    });
+
+    it('should check the user has permission to view the profession', async () => {
+      const profession = professionFactory.build();
+
+      const version = professionVersionFactory.build({
+        profession: profession,
+        occupationLocations: ['GB-ENG'],
+        industries: [industryFactory.build({ name: 'industries.example' })],
+      });
+
+      professionVersionsService.findByIdWithProfession.mockResolvedValue(
+        version,
+      );
+      professionVersionsService.hasLiveVersion.mockResolvedValue(true);
+
+      const request = createDefaultMockRequest({
+        user: userFactory.build(),
+      });
+
+      await controller.show('profession-id', 'version-id', request);
+
+      expect(checkCanViewProfession).toHaveBeenCalledWith(
+        request,
+        Profession.withVersion(profession, version),
+      );
     });
 
     describe('when the Profession is complete', () => {
@@ -125,7 +176,15 @@ describe('ProfessionVersionsController', () => {
             'getOrganisationsFromProfession',
           );
 
-          const result = await controller.show('profession-id', 'version-id');
+          const request = createDefaultMockRequest({
+            user: userFactory.build(),
+          });
+
+          const result = await controller.show(
+            'profession-id',
+            'version-id',
+            request,
+          );
 
           expect(result).toEqual({
             profession: professionWithVersion,
@@ -185,7 +244,15 @@ describe('ProfessionVersionsController', () => {
             'getOrganisationsFromProfession',
           );
 
-          const result = await controller.show('profession-id', 'version-id');
+          const request = createDefaultMockRequest({
+            user: userFactory.build(),
+          });
+
+          const result = await controller.show(
+            'profession-id',
+            'version-id',
+            request,
+          );
 
           expect(result).toEqual({
             profession: professionWithVersion,
@@ -243,7 +310,13 @@ describe('ProfessionVersionsController', () => {
           (organisation) => organisation,
         );
 
-        const result = await controller.show('profession-id', 'version-id');
+        const request = createDefaultMockRequest({ user: userFactory.build() });
+
+        const result = await controller.show(
+          'profession-id',
+          'version-id',
+          request,
+        );
 
         expect(result).toEqual({
           profession: professionWithVersion,
@@ -293,7 +366,13 @@ describe('ProfessionVersionsController', () => {
           (organisation) => organisation,
         );
 
-        const result = await controller.show('profession-id', 'version-id');
+        const request = createDefaultMockRequest({ user: userFactory.build() });
+
+        const result = await controller.show(
+          'profession-id',
+          'version-id',
+          request,
+        );
 
         expect(result).toEqual({
           profession: professionWithVersion,
