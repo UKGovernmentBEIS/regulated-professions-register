@@ -5,6 +5,7 @@ import {
   Param,
   Post,
   Query,
+  Req,
   Res,
   UseGuards,
 } from '@nestjs/common';
@@ -30,6 +31,8 @@ import { ProfessionVersion } from '../profession-version.entity';
 import { allNations, isUK } from '../../helpers/nations.helper';
 import { ScopeDto } from './dto/scope.dto';
 import { Profession } from '../profession.entity';
+import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
+import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
@@ -53,11 +56,14 @@ export class ScopeController {
     @Param('professionId') professionId: string,
     @Param('versionId') versionId: string,
     @Query('change') change: string,
+    @Req() req: RequestWithAppSession,
     errors: object | undefined = undefined,
   ): Promise<void> {
     const profession = await this.professionsService.findWithVersions(
       professionId,
     );
+
+    checkCanViewProfession(req, profession);
 
     const version = await this.professionVersionsService.findWithProfession(
       versionId,
@@ -90,6 +96,7 @@ export class ScopeController {
     @Res() res: Response,
     @Param('professionId') professionId: string,
     @Param('versionId') versionId: string,
+    @Req() req: RequestWithAppSession,
   ): Promise<void> {
     const validator = await Validator.validate(ScopeDto, scopeDto);
     const submittedValues = validator.obj;
@@ -99,6 +106,8 @@ export class ScopeController {
     const profession = await this.professionsService.findWithVersions(
       professionId,
     );
+
+    checkCanViewProfession(req, profession);
 
     const version = await this.professionVersionsService.findWithProfession(
       versionId,
