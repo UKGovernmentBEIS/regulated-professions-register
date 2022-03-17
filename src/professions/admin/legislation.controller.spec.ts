@@ -3,14 +3,19 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { Response } from 'express';
 import { I18nService } from 'nestjs-i18n';
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
+import { createDefaultMockRequest } from '../../testutils/factories/create-default-mock-request';
 import legislationFactory from '../../testutils/factories/legislation';
 import professionFactory from '../../testutils/factories/profession';
 import professionVersionFactory from '../../testutils/factories/profession-version';
+import userFactory from '../../testutils/factories/user';
 import { translationOf } from '../../testutils/translation-of';
+import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
 import { ProfessionVersionsService } from '../profession-versions.service';
 import { ProfessionsService } from '../professions.service';
 import LegislationDto from './dto/legislation.dto';
 import { LegislationController } from './legislation.controller';
+
+jest.mock('../../users/helpers/check-can-view-profession');
 
 describe(LegislationController, () => {
   let controller: LegislationController;
@@ -60,7 +65,17 @@ describe(LegislationController, () => {
         professionsService.findWithVersions.mockResolvedValue(profession);
         professionVersionsService.findWithProfession.mockResolvedValue(version);
 
-        await controller.edit(response, 'profession-id', 'version-id', 'false');
+        const request = createDefaultMockRequest({
+          user: userFactory.build(),
+        });
+
+        await controller.edit(
+          response,
+          'profession-id',
+          'version-id',
+          'false',
+          request,
+        );
 
         expect(response.render).toHaveBeenCalledWith(
           'admin/professions/legislation',
@@ -68,6 +83,31 @@ describe(LegislationController, () => {
             legislation: legislation,
             captionText: translationOf('professions.form.captions.edit'),
           }),
+        );
+      });
+
+      it('checks the user has permission to view the Profession', async () => {
+        const profession = professionFactory.build({
+          id: 'profession-id',
+        });
+
+        professionsService.findWithVersions.mockResolvedValue(profession);
+
+        const request = createDefaultMockRequest({
+          user: userFactory.build(),
+        });
+
+        await controller.edit(
+          response,
+          'profession-id',
+          'version-id',
+          'false',
+          request,
+        );
+
+        expect(checkCanViewProfession).toHaveBeenCalledWith(
+          request,
+          profession,
         );
       });
     });
@@ -96,7 +136,17 @@ describe(LegislationController, () => {
         professionsService.findWithVersions.mockResolvedValue(profession);
         professionVersionsService.findWithProfession.mockResolvedValue(version);
 
-        await controller.edit(response, 'profession-id', 'version-id', 'false');
+        const request = createDefaultMockRequest({
+          user: userFactory.build(),
+        });
+
+        await controller.edit(
+          response,
+          'profession-id',
+          'version-id',
+          'false',
+          request,
+        );
 
         expect(response.render).toHaveBeenCalledWith(
           'admin/professions/legislation',
@@ -128,7 +178,17 @@ describe(LegislationController, () => {
         professionsService.findWithVersions.mockResolvedValue(profession);
         professionVersionsService.findWithProfession.mockResolvedValue(version);
 
-        await controller.update(response, 'profession-id', 'version-id', dto);
+        const request = createDefaultMockRequest({
+          user: userFactory.build(),
+        });
+
+        await controller.update(
+          response,
+          'profession-id',
+          'version-id',
+          dto,
+          request,
+        );
 
         expect(professionVersionsService.save).toHaveBeenCalledWith(
           expect.objectContaining({
@@ -167,7 +227,17 @@ describe(LegislationController, () => {
         professionsService.findWithVersions.mockResolvedValue(profession);
         professionVersionsService.findWithProfession.mockResolvedValue(version);
 
-        await controller.update(response, 'profession-id', 'version-id', dto);
+        const request = createDefaultMockRequest({
+          user: userFactory.build(),
+        });
+
+        await controller.update(
+          response,
+          'profession-id',
+          'version-id',
+          dto,
+          request,
+        );
 
         expect(professionVersionsService.save).toHaveBeenCalledWith(
           expect.objectContaining({
@@ -210,7 +280,17 @@ describe(LegislationController, () => {
         professionsService.findWithVersions.mockResolvedValue(profession);
         professionVersionsService.findWithProfession.mockResolvedValue(version);
 
-        await controller.update(response, 'profession-id', 'version-id', dto);
+        const request = createDefaultMockRequest({
+          user: userFactory.build(),
+        });
+
+        await controller.update(
+          response,
+          'profession-id',
+          'version-id',
+          dto,
+          request,
+        );
 
         expect(professionVersionsService.save).toHaveBeenCalledWith(
           expect.objectContaining({
@@ -254,7 +334,17 @@ describe(LegislationController, () => {
             version,
           );
 
-          await controller.update(response, 'profession-id', 'version-id', dto);
+          const request = createDefaultMockRequest({
+            user: userFactory.build(),
+          });
+
+          await controller.update(
+            response,
+            'profession-id',
+            'version-id',
+            dto,
+            request,
+          );
 
           expect(professionVersionsService.save).not.toHaveBeenCalled();
 
@@ -290,7 +380,17 @@ describe(LegislationController, () => {
             version,
           );
 
-          await controller.update(response, 'profession-id', 'version-id', dto);
+          const request = createDefaultMockRequest({
+            user: userFactory.build(),
+          });
+
+          await controller.update(
+            response,
+            'profession-id',
+            'version-id',
+            dto,
+            request,
+          );
 
           expect(professionVersionsService.save).not.toHaveBeenCalled();
 
@@ -306,6 +406,34 @@ describe(LegislationController, () => {
           );
         });
       });
+    });
+
+    it('checks the user has permission to update the Profession', async () => {
+      const profession = professionFactory.build({
+        id: 'profession-id',
+      });
+
+      professionsService.findWithVersions.mockResolvedValue(profession);
+
+      const request = createDefaultMockRequest({
+        user: userFactory.build(),
+      });
+
+      const dto: LegislationDto = {
+        link: 'www.legal-legislation.com',
+        nationalLegislation: 'Legal Services Act 2008',
+        change: false,
+      };
+
+      await controller.update(
+        response,
+        'profession-id',
+        'version-id',
+        dto,
+        request,
+      );
+
+      expect(checkCanViewProfession).toHaveBeenCalledWith(request, profession);
     });
   });
 

@@ -5,6 +5,7 @@ import {
   Param,
   Post,
   Query,
+  Req,
   Res,
   UseGuards,
 } from '@nestjs/common';
@@ -23,6 +24,8 @@ import { BackLink } from '../../common/decorators/back-link.decorator';
 import { ProfessionVersionsService } from '../profession-versions.service';
 import { I18nService } from 'nestjs-i18n';
 import { Profession } from '../profession.entity';
+import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
+import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
@@ -45,10 +48,13 @@ export class LegislationController {
     @Param('professionId') professionId: string,
     @Param('versionId') versionId: string,
     @Query('change') change: string,
+    @Req() request: RequestWithAppSession,
   ): Promise<void> {
     const profession = await this.professionsService.findWithVersions(
       professionId,
     );
+
+    checkCanViewProfession(request, profession);
 
     const version = await this.professionVersionsService.findWithProfession(
       versionId,
@@ -75,13 +81,16 @@ export class LegislationController {
     @Param('professionId') professionId: string,
     @Param('versionId') versionId: string,
     @Body() legislationDto,
+    @Req() request: RequestWithAppSession,
   ): Promise<void> {
-    const validator = await Validator.validate(LegislationDto, legislationDto);
-    const submittedValues = validator.obj;
-
     const profession = await this.professionsService.findWithVersions(
       professionId,
     );
+
+    checkCanViewProfession(request, profession);
+
+    const validator = await Validator.validate(LegislationDto, legislationDto);
+    const submittedValues = validator.obj;
 
     const version = await this.professionVersionsService.findWithProfession(
       versionId,
