@@ -11,6 +11,25 @@ async function bootstrap() {
   const command = process.argv[2];
 
   switch (command) {
+    case 'opensearch:reseed:professions':
+      console.log('Reseeding professions...');
+
+      const professionVersionsService = application.get(
+        ProfessionVersionsService,
+      );
+      const professionsSearchService = application.get(
+        ProfessionsSearchService,
+      );
+
+      await professionsSearchService.deleteAll();
+
+      const professions = await professionVersionsService.allLive();
+
+      for (const profession of professions) {
+        professionsSearchService.index(profession);
+      }
+
+      break;
     default:
       console.log('Command not found');
       process.exit(1);
