@@ -17,6 +17,7 @@ export class ProfessionsSearchService {
       index: this.indexName,
       body: {
         name: professionVersion.profession.name,
+        keywords: professionVersion.keywords,
       },
     });
   }
@@ -50,7 +51,7 @@ export class ProfessionsSearchService {
         query: {
           multi_match: {
             query: query,
-            fields: ['name'],
+            fields: ['name^4', 'keywords'],
           },
         },
       },

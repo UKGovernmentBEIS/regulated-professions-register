@@ -42,6 +42,7 @@ describe('ProfessionVersionsService', () => {
         index: service.indexName,
         body: {
           name: professionVersion.profession.name,
+          keywords: professionVersion.keywords,
         },
       });
     });
@@ -111,7 +112,7 @@ describe('ProfessionVersionsService', () => {
           query: {
             multi_match: {
               query: 'something',
-              fields: ['name'],
+              fields: ['name^4', 'keywords'],
             },
           },
         },
