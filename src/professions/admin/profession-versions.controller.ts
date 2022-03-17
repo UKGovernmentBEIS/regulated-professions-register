@@ -26,6 +26,7 @@ import { getActingUser } from '../../users/helpers/get-acting-user.helper';
 import { getOrganisationsFromProfession } from '../helpers/get-organisations-from-profession.helper';
 import { ShowTemplate } from './interfaces/show-template.interface';
 import { isUK } from '../../helpers/nations.helper';
+import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
 
 @UseGuards(AuthenticationGuard)
 @Controller('/admin/professions')
@@ -46,6 +47,7 @@ export class ProfessionVersionsController {
   async show(
     @Param('professionId') professionId: string,
     @Param('versionId') versionId: string,
+    @Req() req: RequestWithAppSession,
   ): Promise<ShowTemplate> {
     const version = await this.professionVersionsService.findByIdWithProfession(
       professionId,
@@ -59,6 +61,9 @@ export class ProfessionVersionsController {
     }
 
     const profession = Profession.withVersion(version.profession, version);
+
+    checkCanViewProfession(req, profession);
+
     const presenter = new ProfessionPresenter(profession, this.i18nService);
 
     const hasLiveVersion = await this.professionVersionsService.hasLiveVersion(
@@ -113,6 +118,8 @@ export class ProfessionVersionsController {
       await this.professionVersionsService.findLatestForProfessionId(
         professionId,
       );
+
+    checkCanViewProfession(req, latestVersion.profession);
 
     const version = await this.professionVersionsService.create(
       latestVersion,

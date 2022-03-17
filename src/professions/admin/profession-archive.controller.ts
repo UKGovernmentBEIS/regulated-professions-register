@@ -14,6 +14,7 @@ import { flashMessage } from '../../common/flash-message';
 import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
 import { Permissions } from '../../common/permissions.decorator';
 import { escape } from '../../helpers/escape.helper';
+import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
 import { getActingUser } from '../../users/helpers/get-acting-user.helper';
 import { UserPermission } from '../../users/user-permission';
 import { ProfessionVersionsService } from '../profession-versions.service';
@@ -33,6 +34,7 @@ export class ProfessionArchiveController {
   async new(
     @Param('professionId') professionId: string,
     @Param('versionId') versionId: string,
+    @Req() req: RequestWithAppSession,
   ) {
     const version = await this.professionVersionsService.findByIdWithProfession(
       professionId,
@@ -40,6 +42,8 @@ export class ProfessionArchiveController {
     );
 
     const profession = Profession.withVersion(version.profession, version);
+
+    checkCanViewProfession(req, profession);
 
     return { profession };
   }
@@ -56,6 +60,8 @@ export class ProfessionArchiveController {
       professionId,
       versionId,
     );
+
+    checkCanViewProfession(req, version.profession);
 
     const versionToBeArchived = await this.professionVersionsService.create(
       version,

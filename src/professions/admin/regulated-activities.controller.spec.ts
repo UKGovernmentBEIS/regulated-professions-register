@@ -14,6 +14,11 @@ import { RegulatedActivitiesDto } from './dto/regulated-activities.dto';
 import { RegulatedActivitiesTemplate } from './interfaces/regulated-activities.template';
 import { RegulatedActivitiesController } from './regulated-activities.controller';
 import { RegulationTypeRadioButtonsPresenter } from './presenters/regulation-type-radio-buttons.presenter';
+import userFactory from '../../testutils/factories/user';
+import { createDefaultMockRequest } from '../../testutils/factories/create-default-mock-request';
+import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
+
+jest.mock('../../users/helpers/check-can-view-profession');
 
 describe(RegulatedActivitiesController, () => {
   let controller: RegulatedActivitiesController;
@@ -78,7 +83,17 @@ describe(RegulatedActivitiesController, () => {
         .spyOn(RegulationTypeRadioButtonsPresenter.prototype, 'radioButtonArgs')
         .mockResolvedValue(mockRegulationTypeRadioButtonArgs);
 
-      await controller.edit(response, 'profession-id', 'version-id', 'false');
+      const request = createDefaultMockRequest({
+        user: userFactory.build(),
+      });
+
+      await controller.edit(
+        response,
+        'profession-id',
+        'version-id',
+        'false',
+        request,
+      );
 
       expect(response.render).toHaveBeenCalledWith(
         'admin/professions/regulated-activities',
@@ -91,6 +106,28 @@ describe(RegulatedActivitiesController, () => {
       );
 
       expect(regulationTypeRadioButtonArgsSpy).toBeCalled();
+    });
+
+    it('should check the user has permission to view the page', async () => {
+      const profession = professionFactory.build({
+        id: 'profession-id',
+      });
+
+      professionsService.findWithVersions.mockResolvedValue(profession);
+
+      const request = createDefaultMockRequest({
+        user: userFactory.build(),
+      });
+
+      await controller.edit(
+        response,
+        'profession-id',
+        'version-id',
+        'false',
+        request,
+      );
+
+      expect(checkCanViewProfession).toHaveBeenCalledWith(request, profession);
     });
   });
 
@@ -122,11 +159,16 @@ describe(RegulatedActivitiesController, () => {
             change: false,
           };
 
+          const request = createDefaultMockRequest({
+            user: userFactory.build(),
+          });
+
           await controller.update(
             response,
             'profession-id',
             'version-id',
             regulatedActivitiesDto,
+            request,
           );
 
           expect(professionVersionsService.save).toHaveBeenCalledWith(
@@ -172,11 +214,16 @@ describe(RegulatedActivitiesController, () => {
             change: false,
           };
 
+          const request = createDefaultMockRequest({
+            user: userFactory.build(),
+          });
+
           await controller.update(
             response,
             'profession-id',
             'version-id',
             regulatedActivitiesDto,
+            request,
           );
 
           expect(professionVersionsService.save).toHaveBeenCalledWith(
@@ -223,11 +270,16 @@ describe(RegulatedActivitiesController, () => {
             change: true,
           };
 
+          const request = createDefaultMockRequest({
+            user: userFactory.build(),
+          });
+
           await controller.update(
             response,
             'profession-id',
             'version-id',
             regulatedActivitiesDto,
+            request,
           );
 
           expect(professionVersionsService.save).toHaveBeenCalledWith(
@@ -273,11 +325,14 @@ describe(RegulatedActivitiesController, () => {
           change: false,
         };
 
+        const request = createDefaultMockRequest({ user: userFactory.build() });
+
         await controller.update(
           response,
           'profession-id',
           'version-id',
           regulatedActivitiesDto,
+          request,
         );
 
         expect(professionVersionsService.save).not.toHaveBeenCalled();
@@ -299,6 +354,35 @@ describe(RegulatedActivitiesController, () => {
           }),
         );
       });
+    });
+
+    it('checks the user has permissions to update the profession', async () => {
+      const profession = professionFactory.build({ id: 'profession-id' });
+
+      professionsService.findWithVersions.mockResolvedValue(profession);
+
+      const regulatedActivitiesDto: RegulatedActivitiesDto = {
+        regulationSummary: 'Example regulation summary',
+        regulationType: RegulationType.Accreditation,
+        reservedActivities: 'Example reserved activities',
+        protectedTitles: 'Example protected titles',
+        regulationUrl: 'https://example.com/regulation',
+        change: false,
+      };
+
+      const request = createDefaultMockRequest({
+        user: userFactory.build(),
+      });
+
+      await controller.update(
+        response,
+        'profession-id',
+        'version-id',
+        regulatedActivitiesDto,
+        request,
+      );
+
+      expect(checkCanViewProfession).toHaveBeenCalledWith(request, profession);
     });
   });
 

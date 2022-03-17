@@ -7,6 +7,7 @@ import {
   Body,
   Query,
   UseGuards,
+  Req,
 } from '@nestjs/common';
 import { Response, Request } from 'express';
 import { AuthenticationGuard } from '../../common/authentication.guard';
@@ -28,6 +29,8 @@ import {
 import { Profession } from '../profession.entity';
 import { I18nService } from 'nestjs-i18n';
 import { RegulationTypeRadioButtonsPresenter } from './presenters/regulation-type-radio-buttons.presenter';
+import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
+import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
@@ -50,10 +53,13 @@ export class RegulatedActivitiesController {
     @Param('professionId') professionId: string,
     @Param('versionId') versionId: string,
     @Query('change') change: string,
+    @Req() req: RequestWithAppSession,
   ): Promise<void> {
     const profession = await this.professionsService.findWithVersions(
       professionId,
     );
+
+    checkCanViewProfession(req, profession);
 
     const version = await this.professionVersionsService.findWithProfession(
       versionId,
@@ -83,16 +89,19 @@ export class RegulatedActivitiesController {
     @Param('professionId') professionId: string,
     @Param('versionId') versionId: string,
     @Body() regulatedActivitiesDto,
+    @Req() req: RequestWithAppSession,
   ): Promise<void> {
+    const profession = await this.professionsService.findWithVersions(
+      professionId,
+    );
+
+    checkCanViewProfession(req, profession);
+
     const validator = await Validator.validate(
       RegulatedActivitiesDto,
       regulatedActivitiesDto,
     );
     const submittedValues = validator.obj;
-
-    const profession = await this.professionsService.findWithVersions(
-      professionId,
-    );
 
     const version = await this.professionVersionsService.findWithProfession(
       versionId,

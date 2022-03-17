@@ -1,5 +1,5 @@
 import { Controller, Param, Post, Req, Res, UseGuards } from '@nestjs/common';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { AuthenticationGuard } from '../../common/authentication.guard';
 import { ProfessionsService } from '../professions.service';
 import { Permissions } from '../../common/permissions.decorator';
@@ -8,6 +8,8 @@ import { ProfessionVersionsService } from '../profession-versions.service';
 import { I18nService } from 'nestjs-i18n';
 import { flashMessage } from '../../common/flash-message';
 import { escape } from '../../helpers/escape.helper';
+import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
+import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
 export class ConfirmationController {
@@ -21,13 +23,15 @@ export class ConfirmationController {
   @Permissions(UserPermission.CreateProfession, UserPermission.EditProfession)
   async create(
     @Res() res: Response,
-    @Req() req: Request,
+    @Req() req: RequestWithAppSession,
     @Param('professionId') professionId: string,
     @Param('versionId') versionId: string,
   ): Promise<void> {
     const profession = await this.professionsService.findWithVersions(
       professionId,
     );
+
+    checkCanViewProfession(req, profession);
 
     const version = await this.professionVersionsService.findWithProfession(
       versionId,

@@ -5,6 +5,7 @@ import {
   Param,
   Post,
   Query,
+  Req,
   Res,
   UseGuards,
 } from '@nestjs/common';
@@ -26,6 +27,8 @@ import { RegulatedAuthoritiesSelectPresenter } from './regulated-authorities-sel
 import { Organisation } from '../../organisations/organisation.entity';
 import { I18nService } from 'nestjs-i18n';
 import { OrganisationVersionsService } from '../../organisations/organisation-versions.service';
+import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
+import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
@@ -48,11 +51,14 @@ export class TopLevelInformationController {
     @Res() res: Response,
     @Param('professionId') professionId: string,
     @Query('change') change: string,
+    @Req() req: RequestWithAppSession,
     errors: object | undefined = undefined,
   ): Promise<void> {
     const profession = await this.professionsService.findWithVersions(
       professionId,
     );
+
+    checkCanViewProfession(req, profession);
 
     return this.renderForm(
       res,
@@ -77,11 +83,19 @@ export class TopLevelInformationController {
     @Res() res: Response,
     @Param('professionId') professionId: string,
     @Param('versionId') versionId: string,
+    @Req() req: RequestWithAppSession,
   ): Promise<void> {
+    const profession = await this.professionsService.findWithVersions(
+      professionId,
+    );
+
+    checkCanViewProfession(req, profession);
+
     const validator = await Validator.validate(
       TopLevelDetailsDto,
       topLevelDetailsDto,
     );
+
     const submittedValues = validator.obj;
 
     const selectedOrganisation = submittedValues.regulatoryBody
@@ -94,10 +108,6 @@ export class TopLevelInformationController {
             submittedValues.additionalRegulatoryBody,
           )
         : null;
-
-    const profession = await this.professionsService.findWithVersions(
-      professionId,
-    );
 
     if (!validator.valid()) {
       const errors = new ValidationFailedError(validator.errors).fullMessages();

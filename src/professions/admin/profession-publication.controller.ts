@@ -7,6 +7,7 @@ import { RequestWithAppSession } from '../../common/interfaces/request-with-app-
 import { Permissions } from '../../common/permissions.decorator';
 import { escape } from '../../helpers/escape.helper';
 import { isConfirmed } from '../../helpers/is-confirmed';
+import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
 import { getActingUser } from '../../users/helpers/get-acting-user.helper';
 import { UserPermission } from '../../users/user-permission';
 import { ProfessionVersionsService } from '../profession-versions.service';
@@ -32,6 +33,7 @@ export class ProfessionPublicationController {
   async new(
     @Param('professionId') professionId: string,
     @Param('versionId') versionId: string,
+    @Req() req: RequestWithAppSession,
   ) {
     const version = await this.professionVersionsService.findByIdWithProfession(
       professionId,
@@ -39,6 +41,8 @@ export class ProfessionPublicationController {
     );
 
     const profession = Profession.withVersion(version.profession, version);
+
+    checkCanViewProfession(req, profession);
 
     return { profession };
   }
@@ -52,6 +56,8 @@ export class ProfessionPublicationController {
     @Param('versionId') versionId: string,
   ): Promise<void> {
     const profession = await this.professionsService.find(professionId);
+
+    checkCanViewProfession(req, profession);
 
     const version = await this.professionVersionsService.findByIdWithProfession(
       professionId,
