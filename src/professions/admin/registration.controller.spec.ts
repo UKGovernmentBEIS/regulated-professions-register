@@ -9,11 +9,16 @@ import { createMockI18nService } from '../../testutils/create-mock-i18n-service'
 
 import professionFactory from '../../testutils/factories/profession';
 import professionVersionFactory from '../../testutils/factories/profession-version';
+import userFactory from '../../testutils/factories/user';
 
 import { ProfessionVersionsService } from '../profession-versions.service';
 import { ProfessionsService } from '../professions.service';
 
 import { translationOf } from '../../testutils/translation-of';
+import { createDefaultMockRequest } from '../../testutils/factories/create-default-mock-request';
+import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
+
+jest.mock('../../users/helpers/check-can-view-profession');
 
 describe(RegistrationController, () => {
   let controller: RegistrationController;
@@ -57,7 +62,17 @@ describe(RegistrationController, () => {
         professionsService.findWithVersions.mockResolvedValue(profession);
         professionVersionsService.findWithProfession.mockResolvedValue(version);
 
-        await controller.edit(response, 'profession-id', 'version-id', 'false');
+        const request = createDefaultMockRequest({
+          user: userFactory.build(),
+        });
+
+        await controller.edit(
+          response,
+          'profession-id',
+          'version-id',
+          'false',
+          request,
+        );
 
         expect(response.render).toHaveBeenCalledWith(
           'admin/professions/registration',
@@ -79,10 +94,20 @@ describe(RegistrationController, () => {
           registrationUrl: 'http://example.com',
         });
 
+        const request = createDefaultMockRequest({
+          user: userFactory.build(),
+        });
+
         professionsService.findWithVersions.mockResolvedValue(profession);
         professionVersionsService.findWithProfession.mockResolvedValue(version);
 
-        await controller.edit(response, 'profession-id', 'version-id', 'false');
+        await controller.edit(
+          response,
+          'profession-id',
+          'version-id',
+          'false',
+          request,
+        );
 
         expect(response.render).toHaveBeenCalledWith(
           'admin/professions/registration',
@@ -93,6 +118,26 @@ describe(RegistrationController, () => {
           }),
         );
       });
+    });
+
+    it('checks the user has permission to view the Profession', async () => {
+      const profession = professionFactory.justCreated('profession-id').build();
+
+      professionsService.findWithVersions.mockResolvedValue(profession);
+
+      const request = createDefaultMockRequest({
+        user: userFactory.build(),
+      });
+
+      await controller.edit(
+        response,
+        'profession-id',
+        'version-id',
+        'false',
+        request,
+      );
+
+      expect(checkCanViewProfession).toHaveBeenCalledWith(request, profession);
     });
   });
 
@@ -115,11 +160,16 @@ describe(RegistrationController, () => {
           registrationUrl: 'http://example.com',
         };
 
+        const request = createDefaultMockRequest({
+          user: userFactory.build(),
+        });
+
         await controller.update(
           response,
           'profession-id',
           'version-id',
           registrationDto,
+          request,
         );
 
         expect(professionVersionsService.save).toHaveBeenCalledWith(
@@ -154,11 +204,16 @@ describe(RegistrationController, () => {
           registrationUrl: 'example.com',
         };
 
+        const request = createDefaultMockRequest({
+          user: userFactory.build(),
+        });
+
         await controller.update(
           response,
           'profession-id',
           'version-id',
           registrationDto,
+          request,
         );
 
         expect(professionVersionsService.save).toHaveBeenCalledWith(
@@ -181,12 +236,16 @@ describe(RegistrationController, () => {
           mandatoryRegistration: undefined,
           registrationUrl: 'not a url',
         };
+        const request = createDefaultMockRequest({
+          user: userFactory.build(),
+        });
 
         await controller.update(
           response,
           'profession-id',
           'version-id',
           registrationDtoWithInvalidURL,
+          request,
         );
 
         expect(professionVersionsService.save).not.toHaveBeenCalled();
@@ -225,11 +284,16 @@ describe(RegistrationController, () => {
             change: true,
           };
 
+          const request = createDefaultMockRequest({
+            user: userFactory.build(),
+          });
+
           await controller.update(
             response,
             'profession-id',
             'version-id',
             registrationDtoWithChangeParam,
+            request,
           );
 
           expect(response.redirect).toHaveBeenCalledWith(
@@ -258,11 +322,16 @@ describe(RegistrationController, () => {
             change: false,
           };
 
+          const request = createDefaultMockRequest({
+            user: userFactory.build(),
+          });
+
           await controller.update(
             response,
             'profession-id',
             'version-id',
             registrationDtoWithFalseChangeParam,
+            request,
           );
 
           expect(response.redirect).toHaveBeenCalledWith(
@@ -270,6 +339,31 @@ describe(RegistrationController, () => {
           );
         });
       });
+    });
+
+    it('checks the user has permission to update the Profession', async () => {
+      const profession = professionFactory.justCreated('profession-id').build();
+
+      professionsService.findWithVersions.mockResolvedValue(profession);
+
+      const request = createDefaultMockRequest({
+        user: userFactory.build(),
+      });
+
+      const registrationDto = {
+        registrationRequirements: 'Something',
+        registrationUrl: 'example.com',
+      };
+
+      await controller.update(
+        response,
+        'profession-id',
+        'version-id',
+        registrationDto,
+        request,
+      );
+
+      expect(checkCanViewProfession).toHaveBeenCalledWith(request, profession);
     });
   });
 
