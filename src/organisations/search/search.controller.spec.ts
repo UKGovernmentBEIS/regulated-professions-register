@@ -88,38 +88,42 @@ describe('SearchController', () => {
   });
 
   describe('index', () => {
-    it('should return populated template params', async () => {
-      const result = await controller.index();
-
-      const expected = await new SearchPresenter(
-        {
+    describe('when no parameters are provided', () => {
+      it('should return populated template params', async () => {
+        const result = await controller.index({
           keywords: '',
           industries: [],
           nations: [],
-        },
-        Nation.all(),
-        industries,
-        [organisation1, organisation2],
-        i18nService,
-      ).present();
+        });
 
-      expect(result).toEqual(expected);
-    });
+        const expected = await new SearchPresenter(
+          {
+            keywords: '',
+            industries: [],
+            nations: [],
+          },
+          Nation.all(),
+          industries,
+          [organisation1, organisation2],
+          i18nService,
+        ).present();
 
-    it('should request organisations populated with professions from `OrganisationVersionsService`', async () => {
-      await controller.create({
-        keywords: '',
-        industries: [],
-        nations: [],
+        expect(result).toEqual(expected);
       });
 
-      expect(organisationVersionsService.allLive).toHaveBeenCalled();
-    });
-  });
+      it('should request organisations populated with professions from `OrganisationVersionsService`', async () => {
+        await controller.index({
+          keywords: '',
+          industries: [],
+          nations: [],
+        });
 
-  describe('create', () => {
+        expect(organisationVersionsService.allLive).toHaveBeenCalled();
+      });
+    });
+
     it('should return template params populated with provided search filters', async () => {
-      const result = await controller.create({
+      const result = await controller.index({
         keywords: 'example search',
         industries: [industry1.id, industry2.id],
         nations: ['GB-NIR'],
@@ -141,7 +145,7 @@ describe('SearchController', () => {
     });
 
     it('should return filtered organisations when searching by nation', async () => {
-      const result = await controller.create({
+      const result = await controller.index({
         keywords: '',
         industries: [],
         nations: ['GB-SCT'],
@@ -163,7 +167,7 @@ describe('SearchController', () => {
     });
 
     it('should return filtered organisations when searching by industry', async () => {
-      const result = await controller.create({
+      const result = await controller.index({
         keywords: '',
         industries: [industry2.id],
         nations: [],
@@ -185,7 +189,7 @@ describe('SearchController', () => {
     });
 
     it('should return filtered organisations when searching by keyword', async () => {
-      const result = await controller.create({
+      const result = await controller.index({
         keywords: 'Medical',
         industries: [],
         nations: [],
@@ -207,7 +211,7 @@ describe('SearchController', () => {
     });
 
     it('should return unfiltered organisations when no search parameters are specified', async () => {
-      const result = await controller.create({
+      const result = await controller.index({
         keywords: '',
         industries: [],
         nations: [],

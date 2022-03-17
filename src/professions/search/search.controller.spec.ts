@@ -41,55 +41,59 @@ describe('SearchController', () => {
   });
 
   describe('index', () => {
-    it('should return populated template params', async () => {
-      const industry1 = industryFactory.build({ id: 'example-industry-1' });
-      const industry2 = industryFactory.build({ id: 'example-industry-2' });
-      const industry3 = industryFactory.build({ id: 'example-industry-3' });
-      const industries = [industry1, industry2, industry3];
-      industriesService.all.mockResolvedValue(industries);
+    describe('when no parameters are provided', () => {
+      it('should return populated template params', async () => {
+        const industry1 = industryFactory.build({ id: 'example-industry-1' });
+        const industry2 = industryFactory.build({ id: 'example-industry-2' });
+        const industry3 = industryFactory.build({ id: 'example-industry-3' });
+        const industries = [industry1, industry2, industry3];
+        industriesService.all.mockResolvedValue(industries);
 
-      const schoolTeacher = professionFactory.build({
-        name: 'Secondary School Teacher',
-        industries: [industry1],
-      });
-      const trademarkAttorney = professionFactory.build({
-        name: 'Trademark Attorney',
-        industries: [industry2, industry3],
-      });
-      professionVersionsService.searchLive.mockResolvedValue([
-        schoolTeacher,
-        trademarkAttorney,
-      ]);
+        const schoolTeacher = professionFactory.build({
+          name: 'Secondary School Teacher',
+          industries: [industry1],
+        });
+        const trademarkAttorney = professionFactory.build({
+          name: 'Trademark Attorney',
+          industries: [industry2, industry3],
+        });
+        professionVersionsService.searchLive.mockResolvedValue([
+          schoolTeacher,
+          trademarkAttorney,
+        ]);
 
-      const result = await controller.index();
-
-      const expected = await new SearchPresenter(
-        {
+        const result = await controller.index({
           keywords: '',
           industries: [],
           nations: [],
-        },
-        Nation.all(),
-        industries,
-        [schoolTeacher, trademarkAttorney],
-        i18nService,
-      ).present();
+        });
 
-      expect(result).toEqual(expected);
-    });
+        const expected = await new SearchPresenter(
+          {
+            keywords: '',
+            industries: [],
+            nations: [],
+          },
+          Nation.all(),
+          industries,
+          [schoolTeacher, trademarkAttorney],
+          i18nService,
+        ).present();
 
-    it('should request only complete professions from `ProfessionsService`', async () => {
-      await controller.create({
-        keywords: '',
-        industries: [],
-        nations: [],
+        expect(result).toEqual(expected);
       });
 
-      expect(professionVersionsService.searchLive).toHaveBeenCalled();
-    });
-  });
+      it('should request only complete professions from `ProfessionsService`', async () => {
+        await controller.index({
+          keywords: '',
+          industries: [],
+          nations: [],
+        });
 
-  describe('create', () => {
+        expect(professionVersionsService.searchLive).toHaveBeenCalled();
+      });
+    });
+
     it('should return template params populated with provided search filters', async () => {
       const industry1 = industryFactory.build();
       const industry2 = industryFactory.build();
@@ -111,7 +115,7 @@ describe('SearchController', () => {
         trademarkAttorney,
       ]);
 
-      const result = await controller.create({
+      const result = await controller.index({
         keywords: 'example search',
         industries: [industry1.id, industry2.id],
         nations: ['GB-SCT'],
@@ -142,7 +146,7 @@ describe('SearchController', () => {
       const industry1 = industryFactory.build();
       const industry2 = industryFactory.build();
 
-      await controller.create({
+      await controller.index({
         keywords: 'example search',
         industries: [industry1.id, industry2.id],
         nations: ['GB-SCT'],

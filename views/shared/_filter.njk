@@ -2,7 +2,7 @@
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
-<form action="" method="{{ filterFormMethod }}" class="form">
+<form action="" method="get" class="form">
   <div class="{{ filterRowClass }}">
      <div class="{{ filterColumnClass }}">
       {{ govukInput({
@@ -38,7 +38,7 @@
         }) }}
       </div>
     {% endif %}
-    
+
     {% if nationsCheckboxItems %}
       <div class="{{ filterColumnClass }}">
         {{ govukCheckboxes({
