@@ -44,6 +44,13 @@ export class ProfessionsSearchService {
     });
   }
 
+  public async deleteAll(): Promise<any> {
+    await this.client.indices.delete({
+      index: this.indexName,
+      ignore_unavailable: true,
+    });
+  }
+
   public async search(query: string): Promise<string[]> {
     const response = await this.client.search<SearchResponse>({
       index: this.indexName,
