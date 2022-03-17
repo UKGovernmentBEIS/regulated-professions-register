@@ -3,17 +3,22 @@ import { TestingModule, Test } from '@nestjs/testing';
 import { I18nService } from 'nestjs-i18n';
 import QualificationPresenter from '../../qualifications/presenters/qualification.presenter';
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
+import { createDefaultMockRequest } from '../../testutils/factories/create-default-mock-request';
 import industryFactory from '../../testutils/factories/industry';
 import legislationFactory from '../../testutils/factories/legislation';
 import organisationFactory from '../../testutils/factories/organisation';
 import professionFactory from '../../testutils/factories/profession';
 import professionVersionFactory from '../../testutils/factories/profession-version';
 import qualificationFactory from '../../testutils/factories/qualification';
+import userFactory from '../../testutils/factories/user';
 import { translationOf } from '../../testutils/translation-of';
+import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
 import { RegulationType } from '../profession-version.entity';
 import { ProfessionVersionsService } from '../profession-versions.service';
 import { ProfessionsService } from '../professions.service';
 import { CheckYourAnswersController } from './check-your-answers.controller';
+
+jest.mock('../../users/helpers/check-can-view-profession');
 
 describe('CheckYourAnswersController', () => {
   let controller: CheckYourAnswersController;
@@ -87,11 +92,17 @@ describe('CheckYourAnswersController', () => {
 
         professionVersionsService.findWithProfession.mockResolvedValue(version);
 
+        const request = createDefaultMockRequest({
+          user: userFactory.build(),
+        });
+
         const templateParams = await controller.show(
           'profession-id',
           'version-id',
           'false',
+          request,
         );
+
         expect(templateParams.name).toEqual('Gas Safe Engineer');
         expect(templateParams.nations).toEqual([
           translationOf('nations.england'),
@@ -163,10 +174,15 @@ describe('CheckYourAnswersController', () => {
         professionsService.findWithVersions.mockResolvedValue(profession);
         professionVersionsService.findWithProfession.mockResolvedValue(version);
 
+        const request = createDefaultMockRequest({
+          user: userFactory.build(),
+        });
+
         const templateParams = await controller.show(
           'profession-id',
           'version-id',
           'false',
+          request,
         );
 
         expect(templateParams.name).toEqual('Gas Safe Engineer');
@@ -192,6 +208,23 @@ describe('CheckYourAnswersController', () => {
           'profession-id',
         );
       });
+    });
+
+    it('checks that the user has permission to view the page', async () => {
+      const request = createDefaultMockRequest({
+        user: userFactory.build(),
+      });
+
+      const profession = professionFactory.build();
+
+      const version = professionVersionFactory.build();
+
+      professionsService.findWithVersions.mockResolvedValue(profession);
+      professionVersionsService.findWithProfession.mockResolvedValue(version);
+
+      await controller.show('profession-id', 'version-id', 'false', request);
+
+      expect(checkCanViewProfession).toHaveBeenCalledWith(request, profession);
     });
   });
 

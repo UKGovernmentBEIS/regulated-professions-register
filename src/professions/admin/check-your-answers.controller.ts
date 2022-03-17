@@ -4,6 +4,7 @@ import {
   Param,
   Query,
   Render,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { Request } from 'express';
@@ -22,6 +23,8 @@ import { BackLink } from '../../common/decorators/back-link.decorator';
 import { ProfessionVersionsService } from '../profession-versions.service';
 import { isConfirmed } from '../../helpers/is-confirmed';
 import { isUK } from '../../helpers/nations.helper';
+import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
+import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
@@ -40,10 +43,13 @@ export class CheckYourAnswersController {
     @Param('professionId') professionId: string,
     @Param('versionId') versionId: string,
     @Query('edit') edit: string,
+    @Req() request: RequestWithAppSession,
   ): Promise<CheckYourAnswersTemplate> {
     const draftProfession = await this.professionsService.findWithVersions(
       professionId,
     );
+
+    checkCanViewProfession(request, draftProfession);
 
     if (!draftProfession) {
       throw new Error('Draft profession not found');
