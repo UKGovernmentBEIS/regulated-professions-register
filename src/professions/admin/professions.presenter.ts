@@ -62,7 +62,6 @@ export class ProfessionsPresenter {
       organisationsCheckboxItems,
       industriesCheckboxItems,
       regulationTypesCheckboxItems,
-      changedByCheckboxItems: [],
       filters: {
         keywords: this.filterInput.keywords || '',
         nations: (this.filterInput.nations || []).map((nation) => nation.name),
@@ -73,7 +72,6 @@ export class ProfessionsPresenter {
           (industry) => industry.name,
         ),
         regulationTypes: this.filterInput.regulationTypes || [],
-        changedBy: [],
       },
     };
   }

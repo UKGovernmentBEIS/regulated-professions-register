@@ -6,5 +6,4 @@ export class FilterDto {
   organisations?: string[] = [];
   industries?: string[] = [];
   regulationTypes?: RegulationType[] = [];
-  changedBy?: string[] = [];
 }

@@ -379,7 +379,6 @@ describe('ProfessionsController', () => {
             keywords: '',
             nations: [],
             organisations: [],
-            changedBy: [],
           },
           organisation1,
           [profession1, profession2],
@@ -397,7 +396,6 @@ describe('ProfessionsController', () => {
         const result = await controller.index(request, {
           keywords: 'primary',
           nations: [],
-          changedBy: [],
         });
 
         const expected = await createPresenter(
@@ -405,7 +403,6 @@ describe('ProfessionsController', () => {
             keywords: 'primary',
             nations: [],
             organisations: [],
-            changedBy: [],
           },
           organisation1,
           [profession1],
@@ -423,7 +420,6 @@ describe('ProfessionsController', () => {
         const result = await controller.index(request, {
           keywords: '',
           nations: ['GB-NIR'],
-          changedBy: [],
         });
 
         const expected = await createPresenter(
@@ -431,7 +427,6 @@ describe('ProfessionsController', () => {
             keywords: '',
             nations: [Nation.find('GB-NIR')],
             organisations: [],
-            changedBy: [],
           },
           organisation1,
           [profession2],

@@ -77,25 +77,6 @@
       </div>
     {% endif %}
 
-    {% if changedByCheckboxItems %}
-      <div class="{{ filterColumnClass }}">
-        {{ govukCheckboxes({
-          name: "changedBy[]",
-          classes: filterCheckboxClasses,
-          fieldset: {
-            legend: {
-            text: (filterTextPrefix + ".filter.changedBy.label") | t,
-            classes: "govuk-fieldset__legend--s"
-            }
-          },
-          hint: {
-            text: (filterTextPrefix + ".filter.changedBy.hint") | t
-          },
-          items: changedByCheckboxItems
-        }) }}
-      </div>
-    {% endif %}
-
     {% if regulationTypesCheckboxItems %}
       <div class="{{ filterColumnClass }}">
         {{ govukCheckboxes({

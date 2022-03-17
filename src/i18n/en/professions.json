@@ -223,8 +223,7 @@
       "nations": "Nations:",
       "organisations": "Regulators:",
       "industries": "Industries:",
-      "regulationTypes": "Regulation types:",
-      "changedBy": "Changed by:"
+      "regulationTypes": "Regulation types:"
     },
     "filter": {
       "keywords": {
@@ -245,10 +244,6 @@
       },
       "regulationTypes": {
         "label": "Regulation types",
-        "hint": "Select all that apply."
-      },
-      "changedBy": {
-        "label": "Changed by",
         "hint": "Select all that apply."
       },
       "button": "Filter results"
