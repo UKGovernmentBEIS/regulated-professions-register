@@ -34,6 +34,12 @@ export class AppController {
     // do nothing.
   }
 
+  @Get('/accessibility')
+  @Render('pages/accessibility')
+  accessibility() {
+    // do nothing.
+  }
+
   @Get('/health-check')
   healthCheck() {
     return {
