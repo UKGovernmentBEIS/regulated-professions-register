@@ -10,7 +10,11 @@ describe('ProfessionVersionsService', () => {
   let opensearchClient: DeepMocked<OpensearchClient>;
 
   beforeEach(async () => {
-    opensearchClient = createMock<OpensearchClient>();
+    opensearchClient = createMock<OpensearchClient>({
+      indices: {
+        delete: jest.fn(),
+      },
+    });
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -116,6 +120,17 @@ describe('ProfessionVersionsService', () => {
             },
           },
         },
+      });
+    });
+  });
+
+  describe('deleteAll', () => {
+    it('deletes all documents in an index', async () => {
+      await service.deleteAll();
+
+      expect(opensearchClient.indices.delete).toHaveBeenCalledWith({
+        index: service.indexName,
+        ignore_unavailable: true,
       });
     });
   });

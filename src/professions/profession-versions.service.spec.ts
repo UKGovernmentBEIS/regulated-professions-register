@@ -464,11 +464,7 @@ describe('ProfessionVersionsService', () => {
 
       const result = await service.allLive();
 
-      const expectedProfessions = versions.map((version) =>
-        Profession.withVersion(version.profession, version),
-      );
-
-      expect(result).toEqual(expectedProfessions);
+      expect(result).toEqual(versions);
 
       expect(queryBuilder).toHaveJoined([
         'professionVersion.profession',

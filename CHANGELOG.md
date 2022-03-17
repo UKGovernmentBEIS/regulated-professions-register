@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Search profession titles using Opensearch
 - Allow central users to filter Profession and Organisation listings by regulation type
 - Search profession keywords using Opensearch
+- Add a script to reindex professions in Opensearch
 
 ### Changed
 

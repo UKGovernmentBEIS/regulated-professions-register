@@ -202,17 +202,13 @@ export class ProfessionVersionsService {
     );
   }
 
-  async allLive(): Promise<Profession[]> {
-    const versions = await this.versionsWithJoins()
+  async allLive(): Promise<ProfessionVersion[]> {
+    return await this.versionsWithJoins()
       .where('professionVersion.status = :status', {
         status: ProfessionVersionStatus.Live,
       })
       .orderBy('profession.name')
       .getMany();
-
-    return versions.map((version) =>
-      Profession.withVersion(version.profession, version),
-    );
   }
 
   async allWithLatestVersion(): Promise<Profession[]> {
