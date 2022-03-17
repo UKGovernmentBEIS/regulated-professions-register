@@ -1,19 +1,23 @@
 import { DeepMocked, createMock } from '@golevelup/ts-jest';
 import { TestingModule, Test } from '@nestjs/testing';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { I18nService } from 'nestjs-i18n';
 import { flashMessage } from '../../common/flash-message';
 import { escape } from '../../helpers/escape.helper';
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
+import { createDefaultMockRequest } from '../../testutils/factories/create-default-mock-request';
 import professionFactory from '../../testutils/factories/profession';
 import professionVersionFactory from '../../testutils/factories/profession-version';
+import userFactory from '../../testutils/factories/user';
 import { translationOf } from '../../testutils/translation-of';
+import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
 import { ProfessionVersionsService } from '../profession-versions.service';
 import { ProfessionsService } from '../professions.service';
 import { ConfirmationController } from './confirmation.controller';
 
 jest.mock('../../common/flash-message');
 jest.mock('../../helpers/escape.helper');
+jest.mock('../../users/helpers/check-can-view-profession');
 
 describe('ConfirmationController', () => {
   let controller: ConfirmationController;
@@ -45,7 +49,9 @@ describe('ConfirmationController', () => {
     describe('when creating a new profession', () => {
       it('"Confirms" the Profession and the Profession Version, then displays a confirmation flash message on the Profession version page', async () => {
         const res = createMock<Response>();
-        const req = createMock<Request>();
+        const req = createDefaultMockRequest({
+          user: userFactory.build(),
+        });
 
         const flashMock = flashMessage as jest.Mock;
         flashMock.mockImplementation(() => 'STUB_FLASH_MESSAGE');
@@ -85,7 +91,9 @@ describe('ConfirmationController', () => {
     describe('when amending an existing profession', () => {
       it("redirects with the 'amended' query param, 'confirming' the version, but not updating the Profession", async () => {
         const res = createMock<Response>();
-        const req = createMock<Request>();
+        const req = createDefaultMockRequest({
+          user: userFactory.build(),
+        });
 
         (escape as jest.Mock).mockImplementation();
         const flashMock = flashMessage as jest.Mock;
@@ -123,6 +131,21 @@ describe('ConfirmationController', () => {
 
         expect(req.flash).toHaveBeenCalledWith('info', 'STUB_FLASH_MESSAGE');
       });
+    });
+
+    it('checks the user has permissions to confirm the Profession', async () => {
+      const res = createMock<Response>();
+      const req = createDefaultMockRequest({
+        user: userFactory.build(),
+      });
+
+      const profession = professionFactory.build();
+
+      professionsService.findWithVersions.mockResolvedValue(profession);
+
+      await controller.create(res, req, 'profession-id', 'version-id');
+
+      expect(checkCanViewProfession).toHaveBeenCalledWith(req, profession);
     });
   });
 
