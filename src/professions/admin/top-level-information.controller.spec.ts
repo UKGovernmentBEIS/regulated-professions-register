@@ -12,6 +12,11 @@ import { I18nService } from 'nestjs-i18n';
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 import { translationOf } from '../../testutils/translation-of';
 import { OrganisationVersionsService } from '../../organisations/organisation-versions.service';
+import { createDefaultMockRequest } from '../../testutils/factories/create-default-mock-request';
+import userFactory from '../../testutils/factories/user';
+import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
+
+jest.mock('../../users/helpers/check-can-view-profession');
 
 describe('TopLevelInformationController', () => {
   let controller: TopLevelInformationController;
@@ -64,7 +69,11 @@ describe('TopLevelInformationController', () => {
         const regulatedAuthoritiesSelectPresenter =
           new RegulatedAuthoritiesSelectPresenter(organisations, null);
 
-        await controller.edit(response, 'profession-id', 'false');
+        const request = createDefaultMockRequest({
+          user: userFactory.build(),
+        });
+
+        await controller.edit(response, 'profession-id', 'false', request);
 
         expect(response.render).toHaveBeenCalledWith(
           'admin/professions/top-level-information',
@@ -116,7 +125,11 @@ describe('TopLevelInformationController', () => {
             additionalOrganisation,
           );
 
-        await controller.edit(response, 'profession-id', 'false');
+        const request = createDefaultMockRequest({
+          user: userFactory.build(),
+        });
+
+        await controller.edit(response, 'profession-id', 'false', request);
 
         expect(response.render).toHaveBeenCalledWith(
           'admin/professions/top-level-information',
@@ -128,6 +141,23 @@ describe('TopLevelInformationController', () => {
               regulatedAuthoritiesSelectPresenterWithSelectedAdditionalOrganisation.selectArgs(),
             captionText: translationOf('professions.form.captions.edit'),
           }),
+        );
+      });
+
+      it('checks the acting user has permission to view the page', async () => {
+        const request = createDefaultMockRequest({
+          user: userFactory.build(),
+        });
+
+        const profession = professionFactory.build();
+
+        professionsService.findWithVersions.mockResolvedValue(profession);
+
+        await controller.edit(response, 'profession-id', 'false', request);
+
+        expect(checkCanViewProfession).toHaveBeenCalledWith(
+          request,
+          profession,
         );
       });
     });
@@ -162,11 +192,16 @@ describe('TopLevelInformationController', () => {
           .calledWith('other-example-org-id')
           .mockResolvedValue(newAdditionalOrganisation);
 
+        const request = createDefaultMockRequest({
+          user: userFactory.build(),
+        });
+
         await controller.update(
           topLevelDetailsDto,
           response,
           'profession-id',
           'version-id',
+          request,
         );
 
         expect(professionsService.save).toHaveBeenCalledWith(
@@ -191,11 +226,16 @@ describe('TopLevelInformationController', () => {
           regulatoryBody: null,
         };
 
+        const request = createDefaultMockRequest({
+          user: userFactory.build(),
+        });
+
         await controller.update(
           topLevelDetailsDtoWithNoAnswers,
           response,
           'profession-id',
           'version-id',
+          request,
         );
 
         expect(response.render).toHaveBeenCalledWith(
@@ -234,11 +274,16 @@ describe('TopLevelInformationController', () => {
           const organisation = organisationFactory.build();
           organisationsService.find.mockResolvedValue(organisation);
 
+          const request = createDefaultMockRequest({
+            user: userFactory.build(),
+          });
+
           await controller.update(
             topLevelDetailsDtoWithChangeParam,
             response,
             'profession-id',
             'version-id',
+            request,
           );
 
           expect(response.redirect).toHaveBeenCalledWith(
@@ -260,11 +305,16 @@ describe('TopLevelInformationController', () => {
             regulatoryBody: 'example-org-id',
           };
 
+          const request = createDefaultMockRequest({
+            user: userFactory.build(),
+          });
+
           await controller.update(
             topLevelDetailsDtoWithoutChangeParam,
             response,
             'profession-id',
             'version-id',
+            request,
           );
 
           expect(response.redirect).toHaveBeenCalledWith(
@@ -272,6 +322,32 @@ describe('TopLevelInformationController', () => {
           );
         });
       });
+    });
+
+    it('checks the acting user has permission to update the Profession', async () => {
+      const profession = professionFactory.build();
+
+      const topLevelDetailsDto = {
+        name: 'Gas Safe Engineer',
+        regulatoryBody: 'example-org-id',
+        additionalRegulatoryBody: 'other-example-org-id',
+      };
+
+      professionsService.findWithVersions.mockResolvedValue(profession);
+
+      const request = createDefaultMockRequest({
+        user: userFactory.build(),
+      });
+
+      await controller.update(
+        topLevelDetailsDto,
+        response,
+        'profession-id',
+        'false',
+        request,
+      );
+
+      expect(checkCanViewProfession).toHaveBeenCalledWith(request, profession);
     });
   });
 
