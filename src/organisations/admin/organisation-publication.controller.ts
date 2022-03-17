@@ -7,6 +7,7 @@ import { RequestWithAppSession } from '../../common/interfaces/request-with-app-
 import { Permissions } from '../../common/permissions.decorator';
 import { escape } from '../../helpers/escape.helper';
 import { isConfirmed } from '../../helpers/is-confirmed';
+import { checkCanViewOrganisation } from '../../users/helpers/check-can-view-organisation';
 import { getActingUser } from '../../users/helpers/get-acting-user.helper';
 import { UserPermission } from '../../users/user-permission';
 import { OrganisationVersionsService } from '../organisation-versions.service';
@@ -32,6 +33,7 @@ export class OrganisationPublicationController {
   async new(
     @Param('organisationId') organisationId: string,
     @Param('versionId') versionId: string,
+    @Req() req: RequestWithAppSession,
   ) {
     const version =
       await this.organisationVersionsService.findByIdWithOrganisation(
@@ -43,6 +45,8 @@ export class OrganisationPublicationController {
       version.organisation,
       version,
     );
+
+    checkCanViewOrganisation(req, organisation);
 
     return { organisation };
   }
@@ -56,6 +60,8 @@ export class OrganisationPublicationController {
     @Param('versionId') versionId: string,
   ): Promise<void> {
     const organisation = await this.organisationsService.find(organisationId);
+
+    checkCanViewOrganisation(req, organisation);
 
     const version =
       await this.organisationVersionsService.findByIdWithOrganisation(

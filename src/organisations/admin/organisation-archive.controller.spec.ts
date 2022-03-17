@@ -10,6 +10,7 @@ import organisationFactory from '../../testutils/factories/organisation';
 import organisationVersionFactory from '../../testutils/factories/organisation-version';
 import userFactory from '../../testutils/factories/user';
 import { translationOf } from '../../testutils/translation-of';
+import { checkCanViewOrganisation } from '../../users/helpers/check-can-view-organisation';
 import { getActingUser } from '../../users/helpers/get-acting-user.helper';
 import { OrganisationVersionsService } from '../organisation-versions.service';
 import { Organisation } from '../organisation.entity';
@@ -18,6 +19,7 @@ import { OrganisationArchiveController } from './organisation-archive.controller
 jest.mock('../../common/flash-message');
 jest.mock('../../users/helpers/get-acting-user.helper');
 jest.mock('../../helpers/escape.helper');
+jest.mock('../../users/helpers/check-can-view-organisation');
 
 describe('OrganisationArchiveController', () => {
   let controller: OrganisationArchiveController;
@@ -59,7 +61,11 @@ describe('OrganisationArchiveController', () => {
         version,
       );
 
-      const result = await controller.new(organisation.id, version.id);
+      const request = createDefaultMockRequest({
+        user: userFactory.build(),
+      });
+
+      const result = await controller.new(organisation.id, version.id, request);
 
       expect(
         organisationVersionsService.findByIdWithOrganisation,
@@ -67,6 +73,28 @@ describe('OrganisationArchiveController', () => {
       expect(result).toEqual({
         organisation: Organisation.withVersion(organisation, version),
       });
+    });
+
+    it('checks the acting user has permission to archive the Organisation', async () => {
+      const organisation = organisationFactory.build();
+      const version = organisationVersionFactory.build({
+        organisation,
+      });
+
+      organisationVersionsService.findByIdWithOrganisation.mockResolvedValue(
+        version,
+      );
+
+      const request = createDefaultMockRequest({
+        user: userFactory.build(),
+      });
+
+      await controller.new(organisation.id, version.id, request);
+
+      expect(checkCanViewOrganisation).toHaveBeenCalledWith(
+        request,
+        Organisation.withVersion(organisation, version),
+      );
     });
   });
 
@@ -78,7 +106,9 @@ describe('OrganisationArchiveController', () => {
       });
       const user = userFactory.build();
 
-      const req = createDefaultMockRequest();
+      const req = createDefaultMockRequest({
+        user: userFactory.build(),
+      });
       (getActingUser as jest.Mock).mockReturnValue(user);
 
       const res = createMock<Response>({});
@@ -125,6 +155,29 @@ describe('OrganisationArchiveController', () => {
       expect(res.redirect).toHaveBeenCalledWith(
         `/admin/organisations/${organisation.id}/versions/${versionToArchive.id}`,
       );
+    });
+
+    it('checks the acting user has permission to archive the Organisation', async () => {
+      const organisation = organisationFactory.build();
+      const version = organisationVersionFactory.build({
+        organisation: organisation,
+      });
+      const user = userFactory.build();
+
+      const req = createDefaultMockRequest({
+        user: userFactory.build(),
+      });
+      (getActingUser as jest.Mock).mockReturnValue(user);
+
+      const res = createMock<Response>({});
+
+      organisationVersionsService.findByIdWithOrganisation.mockResolvedValue(
+        version,
+      );
+
+      await controller.delete(req, res, organisation.id, version.id);
+
+      expect(checkCanViewOrganisation).toHaveBeenCalledWith(req, organisation);
     });
   });
 });

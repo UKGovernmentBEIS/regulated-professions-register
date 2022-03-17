@@ -23,10 +23,12 @@ import { OrganisationPresenter } from '../presenters/organisation.presenter';
 
 import { getActingUser } from '../../users/helpers/get-acting-user.helper';
 import { createDefaultMockRequest } from '../../testutils/factories/create-default-mock-request';
+import { checkCanViewOrganisation } from '../../users/helpers/check-can-view-organisation';
 
 jest.mock('../presenters/organisation-summary.presenter');
 jest.mock('../presenters/organisation.presenter');
 jest.mock('../../users/helpers/get-acting-user.helper');
+jest.mock('../../users/helpers/check-can-view-organisation');
 
 describe('OrganisationVersionsController', () => {
   let controller: OrganisationVersionsController;
@@ -88,6 +90,32 @@ describe('OrganisationVersionsController', () => {
         `/admin/organisations/${newOrganisationVersion.organisation.id}/versions/${newOrganisationVersion.id}/edit`,
       );
     });
+
+    it('should check the acting user has permission to update the Organisation', async () => {
+      const organisation = organisationFactory.build();
+      const version = organisationVersionFactory.build({
+        organisation: organisation,
+      });
+
+      const request = createDefaultMockRequest({
+        user: userFactory.build(),
+      });
+
+      const response = createMock<Response>();
+
+      organisationVersionsService.findLatestForOrganisationId.mockResolvedValue(
+        version,
+      );
+
+      organisationVersionsService.hasLiveVersion.mockResolvedValue(true);
+
+      await controller.create(response, request, 'some-uuid');
+
+      expect(checkCanViewOrganisation).toHaveBeenCalledWith(
+        request,
+        organisation,
+      );
+    });
   });
 
   describe('show', () => {
@@ -118,13 +146,17 @@ describe('OrganisationVersionsController', () => {
         professions: [],
       };
 
+      const request = createDefaultMockRequest({
+        user: userFactory.build(),
+      });
+
       (
         OrganisationSummaryPresenter.prototype as DeepMocked<OrganisationSummaryPresenter>
       ).present.mockResolvedValue(showTemplate);
 
-      expect(await controller.show('org-uuid', 'version-uuid')).toEqual(
-        showTemplate,
-      );
+      expect(
+        await controller.show('org-uuid', 'version-uuid', request),
+      ).toEqual(showTemplate);
 
       expect(
         organisationVersionsService.findByIdWithOrganisation,
@@ -136,6 +168,34 @@ describe('OrganisationVersionsController', () => {
       expect(OrganisationSummaryPresenter).toHaveBeenCalledWith(
         organisationWithVersion,
         i18nService,
+      );
+    });
+
+    it('should check the acting user has permission to view the page', async () => {
+      const organisation = organisationFactory.build();
+      const version = organisationVersionFactory.build({
+        organisation: organisation,
+      });
+      const organisationWithVersion = Organisation.withVersion(
+        organisation,
+        version,
+        true,
+      );
+
+      const request = createDefaultMockRequest({
+        user: userFactory.build(),
+      });
+
+      organisationVersionsService.findByIdWithOrganisation.mockResolvedValue(
+        version,
+      );
+      organisationVersionsService.hasLiveVersion.mockResolvedValue(true);
+
+      await controller.show('org-uuid', 'version-uuid', request);
+
+      expect(checkCanViewOrganisation).toHaveBeenCalledWith(
+        request,
+        organisationWithVersion,
       );
     });
   });
