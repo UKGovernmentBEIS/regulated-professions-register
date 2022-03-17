@@ -112,6 +112,48 @@ describe('Searching an organisation', () => {
     cy.get('body').should('contain', 'Council of Registered Gas Installers');
     checkResultLength(1);
   });
+
+  it('I can go back to my search query', () => {
+    cy.get('input[name="keywords"]').type('Law');
+
+    cy.translate('industries.law').then((nameLabel) => {
+      cy.get('label').contains(nameLabel).parent().find('input').check();
+    });
+
+    cy.get('input[name="nations[]"][value="GB-ENG"]').check();
+
+    cy.get('button').click();
+
+    checkResultLength(1);
+
+    cy.get('a').contains('Law Society of England and Wales').click();
+
+    cy.translate('app.back').then((backLabel) => {
+      cy.get('a').contains(backLabel).click();
+    });
+
+    checkResultLength(1);
+
+    cy.get('input[name="keywords"]').should('have.value', 'Law');
+
+    cy.translate('industries.law').then((nameLabel) => {
+      cy.get('label')
+        .contains(nameLabel)
+        .parent()
+        .within(() => {
+          cy.get('input[name="industries[]"]').should('be.checked');
+        });
+    });
+
+    cy.translate('nations.england').then((nameLabel) => {
+      cy.get('label')
+        .contains(nameLabel)
+        .parent()
+        .within(() => {
+          cy.get('input[name="nations[]"]').should('be.checked');
+        });
+    });
+  });
 });
 
 function checkResultLength(expectedLength: number): void {
