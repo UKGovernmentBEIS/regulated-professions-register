@@ -254,6 +254,7 @@ describe('Listing professions', () => {
         'Secondary School Teacher in State maintained schools (England)',
       );
       cy.get('body').should('not.contain', 'Registered Trademark Attorney');
+      cy.get('body').should('not.contain', 'Draft Profession');
     });
   });
 

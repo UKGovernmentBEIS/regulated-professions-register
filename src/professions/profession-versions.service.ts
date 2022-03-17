@@ -11,6 +11,7 @@ import { Legislation } from '../legislations/legislation.entity';
 import { Qualification } from '../qualifications/qualification.entity';
 import { User } from '../users/user.entity';
 import { FilterInput } from '../common/interfaces/filter-input.interface';
+import { Organisation } from '../organisations/organisation.entity';
 
 @Injectable()
 export class ProfessionVersionsService {
@@ -223,6 +224,32 @@ export class ProfessionVersionsService {
           ProfessionVersionStatus.Draft,
           ProfessionVersionStatus.Archived,
         ],
+      })
+      .orderBy(
+        'professionVersion.profession, professionVersion.created_at',
+        'DESC',
+      )
+      .getMany();
+
+    return versions.map((version) =>
+      Profession.withVersion(version.profession, version),
+    );
+  }
+
+  async allWithLatestVersionForOrganisation(
+    organisation: Organisation,
+  ): Promise<Profession[]> {
+    const versions = await this.versionsWithJoins()
+      .distinctOn(['professionVersion.profession'])
+      .where('professionVersion.status IN(:...status)', {
+        status: [
+          ProfessionVersionStatus.Live,
+          ProfessionVersionStatus.Draft,
+          ProfessionVersionStatus.Archived,
+        ],
+      })
+      .andWhere('organisation.id = :organisationId', {
+        organisationId: organisation.id,
       })
       .orderBy(
         'professionVersion.profession, professionVersion.created_at',
