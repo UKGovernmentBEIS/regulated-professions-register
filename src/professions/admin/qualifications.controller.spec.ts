@@ -14,8 +14,12 @@ import professionVersionFactory from '../../testutils/factories/profession-versi
 import qualificationFactory from '../../testutils/factories/qualification';
 import organisationFactory from '../../testutils/factories/organisation';
 import { translationOf } from '../../testutils/translation-of';
+import userFactory from '../../testutils/factories/user';
+import { createDefaultMockRequest } from '../../testutils/factories/create-default-mock-request';
+import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
 
 jest.mock('../../helpers/nations.helper');
+jest.mock('../../users/helpers/check-can-view-profession');
 
 describe(QualificationsController, () => {
   let controller: QualificationsController;
@@ -63,7 +67,17 @@ describe(QualificationsController, () => {
         professionVersionsService.findWithProfession.mockResolvedValue(version);
         (isUK as jest.Mock).mockImplementation(() => false);
 
-        await controller.edit(response, 'profession-id', 'version-id', false);
+        const request = createDefaultMockRequest({
+          user: userFactory.build(),
+        });
+
+        await controller.edit(
+          response,
+          'profession-id',
+          'version-id',
+          false,
+          request,
+        );
 
         expect(response.render).toHaveBeenCalledWith(
           'admin/professions/qualifications',
@@ -99,7 +113,17 @@ describe(QualificationsController, () => {
         professionVersionsService.findWithProfession.mockResolvedValue(version);
         (isUK as jest.Mock).mockImplementation(() => false);
 
-        await controller.edit(response, 'profession-id', 'version-id', false);
+        const request = createDefaultMockRequest({
+          user: userFactory.build(),
+        });
+
+        await controller.edit(
+          response,
+          'profession-id',
+          'version-id',
+          false,
+          request,
+        );
 
         expect(response.render).toHaveBeenCalledWith(
           'admin/professions/qualifications',
@@ -113,6 +137,26 @@ describe(QualificationsController, () => {
           }),
         );
       });
+    });
+
+    it('should check the user has permission to view the Profession', async () => {
+      const profession = professionFactory.build();
+
+      professionsService.findWithVersions.mockResolvedValue(profession);
+
+      const request = createDefaultMockRequest({
+        user: userFactory.build(),
+      });
+
+      await controller.edit(
+        response,
+        'profession-id',
+        'version-id',
+        false,
+        request,
+      );
+
+      expect(checkCanViewProfession).toHaveBeenCalledWith(request, profession);
     });
   });
 
@@ -141,7 +185,17 @@ describe(QualificationsController, () => {
             version,
           );
 
-          await controller.update(response, 'profession-id', 'version-id', dto);
+          const request = createDefaultMockRequest({
+            user: userFactory.build(),
+          });
+
+          await controller.update(
+            response,
+            'profession-id',
+            'version-id',
+            dto,
+            request,
+          );
 
           expect(professionVersionsService.save).toHaveBeenCalledWith(
             expect.objectContaining({
@@ -183,7 +237,17 @@ describe(QualificationsController, () => {
             version,
           );
 
-          await controller.update(response, 'profession-id', 'version-id', dto);
+          const request = createDefaultMockRequest({
+            user: userFactory.build(),
+          });
+
+          await controller.update(
+            response,
+            'profession-id',
+            'version-id',
+            dto,
+            request,
+          );
 
           expect(professionVersionsService.save).toHaveBeenCalledWith(
             expect.objectContaining({
@@ -224,7 +288,17 @@ describe(QualificationsController, () => {
         professionsService.findWithVersions.mockResolvedValue(profession);
         professionVersionsService.findWithProfession.mockResolvedValue(version);
 
-        await controller.update(response, 'profession-id', 'version-id', dto);
+        const request = createDefaultMockRequest({
+          user: userFactory.build(),
+        });
+
+        await controller.update(
+          response,
+          'profession-id',
+          'version-id',
+          dto,
+          request,
+        );
 
         expect(professionVersionsService.save).toHaveBeenCalledWith(
           expect.objectContaining({
@@ -265,7 +339,17 @@ describe(QualificationsController, () => {
         professionVersionsService.findWithProfession.mockResolvedValue(version);
         (isUK as jest.Mock).mockImplementation(() => false);
 
-        await controller.update(response, 'profession-id', 'version-id', dto);
+        const request = createDefaultMockRequest({
+          user: userFactory.build(),
+        });
+
+        await controller.update(
+          response,
+          'profession-id',
+          'version-id',
+          dto,
+          request,
+        );
 
         expect(response.render).toHaveBeenCalledWith(
           'admin/professions/qualifications',
@@ -285,6 +369,34 @@ describe(QualificationsController, () => {
           }),
         );
       });
+    });
+
+    it('should check the user has permission to update the Profession', async () => {
+      const profession = professionFactory.build();
+
+      professionsService.findWithVersions.mockResolvedValue(profession);
+
+      const request = createDefaultMockRequest({
+        user: userFactory.build(),
+      });
+
+      const dto: QualificationsDto = {
+        routesToObtain: 'General secondary education',
+        moreInformationUrl: 'http://www.example.com/more-info',
+        ukRecognition: 'ukRecognition',
+        ukRecognitionUrl: 'http://example.com/uk',
+        change: true,
+      };
+
+      await controller.update(
+        response,
+        'profession-id',
+        'version-id',
+        dto,
+        request,
+      );
+
+      expect(checkCanViewProfession).toHaveBeenCalledWith(request, profession);
     });
   });
 

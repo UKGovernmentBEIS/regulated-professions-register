@@ -5,6 +5,7 @@ import {
   Param,
   Post,
   Query,
+  Req,
   Res,
   UseGuards,
 } from '@nestjs/common';
@@ -25,6 +26,8 @@ import { ProfessionVersionsService } from '../profession-versions.service';
 import { isUK } from '../../helpers/nations.helper';
 import { ProfessionVersion } from '../profession-version.entity';
 import { Profession } from '../profession.entity';
+import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
+import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
@@ -47,10 +50,13 @@ export class QualificationsController {
     @Param('professionId') professionId: string,
     @Param('versionId') versionId: string,
     @Query('change') change: boolean,
+    @Req() request: RequestWithAppSession,
   ): Promise<void> {
     const profession = await this.professionsService.findWithVersions(
       professionId,
     );
+
+    checkCanViewProfession(request, profession);
 
     const version = await this.professionVersionsService.findWithProfession(
       versionId,
@@ -77,16 +83,19 @@ export class QualificationsController {
     @Param('professionId') professionId: string,
     @Param('versionId') versionId: string,
     @Body() qualificationsDto,
+    @Req() request: RequestWithAppSession,
   ): Promise<void> {
+    const profession = await this.professionsService.findWithVersions(
+      professionId,
+    );
+
+    checkCanViewProfession(request, profession);
+
     const validator = await Validator.validate(
       QualificationsDto,
       qualificationsDto,
     );
     const submittedValues = validator.obj;
-
-    const profession = await this.professionsService.findWithVersions(
-      professionId,
-    );
 
     const version = await this.professionVersionsService.findWithProfession(
       versionId,
