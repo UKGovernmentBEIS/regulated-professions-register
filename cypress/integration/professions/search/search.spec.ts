@@ -122,4 +122,56 @@ describe('Searching a profession', () => {
       'Secondary School Teacher in State maintained schools (England)',
     );
   });
+
+  it('I can go back to my search query', () => {
+    cy.get('input[name="keywords"]').type('Teacher');
+
+    cy.translate('industries.education').then((nameLabel) => {
+      cy.get('label').contains(nameLabel).parent().find('input').check();
+    });
+
+    cy.get('input[name="nations[]"][value="GB-ENG"]').check();
+
+    cy.get('button').click();
+
+    checkResultLength(1);
+
+    cy.get('a')
+      .contains(
+        'Secondary School Teacher in State maintained schools (England)',
+      )
+      .click();
+
+    cy.translate('app.back').then((backLabel) => {
+      cy.get('a').contains(backLabel).click();
+    });
+
+    checkResultLength(1);
+
+    cy.get('input[name="keywords"]').should('have.value', 'Teacher');
+
+    cy.translate('industries.education').then((nameLabel) => {
+      cy.get('label')
+        .contains(nameLabel)
+        .parent()
+        .within(() => {
+          cy.get('input[name="industries[]"]').should('be.checked');
+        });
+    });
+
+    cy.translate('nations.england').then((nameLabel) => {
+      cy.get('label')
+        .contains(nameLabel)
+        .parent()
+        .within(() => {
+          cy.get('input[name="nations[]"]').should('be.checked');
+        });
+    });
+  });
 });
+
+function checkResultLength(expectedLength: number): void {
+  cy.get('.govuk-grid-column-two-thirds')
+    .find('h2')
+    .should('have.length', expectedLength);
+}

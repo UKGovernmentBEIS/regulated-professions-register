@@ -6,6 +6,7 @@ import {
   Render,
 } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
+import { Request } from 'express';
 import { Nation } from '../nations/nation';
 import QualificationPresenter from '../qualifications/presenters/qualification.presenter';
 import { ShowTemplate } from './interfaces/show-template.interface';
@@ -14,6 +15,7 @@ import { Organisation } from '../organisations/organisation.entity';
 import { ProfessionVersionsService } from './profession-versions.service';
 import { getOrganisationsFromProfession } from './helpers/get-organisations-from-profession.helper';
 import { isUK } from '../helpers/nations.helper';
+import { getReferrer } from '../common/utils';
 
 @Controller()
 export class ProfessionsController {
@@ -24,7 +26,7 @@ export class ProfessionsController {
 
   @Get('/professions/:slug')
   @Render('professions/show')
-  @BackLink('/professions/search')
+  @BackLink((request: Request) => getReferrer(request))
   async show(@Param('slug') slug: string): Promise<ShowTemplate> {
     const profession = await this.professionVersionsService.findLiveBySlug(
       slug,
