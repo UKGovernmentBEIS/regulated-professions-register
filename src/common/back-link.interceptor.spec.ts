@@ -111,5 +111,20 @@ describe('BackLinkInterceptor', () => {
         expect(response.locals.backLink).toEqual('/foo/123');
       });
     });
+
+    describe('when the generator returns undefined', () => {
+      const generator = () => undefined;
+
+      const interceptor = new BackLinkInterceptor(generator);
+      beforeEach(() => {
+        request = createMock<Request>();
+      });
+
+      it('should generate a backlink depending on the params', () => {
+        interceptor.intercept(context, next);
+
+        expect(response.locals.backLink).toEqual(undefined);
+      });
+    });
   });
 });
