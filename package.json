@@ -54,7 +54,7 @@
     "@nestjs/typeorm": "^8.0.3",
     "@opensearch-project/opensearch": "^1.0.2",
     "@symfony/webpack-encore": "^1.8.1",
-    "@types/auth0": "^2.34.13",
+    "@types/auth0": "^2.34.14",
     "@types/connect-flash": "^0.0.37",
     "@types/express-session": "^1.17.4",
     "auth0": "^2.40.0",
