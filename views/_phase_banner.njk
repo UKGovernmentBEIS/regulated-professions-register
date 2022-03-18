@@ -16,8 +16,10 @@
       govukBackLink({
         text: ("app.back" | t),
         href: backLink,
+        classes: ("govuk-visually-hidden" if (backLink == "#") else ""),
         attributes: {
-          "data-cy": "back-link"
+          "data-cy": "back-link",
+          "data-populate-backlink": (backLink == "#")
         }
       })
     }}

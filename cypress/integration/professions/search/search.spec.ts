@@ -168,6 +168,43 @@ describe('Searching a profession', () => {
         });
     });
   });
+
+  it('populates the backLink without triggering an infinite loop', () => {
+    cy.get('a')
+      .contains(
+        'Secondary School Teacher in State maintained schools (England)',
+      )
+      .click();
+
+    // At the moment, we don't currently link to another page from a
+    // profession page, so we fake the referrer. Once we have a case
+    // we can test properly, we can swap this out for something more
+    // realistic
+    cy.url().then((currentUrl) => {
+      cy.visit('/professions/registered-trademark-attorney', {
+        headers: {
+          Referer: currentUrl,
+        },
+      });
+    });
+
+    cy.translate('app.back').then((backLabel) => {
+      cy.get('a').contains(backLabel).click();
+    });
+
+    cy.get('body').should(
+      'contain',
+      'Secondary School Teacher in State maintained schools (England)',
+    );
+
+    cy.translate('app.back').then((backLabel) => {
+      cy.get('a').contains(backLabel).click();
+    });
+
+    cy.translate('professions.search.heading').then((heading) => {
+      cy.get('body').should('contain', heading);
+    });
+  });
 });
 
 function checkResultLength(expectedLength: number): void {
