@@ -32,7 +32,18 @@ export class BackLinkInterceptor<T> implements NestInterceptor<T, Response<T>> {
     const request = context.switchToHttp().getRequest();
     const response = context.switchToHttp().getResponse();
 
-    response.locals.backLink = this.generateBackLink(request);
+    const backLink = this.generateBackLink(request);
+    const requestUrl = `${request.protocol}://${request.get('host')}${
+      request.originalUrl
+    }`;
+
+    console.log(requestUrl);
+
+    if (backLink == requestUrl || backLink == request.get('Referrer')) {
+      response.locals.backLink = '#';
+    } else {
+      response.locals.backLink = backLink;
+    }
 
     return next.handle();
   }
