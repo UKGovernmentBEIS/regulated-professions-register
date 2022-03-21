@@ -62,6 +62,20 @@ $small-screen: 768px;
   &__ra-summary-list dd {
     padding: 2px 0;
   }
+
+  &__results-found--mobile {
+    display: none;
+    @media screen and (max-width: $small-screen) {
+      display: block;
+    }
+  }
+
+  &__results-found--desktop {
+    display: block;
+    @media screen and (max-width: $small-screen) {
+      display: none;
+    }
+  }
 }
 
 .rpr-internal {

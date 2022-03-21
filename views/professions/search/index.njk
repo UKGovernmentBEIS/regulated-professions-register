@@ -9,6 +9,14 @@
 
     <div class="govuk-grid-column-one-third">
 
+      <p class="govuk-body-m rpr-listing__results-found--mobile">
+        {% if (professions.length === 1) %}
+          {{ ("professions.search.foundSingular" | t({ count: "<span class='govuk-!-font-size-36 govuk-!-font-weight-bold'>" + professions.length + "</span>" }) | safe) }}
+        {% else %}
+          {{ ("professions.search.foundPlural" | t({ count: "<span class='govuk-!-font-size-36 govuk-!-font-weight-bold'>" + professions.length + "</span>" }) | safe) }}
+        {% endif %}
+      </p>
+
       {% set filterTextPrefix = "professions.search" %}
       {% include "../../shared/_vertical-filter.njk" %}
 
@@ -19,7 +27,7 @@
       {% set filterCriteriaTextPrefix = "professions.search" %}
       {% include "../../shared/_filter-criteria.njk" %}
 
-      <p class="govuk-body-m">
+      <p class="govuk-body-m rpr-listing__results-found--desktop">
         {% if (professions.length === 1) %}
           {{ ("professions.search.foundSingular" | t({ count: "<span class='govuk-!-font-size-36 govuk-!-font-weight-bold'>" + professions.length + "</span>" }) | safe) }}
         {% else %}
