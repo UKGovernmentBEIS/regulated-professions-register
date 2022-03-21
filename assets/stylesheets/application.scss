@@ -42,6 +42,18 @@ $small-screen: 768px;
     overflow-y: auto;
   }
 
+  &__filters-details-summary {
+    display: none;
+    @media screen and (max-width: $small-screen) {
+      display: block;
+    }
+  }
+
+  &__filters-details-text {
+    border: 0;
+    padding-left: 0;
+  }
+
   &__search-criteria-container {
     margin-bottom: 5px;
   }
