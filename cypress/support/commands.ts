@@ -204,6 +204,25 @@ Cypress.Commands.add(
   },
 );
 
+Cypress.Commands.add(
+  'checkCorrectNumberOfProfessionsAreShown',
+  (statuses: ('live' | 'archived' | 'draft')[]) => {
+    cy.readFile('./seeds/test/professions.json').then((professions) => {
+      const professionsToShow = professions.filter((profession) =>
+        profession.versions.some((version) =>
+          statuses.includes(version.status),
+        ),
+      );
+
+      cy.translate('professions.search.foundPlural', {
+        count: professionsToShow.length,
+      }).then((foundText) => {
+        cy.get('body').should('contain', foundText);
+      });
+    });
+  },
+);
+
 Cypress.Commands.add('visitAndCheckAccessibility', (url: string) => {
   cy.visit(url);
   cy.checkAccessibility();

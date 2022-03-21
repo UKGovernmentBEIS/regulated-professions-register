@@ -6,48 +6,36 @@ describe('Listing professions', () => {
     });
 
     it('I can view an unfiltered list of draft, live and archived Professions', () => {
-      cy.readFile('./seeds/test/professions.json').then((professions) => {
-        const professionsToShow = professions.filter((profession) =>
-          profession.versions.some((version) =>
-            ['live', 'draft', 'archived'].includes(version.status),
-          ),
-        );
+      cy.checkCorrectNumberOfProfessionsAreShown(['draft', 'live', 'archived']);
 
-        cy.translate('professions.search.foundPlural', {
-          count: professionsToShow.length,
-        }).then((foundText) => {
-          cy.get('body').should('contain', foundText);
-        });
+      cy.translate('professions.admin.tableHeading.changedBy').then(
+        (changedBy) => {
+          cy.get('tr').eq(0).should('not.contain', changedBy);
+        },
+      );
 
-        cy.translate('professions.admin.tableHeading.changedBy').then(
-          (changedBy) => {
-            cy.get('tr').eq(0).should('not.contain', changedBy);
-          },
-        );
-
-        cy.translate('app.status.live').then((liveText) => {
-          cy.translate('app.status.draft').then((draftText) => {
-            cy.get('tr')
-              .contains('Registered Trademark Attorney')
-              .then(($header) => {
-                const $row = $header.parent();
-                cy.wrap($row).contains(liveText);
-              });
-            cy.get('tr')
-              .contains(
-                'Secondary School Teacher in State maintained schools (England)',
-              )
-              .then(($header) => {
-                const $row = $header.parent();
-                cy.wrap($row).contains(liveText);
-              });
-            cy.get('tr')
-              .contains('Gas Safe Engineer')
-              .then(($header) => {
-                const $row = $header.parent();
-                cy.wrap($row).contains(draftText);
-              });
-          });
+      cy.translate('app.status.live').then((liveText) => {
+        cy.translate('app.status.draft').then((draftText) => {
+          cy.get('tr')
+            .contains('Registered Trademark Attorney')
+            .then(($header) => {
+              const $row = $header.parent();
+              cy.wrap($row).contains(liveText);
+            });
+          cy.get('tr')
+            .contains(
+              'Secondary School Teacher in State maintained schools (England)',
+            )
+            .then(($header) => {
+              const $row = $header.parent();
+              cy.wrap($row).contains(liveText);
+            });
+          cy.get('tr')
+            .contains('Gas Safe Engineer')
+            .then(($header) => {
+              const $row = $header.parent();
+              cy.wrap($row).contains(draftText);
+            });
         });
       });
     });
