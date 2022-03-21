@@ -545,6 +545,11 @@ describe('OrganisationVersionsService', () => {
         status: OrganisationVersionStatus.Live,
       });
 
+      expect(organisationsSearchService.index).toBeCalledWith({
+        ...version,
+        status: OrganisationVersionStatus.Live,
+      });
+
       expect(queryRunner.commitTransaction).toHaveBeenCalled();
       expect(queryRunner.release).toHaveBeenCalled();
     });

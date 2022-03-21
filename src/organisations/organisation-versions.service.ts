@@ -195,6 +195,8 @@ export class OrganisationVersionsService {
       await queryRunner.release();
     }
 
+    await this.organisationsSearchService.index(version);
+
     return version;
   }
 
