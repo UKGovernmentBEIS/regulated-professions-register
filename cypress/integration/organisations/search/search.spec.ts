@@ -133,6 +133,58 @@ describe('Searching an organisation', () => {
         );
     });
   });
+
+  it('I can clear all filters', () => {
+    cy.get('input[name="keywords"]').type('Medical');
+
+    cy.translate('industries.law').then((lawText) => {
+      cy.get('label')
+        .contains(lawText)
+        .parent()
+        .within(() => {
+          cy.get('input[name="industries[]"]').check();
+        });
+
+      cy.translate('nations.wales').then((wales) => {
+        cy.get('label')
+          .contains(wales)
+          .parent()
+          .within(() => {
+            cy.get('input[name="nations[]"]').check();
+          });
+      });
+
+      cy.get('button').click();
+
+      cy.translate('app.filters.clearAllButton').then((clearAllButton) => {
+        cy.get('a').contains(clearAllButton).click();
+      });
+
+      cy.checkAccessibility();
+
+      cy.get('input[name="keywords"]').should('not.have.value', 'Medical');
+
+      cy.translate('nations.wales').then((wales) => {
+        cy.get('label')
+          .contains(wales)
+          .parent()
+          .within(() => {
+            cy.get('input[name="nations[]"]').should('not.be.checked');
+          });
+      });
+
+      cy.translate('industries.law').then((lawText) => {
+        cy.get('label')
+          .contains(lawText)
+          .parent()
+          .within(() => {
+            cy.get('input[name="industries[]"]').should('not.be.checked');
+          });
+      });
+
+      cy.checkCorrectNumberOfOrganisationsAreShown(['live']);
+    });
+  });
 });
 
 function checkResultLength(expectedLength: number): void {

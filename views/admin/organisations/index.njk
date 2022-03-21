@@ -43,6 +43,7 @@
 
         {% ifAsync view === 'overview' %}
           {% set filterTextPrefix = "organisations.admin" %}
+          {% set emptyFiltersHref = "/admin/organisations" %}
           {% include "../../shared/_horizontal-filter.njk" %}
         {% endif %}
     </div>

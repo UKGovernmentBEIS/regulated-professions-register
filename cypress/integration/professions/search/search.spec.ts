@@ -138,4 +138,36 @@ describe('Searching a profession', () => {
         );
     });
   });
+
+  it('I can clear all filters', () => {
+    cy.get('input[name="nations[]"][value="GB-WLS"]').check();
+
+    cy.translate('industries.education').then((nameLabel) => {
+      cy.get('label').contains(nameLabel).parent().find('input').check();
+    });
+
+    cy.get('input[name="keywords"]').type('Attorney');
+
+    cy.get('button').click();
+    cy.checkAccessibility();
+
+    cy.translate('app.filters.clearAllButton').then((clearAllButton) => {
+      cy.get('a').contains(clearAllButton).click();
+    });
+    cy.checkAccessibility();
+
+    cy.get('input[name="keywords"]').should('not.have.value', 'Attorney');
+
+    cy.get('input[name="nations[]"][value="GB-WLS"]').should('not.be.checked');
+
+    cy.translate('industries.education').then((nameLabel) => {
+      cy.get('label')
+        .contains(nameLabel)
+        .parent()
+        .find('input')
+        .should('not.be.checked');
+    });
+
+    cy.checkCorrectNumberOfProfessionsAreShown(['live']);
+  });
 });

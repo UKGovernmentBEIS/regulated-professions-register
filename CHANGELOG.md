@@ -22,6 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Allow central users to filter Profession and Organisation listings by regulation type
 - Search profession keywords using Opensearch
 - Add a script to reindex professions in Opensearch
+- Add button for clearing all filters on public and internal pages
 
 ### Changed
 

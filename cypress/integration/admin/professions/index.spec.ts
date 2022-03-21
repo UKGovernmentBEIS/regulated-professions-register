@@ -190,6 +190,71 @@ describe('Listing professions', () => {
         'Secondary School Teacher in State maintained schools (England)',
       );
     });
+
+    it('I can clear all filters and view the original search results', () => {
+      expandFilters();
+
+      cy.get('input[name="keywords"]').type('Attorney');
+
+      cy.get('input[name="nations[]"][value="GB-WLS"]').check();
+
+      cy.get('label')
+        .contains('Law Society of England and Wales')
+        .parent()
+        .find('input')
+        .check();
+
+      cy.translate('industries.education').then((nameLabel) => {
+        cy.get('label').contains(nameLabel).parent().find('input').check();
+      });
+
+      cy.translate('professions.regulationTypes.certification.name').then(
+        (nameLabel) => {
+          cy.get('label').contains(nameLabel).parent().find('input').check();
+        },
+      );
+
+      clickFilterButtonAndCheckAccessibility();
+
+      expandFilters();
+
+      cy.translate('app.filters.clearAllButton').then((clearAllButton) => {
+        cy.get('a').contains(clearAllButton).click();
+      });
+      cy.checkAccessibility();
+
+      cy.get('input[name="keywords"]').should('not.have.value', 'Attorney');
+
+      cy.get('input[name="nations[]"][value="GB-WLS"]').should(
+        'not.be.checked',
+      );
+
+      cy.get('label')
+        .contains('Law Society of England and Wales')
+        .parent()
+        .find('input')
+        .should('not.be.checked');
+
+      cy.translate('industries.education').then((nameLabel) => {
+        cy.get('label')
+          .contains(nameLabel)
+          .parent()
+          .find('input')
+          .should('not.be.checked');
+      });
+
+      cy.translate('professions.regulationTypes.certification.name').then(
+        (nameLabel) => {
+          cy.get('label')
+            .contains(nameLabel)
+            .parent()
+            .find('input')
+            .should('not.be.checked');
+        },
+      );
+
+      cy.checkCorrectNumberOfProfessionsAreShown(['draft', 'live', 'archived']);
+    });
   });
 
   context('When I am logged in as organisation editor', () => {
@@ -247,7 +312,7 @@ describe('Listing professions', () => {
   });
 
   function clickFilterButtonAndCheckAccessibility(): void {
-    cy.translate('professions.admin.filter.button').then((buttonLabel) => {
+    cy.translate('app.filters.filterButton').then((buttonLabel) => {
       cy.get('button').contains(buttonLabel).click();
     });
 
