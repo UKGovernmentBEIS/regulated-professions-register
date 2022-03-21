@@ -6,6 +6,7 @@ import {
   OrganisationVersionStatus,
 } from './organisation-version.entity';
 import { Organisation } from './organisation.entity';
+import { OrganisationsSearchService } from './organisations-search.service';
 import { User } from '../users/user.entity';
 import { ProfessionVersionStatus } from '../professions/profession-version.entity';
 
@@ -16,6 +17,7 @@ export class OrganisationVersionsService {
     @InjectRepository(OrganisationVersion)
     private repository: Repository<OrganisationVersion>,
     private professionVersionsService: ProfessionVersionsService,
+    private organisationsSearchService: OrganisationsSearchService,
     private connection: Connection,
   ) {}
 
@@ -159,6 +161,8 @@ export class OrganisationVersionsService {
 
   async confirm(version: OrganisationVersion): Promise<OrganisationVersion> {
     version.status = OrganisationVersionStatus.Draft;
+
+    await this.organisationsSearchService.index(version);
 
     return this.repository.save(version);
   }

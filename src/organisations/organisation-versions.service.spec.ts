@@ -16,6 +16,7 @@ import {
 import { Organisation } from './organisation.entity';
 import { User } from '../users/user.entity';
 import { OrganisationVersionsService } from './organisation-versions.service';
+import { OrganisationsSearchService } from './organisations-search.service';
 
 import organisationVersionFactory from '../testutils/factories/organisation-version';
 import organisationFactory from '../testutils/factories/organisation';
@@ -31,10 +32,12 @@ describe('OrganisationVersionsService', () => {
   let repo: Repository<OrganisationVersion>;
   let connection: DeepMocked<Connection>;
   let professionVersionsService: DeepMocked<ProfessionVersionsService>;
+  let organisationsSearchService: DeepMocked<OrganisationsSearchService>;
 
   beforeEach(async () => {
     connection = createMock<Connection>();
     professionVersionsService = createMock<ProfessionVersionsService>();
+    organisationsSearchService = createMock<OrganisationsSearchService>();
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -46,6 +49,10 @@ describe('OrganisationVersionsService', () => {
         {
           provide: ProfessionVersionsService,
           useValue: professionVersionsService,
+        },
+        {
+          provide: OrganisationsSearchService,
+          useValue: organisationsSearchService,
         },
         {
           provide: Connection,
@@ -146,6 +153,20 @@ describe('OrganisationVersionsService', () => {
 
       expect(result).toEqual(updatedVersion);
       expect(repoSpy).toHaveBeenCalledWith(updatedVersion);
+    });
+
+    it('indexes the version in opensearch', async () => {
+      const organisationVersion = organisationVersionFactory.build();
+      const updatedVersion = {
+        ...organisationVersion,
+        status: OrganisationVersionStatus.Draft,
+      };
+
+      await service.confirm(organisationVersion);
+
+      expect(organisationsSearchService.index).toHaveBeenCalledWith(
+        updatedVersion,
+      );
     });
   });
 
