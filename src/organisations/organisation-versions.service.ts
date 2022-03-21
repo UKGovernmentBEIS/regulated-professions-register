@@ -117,6 +117,31 @@ export class OrganisationVersionsService {
     );
   }
 
+  async searchWithLatestVersion(filter: FilterInput): Promise<Organisation[]> {
+    const query = this.versionsWithJoins()
+      .distinctOn(['organisationVersion.organisation', 'professions.id'])
+      .where(
+        '(organisationVersion.status IN(:...organisationStatus)) AND (professionVersions.status IN(:...professionStatus) OR professionVersions.status IS NULL)',
+        {
+          organisationStatus: [
+            OrganisationVersionStatus.Live,
+            OrganisationVersionStatus.Draft,
+            OrganisationVersionStatus.Archived,
+          ],
+          professionStatus: [
+            ProfessionVersionStatus.Live,
+            ProfessionVersionStatus.Draft,
+          ],
+        },
+      )
+      .orderBy(
+        'organisationVersion.organisation, professions.id, professionVersions.created_at, organisationVersion.created_at',
+        'DESC',
+      );
+
+    return await this.filter(query, filter, true);
+  }
+
   async allWithLatestVersion(): Promise<Organisation[]> {
     const versions = await this.versionsWithJoins()
       .distinctOn(['organisationVersion.organisation', 'professions.id'])
@@ -280,6 +305,7 @@ export class OrganisationVersionsService {
   private async filter(
     query: SelectQueryBuilder<OrganisationVersion>,
     filter: FilterInput,
+    showDraftProfessions = false,
   ): Promise<Organisation[]> {
     if (filter.keywords?.length) {
       const ids = await this.organisationsSearchService.search(filter.keywords);
@@ -308,7 +334,11 @@ export class OrganisationVersionsService {
     const versions = await query.getMany();
 
     return versions.map((version) =>
-      Organisation.withVersion(version.organisation, version),
+      Organisation.withVersion(
+        version.organisation,
+        version,
+        showDraftProfessions,
+      ),
     );
   }
 }
