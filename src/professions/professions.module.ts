@@ -25,6 +25,7 @@ import { ProfessionArchiveController } from './admin/profession-archive.controll
 import { OrganisationVersionsService } from '../organisations/organisation-versions.service';
 import { OrganisationVersion } from '../organisations/organisation-version.entity';
 import { ProfessionsSearchService } from './professions-search.service';
+import { OrganisationsSearchService } from '../organisations/organisations-search.service';
 import { SearchModule } from '../search/search.module';
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { SearchModule } from '../search/search.module';
     OrganisationsService,
     OrganisationVersionsService,
     ProfessionsSearchService,
+    OrganisationsSearchService,
     ProfessionVersionsService,
   ],
   controllers: [

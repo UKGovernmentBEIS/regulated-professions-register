@@ -7,6 +7,7 @@ import { ProfessionVersion } from '../professions/profession-version.entity';
 import { OrganisationVersion } from './organisation-version.entity';
 import { OrganisationsService } from './organisations.service';
 import { OrganisationVersionsService } from './organisation-versions.service';
+import { OrganisationsSearchService } from './organisations-search.service';
 import { OrganisationsController as AdminOrganisationsController } from './admin/organisations.controller';
 import { OrganisationVersionsController as AdminOrganisationVersionsController } from './admin/organisation-versions.controller';
 
@@ -25,6 +26,7 @@ import { SearchModule } from '../search/search.module';
     OrganisationVersionsService,
     ProfessionVersionsService,
     ProfessionsSearchService,
+    OrganisationsSearchService,
   ],
   controllers: [
     AdminOrganisationsController,
