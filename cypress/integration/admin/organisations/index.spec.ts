@@ -13,7 +13,11 @@ describe('Listing organisations', () => {
     it('Lists all the organisations', () => {
       cy.readFile('./seeds/test/professions.json').then((professions) => {
         cy.readFile('./seeds/test/organisations.json').then((organisations) => {
-          let confirmedCount = 0;
+          cy.checkCorrectNumberOfOrganisationsAreShown([
+            'draft',
+            'live',
+            'archived',
+          ]);
 
           organisations.forEach((organisation) => {
             const latestVersion =
@@ -22,8 +26,6 @@ describe('Listing organisations', () => {
             if (latestVersion.status === 'unconfirmed') {
               cy.get('tr').should('not.contain', organisation.name);
             } else {
-              confirmedCount++;
-
               cy.get('tr')
                 .contains(organisation.name)
                 .then(($header) => {
@@ -59,12 +61,6 @@ describe('Listing organisations', () => {
                   });
                 });
             }
-          });
-
-          cy.translate('organisations.search.foundPlural', {
-            count: confirmedCount,
-          }).then((foundText) => {
-            cy.get('body').should('contain', foundText);
           });
         });
       });

@@ -223,6 +223,25 @@ Cypress.Commands.add(
   },
 );
 
+Cypress.Commands.add(
+  'checkCorrectNumberOfOrganisationsAreShown',
+  (statuses: ('live' | 'archived' | 'draft')[]) => {
+    cy.readFile('./seeds/test/organisations.json').then((organisations) => {
+      const organisationsToShow = organisations.filter((organisation) =>
+        organisation.versions.some((version) =>
+          statuses.includes(version.status),
+        ),
+      );
+
+      cy.translate('organisations.search.foundPlural', {
+        count: organisationsToShow.length,
+      }).then((foundText) => {
+        cy.get('body').should('contain', foundText);
+      });
+    });
+  },
+);
+
 Cypress.Commands.add('visitAndCheckAccessibility', (url: string) => {
   cy.visit(url);
   cy.checkAccessibility();

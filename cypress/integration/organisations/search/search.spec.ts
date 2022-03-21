@@ -11,29 +11,19 @@ describe('Searching an organisation', () => {
   });
 
   it('I can view an unfiltered list of organisations', () => {
+    cy.checkCorrectNumberOfOrganisationsAreShown(['live']);
     cy.readFile('./seeds/test/organisations.json').then((organisations) => {
-      let liveCount = 0;
-
       organisations.forEach((organisation) => {
         const live = organisation.versions.some(
           (version) => version.status === 'live',
         );
 
         if (live) {
-          liveCount++;
           cy.get('body').should('contain', organisation.name);
         } else {
           cy.get('body').should('not.contain', organisation.name);
         }
       });
-
-      cy.translate('organisations.search.foundPlural', {
-        count: liveCount,
-      }).then((foundText) => {
-        cy.get('body').should('contain.text', foundText);
-      });
-
-      checkResultLength(liveCount);
     });
   });
 
