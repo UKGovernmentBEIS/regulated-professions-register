@@ -98,6 +98,43 @@ describe('OrganisationVersionsService', () => {
     });
   });
 
+  describe('all', () => {
+    it('returns all OrganisationVersion', async () => {
+      const organisationVersions = organisationVersionFactory.buildList(5);
+      const queryBuilder = createMock<SelectQueryBuilder<OrganisationVersion>>({
+        leftJoinAndSelect: () => queryBuilder,
+        where: () => queryBuilder,
+        getMany: async () => organisationVersions,
+      });
+
+      jest
+        .spyOn(repo, 'createQueryBuilder')
+        .mockImplementation(() => queryBuilder);
+
+      const result = await service.all();
+
+      expect(result).toEqual(organisationVersions);
+
+      expect(queryBuilder).toHaveJoined([
+        'organisationVersion.organisation',
+        'organisationVersion.user',
+        'organisation.professions',
+      ]);
+
+      expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
+        'professions.versions',
+        'professionVersions',
+      );
+
+      expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
+        'professionVersions.industries',
+        'industries',
+      );
+
+      expect(queryBuilder.getMany).toHaveBeenCalled();
+    });
+  });
+
   describe('findByIdWithOrganisation', () => {
     it('returns an Organisation with a version, fetching its draft and live professions', async () => {
       const organisationVersion = organisationVersionFactory.build();

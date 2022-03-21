@@ -30,6 +30,10 @@ export class OrganisationVersionsService {
     return this.repository.findOne(id);
   }
 
+  async all(): Promise<OrganisationVersion[]> {
+    return await this.versionsWithJoins().getMany();
+  }
+
   async create(
     previousVersion: OrganisationVersion,
     user: User,
