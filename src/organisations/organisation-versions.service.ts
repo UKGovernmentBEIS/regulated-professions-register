@@ -331,6 +331,23 @@ export class OrganisationVersionsService {
       });
     }
 
+    if (filter.organisations?.length) {
+      const organisations = filter.organisations.map((o) => o.id);
+
+      query = query.andWhere('organisation.id IN(:...organisations)', {
+        organisations: organisations,
+      });
+    }
+
+    if (filter.regulationTypes?.length) {
+      query = query.andWhere(
+        'professionVersions.regulationType IN(:...regulationTypes)',
+        {
+          regulationTypes: filter.regulationTypes,
+        },
+      );
+    }
+
     const versions = await query.getMany();
 
     return versions.map((version) =>

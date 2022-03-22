@@ -29,6 +29,7 @@ import industryFactory from '../testutils/factories/industry';
 
 import { ProfessionVersionStatus } from '../professions/profession-version.entity';
 import { ProfessionVersionsService } from '../professions/profession-versions.service';
+import { RegulationType } from '../professions/profession-version.entity';
 
 describe('OrganisationVersionsService', () => {
   let service: OrganisationVersionsService;
@@ -1098,6 +1099,59 @@ describe('OrganisationVersionsService', () => {
         'industries.id IN(:...industries)',
         {
           industries: ['some-uuid', 'other-uuid'],
+        },
+      );
+    });
+
+    it('filters by organisation when provided', async () => {
+      const organisation1 = organisationFactory.build({ id: 'some-uuid' });
+      const organisation2 = organisationFactory.build({
+        id: 'some-other-uuid',
+      });
+
+      const filter = {
+        keywords: '',
+        nations: [],
+        industries: [],
+        organisations: [organisation1, organisation2],
+      };
+
+      const result = await service.searchWithLatestVersion(filter);
+
+      const expectedOrgs = versions.map((version) =>
+        Organisation.withVersion(version.organisation, version),
+      );
+
+      expect(result).toEqual(expectedOrgs);
+
+      expect(queryBuilder.andWhere).toHaveBeenCalledWith(
+        'organisation.id IN(:...organisations)',
+        {
+          organisations: ['some-uuid', 'some-other-uuid'],
+        },
+      );
+    });
+
+    it('filters by regulation type when provided', async () => {
+      const filter = {
+        keywords: '',
+        nations: [],
+        industries: [],
+        regulationTypes: [RegulationType.Accreditation],
+      };
+
+      const result = await service.searchWithLatestVersion(filter);
+
+      const expectedOrgs = versions.map((version) =>
+        Organisation.withVersion(version.organisation, version),
+      );
+
+      expect(result).toEqual(expectedOrgs);
+
+      expect(queryBuilder.andWhere).toHaveBeenCalledWith(
+        'professionVersions.regulationType IN(:...regulationTypes)',
+        {
+          regulationTypes: [RegulationType.Accreditation],
         },
       );
     });
