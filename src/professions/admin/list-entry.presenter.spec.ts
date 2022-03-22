@@ -71,7 +71,7 @@ describe('ListEntryPresenter', () => {
 
           { html: 'Published' },
           {
-            html: `<a href="/admin/professions/profession-id/versions/version-id">${translationOf(
+            html: `<a class="govuk-link" href="/admin/professions/profession-id/versions/version-id">${translationOf(
               'professions.admin.viewDetails',
             )}</a>`,
           },
@@ -126,7 +126,7 @@ describe('ListEntryPresenter', () => {
           { text: 'Editor' },
           { html: 'Draft' },
           {
-            html: `<a href="/admin/professions/profession-id/versions/version-id">${translationOf(
+            html: `<a class="govuk-link" href="/admin/professions/profession-id/versions/version-id">${translationOf(
               'professions.admin.viewDetails',
             )}</a>`,
           },
@@ -183,7 +183,7 @@ describe('ListEntryPresenter', () => {
           { text: 'Editor' },
           { html: 'Archived' },
           {
-            html: `<a href="/admin/professions/profession-id/versions/version-id">${translationOf(
+            html: `<a class="govuk-link" href="/admin/professions/profession-id/versions/version-id">${translationOf(
               'professions.admin.viewDetails',
             )}</a>`,
           },

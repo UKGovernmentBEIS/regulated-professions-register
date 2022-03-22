@@ -84,7 +84,7 @@ export class ListEntryPresenter {
       )
     ).join(', ');
 
-    const viewDetails = `<a href="/admin/professions/${
+    const viewDetails = `<a class="govuk-link" href="/admin/professions/${
       this.profession.id
     }/versions/${this.profession.versionId}">${await this.i18nService.translate(
       'professions.admin.viewDetails',
