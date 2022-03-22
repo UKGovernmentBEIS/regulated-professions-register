@@ -112,4 +112,17 @@ describe('BackLinkInterceptor', () => {
       });
     });
   });
+
+  describe('when a link title is specified', () => {
+    it('should add the backLink and the title to the call handler', () => {
+      const backLink = '/foo/bar';
+      const linkTitle = 'foo/bar';
+      const interceptor = new BackLinkInterceptor(backLink, linkTitle);
+
+      interceptor.intercept(context, next);
+
+      expect(response.locals.backLink).toEqual(backLink);
+      expect(response.locals.linkTitle).toEqual(linkTitle);
+    });
+  });
 });

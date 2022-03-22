@@ -15,14 +15,17 @@ export type Generator = (request: Request) => string;
 @Injectable()
 export class BackLinkInterceptor<T> implements NestInterceptor<T, Response<T>> {
   private readonly backLink: string;
+  private readonly linkTitle: string;
   private readonly generator: Generator;
 
-  constructor(arg: string | Generator) {
+  constructor(arg: string | Generator, linkTitle = '') {
     if (typeof arg === 'string') {
       this.backLink = arg;
     } else {
       this.generator = arg;
     }
+
+    this.linkTitle = linkTitle;
   }
 
   intercept(
@@ -33,6 +36,7 @@ export class BackLinkInterceptor<T> implements NestInterceptor<T, Response<T>> {
     const response = context.switchToHttp().getResponse();
 
     response.locals.backLink = this.generateBackLink(request);
+    response.locals.linkTitle = this.linkTitle;
 
     return next.handle();
   }
