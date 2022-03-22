@@ -111,5 +111,29 @@ describe('BackLinkInterceptor', () => {
         expect(response.locals.backLink).toEqual('/foo/123');
       });
     });
+
+    describe('when the generator conditional returns undefined', () => {
+      it('should make the backlink undefined', () => {
+        const generator = () => undefined;
+        const interceptor = new BackLinkInterceptor(generator);
+
+        interceptor.intercept(context, next);
+
+        expect(response.locals.backLink).toEqual(undefined);
+      });
+    });
+  });
+
+  describe('when a link title is specified', () => {
+    it('should add the backLink and the title to the call handler', () => {
+      const backLink = '/foo/bar';
+      const linkTitle = 'foo/bar';
+      const interceptor = new BackLinkInterceptor(backLink, linkTitle);
+
+      interceptor.intercept(context, next);
+
+      expect(response.locals.backLink).toEqual(backLink);
+      expect(response.locals.linkTitle).toEqual(linkTitle);
+    });
   });
 });

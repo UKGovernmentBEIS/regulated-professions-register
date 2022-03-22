@@ -1,5 +1,6 @@
 import { createMock, DeepMocked } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
+import { Request } from 'express';
 import { Nation } from '../../nations/nation';
 import { SearchController } from './search.controller';
 import { SearchPresenter } from './search.presenter';
@@ -50,6 +51,7 @@ describe('SearchController', () => {
   let organisationVersionsService: DeepMocked<OrganisationVersionsService>;
   let industriesService: DeepMocked<IndustriesService>;
   let i18nService: DeepMocked<I18nService>;
+  let request: DeepMocked<Request> = createMock<Request>();
 
   let controller: SearchController;
 
@@ -90,11 +92,14 @@ describe('SearchController', () => {
   describe('index', () => {
     describe('when no parameters are provided', () => {
       it('should return populated template params', async () => {
-        const result = await controller.index({
-          keywords: '',
-          industries: [],
-          nations: [],
-        });
+        const result = await controller.index(
+          {
+            keywords: '',
+            industries: [],
+            nations: [],
+          },
+          request,
+        );
 
         const expected = await new SearchPresenter(
           {
@@ -112,22 +117,28 @@ describe('SearchController', () => {
       });
 
       it('should request organisations populated with professions from `OrganisationVersionsService`', async () => {
-        await controller.index({
-          keywords: '',
-          industries: [],
-          nations: [],
-        });
+        await controller.index(
+          {
+            keywords: '',
+            industries: [],
+            nations: [],
+          },
+          request,
+        );
 
         expect(organisationVersionsService.allLive).toHaveBeenCalled();
       });
     });
 
     it('should return template params populated with provided search filters', async () => {
-      const result = await controller.index({
-        keywords: 'example search',
-        industries: [industry1.id, industry2.id],
-        nations: ['GB-NIR'],
-      });
+      const result = await controller.index(
+        {
+          keywords: 'example search',
+          industries: [industry1.id, industry2.id],
+          nations: ['GB-NIR'],
+        },
+        request,
+      );
 
       const expected = await new SearchPresenter(
         {
@@ -145,11 +156,14 @@ describe('SearchController', () => {
     });
 
     it('should return filtered organisations when searching by nation', async () => {
-      const result = await controller.index({
-        keywords: '',
-        industries: [],
-        nations: ['GB-SCT'],
-      });
+      const result = await controller.index(
+        {
+          keywords: '',
+          industries: [],
+          nations: ['GB-SCT'],
+        },
+        request,
+      );
 
       const expected = await new SearchPresenter(
         {
@@ -167,11 +181,14 @@ describe('SearchController', () => {
     });
 
     it('should return filtered organisations when searching by industry', async () => {
-      const result = await controller.index({
-        keywords: '',
-        industries: [industry2.id],
-        nations: [],
-      });
+      const result = await controller.index(
+        {
+          keywords: '',
+          industries: [industry2.id],
+          nations: [],
+        },
+        request,
+      );
 
       const expected = await new SearchPresenter(
         {
@@ -189,11 +206,14 @@ describe('SearchController', () => {
     });
 
     it('should return filtered organisations when searching by keyword', async () => {
-      const result = await controller.index({
-        keywords: 'Medical',
-        industries: [],
-        nations: [],
-      });
+      const result = await controller.index(
+        {
+          keywords: 'Medical',
+          industries: [],
+          nations: [],
+        },
+        request,
+      );
 
       const expected = await new SearchPresenter(
         {
@@ -211,11 +231,14 @@ describe('SearchController', () => {
     });
 
     it('should return unfiltered organisations when no search parameters are specified', async () => {
-      const result = await controller.index({
-        keywords: '',
-        industries: [],
-        nations: [],
-      });
+      const result = await controller.index(
+        {
+          keywords: '',
+          industries: [],
+          nations: [],
+        },
+        request,
+      );
 
       const expected = await new SearchPresenter(
         {
@@ -230,6 +253,23 @@ describe('SearchController', () => {
       ).present();
 
       expect(result).toEqual(expected);
+    });
+
+    it('should set the searchResultUrl', async () => {
+      request = createMock<Request>({
+        url: '/search',
+      });
+
+      await controller.index(
+        {
+          keywords: '',
+          industries: [],
+          nations: [],
+        },
+        request,
+      );
+
+      expect(request.session.searchResultUrl).toEqual('/search');
     });
   });
 });

@@ -6,6 +6,7 @@ import {
   Render,
 } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
+import { Request } from 'express';
 import { Nation } from '../nations/nation';
 import QualificationPresenter from '../qualifications/presenters/qualification.presenter';
 import { ShowTemplate } from './interfaces/show-template.interface';
@@ -24,7 +25,10 @@ export class ProfessionsController {
 
   @Get('/professions/:slug')
   @Render('professions/show')
-  @BackLink('/professions/search')
+  @BackLink(
+    (request: Request) => request.session.searchResultUrl,
+    'app.backToSearch',
+  )
   async show(@Param('slug') slug: string): Promise<ShowTemplate> {
     const profession = await this.professionVersionsService.findLiveBySlug(
       slug,

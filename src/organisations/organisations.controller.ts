@@ -1,5 +1,6 @@
 import { Controller, Get, Render, Param } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
+import { Request } from 'express';
 
 import { OrganisationVersionsService } from './organisation-versions.service';
 import { ShowTemplate } from './interfaces/show-template.interface';
@@ -14,7 +15,10 @@ export class OrganisationsController {
 
   @Get('/regulatory-authorities/:slug')
   @Render('organisations/show')
-  @BackLink('/regulatory-authorities/search')
+  @BackLink(
+    (request: Request) => request.session.searchResultUrl,
+    'app.backToSearch',
+  )
   async show(@Param('slug') slug: string): Promise<ShowTemplate> {
     const organisation = await this.organisationVersionsService.findLiveBySlug(
       slug,
