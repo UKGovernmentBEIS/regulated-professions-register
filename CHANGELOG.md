@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [Unreleased]
+## [release-010] - 2022-03-22
 
 ### Added
 
@@ -21,9 +21,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Improve constraints around editing users
 - Improve constraints around editing organisations
 - Improve constraints around editing professions
-
-### Changed
-
 - Only allow users to edit a Profession if they are a central user, or in that Profession's primary Organisation
 
 ## [release-009] - 2022-03-11
@@ -218,7 +215,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fix links in error messages when adding a new profession
 - Make validation errors more human readable
 
-[unreleased]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-009...HEAD
+[unreleased]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-010...HEAD
+[release-010]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release009...release-010
 [release-009]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release008...release-009
 [release-008]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release007...release-008
 [release-007]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release006...release-007
