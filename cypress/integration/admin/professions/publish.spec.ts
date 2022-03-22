@@ -133,9 +133,8 @@ describe('Publishing professions', () => {
         cy.contains(buttonText).click();
       });
 
-      cy.clickSummaryListRowAction(
+      cy.clickSummaryListRowChangeLink(
         'professions.form.label.legislation.nationalLegislation',
-        'Change',
       );
       cy.checkAccessibility();
 

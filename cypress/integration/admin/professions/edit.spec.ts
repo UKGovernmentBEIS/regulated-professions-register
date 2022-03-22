@@ -95,10 +95,7 @@ describe('Editing an existing profession', () => {
         cy.get('dt').contains(label).siblings().should('not.contain', 'Change');
       });
 
-      cy.clickSummaryListRowAction(
-        'professions.form.label.scope.nations',
-        'Change',
-      );
+      cy.clickSummaryListRowChangeLink('professions.form.label.scope.nations');
 
       // Conditional radio buttons add an additional `aria-expanded` field,
       // so ignore that rule on this page
@@ -128,9 +125,8 @@ describe('Editing an existing profession', () => {
         });
       });
 
-      cy.clickSummaryListRowAction(
+      cy.clickSummaryListRowChangeLink(
         'professions.form.label.regulatedActivities.regulationSummary',
-        'Change',
       );
       cy.checkAccessibility();
       cy.translate('professions.form.captions.edit', {
@@ -158,9 +154,8 @@ describe('Editing an existing profession', () => {
         },
       );
 
-      cy.clickSummaryListRowAction(
+      cy.clickSummaryListRowChangeLink(
         'professions.form.label.qualifications.routesToObtain',
-        'Change',
       );
 
       cy.checkAccessibility();
@@ -180,9 +175,8 @@ describe('Editing an existing profession', () => {
         'Updated routes to obtain qualification',
       );
 
-      cy.clickSummaryListRowAction(
+      cy.clickSummaryListRowChangeLink(
         'professions.form.label.legislation.nationalLegislation',
-        'Change',
       );
       cy.checkAccessibility();
       cy.translate('professions.form.captions.edit', {
@@ -202,9 +196,8 @@ describe('Editing an existing profession', () => {
         1,
       );
 
-      cy.clickSummaryListRowAction(
+      cy.clickSummaryListRowChangeLink(
         'professions.form.label.legislation.nationalLegislation',
-        'Change',
       );
       cy.checkAccessibility();
       cy.translate('professions.form.captions.edit', {
@@ -280,10 +273,7 @@ describe('Editing an existing profession', () => {
         cy.contains(buttonText).click();
       });
 
-      cy.clickSummaryListRowAction(
-        'professions.form.label.scope.nations',
-        'Change',
-      );
+      cy.clickSummaryListRowChangeLink('professions.form.label.scope.nations');
 
       cy.translate('app.unitedKingdom').then((uk) => {
         cy.get('label').contains(uk).click();
@@ -299,9 +289,8 @@ describe('Editing an existing profession', () => {
         },
       );
 
-      cy.clickSummaryListRowAction(
+      cy.clickSummaryListRowChangeLink(
         'professions.form.label.qualifications.routesToObtain',
-        'Change',
       );
 
       cy.translate('professions.form.label.qualifications.ukRecognition').then(
@@ -314,10 +303,7 @@ describe('Editing an existing profession', () => {
         cy.get('button').contains(buttonText).click();
       });
 
-      cy.clickSummaryListRowAction(
-        'professions.form.label.scope.nations',
-        'Change',
-      );
+      cy.clickSummaryListRowChangeLink('professions.form.label.scope.nations');
 
       cy.translate('professions.form.label.scope.certainNations').then(
         (certainNations) => {
@@ -339,9 +325,8 @@ describe('Editing an existing profession', () => {
         },
       );
 
-      cy.clickSummaryListRowAction(
+      cy.clickSummaryListRowChangeLink(
         'professions.form.label.qualifications.routesToObtain',
-        'Change',
       );
 
       cy.translate('professions.form.label.qualifications.ukRecognition').then(
@@ -365,10 +350,7 @@ describe('Editing an existing profession', () => {
         cy.contains(buttonText).click();
       });
 
-      cy.clickSummaryListRowAction(
-        'professions.form.label.scope.nations',
-        'Change',
-      );
+      cy.clickSummaryListRowChangeLink('professions.form.label.scope.nations');
 
       cy.translate('app.unitedKingdom').then((uk) => {
         cy.get('label').contains(uk).click();
@@ -427,9 +409,8 @@ describe('Editing an existing profession', () => {
           '',
         );
 
-        cy.clickSummaryListRowAction(
+        cy.clickSummaryListRowChangeLink(
           'professions.form.label.qualifications.routesToObtain',
-          'Change',
         );
 
         cy.checkAccessibility();
@@ -502,9 +483,8 @@ describe('Editing an existing profession', () => {
 
         cy.checkAccessibility();
 
-        cy.clickSummaryListRowAction(
+        cy.clickSummaryListRowChangeLink(
           'professions.form.label.legislation.nationalLegislation',
-          'Change',
         );
         cy.checkAccessibility();
         cy.translate('professions.form.captions.edit', {
@@ -560,9 +540,8 @@ describe('Editing an existing profession', () => {
 
       cy.checkAccessibility();
 
-      cy.clickSummaryListRowAction(
+      cy.clickSummaryListRowChangeLink(
         'professions.form.label.topLevelInformation.name',
-        'Change',
       );
       cy.checkAccessibility();
       cy.translate('professions.form.captions.edit', {
@@ -580,9 +559,8 @@ describe('Editing an existing profession', () => {
         'Updated name',
       );
 
-      cy.clickSummaryListRowAction(
+      cy.clickSummaryListRowChangeLink(
         'professions.form.label.topLevelInformation.regulatedAuthority',
-        'Change',
       );
       cy.checkAccessibility();
       cy.translate('professions.form.captions.edit', {

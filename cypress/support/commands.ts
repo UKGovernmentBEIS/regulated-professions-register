@@ -188,21 +188,20 @@ Cypress.Commands.add(
   },
 );
 
-Cypress.Commands.add(
-  'clickSummaryListRowAction',
-  (key: string, action: string) => {
-    return cy.translate(key).then((label) => {
+Cypress.Commands.add('clickSummaryListRowChangeLink', (key: string) => {
+  return cy.translate(key).then((label) => {
+    cy.translate('app.change').then((changeLabel) => {
       cy.get('.govuk-summary-list__key')
         .contains(label)
         .siblings('.govuk-summary-list__actions')
         .then(($summaryListValue) => {
           cy.wrap($summaryListValue).within(() => {
-            cy.contains(action).click();
+            cy.contains(changeLabel).click();
           });
         });
     });
-  },
-);
+  });
+});
 
 Cypress.Commands.add(
   'checkCorrectNumberOfProfessionsAreShown',

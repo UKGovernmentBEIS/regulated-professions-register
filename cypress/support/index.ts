@@ -57,7 +57,7 @@ declare global {
         key: string,
         listItems: string[],
       ): Chainable<string>;
-      clickSummaryListRowAction(key: string, action: string): Chainable<string>;
+      clickSummaryListRowChangeLink(key: string): Chainable<string>;
       checkCorrectNumberOfProfessionsAreShown(
         statuses: ('live' | 'archived' | 'draft')[],
       ): Chainable<string>;
