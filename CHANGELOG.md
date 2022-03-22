@@ -29,6 +29,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Improve constraints around editing users
 - Improve constraints around editing organisations
 - Improve constraints around editing professions
+- Display number of results above filters on mobile
+- Hide filters on mobile once users have searched
 - Only allow users to edit a Profession if they are a central user, or in that Profession's primary Organisation
 
 ## [release-009] - 2022-03-11

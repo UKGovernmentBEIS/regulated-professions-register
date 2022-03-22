@@ -1,7 +1,7 @@
 {% set filterKeywordsWidthClass = 'govuk-input--width-10%' %}
 {% set filterCheckboxClasses = 'govuk-checkboxes--small rpr-listing__filter' %}
 
-<details class="govuk-details rpr-listing__filters-container" data-module="govuk-details" open="open">
+<details class="govuk-details rpr-listing__filters-container {{ 'rpr-listing__filters--searched' if hasSelectedFilters }}" data-module="govuk-details" open>
   <summary class="govuk-details__summary rpr-listing__filters-details-summary">
     <span class="govuk-details__summary-text">{{ "professions.admin.showFilters" | t }}</span>
   </summary>

@@ -10,6 +10,9 @@ import industryFactory from '../../testutils/factories/industry';
 import professionFactory from '../../testutils/factories/profession';
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 import { IndexTemplate } from './interfaces/index-template.interface';
+import { hasSelectedFilters } from '../../search/helpers/has-selected-filters.helper';
+
+jest.mock('../../search/helpers/has-selected-filters.helper');
 
 const industry1 = industryFactory.build({
   name: 'industries.example1',
@@ -68,6 +71,7 @@ describe('SearchPresenter', () => {
         i18nService,
       );
 
+      (hasSelectedFilters as jest.Mock).mockReturnValue(true);
       const result = await presenter.present();
 
       const industriesCheckboxItems = await new IndustriesCheckboxPresenter(
@@ -104,7 +108,10 @@ describe('SearchPresenter', () => {
             i18nService,
           ).present(),
         ],
+        hasSelectedFilters: true,
       };
+
+      expect(hasSelectedFilters).toHaveBeenCalledWith(filterInput);
 
       expect(result).toEqual(expected);
     });
