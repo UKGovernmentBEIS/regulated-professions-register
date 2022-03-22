@@ -46,15 +46,17 @@ export class BackLinkInterceptor<T> implements NestInterceptor<T, Response<T>> {
 
     let backLink = this.backLink ? this.backLink : this.generator(request);
 
-    const matches = [...backLink.matchAll(regexp)];
+    if (backLink) {
+      const matches = [...backLink.matchAll(regexp)];
 
-    matches.forEach((match) => {
-      const key = match[1];
-      if (request.params[key]) {
-        backLink = backLink.replace(`:${key}`, request.params[key]);
-      }
-    });
+      matches.forEach((match) => {
+        const key = match[1];
+        if (request.params[key]) {
+          backLink = backLink.replace(`:${key}`, request.params[key]);
+        }
+      });
 
-    return backLink;
+      return backLink;
+    }
   }
 }
