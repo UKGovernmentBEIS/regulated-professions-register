@@ -160,6 +160,15 @@ describe('Listing professions', () => {
         'The Trade Marks Act 1994',
       );
 
+      cy.translate(
+        'professions.show.legislation.secondNationalLegislation',
+      ).then((label) => {
+        cy.get('body').should('contain', label);
+      });
+      cy.translate('professions.show.legislation.secondLink').then((label) => {
+        cy.get('body').should('contain', label);
+      });
+
       cy.translate('professions.show.overview.heading').then((heading) => {
         cy.get('body').should('contain', heading);
       });
@@ -281,6 +290,19 @@ describe('Listing professions', () => {
         'professions.show.legislation.nationalLegislation',
         "The Education (School Teachers' Qualifications) (England) Regulations 2003/1662 (as amended)",
       );
+
+      cy.translate('professions.show.legislation.heading').then((heading) => {
+        cy.get('body').should('contain', heading);
+      });
+
+      cy.translate(
+        'professions.show.legislation.secondNationalLegislation',
+      ).then((label) => {
+        cy.get('body').should('contain', label);
+      });
+      cy.translate('professions.show.legislation.secondLink').then((label) => {
+        cy.get('body').should('contain', label);
+      });
 
       cy.translate('professions.show.overview.heading').then((heading) => {
         cy.get('body').should('contain', heading);
