@@ -22,6 +22,8 @@ import { OrganisationVersion } from './organisations/organisation-version.entity
 import { ProfessionVersion } from './professions/profession-version.entity';
 
 import { ProfessionsSearchService } from './professions/professions-search.service';
+import { OrganisationsSearchService } from './organisations/organisations-search.service';
+
 import { SearchModule } from './search/search.module';
 
 seeder({
@@ -48,7 +50,7 @@ seeder({
     ]),
     SearchModule.register(),
   ],
-  providers: [ProfessionsSearchService],
+  providers: [ProfessionsSearchService, OrganisationsSearchService],
 }).run([
   IndustriesSeeder,
   QualificationsSeeder,
