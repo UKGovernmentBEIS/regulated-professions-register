@@ -14,7 +14,7 @@ export class OrganisationsController {
 
   @Get('/regulatory-authorities/:slug')
   @Render('organisations/show')
-  @BackLink('/regulatory-authorities/search')
+  @BackLink('/regulatory-authorities/search', 'app.backToSearch')
   async show(@Param('slug') slug: string): Promise<ShowTemplate> {
     const organisation = await this.organisationVersionsService.findLiveBySlug(
       slug,

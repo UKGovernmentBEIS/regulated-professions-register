@@ -22,6 +22,10 @@ describe('Showing organisations', () => {
         cy.get('body').should('contain', version.email);
         cy.get('body').should('contain', version.url);
 
+        cy.translate('app.backToSearch').then((backLink) => {
+          cy.get('body').should('contain', backLink);
+        });
+
         const professionsForOrganisation = professions.filter(
           (profession: any) => profession.organisation == organisation.name,
         );

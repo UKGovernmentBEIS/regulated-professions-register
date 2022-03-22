@@ -2,6 +2,10 @@ describe('Showing a profession', () => {
   it('I can view a profession', () => {
     cy.visitAndCheckAccessibility('/professions/registered-trademark-attorney');
 
+    cy.translate('app.backToSearch').then((backLink) => {
+      cy.get('body').should('contain', backLink);
+    });
+
     cy.get('body').should('contain', 'Registered Trademark Attorney');
 
     cy.translate('professions.show.overview.heading').then((heading) => {

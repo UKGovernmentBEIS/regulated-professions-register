@@ -24,7 +24,7 @@ export class ProfessionsController {
 
   @Get('/professions/:slug')
   @Render('professions/show')
-  @BackLink('/professions/search')
+  @BackLink('/professions/search', 'app.backToSearch')
   async show(@Param('slug') slug: string): Promise<ShowTemplate> {
     const profession = await this.professionVersionsService.findLiveBySlug(
       slug,
