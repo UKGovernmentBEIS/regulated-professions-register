@@ -172,13 +172,17 @@ export class OrganisationsController {
     @Res() res: Response,
     @Req() req: RequestWithAppSession,
   ): Promise<void> {
-    const organisation = await this.organisationsService.find(organisationId);
-    const version = await this.organisationVersionsService.find(versionId);
+    const version =
+      await this.organisationVersionsService.findByIdWithOrganisation(
+        organisationId,
+        versionId,
+      );
+    const organisation = version.organisation;
 
     checkCanViewOrganisation(req, organisation);
 
     if (body.confirm) {
-      return this.confirm(res, req, organisation, version);
+      return this.confirm(res, req, version);
     } else {
       if (!isConfirmed(organisation)) {
         organisation.name = body.name;
@@ -205,7 +209,7 @@ export class OrganisationsController {
         this.i18nService,
       );
 
-      return this.showReviewPage(res, organisation, version, {
+      return this.showReviewPage(res, version, {
         ...updatedOrganisation,
         summaryList: await organisationPresenter.summaryList({
           classes: 'govuk-summary-list',
@@ -220,17 +224,17 @@ export class OrganisationsController {
   private async confirm(
     res: Response,
     req: Request,
-    organisation: Organisation,
     version: OrganisationVersion,
   ): Promise<void> {
     let action: string;
 
-    if (!isConfirmed(organisation)) {
+    if (!isConfirmed(version.organisation)) {
       action = 'create';
-      await this.organisationsService.setSlug(organisation);
+      await this.organisationsService.setSlug(version.organisation);
     } else {
       action = 'edit';
     }
+
     await this.organisationVersionsService.confirm(version);
 
     const messageTitle = await this.i18nService.translate(
@@ -239,25 +243,24 @@ export class OrganisationsController {
 
     const messageBody = await this.i18nService.translate(
       `organisations.admin.${action}.confirmation.body`,
-      { args: { name: escape(organisation.name) } },
+      { args: { name: escape(version.organisation.name) } },
     );
 
     req.flash('info', flashMessage(messageTitle, messageBody));
 
     res.redirect(
-      `/admin/organisations/${organisation.id}/versions/${version.id}`,
+      `/admin/organisations/${version.organisation.id}/versions/${version.id}`,
     );
   }
 
   private async showReviewPage(
     res: Response,
-    organisation: Organisation,
     version: OrganisationVersion,
     template: ReviewTemplate,
   ): Promise<void> {
     return res.render('admin/organisations/review', {
       ...template,
-      backLink: `/admin/organisations/${organisation.id}/versions/${version.id}/edit/`,
+      backLink: `/admin/organisations/${version.organisation.id}/versions/${version.id}/edit/`,
     });
   }
 }

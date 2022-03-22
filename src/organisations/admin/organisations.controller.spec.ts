@@ -433,10 +433,13 @@ describe('OrganisationsController', () => {
           };
 
           const organisation = organisationFactory.build({ slug: '' });
-          const version = organisationVersionFactory.build({});
+          const version = organisationVersionFactory.build({
+            organisation: organisation,
+          });
 
-          organisationsService.find.mockResolvedValue(organisation);
-          organisationVersionsService.find.mockResolvedValue(version);
+          organisationVersionsService.findByIdWithOrganisation.mockResolvedValue(
+            version,
+          );
 
           const newOrganisation = {
             ...organisation,
@@ -468,7 +471,7 @@ describe('OrganisationsController', () => {
           );
 
           const updatedOrganisation = Organisation.withVersion(
-            organisation,
+            newOrganisation,
             newVersion,
             true,
           );
@@ -514,14 +517,17 @@ describe('OrganisationsController', () => {
             name: 'My awesome organisation',
             slug: 'my-awesome-organisation',
           });
-          const version = organisationVersionFactory.build({});
+          const version = organisationVersionFactory.build({
+            organisation: organisation,
+          });
           const response = createMock<Response>();
           const request = createDefaultMockRequest({
             user: userFactory.build(),
           });
 
-          organisationsService.find.mockResolvedValue(organisation);
-          organisationVersionsService.find.mockResolvedValue(version);
+          organisationVersionsService.findByIdWithOrganisation.mockResolvedValue(
+            version,
+          );
 
           const newVersion = {
             ...version,
@@ -557,7 +563,9 @@ describe('OrganisationsController', () => {
       describe('when the slug is not set', () => {
         beforeEach(async () => {
           organisation = organisationFactory.build({ slug: '' });
-          version = organisationVersionFactory.build();
+          version = organisationVersionFactory.build({
+            organisation: organisation,
+          });
           response = createMock<Response>();
           request = createDefaultMockRequest({
             user: userFactory.build(),
@@ -567,8 +575,9 @@ describe('OrganisationsController', () => {
             confirm: true,
           });
 
-          organisationsService.find.mockResolvedValue(organisation);
-          organisationVersionsService.find.mockResolvedValue(version);
+          organisationVersionsService.findByIdWithOrganisation.mockResolvedValue(
+            version,
+          );
 
           flashMock = flashMessage as jest.Mock;
           flashMock.mockImplementation(() => 'STUB_FLASH_MESSAGE');
@@ -583,17 +592,17 @@ describe('OrganisationsController', () => {
         });
 
         it('should set the slug and confirm the version', async () => {
-          expect(organisationsService.find).toHaveBeenCalledWith('some-uuid');
-          expect(organisationVersionsService.find).toHaveBeenCalledWith(
-            'some-other-uuid',
-          );
+          expect(
+            organisationVersionsService.findByIdWithOrganisation,
+          ).toHaveBeenCalledWith('some-uuid', 'some-other-uuid');
 
           expect(organisationsService.setSlug).toHaveBeenCalledWith(
             organisation,
           );
-          expect(organisationVersionsService.confirm).toHaveBeenCalledWith(
-            version,
-          );
+          expect(organisationVersionsService.confirm).toHaveBeenCalledWith({
+            ...version,
+            organisation: organisation,
+          });
         });
 
         it('should set a flash message and redirect', () => {
@@ -618,7 +627,9 @@ describe('OrganisationsController', () => {
       describe('when the slug is set', () => {
         beforeEach(async () => {
           organisation = organisationFactory.build({ slug: 'some-slug' });
-          version = organisationVersionFactory.build();
+          version = organisationVersionFactory.build({
+            organisation: organisation,
+          });
           response = createMock<Response>();
           request = createDefaultMockRequest({
             user: userFactory.build(),
@@ -628,8 +639,9 @@ describe('OrganisationsController', () => {
             confirm: true,
           });
 
-          organisationsService.find.mockResolvedValue(organisation);
-          organisationVersionsService.find.mockResolvedValue(version);
+          organisationVersionsService.findByIdWithOrganisation.mockResolvedValue(
+            version,
+          );
 
           (escape as jest.Mock).mockImplementation();
 
@@ -649,9 +661,10 @@ describe('OrganisationsController', () => {
           expect(organisationsService.setSlug).not.toHaveBeenCalledWith(
             organisation,
           );
-          expect(organisationVersionsService.confirm).toHaveBeenCalledWith(
-            version,
-          );
+          expect(organisationVersionsService.confirm).toHaveBeenCalledWith({
+            ...version,
+            organisation: organisation,
+          });
         });
 
         it('should set a flash message and redirect', () => {
@@ -687,14 +700,17 @@ describe('OrganisationsController', () => {
     };
 
     const organisation = organisationFactory.build();
-    const version = organisationVersionFactory.build({});
+    const version = organisationVersionFactory.build({
+      organisation: organisation,
+    });
     const response = createMock<Response>();
     const request = createDefaultMockRequest({
       user: userFactory.build(),
     });
 
-    organisationsService.find.mockResolvedValue(organisation);
-    organisationVersionsService.find.mockResolvedValue(version);
+    organisationVersionsService.findByIdWithOrganisation.mockResolvedValue(
+      version,
+    );
 
     await controller.update(
       organisation.id,
