@@ -32,6 +32,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Display number of results above filters on mobile
 - Hide filters on mobile once users have searched
 - Only allow users to edit a Profession if they are a central user, or in that Profession's primary Organisation
+- Allow a central user to create a draft Profession with only a name and an Organisation
+- Validate that all necessary fields are completed before a Profession is published
 
 ## [release-009] - 2022-03-11
 
