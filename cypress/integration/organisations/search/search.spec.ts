@@ -112,6 +112,30 @@ describe('Searching an organisation', () => {
     cy.get('body').should('contain', 'Council of Registered Gas Installers');
     checkResultLength(1);
   });
+
+  it('I can use the back button to go back to my search results', () => {
+    cy.get('input[name="keywords"]').type('Education');
+
+    cy.translate('industries.education').then((nameLabel) => {
+      cy.get('label').contains(nameLabel).parent().find('input').check();
+    });
+
+    cy.get('input[name="nations[]"][value="GB-ENG"]').check();
+
+    cy.get('button').click();
+
+    cy.get('a').contains('Department for Education').click();
+
+    cy.translate('app.backToSearch').then((label) => {
+      cy.get('[data-cy=back-link]').should('contain', label);
+      cy.get('[data-cy=back-link]')
+        .invoke('attr', 'href')
+        .should(
+          'match',
+          /regulatory-authorities\/search\?keywords=Education&industries%5B%5D=.+&nations%5B%5D=GB-ENG/,
+        );
+    });
+  });
 });
 
 function checkResultLength(expectedLength: number): void {

@@ -38,9 +38,7 @@ describe('Showing organisations', () => {
         cy.checkAccessibility();
         cy.get('body').should('not.contain', 'Edit this profession');
         cy.get('[data-cy=back-link]').click();
-        // This should really go back to the organisation page itself
-        // but we'll fix that in a future piece of work
-        cy.translate('professions.search.heading').then((heading) => {
+        cy.translate('organisations.search.heading').then((heading) => {
           cy.contains(heading);
         });
       });
