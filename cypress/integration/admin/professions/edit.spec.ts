@@ -386,12 +386,6 @@ describe('Editing an existing profession', () => {
 
         cy.checkAccessibility();
 
-        cy.translate('professions.form.headings.qualifications').then(
-          (qualifications) => {
-            cy.get('body').should('not.contain', qualifications);
-          },
-        );
-
         cy.translate('professions.admin.button.edit.draft').then(
           (buttonText) => {
             cy.contains(buttonText).click();
