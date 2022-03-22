@@ -35,7 +35,6 @@ import { IndexTemplate } from './interfaces/index-template.interface';
 
 import { OrganisationDto } from './dto/organisation.dto';
 import { FilterDto } from './dto/filter.dto';
-import { OrganisationsFilterHelper } from '../helpers/organisations-filter.helper';
 import { IndustriesService } from '../../industries/industries.service';
 import { createFilterInput } from '../../helpers/create-filter-input.helper';
 
@@ -80,8 +79,6 @@ export class OrganisationsController {
       : 'single-organisation';
 
     const allNations = Nation.all();
-    const allOrganisations =
-      await this.organisationVersionsService.allWithLatestVersion();
     const allIndustries = await this.industriesService.all();
 
     const filter = query || new FilterDto();
@@ -96,9 +93,10 @@ export class OrganisationsController {
       filterInput.organisations = [actingUser.organisation];
     }
 
-    const filteredOrganisations = new OrganisationsFilterHelper(
-      allOrganisations,
-    ).filter(filterInput);
+    const filteredOrganisations =
+      await this.organisationVersionsService.searchWithLatestVersion(
+        filterInput,
+      );
 
     const userOrganisation = showAllOrgs
       ? await this.i18nService.translate('app.beis')

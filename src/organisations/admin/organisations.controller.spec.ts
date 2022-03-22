@@ -133,11 +133,8 @@ describe('OrganisationsController', () => {
           expect(await controller.index(request)).toEqual(templateParams);
 
           expect(
-            organisationVersionsService.allWithLatestVersion,
-          ).toHaveBeenCalled();
-
-          expect(OrganisationsFilterHelper).toBeCalledWith(organisations);
-          expect(OrganisationsFilterHelper.prototype.filter).toBeCalledWith({
+            organisationVersionsService.searchWithLatestVersion,
+          ).toHaveBeenCalledWith({
             keywords: '',
             nations: [],
             industries: [],
@@ -215,11 +212,8 @@ describe('OrganisationsController', () => {
           ).toEqual(templateParams);
 
           expect(
-            organisationVersionsService.allWithLatestVersion,
-          ).toHaveBeenCalled();
-
-          expect(OrganisationsFilterHelper).toBeCalledWith(organisations);
-          expect(OrganisationsFilterHelper.prototype.filter).toBeCalledWith({
+            organisationVersionsService.searchWithLatestVersion,
+          ).toHaveBeenCalledWith({
             keywords: 'example keywords',
             nations: [nations[2]],
             industries: [industries[1]],
@@ -296,11 +290,8 @@ describe('OrganisationsController', () => {
         expect(await controller.index(request)).toEqual(templateParams);
 
         expect(
-          organisationVersionsService.allWithLatestVersion,
-        ).toHaveBeenCalled();
-
-        expect(OrganisationsFilterHelper).toBeCalledWith(organisations);
-        expect(OrganisationsFilterHelper.prototype.filter).toBeCalledWith({
+          organisationVersionsService.searchWithLatestVersion,
+        ).toHaveBeenCalledWith({
           keywords: '',
           nations: [],
           organisations: [userOrganisation],
