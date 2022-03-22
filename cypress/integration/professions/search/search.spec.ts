@@ -122,4 +122,32 @@ describe('Searching a profession', () => {
       'Secondary School Teacher in State maintained schools (England)',
     );
   });
+
+  it('I can use the back button to go back to my search results', () => {
+    cy.get('input[name="keywords"]').type('Education');
+
+    cy.translate('industries.education').then((nameLabel) => {
+      cy.get('label').contains(nameLabel).parent().find('input').check();
+    });
+
+    cy.get('input[name="nations[]"][value="GB-ENG"]').check();
+
+    cy.get('button').click();
+
+    cy.get('a')
+      .contains(
+        'Secondary School Teacher in State maintained schools (England)',
+      )
+      .click();
+
+    cy.translate('app.backToSearch').then((label) => {
+      cy.get('[data-cy=back-link]').should('contain', label);
+      cy.get('[data-cy=back-link]')
+        .invoke('attr', 'href')
+        .should(
+          'match',
+          /professions\/search\?keywords=Education&industries%5B%5D=.+&nations%5B%5D=GB-ENG/,
+        );
+    });
+  });
 });
