@@ -12,14 +12,26 @@
   }}
 
   {% if backLink %}
-    {{
-      govukBackLink({
-        text: ("app.back" | t),
-        href: backLink,
-        attributes: {
-          "data-cy": "back-link"
-        }
-      })
-    }}
+    {% if linkTitle %}
+      {{
+        govukBackLink({
+          text: (linkTitle | t),
+          href: backLink,
+          attributes: {
+            "data-cy": "back-link"
+          }
+        })
+      }}
+    {% else %}
+      {{
+        govukBackLink({
+          text: ("app.back" | t),
+          href: backLink,
+          attributes: {
+            "data-cy": "back-link"
+          }
+        })
+      }}
+    {% endif %}
   {% endif %}
 </div>
