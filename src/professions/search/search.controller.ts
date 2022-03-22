@@ -1,5 +1,6 @@
-import { Controller, Get, Query, Render } from '@nestjs/common';
+import { Controller, Get, Query, Render, Req } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
+import { Request } from 'express';
 import { IndustriesService } from '../../industries/industries.service';
 import { Nation } from '../../nations/nation';
 import { FilterDto } from './dto/filter.dto';
@@ -20,7 +21,12 @@ export class SearchController {
   @Get()
   @Render('professions/search/index')
   @BackLink('/')
-  async index(@Query() filter: FilterDto): Promise<IndexTemplate> {
+  async index(
+    @Query() filter: FilterDto,
+    @Req() request: Request,
+  ): Promise<IndexTemplate> {
+    request.session.searchResultUrl = request.url;
+
     const allNations = Nation.all();
     const allIndustries = await this.industriesService.all();
 

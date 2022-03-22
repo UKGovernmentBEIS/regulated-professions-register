@@ -1,6 +1,8 @@
 import { createMock, DeepMocked } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { I18nService } from 'nestjs-i18n';
+import { Request } from 'express';
+
 import { Nation } from '../../nations/nation';
 import { IndustriesService } from '../../industries/industries.service';
 import { SearchController } from './search.controller';
@@ -15,6 +17,7 @@ describe('SearchController', () => {
   let professionVersionsService: DeepMocked<ProfessionVersionsService>;
   let industriesService: DeepMocked<IndustriesService>;
   let i18nService: DeepMocked<I18nService>;
+  let request: DeepMocked<Request> = createMock<Request>();
 
   beforeEach(async () => {
     professionVersionsService = createMock<ProfessionVersionsService>();
@@ -62,11 +65,14 @@ describe('SearchController', () => {
           trademarkAttorney,
         ]);
 
-        const result = await controller.index({
-          keywords: '',
-          industries: [],
-          nations: [],
-        });
+        const result = await controller.index(
+          {
+            keywords: '',
+            industries: [],
+            nations: [],
+          },
+          request,
+        );
 
         const expected = await new SearchPresenter(
           {
@@ -84,11 +90,14 @@ describe('SearchController', () => {
       });
 
       it('should request only complete professions from `ProfessionsService`', async () => {
-        await controller.index({
-          keywords: '',
-          industries: [],
-          nations: [],
-        });
+        await controller.index(
+          {
+            keywords: '',
+            industries: [],
+            nations: [],
+          },
+          request,
+        );
 
         expect(professionVersionsService.searchLive).toHaveBeenCalled();
       });
@@ -115,11 +124,14 @@ describe('SearchController', () => {
         trademarkAttorney,
       ]);
 
-      const result = await controller.index({
-        keywords: 'example search',
-        industries: [industry1.id, industry2.id],
-        nations: ['GB-SCT'],
-      });
+      const result = await controller.index(
+        {
+          keywords: 'example search',
+          industries: [industry1.id, industry2.id],
+          nations: ['GB-SCT'],
+        },
+        request,
+      );
 
       const expected = await new SearchPresenter(
         {
@@ -146,11 +158,14 @@ describe('SearchController', () => {
       const industry1 = industryFactory.build();
       const industry2 = industryFactory.build();
 
-      await controller.index({
-        keywords: 'example search',
-        industries: [industry1.id, industry2.id],
-        nations: ['GB-SCT'],
-      });
+      await controller.index(
+        {
+          keywords: 'example search',
+          industries: [industry1.id, industry2.id],
+          nations: ['GB-SCT'],
+        },
+        request,
+      );
 
       expect(professionVersionsService.searchLive).toHaveBeenCalledWith({
         keywords: 'example search',
@@ -158,5 +173,22 @@ describe('SearchController', () => {
         nations: [Nation.find('GB-SCT')],
       });
     });
+  });
+
+  it('should set the searchResultUrl', async () => {
+    request = createMock<Request>({
+      url: '/search',
+    });
+
+    await controller.index(
+      {
+        keywords: '',
+        industries: [],
+        nations: [],
+      },
+      request,
+    );
+
+    expect(request.session.searchResultUrl).toEqual('/search');
   });
 });
