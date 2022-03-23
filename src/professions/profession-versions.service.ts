@@ -164,12 +164,11 @@ export class ProfessionVersionsService {
   }
 
   async searchLive(filter: FilterInput): Promise<Profession[]> {
-    let query = this.versionsWithJoins().where(
-      'professionVersion.status = :status',
-      {
+    let query = this.versionsWithJoins()
+      .orderBy('profession.name')
+      .where('professionVersion.status = :status', {
         status: ProfessionVersionStatus.Live,
-      },
-    );
+      });
 
     if (filter.keywords?.length) {
       const ids = await this.searchService.search(filter.keywords);

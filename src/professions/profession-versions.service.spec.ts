@@ -838,6 +838,7 @@ describe('ProfessionVersionsService', () => {
       leftJoinAndSelect: () => queryBuilder,
       where: () => queryBuilder,
       andWhere: () => queryBuilder,
+      orderBy: () => queryBuilder,
       getMany: async () => versions,
     });
 
