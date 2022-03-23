@@ -212,7 +212,7 @@ export class ProfessionVersionsService {
 
   async allWithLatestVersion(): Promise<Profession[]> {
     const versions = await this.versionsWithJoins()
-      .distinctOn(['professionVersion.profession'])
+      .distinctOn(['professionVersion.profession', 'profession.name'])
       .where('professionVersion.status IN(:...status)', {
         status: [
           ProfessionVersionStatus.Live,
@@ -221,7 +221,7 @@ export class ProfessionVersionsService {
         ],
       })
       .orderBy(
-        'professionVersion.profession, professionVersion.created_at',
+        'profession.name, professionVersion.profession, professionVersion.created_at',
         'DESC',
       )
       .getMany();
@@ -235,7 +235,7 @@ export class ProfessionVersionsService {
     organisation: Organisation,
   ): Promise<Profession[]> {
     const versions = await this.versionsWithJoins()
-      .distinctOn(['professionVersion.profession'])
+      .distinctOn(['professionVersion.profession', 'profession.name'])
       .where('professionVersion.status IN(:...status)', {
         status: [
           ProfessionVersionStatus.Live,
@@ -247,7 +247,7 @@ export class ProfessionVersionsService {
         organisationId: organisation.id,
       })
       .orderBy(
-        'professionVersion.profession, professionVersion.created_at',
+        'profession.name, professionVersion.profession, professionVersion.created_at',
         'DESC',
       )
       .getMany();
@@ -259,13 +259,13 @@ export class ProfessionVersionsService {
 
   async latestVersion(profession: Profession): Promise<ProfessionVersion> {
     return await this.versionsWithJoins()
-      .distinctOn(['professionVersion.profession'])
+      .distinctOn(['professionVersion.profession', 'profession.name'])
       .where('professionVersion.status IN(:...status)', {
         status: [ProfessionVersionStatus.Live, ProfessionVersionStatus.Draft],
       })
       .where({ profession: profession })
       .orderBy(
-        'professionVersion.profession, professionVersion.created_at',
+        'profession.name, professionVersion.profession, professionVersion.created_at',
         'DESC',
       )
       .getOne();

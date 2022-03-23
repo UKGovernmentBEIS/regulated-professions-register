@@ -511,6 +511,7 @@ describe('ProfessionVersionsService', () => {
 
       expect(queryBuilder.distinctOn).toHaveBeenCalledWith([
         'professionVersion.profession',
+        'profession.name',
       ]);
 
       expect(queryBuilder).toHaveJoined([
@@ -535,7 +536,7 @@ describe('ProfessionVersionsService', () => {
       );
 
       expect(queryBuilder.orderBy).toHaveBeenCalledWith(
-        'professionVersion.profession, professionVersion.created_at',
+        'profession.name, professionVersion.profession, professionVersion.created_at',
         'DESC',
       );
     });
@@ -571,6 +572,7 @@ describe('ProfessionVersionsService', () => {
 
       expect(queryBuilder.distinctOn).toHaveBeenCalledWith([
         'professionVersion.profession',
+        'profession.name',
       ]);
 
       expect(queryBuilder).toHaveJoined([
@@ -602,7 +604,7 @@ describe('ProfessionVersionsService', () => {
       );
 
       expect(queryBuilder.orderBy).toHaveBeenCalledWith(
-        'professionVersion.profession, professionVersion.created_at',
+        'profession.name, professionVersion.profession, professionVersion.created_at',
         'DESC',
       );
     });
@@ -632,6 +634,7 @@ describe('ProfessionVersionsService', () => {
 
       expect(queryBuilder.distinctOn).toHaveBeenCalledWith([
         'professionVersion.profession',
+        'profession.name',
       ]);
 
       expect(queryBuilder).toHaveJoined([
@@ -656,7 +659,7 @@ describe('ProfessionVersionsService', () => {
       });
 
       expect(queryBuilder.orderBy).toHaveBeenCalledWith(
-        'professionVersion.profession, professionVersion.created_at',
+        'profession.name, professionVersion.profession, professionVersion.created_at',
         'DESC',
       );
     });
