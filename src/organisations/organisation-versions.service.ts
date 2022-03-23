@@ -90,12 +90,11 @@ export class OrganisationVersionsService {
   }
 
   async searchLive(filter: FilterInput): Promise<Organisation[]> {
-    const query = this.versionsWithJoins().where(
-      'organisationVersion.status = :status',
-      {
+    const query = this.versionsWithJoins()
+      .orderBy('organisation.name')
+      .where('organisationVersion.status = :status', {
         status: OrganisationVersionStatus.Live,
-      },
-    );
+      });
 
     return await this.filter(query, filter);
   }

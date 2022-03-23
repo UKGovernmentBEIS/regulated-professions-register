@@ -822,6 +822,7 @@ describe('OrganisationVersionsService', () => {
       leftJoinAndSelect: () => queryBuilder,
       where: () => queryBuilder,
       andWhere: () => queryBuilder,
+      orderBy: () => queryBuilder,
       getMany: async () => versions,
     });
 
@@ -861,6 +862,8 @@ describe('OrganisationVersionsService', () => {
         'professionVersions.industries',
         'industries',
       );
+
+      expect(queryBuilder.orderBy).toHaveBeenCalledWith('organisation.name');
 
       expect(queryBuilder.where).toHaveBeenCalledWith(
         'organisationVersion.status = :status',
