@@ -17,16 +17,24 @@ export class UsersService {
     return this.repository.find();
   }
 
-  allConfirmed(): Promise<User[]> {
-    return this.repository.find({
-      where: { confirmed: true, archived: false },
-    });
+  async allConfirmed(): Promise<User[]> {
+    return this.repository
+      .createQueryBuilder('user')
+      .where('user.confirmed = true AND user.archived = false')
+      .orderBy('LOWER(user.name)')
+      .getMany();
   }
 
   allConfirmedForOrganisation(organisation: Organisation): Promise<User[]> {
-    return this.repository.find({
-      where: { confirmed: true, archived: false, organisation },
-    });
+    return this.repository
+      .createQueryBuilder('user')
+      .where('user.confirmed = true AND user.archived = false')
+      .leftJoinAndSelect('user.organisation', 'organisation')
+      .andWhere('organisation.id = :organisationId', {
+        organisationId: organisation.id,
+      })
+      .orderBy('LOWER(user.name)')
+      .getMany();
   }
 
   find(id: string): Promise<User> {

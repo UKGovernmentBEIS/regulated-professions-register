@@ -70,27 +70,59 @@ describe('UsersService', () => {
 
   describe('allConfirmed', () => {
     it('should return all confirmed users', async () => {
-      const repoSpy = jest.spyOn(repo, 'find');
-      const posts = await service.allConfirmed();
+      const users = userFactory.buildList(2);
 
-      expect(posts).toEqual(userArray);
-      expect(repoSpy).toHaveBeenCalledWith({
-        where: { confirmed: true, archived: false },
+      const queryBuilder = createMock<SelectQueryBuilder<User>>({
+        leftJoinAndSelect: () => queryBuilder,
+        where: () => queryBuilder,
+        orderBy: () => queryBuilder,
+        getMany: async () => users,
       });
+
+      jest
+        .spyOn(repo, 'createQueryBuilder')
+        .mockImplementation(() => queryBuilder);
+
+      await service.allConfirmed();
+
+      expect(queryBuilder.where).toHaveBeenCalledWith(
+        'user.confirmed = true AND user.archived = false',
+      );
+      expect(queryBuilder.orderBy).toHaveBeenCalledWith('LOWER(user.name)');
+      expect(queryBuilder.getMany).toHaveBeenCalled();
     });
   });
 
   describe('allConfirmedForOrganisation', () => {
     it('should return all confirmed users', async () => {
       const organisation = organisationFactory.build();
+      const users = userFactory.buildList(2);
 
-      const repoSpy = jest.spyOn(repo, 'find');
-      const posts = await service.allConfirmedForOrganisation(organisation);
-
-      expect(posts).toEqual(userArray);
-      expect(repoSpy).toHaveBeenCalledWith({
-        where: { confirmed: true, archived: false, organisation },
+      const queryBuilder = createMock<SelectQueryBuilder<User>>({
+        leftJoinAndSelect: () => queryBuilder,
+        where: () => queryBuilder,
+        andWhere: () => queryBuilder,
+        orderBy: () => queryBuilder,
+        getMany: async () => users,
       });
+
+      jest
+        .spyOn(repo, 'createQueryBuilder')
+        .mockImplementation(() => queryBuilder);
+
+      await service.allConfirmedForOrganisation(organisation);
+
+      expect(queryBuilder.where).toHaveBeenCalledWith(
+        'user.confirmed = true AND user.archived = false',
+      );
+      expect(queryBuilder.andWhere).toHaveBeenCalledWith(
+        'organisation.id = :organisationId',
+        {
+          organisationId: organisation.id,
+        },
+      );
+      expect(queryBuilder.orderBy).toHaveBeenCalledWith('LOWER(user.name)');
+      expect(queryBuilder.getMany).toHaveBeenCalled();
     });
   });
 
