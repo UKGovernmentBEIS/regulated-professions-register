@@ -13,4 +13,6 @@ export interface IndexTemplate {
   nationsCheckboxItems: CheckboxItems[];
 
   industriesCheckboxItems: CheckboxItems[];
+
+  hasSelectedFilters: boolean;
 }

@@ -90,5 +90,9 @@
     "live": "Published",
     "draft": "Draft",
     "archived": "Archived"
+  },
+  "filters": {
+    "filterButton": "Filter results",
+    "clearAllButton": "Clear all filters"
   }
 }

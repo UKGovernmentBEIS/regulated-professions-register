@@ -4,7 +4,7 @@
 
 <form action="" method="get" class="form">
   <div class="{{ filterRowClass }}">
-     <div class="{{ filterColumnClass }}">
+    <div class="{{ filterColumnClass }}">
       {{ govukInput({
         label: {
           text: (filterTextPrefix + ".filter.keywords.label") | t,
@@ -100,8 +100,11 @@
 
   <div class="{{ filterRowClass }}">
     <div class="{{ filterButtonColumnClass }}">
+      <p class="govuk-body-m">
+        <a class="govuk-link" href="{{emptyFiltersHref}}">{{"app.filters.clearAllButton" | t}}</a>
+      </p>
       {{ govukButton({
-        text: (filterTextPrefix + ".filter.button") | t,
+        text: "app.filters.filterButton" | t,
         classes: filterButtonClasses
       }) }}
     </div>

@@ -9,7 +9,16 @@
 
     <div class="govuk-grid-column-one-third">
 
+      <p class="govuk-body-m rpr-listing__results-found--mobile">
+        {% if (organisations.length === 1) %}
+          {{ ("organisations.search.foundSingular" | t({ count: "<span class='govuk-!-font-size-36 govuk-!-font-weight-bold'>" + organisations.length + "</span>" }) | safe) }}
+        {% else %}
+          {{ ("organisations.search.foundPlural" | t({ count: "<span class='govuk-!-font-size-36 govuk-!-font-weight-bold'>" + organisations.length + "</span>" }) | safe) }}
+        {% endif %}
+      </p>
+
       {% set filterTextPrefix = "organisations.search" %}
+      {% set emptyFiltersHref = "/regulatory-authorities/search" %}
       {% include "../../shared/_vertical-filter.njk" %}
 
     </div>
@@ -19,7 +28,7 @@
       {% set filterCriteriaTextPrefix = "organisations.search" %}
       {% include "../../shared/_filter-criteria.njk" %}
 
-      <p class="govuk-body-m">
+      <p class="govuk-body-m rpr-listing__results-found--desktop">
         {% if (organisations.length === 1) %}
           {{ ("organisations.search.foundSingular" | t({ count: "<span class='govuk-!-font-size-36 govuk-!-font-weight-bold'>" + organisations.length + "</span>" }) | safe) }}
         {% else %}

@@ -13,7 +13,11 @@ describe('Listing organisations', () => {
     it('Lists all the organisations', () => {
       cy.readFile('./seeds/test/professions.json').then((professions) => {
         cy.readFile('./seeds/test/organisations.json').then((organisations) => {
-          let confirmedCount = 0;
+          cy.checkCorrectNumberOfOrganisationsAreShown([
+            'draft',
+            'live',
+            'archived',
+          ]);
 
           organisations.forEach((organisation) => {
             const latestVersion =
@@ -22,8 +26,6 @@ describe('Listing organisations', () => {
             if (latestVersion.status === 'unconfirmed') {
               cy.get('tr').should('not.contain', organisation.name);
             } else {
-              confirmedCount++;
-
               cy.get('tr')
                 .contains(organisation.name)
                 .then(($header) => {
@@ -59,12 +61,6 @@ describe('Listing organisations', () => {
                   });
                 });
             }
-          });
-
-          cy.translate('organisations.search.foundPlural', {
-            count: confirmedCount,
-          }).then((foundText) => {
-            cy.get('body').should('contain', foundText);
           });
         });
       });
@@ -188,6 +184,81 @@ describe('Listing organisations', () => {
         );
       });
     });
+
+    it('I can clear all filters', () => {
+      expandFilters();
+
+      cy.get('input[name="keywords"]').type('Medical');
+
+      cy.translate('industries.law').then((lawText) => {
+        cy.get('label')
+          .contains(lawText)
+          .parent()
+          .within(() => {
+            cy.get('input[name="industries[]"]').check();
+          });
+
+        cy.translate('professions.regulationTypes.licensing.name').then(
+          (nameLabel) => {
+            cy.get('label').contains(nameLabel).parent().find('input').check();
+          },
+        );
+
+        cy.translate('nations.wales').then((wales) => {
+          cy.get('label')
+            .contains(wales)
+            .parent()
+            .within(() => {
+              cy.get('input[name="nations[]"]').check();
+            });
+        });
+
+        clickFilterButtonAndCheckAccessibility();
+        expandFilters();
+
+        cy.translate('app.filters.clearAllButton').then((clearAllButton) => {
+          cy.get('a').contains(clearAllButton).click();
+        });
+        cy.checkAccessibility();
+        expandFilters();
+
+        cy.get('input[name="keywords"]').should('not.have.value', 'Medical');
+
+        cy.translate('nations.wales').then((wales) => {
+          cy.get('label')
+            .contains(wales)
+            .parent()
+            .within(() => {
+              cy.get('input[name="nations[]"]').should('not.be.checked');
+            });
+        });
+
+        cy.translate('industries.law').then((lawText) => {
+          cy.get('label')
+            .contains(lawText)
+            .parent()
+            .within(() => {
+              cy.get('input[name="industries[]"]').should('not.be.checked');
+            });
+        });
+
+        cy.translate('professions.regulationTypes.licensing.name').then(
+          (nameLabel) => {
+            cy.get('label')
+              .contains(nameLabel)
+              .parent()
+              .find('input')
+              .should('not.be.checked');
+          },
+        );
+
+        cy.checkCorrectNumberOfOrganisationsAreShown([
+          'live',
+          'draft',
+          'archived',
+        ]);
+      });
+    });
   });
 
   context('When I am logged in as an organisation admin', () => {
@@ -208,7 +279,7 @@ describe('Listing organisations', () => {
   });
 
   function clickFilterButtonAndCheckAccessibility(): void {
-    cy.translate('organisations.admin.filter.button').then((buttonLabel) => {
+    cy.translate('app.filters.filterButton').then((buttonLabel) => {
       cy.get('button').contains(buttonLabel).click();
     });
 

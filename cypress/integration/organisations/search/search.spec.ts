@@ -11,29 +11,19 @@ describe('Searching an organisation', () => {
   });
 
   it('I can view an unfiltered list of organisations', () => {
+    cy.checkCorrectNumberOfOrganisationsAreShown(['live']);
     cy.readFile('./seeds/test/organisations.json').then((organisations) => {
-      let liveCount = 0;
-
       organisations.forEach((organisation) => {
         const live = organisation.versions.some(
           (version) => version.status === 'live',
         );
 
         if (live) {
-          liveCount++;
           cy.get('body').should('contain', organisation.name);
         } else {
           cy.get('body').should('not.contain', organisation.name);
         }
       });
-
-      cy.translate('organisations.search.foundPlural', {
-        count: liveCount,
-      }).then((foundText) => {
-        cy.get('body').should('contain.text', foundText);
-      });
-
-      checkResultLength(liveCount);
     });
   });
 
@@ -141,6 +131,58 @@ describe('Searching an organisation', () => {
           'match',
           /regulatory-authorities\/search\?keywords=Education&industries%5B%5D=.+&nations%5B%5D=GB-ENG/,
         );
+    });
+  });
+
+  it('I can clear all filters', () => {
+    cy.get('input[name="keywords"]').type('Medical');
+
+    cy.translate('industries.law').then((lawText) => {
+      cy.get('label')
+        .contains(lawText)
+        .parent()
+        .within(() => {
+          cy.get('input[name="industries[]"]').check();
+        });
+
+      cy.translate('nations.wales').then((wales) => {
+        cy.get('label')
+          .contains(wales)
+          .parent()
+          .within(() => {
+            cy.get('input[name="nations[]"]').check();
+          });
+      });
+
+      cy.get('button').click();
+
+      cy.translate('app.filters.clearAllButton').then((clearAllButton) => {
+        cy.get('a').contains(clearAllButton).click();
+      });
+
+      cy.checkAccessibility();
+
+      cy.get('input[name="keywords"]').should('not.have.value', 'Medical');
+
+      cy.translate('nations.wales').then((wales) => {
+        cy.get('label')
+          .contains(wales)
+          .parent()
+          .within(() => {
+            cy.get('input[name="nations[]"]').should('not.be.checked');
+          });
+      });
+
+      cy.translate('industries.law').then((lawText) => {
+        cy.get('label')
+          .contains(lawText)
+          .parent()
+          .within(() => {
+            cy.get('input[name="industries[]"]').should('not.be.checked');
+          });
+      });
+
+      cy.checkCorrectNumberOfOrganisationsAreShown(['live']);
     });
   });
 });

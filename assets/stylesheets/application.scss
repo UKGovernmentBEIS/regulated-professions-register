@@ -42,6 +42,18 @@ $small-screen: 768px;
     overflow-y: auto;
   }
 
+  &__filters-details-summary {
+    display: none;
+    @media screen and (max-width: $small-screen) {
+      display: block;
+    }
+  }
+
+  &__filters-details-text {
+    border: 0;
+    padding-left: 0;
+  }
+
   &__search-criteria-container {
     margin-bottom: 5px;
   }
@@ -61,6 +73,20 @@ $small-screen: 768px;
   &__ra-summary-list dt,
   &__ra-summary-list dd {
     padding: 2px 0;
+  }
+
+  &__results-found--mobile {
+    display: none;
+    @media screen and (max-width: $small-screen) {
+      display: block;
+    }
+  }
+
+  &__results-found--desktop {
+    display: block;
+    @media screen and (max-width: $small-screen) {
+      display: none;
+    }
   }
 }
 
@@ -126,7 +152,7 @@ $small-screen: 768px;
       color: govuk-colour('white');
     }
 
-    &__fitlers-details-summary {
+    &__filters-details-summary {
       display: block;
     }
   }

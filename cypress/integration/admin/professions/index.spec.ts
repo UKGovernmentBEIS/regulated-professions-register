@@ -6,48 +6,36 @@ describe('Listing professions', () => {
     });
 
     it('I can view an unfiltered list of draft, live and archived Professions', () => {
-      cy.readFile('./seeds/test/professions.json').then((professions) => {
-        const professionsToShow = professions.filter((profession) =>
-          profession.versions.some((version) =>
-            ['live', 'draft', 'archived'].includes(version.status),
-          ),
-        );
+      cy.checkCorrectNumberOfProfessionsAreShown(['draft', 'live', 'archived']);
 
-        cy.translate('professions.search.foundPlural', {
-          count: professionsToShow.length,
-        }).then((foundText) => {
-          cy.get('body').should('contain', foundText);
-        });
+      cy.translate('professions.admin.tableHeading.changedBy').then(
+        (changedBy) => {
+          cy.get('tr').eq(0).should('not.contain', changedBy);
+        },
+      );
 
-        cy.translate('professions.admin.tableHeading.changedBy').then(
-          (changedBy) => {
-            cy.get('tr').eq(0).should('not.contain', changedBy);
-          },
-        );
-
-        cy.translate('app.status.live').then((liveText) => {
-          cy.translate('app.status.draft').then((draftText) => {
-            cy.get('tr')
-              .contains('Registered Trademark Attorney')
-              .then(($header) => {
-                const $row = $header.parent();
-                cy.wrap($row).contains(liveText);
-              });
-            cy.get('tr')
-              .contains(
-                'Secondary School Teacher in State maintained schools (England)',
-              )
-              .then(($header) => {
-                const $row = $header.parent();
-                cy.wrap($row).contains(liveText);
-              });
-            cy.get('tr')
-              .contains('Gas Safe Engineer')
-              .then(($header) => {
-                const $row = $header.parent();
-                cy.wrap($row).contains(draftText);
-              });
-          });
+      cy.translate('app.status.live').then((liveText) => {
+        cy.translate('app.status.draft').then((draftText) => {
+          cy.get('tr')
+            .contains('Registered Trademark Attorney')
+            .then(($header) => {
+              const $row = $header.parent();
+              cy.wrap($row).contains(liveText);
+            });
+          cy.get('tr')
+            .contains(
+              'Secondary School Teacher in State maintained schools (England)',
+            )
+            .then(($header) => {
+              const $row = $header.parent();
+              cy.wrap($row).contains(liveText);
+            });
+          cy.get('tr')
+            .contains('Gas Safe Engineer')
+            .then(($header) => {
+              const $row = $header.parent();
+              cy.wrap($row).contains(draftText);
+            });
         });
       });
     });
@@ -202,6 +190,71 @@ describe('Listing professions', () => {
         'Secondary School Teacher in State maintained schools (England)',
       );
     });
+
+    it('I can clear all filters and view the original search results', () => {
+      expandFilters();
+
+      cy.get('input[name="keywords"]').type('Attorney');
+
+      cy.get('input[name="nations[]"][value="GB-WLS"]').check();
+
+      cy.get('label')
+        .contains('Law Society of England and Wales')
+        .parent()
+        .find('input')
+        .check();
+
+      cy.translate('industries.education').then((nameLabel) => {
+        cy.get('label').contains(nameLabel).parent().find('input').check();
+      });
+
+      cy.translate('professions.regulationTypes.certification.name').then(
+        (nameLabel) => {
+          cy.get('label').contains(nameLabel).parent().find('input').check();
+        },
+      );
+
+      clickFilterButtonAndCheckAccessibility();
+
+      expandFilters();
+
+      cy.translate('app.filters.clearAllButton').then((clearAllButton) => {
+        cy.get('a').contains(clearAllButton).click();
+      });
+      cy.checkAccessibility();
+
+      cy.get('input[name="keywords"]').should('not.have.value', 'Attorney');
+
+      cy.get('input[name="nations[]"][value="GB-WLS"]').should(
+        'not.be.checked',
+      );
+
+      cy.get('label')
+        .contains('Law Society of England and Wales')
+        .parent()
+        .find('input')
+        .should('not.be.checked');
+
+      cy.translate('industries.education').then((nameLabel) => {
+        cy.get('label')
+          .contains(nameLabel)
+          .parent()
+          .find('input')
+          .should('not.be.checked');
+      });
+
+      cy.translate('professions.regulationTypes.certification.name').then(
+        (nameLabel) => {
+          cy.get('label')
+            .contains(nameLabel)
+            .parent()
+            .find('input')
+            .should('not.be.checked');
+        },
+      );
+
+      cy.checkCorrectNumberOfProfessionsAreShown(['draft', 'live', 'archived']);
+    });
   });
 
   context('When I am logged in as organisation editor', () => {
@@ -259,7 +312,7 @@ describe('Listing professions', () => {
   });
 
   function clickFilterButtonAndCheckAccessibility(): void {
-    cy.translate('professions.admin.filter.button').then((buttonLabel) => {
+    cy.translate('app.filters.filterButton').then((buttonLabel) => {
       cy.get('button').contains(buttonLabel).click();
     });
 

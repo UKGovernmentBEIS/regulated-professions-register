@@ -58,6 +58,12 @@ declare global {
         listItems: string[],
       ): Chainable<string>;
       clickSummaryListRowAction(key: string, action: string): Chainable<string>;
+      checkCorrectNumberOfProfessionsAreShown(
+        statuses: ('live' | 'archived' | 'draft')[],
+      ): Chainable<string>;
+      checkCorrectNumberOfOrganisationsAreShown(
+        statuses: ('live' | 'archived' | 'draft')[],
+      ): Chainable<string>;
       visitAndCheckAccessibility(url: string): void;
       checkAccessibility(rules?: AxeRules): void;
     }

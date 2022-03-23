@@ -22,12 +22,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Allow central users to filter Profession and Organisation listings by regulation type
 - Search profession keywords using Opensearch
 - Add a script to reindex professions in Opensearch
+- Add button for clearing all filters on public and internal pages
 
 ### Changed
 
 - Improve constraints around editing users
 - Improve constraints around editing organisations
 - Improve constraints around editing professions
+- Display number of results above filters on mobile
+- Hide filters on mobile once users have searched
 - Only allow users to edit a Profession if they are a central user, or in that Profession's primary Organisation
 
 ## [release-009] - 2022-03-11

@@ -11,25 +11,13 @@ describe('Searching a profession', () => {
   });
 
   it('I can view an unfiltered list of live professions', () => {
-    cy.readFile('./seeds/test/professions.json').then((professions) => {
-      const professionsToShow = professions.filter((profession) =>
-        profession.versions.some((version) =>
-          ['live'].includes(version.status),
-        ),
-      );
-
-      cy.translate('professions.search.foundPlural', {
-        count: professionsToShow.length,
-      }).then((foundText) => {
-        cy.get('body').should('contain.text', foundText);
-      });
-      cy.get('body').should('contain', 'Registered Trademark Attorney');
-      cy.get('body').should(
-        'contain',
-        'Secondary School Teacher in State maintained schools (England)',
-      );
-      cy.get('body').should('not.contain', 'Gas Safe Engineer');
-    });
+    cy.checkCorrectNumberOfProfessionsAreShown(['live']);
+    cy.get('body').should('contain', 'Registered Trademark Attorney');
+    cy.get('body').should(
+      'contain',
+      'Secondary School Teacher in State maintained schools (England)',
+    );
+    cy.get('body').should('not.contain', 'Gas Safe Engineer');
   });
 
   it('Professions are sorted alphabetically', () => {
@@ -149,5 +137,37 @@ describe('Searching a profession', () => {
           /professions\/search\?keywords=Education&industries%5B%5D=.+&nations%5B%5D=GB-ENG/,
         );
     });
+  });
+
+  it('I can clear all filters', () => {
+    cy.get('input[name="nations[]"][value="GB-WLS"]').check();
+
+    cy.translate('industries.education').then((nameLabel) => {
+      cy.get('label').contains(nameLabel).parent().find('input').check();
+    });
+
+    cy.get('input[name="keywords"]').type('Attorney');
+
+    cy.get('button').click();
+    cy.checkAccessibility();
+
+    cy.translate('app.filters.clearAllButton').then((clearAllButton) => {
+      cy.get('a').contains(clearAllButton).click();
+    });
+    cy.checkAccessibility();
+
+    cy.get('input[name="keywords"]').should('not.have.value', 'Attorney');
+
+    cy.get('input[name="nations[]"][value="GB-WLS"]').should('not.be.checked');
+
+    cy.translate('industries.education').then((nameLabel) => {
+      cy.get('label')
+        .contains(nameLabel)
+        .parent()
+        .find('input')
+        .should('not.be.checked');
+    });
+
+    cy.checkCorrectNumberOfProfessionsAreShown(['live']);
   });
 });

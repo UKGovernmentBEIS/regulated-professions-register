@@ -10,6 +10,9 @@ import { IndexTemplate } from './interfaces/index-template.interface';
 import { OrganisationSearchResultPresenter } from './organisation-search-result.presenter';
 import organisationFactory from '../../testutils/factories/organisation';
 import industryFactory from '../../testutils/factories/industry';
+import { hasSelectedFilters } from '../../search/helpers/has-selected-filters.helper';
+
+jest.mock('../../search/helpers/has-selected-filters.helper');
 
 const organisation1 = organisationFactory.build({
   name: 'Example Organisation 1',
@@ -62,6 +65,7 @@ describe('SearchPresenter', () => {
         i18nService,
       );
 
+      (hasSelectedFilters as jest.Mock).mockReturnValue(true);
       const result = await presenter.present();
 
       const industriesCheckboxItems = await new IndustriesCheckboxPresenter(
@@ -89,7 +93,10 @@ describe('SearchPresenter', () => {
           await new OrganisationSearchResultPresenter(organisation2).present(),
           await new OrganisationSearchResultPresenter(organisation3).present(),
         ],
+        hasSelectedFilters: true,
       };
+
+      expect(hasSelectedFilters).toHaveBeenCalledWith(filterInput);
 
       expect(result).toEqual(expected);
     });

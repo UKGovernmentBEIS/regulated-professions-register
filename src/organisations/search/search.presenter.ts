@@ -7,6 +7,7 @@ import { FilterInput } from '../../common/interfaces/filter-input.interface';
 import { IndexTemplate } from './interfaces/index-template.interface';
 import { OrganisationSearchResultPresenter } from './organisation-search-result.presenter';
 import { Organisation } from '../organisation.entity';
+import { hasSelectedFilters } from '../../search/helpers/has-selected-filters.helper';
 
 export class SearchPresenter {
   constructor(
@@ -47,6 +48,7 @@ export class SearchPresenter {
           (industry) => industry.name,
         ),
       },
+      hasSelectedFilters: hasSelectedFilters(this.filterInput),
     };
   }
 }
