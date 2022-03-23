@@ -3,7 +3,6 @@ import { I18nService } from 'nestjs-i18n';
 import { Request } from 'express';
 import { IndustriesService } from '../../industries/industries.service';
 import { Nation } from '../../nations/nation';
-import { OrganisationsFilterHelper } from '../helpers/organisations-filter.helper';
 import { OrganisationVersionsService } from '../organisation-versions.service';
 
 import { FilterDto } from './dto/filter.dto';
@@ -33,17 +32,14 @@ export class SearchController {
     const allNations = Nation.all();
     const allIndustries = await this.industriesService.all();
 
-    const allOrganisations = await this.organisationVersionsService.allLive();
-
     const filterInput = createFilterInput({
       ...filter,
       allNations,
       allIndustries,
     });
 
-    const filteredOrganisations = new OrganisationsFilterHelper(
-      allOrganisations,
-    ).filter(filterInput);
+    const filteredOrganisations =
+      await this.organisationVersionsService.searchLive(filterInput);
 
     return new SearchPresenter(
       filterInput,

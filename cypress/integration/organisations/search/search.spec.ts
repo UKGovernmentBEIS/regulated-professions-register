@@ -59,9 +59,13 @@ describe('Searching an organisation', () => {
       const scottishProfessions = professions.filter((profession) =>
         profession.versions.some(
           (version) =>
-            version.status === 'live' &&
+            version.occupationLocations &&
             version.occupationLocations.includes('GB-SCT'),
         ),
+      );
+
+      const organisations = scottishProfessions.map(
+        (profession) => profession.organisation,
       );
 
       cy.get('input[name="nations[]"][value="GB-SCT"]').check();
@@ -71,8 +75,11 @@ describe('Searching an organisation', () => {
 
       cy.get('input[name="nations[]"][value="GB-SCT"]').should('be.checked');
 
-      cy.get('body').should('contain', 'Law Society of England and Wales');
-      checkResultLength(scottishProfessions.length);
+      checkResultLength(organisations.length);
+
+      for (const organisation of organisations) {
+        cy.get('body').should('contain', organisation);
+      }
     });
   });
 
