@@ -13,7 +13,6 @@ import { AuthenticationGuard } from '../../common/authentication.guard';
 import { getReferrer } from '../../common/utils';
 
 import { Nation } from '../../nations/nation';
-import { ProfessionsService } from '../professions.service';
 import QualificationPresenter from '../../qualifications/presenters/qualification.presenter';
 import { CheckYourAnswersTemplate } from './interfaces/check-your-answers.template';
 import { Permissions } from '../../common/permissions.decorator';
@@ -25,12 +24,12 @@ import { isUK } from '../../helpers/nations.helper';
 import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
 import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
 import { getPublicationBlockers } from '../helpers/get-publication-blockers.helper';
+import { Profession } from '../profession.entity';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
 export class CheckYourAnswersController {
   constructor(
-    private readonly professionsService: ProfessionsService,
     private readonly professionVersionsService: ProfessionVersionsService,
     private readonly i18nService: I18nService,
   ) {}
@@ -45,23 +44,18 @@ export class CheckYourAnswersController {
     @Query('edit') edit: string,
     @Req() request: RequestWithAppSession,
   ): Promise<CheckYourAnswersTemplate> {
-    const draftProfession = await this.professionsService.findWithVersions(
+    const version = await this.professionVersionsService.findByIdWithProfession(
       professionId,
-    );
-
-    checkCanViewProfession(request, draftProfession);
-
-    if (!draftProfession) {
-      throw new Error('Draft profession not found');
-    }
-
-    const version = await this.professionVersionsService.findWithProfession(
       versionId,
     );
+
+    const profession = Profession.withVersion(version.profession, version);
 
     if (!version) {
       throw new Error('Version not found');
     }
+
+    checkCanViewProfession(request, profession);
 
     const industryNames = await Promise.all(
       version.industries.map(
@@ -83,12 +77,12 @@ export class CheckYourAnswersController {
     return {
       professionId,
       versionId,
-      name: draftProfession.name,
+      name: profession.name,
       nations: selectedNations,
       industries: industryNames,
-      organisation: draftProfession.organisation.name,
-      additionalOrganisation: draftProfession.additionalOrganisation
-        ? draftProfession.additionalOrganisation.name
+      organisation: profession.organisation.name,
+      additionalOrganisation: profession.additionalOrganisation
+        ? profession.additionalOrganisation.name
         : null,
       registrationRequirements: version.registrationRequirements,
       registrationUrl: version.registrationUrl,
@@ -99,10 +93,7 @@ export class CheckYourAnswersController {
       regulationUrl: version.regulationUrl,
       qualification,
       legislations: version.legislations,
-      captionText: await ViewUtils.captionText(
-        this.i18nService,
-        draftProfession,
-      ),
+      captionText: await ViewUtils.captionText(this.i18nService, profession),
       publicationBlockers: getPublicationBlockers(version),
       isUK: version.occupationLocations
         ? isUK(version.occupationLocations)

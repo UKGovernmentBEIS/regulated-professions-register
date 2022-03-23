@@ -16,26 +16,23 @@ import { checkCanViewProfession } from '../../users/helpers/check-can-view-profe
 import * as getPublicationBlockersModule from '../helpers/get-publication-blockers.helper';
 import { RegulationType } from '../profession-version.entity';
 import { ProfessionVersionsService } from '../profession-versions.service';
-import { ProfessionsService } from '../professions.service';
+import { Profession } from '../profession.entity';
 import { CheckYourAnswersController } from './check-your-answers.controller';
 
 jest.mock('../../users/helpers/check-can-view-profession');
 
 describe('CheckYourAnswersController', () => {
   let controller: CheckYourAnswersController;
-  let professionsService: DeepMocked<ProfessionsService>;
   let professionVersionsService: DeepMocked<ProfessionVersionsService>;
   let i18nService: DeepMocked<I18nService>;
 
   beforeEach(async () => {
-    professionsService = createMock<ProfessionsService>();
     professionVersionsService = createMock<ProfessionVersionsService>();
     i18nService = createMockI18nService();
 
     const module: TestingModule = await Test.createTestingModule({
       controllers: [CheckYourAnswersController],
       providers: [
-        { provide: ProfessionsService, useValue: professionsService },
         {
           provide: ProfessionVersionsService,
           useValue: professionVersionsService,
@@ -72,9 +69,9 @@ describe('CheckYourAnswersController', () => {
           }),
           slug: null,
         });
-        professionsService.findWithVersions.mockResolvedValue(profession);
 
         const version = professionVersionFactory.build({
+          id: 'version-id',
           occupationLocations: ['GB-ENG'],
           industries: [
             industryFactory.build({ name: 'industries.construction' }),
@@ -91,7 +88,9 @@ describe('CheckYourAnswersController', () => {
           qualification: qualification,
         });
 
-        professionVersionsService.findWithProfession.mockResolvedValue(version);
+        professionVersionsService.findByIdWithProfession.mockResolvedValue(
+          version,
+        );
         const getPublicationBlockersSpy = jest
           .spyOn(getPublicationBlockersModule, 'getPublicationBlockers')
           .mockReturnValue([]);
@@ -151,9 +150,9 @@ describe('CheckYourAnswersController', () => {
         );
         expect(templateParams.publicationBlockers).toEqual([]);
 
-        expect(professionsService.findWithVersions).toHaveBeenCalledWith(
-          'profession-id',
-        );
+        expect(
+          professionVersionsService.findByIdWithProfession,
+        ).toHaveBeenCalledWith('profession-id', 'version-id');
         expect(getPublicationBlockersSpy).toHaveBeenCalledWith(version);
       });
     });
@@ -172,12 +171,14 @@ describe('CheckYourAnswersController', () => {
         const version = professionVersionFactory
           .justCreated('version-id')
           .build({
+            profession: profession,
             industries: [],
             legislations: [],
           });
 
-        professionsService.findWithVersions.mockResolvedValue(profession);
-        professionVersionsService.findWithProfession.mockResolvedValue(version);
+        professionVersionsService.findByIdWithProfession.mockResolvedValue(
+          version,
+        );
         const getPublicationBlockersSpy = jest
           .spyOn(getPublicationBlockersModule, 'getPublicationBlockers')
           .mockReturnValue([
@@ -222,9 +223,9 @@ describe('CheckYourAnswersController', () => {
           },
         ]);
 
-        expect(professionsService.findWithVersions).toHaveBeenCalledWith(
-          'profession-id',
-        );
+        expect(
+          professionVersionsService.findByIdWithProfession,
+        ).toHaveBeenCalledWith('profession-id', 'version-id');
         expect(getPublicationBlockersSpy).toHaveBeenCalledWith(version);
       });
     });
@@ -236,14 +237,20 @@ describe('CheckYourAnswersController', () => {
 
       const profession = professionFactory.build();
 
-      const version = professionVersionFactory.build();
+      const version = professionVersionFactory.build({
+        profession,
+      });
 
-      professionsService.findWithVersions.mockResolvedValue(profession);
-      professionVersionsService.findWithProfession.mockResolvedValue(version);
+      professionVersionsService.findByIdWithProfession.mockResolvedValue(
+        version,
+      );
 
       await controller.show('profession-id', 'version-id', 'false', request);
 
-      expect(checkCanViewProfession).toHaveBeenCalledWith(request, profession);
+      expect(checkCanViewProfession).toHaveBeenCalledWith(
+        request,
+        Profession.withVersion(profession, version),
+      );
     });
   });
 
