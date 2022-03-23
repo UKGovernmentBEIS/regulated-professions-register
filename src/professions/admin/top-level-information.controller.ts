@@ -148,7 +148,7 @@ export class TopLevelInformationController {
     errors: object | undefined = undefined,
   ): Promise<void> {
     const regulatedAuthorities =
-      await this.organisationVersionsService.allLiveAndDraft();
+      await this.organisationVersionsService.allLive();
 
     const regulatedAuthoritiesSelectArgs =
       new RegulatedAuthoritiesSelectPresenter(
