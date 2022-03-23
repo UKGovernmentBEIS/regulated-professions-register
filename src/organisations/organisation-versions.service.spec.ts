@@ -403,6 +403,7 @@ describe('OrganisationVersionsService', () => {
 
       expect(queryBuilder.distinctOn).toHaveBeenCalledWith([
         'organisationVersion.organisation',
+        'organisation.name',
         'professions.id',
       ]);
 
@@ -422,7 +423,7 @@ describe('OrganisationVersionsService', () => {
       );
 
       expect(queryBuilder.orderBy).toHaveBeenCalledWith(
-        'organisationVersion.organisation, professions.id, professionVersions.created_at, organisationVersion.created_at',
+        'organisation.name, organisationVersion.organisation, professions.id, professionVersions.created_at, organisationVersion.created_at',
         'DESC',
       );
     });
@@ -1003,6 +1004,7 @@ describe('OrganisationVersionsService', () => {
 
       expect(queryBuilder.distinctOn).toHaveBeenCalledWith([
         'organisationVersion.organisation',
+        'organisation.name',
         'professions.id',
       ]);
 
@@ -1022,7 +1024,7 @@ describe('OrganisationVersionsService', () => {
       );
 
       expect(queryBuilder.orderBy).toHaveBeenCalledWith(
-        'organisationVersion.organisation, professions.id, professionVersions.created_at, organisationVersion.created_at',
+        'organisation.name, organisationVersion.organisation, professions.id, professionVersions.created_at, organisationVersion.created_at',
         'DESC',
       );
     });
