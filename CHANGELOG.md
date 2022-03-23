@@ -35,6 +35,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Only allow users to edit a Profession if they are a central user, or in that Profession's primary Organisation
 - Allow a central user to create a draft Profession with only a name and an Organisation
 - Validate that all necessary fields are completed before a Profession is published
+- Validate that all associated Organisations are published before a Profession is published
 
 ## [release-009] - 2022-03-11
 
