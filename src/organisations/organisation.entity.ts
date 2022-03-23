@@ -14,6 +14,7 @@ import {
   Index,
 } from 'typeorm';
 import { User } from '../users/user.entity';
+import { ProfessionToOrganisation } from '../professions/profession-to-organisation.entity';
 
 @Entity({ name: 'organisations' })
 export class Organisation {
@@ -36,6 +37,12 @@ export class Organisation {
 
   @OneToMany(() => Profession, (profession) => profession.organisation)
   professions: Profession[];
+
+  @OneToMany(
+    () => ProfessionToOrganisation,
+    (professionToOrganisation) => professionToOrganisation.organisation,
+  )
+  professionToOrganisations!: ProfessionToOrganisation[];
 
   @OneToMany(() => User, (user) => user.organisation)
   users: User[];

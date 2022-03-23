@@ -47,6 +47,7 @@ export default ProfessionFactory.define(({ sequence }) => ({
   created_at: new Date(),
   legislations: [],
   organisation: organisationFactory.build({ name: 'Example organisation' }),
+  professionToOrganisations: undefined,
   additionalOrganisation: undefined,
   regulationSummary: 'Example summary',
   reservedActivities: 'Example activities',
