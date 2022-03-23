@@ -258,6 +258,24 @@ describe('Publishing professions', () => {
       );
     });
 
+    it('Does not allows me to publish a draft profession with a draft organisation from the profession page', () => {
+      cy.get('a').contains('Regulated professions').click();
+      cy.checkAccessibility();
+
+      cy.contains('Profession with draft organisation')
+        .parent('tr')
+        .within(() => {
+          cy.get('a').contains('View details').click();
+        });
+
+      cy.checkAccessibility({ 'color-contrast': { enabled: false } });
+      cy.translate('app.status.draft').then((status) => {
+        cy.get('h2[data-status]').should('contain', status);
+      });
+
+      cy.checkPublishBlocked([], ['Draft Organisation']);
+    });
+
     it('Does not allows me to publish a draft profession with missing fields from the Check Your Answers page', () => {
       cy.get('a').contains('Regulated professions').click();
       cy.checkAccessibility();
@@ -282,6 +300,28 @@ describe('Publishing professions', () => {
         [],
         false,
       );
+    });
+
+    it('Does not allows me to publish a draft profession with a draft organisation from the Check Your Answers page', () => {
+      cy.get('a').contains('Regulated professions').click();
+      cy.checkAccessibility();
+
+      cy.contains('Profession with draft organisation')
+        .parent('tr')
+        .within(() => {
+          cy.get('a').contains('View details').click();
+        });
+
+      cy.checkAccessibility({ 'color-contrast': { enabled: false } });
+      cy.translate('app.status.draft').then((status) => {
+        cy.get('h2[data-status]').should('contain', status);
+      });
+
+      cy.translate('professions.admin.button.edit.draft').then((buttonText) => {
+        cy.contains(buttonText).click();
+      });
+
+      cy.checkPublishBlocked([], ['Draft Organisation'], false);
     });
   });
 

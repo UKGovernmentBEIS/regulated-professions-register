@@ -115,6 +115,24 @@
     ]
   },
   {
+    "name": "Profession with draft organisation",
+    "slug": "profession-with-draft-organisation",
+    "organisation": "Draft Organisation",
+    "additionalOrganisation": null,
+    "versions": [
+      {
+        "occupationLocations": ["GB-ENG", "GB-NIR"],
+        "industries": ["industries.finance"],
+        "description": "A description of the profession",
+        "regulationType": "accreditation",
+        "reservedActivities": "Some reserved activities",
+        "legislations": ["Legal Services Act 2007"],
+        "qualification": "To teach in a state school in England, you must have a degree, and gain Qualified Teacher Status (QTS) by following a programme of Initial Teacher Training (ITT). You must have achieved minimum requirements in GCSE English, maths, and science if you wish to teach at primary-level. You can teach in independent schools, academies, and free schools in England without QTS, but it’s a definite advantage to have it.",
+        "status": "draft"
+      }
+    ]
+  },
+  {
     "name": "Draft Profession",
     "slug": "draft-profession",
     "organisation": "Council of Registered Gas Installers",
