@@ -90,42 +90,14 @@ export class OrganisationVersionsService {
   }
 
   async searchLive(filter: FilterInput): Promise<Organisation[]> {
-    let query = this.versionsWithJoins().where(
+    const query = this.versionsWithJoins().where(
       'organisationVersion.status = :status',
       {
         status: OrganisationVersionStatus.Live,
       },
     );
 
-    if (filter.keywords?.length) {
-      const ids = await this.organisationsSearchService.search(filter.keywords);
-      query = query.andWhere({ id: In(ids) });
-    }
-
-    if (filter.nations?.length) {
-      const nations = filter.nations.map((n) => n.code);
-
-      query = query.andWhere(
-        'professionVersions.occupationLocations @> :nations',
-        {
-          nations: nations,
-        },
-      );
-    }
-
-    if (filter.industries?.length) {
-      const industries = filter.industries.map((i) => i.id);
-
-      query = query.andWhere('industries.id IN(:...industries)', {
-        industries: industries,
-      });
-    }
-
-    const versions = await query.getMany();
-
-    return versions.map((version) =>
-      Organisation.withVersion(version.organisation, version),
-    );
+    return await this.filter(query, filter);
   }
 
   async allLiveAndDraft(): Promise<Organisation[]> {
@@ -303,5 +275,40 @@ export class OrganisationVersionsService {
       .leftJoinAndSelect('organisation.professions', 'professions')
       .leftJoinAndSelect('professions.versions', 'professionVersions')
       .leftJoinAndSelect('professionVersions.industries', 'industries');
+  }
+
+  private async filter(
+    query: SelectQueryBuilder<OrganisationVersion>,
+    filter: FilterInput,
+  ): Promise<Organisation[]> {
+    if (filter.keywords?.length) {
+      const ids = await this.organisationsSearchService.search(filter.keywords);
+      query = query.andWhere({ id: In(ids) });
+    }
+
+    if (filter.nations?.length) {
+      const nations = filter.nations.map((n) => n.code);
+
+      query = query.andWhere(
+        'professionVersions.occupationLocations @> :nations',
+        {
+          nations: nations,
+        },
+      );
+    }
+
+    if (filter.industries?.length) {
+      const industries = filter.industries.map((i) => i.id);
+
+      query = query.andWhere('industries.id IN(:...industries)', {
+        industries: industries,
+      });
+    }
+
+    const versions = await query.getMany();
+
+    return versions.map((version) =>
+      Organisation.withVersion(version.organisation, version),
+    );
   }
 }
