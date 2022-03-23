@@ -69,13 +69,7 @@ describe(LegislationController, () => {
           user: userFactory.build(),
         });
 
-        await controller.edit(
-          response,
-          'profession-id',
-          'version-id',
-          'false',
-          request,
-        );
+        await controller.edit(response, 'profession-id', 'version-id', request);
 
         expect(response.render).toHaveBeenCalledWith(
           'admin/professions/legislation',
@@ -97,13 +91,7 @@ describe(LegislationController, () => {
           user: userFactory.build(),
         });
 
-        await controller.edit(
-          response,
-          'profession-id',
-          'version-id',
-          'false',
-          request,
-        );
+        await controller.edit(response, 'profession-id', 'version-id', request);
 
         expect(checkCanViewProfession).toHaveBeenCalledWith(
           request,
@@ -140,13 +128,7 @@ describe(LegislationController, () => {
           user: userFactory.build(),
         });
 
-        await controller.edit(
-          response,
-          'profession-id',
-          'version-id',
-          'false',
-          request,
-        );
+        await controller.edit(response, 'profession-id', 'version-id', request);
 
         expect(response.render).toHaveBeenCalledWith(
           'admin/professions/legislation',
@@ -172,7 +154,6 @@ describe(LegislationController, () => {
         const dto: LegislationDto = {
           link: 'www.legal-legislation.com',
           nationalLegislation: 'Legal Services Act 2008',
-          change: false,
         };
 
         professionsService.findWithVersions.mockResolvedValue(profession);
@@ -221,7 +202,6 @@ describe(LegislationController, () => {
           nationalLegislation: 'Legal Services Act 2008',
           secondLink: 'http://www.another-legal-legislation.com',
           secondNationalLegislation: 'Another Legal Services Act 2008',
-          change: false,
         };
 
         professionsService.findWithVersions.mockResolvedValue(profession);
@@ -274,7 +254,6 @@ describe(LegislationController, () => {
           nationalLegislation: 'Legal Services Act 2008',
           secondLink: 'www.another-legal-legislation.com   ',
           secondNationalLegislation: 'Another Legal Services Act 2008',
-          change: false,
         };
 
         professionsService.findWithVersions.mockResolvedValue(profession);
@@ -326,7 +305,6 @@ describe(LegislationController, () => {
           const dto: LegislationDto = {
             link: undefined,
             nationalLegislation: undefined,
-            change: false,
           };
 
           professionsService.findWithVersions.mockResolvedValue(profession);
@@ -372,7 +350,6 @@ describe(LegislationController, () => {
           const dto: LegislationDto = {
             link: 'bad link',
             nationalLegislation: 'national legislation value',
-            change: false,
           };
 
           professionsService.findWithVersions.mockResolvedValue(profession);
@@ -422,7 +399,6 @@ describe(LegislationController, () => {
       const dto: LegislationDto = {
         link: 'www.legal-legislation.com',
         nationalLegislation: 'Legal Services Act 2008',
-        change: false,
       };
 
       await controller.update(

@@ -4,12 +4,11 @@ import {
   Get,
   Param,
   Post,
-  Query,
   Req,
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { Response, Request } from 'express';
+import { Response } from 'express';
 import { I18nService } from 'nestjs-i18n';
 import { AuthenticationGuard } from '../../common/authentication.guard';
 import { Permissions } from '../../common/permissions.decorator';
@@ -40,16 +39,13 @@ export class QualificationsController {
 
   @Get('/:professionId/versions/:versionId/qualifications/edit')
   @Permissions(UserPermission.CreateProfession, UserPermission.EditProfession)
-  @BackLink((request: Request) =>
-    request.query.change === 'true'
-      ? '/admin/professions/:professionId/versions/:versionId/check-your-answers'
-      : '/admin/professions/:professionId/versions/:versionId/regulated-activities/edit',
+  @BackLink(
+    '/admin/professions/:professionId/versions/:versionId/check-your-answers',
   )
   async edit(
     @Res() res: Response,
     @Param('professionId') professionId: string,
     @Param('versionId') versionId: string,
-    @Query('change') change: boolean,
     @Req() request: RequestWithAppSession,
   ): Promise<void> {
     const profession = await this.professionsService.findWithVersions(
@@ -62,21 +58,13 @@ export class QualificationsController {
       versionId,
     );
 
-    return this.renderForm(
-      res,
-      version.qualification,
-      version,
-      profession,
-      change,
-    );
+    return this.renderForm(res, version.qualification, version, profession);
   }
 
   @Post('/:professionId/versions/:versionId/qualifications')
   @Permissions(UserPermission.CreateProfession, UserPermission.EditProfession)
-  @BackLink((request: Request) =>
-    request.body.change === 'true'
-      ? '/admin/professions/:professionId/versions/:versionId/check-your-answers'
-      : '/admin/professions/:professionId/versions/:versionId/regulated-activities/edit',
+  @BackLink(
+    '/admin/professions/:professionId/versions/:versionId/check-your-answers',
   )
   async update(
     @Res() res: Response,
@@ -119,7 +107,6 @@ export class QualificationsController {
         updatedQualification,
         version,
         profession,
-        submittedValues.change,
         errors,
       );
     }
@@ -128,14 +115,8 @@ export class QualificationsController {
 
     await this.professionVersionsService.save(version);
 
-    if (submittedValues.change) {
-      return res.redirect(
-        `/admin/professions/${professionId}/versions/${versionId}/check-your-answers`,
-      );
-    }
-
     return res.redirect(
-      `/admin/professions/${professionId}/versions/${versionId}/legislation/edit`,
+      `/admin/professions/${professionId}/versions/${versionId}/check-your-answers`,
     );
   }
 
@@ -144,7 +125,6 @@ export class QualificationsController {
     qualification: Qualification | null,
     version: ProfessionVersion | null,
     profession: Profession,
-    change: boolean,
     errors: object | undefined = undefined,
   ) {
     const templateArgs: QualificationsTemplate = {
@@ -156,7 +136,6 @@ export class QualificationsController {
       isUK: version.occupationLocations
         ? isUK(version.occupationLocations)
         : false,
-      change,
       errors,
     };
 

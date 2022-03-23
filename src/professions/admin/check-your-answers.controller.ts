@@ -21,10 +21,10 @@ import { UserPermission } from '../../users/user-permission';
 import ViewUtils from './viewUtils';
 import { BackLink } from '../../common/decorators/back-link.decorator';
 import { ProfessionVersionsService } from '../profession-versions.service';
-import { isConfirmed } from '../../helpers/is-confirmed';
 import { isUK } from '../../helpers/nations.helper';
 import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
 import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
+import { getPublicationBlockers } from '../helpers/get-publication-blockers.helper';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
@@ -99,11 +99,11 @@ export class CheckYourAnswersController {
       regulationUrl: version.regulationUrl,
       qualification,
       legislations: version.legislations,
-      confirmed: isConfirmed(draftProfession),
       captionText: await ViewUtils.captionText(
         this.i18nService,
         draftProfession,
       ),
+      publicationBlockers: getPublicationBlockers(version),
       isUK: version.occupationLocations
         ? isUK(version.occupationLocations)
         : false,

@@ -84,13 +84,7 @@ describe('ScopeController', () => {
           user: userFactory.build(),
         });
 
-        await controller.edit(
-          response,
-          'profession-id',
-          'version-id',
-          'false',
-          request,
-        );
+        await controller.edit(response, 'profession-id', 'version-id', request);
 
         expect(response.render).toHaveBeenCalledWith(
           'admin/professions/scope',
@@ -177,13 +171,7 @@ describe('ScopeController', () => {
           user: userFactory.build(),
         });
 
-        await controller.edit(
-          response,
-          'profession-id',
-          'version-id',
-          'false',
-          request,
-        );
+        await controller.edit(response, 'profession-id', 'version-id', request);
 
         expect(response.render).toHaveBeenCalledWith(
           'admin/professions/scope',
@@ -255,13 +243,7 @@ describe('ScopeController', () => {
           user: userFactory.build(),
         });
 
-        await controller.edit(
-          response,
-          'profession-id',
-          'version-id',
-          'false',
-          request,
-        );
+        await controller.edit(response, 'profession-id', 'version-id', request);
 
         expect(response.render).toHaveBeenCalledWith(
           'admin/professions/scope',
@@ -284,13 +266,7 @@ describe('ScopeController', () => {
         user: userFactory.build(),
       });
 
-      await controller.edit(
-        response,
-        'profession-id',
-        'version-id',
-        'false',
-        request,
-      );
+      await controller.edit(response, 'profession-id', 'version-id', request);
 
       expect(checkCanViewProfession).toHaveBeenCalledWith(request, profession);
     });
@@ -346,7 +322,7 @@ describe('ScopeController', () => {
         );
 
         expect(response.redirect).toHaveBeenCalledWith(
-          '/admin/professions/profession-id/versions/version-id/registration/edit',
+          '/admin/professions/profession-id/versions/version-id/check-your-answers',
         );
       });
 
@@ -423,95 +399,6 @@ describe('ScopeController', () => {
         );
 
         expect(industriesService.all).toHaveBeenCalled();
-      });
-    });
-
-    describe('the "change" query param', () => {
-      describe('when set to true', () => {
-        it('redirects to check your answers on submit', async () => {
-          const profession = professionFactory.build({
-            id: 'profession-id',
-          });
-
-          const version = professionVersionFactory.build({
-            profession: profession,
-          });
-
-          const industry = industryFactory.build({ id: 'construction-uuid' });
-
-          professionsService.findWithVersions.mockResolvedValue(profession);
-          professionVersionsService.findWithProfession.mockResolvedValue(
-            version,
-          );
-
-          const scopeDtoWithChangeParam = {
-            coversUK: '0',
-            nations: ['GB-ENG'],
-            industries: ['construction-uuid'],
-            change: true,
-          };
-
-          industriesService.findByIds.mockResolvedValue([industry]);
-
-          const request = createDefaultMockRequest({
-            user: userFactory.build(),
-          });
-
-          await controller.update(
-            scopeDtoWithChangeParam,
-            response,
-            'profession-id',
-            'version-id',
-            request,
-          );
-
-          expect(response.redirect).toHaveBeenCalledWith(
-            '/admin/professions/profession-id/versions/version-id/check-your-answers',
-          );
-        });
-      });
-
-      describe('when set to false', () => {
-        it('continues to the next step in the journey', async () => {
-          const profession = professionFactory.build({
-            id: 'profession-id',
-          });
-
-          const version = professionVersionFactory.build({
-            profession: profession,
-          });
-
-          professionsService.findWithVersions.mockResolvedValue(profession);
-          professionVersionsService.findWithProfession.mockResolvedValue(
-            version,
-          );
-
-          const industry = industryFactory.build({ id: 'construction-uuid' });
-
-          const scopeDtoWithoutChangeParam = {
-            nations: ['GB-ENG'],
-            coversUK: '0',
-            industries: ['construction-uuid'],
-          };
-
-          industriesService.findByIds.mockResolvedValue([industry]);
-
-          const request = createDefaultMockRequest({
-            user: userFactory.build(),
-          });
-
-          await controller.update(
-            scopeDtoWithoutChangeParam,
-            response,
-            'profession-id',
-            'version-id',
-            request,
-          );
-
-          expect(response.redirect).toHaveBeenCalledWith(
-            '/admin/professions/profession-id/versions/version-id/registration/edit',
-          );
-        });
       });
     });
 

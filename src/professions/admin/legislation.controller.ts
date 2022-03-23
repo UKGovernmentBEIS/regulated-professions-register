@@ -4,12 +4,11 @@ import {
   Get,
   Param,
   Post,
-  Query,
   Req,
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { Response, Request } from 'express';
+import { Response } from 'express';
 import { AuthenticationGuard } from '../../common/authentication.guard';
 import { Permissions } from '../../common/permissions.decorator';
 import { Validator } from '../../helpers/validator';
@@ -38,16 +37,13 @@ export class LegislationController {
 
   @Get('/:professionId/versions/:versionId/legislation/edit')
   @Permissions(UserPermission.CreateProfession, UserPermission.EditProfession)
-  @BackLink((request: Request) =>
-    request.query.change === 'true'
-      ? '/admin/professions/:professionId/versions/:versionId/check-your-answers'
-      : '/admin/professions/:professionId/versions/:versionId/qualifications/edit',
+  @BackLink(
+    '/admin/professions/:professionId/versions/:versionId/check-your-answers',
   )
   async edit(
     @Res() res: Response,
     @Param('professionId') professionId: string,
     @Param('versionId') versionId: string,
-    @Query('change') change: string,
     @Req() request: RequestWithAppSession,
   ): Promise<void> {
     const profession = await this.professionsService.findWithVersions(
@@ -65,16 +61,13 @@ export class LegislationController {
       version.legislations[0],
       version.legislations[1],
       profession,
-      change === 'true',
     );
   }
 
   @Post('/:professionId/versions/:versionId/legislation')
   @Permissions(UserPermission.CreateProfession, UserPermission.EditProfession)
-  @BackLink((request: Request) =>
-    request.body.change === 'true'
-      ? '/admin/professions/:professionId/versions/:versionId/check-your-answers'
-      : '/admin/professions/:professionId/versions/:versionId/qualifications/edit',
+  @BackLink(
+    '/admin/professions/:professionId/versions/:versionId/check-your-answers',
   )
   async update(
     @Res() res: Response,
@@ -120,7 +113,6 @@ export class LegislationController {
         updatedLegislation,
         updatedSecondLegislation,
         profession,
-        submittedValues.change,
         errors,
       );
     }
@@ -145,14 +137,12 @@ export class LegislationController {
     legislation: Legislation,
     secondLegislation: Legislation,
     profession: Profession,
-    change: boolean,
     errors: object | undefined = undefined,
   ): Promise<void> {
     const templateArgs: LegislationTemplate = {
       legislation,
       secondLegislation,
       captionText: await ViewUtils.captionText(this.i18nService, profession),
-      change,
       errors,
     };
 

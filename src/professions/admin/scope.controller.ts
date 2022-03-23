@@ -4,12 +4,11 @@ import {
   Get,
   Param,
   Post,
-  Query,
   Req,
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { Response, Request } from 'express';
+import { Response } from 'express';
 import { IndustriesCheckboxPresenter } from '../../industries/industries-checkbox.presenter';
 import { NationsCheckboxPresenter } from '../../nations/nations-checkbox.presenter';
 import { Validator } from '../../helpers/validator';
@@ -46,16 +45,13 @@ export class ScopeController {
 
   @Get('/:professionId/versions/:versionId/scope/edit')
   @Permissions(UserPermission.CreateProfession, UserPermission.EditProfession)
-  @BackLink((request: Request) =>
-    request.query.change === 'true'
-      ? '/admin/professions/:professionId/versions/:versionId/check-your-answers'
-      : '/admin/professions/:professionId/versions/:versionId/top-level-information/edit',
+  @BackLink(
+    '/admin/professions/:professionId/versions/:versionId/check-your-answers',
   )
   async edit(
     @Res() res: Response,
     @Param('professionId') professionId: string,
     @Param('versionId') versionId: string,
-    @Query('change') change: string,
     @Req() req: RequestWithAppSession,
     errors: object | undefined = undefined,
   ): Promise<void> {
@@ -79,17 +75,14 @@ export class ScopeController {
       version.industries || [],
       version.occupationLocations || [],
       profession,
-      change === 'true',
       errors,
     );
   }
 
   @Post('/:professionId/versions/:versionId/scope')
   @Permissions(UserPermission.CreateProfession, UserPermission.EditProfession)
-  @BackLink((request: Request) =>
-    request.body.change === 'true'
-      ? '/admin/professions/:professionId/versions/:versionId/check-your-answers'
-      : '/admin/professions/:professionId/versions/:versionId/top-level-information/edit',
+  @BackLink(
+    '/admin/professions/:professionId/versions/:versionId/check-your-answers',
   )
   async update(
     @Body() scopeDto, // unfortunately we can't type this here without a validation error being thrown outside of this
@@ -125,7 +118,6 @@ export class ScopeController {
         submittedIndustries,
         submittedValues.nations || [],
         profession,
-        submittedValues.change,
         errors,
       );
     }
@@ -144,14 +136,8 @@ export class ScopeController {
 
     await this.professionVersionsService.save(updatedVersion);
 
-    if (submittedValues.change) {
-      return res.redirect(
-        `/admin/professions/${professionId}/versions/${versionId}/check-your-answers`,
-      );
-    }
-
     return res.redirect(
-      `/admin/professions/${professionId}/versions/${versionId}/registration/edit`,
+      `/admin/professions/${professionId}/versions/${versionId}/check-your-answers`,
     );
   }
 
@@ -161,7 +147,6 @@ export class ScopeController {
     selectedIndustries: Industry[],
     selectedNations: string[],
     profession: Profession,
-    change: boolean,
     errors: object | undefined = undefined,
   ): Promise<void> {
     const industries = await this.industriesService.all();
@@ -189,7 +174,6 @@ export class ScopeController {
       industriesCheckboxItems,
       nationsCheckboxArgs,
       captionText: await ViewUtils.captionText(this.i18nService, profession),
-      change,
       errors,
     };
 

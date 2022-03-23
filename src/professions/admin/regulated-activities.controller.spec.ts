@@ -87,13 +87,7 @@ describe(RegulatedActivitiesController, () => {
         user: userFactory.build(),
       });
 
-      await controller.edit(
-        response,
-        'profession-id',
-        'version-id',
-        'false',
-        request,
-      );
+      await controller.edit(response, 'profession-id', 'version-id', request);
 
       expect(response.render).toHaveBeenCalledWith(
         'admin/professions/regulated-activities',
@@ -119,13 +113,7 @@ describe(RegulatedActivitiesController, () => {
         user: userFactory.build(),
       });
 
-      await controller.edit(
-        response,
-        'profession-id',
-        'version-id',
-        'false',
-        request,
-      );
+      await controller.edit(response, 'profession-id', 'version-id', request);
 
       expect(checkCanViewProfession).toHaveBeenCalledWith(request, profession);
     });
@@ -156,7 +144,6 @@ describe(RegulatedActivitiesController, () => {
             reservedActivities: 'Example reserved activities',
             protectedTitles: 'Example protected titles',
             regulationUrl: 'https://example.com/regulation',
-            change: false,
           };
 
           const request = createDefaultMockRequest({
@@ -183,7 +170,7 @@ describe(RegulatedActivitiesController, () => {
           );
 
           expect(response.redirect).toHaveBeenCalledWith(
-            '/admin/professions/profession-id/versions/version-id/qualifications/edit',
+            '/admin/professions/profession-id/versions/version-id/check-your-answers',
           );
         });
       });
@@ -211,7 +198,6 @@ describe(RegulatedActivitiesController, () => {
             reservedActivities: 'Example reserved activities',
             protectedTitles: 'Example protected titles',
             regulationUrl: ' example.com/regulation',
-            change: false,
           };
 
           const request = createDefaultMockRequest({
@@ -234,61 +220,6 @@ describe(RegulatedActivitiesController, () => {
               reservedActivities: 'Example reserved activities',
               protectedTitles: 'Example protected titles',
               regulationUrl: 'http://example.com/regulation',
-            }),
-          );
-
-          expect(response.redirect).toHaveBeenCalledWith(
-            '/admin/professions/profession-id/versions/version-id/qualifications/edit',
-          );
-        });
-      });
-
-      describe('when the "Change" query param is true', () => {
-        it('updates the Profession and redirects to the Check your answers page', async () => {
-          const profession = professionFactory.build({ id: 'profession-id' });
-          const version = professionVersionFactory.build({
-            id: 'version-id',
-            profession: profession,
-            description: 'Example regulation summary',
-            regulationType: RegulationType.Licensing,
-            reservedActivities: 'Example reserved activities',
-            protectedTitles: 'Example protected titles',
-            regulationUrl: 'https://example.com/regulation',
-          });
-
-          professionsService.findWithVersions.mockResolvedValue(profession);
-          professionVersionsService.findWithProfession.mockResolvedValue(
-            version,
-          );
-
-          const regulatedActivitiesDto: RegulatedActivitiesDto = {
-            regulationSummary: 'Example regulation summary',
-            regulationType: RegulationType.Licensing,
-            reservedActivities: 'Example reserved activities',
-            protectedTitles: 'Example protected titles',
-            regulationUrl: 'https://example.com/regulation',
-            change: true,
-          };
-
-          const request = createDefaultMockRequest({
-            user: userFactory.build(),
-          });
-
-          await controller.update(
-            response,
-            'profession-id',
-            'version-id',
-            regulatedActivitiesDto,
-            request,
-          );
-
-          expect(professionVersionsService.save).toHaveBeenCalledWith(
-            expect.objectContaining({
-              id: 'version-id',
-              description: 'Example regulation summary',
-              reservedActivities: 'Example reserved activities',
-              protectedTitles: 'Example protected titles',
-              regulationUrl: 'https://example.com/regulation',
             }),
           );
 
@@ -322,7 +253,6 @@ describe(RegulatedActivitiesController, () => {
           reservedActivities: undefined,
           protectedTitles: undefined,
           regulationUrl: undefined,
-          change: false,
         };
 
         const request = createDefaultMockRequest({ user: userFactory.build() });
@@ -367,7 +297,6 @@ describe(RegulatedActivitiesController, () => {
         reservedActivities: 'Example reserved activities',
         protectedTitles: 'Example protected titles',
         regulationUrl: 'https://example.com/regulation',
-        change: false,
       };
 
       const request = createDefaultMockRequest({

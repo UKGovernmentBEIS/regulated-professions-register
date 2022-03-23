@@ -214,7 +214,7 @@ describe('TopLevelInformationController', () => {
         );
 
         expect(response.redirect).toHaveBeenCalledWith(
-          '/admin/professions/profession-id/versions/version-id/scope/edit',
+          '/admin/professions/profession-id/versions/version-id/check-your-answers',
         );
       });
     });
@@ -253,74 +253,6 @@ describe('TopLevelInformationController', () => {
         );
 
         expect(professionsService.save).not.toHaveBeenCalled();
-      });
-    });
-
-    describe('the "change" query param', () => {
-      describe('when set to true', () => {
-        it('redirects to check your answers on submit', async () => {
-          const profession = professionFactory.build({
-            id: 'profession-id',
-          });
-
-          professionsService.findWithVersions.mockResolvedValue(profession);
-
-          const topLevelDetailsDtoWithChangeParam = {
-            name: 'A new profession',
-            regulatoryBody: 'example-org-id',
-            change: true,
-          };
-
-          const organisation = organisationFactory.build();
-          organisationsService.find.mockResolvedValue(organisation);
-
-          const request = createDefaultMockRequest({
-            user: userFactory.build(),
-          });
-
-          await controller.update(
-            topLevelDetailsDtoWithChangeParam,
-            response,
-            'profession-id',
-            'version-id',
-            request,
-          );
-
-          expect(response.redirect).toHaveBeenCalledWith(
-            '/admin/professions/profession-id/versions/version-id/check-your-answers',
-          );
-        });
-      });
-
-      describe('when set to false', () => {
-        it('continues to the next step in the journey', async () => {
-          const profession = professionFactory.build({
-            id: 'profession-id',
-          });
-
-          professionsService.findWithVersions.mockResolvedValue(profession);
-
-          const topLevelDetailsDtoWithoutChangeParam = {
-            name: 'A new profession',
-            regulatoryBody: 'example-org-id',
-          };
-
-          const request = createDefaultMockRequest({
-            user: userFactory.build(),
-          });
-
-          await controller.update(
-            topLevelDetailsDtoWithoutChangeParam,
-            response,
-            'profession-id',
-            'version-id',
-            request,
-          );
-
-          expect(response.redirect).toHaveBeenCalledWith(
-            '/admin/professions/profession-id/versions/version-id/scope/edit',
-          );
-        });
       });
     });
 

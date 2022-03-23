@@ -23,6 +23,7 @@ describe('Publishing professions', () => {
 
       cy.get('[data-cy=changed-by-text]').should('not.exist');
       cy.get('[data-cy=currently-published-version-text]').should('not.exist');
+      cy.checkPublishNotBlocked();
 
       cy.translate('professions.form.button.publish').then((publishButton) => {
         cy.get('a').contains(publishButton).click();
@@ -113,7 +114,7 @@ describe('Publishing professions', () => {
         });
     });
 
-    it('Allows me to publish a draft profession from the check your answers page', () => {
+    it('Allows me to publish a draft profession from the Check Your Answers page', () => {
       cy.get('a').contains('Regulated professions').click();
       cy.checkAccessibility();
 
@@ -128,31 +129,41 @@ describe('Publishing professions', () => {
       });
 
       cy.get('[data-cy=changed-by-text]').should('not.exist');
+      cy.checkPublishBlocked(['regulatedActivities', 'qualifications']);
 
       cy.translate('professions.admin.button.edit.draft').then((buttonText) => {
         cy.contains(buttonText).click();
       });
 
-      cy.clickSummaryListRowAction(
-        'professions.form.label.legislation.nationalLegislation',
-        'Change',
+      cy.clickSummaryListRowChangeLink(
+        'professions.form.label.qualifications.routesToObtain',
       );
       cy.checkAccessibility();
-
-      cy.get('textarea[name="nationalLegislation"]').type(
-        'National legislation',
-      );
-
+      cy.get('textarea[name="routesToObtain"]').type('Routes to obtain');
       cy.translate('app.continue').then((buttonText) => {
         cy.get('button').contains(buttonText).click();
       });
-      cy.checkAccessibility();
 
-      cy.checkIndexedSummaryListRowValue(
-        'professions.form.label.legislation.nationalLegislation',
-        'National legislation',
-        1,
+      cy.checkAccessibility({ 'color-contrast': { enabled: false } });
+      cy.clickSummaryListRowChangeLink(
+        'professions.form.label.regulatedActivities.reservedActivities',
       );
+      cy.checkAccessibility();
+      cy.get('textarea[name="reservedActivities"]').type('Reserved activities');
+      cy.translate('app.continue').then((buttonText) => {
+        cy.get('button').contains(buttonText).click();
+      });
+
+      cy.checkSummaryListRowValue(
+        'professions.form.label.qualifications.routesToObtain',
+        'Routes to obtain',
+      );
+      cy.checkSummaryListRowValue(
+        'professions.form.label.regulatedActivities.reservedActivities',
+        'Reserved activities',
+      );
+
+      cy.checkPublishNotBlocked();
 
       cy.translate('professions.form.button.publish').then((buttonText) => {
         cy.get('a').contains(buttonText).click();
@@ -216,7 +227,7 @@ describe('Publishing professions', () => {
       cy.visitAndCheckAccessibility('/admin/professions');
 
       cy.get('tr')
-        .contains('Gas Safe Engineer')
+        .contains('Orthodontic Therapist')
         .then(($header) => {
           const $row = $header.parent();
 
@@ -226,7 +237,7 @@ describe('Publishing professions', () => {
         });
     });
 
-    it('Allows me to publish a draft profession with the bare minimum fields, without breaking the view', () => {
+    it('Does not allows me to publish a draft profession with missing fields from the profession page', () => {
       cy.get('a').contains('Regulated professions').click();
       cy.checkAccessibility();
 
@@ -236,68 +247,42 @@ describe('Publishing professions', () => {
           cy.get('a').contains('View details').click();
         });
 
+      cy.checkAccessibility({ 'color-contrast': { enabled: false } });
       cy.translate('app.status.draft').then((status) => {
         cy.get('h2[data-status]').should('contain', status);
       });
 
-      cy.translate('professions.form.button.publish').then((publishButton) => {
-        cy.get('a').contains(publishButton).click();
-      });
+      cy.checkPublishBlocked([
+        'scope',
+        'regulatedActivities',
+        'qualifications',
+        'legislation',
+      ]);
+    });
 
+    it('Does not allows me to publish a draft profession with missing fields from the Check Your Answers page', () => {
+      cy.get('a').contains('Regulated professions').click();
       cy.checkAccessibility();
 
-      cy.translate('professions.form.button.publish').then((buttonText) => {
-        cy.get('button').contains(buttonText).click();
-      });
-
-      cy.checkAccessibility();
-
-      cy.translate('professions.admin.publish.confirmation.heading').then(
-        (confirmation) => {
-          cy.get('html').should('contain', confirmation);
-        },
-      );
-
-      cy.translate('professions.admin.button.edit.live').then((buttonText) => {
-        cy.get('html').should('contain', buttonText);
-      });
-
-      cy.translate('professions.admin.changed.by').then((changedByText) => {
-        cy.get('[data-cy=changed-by-text]').should('contain', changedByText);
-      });
-      cy.get('[data-cy=changed-by-user-name]').should('contain', 'Editor');
-      cy.get('[data-cy=changed-by-user-email]').should(
-        'contain',
-        'beis-rpr+editor@dxw.com',
-      );
-      cy.get('[data-cy=last-modified]').should(
-        'contain',
-        format(new Date(), 'd MMM yyyy'),
-      );
-
-      cy.get('[data-cy=currently-published-version-text]').within(() => {
-        cy.translate('professions.admin.publicFacingLink.label').then(
-          (publicFacingLinkLabel) => {
-            cy.get('a').should('contain', publicFacingLinkLabel);
-          },
-        );
-
-        cy.get('a').click();
-      });
-      cy.get('body').should('contain', 'Draft Profession');
-      cy.go('back');
-
-      cy.visitAndCheckAccessibility('/admin/professions');
-
-      cy.get('tr')
-        .contains('Draft Profession')
-        .then(($header) => {
-          const $row = $header.parent();
-
-          cy.translate('app.status.live').then((status) => {
-            cy.wrap($row).should('contain', status);
-          });
+      cy.contains('Draft Profession')
+        .parent('tr')
+        .within(() => {
+          cy.get('a').contains('View details').click();
         });
+
+      cy.checkAccessibility({ 'color-contrast': { enabled: false } });
+      cy.translate('app.status.draft').then((status) => {
+        cy.get('h2[data-status]').should('contain', status);
+      });
+
+      cy.translate('professions.admin.button.edit.draft').then((buttonText) => {
+        cy.contains(buttonText).click();
+      });
+
+      cy.checkPublishBlocked(
+        ['scope', 'regulatedActivities', 'qualifications', 'legislation'],
+        false,
+      );
     });
   });
 
@@ -307,7 +292,7 @@ describe('Publishing professions', () => {
       cy.visitAndCheckAccessibility('/admin');
     });
 
-    it('I can create and publish a new profession from the Check your answers page', () => {
+    it('I can create and publish a new profession from the Check Your Answers page', () => {
       cy.visitAndCheckAccessibility('/admin/professions');
 
       cy.translate('professions.admin.addButtonLabel').then((buttonText) => {
@@ -338,6 +323,14 @@ describe('Publishing professions', () => {
         cy.get('button').contains(buttonText).click();
       });
 
+      cy.checkAccessibility({ 'color-contrast': { enabled: false } });
+      cy.checkPublishBlocked([
+        'scope',
+        'regulatedActivities',
+        'qualifications',
+        'legislation',
+      ]);
+      cy.clickSummaryListRowChangeLink('professions.form.label.scope.nations');
       // Conditional radio buttons add an additional `aria-expanded` field,
       // so ignore that rule on this page
       cy.checkAccessibility({ 'aria-allowed-attr': { enabled: false } });
@@ -362,6 +355,15 @@ describe('Publishing professions', () => {
         cy.get('button').contains(buttonText).click();
       });
 
+      cy.checkAccessibility({ 'color-contrast': { enabled: false } });
+      cy.checkPublishBlocked([
+        'regulatedActivities',
+        'qualifications',
+        'legislation',
+      ]);
+      cy.clickSummaryListRowChangeLink(
+        'professions.form.label.registration.registrationRequirements',
+      );
       cy.checkAccessibility();
       cy.translate('professions.form.captions.addWithName', {
         professionName: 'Example Profession',
@@ -378,8 +380,16 @@ describe('Publishing professions', () => {
         cy.get('button').contains(buttonText).click();
       });
 
+      cy.checkAccessibility({ 'color-contrast': { enabled: false } });
+      cy.checkPublishBlocked([
+        'regulatedActivities',
+        'qualifications',
+        'legislation',
+      ]);
+      cy.clickSummaryListRowChangeLink(
+        'professions.form.label.regulatedActivities.regulationType',
+      );
       cy.checkAccessibility();
-
       cy.translate('professions.form.headings.regulatedActivities').then(
         (heading) => {
           cy.get('body').should('contain', heading);
@@ -406,6 +416,11 @@ describe('Publishing professions', () => {
         cy.get('button').contains(buttonText).click();
       });
 
+      cy.checkAccessibility({ 'color-contrast': { enabled: false } });
+      cy.checkPublishBlocked(['qualifications', 'legislation']);
+      cy.clickSummaryListRowChangeLink(
+        'professions.form.label.qualifications.routesToObtain',
+      );
       cy.checkAccessibility();
       cy.translate('professions.form.headings.qualifications').then(
         (heading) => {
@@ -431,6 +446,11 @@ describe('Publishing professions', () => {
         cy.get('button').contains(buttonText).click();
       });
 
+      cy.checkAccessibility({ 'color-contrast': { enabled: false } });
+      cy.checkPublishBlocked(['legislation']);
+      cy.clickSummaryListRowChangeLink(
+        'professions.form.label.legislation.nationalLegislation',
+      );
       cy.checkAccessibility();
       cy.translate('professions.form.headings.legislation').then((heading) => {
         cy.get('body').should('contain', heading);
@@ -450,7 +470,7 @@ describe('Publishing professions', () => {
       });
 
       cy.checkAccessibility();
-
+      cy.checkPublishNotBlocked();
       cy.translate('professions.form.captions.addWithName', {
         professionName: 'Example Profession',
       }).then((addCaption) => {

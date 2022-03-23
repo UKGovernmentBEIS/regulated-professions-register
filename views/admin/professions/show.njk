@@ -62,9 +62,9 @@
                   {{
                     govukButton({
                       text: ('professions.form.button.publish' | t),
-                      classes: "govuk-button",
                       attributes: { "data-cy": "publish-button" },
-                      href: "/admin/professions/" + profession.id + "/versions/" + profession.versionId + "/publish"
+                      href: "/admin/professions/" + profession.id + "/versions/" + profession.versionId + "/publish",
+                      disabled: publicationBlockers.length
                     })
                   }}
                 </li>
@@ -82,6 +82,7 @@
               {% endif %}
             </ul>
           </nav>
+          {% include '../../shared/_publication-blockers.njk' %}
         {% endif %}
       </aside>
     </div>

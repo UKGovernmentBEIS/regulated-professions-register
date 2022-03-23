@@ -57,13 +57,18 @@ declare global {
         key: string,
         listItems: string[],
       ): Chainable<string>;
-      clickSummaryListRowAction(key: string, action: string): Chainable<string>;
+      clickSummaryListRowChangeLink(key: string): Chainable<string>;
       checkCorrectNumberOfProfessionsAreShown(
         statuses: ('live' | 'archived' | 'draft')[],
       ): Chainable<string>;
       checkCorrectNumberOfOrganisationsAreShown(
         statuses: ('live' | 'archived' | 'draft')[],
       ): Chainable<string>;
+      checkPublishBlocked(
+        missingSections: string[],
+        shouldHaveButton?: boolean,
+      ): Chainable<string>;
+      checkPublishNotBlocked(): Chainable<string>;
       visitAndCheckAccessibility(url: string): void;
       checkAccessibility(rules?: AxeRules): void;
     }

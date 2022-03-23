@@ -1,4 +1,13 @@
-import { Controller, Get, Param, Put, Render, Req, Res } from '@nestjs/common';
+import {
+  BadRequestException,
+  Controller,
+  Get,
+  Param,
+  Put,
+  Render,
+  Req,
+  Res,
+} from '@nestjs/common';
 import { Request, Response } from 'express';
 import { I18nService } from 'nestjs-i18n';
 import { BackLink } from '../../common/decorators/back-link.decorator';
@@ -10,6 +19,7 @@ import { isConfirmed } from '../../helpers/is-confirmed';
 import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
 import { getActingUser } from '../../users/helpers/get-acting-user.helper';
 import { UserPermission } from '../../users/user-permission';
+import { getPublicationBlockers } from '../helpers/get-publication-blockers.helper';
 import { ProfessionVersionsService } from '../profession-versions.service';
 import { Profession } from '../profession.entity';
 import { ProfessionsService } from '../professions.service';
@@ -63,6 +73,10 @@ export class ProfessionPublicationController {
       professionId,
       versionId,
     );
+
+    if (getPublicationBlockers(version).length) {
+      throw new BadRequestException();
+    }
 
     const newVersion = await this.professionVersionsService.create(
       version,

@@ -7,6 +7,5 @@ export interface RegulatedActivitiesTemplate {
   protectedTitles: string;
   regulationUrl: string;
   captionText: string;
-  change: boolean;
   errors: object | undefined;
 }

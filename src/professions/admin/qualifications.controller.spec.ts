@@ -71,13 +71,7 @@ describe(QualificationsController, () => {
           user: userFactory.build(),
         });
 
-        await controller.edit(
-          response,
-          'profession-id',
-          'version-id',
-          false,
-          request,
-        );
+        await controller.edit(response, 'profession-id', 'version-id', request);
 
         expect(response.render).toHaveBeenCalledWith(
           'admin/professions/qualifications',
@@ -117,13 +111,7 @@ describe(QualificationsController, () => {
           user: userFactory.build(),
         });
 
-        await controller.edit(
-          response,
-          'profession-id',
-          'version-id',
-          false,
-          request,
-        );
+        await controller.edit(response, 'profession-id', 'version-id', request);
 
         expect(response.render).toHaveBeenCalledWith(
           'admin/professions/qualifications',
@@ -148,13 +136,7 @@ describe(QualificationsController, () => {
         user: userFactory.build(),
       });
 
-      await controller.edit(
-        response,
-        'profession-id',
-        'version-id',
-        false,
-        request,
-      );
+      await controller.edit(response, 'profession-id', 'version-id', request);
 
       expect(checkCanViewProfession).toHaveBeenCalledWith(request, profession);
     });
@@ -162,108 +144,51 @@ describe(QualificationsController, () => {
 
   describe('update', () => {
     describe('when all required parameters are entered', () => {
-      describe('when the "Change" query param is false', () => {
-        it('creates a new Qualification on the Profession and redirects to the next page in the journey', async () => {
-          const profession = professionFactory.build({ id: 'profession-id' });
+      it('creates a new Qualification on the Profession and redirects to the next page in the journey', async () => {
+        const profession = professionFactory.build({ id: 'profession-id' });
 
-          const version = professionVersionFactory.build({
-            id: 'version-id',
-            profession: profession,
-            qualification: qualificationFactory.build(),
-          });
-
-          const dto: QualificationsDto = {
-            routesToObtain: 'General secondary education',
-            moreInformationUrl: 'http://www.example.com/more-info',
-            ukRecognition: 'ukRecognition',
-            ukRecognitionUrl: 'http://example.com/uk',
-            change: false,
-          };
-
-          professionsService.findWithVersions.mockResolvedValue(profession);
-          professionVersionsService.findWithProfession.mockResolvedValue(
-            version,
-          );
-
-          const request = createDefaultMockRequest({
-            user: userFactory.build(),
-          });
-
-          await controller.update(
-            response,
-            'profession-id',
-            'version-id',
-            dto,
-            request,
-          );
-
-          expect(professionVersionsService.save).toHaveBeenCalledWith(
-            expect.objectContaining({
-              qualification: expect.objectContaining({
-                routesToObtain: 'General secondary education',
-                url: 'http://www.example.com/more-info',
-                ukRecognition: 'ukRecognition',
-                ukRecognitionUrl: 'http://example.com/uk',
-              }),
-            }),
-          );
-
-          expect(response.redirect).toHaveBeenCalledWith(
-            '/admin/professions/profession-id/versions/version-id/legislation/edit',
-          );
+        const version = professionVersionFactory.build({
+          id: 'version-id',
+          profession: profession,
+          qualification: qualificationFactory.build(),
         });
-      });
 
-      describe('when the "Change" query param is true', () => {
-        it('creates a new Qualification on the Profession and redirects to "Check your answers"', async () => {
-          const profession = professionFactory.build({ id: 'profession-id' });
+        const dto: QualificationsDto = {
+          routesToObtain: 'General secondary education',
+          moreInformationUrl: 'http://www.example.com/more-info',
+          ukRecognition: 'ukRecognition',
+          ukRecognitionUrl: 'http://example.com/uk',
+        };
 
-          const version = professionVersionFactory.build({
-            id: 'version-id',
-            profession: profession,
-            qualification: qualificationFactory.build(),
-          });
+        professionsService.findWithVersions.mockResolvedValue(profession);
+        professionVersionsService.findWithProfession.mockResolvedValue(version);
 
-          const dto: QualificationsDto = {
-            routesToObtain: 'General secondary education',
-            moreInformationUrl: 'http://www.example.com/more-info',
-            ukRecognition: 'ukRecognition',
-            ukRecognitionUrl: 'http://example.com/uk',
-            change: true,
-          };
-
-          professionsService.findWithVersions.mockResolvedValue(profession);
-          professionVersionsService.findWithProfession.mockResolvedValue(
-            version,
-          );
-
-          const request = createDefaultMockRequest({
-            user: userFactory.build(),
-          });
-
-          await controller.update(
-            response,
-            'profession-id',
-            'version-id',
-            dto,
-            request,
-          );
-
-          expect(professionVersionsService.save).toHaveBeenCalledWith(
-            expect.objectContaining({
-              qualification: expect.objectContaining({
-                routesToObtain: 'General secondary education',
-                url: 'http://www.example.com/more-info',
-                ukRecognition: 'ukRecognition',
-                ukRecognitionUrl: 'http://example.com/uk',
-              }),
-            }),
-          );
-
-          expect(response.redirect).toHaveBeenCalledWith(
-            '/admin/professions/profession-id/versions/version-id/check-your-answers',
-          );
+        const request = createDefaultMockRequest({
+          user: userFactory.build(),
         });
+
+        await controller.update(
+          response,
+          'profession-id',
+          'version-id',
+          dto,
+          request,
+        );
+
+        expect(professionVersionsService.save).toHaveBeenCalledWith(
+          expect.objectContaining({
+            qualification: expect.objectContaining({
+              routesToObtain: 'General secondary education',
+              url: 'http://www.example.com/more-info',
+              ukRecognition: 'ukRecognition',
+              ukRecognitionUrl: 'http://example.com/uk',
+            }),
+          }),
+        );
+
+        expect(response.redirect).toHaveBeenCalledWith(
+          '/admin/professions/profession-id/versions/version-id/check-your-answers',
+        );
       });
     });
 
@@ -282,7 +207,6 @@ describe(QualificationsController, () => {
           moreInformationUrl: 'www.example.com/more-info ',
           ukRecognition: 'ukRecognition',
           ukRecognitionUrl: 'example.com/uk',
-          change: true,
         };
 
         professionsService.findWithVersions.mockResolvedValue(profession);
@@ -330,7 +254,6 @@ describe(QualificationsController, () => {
         const dto: QualificationsDto = {
           routesToObtain: '',
           moreInformationUrl: 'not a url',
-          change: false,
           ukRecognition: '',
           ukRecognitionUrl: 'not a url',
         };
@@ -385,7 +308,6 @@ describe(QualificationsController, () => {
         moreInformationUrl: 'http://www.example.com/more-info',
         ukRecognition: 'ukRecognition',
         ukRecognitionUrl: 'http://example.com/uk',
-        change: true,
       };
 
       await controller.update(

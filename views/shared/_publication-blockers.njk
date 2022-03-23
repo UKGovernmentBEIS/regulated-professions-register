@@ -1,0 +1,14 @@
+{% if publicationBlockers.length %}
+<div>
+  <h2 class="govuk-heading-s">{{ "professions.admin.publish.blocked.heading" | t }}</h2>
+    <ul class="govuk-list govuk-list--bullet">
+      {%for blocker in publicationBlockers %}
+        {% if blocker.type === "incomplete-section" %}
+          {% set sectionName = (("professions.form.headings." + blocker.section) | t) %}
+          <li class="govuk-body-s">{{ "professions.admin.publish.blocked.missing" | t({section: sectionName}) }}</li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+  </b>
+</div>
+{% endif %}
