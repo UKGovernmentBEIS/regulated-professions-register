@@ -6,8 +6,10 @@ import {
   OrganisationVersionStatus,
 } from './organisation-version.entity';
 import { Organisation } from './organisation.entity';
+import { OrganisationsSearchService } from './organisations-search.service';
 import { User } from '../users/user.entity';
 import { ProfessionVersionStatus } from '../professions/profession-version.entity';
+import { FilterInput } from '../common/interfaces/filter-input.interface';
 
 import { ProfessionVersionsService } from '../professions/profession-versions.service';
 @Injectable()
@@ -16,6 +18,7 @@ export class OrganisationVersionsService {
     @InjectRepository(OrganisationVersion)
     private repository: Repository<OrganisationVersion>,
     private professionVersionsService: ProfessionVersionsService,
+    private organisationsSearchService: OrganisationsSearchService,
     private connection: Connection,
   ) {}
 
@@ -25,6 +28,10 @@ export class OrganisationVersionsService {
 
   async find(id: string): Promise<OrganisationVersion> {
     return this.repository.findOne(id);
+  }
+
+  async all(): Promise<OrganisationVersion[]> {
+    return await this.versionsWithJoins().getMany();
   }
 
   async create(
@@ -82,6 +89,17 @@ export class OrganisationVersionsService {
     );
   }
 
+  async searchLive(filter: FilterInput): Promise<Organisation[]> {
+    const query = this.versionsWithJoins().where(
+      'organisationVersion.status = :status',
+      {
+        status: OrganisationVersionStatus.Live,
+      },
+    );
+
+    return await this.filter(query, filter);
+  }
+
   async allLiveAndDraft(): Promise<Organisation[]> {
     const versions = await this.versionsWithJoins()
       .distinctOn(['organisation.name'])
@@ -97,6 +115,31 @@ export class OrganisationVersionsService {
     return versions.map((version) =>
       Organisation.withVersion(version.organisation, version),
     );
+  }
+
+  async searchWithLatestVersion(filter: FilterInput): Promise<Organisation[]> {
+    const query = this.versionsWithJoins()
+      .distinctOn(['organisationVersion.organisation', 'professions.id'])
+      .where(
+        '(organisationVersion.status IN(:...organisationStatus)) AND (professionVersions.status IN(:...professionStatus) OR professionVersions.status IS NULL)',
+        {
+          organisationStatus: [
+            OrganisationVersionStatus.Live,
+            OrganisationVersionStatus.Draft,
+            OrganisationVersionStatus.Archived,
+          ],
+          professionStatus: [
+            ProfessionVersionStatus.Live,
+            ProfessionVersionStatus.Draft,
+          ],
+        },
+      )
+      .orderBy(
+        'organisationVersion.organisation, professions.id, professionVersions.created_at, organisationVersion.created_at',
+        'DESC',
+      );
+
+    return await this.filter(query, filter, true);
   }
 
   async allWithLatestVersion(): Promise<Organisation[]> {
@@ -160,6 +203,8 @@ export class OrganisationVersionsService {
   async confirm(version: OrganisationVersion): Promise<OrganisationVersion> {
     version.status = OrganisationVersionStatus.Draft;
 
+    await this.organisationsSearchService.index(version);
+
     return this.repository.save(version);
   }
 
@@ -190,6 +235,8 @@ export class OrganisationVersionsService {
     } finally {
       await queryRunner.release();
     }
+
+    await this.organisationsSearchService.index(version);
 
     return version;
   }
@@ -253,5 +300,62 @@ export class OrganisationVersionsService {
       .leftJoinAndSelect('organisation.professions', 'professions')
       .leftJoinAndSelect('professions.versions', 'professionVersions')
       .leftJoinAndSelect('professionVersions.industries', 'industries');
+  }
+
+  private async filter(
+    query: SelectQueryBuilder<OrganisationVersion>,
+    filter: FilterInput,
+    showDraftProfessions = false,
+  ): Promise<Organisation[]> {
+    if (filter.keywords?.length) {
+      const ids = await this.organisationsSearchService.search(filter.keywords);
+      query = query.andWhere({ id: In(ids) });
+    }
+
+    if (filter.nations?.length) {
+      const nations = filter.nations.map((n) => n.code);
+
+      query = query.andWhere(
+        'professionVersions.occupationLocations @> :nations',
+        {
+          nations: nations,
+        },
+      );
+    }
+
+    if (filter.industries?.length) {
+      const industries = filter.industries.map((i) => i.id);
+
+      query = query.andWhere('industries.id IN(:...industries)', {
+        industries: industries,
+      });
+    }
+
+    if (filter.organisations?.length) {
+      const organisations = filter.organisations.map((o) => o.id);
+
+      query = query.andWhere('organisation.id IN(:...organisations)', {
+        organisations: organisations,
+      });
+    }
+
+    if (filter.regulationTypes?.length) {
+      query = query.andWhere(
+        'professionVersions.regulationType IN(:...regulationTypes)',
+        {
+          regulationTypes: filter.regulationTypes,
+        },
+      );
+    }
+
+    const versions = await query.getMany();
+
+    return versions.map((version) =>
+      Organisation.withVersion(
+        version.organisation,
+        version,
+        showDraftProfessions,
+      ),
+    );
   }
 }

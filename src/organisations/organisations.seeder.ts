@@ -5,6 +5,7 @@ import { Seeder } from 'nestjs-seeder';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { Organisation } from '../organisations/organisation.entity';
+import { OrganisationsSearchService } from '../organisations/organisations-search.service';
 import {
   OrganisationVersion,
   OrganisationVersionStatus,
@@ -38,6 +39,7 @@ export class OrganisationsSeeder implements Seeder {
     private readonly organisationsRepository: Repository<Organisation>,
     @InjectRepository(OrganisationVersion)
     private readonly organisationVersionsRepository: Repository<OrganisationVersion>,
+    private readonly searchService: OrganisationsSearchService,
   ) {}
 
   async seed(): Promise<any> {
@@ -94,7 +96,13 @@ export class OrganisationsSeeder implements Seeder {
       }),
     );
 
-    await this.organisationVersionsRepository.save(versions.flat());
+    const flattenedVersions = versions.flat();
+
+    await this.organisationVersionsRepository.save(flattenedVersions);
+
+    for (const version of flattenedVersions) {
+      await this.searchService.index(version);
+    }
   }
 
   async drop(): Promise<any> {

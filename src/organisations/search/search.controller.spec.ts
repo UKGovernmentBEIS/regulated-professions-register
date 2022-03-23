@@ -57,7 +57,7 @@ describe('SearchController', () => {
 
   beforeEach(async () => {
     organisationVersionsService = createMock<OrganisationVersionsService>();
-    organisationVersionsService.allLive.mockResolvedValue([
+    organisationVersionsService.searchLive.mockResolvedValue([
       organisation1,
       organisation2,
     ]);
@@ -116,7 +116,7 @@ describe('SearchController', () => {
         expect(result).toEqual(expected);
       });
 
-      it('should request organisations populated with professions from `OrganisationVersionsService`', async () => {
+      it('should make a search request from `OrganisationVersionsService`', async () => {
         await controller.index(
           {
             keywords: '',
@@ -126,7 +126,11 @@ describe('SearchController', () => {
           request,
         );
 
-        expect(organisationVersionsService.allLive).toHaveBeenCalled();
+        expect(organisationVersionsService.searchLive).toHaveBeenCalledWith({
+          keywords: '',
+          industries: [],
+          nations: [],
+        });
       });
     });
 
@@ -148,111 +152,17 @@ describe('SearchController', () => {
         },
         Nation.all(),
         industries,
-        [],
-        i18nService,
-      ).present();
-
-      expect(result).toEqual(expected);
-    });
-
-    it('should return filtered organisations when searching by nation', async () => {
-      const result = await controller.index(
-        {
-          keywords: '',
-          industries: [],
-          nations: ['GB-SCT'],
-        },
-        request,
-      );
-
-      const expected = await new SearchPresenter(
-        {
-          keywords: '',
-          industries: [],
-          nations: [Nation.find('GB-SCT')],
-        },
-        Nation.all(),
-        industries,
-        [organisation1],
-        i18nService,
-      ).present();
-
-      expect(result).toEqual(expected);
-    });
-
-    it('should return filtered organisations when searching by industry', async () => {
-      const result = await controller.index(
-        {
-          keywords: '',
-          industries: [industry2.id],
-          nations: [],
-        },
-        request,
-      );
-
-      const expected = await new SearchPresenter(
-        {
-          keywords: '',
-          industries: [industry2],
-          nations: [],
-        },
-        Nation.all(),
-        industries,
-        [organisation2],
-        i18nService,
-      ).present();
-
-      expect(result).toEqual(expected);
-    });
-
-    it('should return filtered organisations when searching by keyword', async () => {
-      const result = await controller.index(
-        {
-          keywords: 'Medical',
-          industries: [],
-          nations: [],
-        },
-        request,
-      );
-
-      const expected = await new SearchPresenter(
-        {
-          keywords: 'Medical',
-          industries: [],
-          nations: [],
-        },
-        Nation.all(),
-        industries,
-        [organisation1],
-        i18nService,
-      ).present();
-
-      expect(result).toEqual(expected);
-    });
-
-    it('should return unfiltered organisations when no search parameters are specified', async () => {
-      const result = await controller.index(
-        {
-          keywords: '',
-          industries: [],
-          nations: [],
-        },
-        request,
-      );
-
-      const expected = await new SearchPresenter(
-        {
-          keywords: '',
-          industries: [],
-          nations: [],
-        },
-        Nation.all(),
-        industries,
         [organisation1, organisation2],
         i18nService,
       ).present();
 
       expect(result).toEqual(expected);
+
+      expect(organisationVersionsService.searchLive).toHaveBeenCalledWith({
+        keywords: 'example search',
+        industries: [industry1, industry2],
+        nations: [Nation.find('GB-NIR')],
+      });
     });
 
     it('should set the searchResultUrl', async () => {

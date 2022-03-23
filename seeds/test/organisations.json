@@ -4,7 +4,7 @@
     "slug": "department-for-education",
     "versions": [
       {
-        "alternateName": "",
+        "alternateName": "DFE",
         "address": "123 Example Street\nLondon\nEC1 1AB",
         "url": "https://www.gov.uk/guidance/early-years-qualifications-finder#overseas-qualifications",
         "email": "dfe@example.com",
@@ -14,7 +14,7 @@
         "created_at": "2022-01-01"
       },
       {
-        "alternateName": "DFE",
+        "alternateName": "",
         "address": "345 Example Street\nLondon\nEC1 1AB",
         "url": "https://www.gov.uk/guidance/early-years-qualifications-finder#overseas-qualifications",
         "email": "old@example.com",
