@@ -9,6 +9,7 @@ import { Organisation } from './organisation.entity';
 import { OrganisationsSearchService } from './organisations-search.service';
 import { User } from '../users/user.entity';
 import { ProfessionVersionStatus } from '../professions/profession-version.entity';
+import { FilterInput } from '../common/interfaces/filter-input.interface';
 
 import { ProfessionVersionsService } from '../professions/profession-versions.service';
 @Injectable()
@@ -78,6 +79,45 @@ export class OrganisationVersionsService {
       })
       .orderBy('organisation.name')
       .getMany();
+
+    return versions.map((version) =>
+      Organisation.withVersion(version.organisation, version),
+    );
+  }
+
+  async searchLive(filter: FilterInput): Promise<Organisation[]> {
+    let query = this.versionsWithJoins().where(
+      'organisationVersion.status = :status',
+      {
+        status: OrganisationVersionStatus.Live,
+      },
+    );
+
+    if (filter.keywords?.length) {
+      const ids = await this.organisationsSearchService.search(filter.keywords);
+      query = query.andWhere({ id: In(ids) });
+    }
+
+    if (filter.nations?.length) {
+      const nations = filter.nations.map((n) => n.code);
+
+      query = query.andWhere(
+        'professionVersions.occupationLocations @> :nations',
+        {
+          nations: nations,
+        },
+      );
+    }
+
+    if (filter.industries?.length) {
+      const industries = filter.industries.map((i) => i.id);
+
+      query = query.andWhere('industries.id IN(:...industries)', {
+        industries: industries,
+      });
+    }
+
+    const versions = await query.getMany();
 
     return versions.map((version) =>
       Organisation.withVersion(version.organisation, version),

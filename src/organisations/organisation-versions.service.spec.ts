@@ -15,6 +15,8 @@ import {
 } from './organisation-version.entity';
 import { Organisation } from './organisation.entity';
 import { User } from '../users/user.entity';
+import { Nation } from '../nations/nation';
+
 import { OrganisationVersionsService } from './organisation-versions.service';
 import { OrganisationsSearchService } from './organisations-search.service';
 
@@ -23,6 +25,7 @@ import organisationFactory from '../testutils/factories/organisation';
 import professionVersionFactory from '../testutils/factories/profession-version';
 import professionFactory from '../testutils/factories/profession';
 import userFactory from '../testutils/factories/user';
+import industryFactory from '../testutils/factories/industry';
 
 import { ProfessionVersionStatus } from '../professions/profession-version.entity';
 import { ProfessionVersionsService } from '../professions/profession-versions.service';
@@ -771,6 +774,140 @@ describe('OrganisationVersionsService', () => {
 
       expect(professionVersionsService.archive).toHaveBeenCalledWith(
         profession2.versions[0],
+      );
+    });
+  });
+
+  describe('searchLive', () => {
+    const versions = organisationVersionFactory.buildList(5);
+    const queryBuilder = createMock<SelectQueryBuilder<OrganisationVersion>>({
+      leftJoinAndSelect: () => queryBuilder,
+      where: () => queryBuilder,
+      andWhere: () => queryBuilder,
+      getMany: async () => versions,
+    });
+
+    beforeEach(() => {
+      jest
+        .spyOn(repo, 'createQueryBuilder')
+        .mockImplementation(() => queryBuilder);
+    });
+
+    it('returns all organisations with a given status when no filter arguments are passed', async () => {
+      const filter = {
+        keywords: '',
+        nations: [],
+        industries: [],
+      };
+
+      const result = await service.searchLive(filter);
+
+      const expectedOrgs = versions.map((version) =>
+        Organisation.withVersion(version.organisation, version),
+      );
+
+      expect(result).toEqual(expectedOrgs);
+
+      expect(queryBuilder).toHaveJoined([
+        'organisationVersion.organisation',
+        'organisationVersion.user',
+        'organisation.professions',
+      ]);
+
+      expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
+        'professions.versions',
+        'professionVersions',
+      );
+
+      expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
+        'professionVersions.industries',
+        'industries',
+      );
+
+      expect(queryBuilder.where).toHaveBeenCalledWith(
+        'organisationVersion.status = :status',
+        {
+          status: OrganisationVersionStatus.Live,
+        },
+      );
+    });
+
+    it('makes a search query to opensearch and filters by the resulting IDs when keywords are provided', async () => {
+      const filter = {
+        keywords: 'some-keyword',
+        nations: [],
+        industries: [],
+      };
+
+      (organisationsSearchService.search as jest.Mock).mockReturnValue([
+        '123',
+        '456',
+      ]);
+
+      const result = await service.searchLive(filter);
+
+      const expectedOrgs = versions.map((version) =>
+        Organisation.withVersion(version.organisation, version),
+      );
+
+      expect(result).toEqual(expectedOrgs);
+
+      expect(organisationsSearchService.search).toHaveBeenCalledWith(
+        'some-keyword',
+      );
+
+      expect(queryBuilder.andWhere).toHaveBeenCalledWith({
+        id: In(['123', '456']),
+      });
+    });
+
+    it('filters by nations when provided', async () => {
+      const filter = {
+        keywords: '',
+        nations: [Nation.find('GB-ENG'), Nation.find('GB-NIR')],
+        industries: [],
+      };
+
+      const result = await service.searchLive(filter);
+
+      const expectedOrgs = versions.map((version) =>
+        Organisation.withVersion(version.organisation, version),
+      );
+
+      expect(result).toEqual(expectedOrgs);
+
+      expect(queryBuilder.andWhere).toHaveBeenCalledWith(
+        'professionVersions.occupationLocations @> :nations',
+        {
+          nations: ['GB-ENG', 'GB-NIR'],
+        },
+      );
+    });
+
+    it('filters by industries when provided', async () => {
+      const industries = [
+        industryFactory.build({ id: 'some-uuid' }),
+        industryFactory.build({ id: 'other-uuid' }),
+      ];
+      const filter = {
+        keywords: '',
+        nations: [],
+        industries: industries,
+      };
+
+      const result = await service.searchLive(filter);
+
+      const expectedOrgs = versions.map((version) =>
+        Organisation.withVersion(version.organisation, version),
+      );
+
+      expect(result).toEqual(expectedOrgs);
+
+      expect(queryBuilder.andWhere).toHaveBeenCalledWith(
+        'industries.id IN(:...industries)',
+        {
+          industries: ['some-uuid', 'other-uuid'],
+        },
       );
     });
   });
