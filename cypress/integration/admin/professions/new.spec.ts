@@ -60,12 +60,10 @@ describe('Adding a new profession', () => {
       });
 
       cy.checkAccessibility({ 'color-contrast': { enabled: false } });
-      cy.checkPublishBlocked([
-        'scope',
-        'regulatedActivities',
-        'qualifications',
-        'legislation',
-      ]);
+      cy.checkPublishBlocked(
+        ['scope', 'regulatedActivities', 'qualifications', 'legislation'],
+        [],
+      );
       cy.clickSummaryListRowChangeLink('professions.form.label.scope.nations');
       // Conditional radio buttons add an additional `aria-expanded` field,
       // so ignore that rule on this page
@@ -92,11 +90,10 @@ describe('Adding a new profession', () => {
       });
 
       cy.checkAccessibility({ 'color-contrast': { enabled: false } });
-      cy.checkPublishBlocked([
-        'regulatedActivities',
-        'qualifications',
-        'legislation',
-      ]);
+      cy.checkPublishBlocked(
+        ['regulatedActivities', 'qualifications', 'legislation'],
+        [],
+      );
       cy.clickSummaryListRowChangeLink(
         'professions.form.label.registration.registrationRequirements',
       );
@@ -128,11 +125,10 @@ describe('Adding a new profession', () => {
       });
 
       cy.checkAccessibility({ 'color-contrast': { enabled: false } });
-      cy.checkPublishBlocked([
-        'regulatedActivities',
-        'qualifications',
-        'legislation',
-      ]);
+      cy.checkPublishBlocked(
+        ['regulatedActivities', 'qualifications', 'legislation'],
+        [],
+      );
       cy.clickSummaryListRowChangeLink(
         'professions.form.label.regulatedActivities.regulationType',
       );
@@ -164,7 +160,7 @@ describe('Adding a new profession', () => {
       });
 
       cy.checkAccessibility({ 'color-contrast': { enabled: false } });
-      cy.checkPublishBlocked(['qualifications', 'legislation']);
+      cy.checkPublishBlocked(['qualifications', 'legislation'], []);
       cy.clickSummaryListRowChangeLink(
         'professions.form.label.qualifications.routesToObtain',
       );
@@ -194,7 +190,7 @@ describe('Adding a new profession', () => {
       });
 
       cy.checkAccessibility({ 'color-contrast': { enabled: false } });
-      cy.checkPublishBlocked(['legislation']);
+      cy.checkPublishBlocked(['legislation'], []);
       cy.clickSummaryListRowChangeLink(
         'professions.form.label.legislation.nationalLegislation',
       );

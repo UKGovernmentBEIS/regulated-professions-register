@@ -280,7 +280,8 @@
       },
       "blocked": {
         "heading": "This page is not ready to publish. Before you can publish, check:",
-        "missing": "{section} is complete"
+        "incompleteSection": "{section} is complete",
+        "organisationNotLive": "{organisation} is published"
       }
     },
     "status": {
