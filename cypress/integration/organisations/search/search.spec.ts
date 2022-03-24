@@ -102,6 +102,47 @@ describe('Searching an organisation', () => {
     });
   });
 
+  it('I can filter by regulation type', () => {
+    cy.readFile('./seeds/test/professions.json').then((professions) => {
+      const cerificatedProfessions = professions.filter((profession) =>
+        profession.versions.some(
+          (version) =>
+            version.status === 'live' &&
+            version.regulationType === 'certification',
+        ),
+      );
+
+      const organisations = new Set(
+        cerificatedProfessions.map((profession) => profession.organisation),
+      );
+
+      cy.translate('professions.regulationTypes.certification.name').then(
+        (nameLabel) => {
+          cy.get('label').contains(nameLabel).parent().find('input').check();
+        },
+      );
+
+      cy.get('button').click();
+      cy.checkAccessibility();
+
+      cy.translate('professions.regulationTypes.certification.name').then(
+        (nameLabel) => {
+          cy.get('label')
+            .contains(nameLabel)
+            .parent()
+            .find('input')
+            .should('be.checked');
+        },
+      );
+
+      checkResultLength(organisations.size);
+
+      organisations.forEach((organisation) => {
+        cy.get('body').should('contain', organisation);
+      });
+    });
+  });
+
   it('I can filter by keyword', () => {
     cy.get('input[name="keywords"]').type('Installers');
 

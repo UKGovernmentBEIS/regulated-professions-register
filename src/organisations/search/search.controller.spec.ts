@@ -12,6 +12,8 @@ import { createMockI18nService } from '../../testutils/create-mock-i18n-service'
 import { OrganisationVersionsService } from '../organisation-versions.service';
 
 import { IndustriesService } from '../../industries/industries.service';
+import { RegulationType } from '../../professions/profession-version.entity';
+import { FilterInput } from '../../common/interfaces/filter-input.interface';
 
 const industry1 = industryFactory.build({
   name: 'industries.example1',
@@ -95,8 +97,9 @@ describe('SearchController', () => {
         const result = await controller.index(
           {
             keywords: '',
-            industries: [],
             nations: [],
+            industries: [],
+            regulationTypes: [],
           },
           request,
         );
@@ -104,8 +107,9 @@ describe('SearchController', () => {
         const expected = await new SearchPresenter(
           {
             keywords: '',
-            industries: [],
             nations: [],
+            industries: [],
+            regulationTypes: [],
           },
           Nation.all(),
           industries,
@@ -120,17 +124,19 @@ describe('SearchController', () => {
         await controller.index(
           {
             keywords: '',
-            industries: [],
             nations: [],
+            industries: [],
+            regulationTypes: [],
           },
           request,
         );
 
         expect(organisationVersionsService.searchLive).toHaveBeenCalledWith({
           keywords: '',
-          industries: [],
           nations: [],
-        });
+          industries: [],
+          regulationTypes: [],
+        } as FilterInput);
       });
     });
 
@@ -138,8 +144,9 @@ describe('SearchController', () => {
       const result = await controller.index(
         {
           keywords: 'example search',
-          industries: [industry1.id, industry2.id],
           nations: ['GB-NIR'],
+          industries: [industry1.id, industry2.id],
+          regulationTypes: [RegulationType.Licensing],
         },
         request,
       );
@@ -149,6 +156,7 @@ describe('SearchController', () => {
           keywords: 'example search',
           industries: [industry1, industry2],
           nations: [Nation.find('GB-NIR')],
+          regulationTypes: [RegulationType.Licensing],
         },
         Nation.all(),
         industries,
@@ -160,9 +168,10 @@ describe('SearchController', () => {
 
       expect(organisationVersionsService.searchLive).toHaveBeenCalledWith({
         keywords: 'example search',
-        industries: [industry1, industry2],
         nations: [Nation.find('GB-NIR')],
-      });
+        industries: [industry1, industry2],
+        regulationTypes: [RegulationType.Licensing],
+      } as FilterInput);
     });
 
     it('should set the searchResultUrl', async () => {
@@ -173,8 +182,9 @@ describe('SearchController', () => {
       await controller.index(
         {
           keywords: '',
-          industries: [],
           nations: [],
+          industries: [],
+          regulationTypes: [],
         },
         request,
       );

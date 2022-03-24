@@ -5,14 +5,17 @@ export interface IndexTemplate {
   organisations: OrganisationSearchResultTemplate[];
 
   filters: {
-    industries: string[];
-    nations: string[];
     keywords: string;
+    nations: string[];
+    industries: string[];
+    regulationTypes: string[];
   };
 
   nationsCheckboxItems: CheckboxItems[];
 
   industriesCheckboxItems: CheckboxItems[];
+
+  regulationTypesCheckboxItems: CheckboxItems[];
 
   hasSelectedFilters: boolean;
 }

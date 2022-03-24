@@ -130,7 +130,8 @@
     "labels": {
       "keywords": "Keywords:",
       "nations": "Nations:",
-      "industries": "Industries:"
+      "industries": "Industries:",
+      "regulationTypes": "Regulation types:"
     },
     "foundSingular": "{count} regulatory authority found",
     "foundPlural": "{count} regulatory authorities found",
@@ -145,6 +146,10 @@
       },
       "industries": {
         "label": "Sectors",
+        "hint": "Select all that apply."
+      },
+      "regulationTypes": {
+        "label": "Regulation types",
         "hint": "Select all that apply."
       },
       "button": "Filter results"
