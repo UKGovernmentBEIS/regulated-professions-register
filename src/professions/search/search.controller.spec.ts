@@ -11,6 +11,8 @@ import industryFactory from '../../testutils/factories/industry';
 import professionFactory from '../../testutils/factories/profession';
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 import { ProfessionVersionsService } from '../profession-versions.service';
+import { RegulationType } from '../profession-version.entity';
+import { FilterInput } from '../../common/interfaces/filter-input.interface';
 
 describe('SearchController', () => {
   let controller: SearchController;
@@ -68,8 +70,9 @@ describe('SearchController', () => {
         const result = await controller.index(
           {
             keywords: '',
-            industries: [],
             nations: [],
+            industries: [],
+            regulationTypes: [],
           },
           request,
         );
@@ -77,8 +80,9 @@ describe('SearchController', () => {
         const expected = await new SearchPresenter(
           {
             keywords: '',
-            industries: [],
             nations: [],
+            industries: [],
+            regulationTypes: [],
           },
           Nation.all(),
           industries,
@@ -93,8 +97,9 @@ describe('SearchController', () => {
         await controller.index(
           {
             keywords: '',
-            industries: [],
             nations: [],
+            industries: [],
+            regulationTypes: [],
           },
           request,
         );
@@ -127,8 +132,9 @@ describe('SearchController', () => {
       const result = await controller.index(
         {
           keywords: 'example search',
-          industries: [industry1.id, industry2.id],
           nations: ['GB-SCT'],
+          industries: [industry1.id, industry2.id],
+          regulationTypes: [RegulationType.Certification],
         },
         request,
       );
@@ -136,8 +142,9 @@ describe('SearchController', () => {
       const expected = await new SearchPresenter(
         {
           keywords: 'example search',
-          industries: [industry1, industry2],
           nations: [Nation.find('GB-SCT')],
+          industries: [industry1, industry2],
+          regulationTypes: [RegulationType.Certification],
         },
         Nation.all(),
         industries,
@@ -149,9 +156,10 @@ describe('SearchController', () => {
 
       expect(professionVersionsService.searchLive).toHaveBeenCalledWith({
         keywords: 'example search',
-        industries: [industry1, industry2],
         nations: [Nation.find('GB-SCT')],
-      });
+        industries: [industry1, industry2],
+        regulationTypes: [RegulationType.Certification],
+      } as FilterInput);
     });
 
     it('should call the search service with the provided filters', async () => {
@@ -161,17 +169,25 @@ describe('SearchController', () => {
       await controller.index(
         {
           keywords: 'example search',
-          industries: [industry1.id, industry2.id],
           nations: ['GB-SCT'],
+          industries: [industry1.id, industry2.id],
+          regulationTypes: [
+            RegulationType.Certification,
+            RegulationType.Accreditation,
+          ],
         },
         request,
       );
 
       expect(professionVersionsService.searchLive).toHaveBeenCalledWith({
         keywords: 'example search',
-        industries: [industry1, industry2],
         nations: [Nation.find('GB-SCT')],
-      });
+        industries: [industry1, industry2],
+        regulationTypes: [
+          RegulationType.Certification,
+          RegulationType.Accreditation,
+        ],
+      } as FilterInput);
     });
   });
 
@@ -183,8 +199,9 @@ describe('SearchController', () => {
     await controller.index(
       {
         keywords: '',
-        industries: [],
         nations: [],
+        industries: [],
+        regulationTypes: [],
       },
       request,
     );

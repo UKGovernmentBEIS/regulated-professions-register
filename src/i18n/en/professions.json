@@ -304,7 +304,8 @@
     "labels": {
       "keywords": "Keywords:",
       "nations": "Nations:",
-      "industries": "Sectors:"
+      "industries": "Sectors:",
+      "regulationTypes": "Regulation types:"
     },
     "profession": {
       "regulators": "Regulators",
@@ -321,6 +322,10 @@
       },
       "industries": {
         "label": "Sectors",
+        "hint": "Select all that apply."
+      },
+      "regulationTypes": {
+        "label": "Regulation types",
         "hint": "Select all that apply."
       },
       "button": "Filter results"

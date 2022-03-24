@@ -11,6 +11,8 @@ import professionFactory from '../../testutils/factories/profession';
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 import { IndexTemplate } from './interfaces/index-template.interface';
 import { hasSelectedFilters } from '../../search/helpers/has-selected-filters.helper';
+import { RegulationType } from '../profession-version.entity';
+import { RegulationTypesCheckboxPresenter } from '../admin/presenters/regulation-types-checkbox.presenter';
 
 jest.mock('../../search/helpers/has-selected-filters.helper');
 
@@ -58,9 +60,13 @@ describe('SearchPresenter', () => {
   describe('present', () => {
     it('should return a IndexTemplate', async () => {
       const filterInput: FilterInput = {
+        keywords: 'Example Keywords',
         nations: [nations[0]],
         industries: [industry2],
-        keywords: 'Example Keywords',
+        regulationTypes: [
+          RegulationType.Certification,
+          RegulationType.Licensing,
+        ],
       };
 
       const presenter = new SearchPresenter(
@@ -74,26 +80,37 @@ describe('SearchPresenter', () => {
       (hasSelectedFilters as jest.Mock).mockReturnValue(true);
       const result = await presenter.present();
 
-      const industriesCheckboxItems = await new IndustriesCheckboxPresenter(
-        industries,
-        [industry2],
-        i18nService,
-      ).checkboxItems();
-
       const nationsCheckboxItems = await new NationsCheckboxPresenter(
         Nation.all(),
         [Nation.find('GB-ENG')],
         i18nService,
       ).checkboxItems();
 
+      const industriesCheckboxItems = await new IndustriesCheckboxPresenter(
+        industries,
+        [industry2],
+        i18nService,
+      ).checkboxItems();
+
+      const regulationTypesCheckboxItems =
+        await new RegulationTypesCheckboxPresenter(
+          [RegulationType.Certification, RegulationType.Licensing],
+          i18nService,
+        ).checkboxItems();
+
       const expected: IndexTemplate = {
         filters: {
-          industries: ['industries.example2'],
           keywords: 'Example Keywords',
+          industries: ['industries.example2'],
           nations: ['nations.england'],
+          regulationTypes: [
+            RegulationType.Certification,
+            RegulationType.Licensing,
+          ],
         },
-        industriesCheckboxItems,
         nationsCheckboxItems,
+        industriesCheckboxItems,
+        regulationTypesCheckboxItems,
         professions: [
           await new ProfessionSearchResultPresenter(
             profession1,

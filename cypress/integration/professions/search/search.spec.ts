@@ -56,8 +56,8 @@ describe('Searching a profession', () => {
     cy.get('input[name="nations[]"][value="GB-WLS"]').check();
 
     cy.get('button').click();
-
     cy.checkAccessibility();
+
     cy.get('input[name="nations[]"][value="GB-WLS"]').should('be.checked');
 
     cy.get('body').should('contain', 'Registered Trademark Attorney');
@@ -82,6 +82,33 @@ describe('Searching a profession', () => {
         .find('input')
         .should('be.checked');
     });
+
+    cy.get('body').should(
+      'contain',
+      'Secondary School Teacher in State maintained schools (England)',
+    );
+    cy.get('body').should('not.contain', 'Registered Trademark Attorney');
+  });
+
+  it('I can filter by regulation type', () => {
+    cy.translate('professions.regulationTypes.licensing.name').then(
+      (nameLabel) => {
+        cy.get('label').contains(nameLabel).parent().find('input').check();
+      },
+    );
+
+    cy.get('button').click();
+    cy.checkAccessibility();
+
+    cy.translate('professions.regulationTypes.licensing.name').then(
+      (nameLabel) => {
+        cy.get('label')
+          .contains(nameLabel)
+          .parent()
+          .find('input')
+          .should('be.checked');
+      },
+    );
 
     cy.get('body').should(
       'contain',
