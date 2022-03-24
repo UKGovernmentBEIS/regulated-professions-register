@@ -89,6 +89,41 @@
 
         {% endif %}
 
+        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+
+        {{
+          govukTextarea({
+            label: {
+              text: ("professions.form.label.qualifications.otherCountriesRecognition.summary" | t),
+              classes: "govuk-label--m",
+              isPageHeading: false
+            },
+            id: "otherCountriesRecognitionSummary",
+            name: "otherCountriesRecognitionSummary",
+            value: otherCountriesRecognitionSummary,
+            rows: "7",
+            hint: {
+              text: ("professions.form.label.qualifications.otherCountriesRecognition.summaryHint" | t)
+            }
+          })
+        }}
+
+        {{
+          govukInput({
+            label: {
+              text: ("professions.form.label.qualifications.otherCountriesRecognition.url" | t),
+              classes: "govuk-label--m"
+            },
+            id: "otherCountriesRecognitionUrl",
+            name: "otherCountriesRecognitionUrl",
+            value: otherCountriesRecognitionUrl,
+            hint: {
+              text: ("professions.form.label.qualifications.otherCountriesRecognition.urlHint" | t)
+            },
+            errorMessage: errors.otherCountriesRecognitionUrl | tError
+          })
+        }}
+
         {{
           govukButton({
             id: "submit-button",

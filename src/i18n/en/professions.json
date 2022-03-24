@@ -72,7 +72,13 @@
         "routesToObtain": "Routes to qualification for new professionals",
         "moreInformationUrl": "More about qualification (optional)",
         "ukRecognition": "Routes to recognition within the UK (optional)",
-        "ukRecognitionUrl": "More about recognition within the UK (optional)"
+        "ukRecognitionUrl": "More about recognition within the UK (optional)",
+        "otherCountriesRecognition": {
+          "summary": "Summary of routes (optional)",
+          "summaryHint": "How qualifications and experience gained outside the UK may be recognised",
+          "url": "More about recognition for professionals outside the UK (optional)",
+          "urlHint": "Website link to more information"
+        }
       },
       "legislation": {
         "nationalLegislation": "Title of relevant act or charter",
@@ -141,6 +147,9 @@
         },
         "ukRecognitionUrl": {
           "invalid": "Please enter a valid website address"
+        },
+        "otherCountriesRecognitionUrl": {
+          "invalid": "Please enter a valid website address"
         }
       },
       "legislation": {
@@ -186,7 +195,11 @@
       "routesToObtain": "Routes to qualification",
       "moreInformationUrl": "More about qualification",
       "ukRecognition": "Routes to recognition within the UK",
-      "ukRecognitionUrl": "More about recognition within the UK"
+      "ukRecognitionUrl": "More about recognition within the UK",
+      "otherCountriesRecognition": {
+        "summary": "Summary of routes",
+        "url": "More about recognition for professionals outside the UK"
+      }
     },
     "registration": {
       "heading": "Registration",

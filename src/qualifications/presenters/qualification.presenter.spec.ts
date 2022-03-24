@@ -110,6 +110,26 @@ describe(QualificationPresenter, () => {
                     html: presenter.moreInformationUrl,
                   },
                 },
+                {
+                  key: {
+                    text: translationOf(
+                      'professions.show.qualification.otherCountriesRecognition.summary',
+                    ),
+                  },
+                  value: {
+                    text: presenter.otherCountriesRecognitionSummary,
+                  },
+                },
+                {
+                  key: {
+                    text: translationOf(
+                      'professions.show.qualification.otherCountriesRecognition.url',
+                    ),
+                  },
+                  value: {
+                    html: presenter.otherCountriesRecognitionUrl,
+                  },
+                },
               ],
             });
           });
@@ -176,6 +196,26 @@ describe(QualificationPresenter, () => {
                     html: presenter.ukRecognitionUrl,
                   },
                 },
+                {
+                  key: {
+                    text: translationOf(
+                      'professions.show.qualification.otherCountriesRecognition.summary',
+                    ),
+                  },
+                  value: {
+                    text: presenter.otherCountriesRecognitionSummary,
+                  },
+                },
+                {
+                  key: {
+                    text: translationOf(
+                      'professions.show.qualification.otherCountriesRecognition.url',
+                    ),
+                  },
+                  value: {
+                    html: presenter.otherCountriesRecognitionUrl,
+                  },
+                },
               ],
             });
           });
@@ -222,6 +262,26 @@ describe(QualificationPresenter, () => {
                   },
                   value: {
                     html: presenter.moreInformationUrl,
+                  },
+                },
+                {
+                  key: {
+                    text: translationOf(
+                      'professions.show.qualification.otherCountriesRecognition.summary',
+                    ),
+                  },
+                  value: {
+                    text: presenter.otherCountriesRecognitionSummary,
+                  },
+                },
+                {
+                  key: {
+                    text: translationOf(
+                      'professions.show.qualification.otherCountriesRecognition.url',
+                    ),
+                  },
+                  value: {
+                    html: presenter.otherCountriesRecognitionUrl,
                   },
                 },
               ],
@@ -281,6 +341,8 @@ describe(QualificationPresenter, () => {
           qualification: undefined,
           ukRecognition: undefined,
           ukRecognitionUrl: linkOf(undefined),
+          otherCountriesRecognitionSummary: undefined,
+          otherCountriesRecognitionUrl: linkOf(undefined),
         }),
       );
     });

@@ -306,7 +306,41 @@
                     }
                   ]
                 }
-              } if not isUK else undefined
+              } if not isUK else undefined,
+              {
+                key: {
+                  text: ("professions.form.label.qualifications.otherCountriesRecognition.summary" | t)
+                },
+                value: {
+                  text: qualification.otherCountriesRecognitionSummary
+                },
+                actions: {
+                  items: [
+                    {
+                      href: "/admin/professions/" + professionId + "/versions/" + versionId + "/qualifications/edit?change=true",
+                      text: ("app.change" | t),
+                      visuallyHiddenText: ("professions.form.label.qualifications.otherCountriesRecognition.summary" | t)
+                    }
+                  ]
+                }
+              },
+              {
+                key: {
+                  text: ("professions.form.label.qualifications.otherCountriesRecognition.url" | t)
+                },
+                value: {
+                  html: qualification.otherCountriesRecognitionUrl
+                },
+                actions: {
+                  items: [
+                    {
+                      href: "/admin/professions/" + professionId + "/versions/" + versionId + "/qualifications/edit?change=true",
+                      text: ("app.change" | t),
+                      visuallyHiddenText: ("professions.form.label.qualifications.otherCountriesRecognition.url" | t)
+                    }
+                  ]
+                }
+              }
             ]
           })
         }}

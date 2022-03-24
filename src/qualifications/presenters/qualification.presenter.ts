@@ -24,6 +24,13 @@ export default class QualificationPresenter {
     this.qualification && this.qualification.ukRecognitionUrl,
   );
 
+  readonly otherCountriesRecognitionSummary =
+    this.qualification && this.qualification.otherCountriesRecognitionSummary;
+
+  readonly otherCountriesRecognitionUrl = formatLink(
+    this.qualification && this.qualification.otherCountriesRecognitionUrl,
+  );
+
   async summaryList(
     showEmptyFields: boolean,
     showUKRecognitionFields: boolean,
@@ -65,6 +72,24 @@ export default class QualificationPresenter {
           this.ukRecognitionUrl,
         );
       }
+    }
+
+    // Only show this on the admin page until we've decided on the best way to present this to public users
+    if (showEmptyFields) {
+      await this.addTextRow(
+        summaryList,
+        'professions.show.qualification.otherCountriesRecognition.summary',
+        this.otherCountriesRecognitionSummary,
+      );
+    }
+
+    // Only show this on the admin page until we've decided on the best way to present this to public users
+    if (showEmptyFields) {
+      await this.addHtmlRow(
+        summaryList,
+        'professions.show.qualification.otherCountriesRecognition.url',
+        this.otherCountriesRecognitionUrl,
+      );
     }
 
     return summaryList;

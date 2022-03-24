@@ -81,6 +81,10 @@ describe(QualificationsController, () => {
             captionText: translationOf('professions.form.captions.edit'),
             ukRecognition: profession.qualification.ukRecognition,
             ukRecognitionUrl: profession.qualification.ukRecognitionUrl,
+            otherCountriesRecognitionSummary:
+              profession.qualification.otherCountriesRecognitionSummary,
+            otherCountriesRecognitionUrl:
+              profession.qualification.ukRecognitionUrl,
             isUK: false,
           }),
         );
@@ -158,6 +162,9 @@ describe(QualificationsController, () => {
           moreInformationUrl: 'http://www.example.com/more-info',
           ukRecognition: 'ukRecognition',
           ukRecognitionUrl: 'http://example.com/uk',
+          otherCountriesRecognitionSummary:
+            'other countries recognition summary',
+          otherCountriesRecognitionUrl: 'http://example.com/overseas',
         };
 
         professionsService.findWithVersions.mockResolvedValue(profession);
@@ -182,6 +189,9 @@ describe(QualificationsController, () => {
               url: 'http://www.example.com/more-info',
               ukRecognition: 'ukRecognition',
               ukRecognitionUrl: 'http://example.com/uk',
+              otherCountriesRecognitionSummary:
+                'other countries recognition summary',
+              otherCountriesRecognitionUrl: 'http://example.com/overseas',
             }),
           }),
         );
@@ -207,6 +217,9 @@ describe(QualificationsController, () => {
           moreInformationUrl: 'www.example.com/more-info ',
           ukRecognition: 'ukRecognition',
           ukRecognitionUrl: 'example.com/uk',
+          otherCountriesRecognitionSummary:
+            'other countries recognition summary',
+          otherCountriesRecognitionUrl: 'example.com/overseas',
         };
 
         professionsService.findWithVersions.mockResolvedValue(profession);
@@ -231,6 +244,9 @@ describe(QualificationsController, () => {
               url: 'http://www.example.com/more-info',
               ukRecognition: 'ukRecognition',
               ukRecognitionUrl: 'http://example.com/uk',
+              otherCountriesRecognitionSummary:
+                'other countries recognition summary',
+              otherCountriesRecognitionUrl: 'http://example.com/overseas',
             }),
           }),
         );
@@ -256,6 +272,8 @@ describe(QualificationsController, () => {
           moreInformationUrl: 'not a url',
           ukRecognition: '',
           ukRecognitionUrl: 'not a url',
+          otherCountriesRecognitionSummary: '',
+          otherCountriesRecognitionUrl: 'not a url',
         };
 
         professionsService.findWithVersions.mockResolvedValue(profession);
@@ -288,6 +306,9 @@ describe(QualificationsController, () => {
               ukRecognitionUrl: {
                 text: 'professions.form.errors.qualification.ukRecognitionUrl.invalid',
               },
+              otherCountriesRecognitionUrl: {
+                text: 'professions.form.errors.qualification.otherCountriesRecognitionUrl.invalid',
+              },
             },
           }),
         );
@@ -308,6 +329,8 @@ describe(QualificationsController, () => {
         moreInformationUrl: 'http://www.example.com/more-info',
         ukRecognition: 'ukRecognition',
         ukRecognitionUrl: 'http://example.com/uk',
+        otherCountriesRecognitionSummary: 'other countries recognition summary',
+        otherCountriesRecognitionUrl: 'http://example.com/overseas',
       };
 
       await controller.update(
