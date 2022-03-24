@@ -194,6 +194,15 @@ export class ProfessionVersionsService {
       });
     }
 
+    if (filter.regulationTypes?.length) {
+      query = query.andWhere(
+        'professionVersion.regulationType IN(:...regulationTypes)',
+        {
+          regulationTypes: filter.regulationTypes,
+        },
+      );
+    }
+
     const versions = await query.getMany();
 
     return versions.map((version) =>

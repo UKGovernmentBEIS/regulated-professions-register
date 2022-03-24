@@ -8,6 +8,7 @@ import { IndexTemplate } from './interfaces/index-template.interface';
 import { OrganisationSearchResultPresenter } from './organisation-search-result.presenter';
 import { Organisation } from '../organisation.entity';
 import { hasSelectedFilters } from '../../search/helpers/has-selected-filters.helper';
+import { RegulationTypesCheckboxPresenter } from '../../professions/admin/presenters/regulation-types-checkbox.presenter';
 
 export class SearchPresenter {
   constructor(
@@ -31,6 +32,12 @@ export class SearchPresenter {
       this.i18nService,
     ).checkboxItems();
 
+    const regulationTypesCheckboxItems =
+      await new RegulationTypesCheckboxPresenter(
+        this.filterInput.regulationTypes,
+        this.i18nService,
+      ).checkboxItems();
+
     const displayOrganisations = await Promise.all(
       this.filteredOrganisations.map(async (organisation) =>
         new OrganisationSearchResultPresenter(organisation).present(),
@@ -41,12 +48,14 @@ export class SearchPresenter {
       organisations: displayOrganisations,
       nationsCheckboxItems,
       industriesCheckboxItems,
+      regulationTypesCheckboxItems,
       filters: {
         keywords: this.filterInput.keywords,
         nations: this.filterInput.nations.map((nation) => nation.name),
         industries: this.filterInput.industries.map(
           (industry) => industry.name,
         ),
+        regulationTypes: this.filterInput.regulationTypes,
       },
       hasSelectedFilters: hasSelectedFilters(this.filterInput),
     };

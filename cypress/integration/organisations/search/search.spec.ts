@@ -48,6 +48,42 @@ describe('Searching an organisation', () => {
     cy.get('body').should('contain', 'General Medical Council');
   });
 
+  it('I can filter by keyword', () => {
+    cy.get('input[name="keywords"]').type('Installers');
+
+    cy.get('button').click();
+    cy.checkAccessibility();
+
+    cy.get('input[name="keywords"]').should('have.value', 'Installers');
+
+    cy.get('body').should('contain', 'Council of Registered Gas Installers');
+    checkResultLength(1);
+  });
+
+  it('I can use the back button to go back to my search results', () => {
+    cy.get('input[name="keywords"]').type('Education');
+
+    cy.translate('industries.education').then((nameLabel) => {
+      cy.get('label').contains(nameLabel).parent().find('input').check();
+    });
+
+    cy.get('input[name="nations[]"][value="GB-ENG"]').check();
+
+    cy.get('button').click();
+
+    cy.get('a').contains('Department for Education').click();
+
+    cy.translate('app.backToSearch').then((label) => {
+      cy.get('[data-cy=back-link]').should('contain', label);
+      cy.get('[data-cy=back-link]')
+        .invoke('attr', 'href')
+        .should(
+          'match',
+          /regulatory-authorities\/search\?keywords=Education&industries%5B%5D=.+&nations%5B%5D=GB-ENG/,
+        );
+    });
+  });
+
   it('I can filter by nation', () => {
     cy.readFile('./seeds/test/professions.json').then((professions) => {
       const scottishProfessions = professions.filter((profession) =>
@@ -102,39 +138,44 @@ describe('Searching an organisation', () => {
     });
   });
 
-  it('I can filter by keyword', () => {
-    cy.get('input[name="keywords"]').type('Installers');
+  it('I can filter by regulation type', () => {
+    cy.readFile('./seeds/test/professions.json').then((professions) => {
+      const cerificatedProfessions = professions.filter((profession) =>
+        profession.versions.some(
+          (version) =>
+            version.status === 'live' &&
+            version.regulationType === 'certification',
+        ),
+      );
 
-    cy.get('button').click();
-    cy.checkAccessibility();
+      const organisations = new Set(
+        cerificatedProfessions.map((profession) => profession.organisation),
+      );
 
-    cy.get('input[name="keywords"]').should('have.value', 'Installers');
+      cy.translate('professions.regulationTypes.certification.name').then(
+        (nameLabel) => {
+          cy.get('label').contains(nameLabel).parent().find('input').check();
+        },
+      );
 
-    cy.get('body').should('contain', 'Council of Registered Gas Installers');
-    checkResultLength(1);
-  });
+      cy.get('button').click();
+      cy.checkAccessibility();
 
-  it('I can use the back button to go back to my search results', () => {
-    cy.get('input[name="keywords"]').type('Education');
+      cy.translate('professions.regulationTypes.certification.name').then(
+        (nameLabel) => {
+          cy.get('label')
+            .contains(nameLabel)
+            .parent()
+            .find('input')
+            .should('be.checked');
+        },
+      );
 
-    cy.translate('industries.education').then((nameLabel) => {
-      cy.get('label').contains(nameLabel).parent().find('input').check();
-    });
+      checkResultLength(organisations.size);
 
-    cy.get('input[name="nations[]"][value="GB-ENG"]').check();
-
-    cy.get('button').click();
-
-    cy.get('a').contains('Department for Education').click();
-
-    cy.translate('app.backToSearch').then((label) => {
-      cy.get('[data-cy=back-link]').should('contain', label);
-      cy.get('[data-cy=back-link]')
-        .invoke('attr', 'href')
-        .should(
-          'match',
-          /regulatory-authorities\/search\?keywords=Education&industries%5B%5D=.+&nations%5B%5D=GB-ENG/,
-        );
+      organisations.forEach((organisation) => {
+        cy.get('body').should('contain', organisation);
+      });
     });
   });
 
