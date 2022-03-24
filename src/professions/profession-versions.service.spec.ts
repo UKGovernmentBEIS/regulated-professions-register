@@ -15,6 +15,7 @@ import professionVersionFactory from '../testutils/factories/profession-version'
 import {
   ProfessionVersion,
   ProfessionVersionStatus,
+  RegulationType,
 } from './profession-version.entity';
 import professionFactory from '../testutils/factories/profession';
 import { Profession } from './profession.entity';
@@ -24,6 +25,7 @@ import userFactory from '../testutils/factories/user';
 import qualificationFactory from '../testutils/factories/qualification';
 import industryFactory from '../testutils/factories/industry';
 import organisationFactory from '../testutils/factories/organisation';
+import { FilterInput } from '../common/interfaces/filter-input.interface';
 
 describe('ProfessionVersionsService', () => {
   let service: ProfessionVersionsService;
@@ -836,27 +838,26 @@ describe('ProfessionVersionsService', () => {
   });
 
   describe('searchLive', () => {
-    const versions = professionVersionFactory.buildList(5);
-    const queryBuilder = createMock<SelectQueryBuilder<ProfessionVersion>>({
-      leftJoinAndSelect: () => queryBuilder,
-      where: () => queryBuilder,
-      andWhere: () => queryBuilder,
-      orderBy: () => queryBuilder,
-      getMany: async () => versions,
-    });
+    let queryBuilder: DeepMocked<SelectQueryBuilder<ProfessionVersion>>;
+    let versions: ProfessionVersion[];
 
     beforeEach(() => {
+      versions = professionVersionFactory.buildList(5);
+      queryBuilder = createMock<SelectQueryBuilder<ProfessionVersion>>({
+        leftJoinAndSelect: () => queryBuilder,
+        where: () => queryBuilder,
+        andWhere: () => queryBuilder,
+        orderBy: () => queryBuilder,
+        getMany: async () => versions,
+      });
+
       jest
         .spyOn(repo, 'createQueryBuilder')
         .mockImplementation(() => queryBuilder);
     });
 
     it('returns all live professions when no arguments are passed', async () => {
-      const filter = {
-        keywords: '',
-        nations: [],
-        industries: [],
-      };
+      const filter: FilterInput = {};
 
       const result = await service.searchLive(filter);
 
@@ -885,10 +886,8 @@ describe('ProfessionVersionsService', () => {
     });
 
     it('makes a search query to opensearch and filters by the resulting IDs when keywords are provided', async () => {
-      const filter = {
+      const filter: FilterInput = {
         keywords: 'some-keyword',
-        nations: [],
-        industries: [],
       };
 
       (searchService.search as jest.Mock).mockReturnValue(['123', '456']);
@@ -909,10 +908,8 @@ describe('ProfessionVersionsService', () => {
     });
 
     it('filters by nations when provided', async () => {
-      const filter = {
-        keywords: '',
+      const filter: FilterInput = {
         nations: [Nation.find('GB-ENG'), Nation.find('GB-NIR')],
-        industries: [],
       };
 
       const result = await service.searchLive(filter);
@@ -936,10 +933,8 @@ describe('ProfessionVersionsService', () => {
         industryFactory.build({ id: 'some-uuid' }),
         industryFactory.build({ id: 'other-uuid' }),
       ];
-      const filter = {
-        keywords: '',
-        nations: [],
-        industries: industries,
+      const filter: FilterInput = {
+        industries,
       };
 
       const result = await service.searchLive(filter);
@@ -957,9 +952,34 @@ describe('ProfessionVersionsService', () => {
         },
       );
     });
+
+    it('filters by regulation types when provided', async () => {
+      const filter: FilterInput = {
+        regulationTypes: [
+          RegulationType.Accreditation,
+          RegulationType.Licensing,
+        ],
+      };
+
+      const result = await service.searchLive(filter);
+
+      const expectedProfessions = versions.map((version) =>
+        Profession.withVersion(version.profession, version),
+      );
+
+      expect(result).toEqual(expectedProfessions);
+
+      expect(queryBuilder.andWhere).toHaveBeenCalledWith(
+        'professionVersion.regulationType IN(:...regulationTypes)',
+        {
+          regulationTypes: ['accreditation', 'licensing'],
+        },
+      );
+    });
   });
 
   afterEach(() => {
+    jest.resetAllMocks();
     jest.restoreAllMocks();
   });
 });
