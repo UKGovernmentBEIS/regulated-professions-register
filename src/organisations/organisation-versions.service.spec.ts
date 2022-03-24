@@ -403,6 +403,7 @@ describe('OrganisationVersionsService', () => {
 
       expect(queryBuilder.distinctOn).toHaveBeenCalledWith([
         'organisationVersion.organisation',
+        'organisation.name',
         'professions.id',
       ]);
 
@@ -422,7 +423,7 @@ describe('OrganisationVersionsService', () => {
       );
 
       expect(queryBuilder.orderBy).toHaveBeenCalledWith(
-        'organisationVersion.organisation, professions.id, professionVersions.created_at, organisationVersion.created_at',
+        'organisation.name, organisationVersion.organisation, professions.id, professionVersions.created_at, organisationVersion.created_at',
         'DESC',
       );
     });
@@ -822,6 +823,7 @@ describe('OrganisationVersionsService', () => {
       leftJoinAndSelect: () => queryBuilder,
       where: () => queryBuilder,
       andWhere: () => queryBuilder,
+      orderBy: () => queryBuilder,
       getMany: async () => versions,
     });
 
@@ -861,6 +863,8 @@ describe('OrganisationVersionsService', () => {
         'professionVersions.industries',
         'industries',
       );
+
+      expect(queryBuilder.orderBy).toHaveBeenCalledWith('organisation.name');
 
       expect(queryBuilder.where).toHaveBeenCalledWith(
         'organisationVersion.status = :status',
@@ -1000,6 +1004,7 @@ describe('OrganisationVersionsService', () => {
 
       expect(queryBuilder.distinctOn).toHaveBeenCalledWith([
         'organisationVersion.organisation',
+        'organisation.name',
         'professions.id',
       ]);
 
@@ -1019,7 +1024,7 @@ describe('OrganisationVersionsService', () => {
       );
 
       expect(queryBuilder.orderBy).toHaveBeenCalledWith(
-        'organisationVersion.organisation, professions.id, professionVersions.created_at, organisationVersion.created_at',
+        'organisation.name, organisationVersion.organisation, professions.id, professionVersions.created_at, organisationVersion.created_at',
         'DESC',
       );
     });

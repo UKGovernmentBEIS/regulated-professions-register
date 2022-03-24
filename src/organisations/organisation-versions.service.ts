@@ -90,12 +90,11 @@ export class OrganisationVersionsService {
   }
 
   async searchLive(filter: FilterInput): Promise<Organisation[]> {
-    const query = this.versionsWithJoins().where(
-      'organisationVersion.status = :status',
-      {
+    const query = this.versionsWithJoins()
+      .orderBy('organisation.name')
+      .where('organisationVersion.status = :status', {
         status: OrganisationVersionStatus.Live,
-      },
-    );
+      });
 
     return await this.filter(query, filter);
   }
@@ -119,7 +118,11 @@ export class OrganisationVersionsService {
 
   async searchWithLatestVersion(filter: FilterInput): Promise<Organisation[]> {
     const query = this.versionsWithJoins()
-      .distinctOn(['organisationVersion.organisation', 'professions.id'])
+      .distinctOn([
+        'organisationVersion.organisation',
+        'organisation.name',
+        'professions.id',
+      ])
       .where(
         '(organisationVersion.status IN(:...organisationStatus)) AND (professionVersions.status IN(:...professionStatus) OR professionVersions.status IS NULL)',
         {
@@ -135,7 +138,7 @@ export class OrganisationVersionsService {
         },
       )
       .orderBy(
-        'organisationVersion.organisation, professions.id, professionVersions.created_at, organisationVersion.created_at',
+        'organisation.name, organisationVersion.organisation, professions.id, professionVersions.created_at, organisationVersion.created_at',
         'DESC',
       );
 
@@ -144,7 +147,11 @@ export class OrganisationVersionsService {
 
   async allWithLatestVersion(): Promise<Organisation[]> {
     const versions = await this.versionsWithJoins()
-      .distinctOn(['organisationVersion.organisation', 'professions.id'])
+      .distinctOn([
+        'organisationVersion.organisation',
+        'organisation.name',
+        'professions.id',
+      ])
       .where(
         '(organisationVersion.status IN(:...organisationStatus)) AND (professionVersions.status IN(:...professionStatus) OR professionVersions.status IS NULL)',
         {
@@ -160,7 +167,7 @@ export class OrganisationVersionsService {
         },
       )
       .orderBy(
-        'organisationVersion.organisation, professions.id, professionVersions.created_at, organisationVersion.created_at',
+        'organisation.name, organisationVersion.organisation, professions.id, professionVersions.created_at, organisationVersion.created_at',
         'DESC',
       )
       .getMany();

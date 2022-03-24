@@ -4,7 +4,7 @@ describe('Listing professions', () => {
       cy.loginAuth0();
     });
 
-    it('All users are listed', () => {
+    it('All users are listed alphabetically', () => {
       cy.visitAndCheckAccessibility('/admin/users');
 
       cy.translate('app.beis').then((beis) => {
@@ -17,6 +17,16 @@ describe('Listing professions', () => {
           cy.get('tbody td').should('contain', user.email);
         });
 
+        cy.get('tbody th').then((elements) => {
+          const names = elements
+            .map((_, element) => element.innerText)
+            .toArray();
+          cy.wrap(names).should(
+            'deep.equal',
+            [...names].sort((a: string, b: string) => a.localeCompare(b)),
+          );
+        });
+
         cy.get('tbody tr').should('have.length', users.length);
       });
     });
@@ -27,7 +37,7 @@ describe('Listing professions', () => {
       cy.loginAuth0('orgadmin');
     });
 
-    it('Users for the organisation are listed', () => {
+    it('Users for the organisation are listed alphabetically', () => {
       cy.visitAndCheckAccessibility('/admin/users');
 
       cy.get('h1 span').should('contain', 'Department for Education');
@@ -40,6 +50,16 @@ describe('Listing professions', () => {
         organisationUsers.forEach((user) => {
           cy.get('tbody th').should('contain', user.name);
           cy.get('tbody td').should('contain', user.email);
+        });
+
+        cy.get('tbody th').then((elements) => {
+          const names = elements
+            .map((_, element) => element.innerText)
+            .toArray();
+          cy.wrap(names).should(
+            'deep.equal',
+            [...names].sort((a: string, b: string) => a.localeCompare(b)),
+          );
         });
 
         cy.get('tbody tr').should('have.length', organisationUsers.length);

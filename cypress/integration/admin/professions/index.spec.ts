@@ -43,7 +43,10 @@ describe('Listing professions', () => {
     it('Professions are sorted alphabetically', () => {
       cy.get('tbody tr th').then((elements) => {
         const names = elements.map((_, element) => element.innerText).toArray();
-        cy.wrap(names).should('deep.equal', names.sort());
+        cy.wrap(names).should(
+          'deep.equal',
+          [...names].sort((a: string, b: string) => a.localeCompare(b)),
+        );
       });
     });
 
