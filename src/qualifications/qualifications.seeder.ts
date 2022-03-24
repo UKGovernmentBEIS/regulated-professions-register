@@ -4,12 +4,16 @@ import { Repository } from 'typeorm';
 import { Seeder } from 'nestjs-seeder';
 import { InjectRepository } from '@nestjs/typeorm';
 
-import { Qualification } from './qualification.entity';
+import {
+  OtherCountriesRecognitionRoutes,
+  Qualification,
+} from './qualification.entity';
 import { InjectData } from '../common/decorators/seeds.decorator';
 
 type SeedQualification = {
   routesToObtain: string;
   url: string;
+  otherCountriesRecognitionRoutes: OtherCountriesRecognitionRoutes;
 };
 
 @Injectable()
@@ -24,7 +28,13 @@ export class QualificationsSeeder implements Seeder {
 
   async seed(): Promise<any> {
     const qualifications = this.data.map((qualification) => {
-      return new Qualification(qualification.routesToObtain, qualification.url);
+      return new Qualification(
+        qualification.routesToObtain,
+        qualification.url,
+        '',
+        '',
+        qualification.otherCountriesRecognitionRoutes as OtherCountriesRecognitionRoutes,
+      );
     });
 
     return this.qualificationsRepository.save(qualifications);

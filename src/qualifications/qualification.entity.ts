@@ -6,6 +6,12 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
+export enum OtherCountriesRecognitionRoutes {
+  None = 'none',
+  Some = 'some',
+  All = 'all',
+}
+
 @Entity({ name: 'qualifications' })
 export class Qualification {
   @PrimaryGeneratedColumn('uuid')
@@ -22,6 +28,19 @@ export class Qualification {
 
   @Column({ nullable: true })
   ukRecognitionUrl: string;
+
+  @Column({ nullable: true })
+  otherCountriesRecognitionSummary: string;
+
+  @Column({ nullable: true })
+  otherCountriesRecognitionUrl: string;
+
+  @Column({
+    nullable: true,
+    type: 'enum',
+    enum: OtherCountriesRecognitionRoutes,
+  })
+  otherCountriesRecognitionRoutes: OtherCountriesRecognitionRoutes;
 
   @CreateDateColumn({
     type: 'timestamp',
@@ -41,10 +60,18 @@ export class Qualification {
     url?: string,
     ukRecognition?: string,
     ukRecognitionUrl?: string,
+    otherCountriesRecognitionRoutes?: OtherCountriesRecognitionRoutes,
+    otherCountriesRecognitionSummary?: string,
+    otherCountriesRecognitionUrl?: string,
   ) {
     this.routesToObtain = routesToObtain || '';
     this.url = url || '';
     this.ukRecognition = ukRecognition || '';
     this.ukRecognitionUrl = ukRecognitionUrl || '';
+    this.otherCountriesRecognitionRoutes =
+      otherCountriesRecognitionRoutes || null;
+    this.otherCountriesRecognitionSummary =
+      otherCountriesRecognitionSummary || '';
+    this.otherCountriesRecognitionUrl = otherCountriesRecognitionUrl || '';
   }
 }

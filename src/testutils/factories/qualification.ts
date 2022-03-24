@@ -8,6 +8,9 @@ export default Factory.define<Qualification>(({ sequence }) => ({
   professionVersion: undefined,
   ukRecognition: undefined,
   ukRecognitionUrl: undefined,
+  otherCountriesRecognitionRoutes: undefined,
+  otherCountriesRecognitionSummary: undefined,
+  otherCountriesRecognitionUrl: undefined,
   created_at: new Date(),
   updated_at: new Date(),
 }));
