@@ -62,9 +62,7 @@ describe('TopLevelInformationController', () => {
         professionsService.findWithVersions.mockResolvedValue(blankProfession);
 
         const organisations = organisationFactory.buildList(2);
-        organisationVersionsService.allLiveAndDraft.mockResolvedValue(
-          organisations,
-        );
+        organisationVersionsService.allLive.mockResolvedValue(organisations);
 
         const regulatedAuthoritiesSelectPresenter =
           new RegulatedAuthoritiesSelectPresenter(organisations, null);
@@ -113,9 +111,7 @@ describe('TopLevelInformationController', () => {
           additionalOrganisation,
           organisationFactory.build(),
         ];
-        organisationVersionsService.allLiveAndDraft.mockResolvedValue(
-          organisations,
-        );
+        organisationVersionsService.allLive.mockResolvedValue(organisations);
         const regulatedAuthoritiesSelectPresenterWithSelectedOrganisation =
           new RegulatedAuthoritiesSelectPresenter(organisations, organisation);
 

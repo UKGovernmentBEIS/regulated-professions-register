@@ -65,7 +65,8 @@ declare global {
         statuses: ('live' | 'archived' | 'draft')[],
       ): Chainable<string>;
       checkPublishBlocked(
-        missingSections: string[],
+        incompleteSections: string[],
+        organisationsNotLive: string[],
         shouldHaveButton?: boolean,
       ): Chainable<string>;
       checkPublishNotBlocked(): Chainable<string>;

@@ -5,7 +5,9 @@
       {%for blocker in publicationBlockers %}
         {% if blocker.type === "incomplete-section" %}
           {% set sectionName = (("professions.form.headings." + blocker.section) | t) %}
-          <li class="govuk-body-s">{{ "professions.admin.publish.blocked.missing" | t({section: sectionName}) }}</li>
+          <li class="govuk-body-s">{{ "professions.admin.publish.blocked.incompleteSection" | t({section: sectionName}) }}</li>
+        {% elif blocker.type === "organisation-not-live" %}
+           <li class="govuk-body-s">{{ "professions.admin.publish.blocked.organisationNotLive" | t({organisation: blocker.organisation.name}) }}</li>
         {% endif %}
       {% endfor %}
     </ul>

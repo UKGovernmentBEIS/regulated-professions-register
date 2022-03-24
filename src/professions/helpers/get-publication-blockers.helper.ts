@@ -1,3 +1,5 @@
+import { OrganisationVersionStatus } from '../../organisations/organisation-version.entity';
+import { Organisation } from '../../organisations/organisation.entity';
 import { ProfessionVersion } from '../profession-version.entity';
 
 type Section =
@@ -11,24 +13,28 @@ interface IncompleteSectionPublicationBlocker {
   section: Section;
 }
 
-export type PublicationBlocker = IncompleteSectionPublicationBlocker;
+interface OrganisationNotLivePublicationBlocker {
+  type: 'organisation-not-live';
+  organisation: Organisation;
+}
+
+export type PublicationBlocker =
+  | IncompleteSectionPublicationBlocker
+  | OrganisationNotLivePublicationBlocker;
 
 export function getPublicationBlockers(
-  profession: ProfessionVersion,
+  version: ProfessionVersion,
 ): PublicationBlocker[] {
   const blockers: PublicationBlocker[] = [];
 
-  if (
-    !profession.industries?.length ||
-    !profession.occupationLocations?.length
-  ) {
+  if (!version.industries?.length || !version.occupationLocations?.length) {
     blockers.push({ type: 'incomplete-section', section: 'scope' });
   }
 
   if (
-    !profession.description ||
-    !profession.regulationType ||
-    !profession.reservedActivities
+    !version.description ||
+    !version.regulationType ||
+    !version.reservedActivities
   ) {
     blockers.push({
       type: 'incomplete-section',
@@ -36,13 +42,36 @@ export function getPublicationBlockers(
     });
   }
 
-  if (!profession.qualification?.routesToObtain) {
+  if (!version.qualification?.routesToObtain) {
     blockers.push({ type: 'incomplete-section', section: 'qualifications' });
   }
 
-  if (!profession.legislations?.[0]?.name) {
+  if (!version.legislations?.[0]?.name) {
     blockers.push({ type: 'incomplete-section', section: 'legislation' });
   }
 
+  if (!hasLiveVersion(version.profession.organisation)) {
+    blockers.push({
+      type: 'organisation-not-live',
+      organisation: version.profession.organisation,
+    });
+  }
+
+  if (
+    version.profession.additionalOrganisation &&
+    !hasLiveVersion(version.profession.additionalOrganisation)
+  ) {
+    blockers.push({
+      type: 'organisation-not-live',
+      organisation: version.profession.additionalOrganisation,
+    });
+  }
+
   return blockers;
+}
+
+function hasLiveVersion(organisation: Organisation): boolean {
+  return organisation.versions?.some(
+    (version) => version.status === OrganisationVersionStatus.Live,
+  );
 }

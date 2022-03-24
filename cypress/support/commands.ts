@@ -243,7 +243,11 @@ Cypress.Commands.add(
 
 Cypress.Commands.add(
   'checkPublishBlocked',
-  (missingSections: string[], shouldHaveButton = true) => {
+  (
+    incompleteSections: string[],
+    organisationsNotLive: string[],
+    shouldHaveButton = true,
+  ) => {
     return cy
       .translate('professions.admin.publish.blocked.heading')
       .then((heading) => {
@@ -251,17 +255,35 @@ Cypress.Commands.add(
           .contains(heading)
           .parent()
           .within(() => {
-            cy.get('li').should('have.length', missingSections.length);
-            missingSections.forEach((missingSection) => {
-              cy.translate(`professions.form.headings.${missingSection}`).then(
-                (section) => {
-                  cy.translate(`professions.admin.publish.blocked.missing`, {
+            cy.get('li').should(
+              'have.length',
+              incompleteSections.length + organisationsNotLive.length,
+            );
+
+            incompleteSections.forEach((incompleteSection) => {
+              cy.translate(
+                `professions.form.headings.${incompleteSection}`,
+              ).then((section) => {
+                cy.translate(
+                  `professions.admin.publish.blocked.incompleteSection`,
+                  {
                     section,
-                  }).then((sectionText) => {
-                    cy.get('li').should('contain', sectionText);
-                  });
+                  },
+                ).then((blockerText) => {
+                  cy.get('li').should('contain', blockerText);
+                });
+              });
+            });
+
+            organisationsNotLive.forEach((organisationNotLive) => {
+              cy.translate(
+                `professions.admin.publish.blocked.organisationNotLive`,
+                {
+                  organisation: organisationNotLive,
                 },
-              );
+              ).then((blockerText) => {
+                cy.get('li').should('contain', blockerText);
+              });
             });
           });
 
