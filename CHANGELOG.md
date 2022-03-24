@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [unreleased]
 
+### Added
+
+- Support for searching by regulation type in public-facing Profession and Organisation search
+
 ### Changed
 
 - Use Opensearch for searching Organisations
