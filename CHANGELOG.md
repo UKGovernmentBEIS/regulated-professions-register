@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 - Use Opensearch for searching Organisations
 - Backlink on public show pages takes the user back to the search results
+- Updated second legislation label text to be clearer for admins
 
 ## [release-010] - 2022-03-22
 

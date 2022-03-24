@@ -187,12 +187,15 @@
 <h2 class="govuk-heading-m rpr-details__section-title">{{ "professions.show.legislation.heading" | t}}</h2>
 
 {% for legislation in ((profession.legislations | pad(2)) if showEmptyProfessionDetails else profession.legislations) %}
+  {% set legislationLocalisationId = "professions.show.legislation.secondNationalLegislation" if (showEmptyProfessionDetails and loop.index > 1) else "professions.show.legislation.nationalLegislation" %}
+  {% set legislationLinkLocalisationId = "professions.show.legislation.secondLink" if (showEmptyProfessionDetails and loop.index > 1) else "professions.show.legislation.legislationLink" %}
+
   {{ govukSummaryList({
     classes: 'govuk-summary-list--no-border',
     rows: [
       {
         key: {
-          html: ( "professions.show.legislation.nationalLegislation" | t) + "<span class=\"govuk-visually-hidden\"> " + loop.index + "</span>"
+          html: (legislationLocalisationId | t) + "<span class=\"govuk-visually-hidden\"> " + loop.index + "</span>"
         },
         value: {
           html: legislation.name | multiline
@@ -200,7 +203,7 @@
       },
       {
         key: {
-          html: ( "professions.show.legislation.legislationLink" | t) + "<span class=\"govuk-visually-hidden\"> " + loop.index + "</span>"
+          html: (legislationLinkLocalisationId | t) + "<span class=\"govuk-visually-hidden\"> " + loop.index + "</span>"
         },
         value: {
           html: legislation.url | link

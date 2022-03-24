@@ -195,7 +195,9 @@
     "legislation": {
       "heading": "Legislation",
       "nationalLegislation": "National legislation",
-      "legislationLink": "Legislation link"
+      "legislationLink": "Legislation link",
+      "secondNationalLegislation": "Title of other act or charter",
+      "secondLink": "Website link to other legislation"
     }
   },
   "admin": {
