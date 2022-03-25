@@ -1,6 +1,6 @@
 process.env.NODE_ENV ||= 'development';
 
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { I18nModule, I18nJsonParser } from 'nestjs-i18n';
 import { BullModule } from '@nestjs/bull';
@@ -18,6 +18,12 @@ import { IndustriesModule } from './industries/industries.module';
 
 import dbConfiguration from './config/db.config';
 import redisConfiguration from './config/redis.config';
+import basicAuth from 'express-basic-auth';
+import { SearchController as ProfessionSearchController } from './professions/search/search.controller';
+import { SearchController as OrganisationSearchController } from './organisations/search/search.controller';
+import { OrganisationsController } from './organisations/organisations.controller';
+import { ProfessionsController } from './professions/professions.controller';
+import { LandingController } from './landing/landing.controller';
 
 @Module({
   imports: [
@@ -54,7 +60,33 @@ import redisConfiguration from './config/redis.config';
     OrganisationsModule,
     IndustriesModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, LandingController],
   providers: [MailerConsumer],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    if (
+      process.env['BASIC_AUTH_USERNAME'] &&
+      process.env['BASIC_AUTH_PASSWORD']
+    ) {
+      consumer
+        .apply(
+          basicAuth({
+            users: {
+              [process.env['BASIC_AUTH_USERNAME']]:
+                process.env['BASIC_AUTH_PASSWORD'],
+            },
+            challenge: true,
+            realm: process.env['HOST_URL'],
+          }),
+        )
+        .forRoutes(
+          LandingController,
+          OrganisationsController,
+          ProfessionsController,
+          ProfessionSearchController,
+          OrganisationSearchController,
+        );
+    }
+  }
+}
