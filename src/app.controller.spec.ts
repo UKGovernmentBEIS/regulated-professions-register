@@ -93,20 +93,26 @@ describe('AppController', () => {
   });
 
   describe('cookies', () => {
-    it('should be defined', () => {
-      expect(appController.cookies).toBeDefined();
+    it('return without error', () => {
+      expect(appController.cookies()).toEqual(undefined);
     });
   });
 
   describe('privacyPolicy', () => {
-    it('should be defined', () => {
-      expect(appController.privacyPolicy).toBeDefined();
+    it('return without error', () => {
+      expect(appController.privacyPolicy()).toEqual(undefined);
     });
   });
 
   describe('accessibility', () => {
-    it('should be defined', () => {
-      expect(appController.accessibility).toBeDefined();
+    it('return without error', () => {
+      expect(appController.accessibility()).toEqual(undefined);
+    });
+  });
+
+  describe('dataDisclaimer', () => {
+    it('return without error', () => {
+      expect(appController.dataDisclaimer()).toEqual(undefined);
     });
   });
 });
