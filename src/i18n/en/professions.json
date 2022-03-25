@@ -74,6 +74,12 @@
         "ukRecognition": "Routes to recognition within the UK (optional)",
         "ukRecognitionUrl": "More about recognition within the UK (optional)",
         "otherCountriesRecognition": {
+          "routes": {
+            "label": "What routes exist",
+            "all": "Routes for professionals in all countries",
+            "some": "Routes for professionals in some countries",
+            "none": "No routes exist - all professionals must re-qualify"
+          },
           "summary": "Summary of routes (optional)",
           "summaryHint": "How qualifications and experience gained outside the UK may be recognised",
           "url": "More about recognition for professionals outside the UK (optional)",
