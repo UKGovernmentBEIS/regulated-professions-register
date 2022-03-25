@@ -63,6 +63,7 @@ describe('Auth0Service', () => {
           managementClient.createPasswordChangeTicket,
         ).toHaveBeenCalledWith({
           result_url: `${process.env['HOST_URL']}/admin`,
+          ttl_sec: 1209600,
           user_id: 123,
         });
 
