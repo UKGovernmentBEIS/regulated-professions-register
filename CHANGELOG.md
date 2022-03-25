@@ -17,6 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Updated second legislation label text to be clearer for admins
 - Fix bug with organisations and professions not being displayed in alphabetical order
 - Order users alphabetically
+- Increase expiry time on invitation email links to 14 days
 
 ## [release-010] - 2022-03-22
 
