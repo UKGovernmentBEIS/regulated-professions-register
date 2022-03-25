@@ -18,6 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fix bug with organisations and professions not being displayed in alphabetical order
 - Order users alphabetically
 - Increase expiry time on invitation email links to 14 days
+- Remove "double authentication" step from internal pages
 
 ## [release-010] - 2022-03-22
 
