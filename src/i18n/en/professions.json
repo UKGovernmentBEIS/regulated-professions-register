@@ -75,7 +75,7 @@
         "ukRecognitionUrl": "More about recognition within the UK (optional)",
         "otherCountriesRecognition": {
           "routes": {
-            "label": "What routes exist",
+            "label": "Routes to recognition for professionals outside the UK",
             "all": "Routes for professionals in all countries",
             "some": "Routes for professionals in some countries",
             "none": "No routes exist - all professionals must re-qualify"
@@ -154,6 +154,9 @@
         "ukRecognitionUrl": {
           "invalid": "Please enter a valid website address"
         },
+        "otherCountriesRecognitionRoutes": {
+          "empty": "Select what recognition routes exist for professionals qualified in another country"
+        },
         "otherCountriesRecognitionUrl": {
           "invalid": "Please enter a valid website address"
         }
@@ -203,6 +206,12 @@
       "ukRecognition": "Routes to recognition within the UK",
       "ukRecognitionUrl": "More about recognition within the UK",
       "otherCountriesRecognition": {
+        "routes": {
+          "label": "Recognition for overseas professionals",
+          "all": "All - there are routes to recognition for professionals from all countries",
+          "some": "Some - qualifications from some countries may be recognised, but professionals from other countries will have to re-qualify",
+          "none": "None - all professionals must re-qualify"
+        },
         "summary": "Summary of routes",
         "url": "More about recognition for professionals outside the UK"
       }

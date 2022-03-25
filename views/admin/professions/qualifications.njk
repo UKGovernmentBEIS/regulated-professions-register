@@ -89,7 +89,23 @@
 
         {% endif %}
 
-        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible"/>
+
+        {{
+          govukRadios({
+            fieldset: {
+              legend: {
+                text: ("professions.form.label.qualifications.otherCountriesRecognition.routes.label" | t),
+                classes: "govuk-label--m",
+                isPageHeading: false
+              }
+            },
+            id: "otherCountriesRecognitionRoutes",
+            name: "otherCountriesRecognitionRoutes",
+            items: otherCountriesRecognitionRoutesRadioButtonArgs,
+            errorMessage: errors.otherCountriesRecognitionRoutes | tError
+          })
+        }}
 
         {{
           govukTextarea({

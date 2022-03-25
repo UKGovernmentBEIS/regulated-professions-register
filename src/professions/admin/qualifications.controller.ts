@@ -27,6 +27,7 @@ import { ProfessionVersion } from '../profession-version.entity';
 import { Profession } from '../profession.entity';
 import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
 import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
+import { OtherCountriesRecognitionRoutesRadioButtonsPresenter } from './presenters/other-countries-recognition-routes-radio-buttons-presenter';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
@@ -96,6 +97,8 @@ export class QualificationsController {
         url: submittedValues.moreInformationUrl,
         ukRecognition: submittedValues.ukRecognition,
         ukRecognitionUrl: submittedValues.ukRecognitionUrl,
+        otherCountriesRecognitionRoutes:
+          submittedValues.otherCountriesRecognitionRoutes,
         otherCountriesRecognitionSummary:
           submittedValues.otherCountriesRecognitionSummary,
         otherCountriesRecognitionUrl:
@@ -137,6 +140,11 @@ export class QualificationsController {
       captionText: await ViewUtils.captionText(this.i18nService, profession),
       ukRecognition: qualification?.ukRecognition,
       ukRecognitionUrl: qualification?.ukRecognitionUrl,
+      otherCountriesRecognitionRoutesRadioButtonArgs:
+        await new OtherCountriesRecognitionRoutesRadioButtonsPresenter(
+          qualification?.otherCountriesRecognitionRoutes,
+          this.i18nService,
+        ).radioButtonArgs(),
       otherCountriesRecognitionSummary:
         qualification?.otherCountriesRecognitionSummary,
       otherCountriesRecognitionUrl: qualification?.otherCountriesRecognitionUrl,

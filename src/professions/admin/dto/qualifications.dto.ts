@@ -4,6 +4,7 @@ import {
   preprocessUrl,
   urlOptions,
 } from '../../../helpers/preprocess-url.helper';
+import { OtherCountriesRecognitionRoutes } from '../../../qualifications/qualification.entity';
 
 export class QualificationsDto {
   @IsNotEmpty({
@@ -26,6 +27,12 @@ export class QualificationsDto {
   @Transform(({ value }) => preprocessUrl(value))
   @ValidateIf((e) => e.ukRecognitionUrl)
   ukRecognitionUrl: string;
+
+  @IsNotEmpty({
+    message:
+      'professions.form.errors.qualification.otherCountriesRecognitionRoutes.empty',
+  })
+  otherCountriesRecognitionRoutes: OtherCountriesRecognitionRoutes;
 
   otherCountriesRecognitionSummary: string;
 

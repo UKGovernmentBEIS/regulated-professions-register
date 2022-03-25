@@ -24,6 +24,9 @@ export default class QualificationPresenter {
     this.qualification && this.qualification.ukRecognitionUrl,
   );
 
+  readonly adminSelectedOtherCountriesRecognitionRoutes =
+    this.qualification && this.qualification.otherCountriesRecognitionRoutes;
+
   readonly otherCountriesRecognitionSummary =
     this.qualification && this.qualification.otherCountriesRecognitionSummary;
 

@@ -417,6 +417,9 @@ describe('Editing an existing profession', () => {
         cy.get('input[name="ukRecognition"]').type('Recognition in UK');
         cy.get('input[name="ukRecognitionUrl"]').type('http://example.com/uk');
 
+        cy.get(
+          'input[name="otherCountriesRecognitionRoutes"][value="some"]',
+        ).check();
         cy.get('textarea[name="otherCountriesRecognitionSummary"]').type(
           'Recognition in other countries',
         );
@@ -447,6 +450,15 @@ describe('Editing an existing profession', () => {
           'http://example.com/uk',
         );
 
+        cy.translate(
+          'professions.form.label.qualifications.otherCountriesRecognition.some',
+          (some: string) => {
+            cy.checkSummaryListRowValue(
+              'professions.form.label.qualifications.otherCountriesRecognition.routes.label',
+              some,
+            );
+          },
+        );
         cy.checkSummaryListRowValue(
           'professions.form.label.qualifications.otherCountriesRecognition.summary',
           'Recognition in other countries',

@@ -6,6 +6,7 @@ import { createMockI18nService } from '../../testutils/create-mock-i18n-service'
 import { translationOf } from '../../testutils/translation-of';
 import { formatLink } from '../../helpers/format-link.helper';
 import { linkOf } from '../../testutils/link-of';
+import { OtherCountriesRecognitionRoutes } from '../qualification.entity';
 
 jest.mock('../../helpers/format-multiline-string.helper');
 jest.mock('../../helpers/format-link.helper');
@@ -47,6 +48,43 @@ describe(QualificationPresenter, () => {
         expect(presenter.moreInformationUrl).toEqual(
           linkOf('http://example.com'),
         );
+      });
+    });
+
+    describe('adminSelectedOtherCountriesRecognitionRoutes', () => {
+      describe('when other routes are set', () => {
+        it('returnsthe route', () => {
+          const qualification = qualificationFactory.build({
+            otherCountriesRecognitionRoutes:
+              OtherCountriesRecognitionRoutes.All,
+          });
+
+          const presenter = new QualificationPresenter(
+            qualification,
+            createMockI18nService(),
+          );
+
+          expect(
+            presenter.adminSelectedOtherCountriesRecognitionRoutes,
+          ).toEqual(OtherCountriesRecognitionRoutes.All);
+        });
+      });
+
+      describe('when other countries routes are not set', () => {
+        it('returns null', () => {
+          const qualification = qualificationFactory.build({
+            otherCountriesRecognitionRoutes: null,
+          });
+
+          const presenter = new QualificationPresenter(
+            qualification,
+            createMockI18nService(),
+          );
+
+          expect(
+            presenter.adminSelectedOtherCountriesRecognitionRoutes,
+          ).toEqual(null);
+        });
       });
     });
 
@@ -341,6 +379,7 @@ describe(QualificationPresenter, () => {
           qualification: undefined,
           ukRecognition: undefined,
           ukRecognitionUrl: linkOf(undefined),
+          adminSelectedOtherCountriesRecognitionRoutes: undefined,
           otherCountriesRecognitionSummary: undefined,
           otherCountriesRecognitionUrl: linkOf(undefined),
         }),

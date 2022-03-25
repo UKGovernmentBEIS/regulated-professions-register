@@ -17,6 +17,7 @@ import { translationOf } from '../../testutils/translation-of';
 import userFactory from '../../testutils/factories/user';
 import { createDefaultMockRequest } from '../../testutils/factories/create-default-mock-request';
 import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
+import { OtherCountriesRecognitionRoutes } from '../../qualifications/qualification.entity';
 
 jest.mock('../../helpers/nations.helper');
 jest.mock('../../users/helpers/check-can-view-profession');
@@ -162,6 +163,8 @@ describe(QualificationsController, () => {
           moreInformationUrl: 'http://www.example.com/more-info',
           ukRecognition: 'ukRecognition',
           ukRecognitionUrl: 'http://example.com/uk',
+          otherCountriesRecognitionRoutes:
+            'all' as OtherCountriesRecognitionRoutes,
           otherCountriesRecognitionSummary:
             'other countries recognition summary',
           otherCountriesRecognitionUrl: 'http://example.com/overseas',
@@ -189,6 +192,8 @@ describe(QualificationsController, () => {
               url: 'http://www.example.com/more-info',
               ukRecognition: 'ukRecognition',
               ukRecognitionUrl: 'http://example.com/uk',
+              otherCountriesRecognitionRoutes:
+                'all' as OtherCountriesRecognitionRoutes,
               otherCountriesRecognitionSummary:
                 'other countries recognition summary',
               otherCountriesRecognitionUrl: 'http://example.com/overseas',
@@ -217,6 +222,8 @@ describe(QualificationsController, () => {
           moreInformationUrl: 'www.example.com/more-info ',
           ukRecognition: 'ukRecognition',
           ukRecognitionUrl: 'example.com/uk',
+          otherCountriesRecognitionRoutes:
+            'all' as OtherCountriesRecognitionRoutes,
           otherCountriesRecognitionSummary:
             'other countries recognition summary',
           otherCountriesRecognitionUrl: 'example.com/overseas',
@@ -244,6 +251,8 @@ describe(QualificationsController, () => {
               url: 'http://www.example.com/more-info',
               ukRecognition: 'ukRecognition',
               ukRecognitionUrl: 'http://example.com/uk',
+              otherCountriesRecognitionRoutes:
+                'all' as OtherCountriesRecognitionRoutes,
               otherCountriesRecognitionSummary:
                 'other countries recognition summary',
               otherCountriesRecognitionUrl: 'http://example.com/overseas',
@@ -272,6 +281,7 @@ describe(QualificationsController, () => {
           moreInformationUrl: 'not a url',
           ukRecognition: '',
           ukRecognitionUrl: 'not a url',
+          otherCountriesRecognitionRoutes: undefined,
           otherCountriesRecognitionSummary: '',
           otherCountriesRecognitionUrl: 'not a url',
         };
@@ -306,6 +316,9 @@ describe(QualificationsController, () => {
               ukRecognitionUrl: {
                 text: 'professions.form.errors.qualification.ukRecognitionUrl.invalid',
               },
+              otherCountriesRecognitionRoutes: {
+                text: 'professions.form.errors.qualification.otherCountriesRecognitionRoutes.empty',
+              },
               otherCountriesRecognitionUrl: {
                 text: 'professions.form.errors.qualification.otherCountriesRecognitionUrl.invalid',
               },
@@ -329,6 +342,8 @@ describe(QualificationsController, () => {
         moreInformationUrl: 'http://www.example.com/more-info',
         ukRecognition: 'ukRecognition',
         ukRecognitionUrl: 'http://example.com/uk',
+        otherCountriesRecognitionRoutes:
+          'all' as OtherCountriesRecognitionRoutes,
         otherCountriesRecognitionSummary: 'other countries recognition summary',
         otherCountriesRecognitionUrl: 'http://example.com/overseas',
       };

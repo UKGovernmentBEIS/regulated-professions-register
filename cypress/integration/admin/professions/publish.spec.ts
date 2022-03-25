@@ -139,6 +139,9 @@ describe('Publishing professions', () => {
         'professions.form.label.qualifications.routesToObtain',
       );
       cy.checkAccessibility();
+      cy.get(
+        'input[name="otherCountriesRecognitionRoutes"][value="some"]',
+      ).check();
       cy.get('textarea[name="routesToObtain"]').type('Routes to obtain');
       cy.translate('app.continue').then((buttonText) => {
         cy.get('button').contains(buttonText).click();
@@ -476,6 +479,9 @@ describe('Publishing professions', () => {
 
       cy.get('input[name="ukRecognition"]').type('Recognition in the UK');
       cy.get('input[name="ukRecognitionUrl"]').type('http://example.com/uk');
+      cy.get(
+        'input[name="otherCountriesRecognitionRoutes"][value="some"]',
+      ).check();
       cy.get('textarea[name="otherCountriesRecognitionSummary"]').type(
         'Recognition in other countries',
       );
