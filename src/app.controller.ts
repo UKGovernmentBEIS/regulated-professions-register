@@ -34,6 +34,12 @@ export class AppController {
     // do nothing.
   }
 
+  @Get('/disclaimer')
+  @Render('pages/data-disclaimer')
+  dataDisclaimer() {
+    // do nothing.
+  }
+
   @Get('/health-check')
   healthCheck() {
     return {
