@@ -18,6 +18,10 @@ import {
 } from './profession-version.entity';
 
 import { ProfessionsSearchService } from './professions-search.service';
+import {
+  ProfessionToOrganisation,
+  OrganisationRole,
+} from './profession-to-organisation.entity';
 
 type SeedProfession = {
   name: string;
@@ -66,6 +70,8 @@ export class ProfessionsSeeder implements Seeder {
     private readonly organisationRepository: Repository<Organisation>,
     @InjectRepository(OrganisationVersion)
     private readonly organisationVersionRepository: Repository<OrganisationVersion>,
+    @InjectRepository(ProfessionToOrganisation)
+    private readonly professionToOrganisationRepository: Repository<ProfessionToOrganisation>,
     private readonly searchService: ProfessionsSearchService,
   ) {}
 
@@ -98,6 +104,28 @@ export class ProfessionsSeeder implements Seeder {
           ...existingProfession,
           ...newProfession,
         });
+
+        const professionToOrganisations = [
+          new ProfessionToOrganisation(
+            organisation,
+            savedProfession,
+            OrganisationRole.PrimaryRegulator,
+          ),
+        ];
+
+        if (additionalOrganisation) {
+          professionToOrganisations.push(
+            new ProfessionToOrganisation(
+              additionalOrganisation,
+              savedProfession,
+              OrganisationRole.PrimaryRegulator,
+            ),
+          );
+        }
+
+        await this.professionToOrganisationRepository.save(
+          professionToOrganisations,
+        );
 
         const seededVersions = (
           await this.seedVersions(seedProfession, savedProfession)
