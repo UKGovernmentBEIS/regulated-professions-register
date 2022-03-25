@@ -18,6 +18,7 @@ import { IndustriesModule } from './industries/industries.module';
 
 import dbConfiguration from './config/db.config';
 import redisConfiguration from './config/redis.config';
+import { LandingController } from './landing/landing.controller';
 
 @Module({
   imports: [
@@ -54,7 +55,7 @@ import redisConfiguration from './config/redis.config';
     OrganisationsModule,
     IndustriesModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, LandingController],
   providers: [MailerConsumer],
 })
 export class AppModule {}

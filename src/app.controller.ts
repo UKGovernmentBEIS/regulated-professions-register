@@ -5,12 +5,6 @@ import { getActingUser } from './users/helpers/get-acting-user.helper';
 import { getUserOrganisation } from './users/helpers/get-user-organisation';
 @Controller()
 export class AppController {
-  @Get()
-  @Render('index')
-  index() {
-    // do nothing.
-  }
-
   @Get('/admin')
   @UseGuards(AuthenticationGuard)
   @Render('admin/dashboard')
