@@ -15,6 +15,10 @@ import { OrganisationVersionsService } from '../../organisations/organisation-ve
 import { createDefaultMockRequest } from '../../testutils/factories/create-default-mock-request';
 import userFactory from '../../testutils/factories/user';
 import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
+import {
+  ProfessionToOrganisation,
+  OrganisationRole,
+} from '../profession-to-organisation.entity';
 
 jest.mock('../../users/helpers/check-can-view-profession');
 
@@ -200,12 +204,26 @@ describe('TopLevelInformationController', () => {
           request,
         );
 
+        const professionToOrganisations = [
+          new ProfessionToOrganisation(
+            newOrganisation,
+            profession,
+            OrganisationRole.PrimaryRegulator,
+          ),
+          new ProfessionToOrganisation(
+            newAdditionalOrganisation,
+            profession,
+            OrganisationRole.PrimaryRegulator,
+          ),
+        ];
+
         expect(professionsService.save).toHaveBeenCalledWith(
           expect.objectContaining({
             id: 'profession-id',
             name: 'Gas Safe Engineer',
             organisation: newOrganisation,
             additionalOrganisation: newAdditionalOrganisation,
+            professionToOrganisations: professionToOrganisations,
           }),
         );
 
@@ -213,6 +231,54 @@ describe('TopLevelInformationController', () => {
           '/admin/professions/profession-id/versions/version-id/check-your-answers',
         );
       });
+    });
+
+    it('only updates with one organisation when an additional organisation is not selected', async () => {
+      const profession = professionFactory.justCreated('profession-id').build();
+
+      professionsService.findWithVersions.mockResolvedValue(profession);
+
+      const topLevelDetailsDto = {
+        name: 'Gas Safe Engineer',
+        regulatoryBody: 'example-org-id',
+        additionalRegulatoryBody: null,
+      };
+
+      const newOrganisation = organisationFactory.build({
+        name: 'Council of Gas Safe Engineers',
+      });
+
+      when(organisationsService.find)
+        .calledWith('example-org-id')
+        .mockResolvedValue(newOrganisation);
+
+      const request = createDefaultMockRequest({
+        user: userFactory.build(),
+      });
+
+      await controller.update(
+        topLevelDetailsDto,
+        response,
+        'profession-id',
+        'version-id',
+        request,
+      );
+
+      const professionToOrganisations = [
+        new ProfessionToOrganisation(
+          newOrganisation,
+          profession,
+          OrganisationRole.PrimaryRegulator,
+        ),
+      ];
+
+      expect(professionsService.save).toHaveBeenCalledWith(
+        expect.objectContaining({
+          id: 'profession-id',
+          name: 'Gas Safe Engineer',
+          professionToOrganisations: professionToOrganisations,
+        }),
+      );
     });
 
     describe('when required parameters are not entered', () => {
