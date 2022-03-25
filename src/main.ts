@@ -7,7 +7,6 @@ import path from 'path';
 import session from 'express-session';
 import methodOverride from 'method-override';
 import connectFlash from 'connect-flash';
-import basicAuth from 'express-basic-auth';
 
 import { AppModule } from './app.module';
 import { AuthenticationMidleware } from './middleware/authentication.middleware';
@@ -64,23 +63,6 @@ async function bootstrap() {
 
   // Add global variables to the application to be used in the templates
   app.use(globalLocals);
-
-  // Add basic auth to the application if the environment variables are set
-  if (
-    process.env['BASIC_AUTH_USERNAME'] &&
-    process.env['BASIC_AUTH_PASSWORD']
-  ) {
-    app.use(
-      basicAuth({
-        users: {
-          [process.env['BASIC_AUTH_USERNAME']]:
-            process.env['BASIC_AUTH_PASSWORD'],
-        },
-        challenge: true,
-        realm: process.env['HOST_URL'],
-      }),
-    );
-  }
 
   if (process.env['CANONICAL_HOSTNAME']) {
     app.use(redirectToCanonicalHostname);
