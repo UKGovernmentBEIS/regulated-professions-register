@@ -18,6 +18,7 @@
     "typeorm:migration:run": "npm run build && npm run typeorm -- migration:run",
     "typeorm:migration:revert": "npm run build && npm run typeorm -- migration:revert",
     "data:migrate:generate": "ts-node ./util/generate-data-migration.ts",
+    "data:migrate": "ts-node --transpile-only",
     "format:check": "prettier --check . --ignore-unknown",
     "format": "prettier --write . --ignore-unknown",
     "start": "nest start",
