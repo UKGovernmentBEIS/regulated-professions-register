@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [unreleased]
 
+### Changed
+
+- Telephone numbers are validated on input, and formatted as international numbers on display
+
 ## [release-011] - 2022-03-25
 
 ### Added
@@ -25,6 +29,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Allow a central user to create a draft Profession with only a name and an Organisation
 - Validate that all necessary fields are completed before a Profession is published
 - Validate that all associated Organisations are published before a Profession is published
+- Telephone numbers are validated on input, and formatted as international numbers on display
 
 ## [release-010] - 2022-03-22
 

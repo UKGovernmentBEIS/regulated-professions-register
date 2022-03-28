@@ -131,7 +131,10 @@ describe('Editing organisations', () => {
         'padded-address@example.com',
       );
 
-      cy.checkSummaryListRowValue('organisations.label.email', '+44 (0)20 7215 5000');
+      cy.checkSummaryListRowValue(
+        'organisations.label.telephone',
+        '+44 (0)20 7215 5000',
+      );
     });
 
     it('Allows me to update an organisation', () => {
