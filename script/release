@@ -15,7 +15,7 @@ if [ "$branch" != "main" ]; then
 fi
 
 latest_tag=$(git describe --tags --abbrev=0)
-latest_version=$(echo "$latest_tag" | sed 's/[a-z0\-]//g')
+latest_version=$(echo "$latest_tag" | sed 's/[a-z\-]//g' | awk '{sub(/^0*/,"");}1')
 next_version=$(printf "%03d\n" $((latest_version + 1)))
 next_tag="release-$next_version"
 
