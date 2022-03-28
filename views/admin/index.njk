@@ -1,0 +1,34 @@
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% extends "base.njk" %}
+
+{% set title = "Manage your Regulated Professions Register account" %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-xl">
+        {{ title }}
+      </h1>
+
+      <p class="govuk-body">The Regulated Professions Register (RPR) is a searchable list of professions in the UK that are regulated either by law or by a chartered body.</p>
+      <p class="govuk-body">Use the RPR to tell people about:</p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>professions in the UK that you regulate</li>
+        <li>the qualifications or experience that people may need to practise a profession in the UK</li>
+        <li>routes to qualification for overseas professionals</li>
+        <li>contact information and other details about your regulatory or professional body</li>
+      </ul>
+      <p class="govuk-body">
+        {{ govukButton({
+          text: "Sign in",
+          href: "/admin/dashboard",
+          isStartButton: true
+        }) }}
+      </p>
+      <h2 class="govuk-heading-m">Before you start</h2>
+      <p class="govuk-body"><a class="govuk-link" href="mailto:RPR@beis.gov.uk">Request an account</a> if you haven't received sign-in details to access this service.<p>
+      <p class="govuk-body">The first time you sign in, you'll be prompted to download a two-factor authentication app to your phone.</p>
+      <p class="govuk-body">You'll need to use this app each time you sign in to the RPR. </p>
+    </div>
+  </div>
+{% endblock %}

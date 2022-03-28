@@ -19,7 +19,7 @@ describe('AppController', () => {
     appController = app.get<AppController>(AppController);
   });
 
-  describe('admin', () => {
+  describe('adminDashboard', () => {
     describe('when the user is a service owner', () => {
       it('returns the BEIS user', () => {
         const user = userFactory.build({ serviceOwner: true });
@@ -32,7 +32,7 @@ describe('AppController', () => {
 
         (getActingUser as jest.Mock).mockReturnValue(user);
 
-        expect(appController.admin(request)).toEqual({
+        expect(appController.adminDashboard(request)).toEqual({
           organisation: 'app.beis',
         });
       });
@@ -53,10 +53,16 @@ describe('AppController', () => {
 
         (getActingUser as jest.Mock).mockReturnValue(user);
 
-        expect(appController.admin(request)).toEqual({
+        expect(appController.adminDashboard(request)).toEqual({
           organisation: 'Department for Education',
         });
       });
+    });
+  });
+
+  describe('adminIndex', () => {
+    it('returns without error', () => {
+      expect(appController.adminIndex()).toEqual(undefined);
     });
   });
 

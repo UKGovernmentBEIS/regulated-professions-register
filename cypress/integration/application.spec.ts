@@ -7,6 +7,18 @@ describe('/', () => {
     });
   });
 
+  it('Shows an internal landing page', () => {
+    cy.visitAndCheckAccessibility('/admin');
+
+    cy.get('body').should(
+      'contain',
+      'Manage your Regulated Professions Register account',
+    );
+    cy.get('a')
+      .contains('Sign in')
+      .should('have.attr', 'href', '/admin/dashboard');
+  });
+
   context('when I am logged in as BEIS user', () => {
     beforeEach(() => {
       cy.loginAuth0('admin');
