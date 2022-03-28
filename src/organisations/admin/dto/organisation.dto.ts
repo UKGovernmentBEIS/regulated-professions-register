@@ -39,7 +39,6 @@ export class OrganisationDto {
     message: 'organisations.admin.form.errors.phone.empty',
   })
   telephone: string;
-  fax?: string;
 
   confirm?: boolean;
 }

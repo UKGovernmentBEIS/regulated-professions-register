@@ -17,7 +17,6 @@ export default Factory.define<OrganisationVersion>(({ sequence }) => ({
   url: 'https://www.example-org.com',
   email: 'hello@example-org.com',
   telephone: '+441234567890',
-  fax: '+441234567891',
   created_at: new Date(),
   updated_at: new Date(),
 }));

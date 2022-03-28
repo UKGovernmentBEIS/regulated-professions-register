@@ -13,7 +13,6 @@ class OrganisationFactory extends Factory<Organisation> {
       url: organisationVersion.url,
       email: organisationVersion.email,
       telephone: organisationVersion.telephone,
-      fax: organisationVersion.fax,
       versionId: organisationVersion.id,
     });
   }

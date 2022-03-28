@@ -9,7 +9,6 @@
         "url": "https://www.gov.uk/guidance/early-years-qualifications-finder#overseas-qualifications",
         "email": "dfe@example.com",
         "telephone": "+44 0123 456789",
-        "fax": "+44 0123 456780",
         "status": "live"
       },
       {
@@ -18,7 +17,6 @@
         "url": "https://www.gov.uk/guidance/early-years-qualifications-finder#overseas-qualifications",
         "email": "old@example.com",
         "telephone": "+44 0123 456789",
-        "fax": "+44 0123 456780",
         "status": "draft"
       }
     ]
@@ -33,7 +31,6 @@
         "url": "www.corgi-gas-safety.com",
         "email": "gas@example.com",
         "telephone": "+44 0123 456789",
-        "fax": "+44 0123 456780",
         "status": "live"
       }
     ]
@@ -48,7 +45,6 @@
         "url": "www.lawsociety.org.uk",
         "email": "law@example.com",
         "telephone": "+44 0123 456789",
-        "fax": "+44 0123 456780",
         "status": "live"
       }
     ]
@@ -63,7 +59,6 @@
         "url": "www.alt-lawsociety.org.uk",
         "email": "alt-law@example.com",
         "telephone": "+44 0123 987654",
-        "fax": "+44 0123 087654",
         "status": "live"
       }
     ]
@@ -78,7 +73,6 @@
         "url": "www.gmc.com",
         "email": "gmc@example.com",
         "telephone": "+44 0123 456789",
-        "fax": "+44 0123 456780",
         "status": "live"
       }
     ]
@@ -112,7 +106,6 @@
         "url": "www.gmc.com",
         "email": "gmc@example.com",
         "telephone": "+44 0123 456789",
-        "fax": "+44 0123 456780",
         "status": "draft"
       }
     ]

@@ -87,7 +87,6 @@ describe('OrganisationsService', () => {
         url: 'https://www.example-org.com',
         email: 'hello@example-org.com',
         telephone: '+441234567890',
-        fax: '+441234567891',
       };
       const version = organisationVersionFactory.build(versionAttributes);
 
