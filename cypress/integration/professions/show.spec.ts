@@ -224,8 +224,19 @@ describe('Showing a profession', () => {
 
             cy.translate(
               'professions.show.regulatedActivities.regulationType',
-            ).then((regulationTypeHeading) => {
-              cy.wrap($div).should('not.contain', regulationTypeHeading);
+            ).then((summaryHeading) => {
+              cy.get('h3').should('contain', summaryHeading);
+
+              cy.get('h3')
+                .contains(summaryHeading)
+                .parent()
+                .within(() => {
+                  cy.translate(
+                    'professions.regulationTypes.accreditation.name',
+                  ).then((regulationType) => {
+                    cy.get('p').should('contain', regulationType);
+                  });
+                });
             });
 
             cy.translate(
