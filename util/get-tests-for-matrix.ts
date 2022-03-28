@@ -9,8 +9,13 @@ const matrix = argv.matrix as number;
 
 glob('./cypress/integration/**/*.spec.ts', {}, (_er, files) => {
   const res = [];
-  const chunkLength = files.length / numberOfChunks;
-  while (files.length > 0) {
+
+  for (
+    let remainingChunks = numberOfChunks;
+    remainingChunks > 0;
+    remainingChunks--
+  ) {
+    const chunkLength = Math.round(files.length / remainingChunks);
     const chunk = files.splice(0, chunkLength);
     res.push(chunk);
   }
