@@ -4,7 +4,7 @@ describe('Creating organisations', () => {
   context('when I am logged in without the correct permissions', () => {
     beforeEach(() => {
       cy.loginAuth0('editor');
-      cy.visit('/admin');
+      cy.visitInternalDashboard();
 
       cy.get('a').contains('Regulatory authorities').click();
     });
@@ -21,7 +21,7 @@ describe('Creating organisations', () => {
   context('When I am logged in as a registrar', () => {
     beforeEach(() => {
       cy.loginAuth0('registrar');
-      cy.visit('/admin');
+      cy.visitInternalDashboard();
 
       cy.get('a').contains('Regulatory authorities').click();
 

@@ -4,7 +4,7 @@ describe('Archiving organisations', () => {
   context('When I am logged in as a registrar', () => {
     beforeEach(() => {
       cy.loginAuth0('registrar');
-      cy.visitAndCheckAccessibility('/admin');
+      cy.visitInternalDashboard();
     });
 
     it('Allows me to archive a draft organisation', () => {

@@ -10,7 +10,7 @@ describe('/', () => {
   context('when I am logged in as BEIS user', () => {
     beforeEach(() => {
       cy.loginAuth0('admin');
-      cy.visitAndCheckAccessibility('/admin');
+      cy.visitInternalDashboard();
     });
 
     it('shows my name and the BEIS organisation name', () => {
@@ -25,7 +25,7 @@ describe('/', () => {
   context('when I am logged in as a non BEIS user', () => {
     beforeEach(() => {
       cy.loginAuth0('orgadmin');
-      cy.visitAndCheckAccessibility('/admin');
+      cy.visitInternalDashboard();
     });
 
     it('shows my name and organisation', () => {
