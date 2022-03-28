@@ -24,7 +24,6 @@ type SeedOrganisationVersion = {
   url: string;
   email: string;
   telephone: string;
-  fax: string;
   status: string;
   created_at: string;
 };
@@ -79,7 +78,6 @@ export class OrganisationsSeeder implements Seeder {
               url: item.url,
               email: item.email,
               telephone: item.telephone,
-              fax: item.fax,
               organisation: org,
               status: status,
             } as OrganisationVersion;

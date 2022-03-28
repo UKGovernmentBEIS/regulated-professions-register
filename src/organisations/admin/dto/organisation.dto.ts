@@ -1,10 +1,30 @@
 import { Transform } from 'class-transformer';
-import { IsEmail, IsNotEmpty, IsUrl, ValidateIf } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsUrl,
+  Validate,
+  ValidateIf,
+} from 'class-validator';
 import { preprocessEmail } from '../../../helpers/preprocess-email.helper';
 import {
   preprocessUrl,
   urlOptions,
 } from '../../../helpers/preprocess-url.helper';
+
+import {
+  ValidatorConstraint,
+  ValidatorConstraintInterface,
+} from 'class-validator';
+import { validateTelephone } from '../../../helpers/validate-telephone.helper';
+import { preprocessTelephone } from '../../../helpers/preprocess-telephone.helper';
+
+@ValidatorConstraint()
+export class IsTelephoneConstraint implements ValidatorConstraintInterface {
+  validate(telephone: string): boolean {
+    return !telephone || validateTelephone(telephone);
+  }
+}
 
 export class OrganisationDto {
   @IsNotEmpty({
@@ -38,8 +58,11 @@ export class OrganisationDto {
   @IsNotEmpty({
     message: 'organisations.admin.form.errors.phone.empty',
   })
+  @Validate(IsTelephoneConstraint, {
+    message: 'organisations.admin.form.errors.phone.invalid',
+  })
+  @Transform(({ value }) => preprocessTelephone(value))
   telephone: string;
-  fax?: string;
 
   confirm?: boolean;
 }

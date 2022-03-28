@@ -9,6 +9,7 @@ import { I18nHelper } from '../helpers/i18n.helper';
 import { formatEmail } from '../helpers/format-email.helper';
 import { pad } from '../helpers/pad.helper';
 import { formatStatus } from '../helpers/format-status.helper';
+import { formatTelephone } from '../helpers/format-telephone.helper';
 
 export const nunjucksConfig = async (
   app: NestExpressApplication,
@@ -109,6 +110,10 @@ export const nunjucksConfig = async (
     },
     true,
   );
+
+  env.addFilter('telephone', (text) => {
+    return formatTelephone(text);
+  });
 
   return env;
 };

@@ -420,7 +420,6 @@ describe('OrganisationsController', () => {
             url: 'http://example.com',
             address: '123 Fake Street',
             telephone: '122356',
-            fax: '',
           };
 
           const organisation = organisationFactory.build({ slug: '' });
@@ -501,7 +500,6 @@ describe('OrganisationsController', () => {
             url: 'http://example.com',
             address: '123 Fake Street',
             telephone: '122356',
-            fax: '',
           };
 
           const organisation = organisationFactory.build({
@@ -687,7 +685,6 @@ describe('OrganisationsController', () => {
       url: 'http://example.com',
       address: '123 Fake Street',
       telephone: '122356',
-      fax: '',
     };
 
     const organisation = organisationFactory.build();

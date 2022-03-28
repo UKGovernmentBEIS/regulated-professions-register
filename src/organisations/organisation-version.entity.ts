@@ -53,9 +53,6 @@ export class OrganisationVersion {
   @Column({ nullable: true })
   telephone: string;
 
-  @Column({ nullable: true })
-  fax: string;
-
   @CreateDateColumn({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP(6)',
@@ -76,7 +73,6 @@ export class OrganisationVersion {
       url: dto.url,
       email: dto.email,
       telephone: dto.telephone,
-      fax: dto.fax,
     } as OrganisationVersion;
   }
 }

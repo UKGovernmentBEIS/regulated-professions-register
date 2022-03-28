@@ -41,6 +41,10 @@ describe('Creating organisations', () => {
         .invoke('val', '')
         .type('this is not an email');
 
+      cy.get('input[name="telephone"]')
+        .invoke('val', '')
+        .type('this is not an telephone number');
+
       cy.translate('app.continue').then((buttonText) => {
         cy.get('button').contains(buttonText).click();
       });
@@ -62,6 +66,12 @@ describe('Creating organisations', () => {
           cy.get('body').should('contain', error);
         },
       );
+
+      cy.translate('organisations.admin.form.errors.phone.invalid').then(
+        (error) => {
+          cy.get('body').should('contain', error);
+        },
+      );
     });
 
     it('allows me to create an organisation', () => {
@@ -78,7 +88,7 @@ describe('Creating organisations', () => {
       cy.get('textarea[name="address"]').type('123 Fake Street');
 
       cy.get('input[name="email"]').type('foo@example.com');
-      cy.get('input[name="telephone"]').type('1234');
+      cy.get('input[name="telephone"]').type('020 7215 5000');
 
       cy.translate('app.continue').then((buttonText) => {
         cy.get('button').contains(buttonText).click();
@@ -104,7 +114,10 @@ describe('Creating organisations', () => {
         'organisations.label.email',
         'foo@example.com',
       );
-      cy.checkSummaryListRowValue('organisations.label.telephone', '1234');
+      cy.checkSummaryListRowValue(
+        'organisations.label.telephone',
+        '+44 (0)20 7215 5000',
+      );
 
       cy.translate('organisations.admin.button.saveAsDraft').then(
         (buttonText) => {

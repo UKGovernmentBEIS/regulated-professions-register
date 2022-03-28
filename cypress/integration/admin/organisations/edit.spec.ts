@@ -112,6 +112,10 @@ describe('Editing organisations', () => {
         .invoke('val', '')
         .type('   padded-address@example.com');
 
+      cy.get('input[name="telephone"]')
+        .invoke('val', '')
+        .type('020    7215 5000');
+
       cy.translate('app.continue').then((buttonText) => {
         cy.get('button').contains(buttonText).click();
       });
@@ -125,6 +129,11 @@ describe('Editing organisations', () => {
       cy.checkSummaryListRowValue(
         'organisations.label.email',
         'padded-address@example.com',
+      );
+
+      cy.checkSummaryListRowValue(
+        'organisations.label.telephone',
+        '+44 (0)20 7215 5000',
       );
     });
 
@@ -140,7 +149,7 @@ describe('Editing organisations', () => {
         .type('123 Fake Street');
 
       cy.get('input[name="email"]').invoke('val', '').type('foo@example.com');
-      cy.get('input[name="telephone"]').invoke('val', '').type('1234');
+      cy.get('input[name="telephone"]').invoke('val', '').type('020 7215 5000');
 
       cy.translate('app.continue').then((buttonText) => {
         cy.get('button').contains(buttonText).click();
@@ -163,7 +172,10 @@ describe('Editing organisations', () => {
         'organisations.label.email',
         'foo@example.com',
       );
-      cy.checkSummaryListRowValue('organisations.label.telephone', '1234');
+      cy.checkSummaryListRowValue(
+        'organisations.label.telephone',
+        '+44 (0)20 7215 5000',
+      );
 
       cy.translate('organisations.admin.button.saveAsDraft').then(
         (buttonText) => {

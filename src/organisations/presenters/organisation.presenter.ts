@@ -11,6 +11,7 @@ import { Profession } from '../../professions/profession.entity';
 import { formatStatus } from '../../helpers/format-status.helper';
 import { Nation } from '../../nations/nation';
 import { stringifyNations } from '../../nations/helpers/stringifyNations';
+import { formatTelephone } from '../../helpers/format-telephone.helper';
 
 interface OrganisationSummaryListOptions {
   classes?: string;
@@ -112,7 +113,7 @@ export class OrganisationPresenter {
           ),
         },
         value: {
-          text: this.organisation.telephone,
+          text: this.telephone(),
         },
       },
     ];
@@ -180,6 +181,10 @@ export class OrganisationPresenter {
 
   public email(): string {
     return formatEmail(this.organisation.email);
+  }
+
+  public telephone(): string {
+    return formatTelephone(this.organisation.telephone);
   }
 
   public url(): string {

@@ -58,7 +58,6 @@ export class Organisation {
   url?: string;
   email?: string;
   telephone?: string;
-  fax?: string;
   versionId?: string;
   lastModified?: Date;
   changedByUser?: User;
@@ -113,7 +112,6 @@ export class Organisation {
       url: organisationVersion.url,
       email: organisationVersion.email,
       telephone: organisationVersion.telephone,
-      fax: organisationVersion.fax,
       versionId: organisationVersion.id,
       status: organisationVersion.status,
       lastModified: organisationVersion.updated_at,
@@ -130,7 +128,6 @@ export class Organisation {
     url?: string,
     email?: string,
     telephone?: string,
-    fax?: string,
     professions?: Profession[],
     users?: User[],
   ) {
@@ -141,7 +138,6 @@ export class Organisation {
     this.url = url || '';
     this.email = email || '';
     this.telephone = telephone || '';
-    this.fax = fax;
     this.professions = professions;
     this.users = users;
   }

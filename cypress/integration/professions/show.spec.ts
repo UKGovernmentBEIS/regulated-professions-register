@@ -37,7 +37,7 @@ describe('Showing a profession', () => {
         );
         cy.checkSummaryListRowValue(
           'professions.show.bodies.phoneNumber',
-          '+44 0123 456789',
+          '+44 (0)123 456789',
         );
       });
 
@@ -60,7 +60,7 @@ describe('Showing a profession', () => {
         );
         cy.checkSummaryListRowValue(
           'professions.show.bodies.phoneNumber',
-          '+44 0123 987654',
+          '+44 (0)123 987654',
         );
       });
 

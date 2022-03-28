@@ -22,6 +22,8 @@ import professionVersionFactory from '../../testutils/factories/profession-versi
 import { OrganisationVersionStatus } from '../organisation-version.entity';
 import { statusOf } from '../../testutils/status-of';
 import { formatStatus } from '../../helpers/format-status.helper';
+import { formatTelephone } from '../../helpers/format-telephone.helper';
+import { telephoneOf } from '../../testutils/telephone-of';
 
 jest.mock('../../helpers/escape.helper');
 jest.mock('../../helpers/format-multiline-string.helper');
@@ -29,6 +31,7 @@ jest.mock('../../common/utils');
 jest.mock('../../helpers/format-link.helper');
 jest.mock('../../helpers/format-email.helper');
 jest.mock('../../helpers/format-status.helper');
+jest.mock('../../helpers/format-telephone.helper');
 
 describe('OrganisationPresenter', () => {
   describe('tableRow', () => {
@@ -222,7 +225,7 @@ describe('OrganisationPresenter', () => {
                 text: 'Translation of `organisations.label.telephone`',
               },
               value: {
-                text: organisation.telephone,
+                text: presenter.telephone(),
               },
             },
           ],
@@ -238,6 +241,7 @@ describe('OrganisationPresenter', () => {
           (formatMultilineString as jest.Mock).mockImplementation(multilineOf);
           (formatEmail as jest.Mock).mockImplementation(emailOf);
           (formatLink as jest.Mock).mockImplementation(linkOf);
+          (formatTelephone as jest.Mock).mockImplementation(telephoneOf);
 
           const organisation = organisationFactory
             .withVersion()
@@ -451,6 +455,23 @@ describe('OrganisationPresenter', () => {
       expect(presenter.email()).toEqual(emailOf('foo@example.com'));
 
       expect(formatEmail).toBeCalledWith('foo@example.com');
+    });
+  });
+
+  describe('telephone', () => {
+    it('makes the telephone number into a formatted telephone number', () => {
+      const i18nService = createMockI18nService();
+      (formatTelephone as jest.Mock).mockImplementation(telephoneOf);
+
+      const organisation = organisationFactory.build({
+        telephone: '020 7215 5000',
+      });
+
+      const presenter = new OrganisationPresenter(organisation, i18nService);
+
+      expect(presenter.telephone()).toEqual(telephoneOf('020 7215 5000'));
+
+      expect(formatTelephone).toBeCalledWith('020 7215 5000');
     });
   });
 

@@ -11,7 +11,6 @@ describe('OrganisationVersion', () => {
       dto.url = 'url';
       dto.email = 'email';
       dto.telephone = 'telephone';
-      dto.fax = 'fax';
 
       expect(OrganisationVersion.fromDto(dto)).toEqual({
         alternateName: 'alternateName',
@@ -19,7 +18,6 @@ describe('OrganisationVersion', () => {
         url: 'url',
         email: 'email',
         telephone: 'telephone',
-        fax: 'fax',
       });
     });
   });

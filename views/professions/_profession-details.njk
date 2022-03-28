@@ -83,7 +83,7 @@
             text: ("professions.show.bodies.phoneNumber" | t)
           },
           value: {
-            text: organisation.telephone
+            text: organisation.telephone | telephone
           }
         } if (organisation.telephone or showEmptyProfessionDetails) else undefined
       ]

@@ -87,11 +87,12 @@
         "url": "Website",
         "address": "Address",
         "email": "Email",
-        "telephone": "Phone number"
+        "telephone": "UK telephone number"
       },
       "hint": {
         "alternateName": "Where the regulator or professional body is also known by a different name or abbreviation",
-        "address": "Use a new line for each line of the address"
+        "address": "Use a new line for each line of the address",
+        "telephone": "Enter a UK number, without a country code. For example, 01632 960 936"
       },
       "errors": {
         "name": {
@@ -101,7 +102,8 @@
           "empty": "Enter the address for the regulatory authority"
         },
         "phone": {
-          "empty": "Enter the phone number for the regulatory authority"
+          "empty": "Enter the UK telephone number for the regulatory authority",
+          "invalid": "Enter a valid UK telephone number, without a country code, for the regulatory authority"
         },
         "email": {
           "invalid": "Please enter a valid email address"
