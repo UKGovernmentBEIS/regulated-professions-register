@@ -50,7 +50,7 @@ export class UsersController {
     UserPermission.DeleteUser,
   )
   @Render('admin/users/index')
-  @BackLink('/admin')
+  @BackLink('/admin/dashboard')
   async index(@Req() req: RequestWithAppSession): Promise<IndexTemplate> {
     const actingUser = getActingUser(req);
 

@@ -53,7 +53,7 @@ export class AuthenticationMidleware {
       },
       getLoginState() {
         return {
-          returnTo: '/admin',
+          returnTo: '/admin/dashboard',
         };
       },
     });

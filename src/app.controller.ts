@@ -5,7 +5,7 @@ import { getActingUser } from './users/helpers/get-acting-user.helper';
 import { getUserOrganisation } from './users/helpers/get-user-organisation';
 @Controller()
 export class AppController {
-  @Get('/admin')
+  @Get('/admin/dashboard')
   @UseGuards(AuthenticationGuard)
   @Render('admin/dashboard')
   admin(@Req() request: RequestWithAppSession) {

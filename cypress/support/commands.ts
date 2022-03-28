@@ -326,5 +326,5 @@ Cypress.Commands.add('checkAccessibility', (rules: AxeRules = undefined) => {
 });
 
 Cypress.Commands.add('visitInternalDashboard', () => {
-  cy.visitAndCheckAccessibility('/admin');
+  cy.visitAndCheckAccessibility('/admin/dashboard');
 });

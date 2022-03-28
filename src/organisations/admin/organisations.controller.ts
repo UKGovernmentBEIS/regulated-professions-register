@@ -65,7 +65,7 @@ export class OrganisationsController {
     UserPermission.PublishOrganisation,
   )
   @Render('admin/organisations/index')
-  @BackLink('/admin')
+  @BackLink('/admin/dashboard')
   async index(
     @Req() request: RequestWithAppSession,
     @Query() query: FilterDto = null,
