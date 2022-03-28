@@ -17,6 +17,7 @@ import {
   ValidatorConstraintInterface,
 } from 'class-validator';
 import { validateTelephone } from '../../../helpers/validate-telephone.helper';
+import { preprocessTelephone } from '../../../helpers/preprocess-telephone.helper';
 
 @ValidatorConstraint()
 export class IsTelephoneConstraint implements ValidatorConstraintInterface {
@@ -60,6 +61,7 @@ export class OrganisationDto {
   @Validate(IsTelephoneConstraint, {
     message: 'organisations.admin.form.errors.phone.invalid',
   })
+  @Transform(({ value }) => preprocessTelephone(value))
   telephone: string;
 
   confirm?: boolean;
