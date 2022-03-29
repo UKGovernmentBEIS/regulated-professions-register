@@ -10,6 +10,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 - Allow professions to have multiple organisations via a join table
 
+### Changed
+
+- Small revisions to sign in/out text to follow GOV.UK style guidelines
+
 ## [release-013] - 2022-03-29
 
 ### Added
