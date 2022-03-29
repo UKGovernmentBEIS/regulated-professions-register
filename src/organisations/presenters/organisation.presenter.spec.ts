@@ -20,6 +20,7 @@ import { formatEmail } from '../../helpers/format-email.helper';
 import { ProfessionVersionStatus } from '../../professions/profession-version.entity';
 import professionVersionFactory from '../../testutils/factories/profession-version';
 import { OrganisationVersionStatus } from '../organisation-version.entity';
+import { ProfessionToOrganisation } from 'src/professions/profession-to-organisation.entity';
 import { statusOf } from '../../testutils/status-of';
 import { formatStatus } from '../../helpers/format-status.helper';
 import { formatTelephone } from '../../helpers/format-telephone.helper';
@@ -40,21 +41,25 @@ describe('OrganisationPresenter', () => {
         it('returns the table row data', async () => {
           const industries = [industryFactory.build({ name: 'Industry 1' })];
 
-          const professions = professionFactory.buildList(4, {
-            versions: [
-              professionVersionFactory.build({
-                occupationLocations: ['GB-ENG', 'GB-WLS'],
-                industries: [industries[0]],
-                status: ProfessionVersionStatus.Draft,
-              }),
-            ],
-          });
+          const professionToOrganisations = professionFactory
+            .buildList(4, {
+              versions: [
+                professionVersionFactory.build({
+                  occupationLocations: ['GB-ENG', 'GB-WLS'],
+                  industries: [industries[0]],
+                  status: ProfessionVersionStatus.Draft,
+                }),
+              ],
+            })
+            .map((profession) => {
+              return { profession: profession };
+            }) as ProfessionToOrganisation[];
 
           const organisation = organisationFactory.build({
-            professions: professions,
             lastModified: new Date('01-01-2022'),
             changedByUser: userFactory.build({ name: 'beis-rpr' }),
             status: OrganisationVersionStatus.Draft,
+            professionToOrganisations: professionToOrganisations,
           });
 
           (escape as jest.Mock).mockImplementation(escapeOf);
@@ -109,7 +114,7 @@ describe('OrganisationPresenter', () => {
             industryFactory.build({ name: 'industry.3' }),
           ];
 
-          const professions = [
+          const professionToOrganisations = [
             professionFactory.buildList(4, {
               versions: [
                 professionVersionFactory.build({
@@ -128,13 +133,17 @@ describe('OrganisationPresenter', () => {
                 }),
               ],
             }),
-          ].flat();
+          ]
+            .flat()
+            .map((profession) => {
+              return { profession: profession };
+            }) as ProfessionToOrganisation[];
 
           const organisation = organisationFactory.build({
-            professions: professions,
             lastModified: new Date('01-01-2022'),
             changedByUser: userFactory.build({ name: 'beis-rpr' }),
             status: OrganisationVersionStatus.Draft,
+            professionToOrganisations: professionToOrganisations,
           });
           (escape as jest.Mock).mockImplementation(escapeOf);
           (formatStatus as jest.Mock).mockImplementation(statusOf);
