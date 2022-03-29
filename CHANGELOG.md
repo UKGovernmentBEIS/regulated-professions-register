@@ -6,12 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [unreleased]
 
+## [release-013] - 2022-03-29
+
+### Added
+
+- New internal guidance page
+
 ## [release-012] - 2022-03-29
 
 ### Added
 
 - New landing page for central users
-- New internal guidance page
 
 ### Changed
 
@@ -254,7 +259,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fix links in error messages when adding a new profession
 - Make validation errors more human readable
 
-[unreleased]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-012...HEAD
+[unreleased]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-013...HEAD
+[release-013]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release012...release-013
 [release-012]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release011...release-012
 [release-011]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release010...release-011
 [release-010]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release009...release-010
