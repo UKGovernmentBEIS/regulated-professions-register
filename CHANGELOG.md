@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 
 - Telephone numbers are validated on input, and formatted as international numbers on display
+- Remove BEIS contact telephone number, as BEIS won't be providing telephone support
 
 ## [release-011] - 2022-03-25
 
