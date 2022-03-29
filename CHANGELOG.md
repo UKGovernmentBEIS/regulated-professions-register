@@ -37,6 +37,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Remove BEIS contact telephone number, as BEIS won't be providing telephone support
 - Consistent labels for legislation fields
 
+## Added
+
+- Allow professions to have multiple organisations via a join table
+
 ## [release-011] - 2022-03-25
 
 ### Added
