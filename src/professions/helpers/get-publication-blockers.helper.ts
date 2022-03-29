@@ -1,6 +1,7 @@
 import { OrganisationVersionStatus } from '../../organisations/organisation-version.entity';
 import { Organisation } from '../../organisations/organisation.entity';
 import { ProfessionVersion } from '../profession-version.entity';
+import { getOrganisationsFromProfession } from './get-organisations-from-profession.helper';
 
 type Section =
   | 'scope'
@@ -53,11 +54,17 @@ export function getPublicationBlockers(
     blockers.push({ type: 'incomplete-section', section: 'legislation' });
   }
 
-  if (!hasLiveVersion(version.profession.organisation)) {
-    blockers.push({
-      type: 'organisation-not-live',
-      organisation: version.profession.organisation,
-    });
+  const organisations = getOrganisationsFromProfession(version.profession);
+
+  if (organisations?.length) {
+    for (const organisation of organisations) {
+      if (!hasLiveVersion(organisation)) {
+        blockers.push({
+          type: 'organisation-not-live',
+          organisation: organisation,
+        });
+      }
+    }
   }
 
   if (
