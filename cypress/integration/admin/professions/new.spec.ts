@@ -238,11 +238,11 @@ describe('Adding a new profession', () => {
         'Example Profession',
       );
       cy.checkSummaryListRowValue(
-        'professions.form.label.topLevelInformation.regulatedAuthority',
+        'professions.form.label.topLevelInformation.regulatedAuthorities',
         'Department for Education',
       );
       cy.checkSummaryListRowValue(
-        'professions.form.label.topLevelInformation.additionalAuthority',
+        'professions.form.label.topLevelInformation.regulatedAuthorities',
         'General Medical Council',
       );
 

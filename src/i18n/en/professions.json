@@ -49,6 +49,7 @@
     "label": {
       "topLevelInformation": {
         "name": "Name of profession",
+        "regulatedAuthorities": "Authorities regulating this profession",
         "regulatedAuthority": "Main authority regulating this profession",
         "additionalAuthority": "Additional regulator or professional body (optional)"
       },

@@ -18,6 +18,7 @@ import { RegulationType } from '../profession-version.entity';
 import { ProfessionVersionsService } from '../profession-versions.service';
 import { Profession } from '../profession.entity';
 import { CheckYourAnswersController } from './check-your-answers.controller';
+import { ProfessionToOrganisation } from '../profession-to-organisation.entity';
 
 jest.mock('../../users/helpers/check-can-view-profession');
 
@@ -64,9 +65,13 @@ describe('CheckYourAnswersController', () => {
         const profession = professionFactory.build({
           id: 'profession-id',
           name: 'Gas Safe Engineer',
-          organisation: organisationFactory.build({
-            name: 'Council of Gas Registered Engineers',
-          }),
+          professionToOrganisations: [
+            {
+              organisation: organisationFactory.build({
+                name: 'Council of Gas Registered Engineers',
+              }),
+            },
+          ] as ProfessionToOrganisation[],
           slug: null,
         });
 
@@ -113,8 +118,8 @@ describe('CheckYourAnswersController', () => {
         expect(templateParams.industries).toEqual([
           translationOf('industries.construction'),
         ]);
-        expect(templateParams.organisation).toEqual(
-          'Council of Gas Registered Engineers',
+        expect(templateParams.organisations).toEqual(
+          '<p class="govuk-body">Council of Gas Registered Engineers</p>',
         );
         expect(templateParams.registrationRequirements).toEqual('Requirements');
         expect(templateParams.registrationUrl).toEqual(
@@ -163,9 +168,13 @@ describe('CheckYourAnswersController', () => {
           .justCreated('profession-id')
           .build({
             name: 'Gas Safe Engineer',
-            organisation: organisationFactory.build({
-              name: 'Council of Gas Registered Engineers',
-            }),
+            professionToOrganisations: [
+              {
+                organisation: organisationFactory.build({
+                  name: 'Council of Gas Registered Engineers',
+                }),
+              },
+            ] as ProfessionToOrganisation[],
           });
 
         const version = professionVersionFactory
@@ -202,8 +211,8 @@ describe('CheckYourAnswersController', () => {
         expect(templateParams.name).toEqual('Gas Safe Engineer');
         expect(templateParams.nations).toEqual([]);
         expect(templateParams.industries).toEqual([]);
-        expect(templateParams.organisation).toEqual(
-          'Council of Gas Registered Engineers',
+        expect(templateParams.organisations).toEqual(
+          '<p class="govuk-body">Council of Gas Registered Engineers</p>',
         );
         expect(templateParams.registrationRequirements).toEqual(undefined);
         expect(templateParams.registrationUrl).toEqual(undefined);
