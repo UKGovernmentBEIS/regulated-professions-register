@@ -12,6 +12,7 @@ import { ProfessionVersionsService } from './profession-versions.service';
 import { ProfessionsController } from './professions.controller';
 
 import { Organisation } from '../organisations/organisation.entity';
+
 import organisationFactory from '../testutils/factories/organisation';
 import * as getOrganisationsFromProfessionModule from './helpers/get-organisations-from-profession.helper';
 
@@ -80,7 +81,7 @@ describe('ProfessionsController', () => {
           ).summaryList(false, true),
           nations: [translationOf('nations.england')],
           industries: [translationOf('industries.example')],
-          organisations: [profession.organisation],
+          organisations: [profession.professionToOrganisations[0].organisation],
         });
 
         expect(professionVersionsService.findLiveBySlug).toBeCalledWith(
@@ -93,13 +94,18 @@ describe('ProfessionsController', () => {
     describe('when the Profession has an additional Organisation', () => {
       it('should return populated template params', async () => {
         const industry = industryFactory.build({ name: 'industries.example' });
-        const profession = professionFactory.build({
-          id: 'profession-id',
-          name: 'Example Profession',
-          occupationLocations: ['GB-ENG'],
-          industries: [industry],
-          additionalOrganisation: organisationFactory.build(),
-        });
+        const organisation1 = organisationFactory.build();
+        const organisation2 = organisationFactory.build();
+
+        const profession = professionFactory.build(
+          {
+            id: 'profession-id',
+            name: 'Example Profession',
+            occupationLocations: ['GB-ENG'],
+            industries: [industry],
+          },
+          { transient: { organisations: [organisation1, organisation2] } },
+        );
 
         professionVersionsService.findLiveBySlug.mockResolvedValue(profession);
 
@@ -122,10 +128,7 @@ describe('ProfessionsController', () => {
           ).summaryList(false, true),
           nations: [translationOf('nations.england')],
           industries: [translationOf('industries.example')],
-          organisations: [
-            profession.organisation,
-            profession.additionalOrganisation,
-          ],
+          organisations: [organisation1, organisation2],
         });
 
         expect(professionVersionsService.findLiveBySlug).toBeCalledWith(
@@ -207,7 +210,9 @@ describe('ProfessionsController', () => {
             qualificationSummaryList: null,
             nations: [translationOf('nations.england')],
             industries: [translationOf('industries.example')],
-            organisations: [profession.organisation],
+            organisations: [
+              profession.professionToOrganisations[0].organisation,
+            ],
           });
         });
       });

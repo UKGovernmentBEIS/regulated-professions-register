@@ -18,25 +18,31 @@ describe('ListEntryPresenter', () => {
   describe('tableRow', () => {
     describe('when the Profession is complete', () => {
       it('returns a table row when called with `overview`', async () => {
-        const profession = professionFactory.build({
-          name: 'Example Profession',
-          id: 'profession-id',
-          occupationLocations: ['GB-SCT', 'GB-NIR'],
-          organisation: organisationFactory.build({
+        const organisations = [
+          organisationFactory.build({
             name: 'Example Organisation',
           }),
-          additionalOrganisation: organisationFactory.build({
+          organisationFactory.build({
             name: 'Additional Example Organisation',
           }),
-          industries: [
-            industryFactory.build({ name: 'industries.law' }),
-            industryFactory.build({ name: 'industries.finance' }),
-          ],
-          status: ProfessionVersionStatus.Live,
-          changedByUser: userFactory.build({ name: 'Administrator' }),
-          lastModified: new Date('12-08-2003'),
-          versionId: 'version-id',
-        });
+        ];
+
+        const profession = professionFactory.build(
+          {
+            name: 'Example Profession',
+            id: 'profession-id',
+            occupationLocations: ['GB-SCT', 'GB-NIR'],
+            industries: [
+              industryFactory.build({ name: 'industries.law' }),
+              industryFactory.build({ name: 'industries.finance' }),
+            ],
+            status: ProfessionVersionStatus.Live,
+            changedByUser: userFactory.build({ name: 'Administrator' }),
+            lastModified: new Date('12-08-2003'),
+            versionId: 'version-id',
+          },
+          { transient: { organisations: organisations } },
+        );
 
         (ProfessionPresenter as jest.Mock).mockReturnValue({
           changedBy: 'Administrator',
