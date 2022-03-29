@@ -27,6 +27,9 @@ export default class QualificationPresenter {
   readonly adminSelectedOtherCountriesRecognitionRoutes =
     this.qualification && this.qualification.otherCountriesRecognitionRoutes;
 
+  readonly publicOtherCountriesRecognitionRoutes =
+    this.qualification && this.qualification.otherCountriesRecognitionRoutes;
+
   readonly otherCountriesRecognitionSummary =
     this.qualification && this.qualification.otherCountriesRecognitionSummary;
 
@@ -77,8 +80,18 @@ export default class QualificationPresenter {
       }
     }
 
-    // Only show this on the admin page until we've decided on the best way to present this to public users
-    if (showEmptyFields) {
+    if (showEmptyFields || this.publicOtherCountriesRecognitionRoutes) {
+      await this.addTextRow(
+        summaryList,
+        'professions.show.qualification.otherCountriesRecognition.routes.label',
+        this.publicOtherCountriesRecognitionRoutes &&
+          (await this.i18nService.translate(
+            `professions.show.qualification.otherCountriesRecognition.routes.${this.publicOtherCountriesRecognitionRoutes}`,
+          )),
+      );
+    }
+
+    if (showEmptyFields || this.otherCountriesRecognitionSummary) {
       await this.addTextRow(
         summaryList,
         'professions.show.qualification.otherCountriesRecognition.summary',
@@ -86,8 +99,7 @@ export default class QualificationPresenter {
       );
     }
 
-    // Only show this on the admin page until we've decided on the best way to present this to public users
-    if (showEmptyFields) {
+    if (showEmptyFields || this.otherCountriesRecognitionUrl) {
       await this.addHtmlRow(
         summaryList,
         'professions.show.qualification.otherCountriesRecognition.url',

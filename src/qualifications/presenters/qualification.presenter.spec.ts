@@ -88,6 +88,43 @@ describe(QualificationPresenter, () => {
       });
     });
 
+    describe('publicOtherCountriesRecognitionRoutes', () => {
+      describe('when other routes are set', () => {
+        it('returns a localisation id with the route', () => {
+          const qualification = qualificationFactory.build({
+            otherCountriesRecognitionRoutes:
+              OtherCountriesRecognitionRoutes.All,
+          });
+
+          const presenter = new QualificationPresenter(
+            qualification,
+            createMockI18nService(),
+          );
+
+          expect(presenter.publicOtherCountriesRecognitionRoutes).toEqual(
+            OtherCountriesRecognitionRoutes.All,
+          );
+        });
+      });
+
+      describe('when other countries routes are not set', () => {
+        it('returns null', () => {
+          const qualification = qualificationFactory.build({
+            otherCountriesRecognitionRoutes: null,
+          });
+
+          const presenter = new QualificationPresenter(
+            qualification,
+            createMockI18nService(),
+          );
+
+          expect(
+            presenter.adminSelectedOtherCountriesRecognitionRoutes,
+          ).toEqual(null);
+        });
+      });
+    });
+
     describe('ukRecognitionUrl', () => {
       it('returns a link', () => {
         (formatLink as jest.Mock).mockImplementation(linkOf);
@@ -146,6 +183,18 @@ describe(QualificationPresenter, () => {
                   },
                   value: {
                     html: presenter.moreInformationUrl,
+                  },
+                },
+                {
+                  key: {
+                    text: translationOf(
+                      'professions.show.qualification.otherCountriesRecognition.routes.label',
+                    ),
+                  },
+                  value: {
+                    text: translationOf(
+                      `professions.show.qualification.otherCountriesRecognition.routes.${presenter.publicOtherCountriesRecognitionRoutes}`,
+                    ),
                   },
                 },
                 {
@@ -237,6 +286,18 @@ describe(QualificationPresenter, () => {
                 {
                   key: {
                     text: translationOf(
+                      'professions.show.qualification.otherCountriesRecognition.routes.label',
+                    ),
+                  },
+                  value: {
+                    text: translationOf(
+                      `professions.show.qualification.otherCountriesRecognition.routes.${presenter.publicOtherCountriesRecognitionRoutes}`,
+                    ),
+                  },
+                },
+                {
+                  key: {
+                    text: translationOf(
                       'professions.show.qualification.otherCountriesRecognition.summary',
                     ),
                   },
@@ -305,6 +366,18 @@ describe(QualificationPresenter, () => {
                 {
                   key: {
                     text: translationOf(
+                      'professions.show.qualification.otherCountriesRecognition.routes.label',
+                    ),
+                  },
+                  value: {
+                    text: translationOf(
+                      `professions.show.qualification.otherCountriesRecognition.routes.${presenter.publicOtherCountriesRecognitionRoutes}`,
+                    ),
+                  },
+                },
+                {
+                  key: {
+                    text: translationOf(
                       'professions.show.qualification.otherCountriesRecognition.summary',
                     ),
                   },
@@ -357,6 +430,18 @@ describe(QualificationPresenter, () => {
                     html: presenter.routesToObtain,
                   },
                 },
+                {
+                  key: {
+                    text: translationOf(
+                      'professions.show.qualification.otherCountriesRecognition.routes.label',
+                    ),
+                  },
+                  value: {
+                    text: translationOf(
+                      `professions.show.qualification.otherCountriesRecognition.routes.${presenter.publicOtherCountriesRecognitionRoutes}`,
+                    ),
+                  },
+                },
               ],
             });
           });
@@ -380,6 +465,7 @@ describe(QualificationPresenter, () => {
           ukRecognition: undefined,
           ukRecognitionUrl: linkOf(undefined),
           adminSelectedOtherCountriesRecognitionRoutes: undefined,
+          publicOtherCountriesRecognitionRoutes: undefined,
           otherCountriesRecognitionSummary: undefined,
           otherCountriesRecognitionUrl: linkOf(undefined),
         }),
