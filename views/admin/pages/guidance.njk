@@ -1,0 +1,42 @@
+{% extends "../base.njk" %}
+
+{% set bodyClasses = "rpr-internal__page" %}
+
+{% set title = "Guidance for regulators" %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">{{ title }}</h1>
+      <p class="govuk-body">This is guidance on how to edit, save and publish changes in the Regulated Professions Register.<p>
+      <p class="govuk-body">If you need help on what information to include in an entry, you should refer to the hint text under each field.</p>
+
+      <h2 class="govuk-heading-l">Editing an existing profession</h2>
+      <p class="govuk-body">From the regulated professions page, select the profession you want to edit by clicking 'view details'.</p>
+      <p class="govuk-body">Click 'edit this profession' to begin changing the entry.</p>
+      <p class="govuk-body">Editing a profession will not remove it from the public site - it just allows you to create a new draft in the background. You can continue editing this draft until you’re ready to publish it.</p>
+      <p class="govuk-body">After you have chosen a section to edit, make your changes and click 'continue'.</p>
+      <p class="govuk-body"><strong>Remember to click 'save as draft' each time you make a change.</strong></p>
+      <p class="govuk-body">Once you've saved your draft, you (or anyone else in your organisation with editing rights) can return to the amended version at any time to continue editing.</p>
+
+      
+      <h2 class="govuk-heading-l">Publishing your changes</h2>
+      <p class="govuk-body">When you're ready for the public to see the changes you've made, click 'publish'. Your draft will overwrite the existing version on the public site.</p>
+
+      <h2 class="govuk-heading-l">How to write a good entry</h2>
+      <p class="govuk-body">Try to keep the information you add to the RPR as succinct as possible.</p>
+      <p class="govuk-body">Users will find it more useful if your entries are concise and address each section clearly. If you're not sure what to write, follow the hint text underneath each question.</p>
+      <p class="govuk-body">Most sections on your profession's page will only need to be a few words long.</p>
+      <p class="govuk-body">Where possible, use line breaks and paragraphs to break up blocks of text. Try to:</p>
+
+      <ul class="govuk-list govuk-list--bullet">
+      <li>keep sentences to no more than 20 words</li>
+      <li>keep paragraphs to no more than two sentences</li>
+      <li>use bulleted lists instead of sentences if you are describing multiple items</li>
+      </ul>
+
+      <p class="govuk-body">If there are opportunities to write more, such as in the regulation introduction, try to limit your answer to a few paragraphs.</p>
+      <p class="govuk-body">Don't forget to include links to relevant sections of your organisation's website. This will give users somewhere to go for more information.</p>
+  </div>
+</div>
+{% endblock %}
