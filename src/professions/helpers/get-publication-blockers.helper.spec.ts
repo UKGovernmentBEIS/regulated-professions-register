@@ -227,6 +227,32 @@ describe('getPublicationBlockers', () => {
     });
   });
 
+  describe('when given a ProfessionVersion with a qualification without other countries routes to recognition', () => {
+    it('returns the "qualifications" publish blocker', () => {
+      const version = professionVersionFactory.build({
+        profession: professionFactory.build({
+          organisation: organisationFactory.build({
+            versions: [
+              organisationVersionFactory.build({
+                status: OrganisationVersionStatus.Live,
+              }),
+            ],
+          }),
+        }),
+        qualification: {
+          otherCountriesRecognitionRoutes: null,
+        },
+      });
+
+      expect(getPublicationBlockers(version)).toEqual([
+        {
+          type: 'incomplete-section',
+          section: 'qualifications',
+        },
+      ] as PublicationBlocker[]);
+    });
+  });
+
   describe('when given a ProfessionVersion with an undefined legislations', () => {
     it('returns the "legislation" publish blocker', () => {
       const version = professionVersionFactory.build({

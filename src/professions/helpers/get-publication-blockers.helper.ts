@@ -42,7 +42,10 @@ export function getPublicationBlockers(
     });
   }
 
-  if (!version.qualification?.routesToObtain) {
+  if (
+    !version.qualification?.routesToObtain ||
+    !version.qualification?.otherCountriesRecognitionRoutes
+  ) {
     blockers.push({ type: 'incomplete-section', section: 'qualifications' });
   }
 
