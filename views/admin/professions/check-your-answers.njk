@@ -363,7 +363,7 @@
               rows: [
                 {
                   key: {
-                    html: (("professions.form.label.legislation.nationalLegislation" | t) if loop.index === 1 else ("professions.form.label.legislation.optionalNationalLegislation" | t)) + "<span class=\"govuk-visually-hidden\"> " + loop.index + "</span>"
+                    text: ("professions.form.label.legislation.nationalLegislation" | t) if loop.index === 1 else ("professions.form.label.legislation.secondNationalLegislation" | t)
                   },
                   value: {
                     text: legislation.name | multiline
@@ -380,7 +380,7 @@
                 },
                 {
                   key: {
-                    html: ("professions.form.label.legislation.link" | t) + "<span class=\"govuk-visually-hidden\"> " + loop.index + "</span>"
+                    text: ("professions.form.label.legislation.link" | t) if loop.index === 1 else ("professions.form.label.legislation.secondLink" | t)
                   },
                   value: {
                     html: legislation.url | link

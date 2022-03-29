@@ -73,7 +73,6 @@
       },
       "legislation": {
         "nationalLegislation": "Title of relevant act or charter",
-        "optionalNationalLegislation": "Legislation title (optional)",
         "link": "Website link to legislation (optional)",
         "secondNationalLegislation": "Title of other act or charter (optional)",
         "secondLink": "Website link to other legislation (optional)"
@@ -143,13 +142,13 @@
       },
       "legislation": {
         "nationalLegislation": {
-          "empty": "Enter the national legislation"
+          "empty": "Enter the act or charter"
         },
         "link": {
           "invalid": "Enter a valid link to the legislation"
         },
         "secondNationalLegislation": {
-          "empty": "Enter a second national legislation"
+          "empty": "Enter a second act or charter, or remove the second legislation link"
         },
         "secondLink": {
           "invalid": "Enter a valid link to the legislation"
@@ -194,8 +193,8 @@
     },
     "legislation": {
       "heading": "Legislation",
-      "nationalLegislation": "National legislation",
-      "legislationLink": "Legislation link",
+      "nationalLegislation": "Title of relevant act or charter",
+      "link": "Website link to legislation",
       "secondNationalLegislation": "Title of other act or charter",
       "secondLink": "Website link to other legislation"
     }

@@ -188,14 +188,14 @@
 
 {% for legislation in ((profession.legislations | pad(2)) if showEmptyProfessionDetails else profession.legislations) %}
   {% set legislationLocalisationId = "professions.show.legislation.secondNationalLegislation" if (showEmptyProfessionDetails and loop.index > 1) else "professions.show.legislation.nationalLegislation" %}
-  {% set legislationLinkLocalisationId = "professions.show.legislation.secondLink" if (showEmptyProfessionDetails and loop.index > 1) else "professions.show.legislation.legislationLink" %}
+  {% set legislationLinkLocalisationId = "professions.show.legislation.secondLink" if (showEmptyProfessionDetails and loop.index > 1) else "professions.show.legislation.link" %}
 
   {{ govukSummaryList({
     classes: 'govuk-summary-list--no-border',
     rows: [
       {
         key: {
-          html: (legislationLocalisationId | t) + "<span class=\"govuk-visually-hidden\"> " + loop.index + "</span>"
+          text: legislationLocalisationId | t
         },
         value: {
           html: legislation.name | multiline
@@ -203,7 +203,7 @@
       },
       {
         key: {
-          html: (legislationLinkLocalisationId | t) + "<span class=\"govuk-visually-hidden\"> " + loop.index + "</span>"
+          text: legislationLinkLocalisationId | t
         },
         value: {
           html: legislation.url | link
