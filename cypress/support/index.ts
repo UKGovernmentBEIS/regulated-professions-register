@@ -72,6 +72,7 @@ declare global {
       checkPublishNotBlocked(): Chainable<string>;
       visitAndCheckAccessibility(url: string): void;
       checkAccessibility(rules?: AxeRules): void;
+      visitInternalDashboard(): void;
     }
   }
 }

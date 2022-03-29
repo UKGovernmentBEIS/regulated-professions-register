@@ -4,7 +4,7 @@ describe('Editing organisations', () => {
   context('When I am logged in as an editor', () => {
     beforeEach(() => {
       cy.loginAuth0('editor');
-      cy.visitAndCheckAccessibility('/admin');
+      cy.visitInternalDashboard();
 
       cy.get('a').contains('Regulatory authorities').click();
       cy.checkAccessibility();

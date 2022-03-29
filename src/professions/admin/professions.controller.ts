@@ -75,7 +75,7 @@ export class ProfessionsController {
     UserPermission.PublishProfession,
   )
   @Render('admin/professions/index')
-  @BackLink('/admin')
+  @BackLink('/admin/dashboard')
   async index(
     @Req() request: RequestWithAppSession,
     @Query() query: FilterDto = null,

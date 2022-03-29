@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [unreleased]
 
+### Added
+
+- New landing page for central users
+
 ### Changed
 
 - Telephone numbers are validated on input, and formatted as international numbers on display

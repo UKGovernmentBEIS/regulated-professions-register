@@ -4,7 +4,7 @@ describe('Publishing organisations', () => {
   context('When I am logged in as an editor', () => {
     beforeEach(() => {
       cy.loginAuth0('editor');
-      cy.visitAndCheckAccessibility('/admin');
+      cy.visitInternalDashboard();
     });
 
     it('Allows me to publish an existing draft organisation from the organisation page', () => {
@@ -241,7 +241,7 @@ describe('Publishing organisations', () => {
     describe('publishing a brand new profession', () => {
       beforeEach(() => {
         cy.loginAuth0('registrar');
-        cy.visitAndCheckAccessibility('/admin');
+        cy.visitInternalDashboard();
       });
       it('allows me to create and publish a brand new organisation from the check your answers page', () => {
         cy.get('a').contains('Regulatory authorities').click();

@@ -324,3 +324,7 @@ Cypress.Commands.add('checkAccessibility', (rules: AxeRules = undefined) => {
 
   cy.checkA11y({ exclude: [['#phase-banner-container']] }, { rules: rules });
 });
+
+Cypress.Commands.add('visitInternalDashboard', () => {
+  cy.visitAndCheckAccessibility('/admin/dashboard');
+});

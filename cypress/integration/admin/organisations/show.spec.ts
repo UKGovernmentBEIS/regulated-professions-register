@@ -2,7 +2,7 @@ describe('Showing organisations', () => {
   context('When I am logged in as an editor', () => {
     beforeEach(() => {
       cy.loginAuth0('editor');
-      cy.visitAndCheckAccessibility('/admin');
+      cy.visitInternalDashboard();
     });
 
     it('Shows the detail of an organisation, with its professions and a link to the admin profession page', () => {

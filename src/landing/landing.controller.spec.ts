@@ -13,7 +13,7 @@ describe('LandingController', () => {
   });
 
   describe('index', () => {
-    it('return without error', () => {
+    it('returns without error', () => {
       expect(landingController.index()).toEqual(undefined);
     });
   });

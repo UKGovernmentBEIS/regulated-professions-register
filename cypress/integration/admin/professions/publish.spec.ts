@@ -4,7 +4,7 @@ describe('Publishing professions', () => {
   context('When I am logged in as an editor', () => {
     beforeEach(() => {
       cy.loginAuth0('editor');
-      cy.visitAndCheckAccessibility('/admin');
+      cy.visitInternalDashboard();
     });
 
     it('Allows me to publish a draft profession from the profession page', () => {
@@ -328,7 +328,7 @@ describe('Publishing professions', () => {
   context('When I am logged in as a registrar', () => {
     beforeEach(() => {
       cy.loginAuth0('registrar');
-      cy.visitAndCheckAccessibility('/admin');
+      cy.visitInternalDashboard();
     });
 
     it('I can create and publish a new profession from the Check Your Answers page', () => {

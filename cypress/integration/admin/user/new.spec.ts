@@ -12,7 +12,7 @@ describe('Creating a new user', () => {
     });
 
     it('does not allow me to add a user', () => {
-      cy.visitAndCheckAccessibility('/admin');
+      cy.visitInternalDashboard();
 
       cy.translate('users.headings.index').then((userLabel) => {
         cy.get('body').should('not.contain', userLabel);

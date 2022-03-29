@@ -19,7 +19,7 @@ describe('AppController', () => {
     appController = app.get<AppController>(AppController);
   });
 
-  describe('admin', () => {
+  describe('adminDashboard', () => {
     describe('when the user is a service owner', () => {
       it('returns the BEIS user', () => {
         const user = userFactory.build({ serviceOwner: true });
@@ -32,7 +32,7 @@ describe('AppController', () => {
 
         (getActingUser as jest.Mock).mockReturnValue(user);
 
-        expect(appController.admin(request)).toEqual({
+        expect(appController.adminDashboard(request)).toEqual({
           organisation: 'app.beis',
         });
       });
@@ -53,10 +53,16 @@ describe('AppController', () => {
 
         (getActingUser as jest.Mock).mockReturnValue(user);
 
-        expect(appController.admin(request)).toEqual({
+        expect(appController.adminDashboard(request)).toEqual({
           organisation: 'Department for Education',
         });
       });
+    });
+  });
+
+  describe('adminIndex', () => {
+    it('returns without error', () => {
+      expect(appController.adminIndex()).toEqual(undefined);
     });
   });
 
@@ -93,25 +99,25 @@ describe('AppController', () => {
   });
 
   describe('cookies', () => {
-    it('return without error', () => {
+    it('returns without error', () => {
       expect(appController.cookies()).toEqual(undefined);
     });
   });
 
   describe('privacyPolicy', () => {
-    it('return without error', () => {
+    it('returns without error', () => {
       expect(appController.privacyPolicy()).toEqual(undefined);
     });
   });
 
   describe('accessibility', () => {
-    it('return without error', () => {
+    it('returns without error', () => {
       expect(appController.accessibility()).toEqual(undefined);
     });
   });
 
   describe('dataDisclaimer', () => {
-    it('return without error', () => {
+    it('returns without error', () => {
       expect(appController.dataDisclaimer()).toEqual(undefined);
     });
   });
