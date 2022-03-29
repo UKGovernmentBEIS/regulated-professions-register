@@ -66,6 +66,12 @@ describe('AppController', () => {
     });
   });
 
+  describe('adminGuidance', () => {
+    it('returns without error', () => {
+      expect(appController.adminGuidance()).toEqual(undefined);
+    });
+  });
+
   describe('healthCheck', () => {
     const OLD_ENV = process.env;
 

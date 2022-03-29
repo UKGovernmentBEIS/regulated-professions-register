@@ -23,6 +23,12 @@ export class AppController {
     // do nothing.
   }
 
+  @Get('/admin/guidance')
+  @Render('admin/pages/guidance')
+  adminGuidance(): void {
+    // do nothing.
+  }
+
   @Get('/cookies')
   @Render('pages/cookies')
   cookies() {
