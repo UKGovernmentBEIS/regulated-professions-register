@@ -190,10 +190,9 @@ describe('Editing an existing profession', () => {
       cy.translate('app.continue').then((buttonText) => {
         cy.get('button').contains(buttonText).click();
       });
-      cy.checkIndexedSummaryListRowValue(
+      cy.checkSummaryListRowValue(
         'professions.form.label.legislation.nationalLegislation',
         'Updated legislation',
-        1,
       );
 
       cy.clickSummaryListRowChangeLink(
@@ -219,13 +218,12 @@ describe('Editing an existing profession', () => {
         'Updated legislation',
       );
       cy.checkSummaryListRowValue(
-        'professions.form.label.legislation.optionalNationalLegislation',
+        'professions.form.label.legislation.secondNationalLegislation',
         'Second legislation',
       );
-      cy.checkIndexedSummaryListRowValue(
-        'professions.form.label.legislation.link',
+      cy.checkSummaryListRowValue(
+        'professions.form.label.legislation.secondLink',
         'http://www.example.com/legislation',
-        2,
       );
 
       cy.translate('professions.form.button.saveAsDraft').then((buttonText) => {
@@ -493,15 +491,13 @@ describe('Editing an existing profession', () => {
         cy.translate('app.continue').then((buttonText) => {
           cy.get('button').contains(buttonText).click();
         });
-        cy.checkIndexedSummaryListRowValue(
+        cy.checkSummaryListRowValue(
           'professions.form.label.legislation.nationalLegislation',
           'National legislation',
-          1,
         );
-        cy.checkIndexedSummaryListRowValue(
+        cy.checkSummaryListRowValue(
           'professions.form.label.legislation.link',
           'http://www.example.com/legislation',
-          1,
         );
       });
     });
