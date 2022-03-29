@@ -82,7 +82,8 @@
         "editRegulatorsCentralAdmin": "Edit information about regulators",
         "editRegulatorsRegulators": "Edit information about your regulator",
         "manageAccessCentralAdmin": "Manage access to this service",
-        "manageAccessRegulators": "Manage access to this service"
+        "manageAccessRegulators": "Manage access to this service",
+        "guidance": "Guidance for regulators"
       }
     }
   },

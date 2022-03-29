@@ -32,6 +32,17 @@ describe('/', () => {
         cy.get('h1 span').should('contain', beis);
       });
     });
+
+    it('I can visit a guidance page', () => {
+      cy.translate('app.pages.admin.dashboard.guidance').then(
+        (guidanceLabel) => {
+          cy.get('a').contains(guidanceLabel).click();
+        },
+      );
+      cy.checkAccessibility();
+
+      cy.get('body').should('contain', 'Guidance for regulators');
+    });
   });
 
   context('when I am logged in as a non BEIS user', () => {
@@ -43,6 +54,17 @@ describe('/', () => {
     it('shows my name and organisation', () => {
       cy.get('h1').should('contain', 'Organisation Admin');
       cy.get('h1 span').should('contain', 'Department for Education');
+    });
+
+    it('I can visit a guidance page', () => {
+      cy.translate('app.pages.admin.dashboard.guidance').then(
+        (guidanceLabel) => {
+          cy.get('a').contains(guidanceLabel).click();
+        },
+      );
+      cy.checkAccessibility();
+
+      cy.get('body').should('contain', 'Guidance for regulators');
     });
   });
 });
