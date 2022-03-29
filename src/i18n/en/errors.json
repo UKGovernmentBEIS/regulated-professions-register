@@ -8,11 +8,11 @@
   "generic": {
     "heading": "Sorry, there is a problem with the service",
     "message": "Try again later.",
-    "help": "Contact the Registered Professions Register team if you need any additional assistance."
+    "help": "<a href='mailto:RPR@beis.gov.uk' class='govuk-link'>Contact the Registered Professions Register team</a> if you need any additional assistance."
   },
   "not-found": {
     "heading": "Page not found",
     "message": "If you typed the web address, check it is correct. If you pasted the web address, check you copied the entire address. ",
-    "help": "Contact the Registered Professions Register team if you need any additional assistance."
+    "help": "<a href='mailto:RPR@beis.gov.uk' class='govuk-link'>Contact the Registered Professions Register team</a> if you need any additional assistance."
   }
 }
