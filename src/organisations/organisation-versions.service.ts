@@ -121,7 +121,7 @@ export class OrganisationVersionsService {
       .distinctOn([
         'organisationVersion.organisation',
         'organisation.name',
-        'professions.id',
+        'profession.id',
       ])
       .where(
         '(organisationVersion.status IN(:...organisationStatus)) AND (professionVersions.status IN(:...professionStatus) OR professionVersions.status IS NULL)',
@@ -138,7 +138,7 @@ export class OrganisationVersionsService {
         },
       )
       .orderBy(
-        'organisation.name, organisationVersion.organisation, professions.id, professionVersions.created_at, organisationVersion.created_at',
+        'organisation.name, organisationVersion.organisation, profession.id, professionVersions.created_at, organisationVersion.created_at',
         'DESC',
       );
 
@@ -150,7 +150,7 @@ export class OrganisationVersionsService {
       .distinctOn([
         'organisationVersion.organisation',
         'organisation.name',
-        'professions.id',
+        'profession.id',
       ])
       .where(
         '(organisationVersion.status IN(:...organisationStatus)) AND (professionVersions.status IN(:...professionStatus) OR professionVersions.status IS NULL)',
@@ -167,7 +167,7 @@ export class OrganisationVersionsService {
         },
       )
       .orderBy(
-        'organisation.name, organisationVersion.organisation, professions.id, professionVersions.created_at, organisationVersion.created_at',
+        'organisation.name, organisationVersion.organisation, profession.id, professionVersions.created_at, organisationVersion.created_at',
         'DESC',
       )
       .getMany();
@@ -269,7 +269,9 @@ export class OrganisationVersionsService {
         await this.repository.save(liveVersion);
       }
 
-      for (const profession of version.organisation.professions) {
+      for (const professionToOrganisation of version.organisation
+        .professionToOrganisations) {
+        const profession = professionToOrganisation.profession;
         const professionVersion =
           await this.professionVersionsService.latestVersion(profession);
 
@@ -304,8 +306,12 @@ export class OrganisationVersionsService {
       .createQueryBuilder('organisationVersion')
       .leftJoinAndSelect('organisationVersion.organisation', 'organisation')
       .leftJoinAndSelect('organisationVersion.user', 'user')
-      .leftJoinAndSelect('organisation.professions', 'professions')
-      .leftJoinAndSelect('professions.versions', 'professionVersions')
+      .leftJoinAndSelect(
+        'organisation.professionToOrganisations',
+        'professionToOrganisation',
+      )
+      .leftJoinAndSelect('professionToOrganisation.profession', 'profession')
+      .leftJoinAndSelect('profession.versions', 'professionVersions')
       .leftJoinAndSelect('professionVersions.industries', 'industries');
   }
 

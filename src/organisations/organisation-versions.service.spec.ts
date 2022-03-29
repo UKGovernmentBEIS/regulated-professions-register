@@ -30,6 +30,7 @@ import industryFactory from '../testutils/factories/industry';
 import { ProfessionVersionStatus } from '../professions/profession-version.entity';
 import { ProfessionVersionsService } from '../professions/profession-versions.service';
 import { RegulationType } from '../professions/profession-version.entity';
+import { ProfessionToOrganisation } from '../professions/profession-to-organisation.entity';
 
 describe('OrganisationVersionsService', () => {
   let service: OrganisationVersionsService;
@@ -116,21 +117,7 @@ describe('OrganisationVersionsService', () => {
 
       expect(result).toEqual(organisationVersions);
 
-      expect(queryBuilder).toHaveJoined([
-        'organisationVersion.organisation',
-        'organisationVersion.user',
-        'organisation.professions',
-      ]);
-
-      expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
-        'professions.versions',
-        'professionVersions',
-      );
-
-      expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
-        'professionVersions.industries',
-        'industries',
-      );
+      expectJoinsToHaveBeenApplied(queryBuilder);
 
       expect(queryBuilder.getMany).toHaveBeenCalled();
     });
@@ -156,21 +143,7 @@ describe('OrganisationVersionsService', () => {
 
       expect(result).toEqual(organisationVersion);
 
-      expect(queryBuilder).toHaveJoined([
-        'organisationVersion.organisation',
-        'organisationVersion.user',
-        'organisation.professions',
-      ]);
-
-      expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
-        'professions.versions',
-        'professionVersions',
-      );
-
-      expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
-        'professionVersions.industries',
-        'industries',
-      );
+      expectJoinsToHaveBeenApplied(queryBuilder);
 
       expect(queryBuilder.where).toHaveBeenCalledWith({
         organisation: { id: 'org-uuid' },
@@ -278,21 +251,7 @@ describe('OrganisationVersionsService', () => {
 
       expect(result).toEqual(expectedOrganisations);
 
-      expect(queryBuilder).toHaveJoined([
-        'organisationVersion.organisation',
-        'organisationVersion.user',
-        'organisation.professions',
-      ]);
-
-      expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
-        'professions.versions',
-        'professionVersions',
-      );
-
-      expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
-        'professionVersions.industries',
-        'industries',
-      );
+      expectJoinsToHaveBeenApplied(queryBuilder);
 
       expect(queryBuilder.where).toHaveBeenCalledWith(
         'organisationVersion.status = :status',
@@ -328,21 +287,7 @@ describe('OrganisationVersionsService', () => {
 
       expect(result).toEqual(expectedOrganisations);
 
-      expect(queryBuilder).toHaveJoined([
-        'organisationVersion.organisation',
-        'organisationVersion.user',
-        'organisation.professions',
-      ]);
-
-      expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
-        'professions.versions',
-        'professionVersions',
-      );
-
-      expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
-        'professionVersions.industries',
-        'industries',
-      );
+      expectJoinsToHaveBeenApplied(queryBuilder);
 
       expect(queryBuilder.distinctOn).toHaveBeenCalledWith([
         'organisation.name',
@@ -385,26 +330,12 @@ describe('OrganisationVersionsService', () => {
 
       expect(result).toEqual(expectedOrganisations);
 
-      expect(queryBuilder).toHaveJoined([
-        'organisationVersion.organisation',
-        'organisationVersion.user',
-        'organisation.professions',
-      ]);
-
-      expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
-        'professions.versions',
-        'professionVersions',
-      );
-
-      expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
-        'professionVersions.industries',
-        'industries',
-      );
+      expectJoinsToHaveBeenApplied(queryBuilder);
 
       expect(queryBuilder.distinctOn).toHaveBeenCalledWith([
         'organisationVersion.organisation',
         'organisation.name',
-        'professions.id',
+        'profession.id',
       ]);
 
       expect(queryBuilder.where).toHaveBeenCalledWith(
@@ -423,7 +354,7 @@ describe('OrganisationVersionsService', () => {
       );
 
       expect(queryBuilder.orderBy).toHaveBeenCalledWith(
-        'organisation.name, organisationVersion.organisation, professions.id, professionVersions.created_at, organisationVersion.created_at',
+        'organisation.name, organisationVersion.organisation, profession.id, professionVersions.created_at, organisationVersion.created_at',
         'DESC',
       );
     });
@@ -450,21 +381,7 @@ describe('OrganisationVersionsService', () => {
 
       expect(result).toEqual(expectedVersion);
 
-      expect(queryBuilder).toHaveJoined([
-        'organisationVersion.organisation',
-        'organisationVersion.user',
-        'organisation.professions',
-      ]);
-
-      expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
-        'professions.versions',
-        'professionVersions',
-      );
-
-      expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
-        'professionVersions.industries',
-        'industries',
-      );
+      expectJoinsToHaveBeenApplied(queryBuilder);
 
       expect(queryBuilder.where).toHaveBeenCalledWith(
         'organisationVersion.status = :status AND organisation.slug = :slug',
@@ -670,7 +587,7 @@ describe('OrganisationVersionsService', () => {
       const version = organisationVersionFactory.build({
         status: OrganisationVersionStatus.Draft,
         organisation: organisationFactory.build({
-          professions: [],
+          professionToOrganisations: [],
         }),
       });
 
@@ -702,7 +619,7 @@ describe('OrganisationVersionsService', () => {
 
       const organisation = organisationFactory.build({
         versions: [liveVersion],
-        professions: [],
+        professionToOrganisations: [],
       });
 
       const draftVersion = organisationVersionFactory.build({
@@ -769,6 +686,13 @@ describe('OrganisationVersionsService', () => {
 
       const organisation = organisationFactory.build({
         professions: [profession1, profession2, profession3],
+        professionToOrganisations: [
+          {
+            profession: profession1,
+          },
+          { profession: profession2 },
+          { profession: profession3 },
+        ] as ProfessionToOrganisation[],
       });
 
       // Mock the `latestVersion` method to only return a version when one is available
@@ -822,8 +746,8 @@ describe('OrganisationVersionsService', () => {
     const queryBuilder = createMock<SelectQueryBuilder<OrganisationVersion>>({
       leftJoinAndSelect: () => queryBuilder,
       where: () => queryBuilder,
-      andWhere: () => queryBuilder,
       orderBy: () => queryBuilder,
+      andWhere: () => queryBuilder,
       getMany: async () => versions,
     });
 
@@ -848,23 +772,7 @@ describe('OrganisationVersionsService', () => {
 
       expect(result).toEqual(expectedOrgs);
 
-      expect(queryBuilder).toHaveJoined([
-        'organisationVersion.organisation',
-        'organisationVersion.user',
-        'organisation.professions',
-      ]);
-
-      expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
-        'professions.versions',
-        'professionVersions',
-      );
-
-      expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
-        'professionVersions.industries',
-        'industries',
-      );
-
-      expect(queryBuilder.orderBy).toHaveBeenCalledWith('organisation.name');
+      expectJoinsToHaveBeenApplied(queryBuilder);
 
       expect(queryBuilder.where).toHaveBeenCalledWith(
         'organisationVersion.status = :status',
@@ -986,26 +894,12 @@ describe('OrganisationVersionsService', () => {
 
       expect(result).toEqual(expectedOrgs);
 
-      expect(queryBuilder).toHaveJoined([
-        'organisationVersion.organisation',
-        'organisationVersion.user',
-        'organisation.professions',
-      ]);
-
-      expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
-        'professions.versions',
-        'professionVersions',
-      );
-
-      expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
-        'professionVersions.industries',
-        'industries',
-      );
+      expectJoinsToHaveBeenApplied(queryBuilder);
 
       expect(queryBuilder.distinctOn).toHaveBeenCalledWith([
         'organisationVersion.organisation',
         'organisation.name',
-        'professions.id',
+        'profession.id',
       ]);
 
       expect(queryBuilder.where).toHaveBeenCalledWith(
@@ -1024,7 +918,7 @@ describe('OrganisationVersionsService', () => {
       );
 
       expect(queryBuilder.orderBy).toHaveBeenCalledWith(
-        'organisation.name, organisationVersion.organisation, professions.id, professionVersions.created_at, organisationVersion.created_at',
+        'organisation.name, organisationVersion.organisation, profession.id, professionVersions.created_at, organisationVersion.created_at',
         'DESC',
       );
     });
@@ -1165,4 +1059,36 @@ describe('OrganisationVersionsService', () => {
   afterEach(() => {
     jest.restoreAllMocks();
   });
+
+  const expectJoinsToHaveBeenApplied = (queryBuilder: any) => {
+    expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
+      'organisationVersion.organisation',
+      'organisation',
+    );
+
+    expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
+      'organisationVersion.user',
+      'user',
+    );
+
+    expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
+      'organisation.professionToOrganisations',
+      'professionToOrganisation',
+    );
+
+    expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
+      'professionToOrganisation.profession',
+      'profession',
+    );
+
+    expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
+      'profession.versions',
+      'professionVersions',
+    );
+
+    expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
+      'professionVersions.industries',
+      'industries',
+    );
+  };
 });
