@@ -102,11 +102,16 @@ describe('TopLevelInformationController', () => {
           id: 'example-org-id-2',
         });
 
-        const profession = professionFactory.build({
-          name: 'Example Profession',
-          organisation: organisation,
-          additionalOrganisation: additionalOrganisation,
-        });
+        const profession = professionFactory.build(
+          {
+            name: 'Example Profession',
+          },
+          {
+            transient: {
+              organisations: [organisation, additionalOrganisation],
+            },
+          },
+        );
 
         professionsService.findWithVersions.mockResolvedValue(profession);
 
