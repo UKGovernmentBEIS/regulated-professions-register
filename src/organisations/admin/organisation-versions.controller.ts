@@ -20,6 +20,7 @@ import { OrganisationVersionsService } from '../organisation-versions.service';
 import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
 
 import { Organisation } from '../organisation.entity';
+import { Profession } from '../../professions/profession.entity';
 
 import { ShowTemplate } from './interfaces/show-template.interface';
 
@@ -28,6 +29,7 @@ import { Permissions } from '../../common/permissions.decorator';
 import { UserPermission } from '../../users/user-permission';
 
 import { getActingUser } from '../../users/helpers/get-acting-user.helper';
+import { getProfessionsFromOrganisation } from '../helpers/get-professions-from-organisation.helper';
 import { checkCanViewOrganisation } from '../../users/helpers/check-can-view-organisation';
 
 @UseGuards(AuthenticationGuard)
@@ -87,6 +89,10 @@ export class OrganisationVersionsController {
       true,
     );
 
+    const professions = getProfessionsFromOrganisation(organisation)
+      .map((profession) => Profession.withLatestLiveOrDraftVersion(profession))
+      .filter((n) => n);
+
     checkCanViewOrganisation(req, organisation);
 
     const hasLiveVersion =
@@ -94,6 +100,7 @@ export class OrganisationVersionsController {
 
     const organisationSummaryPresenter = new OrganisationSummaryPresenter(
       organisation,
+      professions,
       this.i18nService,
     );
 
