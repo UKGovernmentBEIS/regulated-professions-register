@@ -41,6 +41,9 @@
         "moreInformationUrl": "Website link to more information",
         "ukRecognition": "Routes for professionals who practise a corresponding profession that is regulated differently in other parts of the UK",
         "ukRecognitionUrl": "Website link to more information"
+      },
+      "legislation": {
+        "link": "Link to relevant page on legislation.gov.uk"
       }
     },
     "label": {
