@@ -2,7 +2,7 @@
   "forbidden": {
     "heading": "You have not been authorized to see this page",
     "message": "Whilst you have successfully signed in you have not been authorised to see this page.",
-    "resolution": "Please try <a href='/login' class='govuk-link'>logging in</a> again.",
+    "resolution": "Please try <a href='/login' class='govuk-link'>signing in</a> again.",
     "help": "If you believe this to be in error, please contact the person who invited you to the service."
   },
   "generic": {
