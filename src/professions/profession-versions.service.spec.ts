@@ -471,8 +471,8 @@ describe('ProfessionVersionsService', () => {
       expect(queryBuilder).toHaveJoined([
         'professionVersion.profession',
         'professionVersion.industries',
-        'profession.organisation',
-        'profession.additionalOrganisation',
+        'profession.professionToOrganisations',
+        'professionToOrganisations.organisation',
         'professionVersion.user',
         'professionVersion.qualification',
         'professionVersion.legislations',
@@ -513,13 +513,14 @@ describe('ProfessionVersionsService', () => {
 
       expect(queryBuilder.distinctOn).toHaveBeenCalledWith([
         'professionVersion.profession',
+        'organisation.name',
         'profession.name',
       ]);
 
       expect(queryBuilder).toHaveJoined([
         'professionVersion.profession',
-        'profession.organisation',
-        'profession.additionalOrganisation',
+        'profession.professionToOrganisations',
+        'professionToOrganisations.organisation',
         'professionVersion.industries',
         'professionVersion.user',
         'professionVersion.qualification',
@@ -538,7 +539,7 @@ describe('ProfessionVersionsService', () => {
       );
 
       expect(queryBuilder.orderBy).toHaveBeenCalledWith(
-        'profession.name, professionVersion.profession, professionVersion.created_at',
+        'profession.name, organisation.name, professionVersion.profession, professionVersion.created_at',
         'DESC',
       );
     });
@@ -574,13 +575,14 @@ describe('ProfessionVersionsService', () => {
 
       expect(queryBuilder.distinctOn).toHaveBeenCalledWith([
         'professionVersion.profession',
+        'organisation.name',
         'profession.name',
       ]);
 
       expect(queryBuilder).toHaveJoined([
         'professionVersion.profession',
-        'profession.organisation',
-        'profession.additionalOrganisation',
+        'profession.professionToOrganisations',
+        'professionToOrganisations.organisation',
         'professionVersion.industries',
         'professionVersion.user',
         'professionVersion.qualification',
@@ -606,7 +608,7 @@ describe('ProfessionVersionsService', () => {
       );
 
       expect(queryBuilder.orderBy).toHaveBeenCalledWith(
-        'profession.name, professionVersion.profession, professionVersion.created_at',
+        'profession.name, organisation.name, professionVersion.profession, professionVersion.created_at',
         'DESC',
       );
     });
@@ -641,8 +643,8 @@ describe('ProfessionVersionsService', () => {
 
       expect(queryBuilder).toHaveJoined([
         'professionVersion.profession',
-        'profession.organisation',
-        'profession.additionalOrganisation',
+        'profession.professionToOrganisations',
+        'professionToOrganisations.organisation',
         'professionVersion.industries',
         'professionVersion.user',
         'professionVersion.qualification',
@@ -691,8 +693,8 @@ describe('ProfessionVersionsService', () => {
       expect(queryBuilder).toHaveJoined([
         'professionVersion.profession',
         'professionVersion.industries',
-        'profession.organisation',
-        'profession.additionalOrganisation',
+        'profession.professionToOrganisations',
+        'professionToOrganisations.organisation',
         'professionVersion.user',
         'professionVersion.qualification',
         'professionVersion.legislations',
@@ -701,11 +703,6 @@ describe('ProfessionVersionsService', () => {
       expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
         'organisation.versions',
         'organisationVersions',
-      );
-
-      expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
-        'additionalOrganisation.versions',
-        'additionalOrganisationVersions',
       );
 
       expect(queryBuilder.where).toHaveBeenCalledWith(
@@ -813,8 +810,8 @@ describe('ProfessionVersionsService', () => {
       expect(queryBuilder).toHaveJoined([
         'professionVersion.profession',
         'professionVersion.industries',
-        'profession.organisation',
-        'profession.additionalOrganisation',
+        'profession.professionToOrganisations',
+        'professionToOrganisations.organisation',
         'professionVersion.user',
         'professionVersion.qualification',
         'professionVersion.legislations',
@@ -823,11 +820,6 @@ describe('ProfessionVersionsService', () => {
       expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
         'organisation.versions',
         'organisationVersions',
-      );
-
-      expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
-        'additionalOrganisation.versions',
-        'additionalOrganisationVersions',
       );
 
       expect(queryBuilder.where).toHaveBeenCalledWith({
@@ -870,8 +862,8 @@ describe('ProfessionVersionsService', () => {
       expect(queryBuilder).toHaveJoined([
         'professionVersion.profession',
         'professionVersion.industries',
-        'profession.organisation',
-        'profession.additionalOrganisation',
+        'profession.professionToOrganisations',
+        'professionToOrganisations.organisation',
         'professionVersion.user',
         'professionVersion.qualification',
         'professionVersion.legislations',

@@ -105,7 +105,12 @@ describe('Profession', () => {
         profession,
       );
       expect(repoSpy).toHaveBeenCalledWith('profession-id', {
-        relations: ['versions'],
+        relations: [
+          'versions',
+          'professionToOrganisations',
+          'professionToOrganisations.organisation',
+          'professionToOrganisations.profession',
+        ],
       });
     });
   });
