@@ -5,7 +5,7 @@ need a way to access live environments for debugging or incident management purp
 
 ## Prerequisites
 
-You must have an account that has been invited to the Government Platform as a Service (GPaaS) account. Developers from the product team should be able to invite you.
+You must have an account that has been invited to the Government Platform as a Service (GPaaS) account. Developers from the product team should be able to invite you. dxw team members can use the credentials stored in 1Password under `GOV.UK PaaS Service Account`.
 
 You must have have been given 'Space developer' access to the intended space, for example "prod".
 
