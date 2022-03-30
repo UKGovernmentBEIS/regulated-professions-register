@@ -29,7 +29,10 @@ import { I18nService } from 'nestjs-i18n';
 import { OrganisationVersionsService } from '../../organisations/organisation-versions.service';
 import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
 import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
-
+import {
+  ProfessionToOrganisation,
+  OrganisationRole,
+} from '../profession-to-organisation.entity';
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
 export class TopLevelInformationController {
@@ -102,12 +105,29 @@ export class TopLevelInformationController {
       ? await this.organisationsService.find(submittedValues.regulatoryBody)
       : null;
 
-    const selectedAdditionalOrganisation =
-      submittedValues.additionalRegulatoryBody
-        ? await this.organisationsService.find(
-            submittedValues.additionalRegulatoryBody,
-          )
-        : null;
+    const professionToOrganisations = [
+      new ProfessionToOrganisation(
+        selectedOrganisation,
+        profession,
+        OrganisationRole.PrimaryRegulator,
+      ),
+    ];
+
+    let selectedAdditionalOrganisation = null;
+
+    if (submittedValues.additionalRegulatoryBody) {
+      selectedAdditionalOrganisation = await this.organisationsService.find(
+        submittedValues.additionalRegulatoryBody,
+      );
+
+      professionToOrganisations.push(
+        new ProfessionToOrganisation(
+          selectedAdditionalOrganisation,
+          profession,
+          OrganisationRole.PrimaryRegulator,
+        ),
+      );
+    }
 
     if (!validator.valid()) {
       const errors = new ValidationFailedError(validator.errors).fullMessages();
@@ -128,6 +148,7 @@ export class TopLevelInformationController {
         name: submittedValues.name,
         organisation: selectedOrganisation,
         additionalOrganisation: selectedAdditionalOrganisation,
+        professionToOrganisations: professionToOrganisations,
       },
     };
 

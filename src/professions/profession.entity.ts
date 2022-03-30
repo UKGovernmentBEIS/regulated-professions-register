@@ -19,6 +19,7 @@ import {
   ProfessionVersionStatus,
   RegulationType,
 } from './profession-version.entity';
+import { ProfessionToOrganisation } from './profession-to-organisation.entity';
 
 @Entity({ name: 'professions' })
 export class Profession {
@@ -32,6 +33,13 @@ export class Profession {
     eager: true,
   })
   organisation: Organisation;
+
+  @OneToMany(
+    () => ProfessionToOrganisation,
+    (professionToOrganisation) => professionToOrganisation.profession,
+    { cascade: true },
+  )
+  professionToOrganisations!: ProfessionToOrganisation[];
 
   @ManyToOne(() => Organisation, { eager: true })
   @JoinColumn()

@@ -19,13 +19,7 @@ npm run seed:refresh
 ## Production/Staging
 
 Sometimes it will be necessary to seed data in the production/staging environment. To do this, you
-will need to SSH into the application like so (assuming you're logged in GOV.UK PaaS):
-
-```bash
-cf ssh beis-rpr-staging
-# Or
-cf ssh beis-rpr-prod
-```
+will need to [run a live console](./accessing-a-live-console.md).
 
 Once you're logged in, you can run:
 
@@ -33,8 +27,6 @@ Once you're logged in, you can run:
 cd /srv/app
 script/seed
 ```
-
-At the moment, we only seed intiial staging / production users, but this may change in future.
 
 ## Anatomy of a seeder
 

@@ -7,3 +7,5 @@
 - [Database models](./database-models.md)
 - [Background jobs and emails](./background-jobs-and-emails.md)
 - [Database seeds](./seeds.md)
+- [Data migrations](./data-migrations.md)
+- [Accessing a live console](./accessing-a-live-console.md)

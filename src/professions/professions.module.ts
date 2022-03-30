@@ -10,6 +10,7 @@ import { CheckYourAnswersController } from './admin/check-your-answers.controlle
 import { ConfirmationController } from './admin/confirmation.controller';
 import { SearchController } from './search/search.controller';
 import { Organisation } from '../organisations/organisation.entity';
+import { ProfessionToOrganisation } from '../professions/profession-to-organisation.entity';
 import { OrganisationsService } from '../organisations/organisations.service';
 import { RegulatedActivitiesController } from './admin/regulated-activities.controller';
 import { ProfessionsController as AdminProfessionsController } from './admin/professions.controller';
@@ -34,6 +35,7 @@ import { SearchModule } from '../search/search.module';
     TypeOrmModule.forFeature([Industry]),
     TypeOrmModule.forFeature([Organisation]),
     TypeOrmModule.forFeature([OrganisationVersion]),
+    TypeOrmModule.forFeature([ProfessionToOrganisation]),
     SearchModule.register(),
   ],
   providers: [
