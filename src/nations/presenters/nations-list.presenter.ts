@@ -7,6 +7,20 @@ export class NationsListPresenter {
     private readonly i18nService: I18nService,
   ) {}
 
+  async htmlList(): Promise<string> {
+    if (this.all()) {
+      return this.i18nService.translate('app.unitedKingdom');
+    } else {
+      const translatedNations = await this.translatedNations();
+
+      return translatedNations.length > 0
+        ? `<ul class="govuk-list"><li>${translatedNations.join(
+            '</li><li>',
+          )}</li></ul>`
+        : '';
+    }
+  }
+
   async textList(): Promise<string> {
     if (this.all()) {
       return this.i18nService.translate('app.unitedKingdom');
