@@ -4,7 +4,7 @@ import { PublicationBlocker } from '../../helpers/get-publication-blockers.helpe
 import { RegulationType } from '../../profession-version.entity';
 export interface CheckYourAnswersTemplate {
   name: string;
-  nations: string[];
+  nations: string;
   industries: string[];
   professionId: string;
   versionId: string;

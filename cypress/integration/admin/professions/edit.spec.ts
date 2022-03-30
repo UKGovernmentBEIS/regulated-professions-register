@@ -47,17 +47,8 @@ describe('Editing an existing profession', () => {
         'Law Society of England and Wales',
       );
 
-      cy.translate('nations.england').then((england) => {
-        cy.translate('nations.scotland').then((scotland) => {
-          cy.translate('nations.wales').then((wales) => {
-            cy.translate('nations.northernIreland').then((northernIreland) => {
-              cy.checkSummaryListRowList(
-                'professions.form.label.scope.nations',
-                [england, scotland, wales, northernIreland],
-              );
-            });
-          });
-        });
+      cy.translate('app.unitedKingdom').then((uk) => {
+        cy.checkSummaryListRowValue('professions.form.label.scope.nations', uk);
       });
 
       cy.checkSummaryListRowValue(
@@ -358,17 +349,8 @@ describe('Editing an existing profession', () => {
         cy.get('button').contains(buttonText).click();
       });
 
-      cy.translate('nations.england').then((england) => {
-        cy.translate('nations.scotland').then((scotland) => {
-          cy.translate('nations.wales').then((wales) => {
-            cy.translate('nations.northernIreland').then((northernIreland) => {
-              cy.checkSummaryListRowList(
-                'professions.form.label.scope.nations',
-                [england, scotland, wales, northernIreland],
-              );
-            });
-          });
-        });
+      cy.translate('app.unitedKingdom').then((uk) => {
+        cy.checkSummaryListRowValue('professions.form.label.scope.nations', uk);
       });
     });
 

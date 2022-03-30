@@ -27,6 +27,7 @@ import { checkCanViewProfession } from '../../users/helpers/check-can-view-profe
 import { getPublicationBlockers } from '../helpers/get-publication-blockers.helper';
 import { Profession } from '../profession.entity';
 import { getOrganisationsFromProfession } from '../helpers/get-organisations-from-profession.helper';
+import { NationsListPresenter } from '../../nations/presenters/nations-list.presenter';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
@@ -65,10 +66,9 @@ export class CheckYourAnswersController {
       ),
     );
 
-    const selectedNations: string[] = await Promise.all(
-      (version.occupationLocations || []).map(async (nationCode) =>
-        Nation.find(nationCode).translatedName(this.i18nService),
-      ),
+    const nations = new NationsListPresenter(
+      (version.occupationLocations || []).map((code) => Nation.find(code)),
+      this.i18nService,
     );
 
     const qualification = new QualificationPresenter(
@@ -84,7 +84,7 @@ export class CheckYourAnswersController {
       professionId,
       versionId,
       name: profession.name,
-      nations: selectedNations,
+      nations: await nations.htmlList(),
       industries: industryNames,
       organisations: organisations.list(),
       registrationRequirements: version.registrationRequirements,
