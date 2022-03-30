@@ -204,7 +204,7 @@ describe(QualificationPresenter, () => {
                     ),
                   },
                   value: {
-                    text: presenter.otherCountriesRecognitionSummary,
+                    html: presenter.otherCountriesRecognitionSummary,
                   },
                 },
                 {
@@ -302,7 +302,7 @@ describe(QualificationPresenter, () => {
                     ),
                   },
                   value: {
-                    text: presenter.otherCountriesRecognitionSummary,
+                    html: presenter.otherCountriesRecognitionSummary,
                   },
                 },
                 {
@@ -382,7 +382,7 @@ describe(QualificationPresenter, () => {
                     ),
                   },
                   value: {
-                    text: presenter.otherCountriesRecognitionSummary,
+                    html: presenter.otherCountriesRecognitionSummary,
                   },
                 },
                 {
@@ -466,7 +466,7 @@ describe(QualificationPresenter, () => {
           ukRecognitionUrl: linkOf(undefined),
           adminSelectedOtherCountriesRecognitionRoutes: undefined,
           publicOtherCountriesRecognitionRoutes: undefined,
-          otherCountriesRecognitionSummary: undefined,
+          otherCountriesRecognitionSummary: multilineOf(undefined),
           otherCountriesRecognitionUrl: linkOf(undefined),
         }),
       );

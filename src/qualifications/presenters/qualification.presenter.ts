@@ -30,8 +30,9 @@ export default class QualificationPresenter {
   readonly publicOtherCountriesRecognitionRoutes =
     this.qualification && this.qualification.otherCountriesRecognitionRoutes;
 
-  readonly otherCountriesRecognitionSummary =
-    this.qualification && this.qualification.otherCountriesRecognitionSummary;
+  readonly otherCountriesRecognitionSummary = formatMultilineString(
+    this.qualification && this.qualification.otherCountriesRecognitionSummary,
+  );
 
   readonly otherCountriesRecognitionUrl = formatLink(
     this.qualification && this.qualification.otherCountriesRecognitionUrl,
@@ -92,7 +93,7 @@ export default class QualificationPresenter {
     }
 
     if (showEmptyFields || this.otherCountriesRecognitionSummary) {
-      await this.addTextRow(
+      await this.addHtmlRow(
         summaryList,
         'professions.show.qualification.otherCountriesRecognition.summary',
         this.otherCountriesRecognitionSummary,
