@@ -18,8 +18,9 @@ npm run seed:refresh
 
 ## Production/Staging
 
-Sometimes it will be necessary to seed data in the production/staging environment. To do this, you
-will need to [run a live console](./accessing-a-live-console.md).
+Sometimes it will be necessary to seed data in the production/staging
+environment. To do this, follow the instructions in [uploading seed
+data](./uploading-seed-data.md).
 
 Once you're logged in, you can run:
 
