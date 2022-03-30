@@ -278,7 +278,7 @@
                   text: ("professions.form.label.qualifications.ukRecognition" | t)
                 },
                 value: {
-                  text: qualification.ukRecognition
+                  html: qualification.ukRecognition
                 },
                 actions: {
                   items: [
@@ -306,7 +306,58 @@
                     }
                   ]
                 }
-              } if not isUK else undefined
+              } if not isUK else undefined,
+              {
+                key: {
+                  text: ("professions.form.label.qualifications.otherCountriesRecognition.routes.label" | t)
+                },
+                value: {
+                  text: (("professions.form.label.qualifications.otherCountriesRecognition.routes." + qualification.adminSelectedOtherCountriesRecognitionRoutes) | t) if qualification.adminSelectedOtherCountriesRecognitionRoutes else ""
+                },
+                actions: {
+                  items: [
+                    {
+                      href: "/admin/professions/" + professionId + "/versions/" + versionId + "/qualifications/edit?change=true",
+                      text: ("app.change" | t),
+                      visuallyHiddenText: ("professions.form.label.qualifications.otherCountriesRecognition.routes.label" | t)
+                    }
+                  ]
+                }
+              },
+              {
+                key: {
+                  text: ("professions.form.label.qualifications.otherCountriesRecognition.summary" | t)
+                },
+                value: {
+                  html: qualification.otherCountriesRecognitionSummary
+                },
+                actions: {
+                  items: [
+                    {
+                      href: "/admin/professions/" + professionId + "/versions/" + versionId + "/qualifications/edit?change=true",
+                      text: ("app.change" | t),
+                      visuallyHiddenText: ("professions.form.label.qualifications.otherCountriesRecognition.summary" | t)
+                    }
+                  ]
+                }
+              },
+              {
+                key: {
+                  text: ("professions.form.label.qualifications.otherCountriesRecognition.url" | t)
+                },
+                value: {
+                  html: qualification.otherCountriesRecognitionUrl
+                },
+                actions: {
+                  items: [
+                    {
+                      href: "/admin/professions/" + professionId + "/versions/" + versionId + "/qualifications/edit?change=true",
+                      text: ("app.change" | t),
+                      visuallyHiddenText: ("professions.form.label.qualifications.otherCountriesRecognition.url" | t)
+                    }
+                  ]
+                }
+              }
             ]
           })
         }}

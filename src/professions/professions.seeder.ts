@@ -6,7 +6,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 import { Profession } from './profession.entity';
 import { Industry } from 'src/industries/industry.entity';
-import { Qualification } from 'src/qualifications/qualification.entity';
+import {
+  OtherCountriesRecognitionRoutes,
+  Qualification,
+} from 'src/qualifications/qualification.entity';
 import { Legislation } from 'src/legislations/legislation.entity';
 import { InjectData } from '../common/decorators/seeds.decorator';
 import { Organisation } from '../organisations/organisation.entity';
@@ -175,7 +178,13 @@ export class ProfessionsSeeder implements Seeder {
           // each time. We need to fix this, but in the interests of getting
           // seed data in, we'll just create a new entry each time
           qualification = await this.qualificationsRepository.save(
-            new Qualification(qualification.routesToObtain, qualification.url),
+            new Qualification(
+              qualification.routesToObtain,
+              qualification.url,
+              '',
+              '',
+              qualification.otherCountriesRecognitionRoutes as OtherCountriesRecognitionRoutes,
+            ),
           );
         }
 

@@ -1,18 +1,21 @@
 [
   {
     "routesToObtain": "Have a degree in any subject that is equivalent to a UK degree or level 6 qualification, or other qualification and/or experience equivalent to this.",
-    "url": "https://www.sra.org.uk/become-solicitor/qualified-lawyers/"
+    "url": "https://www.sra.org.uk/become-solicitor/qualified-lawyers/",
+    "otherCountriesRecognitionRoutes": "none"
   },
   {
     "routesToObtain": "To teach in a state school in England, you must have a degree, and gain Qualified Teacher Status (QTS) by following a programme of Initial Teacher Training (ITT). You must have achieved minimum requirements in GCSE English, maths, and science if you wish to teach at primary-level. You can teach in independent schools, academies, and free schools in England without QTS, but it’s a definite advantage to have it.",
-    "url": "https://www.ucas.com/postgraduate/teacher-training/train-teach-england/teacher-training-entry-requirements-england"
+    "url": "https://www.ucas.com/postgraduate/teacher-training/train-teach-england/teacher-training-entry-requirements-england",
+    "otherCountriesRecognitionRoutes": "none"
   },
   {
     "routesToObtain": "Evidence of gas safety competence is awarded through the process of proving to a recognised awarding body that you have the appropriate level of knowledge, understanding and practical skills to undertake gas work safely. All evidence of gas safety competence is sent by the awarding body electronically directly to Gas Safe Register and is only recognised once received from the awarding body concerned.",
-    "url": "https://www.euskills.co.uk/about/our-industries/gas/"
+    "url": "https://www.euskills.co.uk/about/our-industries/gas/",
+    "otherCountriesRecognitionRoutes": "some"
   },
   {
     "routesToObtain": "General post-secondary education",
-    "url": "http://www.example.com"
+    "otherCountriesRecognitionRoutes": "all"
   }
 ]

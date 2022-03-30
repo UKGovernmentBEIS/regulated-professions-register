@@ -17,11 +17,26 @@ export default class QualificationPresenter {
     this.qualification && this.qualification.url,
   );
 
-  readonly ukRecognition =
-    this.qualification && this.qualification.ukRecognition;
+  readonly ukRecognition = formatMultilineString(
+    this.qualification && this.qualification.ukRecognition,
+  );
 
   readonly ukRecognitionUrl = formatLink(
     this.qualification && this.qualification.ukRecognitionUrl,
+  );
+
+  readonly adminSelectedOtherCountriesRecognitionRoutes =
+    this.qualification && this.qualification.otherCountriesRecognitionRoutes;
+
+  readonly publicOtherCountriesRecognitionRoutes =
+    this.qualification && this.qualification.otherCountriesRecognitionRoutes;
+
+  readonly otherCountriesRecognitionSummary = formatMultilineString(
+    this.qualification && this.qualification.otherCountriesRecognitionSummary,
+  );
+
+  readonly otherCountriesRecognitionUrl = formatLink(
+    this.qualification && this.qualification.otherCountriesRecognitionUrl,
   );
 
   async summaryList(
@@ -51,7 +66,7 @@ export default class QualificationPresenter {
 
     if (showUKRecognitionFields) {
       if (showEmptyFields || this.ukRecognition) {
-        await this.addTextRow(
+        await this.addHtmlRow(
           summaryList,
           'professions.show.qualification.ukRecognition',
           this.ukRecognition,
@@ -65,6 +80,33 @@ export default class QualificationPresenter {
           this.ukRecognitionUrl,
         );
       }
+    }
+
+    if (showEmptyFields || this.publicOtherCountriesRecognitionRoutes) {
+      await this.addTextRow(
+        summaryList,
+        'professions.show.qualification.otherCountriesRecognition.routes.label',
+        this.publicOtherCountriesRecognitionRoutes &&
+          (await this.i18nService.translate(
+            `professions.show.qualification.otherCountriesRecognition.routes.${this.publicOtherCountriesRecognitionRoutes}`,
+          )),
+      );
+    }
+
+    if (showEmptyFields || this.otherCountriesRecognitionSummary) {
+      await this.addHtmlRow(
+        summaryList,
+        'professions.show.qualification.otherCountriesRecognition.summary',
+        this.otherCountriesRecognitionSummary,
+      );
+    }
+
+    if (showEmptyFields || this.otherCountriesRecognitionUrl) {
+      await this.addHtmlRow(
+        summaryList,
+        'professions.show.qualification.otherCountriesRecognition.url',
+        this.otherCountriesRecognitionUrl,
+      );
     }
 
     return summaryList;

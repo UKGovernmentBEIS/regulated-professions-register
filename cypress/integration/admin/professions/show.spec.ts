@@ -135,6 +135,14 @@ describe('Listing professions', () => {
         'professions.show.qualification.moreInformationUrl',
         'https://www.sra.org.uk/become-solicitor/qualified-lawyers/',
       );
+      cy.translate(
+        'professions.show.qualification.otherCountriesRecognition.routes.none',
+      ).then((none) => {
+        cy.checkSummaryListRowValue(
+          'professions.show.qualification.otherCountriesRecognition.routes.label',
+          none,
+        );
+      });
 
       cy.translate('professions.show.registration.heading').then((heading) => {
         cy.get('body').should('contain', heading);
@@ -258,6 +266,14 @@ describe('Listing professions', () => {
         'professions.show.qualification.moreInformationUrl',
         '',
       );
+      cy.translate(
+        'professions.show.qualification.otherCountriesRecognition.routes.all',
+      ).then((all) => {
+        cy.checkSummaryListRowValue(
+          'professions.show.qualification.otherCountriesRecognition.routes.label',
+          all,
+        );
+      });
 
       cy.translate('professions.show.registration.heading').then((heading) => {
         cy.get('body').should('contain', heading);

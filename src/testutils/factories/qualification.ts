@@ -1,5 +1,8 @@
 import { Factory } from 'fishery';
-import { Qualification } from '../../qualifications/qualification.entity';
+import {
+  OtherCountriesRecognitionRoutes,
+  Qualification,
+} from '../../qualifications/qualification.entity';
 
 export default Factory.define<Qualification>(({ sequence }) => ({
   id: sequence.toString(),
@@ -8,6 +11,9 @@ export default Factory.define<Qualification>(({ sequence }) => ({
   professionVersion: undefined,
   ukRecognition: undefined,
   ukRecognitionUrl: undefined,
+  otherCountriesRecognitionRoutes: OtherCountriesRecognitionRoutes.All,
+  otherCountriesRecognitionSummary: undefined,
+  otherCountriesRecognitionUrl: undefined,
   created_at: new Date(),
   updated_at: new Date(),
 }));

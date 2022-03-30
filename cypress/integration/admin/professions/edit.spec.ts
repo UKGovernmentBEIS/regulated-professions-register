@@ -414,8 +414,18 @@ describe('Editing an existing profession', () => {
           'http://example.com/more-info',
         );
 
-        cy.get('input[name="ukRecognition"]').type('Recognition in UK');
+        cy.get('textarea[name="ukRecognition"]').type('Recognition in UK');
         cy.get('input[name="ukRecognitionUrl"]').type('http://example.com/uk');
+
+        cy.get(
+          'input[name="otherCountriesRecognitionRoutes"][value="some"]',
+        ).check();
+        cy.get('textarea[name="otherCountriesRecognitionSummary"]').type(
+          'Recognition in other countries',
+        );
+        cy.get('input[name="otherCountriesRecognitionUrl"]').type(
+          'http://example.com/other',
+        );
 
         cy.translate('app.continue').then((buttonText) => {
           cy.get('button').contains(buttonText).click();
@@ -438,6 +448,24 @@ describe('Editing an existing profession', () => {
         cy.checkSummaryListRowValue(
           'professions.form.label.qualifications.ukRecognitionUrl',
           'http://example.com/uk',
+        );
+
+        cy.translate(
+          'professions.form.label.qualifications.otherCountriesRecognition.some',
+          (some: string) => {
+            cy.checkSummaryListRowValue(
+              'professions.form.label.qualifications.otherCountriesRecognition.routes.label',
+              some,
+            );
+          },
+        );
+        cy.checkSummaryListRowValue(
+          'professions.form.label.qualifications.otherCountriesRecognition.summary',
+          'Recognition in other countries',
+        );
+        cy.checkSummaryListRowValue(
+          'professions.form.label.qualifications.otherCountriesRecognition.url',
+          'http://example.com/other',
         );
 
         cy.translate('professions.form.button.saveAsDraft').then(
