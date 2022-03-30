@@ -23,7 +23,6 @@ import { createMockI18nService } from '../../testutils/create-mock-i18n-service'
 import { SummaryList } from '../../common/interfaces/summary-list';
 import { IndustriesService } from '../../industries/industries.service';
 import { IndexTemplate } from './interfaces/index-template.interface';
-import { OrganisationsFilterHelper } from '../helpers/organisations-filter.helper';
 import { FilterDto } from './dto/filter.dto';
 import { FilterInput } from '../../common/interfaces/filter-input.interface';
 import { flashMessage } from '../../common/flash-message';
@@ -38,7 +37,6 @@ import { RequestWithAppSession } from '../../common/interfaces/request-with-app-
 
 jest.mock('./presenters/organisations.presenter');
 jest.mock('../presenters/organisation.presenter');
-jest.mock('../helpers/organisations-filter.helper');
 jest.mock('../../common/flash-message');
 jest.mock('../../users/helpers/get-acting-user.helper');
 jest.mock('../../helpers/escape.helper');
@@ -126,10 +124,6 @@ describe('OrganisationsController', () => {
             OrganisationsPresenter.prototype as DeepMocked<OrganisationsPresenter>
           ).present.mockResolvedValue(templateParams);
 
-          (
-            OrganisationsFilterHelper.prototype as DeepMocked<OrganisationsFilterHelper>
-          ).filter.mockReturnValue(organisations);
-
           expect(await controller.index(request)).toEqual(templateParams);
 
           expect(
@@ -197,10 +191,6 @@ describe('OrganisationsController', () => {
           (
             OrganisationsPresenter.prototype as DeepMocked<OrganisationsPresenter>
           ).present.mockResolvedValue(templateParams);
-
-          (
-            OrganisationsFilterHelper.prototype as DeepMocked<OrganisationsFilterHelper>
-          ).filter.mockReturnValue([organisations[1], organisations[3]]);
 
           expect(
             await controller.index(request, {
@@ -282,10 +272,6 @@ describe('OrganisationsController', () => {
         (
           OrganisationsPresenter.prototype as DeepMocked<OrganisationsPresenter>
         ).present.mockResolvedValue(templateParams);
-
-        (
-          OrganisationsFilterHelper.prototype as DeepMocked<OrganisationsFilterHelper>
-        ).filter.mockReturnValue([userOrganisation]);
 
         expect(await controller.index(request)).toEqual(templateParams);
 
