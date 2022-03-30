@@ -40,10 +40,7 @@
   "pages": {
     "index": {
       "heading": "Check which professions are regulated in the UK",
-      "intro": [
-        "Some professions in the UK are regulated. This can mean there is a legal requirement to have certain qualifications or experience. Other professions are regulated by chartered bodies granting a certain status.",
-        "If a profession is regulated, you may need certain professional qualifications or experience to:"
-      ],
+      "intro": "<p class='govuk-body'>Some professions in the UK are regulated. This can mean there is a legal requirement to have certain qualifications or experience. Other professions are regulated by chartered bodies granting a certain status.</p><p class='govuk-body'>If a profession is regulated, you may need certain professional qualifications or experience to:</p>",
       "ifAProfessionIsRegulated": {
         "professionalActivities": "carry out certain professional activities",
         "professionalTitle": "use a professional title, like ‘architect’"
