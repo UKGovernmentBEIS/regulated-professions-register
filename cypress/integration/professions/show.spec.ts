@@ -10,10 +10,6 @@ describe('Showing a profession', () => {
 
     cy.get('body').should('contain', 'Registered Trademark Attorney');
 
-    cy.translate('professions.show.overview.heading').then((heading) => {
-      cy.get('body').should('contain', heading);
-    });
-
     cy.translate('professions.show.bodies.heading').then((heading) => {
       cy.get('body').should('contain', heading);
     });
@@ -152,20 +148,12 @@ describe('Showing a profession', () => {
       'professions.show.legislation.nationalLegislation',
       'The Trade Marks Act 1994',
     );
-
-    cy.translate('professions.show.overview.heading').then((heading) => {
-      cy.get('body').should('contain', heading);
-    });
   });
 
   it('I can view a profession with the bare minimum fields', () => {
     cy.visitAndCheckAccessibility('/professions/no-optional-fields');
 
     cy.get('body').should('contain', 'Profession with no optional fields');
-
-    cy.translate('professions.show.overview.heading').then((heading) => {
-      cy.get('body').should('contain', heading);
-    });
 
     cy.translate('professions.show.bodies.heading').then((heading) => {
       cy.get('body').should('contain', heading);
@@ -277,9 +265,5 @@ describe('Showing a profession', () => {
       'professions.show.legislation.nationalLegislation',
       "The Education (School Teachers' Qualifications) (England) Regulations 2003/1662 (as amended)",
     );
-
-    cy.translate('professions.show.overview.heading').then((heading) => {
-      cy.get('body').should('contain', heading);
-    });
   });
 });

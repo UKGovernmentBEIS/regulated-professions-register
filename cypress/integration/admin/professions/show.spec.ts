@@ -17,10 +17,6 @@ describe('Listing professions', () => {
 
       cy.get('body').should('contain', 'Registered Trademark Attorney');
 
-      cy.translate('professions.show.overview.heading').then((heading) => {
-        cy.get('body').should('contain', heading);
-      });
-
       cy.translate('professions.show.bodies.heading').then((heading) => {
         cy.get('body').should('contain', heading);
       });
@@ -168,10 +164,6 @@ describe('Listing professions', () => {
       cy.translate('professions.show.legislation.secondLink').then((label) => {
         cy.get('body').should('contain', label);
       });
-
-      cy.translate('professions.show.overview.heading').then((heading) => {
-        cy.get('body').should('contain', heading);
-      });
     });
 
     it('I can view a profession with the bare minimum fields', () => {
@@ -185,10 +177,6 @@ describe('Listing professions', () => {
       cy.checkAccessibility();
 
       cy.get('body').should('contain', 'Profession with no optional fields');
-
-      cy.translate('professions.show.overview.heading').then((heading) => {
-        cy.get('body').should('contain', heading);
-      });
 
       cy.translate('professions.show.bodies.heading').then((heading) => {
         cy.get('body').should('contain', heading);
@@ -302,10 +290,6 @@ describe('Listing professions', () => {
       });
       cy.translate('professions.show.legislation.secondLink').then((label) => {
         cy.get('body').should('contain', label);
-      });
-
-      cy.translate('professions.show.overview.heading').then((heading) => {
-        cy.get('body').should('contain', heading);
       });
     });
   });

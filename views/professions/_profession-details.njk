@@ -4,8 +4,6 @@
 
 <h1 class="govuk-heading-xl">{{ profession.name }}</h1>
 
-<h2 class="govuk-heading-m rpr-details__section-title">{{ "professions.show.overview.heading" | t }}</h2>
-
 {% set nationsHtml %}
   <ul class="govuk-list">
     {% for nation in nations %}
@@ -46,7 +44,7 @@
 
 <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
 
-<h2 class="govuk-heading-m rpr-details__section-title">{{ "professions.show.bodies.heading" | t }}</h2>
+<h2 class="govuk-heading-l">{{ "professions.show.bodies.heading" | t }}</h2>
 
 {% for organisation in organisations %}
   <div class="rpr-details__sub-group">
@@ -95,7 +93,7 @@
   <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
 
   <div>
-    <h2 class="govuk-heading-m rpr-details__section-title">{{ "professions.show.regulatedActivities.heading" | t }}</h2>
+    <h2 class="govuk-heading-l">{{ "professions.show.regulatedActivities.heading" | t }}</h2>
     <div>
       <h3 class="govuk-heading-s">{{ "professions.show.regulatedActivities.regulationSummary" | t }}</h3>
       {{ profession.description | multiline('govuk-body') }}
@@ -144,7 +142,7 @@
 
 <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
 
-<h2 class="govuk-heading-m rpr-details__section-title">{{ "professions.show.qualification.heading" | t}}</h2>
+<h2 class="govuk-heading-l">{{ "professions.show.qualification.heading" | t}}</h2>
 
 {{ govukSummaryList(qualificationSummaryList) }}
 
@@ -154,7 +152,7 @@
 
 <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
 
-<h2 class="govuk-heading-m rpr-details__section-title">{{ "professions.show.registration.heading" | t}}</h2>
+<h2 class="govuk-heading-l">{{ "professions.show.registration.heading" | t}}</h2>
 
 {{ govukSummaryList({
   classes: 'govuk-summary-list--no-border',
@@ -184,7 +182,7 @@
 
 <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
 
-<h2 class="govuk-heading-m rpr-details__section-title">{{ "professions.show.legislation.heading" | t}}</h2>
+<h2 class="govuk-heading-l">{{ "professions.show.legislation.heading" | t}}</h2>
 
 {% for legislation in ((profession.legislations | pad(2)) if showEmptyProfessionDetails else profession.legislations) %}
   {% set legislationLocalisationId = "professions.show.legislation.secondNationalLegislation" if (showEmptyProfessionDetails and loop.index > 1) else "professions.show.legislation.nationalLegislation" %}
