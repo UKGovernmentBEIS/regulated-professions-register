@@ -182,7 +182,7 @@ describe('Adding a new profession', () => {
         'http://example.com/more-info',
       );
 
-      cy.get('input[name="ukRecognition"]').type('Recognition in the UK');
+      cy.get('textarea[name="ukRecognition"]').type('Recognition in the UK');
       cy.get('input[name="ukRecognitionUrl"]').type('http://example.com/uk');
 
       cy.get(

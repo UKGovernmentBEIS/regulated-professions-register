@@ -17,8 +17,9 @@ export default class QualificationPresenter {
     this.qualification && this.qualification.url,
   );
 
-  readonly ukRecognition =
-    this.qualification && this.qualification.ukRecognition;
+  readonly ukRecognition = formatMultilineString(
+    this.qualification && this.qualification.ukRecognition,
+  );
 
   readonly ukRecognitionUrl = formatLink(
     this.qualification && this.qualification.ukRecognitionUrl,
@@ -65,7 +66,7 @@ export default class QualificationPresenter {
 
     if (showUKRecognitionFields) {
       if (showEmptyFields || this.ukRecognition) {
-        await this.addTextRow(
+        await this.addHtmlRow(
           summaryList,
           'professions.show.qualification.ukRecognition',
           this.ukRecognition,

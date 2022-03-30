@@ -56,14 +56,16 @@
         <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
 
         {{
-          govukInput({
+          govukTextarea({
             label: {
               text: ("professions.form.label.qualifications.ukRecognition" | t),
-              classes: "govuk-label--m"
+              classes: "govuk-label--m",
+              isPageHeading: false
             },
             id: "ukRecognition",
             name: "ukRecognition",
             value: ukRecognition,
+            rows: "7",
             hint: {
               text: ("professions.form.hint.qualifications.ukRecognition" | t)
             },

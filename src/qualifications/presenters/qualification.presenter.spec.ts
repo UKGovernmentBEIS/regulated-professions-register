@@ -270,7 +270,7 @@ describe(QualificationPresenter, () => {
                     ),
                   },
                   value: {
-                    text: presenter.ukRecognition,
+                    html: presenter.ukRecognition,
                   },
                 },
                 {
@@ -462,7 +462,7 @@ describe(QualificationPresenter, () => {
           routesToObtain: multilineOf(undefined),
           moreInformationUrl: linkOf(undefined),
           qualification: undefined,
-          ukRecognition: undefined,
+          ukRecognition: multilineOf(undefined),
           ukRecognitionUrl: linkOf(undefined),
           adminSelectedOtherCountriesRecognitionRoutes: undefined,
           publicOtherCountriesRecognitionRoutes: undefined,
