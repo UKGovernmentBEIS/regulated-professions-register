@@ -192,15 +192,22 @@ describe('getPublicationBlockers', () => {
   describe('when given a ProfessionVersion with a qualification without other countries routes to recognition', () => {
     it('returns the "qualifications" publish blocker', () => {
       const version = professionVersionFactory.build({
-        profession: professionFactory.build({
-          organisation: organisationFactory.build({
-            versions: [
-              organisationVersionFactory.build({
-                status: OrganisationVersionStatus.Live,
-              }),
-            ],
-          }),
-        }),
+        profession: professionFactory.build(
+          {},
+          {
+            transient: {
+              organisations: [
+                organisationFactory.build({
+                  versions: [
+                    organisationVersionFactory.build({
+                      status: OrganisationVersionStatus.Live,
+                    }),
+                  ],
+                }),
+              ],
+            },
+          },
+        ),
         qualification: {
           otherCountriesRecognitionRoutes: null,
         },

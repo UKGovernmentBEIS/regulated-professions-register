@@ -16,7 +16,6 @@ describe('ProfessionsFilterHelper', () => {
         professionFactory.build({
           name: undefined,
           occupationLocations: undefined,
-          organisation: undefined,
           industries: undefined,
           regulationType: undefined,
         }),

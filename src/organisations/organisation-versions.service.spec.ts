@@ -325,7 +325,7 @@ describe('OrganisationVersionsService', () => {
       const result = await service.allWithLatestVersion();
 
       const expectedOrganisations = versions.map((version) =>
-        Organisation.withVersion(version.organisation, version, true),
+        Organisation.withVersion(version.organisation, version),
       );
 
       expect(result).toEqual(expectedOrganisations);
@@ -685,7 +685,6 @@ describe('OrganisationVersionsService', () => {
       });
 
       const organisation = organisationFactory.build({
-        professions: [profession1, profession2, profession3],
         professionToOrganisations: [
           {
             profession: profession1,

@@ -38,30 +38,37 @@ const organisation2 = organisationFactory.build({
 
 const organisations = [organisation1, organisation2];
 
-const profession1 = professionFactory.build({
-  name: 'Example Profession 1',
-  occupationLocations: ['GB-ENG'],
-  organisation: organisation1,
-  industries: [transportIndustry],
-  regulationType: RegulationType.Accreditation,
-  updated_at: new Date(2011, 11, 1),
-});
-const profession2 = professionFactory.build({
-  name: 'Example Profession 2',
-  occupationLocations: ['GB-SCT', 'GB-NIR'],
-  organisation: organisation1,
-  industries: [educationIndustry],
-  regulationType: RegulationType.Certification,
-  updated_at: new Date(2023, 1, 4),
-});
-const profession3 = professionFactory.build({
-  name: 'Example Profession 3',
-  occupationLocations: ['GB-WLS'],
-  organisation: organisation2,
-  industries: [educationIndustry, transportIndustry],
-  regulationType: RegulationType.Licensing,
-  updated_at: new Date(2019, 6, 4),
-});
+const profession1 = professionFactory.build(
+  {
+    name: 'Example Profession 1',
+    occupationLocations: ['GB-ENG'],
+
+    industries: [transportIndustry],
+    regulationType: RegulationType.Accreditation,
+    updated_at: new Date(2011, 11, 1),
+  },
+  { transient: { organisations: [organisation1] } },
+);
+const profession2 = professionFactory.build(
+  {
+    name: 'Example Profession 2',
+    occupationLocations: ['GB-SCT', 'GB-NIR'],
+    industries: [educationIndustry],
+    regulationType: RegulationType.Certification,
+    updated_at: new Date(2023, 1, 4),
+  },
+  { transient: { organisations: [organisation1] } },
+);
+const profession3 = professionFactory.build(
+  {
+    name: 'Example Profession 3',
+    occupationLocations: ['GB-WLS'],
+    industries: [educationIndustry, transportIndustry],
+    regulationType: RegulationType.Licensing,
+    updated_at: new Date(2019, 6, 4),
+  },
+  { transient: { organisations: [organisation2] } },
+);
 
 describe('ProfessionsPresenter', () => {
   let professionsPresenter: ProfessionsPresenter;

@@ -67,16 +67,6 @@ export function getPublicationBlockers(
     }
   }
 
-  if (
-    version.profession.additionalOrganisation &&
-    !hasLiveVersion(version.profession.additionalOrganisation)
-  ) {
-    blockers.push({
-      type: 'organisation-not-live',
-      organisation: version.profession.additionalOrganisation,
-    });
-  }
-
   return blockers;
 }
 

@@ -15,7 +15,6 @@ import { OrganisationDto } from './dto/organisation.dto';
 
 import organisationFactory from '../../testutils/factories/organisation';
 import organisationVersionFactory from '../../testutils/factories/organisation-version';
-import professionFactory from '../../testutils/factories/profession';
 import industryFactory from '../../testutils/factories/industry';
 import userFactory from '../../testutils/factories/user';
 
@@ -449,7 +448,6 @@ describe('OrganisationsController', () => {
           const updatedOrganisation = Organisation.withVersion(
             newOrganisation,
             newVersion,
-            true,
           );
 
           expect(OrganisationPresenter).toHaveBeenCalledWith(
@@ -706,13 +704,9 @@ describe('OrganisationsController', () => {
 });
 
 function createOrganisations(): Organisation[] {
-  return organisationFactory.buildList(5, {
-    professions: professionFactory.buildList(2),
-  });
+  return organisationFactory.buildList(5);
 }
 
 function createOrganisation(): Organisation {
-  return organisationFactory.build({
-    professions: professionFactory.buildList(2),
-  });
+  return organisationFactory.build({});
 }

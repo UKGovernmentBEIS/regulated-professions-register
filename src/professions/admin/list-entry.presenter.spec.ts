@@ -88,22 +88,30 @@ describe('ListEntryPresenter', () => {
       });
 
       it('returns a table row when called with `single-organisation`', async () => {
-        const profession = professionFactory.build({
-          name: 'Example Profession',
-          id: 'profession-id',
-          occupationLocations: ['GB-SCT', 'GB-NIR'],
-          organisation: organisationFactory.build({
-            name: 'Example Organisation',
-          }),
-          industries: [
-            industryFactory.build({ name: 'industries.law' }),
-            industryFactory.build({ name: 'industries.finance' }),
-          ],
-          status: ProfessionVersionStatus.Draft,
-          lastModified: new Date('12-08-2003'),
-          changedByUser: userFactory.build({ name: 'Editor' }),
-          versionId: 'version-id',
-        });
+        const profession = professionFactory.build(
+          {
+            name: 'Example Profession',
+            id: 'profession-id',
+            occupationLocations: ['GB-SCT', 'GB-NIR'],
+            industries: [
+              industryFactory.build({ name: 'industries.law' }),
+              industryFactory.build({ name: 'industries.finance' }),
+            ],
+            status: ProfessionVersionStatus.Draft,
+            lastModified: new Date('12-08-2003'),
+            changedByUser: userFactory.build({ name: 'Editor' }),
+            versionId: 'version-id',
+          },
+          {
+            transient: {
+              organisations: [
+                organisationFactory.build({
+                  name: 'Example Organisation',
+                }),
+              ],
+            },
+          },
+        );
 
         (ProfessionPresenter as jest.Mock).mockReturnValue({
           changedBy: { name: 'Editor' },
@@ -150,7 +158,6 @@ describe('ListEntryPresenter', () => {
           .justCreated('profession-id')
           .build({
             name: 'Example Profession',
-            organisation: organisationFactory.build(),
           });
 
         const version = professionVersionFactory

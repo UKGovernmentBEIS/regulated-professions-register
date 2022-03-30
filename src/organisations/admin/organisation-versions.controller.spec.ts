@@ -134,7 +134,6 @@ describe('OrganisationVersionsController', () => {
       const organisationWithVersion = Organisation.withVersion(
         organisation,
         version,
-        true,
       );
 
       organisationVersionsService.findByIdWithOrganisation.mockResolvedValue(
@@ -198,7 +197,6 @@ describe('OrganisationVersionsController', () => {
       const organisationWithVersion = Organisation.withVersion(
         organisation,
         version,
-        true,
       );
 
       const request = createDefaultMockRequest({

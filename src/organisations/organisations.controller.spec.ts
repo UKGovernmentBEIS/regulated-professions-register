@@ -6,6 +6,7 @@ import { OrganisationsController } from './organisations.controller';
 import { OrganisationVersionsService } from './organisation-versions.service';
 import { Organisation } from './organisation.entity';
 import { Profession } from '../professions/profession.entity';
+import { ProfessionToOrganisation } from '../professions/profession-to-organisation.entity';
 
 import organisationFactory from '../testutils/factories/organisation';
 import professionFactory from '../testutils/factories/profession';
@@ -48,8 +49,17 @@ describe('OrganisationsController', () => {
 
   describe('show', () => {
     it('should return variables for the show template', async () => {
+      const professionsForOrganisation = [
+        {
+          profession: professionFactory.build(),
+        },
+        {
+          profession: professionFactory.build(),
+        },
+      ] as ProfessionToOrganisation[];
+
       organisation = organisationFactory.build({
-        professions: professionFactory.buildList(2),
+        professionToOrganisations: professionsForOrganisation,
       });
       professions = professionFactory.buildList(5);
 

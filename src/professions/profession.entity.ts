@@ -3,15 +3,12 @@ import {
   CreateDateColumn,
   Entity,
   Index,
-  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-  JoinColumn,
 } from 'typeorm';
 import { Industry } from '../industries/industry.entity';
 import { Legislation } from '../legislations/legislation.entity';
-import { Organisation } from '../organisations/organisation.entity';
 import { Qualification } from '../qualifications/qualification.entity';
 import { User } from '../users/user.entity';
 import {
@@ -29,21 +26,12 @@ export class Profession {
   @Column({ nullable: true })
   name: string;
 
-  @ManyToOne(() => Organisation, (organisation) => organisation.professions, {
-    eager: true,
-  })
-  organisation: Organisation;
-
   @OneToMany(
     () => ProfessionToOrganisation,
     (professionToOrganisation) => professionToOrganisation.profession,
     { cascade: true },
   )
   professionToOrganisations!: ProfessionToOrganisation[];
-
-  @ManyToOne(() => Organisation, { eager: true })
-  @JoinColumn()
-  additionalOrganisation: Organisation;
 
   @Index({ unique: true, where: '"slug" IS NOT NULL' })
   @Column({ nullable: true })
@@ -98,7 +86,6 @@ export class Profession {
     qualification?: Qualification,
     reservedActivities?: string,
     legislations?: Legislation[],
-    organisation?: Organisation,
     versions?: ProfessionVersion[],
   ) {
     this.name = name || null;
@@ -113,7 +100,6 @@ export class Profession {
     this.qualification = qualification || null;
     this.reservedActivities = reservedActivities || null;
     this.legislations = legislations || null;
-    this.organisation = organisation || null;
     this.versions = versions || null;
   }
 

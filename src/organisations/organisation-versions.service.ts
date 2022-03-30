@@ -142,7 +142,7 @@ export class OrganisationVersionsService {
         'DESC',
       );
 
-    return await this.filter(query, filter, true);
+    return await this.filter(query, filter);
   }
 
   async allWithLatestVersion(): Promise<Organisation[]> {
@@ -173,7 +173,7 @@ export class OrganisationVersionsService {
       .getMany();
 
     return versions.map((version) =>
-      Organisation.withVersion(version.organisation, version, true),
+      Organisation.withVersion(version.organisation, version),
     );
   }
 
@@ -318,7 +318,6 @@ export class OrganisationVersionsService {
   private async filter(
     query: SelectQueryBuilder<OrganisationVersion>,
     filter: FilterInput,
-    showDraftProfessions = false,
   ): Promise<Organisation[]> {
     if (filter.keywords?.length) {
       const ids = await this.organisationsSearchService.search(filter.keywords);
@@ -364,11 +363,7 @@ export class OrganisationVersionsService {
     const versions = await query.getMany();
 
     return versions.map((version) =>
-      Organisation.withVersion(
-        version.organisation,
-        version,
-        showDraftProfessions,
-      ),
+      Organisation.withVersion(version.organisation, version),
     );
   }
 }

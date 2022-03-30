@@ -6,7 +6,6 @@ import { createMock } from '@golevelup/ts-jest';
 import { Repository } from 'typeorm';
 import organisationFactory from '../testutils/factories/organisation';
 import organisationVersionFactory from '../testutils/factories/organisation-version';
-import professionFactory from '../testutils/factories/profession';
 import { Organisation } from './organisation.entity';
 import { OrganisationsService } from './organisations.service';
 import { SlugGenerator } from '../common/slug-generator';
@@ -17,14 +16,7 @@ describe('OrganisationsService', () => {
   let service: OrganisationsService;
   let repo: Repository<Organisation>;
 
-  const confirmedProfession = professionFactory.build({
-    slug: 'profession-slug',
-  });
-  const unconfirmedProfession = professionFactory.build({ slug: undefined });
-
-  const organisation = organisationFactory.build({
-    professions: [confirmedProfession, unconfirmedProfession],
-  });
+  const organisation = organisationFactory.build();
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({

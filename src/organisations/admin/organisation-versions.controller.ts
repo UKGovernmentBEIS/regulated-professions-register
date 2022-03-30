@@ -86,7 +86,6 @@ export class OrganisationVersionsController {
     const organisation = Organisation.withVersion(
       version.organisation,
       version,
-      true,
     );
 
     const professions = getProfessionsFromOrganisation(organisation)
