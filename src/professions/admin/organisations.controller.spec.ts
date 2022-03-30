@@ -56,7 +56,7 @@ describe('OrganisationsController', () => {
 
   describe('edit', () => {
     describe('when editing a just-created, blank Profession', () => {
-      it('should a list of Organisations to be displayed in the Selects with none of them selected', async () => {
+      it('should show five lists of Organisations to be displayed in the Selects with none of them selected', async () => {
         const blankProfession = professionFactory
           .justCreated('profession-id')
           .build();
@@ -78,10 +78,13 @@ describe('OrganisationsController', () => {
         expect(response.render).toHaveBeenCalledWith(
           'admin/professions/organisations',
           expect.objectContaining({
-            regulatedAuthoritiesSelectArgs:
+            selectArgsArray: [
               regulatedAuthoritiesSelectPresenter.selectArgs(),
-            additionalRegulatedAuthoritiesSelectArgs:
               regulatedAuthoritiesSelectPresenter.selectArgs(),
+              regulatedAuthoritiesSelectPresenter.selectArgs(),
+              regulatedAuthoritiesSelectPresenter.selectArgs(),
+              regulatedAuthoritiesSelectPresenter.selectArgs(),
+            ],
             captionText: translationOf('professions.form.captions.add'),
           }),
         );
@@ -89,7 +92,7 @@ describe('OrganisationsController', () => {
     });
 
     describe('when an existing Profession is found', () => {
-      it('should pre-fill both Organisations', async () => {
+      it('should pre-fill both Organisations with three blank select args', async () => {
         const organisation = organisationFactory.build({
           name: 'Example org',
           id: 'example-org-id',
@@ -127,6 +130,9 @@ describe('OrganisationsController', () => {
             additionalOrganisation,
           );
 
+        const regulatedAuthoritiesSelectPresenter =
+          new RegulatedAuthoritiesSelectPresenter(organisations, null);
+
         const request = createDefaultMockRequest({
           user: userFactory.build(),
         });
@@ -136,10 +142,13 @@ describe('OrganisationsController', () => {
         expect(response.render).toHaveBeenCalledWith(
           'admin/professions/organisations',
           expect.objectContaining({
-            regulatedAuthoritiesSelectArgs:
+            selectArgsArray: [
               regulatedAuthoritiesSelectPresenterWithSelectedOrganisation.selectArgs(),
-            additionalRegulatedAuthoritiesSelectArgs:
               regulatedAuthoritiesSelectPresenterWithSelectedAdditionalOrganisation.selectArgs(),
+              regulatedAuthoritiesSelectPresenter.selectArgs(),
+              regulatedAuthoritiesSelectPresenter.selectArgs(),
+              regulatedAuthoritiesSelectPresenter.selectArgs(),
+            ],
             captionText: translationOf('professions.form.captions.edit'),
           }),
         );
@@ -174,8 +183,7 @@ describe('OrganisationsController', () => {
         professionsService.findWithVersions.mockResolvedValue(profession);
 
         const organisationsDto = {
-          regulatoryBody: 'example-org-id',
-          additionalRegulatoryBody: 'other-example-org-id',
+          regulatoryBodies: ['example-org-id', 'other-example-org-id'],
         };
 
         const newOrganisation = organisationFactory.build({
@@ -236,8 +244,7 @@ describe('OrganisationsController', () => {
       professionsService.findWithVersions.mockResolvedValue(profession);
 
       const organisationsDto = {
-        regulatoryBody: 'example-org-id',
-        additionalRegulatoryBody: null,
+        regulatoryBodies: ['example-org-id'],
       };
 
       const newOrganisation = organisationFactory.build({
@@ -279,7 +286,7 @@ describe('OrganisationsController', () => {
     describe('when required parameters are not entered', () => {
       it('does not create a profession, and re-renders the top level information view with errors', async () => {
         const organisationsDtoWithNoAnswers = {
-          regulatoryBody: null,
+          regulatoryBody: [],
         };
 
         const request = createDefaultMockRequest({
@@ -298,7 +305,7 @@ describe('OrganisationsController', () => {
           'admin/professions/organisations',
           expect.objectContaining({
             errors: {
-              regulatoryBody: {
+              regulatoryBodies: {
                 text: 'professions.form.errors.regulatoryBody.empty',
               },
             },
@@ -313,8 +320,7 @@ describe('OrganisationsController', () => {
       const profession = professionFactory.build();
 
       const organisationsDto = {
-        regulatoryBody: 'example-org-id',
-        additionalRegulatoryBody: 'other-example-org-id',
+        regulatoryBodies: ['example-org-id', 'other-example-org-id'],
       };
 
       professionsService.findWithVersions.mockResolvedValue(profession);

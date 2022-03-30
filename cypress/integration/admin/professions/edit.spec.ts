@@ -568,10 +568,10 @@ describe('Editing an existing profession', () => {
       }).then((editCaption) => {
         cy.get('body').contains(editCaption);
       });
-      cy.get('select[name="regulatoryBody"]').select(
+      cy.get('select[id="regulatoryBodies_1"]').select(
         'Department for Education',
       );
-      cy.get('select[name="additionalRegulatoryBody"]').select(
+      cy.get('select[id="regulatoryBodies_2"]').select(
         'Council of Registered Gas Installers',
       );
       cy.translate('app.continue').then((buttonText) => {

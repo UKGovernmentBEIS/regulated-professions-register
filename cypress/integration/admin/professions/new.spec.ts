@@ -58,14 +58,14 @@ describe('Adding a new profession', () => {
         'professions.form.label.topLevelInformation.regulatedAuthorities',
       );
 
-      cy.get('select[name="regulatoryBody"]').select(
+      cy.get('select[id="regulatoryBodies_1"]').select(
         'Department for Education',
       );
-      cy.get('select[name="regulatoryBody"]').should(
+      cy.get('select[id="regulatoryBodies_2"]').should(
         'not.contain',
         'Unconfirmed Organisation',
       );
-      cy.get('select[name="additionalRegulatoryBody"]').select(
+      cy.get('select[id="regulatoryBodies_2"]').select(
         'General Medical Council',
       );
       cy.translate('app.continue').then((buttonText) => {

@@ -67,8 +67,7 @@ export class OrganisationsController {
 
     return this.renderForm(
       res,
-      organisations ? organisations[0] : undefined,
-      organisations ? organisations[1] : undefined,
+      organisations,
       profession,
       change === 'true',
       errors,
@@ -102,40 +101,35 @@ export class OrganisationsController {
 
     const submittedValues = validator.obj;
 
-    const selectedOrganisation = submittedValues.regulatoryBody
-      ? await this.organisationsService.find(submittedValues.regulatoryBody)
+    const regulatoryBodies = submittedValues.regulatoryBodies
+      ? await Promise.all(
+          submittedValues.regulatoryBodies.map(async (regulatoryBody) => {
+            return regulatoryBody
+              ? await this.organisationsService.find(regulatoryBody)
+              : null;
+          }),
+        )
       : null;
 
-    const professionToOrganisations = [
-      new ProfessionToOrganisation(
-        selectedOrganisation,
-        profession,
-        OrganisationRole.PrimaryRegulator,
-      ),
-    ];
-
-    let selectedAdditionalOrganisation = null;
-
-    if (submittedValues.additionalRegulatoryBody) {
-      selectedAdditionalOrganisation = await this.organisationsService.find(
-        submittedValues.additionalRegulatoryBody,
-      );
-
-      professionToOrganisations.push(
-        new ProfessionToOrganisation(
-          selectedAdditionalOrganisation,
-          profession,
-          OrganisationRole.PrimaryRegulator,
-        ),
-      );
-    }
+    const professionToOrganisations = regulatoryBodies
+      ? await Promise.all(
+          regulatoryBodies.map(async (regulatoryBody) => {
+            return regulatoryBody
+              ? new ProfessionToOrganisation(
+                  regulatoryBody,
+                  profession,
+                  OrganisationRole.PrimaryRegulator,
+                )
+              : null;
+          }),
+        )
+      : null;
 
     if (!validator.valid()) {
       const errors = new ValidationFailedError(validator.errors).fullMessages();
       return this.renderForm(
         res,
-        selectedOrganisation,
-        selectedAdditionalOrganisation,
+        regulatoryBodies,
         profession,
         submittedValues.change,
         errors,
@@ -158,8 +152,7 @@ export class OrganisationsController {
 
   private async renderForm(
     res: Response,
-    selectedRegulatoryAuthority: Organisation | null,
-    selectedAdditionalRegulatoryAuthority: Organisation | null,
+    organisations: Organisation[],
     profession: Profession,
     change: boolean,
     errors: object | undefined = undefined,
@@ -167,21 +160,17 @@ export class OrganisationsController {
     const regulatedAuthorities =
       await this.organisationVersionsService.allLive();
 
-    const regulatedAuthoritiesSelectArgs =
-      new RegulatedAuthoritiesSelectPresenter(
-        regulatedAuthorities,
-        selectedRegulatoryAuthority,
-      ).selectArgs();
-
-    const additionalRegulatedAuthoritiesSelectArgs =
-      new RegulatedAuthoritiesSelectPresenter(
-        regulatedAuthorities,
-        selectedAdditionalRegulatoryAuthority,
-      ).selectArgs();
+    const selectArgsArray = Array.from({ ...organisations, length: 5 }).map(
+      (organisation) => {
+        return new RegulatedAuthoritiesSelectPresenter(
+          regulatedAuthorities,
+          organisation,
+        ).selectArgs();
+      },
+    );
 
     const templateArgs: OrganisationsTemplate = {
-      regulatedAuthoritiesSelectArgs,
-      additionalRegulatedAuthoritiesSelectArgs,
+      selectArgsArray,
       captionText: await ViewUtils.captionText(this.i18nService, profession),
       change,
       errors,

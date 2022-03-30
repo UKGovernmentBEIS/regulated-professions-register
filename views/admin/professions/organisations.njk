@@ -20,32 +20,21 @@
     <form method="post" action="./">
       <input type="hidden" name="change" value="{{ change }}" />
 
-      {{
-        govukSelect({
-          label: {
-            text: ("professions.form.label.topLevelInformation.regulatedAuthority" | t),
-            classes: "govuk-label--m",
-            isPageHeading: false
-          },
-          id: "regulatoryBody",
-          name: "regulatoryBody",
-          items: regulatedAuthoritiesSelectArgs,
-          errorMessage: errors.regulatoryBody | tError
-        })
-      }}
-
-      {{
-        govukSelect({
-          label: {
-            text: ("professions.form.label.topLevelInformation.additionalAuthority" | t),
-            classes: "govuk-label--m",
-            isPageHeading: false
-          },
-          id: "additionalRegulatoryBody",
-          name: "additionalRegulatoryBody",
-          items: additionalRegulatedAuthoritiesSelectArgs
-        })
-      }}
+      {% for selectArgs in selectArgsArray %}
+        {{
+          govukSelect({
+            label: {
+              text: ("professions.form.label.topLevelInformation.regulatedAuthority" | t),
+              classes: "govuk-label--m",
+              isPageHeading: false
+            },
+            id: "regulatoryBodies_" + loop.index,
+            name: "regulatoryBodies[]",
+            items: selectArgs,
+            errorMessage: errors.regulatoryBody | tError
+          })
+        }}
+      {% endfor %}
 
       {{
         govukButton({

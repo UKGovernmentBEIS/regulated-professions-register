@@ -6,9 +6,7 @@ export class OrganisationsDto {
   @IsNotEmpty({
     message: 'professions.form.errors.regulatoryBody.empty',
   })
-  regulatoryBody: string;
-
-  additionalRegulatoryBody: string;
+  regulatoryBodies: string[];
 
   @Transform(({ value }) => parseBoolean(value))
   change: boolean;
