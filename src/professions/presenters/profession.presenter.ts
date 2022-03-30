@@ -1,10 +1,10 @@
 import { I18nService } from 'nestjs-i18n';
 import { Profession } from '../profession.entity';
 import { SummaryList } from '../../common/interfaces/summary-list';
-import { stringifyNations } from '../../nations/helpers/stringifyNations';
 import { Nation } from '../../nations/nation';
 import { formatDate } from '../../common/utils';
 import { formatStatus } from '../../helpers/format-status.helper';
+import { NationsListPresenter } from '../../nations/presenters/nations-list.presenter';
 
 export class ProfessionPresenter {
   constructor(
@@ -60,12 +60,12 @@ export class ProfessionPresenter {
   }
 
   public async occupationLocations(): Promise<string> {
-    return await stringifyNations(
+    return await new NationsListPresenter(
       (this.profession.occupationLocations || []).map((code) =>
         Nation.find(code),
       ),
       this.i18nService,
-    );
+    ).textList();
   }
 
   public async industries(): Promise<string> {
