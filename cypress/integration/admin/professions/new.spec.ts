@@ -45,6 +45,19 @@ describe('Adding a new profession', () => {
         cy.get('body').contains(addCaption);
       });
       cy.get('input[name="name"]').type('Example Profession');
+      cy.translate('app.continue').then((buttonText) => {
+        cy.get('button').contains(buttonText).click();
+      });
+
+      cy.checkAccessibility({ 'color-contrast': { enabled: false } });
+      cy.checkPublishBlocked(
+        ['scope', 'regulatedActivities', 'qualifications', 'legislation'],
+        [],
+      );
+      cy.clickSummaryListRowChangeLink(
+        'professions.form.label.topLevelInformation.regulatedAuthorities',
+      );
+
       cy.get('select[name="regulatoryBody"]').select(
         'Department for Education',
       );

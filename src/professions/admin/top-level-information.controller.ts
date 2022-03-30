@@ -23,17 +23,10 @@ import { BackLink } from '../../common/decorators/back-link.decorator';
 
 import ViewUtils from './viewUtils';
 import { OrganisationsService } from '../../organisations/organisations.service';
-import { RegulatedAuthoritiesSelectPresenter } from './presenters/regulated-authorities-select-presenter';
-import { Organisation } from '../../organisations/organisation.entity';
 import { I18nService } from 'nestjs-i18n';
 import { OrganisationVersionsService } from '../../organisations/organisation-versions.service';
 import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
 import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
-import { getOrganisationsFromProfession } from '../helpers/get-organisations-from-profession.helper';
-import {
-  ProfessionToOrganisation,
-  OrganisationRole,
-} from '../profession-to-organisation.entity';
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
 export class TopLevelInformationController {
@@ -64,13 +57,9 @@ export class TopLevelInformationController {
 
     checkCanViewProfession(req, profession);
 
-    const organisations = getOrganisationsFromProfession(profession);
-
     return this.renderForm(
       res,
       profession.name,
-      organisations ? organisations[0] : undefined,
-      organisations ? organisations[1] : undefined,
       profession,
       change === 'true',
       errors,
@@ -104,41 +93,11 @@ export class TopLevelInformationController {
 
     const submittedValues = validator.obj;
 
-    const selectedOrganisation = submittedValues.regulatoryBody
-      ? await this.organisationsService.find(submittedValues.regulatoryBody)
-      : null;
-
-    const professionToOrganisations = [
-      new ProfessionToOrganisation(
-        selectedOrganisation,
-        profession,
-        OrganisationRole.PrimaryRegulator,
-      ),
-    ];
-
-    let selectedAdditionalOrganisation = null;
-
-    if (submittedValues.additionalRegulatoryBody) {
-      selectedAdditionalOrganisation = await this.organisationsService.find(
-        submittedValues.additionalRegulatoryBody,
-      );
-
-      professionToOrganisations.push(
-        new ProfessionToOrganisation(
-          selectedAdditionalOrganisation,
-          profession,
-          OrganisationRole.PrimaryRegulator,
-        ),
-      );
-    }
-
     if (!validator.valid()) {
       const errors = new ValidationFailedError(validator.errors).fullMessages();
       return this.renderForm(
         res,
         submittedValues.name,
-        selectedOrganisation,
-        selectedAdditionalOrganisation,
         profession,
         submittedValues.change,
         errors,
@@ -149,9 +108,6 @@ export class TopLevelInformationController {
       ...profession,
       ...{
         name: submittedValues.name,
-        organisation: selectedOrganisation,
-        additionalOrganisation: selectedAdditionalOrganisation,
-        professionToOrganisations: professionToOrganisations,
       },
     };
 
@@ -165,31 +121,12 @@ export class TopLevelInformationController {
   private async renderForm(
     res: Response,
     name: string,
-    selectedRegulatoryAuthority: Organisation | null,
-    selectedAdditionalRegulatoryAuthority: Organisation | null,
     profession: Profession,
     change: boolean,
     errors: object | undefined = undefined,
   ): Promise<void> {
-    const regulatedAuthorities =
-      await this.organisationVersionsService.allLive();
-
-    const regulatedAuthoritiesSelectArgs =
-      new RegulatedAuthoritiesSelectPresenter(
-        regulatedAuthorities,
-        selectedRegulatoryAuthority,
-      ).selectArgs();
-
-    const additionalRegulatedAuthoritiesSelectArgs =
-      new RegulatedAuthoritiesSelectPresenter(
-        regulatedAuthorities,
-        selectedAdditionalRegulatoryAuthority,
-      ).selectArgs();
-
     const templateArgs: TopLevelDetailsTemplate = {
       name,
-      regulatedAuthoritiesSelectArgs,
-      additionalRegulatedAuthoritiesSelectArgs,
       captionText: await ViewUtils.captionText(this.i18nService, profession),
       change,
       errors,
