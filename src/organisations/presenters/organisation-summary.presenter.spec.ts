@@ -4,7 +4,6 @@ import { ProfessionPresenter } from '../../professions/presenters/profession.pre
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 import organisationFactory from '../../testutils/factories/organisation';
 import professionsFactory from '../../testutils/factories/profession';
-import { Organisation } from '../organisation.entity';
 import { OrganisationSummaryPresenter } from './organisation-summary.presenter';
 import { OrganisationPresenter } from './organisation.presenter';
 
@@ -47,22 +46,23 @@ describe('OrganisationSummaryPresenter', () => {
     describe('when all relations are present on the organisation', () => {
       describe('when `showEmptyFields` is true', () => {
         it("should return template variables contraining an organisation's summary, with blank fields preserved", async () => {
-          const organisation = organisationFactory.build({
-            professions: [
-              professionsFactory.build({
-                slug: 'slug-1',
-              }),
-              professionsFactory.build({
-                slug: 'slug-2',
-              }),
-              professionsFactory.build({
-                slug: null,
-              }),
-            ],
-          });
+          const organisation = organisationFactory.build();
+
+          const professions = [
+            professionsFactory.build({
+              slug: 'slug-1',
+            }),
+            professionsFactory.build({
+              slug: 'slug-2',
+            }),
+            professionsFactory.build({
+              slug: null,
+            }),
+          ];
 
           const presenter = new OrganisationSummaryPresenter(
             organisation,
+            professions,
             i18nService,
           );
 
@@ -77,17 +77,17 @@ describe('OrganisationSummaryPresenter', () => {
             summaryList: mockSummaryList(),
             professions: [
               {
-                name: organisation.professions[0].name,
-                id: organisation.professions[0].id,
-                versionId: organisation.professions[0].versionId,
-                slug: organisation.professions[0].slug,
+                name: professions[0].name,
+                id: professions[0].id,
+                versionId: professions[0].versionId,
+                slug: professions[0].slug,
                 summaryList: mockSummaryList(),
               },
               {
-                name: organisation.professions[1].name,
-                id: organisation.professions[1].id,
-                versionId: organisation.professions[1].versionId,
-                slug: organisation.professions[1].slug,
+                name: professions[1].name,
+                id: professions[1].id,
+                versionId: professions[1].versionId,
+                slug: professions[1].slug,
                 summaryList: mockSummaryList(),
               },
             ],
@@ -102,12 +102,12 @@ describe('OrganisationSummaryPresenter', () => {
           );
 
           expect(ProfessionPresenter).toHaveBeenCalledWith(
-            organisation.professions[0],
+            professions[0],
             i18nService,
           );
 
           expect(ProfessionPresenter).toHaveBeenCalledWith(
-            organisation.professions[1],
+            professions[1],
             i18nService,
           );
         });
@@ -115,22 +115,23 @@ describe('OrganisationSummaryPresenter', () => {
 
       describe('when `showEmptyFields` is false', () => {
         it("should return template variables contraining an organisation's summary, with blank fields removed", async () => {
-          const organisation = organisationFactory.build({
-            professions: [
-              professionsFactory.build({
-                slug: 'slug-1',
-              }),
-              professionsFactory.build({
-                slug: 'slug-2',
-              }),
-              professionsFactory.build({
-                slug: null,
-              }),
-            ],
-          });
+          const organisation = organisationFactory.build({});
+
+          const professions = [
+            professionsFactory.build({
+              slug: 'slug-1',
+            }),
+            professionsFactory.build({
+              slug: 'slug-2',
+            }),
+            professionsFactory.build({
+              slug: null,
+            }),
+          ];
 
           const presenter = new OrganisationSummaryPresenter(
             organisation,
+            professions,
             i18nService,
           );
 
@@ -145,17 +146,17 @@ describe('OrganisationSummaryPresenter', () => {
             summaryList: mockSummaryList(),
             professions: [
               {
-                name: organisation.professions[0].name,
-                id: organisation.professions[0].id,
-                versionId: organisation.professions[0].versionId,
-                slug: organisation.professions[0].slug,
+                name: professions[0].name,
+                id: professions[0].id,
+                versionId: professions[0].versionId,
+                slug: professions[0].slug,
                 summaryList: mockSummaryList(),
               },
               {
-                name: organisation.professions[1].name,
-                id: organisation.professions[1].id,
-                versionId: organisation.professions[1].versionId,
-                slug: organisation.professions[1].slug,
+                name: professions[1].name,
+                id: professions[1].id,
+                versionId: professions[1].versionId,
+                slug: professions[1].slug,
                 summaryList: mockSummaryList(),
               },
             ],
@@ -170,37 +171,15 @@ describe('OrganisationSummaryPresenter', () => {
           );
 
           expect(ProfessionPresenter).toHaveBeenCalledWith(
-            organisation.professions[0],
+            professions[0],
             i18nService,
           );
 
           expect(ProfessionPresenter).toHaveBeenCalledWith(
-            organisation.professions[1],
+            professions[1],
             i18nService,
           );
         });
-      });
-    });
-
-    describe('when the professions relation is not present on the organisation', () => {
-      let organisation: Organisation;
-
-      beforeEach(() => {
-        organisation = organisationFactory.build({
-          professions: undefined,
-        });
-      });
-
-      it('should raise an error', async () => {
-        const presenter = new OrganisationSummaryPresenter(
-          organisation,
-          i18nService,
-        );
-        await expect(async () => {
-          await presenter.present(false);
-        }).rejects.toThrowError(
-          'You must eagerly load professions to show professions. Try calling a "WithProfessions" method on the `OrganisationsService` class',
-        );
       });
     });
   });

@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [unreleased]
 
+### Changed
+
+- Read from and write to the new organisation - profession relation
+
 ## [release-014] - 2022-03-30
 
 ### Added
@@ -36,6 +40,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Telephone numbers are validated on input, and formatted as international numbers on display
 - Remove BEIS contact telephone number, as BEIS won't be providing telephone support
 - Consistent labels for legislation fields
+
+## Added
+
+- Allow professions to have multiple organisations via a join table
 
 ## [release-011] - 2022-03-25
 

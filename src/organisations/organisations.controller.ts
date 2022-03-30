@@ -6,6 +6,9 @@ import { OrganisationVersionsService } from './organisation-versions.service';
 import { ShowTemplate } from './interfaces/show-template.interface';
 import { OrganisationSummaryPresenter } from './presenters/organisation-summary.presenter';
 import { BackLink } from '../common/decorators/back-link.decorator';
+import { getProfessionsFromOrganisation } from './helpers/get-professions-from-organisation.helper';
+import { Profession } from '../professions/profession.entity';
+
 @Controller()
 export class OrganisationsController {
   constructor(
@@ -24,8 +27,13 @@ export class OrganisationsController {
       slug,
     );
 
+    const professions = getProfessionsFromOrganisation(organisation)
+      .map((profession) => Profession.withLatestLiveVersion(profession))
+      .filter((n) => n);
+
     const organisationSummaryPresenter = new OrganisationSummaryPresenter(
       organisation,
+      professions,
       this.i18nService,
     );
 

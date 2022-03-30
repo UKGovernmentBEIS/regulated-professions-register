@@ -5,18 +5,24 @@ import { I18nService } from 'nestjs-i18n';
 import { OrganisationsController } from './organisations.controller';
 import { OrganisationVersionsService } from './organisation-versions.service';
 import { Organisation } from './organisation.entity';
+import { Profession } from '../professions/profession.entity';
+import { ProfessionToOrganisation } from '../professions/profession-to-organisation.entity';
 
 import organisationFactory from '../testutils/factories/organisation';
 import professionFactory from '../testutils/factories/profession';
 import { OrganisationSummaryPresenter } from './presenters/organisation-summary.presenter';
 import { createMockI18nService } from '../testutils/create-mock-i18n-service';
 
+import * as getProfessionsFromOrganisationModule from './helpers/get-professions-from-organisation.helper';
+
 jest.mock('./presenters/organisation-summary.presenter');
+jest.mock('../professions/profession.entity');
 
 describe('OrganisationsController', () => {
   let controller: OrganisationsController;
   let organisationVersionsService: DeepMocked<OrganisationVersionsService>;
   let organisation: Organisation;
+  let professions: Profession[];
 
   const i18nService = createMockI18nService();
 
@@ -43,16 +49,38 @@ describe('OrganisationsController', () => {
 
   describe('show', () => {
     it('should return variables for the show template', async () => {
+      const professionsForOrganisation = [
+        {
+          profession: professionFactory.build(),
+        },
+        {
+          profession: professionFactory.build(),
+        },
+      ] as ProfessionToOrganisation[];
+
       organisation = organisationFactory.build({
-        professions: professionFactory.buildList(2),
+        professionToOrganisations: professionsForOrganisation,
       });
+      professions = professionFactory.buildList(5);
 
       organisationVersionsService.findLiveBySlug.mockResolvedValue(
         organisation,
       );
 
+      const getProfessionsFromOrganisationSpy = jest.spyOn(
+        getProfessionsFromOrganisationModule,
+        'getProfessionsFromOrganisation',
+      );
+
+      getProfessionsFromOrganisationSpy.mockReturnValue(professions);
+
+      (Profession.withLatestLiveVersion as jest.Mock).mockImplementation(
+        (profession) => profession,
+      );
+
       const expected = await new OrganisationSummaryPresenter(
         organisation,
+        professions,
         i18nService,
       ).present(false);
 
@@ -65,7 +93,12 @@ describe('OrganisationsController', () => {
       expect(OrganisationSummaryPresenter).toHaveBeenNthCalledWith(
         2,
         organisation,
+        professions,
         i18nService,
+      );
+
+      expect(getProfessionsFromOrganisationSpy).toHaveBeenCalledWith(
+        organisation,
       );
     });
   });

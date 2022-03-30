@@ -16,7 +16,6 @@ describe('ProfessionsFilterHelper', () => {
         professionFactory.build({
           name: undefined,
           occupationLocations: undefined,
-          organisation: undefined,
           industries: undefined,
           regulationType: undefined,
         }),
@@ -72,13 +71,13 @@ describe('ProfessionsFilterHelper', () => {
 
     it('can filter professions by organisation', () => {
       const exampleProfessions = [
-        createProfessionWithOrganisations('law-society'),
-        createProfessionWithOrganisations('department-for-education'),
-        createProfessionWithOrganisations('general-medical-council'),
-        createProfessionWithOrganisations(
+        createProfessionWithOrganisations(['law-society']),
+        createProfessionWithOrganisations(['department-for-education']),
+        createProfessionWithOrganisations(['general-medical-council']),
+        createProfessionWithOrganisations([
           'law-society',
           'alternative-law-society',
-        ),
+        ]),
       ];
 
       const filterHelper = new ProfessionsFilterHelper(exampleProfessions);
@@ -156,15 +155,13 @@ function createProfessionWithNations(...nationCodes: string[]): Profession {
 }
 
 function createProfessionWithOrganisations(
-  organisationId: string,
-  additionalOrganisation: string = undefined,
+  organisations: string[],
 ): Profession {
-  return professionFactory.build({
-    organisation: organisationFactory.build({ id: organisationId }),
-    additionalOrganisation:
-      additionalOrganisation &&
-      organisationFactory.build({ id: additionalOrganisation }),
-  });
+  const orgs = organisations.map((organisation) =>
+    organisationFactory.build({ id: organisation }),
+  );
+
+  return professionFactory.build({}, { transient: { organisations: orgs } });
 }
 
 function createProfessionWithIndustries(...industryIds: string[]): Profession {

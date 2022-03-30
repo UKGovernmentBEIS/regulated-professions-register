@@ -200,7 +200,9 @@ describe('ProfessionVersionsController', () => {
             ).summaryList(true, true),
             nations: ['Translation of `nations.england`'],
             industries: ['Translation of `industries.example`'],
-            organisations: [profession.organisation],
+            organisations: [
+              profession.professionToOrganisations[0].organisation,
+            ],
             publicationBlockers: [],
           });
 
@@ -219,9 +221,13 @@ describe('ProfessionVersionsController', () => {
 
       describe('when the Profession has an additional Organisation', () => {
         it('should return populated template params', async () => {
-          const profession = professionFactory.build({
-            additionalOrganisation: organisationFactory.build(),
-          });
+          const organisation1 = organisationFactory.build();
+          const organisation2 = organisationFactory.build();
+
+          const profession = professionFactory.build(
+            {},
+            { transient: { organisations: [organisation1, organisation2] } },
+          );
 
           const version = professionVersionFactory.build({
             profession: profession,
@@ -273,10 +279,7 @@ describe('ProfessionVersionsController', () => {
             ).summaryList(true, true),
             nations: ['Translation of `nations.england`'],
             industries: ['Translation of `industries.example`'],
-            organisations: [
-              profession.organisation,
-              profession.additionalOrganisation,
-            ],
+            organisations: [organisation1, organisation2],
             publicationBlockers: [],
           });
 
@@ -347,7 +350,7 @@ describe('ProfessionVersionsController', () => {
           ).summaryList(true, true),
           nations: [translationOf('nations.england')],
           industries: [translationOf('industries.example')],
-          organisations: [profession.organisation],
+          organisations: [profession.professionToOrganisations[0].organisation],
           publicationBlockers: [
             {
               type: 'incomplete-section',
@@ -366,7 +369,6 @@ describe('ProfessionVersionsController', () => {
           .justCreated('profession-id')
           .build({
             name: 'Example Profession',
-            organisation: organisationFactory.build(),
           });
 
         const version = professionVersionFactory
@@ -424,7 +426,7 @@ describe('ProfessionVersionsController', () => {
           ).summaryList(true, true),
           nations: [],
           industries: [],
-          organisations: [profession.organisation],
+          organisations: [profession.professionToOrganisations[0].organisation],
           publicationBlockers: [
             {
               type: 'incomplete-section',

@@ -14,6 +14,7 @@ import { getReferrer } from '../../common/utils';
 
 import { Nation } from '../../nations/nation';
 import QualificationPresenter from '../../qualifications/presenters/qualification.presenter';
+import { OrganisationsPresenter } from './presenters/organisations-presenter';
 import { CheckYourAnswersTemplate } from './interfaces/check-your-answers.template';
 import { Permissions } from '../../common/permissions.decorator';
 import { UserPermission } from '../../users/user-permission';
@@ -25,6 +26,7 @@ import { RequestWithAppSession } from '../../common/interfaces/request-with-app-
 import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
 import { getPublicationBlockers } from '../helpers/get-publication-blockers.helper';
 import { Profession } from '../profession.entity';
+import { getOrganisationsFromProfession } from '../helpers/get-organisations-from-profession.helper';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
@@ -74,16 +76,17 @@ export class CheckYourAnswersController {
       this.i18nService,
     );
 
+    const organisations = new OrganisationsPresenter(
+      getOrganisationsFromProfession(profession),
+    );
+
     return {
       professionId,
       versionId,
       name: profession.name,
       nations: selectedNations,
       industries: industryNames,
-      organisation: profession.organisation.name,
-      additionalOrganisation: profession.additionalOrganisation
-        ? profession.additionalOrganisation.name
-        : null,
+      organisations: organisations.list(),
       registrationRequirements: version.registrationRequirements,
       registrationUrl: version.registrationUrl,
       regulationSummary: version.description,

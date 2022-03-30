@@ -2,11 +2,14 @@ import { I18nService } from 'nestjs-i18n';
 import { ProfessionPresenter } from '../../professions/presenters/profession.presenter';
 import { ShowTemplate } from '../interfaces/show-template.interface';
 import { Organisation } from '../organisation.entity';
+import { Profession } from '../../professions/profession.entity';
+
 import { OrganisationPresenter } from './organisation.presenter';
 
 export class OrganisationSummaryPresenter {
   constructor(
     private readonly organisation: Organisation,
+    private readonly professions: Profession[],
     private readonly i18nService: I18nService,
   ) {}
 
@@ -16,13 +19,7 @@ export class OrganisationSummaryPresenter {
       this.i18nService,
     );
 
-    if (this.organisation.professions === undefined) {
-      throw new Error(
-        'You must eagerly load professions to show professions. Try calling a "WithProfessions" method on the `OrganisationsService` class',
-      );
-    }
-
-    const professionPresenters = this.organisation.professions
+    const professionPresenters = this.professions
       .filter((profession) => profession.slug)
       .map(
         (profession) => new ProfessionPresenter(profession, this.i18nService),

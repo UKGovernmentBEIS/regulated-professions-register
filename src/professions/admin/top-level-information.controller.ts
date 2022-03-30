@@ -29,6 +29,7 @@ import { I18nService } from 'nestjs-i18n';
 import { OrganisationVersionsService } from '../../organisations/organisation-versions.service';
 import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
 import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
+import { getOrganisationsFromProfession } from '../helpers/get-organisations-from-profession.helper';
 import {
   ProfessionToOrganisation,
   OrganisationRole,
@@ -63,11 +64,13 @@ export class TopLevelInformationController {
 
     checkCanViewProfession(req, profession);
 
+    const organisations = getOrganisationsFromProfession(profession);
+
     return this.renderForm(
       res,
       profession.name,
-      profession.organisation,
-      profession.additionalOrganisation,
+      organisations ? organisations[0] : undefined,
+      organisations ? organisations[1] : undefined,
       profession,
       change === 'true',
       errors,

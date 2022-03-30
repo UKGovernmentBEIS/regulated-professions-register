@@ -17,21 +17,27 @@ describe('ProfessionSearchResultPresenter', () => {
 
   describe('present', () => {
     it('Returns a ProfessionSearchResultTemplate', async () => {
-      const exampleProfession = professionFactory.build({
-        name: 'Example Profession',
-        slug: 'example-profession',
-        organisation: organisationFactory.build({
+      const organisations = [
+        organisationFactory.build({
           name: 'Example Organisation',
         }),
-        additionalOrganisation: organisationFactory.build({
+        organisationFactory.build({
           name: 'Additional Example Organisation',
         }),
-        occupationLocations: ['GB-ENG', 'GB-WLS'],
-        industries: [
-          industryFactory.build({ id: 'industries.health', name: 'health' }),
-          industryFactory.build({ id: 'industries.law', name: 'law' }),
-        ],
-      });
+      ];
+
+      const exampleProfession = professionFactory.build(
+        {
+          name: 'Example Profession',
+          slug: 'example-profession',
+          occupationLocations: ['GB-ENG', 'GB-WLS'],
+          industries: [
+            industryFactory.build({ id: 'industries.health', name: 'health' }),
+            industryFactory.build({ id: 'industries.law', name: 'law' }),
+          ],
+        },
+        { transient: { organisations: organisations } },
+      );
 
       const getOrganisationsFromProfessionSpy = jest.spyOn(
         getOrganisationsFromProfessionModule,

@@ -99,8 +99,6 @@ export class ProfessionsSeeder implements Seeder {
         const newProfession = {
           name: seedProfession.name,
           slug: seedProfession.slug,
-          organisation: organisation,
-          additionalOrganisation: additionalOrganisation,
         } as Profession;
 
         const savedProfession = await this.professionsRepository.save({

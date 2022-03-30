@@ -15,7 +15,6 @@ import { OrganisationDto } from './dto/organisation.dto';
 
 import organisationFactory from '../../testutils/factories/organisation';
 import organisationVersionFactory from '../../testutils/factories/organisation-version';
-import professionFactory from '../../testutils/factories/profession';
 import industryFactory from '../../testutils/factories/industry';
 import userFactory from '../../testutils/factories/user';
 
@@ -23,7 +22,6 @@ import { createMockI18nService } from '../../testutils/create-mock-i18n-service'
 import { SummaryList } from '../../common/interfaces/summary-list';
 import { IndustriesService } from '../../industries/industries.service';
 import { IndexTemplate } from './interfaces/index-template.interface';
-import { OrganisationsFilterHelper } from '../helpers/organisations-filter.helper';
 import { FilterDto } from './dto/filter.dto';
 import { FilterInput } from '../../common/interfaces/filter-input.interface';
 import { flashMessage } from '../../common/flash-message';
@@ -38,7 +36,6 @@ import { RequestWithAppSession } from '../../common/interfaces/request-with-app-
 
 jest.mock('./presenters/organisations.presenter');
 jest.mock('../presenters/organisation.presenter');
-jest.mock('../helpers/organisations-filter.helper');
 jest.mock('../../common/flash-message');
 jest.mock('../../users/helpers/get-acting-user.helper');
 jest.mock('../../helpers/escape.helper');
@@ -126,10 +123,6 @@ describe('OrganisationsController', () => {
             OrganisationsPresenter.prototype as DeepMocked<OrganisationsPresenter>
           ).present.mockResolvedValue(templateParams);
 
-          (
-            OrganisationsFilterHelper.prototype as DeepMocked<OrganisationsFilterHelper>
-          ).filter.mockReturnValue(organisations);
-
           expect(await controller.index(request)).toEqual(templateParams);
 
           expect(
@@ -197,10 +190,6 @@ describe('OrganisationsController', () => {
           (
             OrganisationsPresenter.prototype as DeepMocked<OrganisationsPresenter>
           ).present.mockResolvedValue(templateParams);
-
-          (
-            OrganisationsFilterHelper.prototype as DeepMocked<OrganisationsFilterHelper>
-          ).filter.mockReturnValue([organisations[1], organisations[3]]);
 
           expect(
             await controller.index(request, {
@@ -282,10 +271,6 @@ describe('OrganisationsController', () => {
         (
           OrganisationsPresenter.prototype as DeepMocked<OrganisationsPresenter>
         ).present.mockResolvedValue(templateParams);
-
-        (
-          OrganisationsFilterHelper.prototype as DeepMocked<OrganisationsFilterHelper>
-        ).filter.mockReturnValue([userOrganisation]);
 
         expect(await controller.index(request)).toEqual(templateParams);
 
@@ -463,7 +448,6 @@ describe('OrganisationsController', () => {
           const updatedOrganisation = Organisation.withVersion(
             newOrganisation,
             newVersion,
-            true,
           );
 
           expect(OrganisationPresenter).toHaveBeenCalledWith(
@@ -720,13 +704,9 @@ describe('OrganisationsController', () => {
 });
 
 function createOrganisations(): Organisation[] {
-  return organisationFactory.buildList(5, {
-    professions: professionFactory.buildList(2),
-  });
+  return organisationFactory.buildList(5);
 }
 
 function createOrganisation(): Organisation {
-  return organisationFactory.build({
-    professions: professionFactory.buildList(2),
-  });
+  return organisationFactory.build({});
 }

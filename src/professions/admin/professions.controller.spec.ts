@@ -51,30 +51,36 @@ const organisation2 = organisationFactory.build({
 
 const organisations = [organisation1, organisation2];
 
-const profession1 = professionFactory.build({
-  name: 'Primary School Teacher',
-  occupationLocations: ['GB-ENG'],
-  organisation: organisation1,
-  industries: [industry1],
-  regulationType: RegulationType.Accreditation,
-  updated_at: new Date(2013, 4, 23),
-});
-const profession2 = professionFactory.build({
-  name: 'Secondary School Teacher',
-  occupationLocations: ['GB-NIR'],
-  organisation: organisation1,
-  industries: [industry1],
-  regulationType: RegulationType.Licensing,
-  updated_at: new Date(2011, 7, 27),
-});
-const profession3 = professionFactory.build({
-  name: 'Trademark Attorny',
-  occupationLocations: ['GB-SCT', 'GB-WLS'],
-  organisation: organisation2,
-  industries: [industry2, industry3],
-  regulationType: RegulationType.Certification,
-  updated_at: new Date(2021, 12, 1),
-});
+const profession1 = professionFactory.build(
+  {
+    name: 'Primary School Teacher',
+    occupationLocations: ['GB-ENG'],
+    industries: [industry1],
+    regulationType: RegulationType.Accreditation,
+    updated_at: new Date(2013, 4, 23),
+  },
+  { transient: { organisations: [organisation1] } },
+);
+const profession2 = professionFactory.build(
+  {
+    name: 'Secondary School Teacher',
+    occupationLocations: ['GB-NIR'],
+    industries: [industry1],
+    regulationType: RegulationType.Licensing,
+    updated_at: new Date(2011, 7, 27),
+  },
+  { transient: { organisations: [organisation1] } },
+);
+const profession3 = professionFactory.build(
+  {
+    name: 'Trademark Attorny',
+    occupationLocations: ['GB-SCT', 'GB-WLS'],
+    industries: [industry2, industry3],
+    regulationType: RegulationType.Certification,
+    updated_at: new Date(2021, 12, 1),
+  },
+  { transient: { organisations: [organisation2] } },
+);
 
 let request: DeepMocked<RequestWithAppSession>;
 let i18nService: DeepMocked<I18nService>;

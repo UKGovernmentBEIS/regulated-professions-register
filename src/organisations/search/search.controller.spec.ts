@@ -6,7 +6,6 @@ import { SearchController } from './search.controller';
 import { SearchPresenter } from './search.presenter';
 import industryFactory from '../../testutils/factories/industry';
 import organisationFactory from '../../testutils/factories/organisation';
-import professionFactory from '../../testutils/factories/profession';
 import { I18nService } from 'nestjs-i18n';
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 import { OrganisationVersionsService } from '../organisation-versions.service';
@@ -30,21 +29,9 @@ const industry3 = industryFactory.build({
 
 const organisation1 = organisationFactory.build({
   name: 'General Medical Council',
-  professions: [
-    professionFactory.build({
-      occupationLocations: ['GB-SCT'],
-      industries: [industry1],
-    }),
-  ],
 });
 const organisation2 = organisationFactory.build({
   name: 'Department for Education',
-  professions: [
-    professionFactory.build({
-      occupationLocations: ['GB-WLS', 'GB-ENG'],
-      industries: [industry2],
-    }),
-  ],
 });
 
 const industries = [industry1, industry2, industry3];

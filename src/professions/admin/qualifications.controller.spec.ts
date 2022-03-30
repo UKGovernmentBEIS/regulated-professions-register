@@ -12,7 +12,6 @@ import { isUK } from '../../helpers/nations.helper';
 
 import professionVersionFactory from '../../testutils/factories/profession-version';
 import qualificationFactory from '../../testutils/factories/qualification';
-import organisationFactory from '../../testutils/factories/organisation';
 import { translationOf } from '../../testutils/translation-of';
 import userFactory from '../../testutils/factories/user';
 import { createDefaultMockRequest } from '../../testutils/factories/create-default-mock-request';
@@ -98,7 +97,6 @@ describe(QualificationsController, () => {
           .justCreated('profession-id')
           .build({
             name: 'Example Profession',
-            organisation: organisationFactory.build(),
             slug: 'example-profession',
           });
 

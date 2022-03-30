@@ -8,6 +8,7 @@ import { OrganisationVersionsController } from './organisation-versions.controll
 import { OrganisationVersionsService } from '../organisation-versions.service';
 
 import { Organisation } from '../organisation.entity';
+import { Profession } from '../../professions/profession.entity';
 
 import { OrganisationSummaryPresenter } from '../presenters/organisation-summary.presenter';
 
@@ -16,6 +17,7 @@ import { ShowTemplate } from './interfaces/show-template.interface';
 import organisationFactory from '../../testutils/factories/organisation';
 import organisationVersionFactory from '../../testutils/factories/organisation-version';
 import userFactory from '../../testutils/factories/user';
+import professionFactory from '../../testutils/factories/profession';
 
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 
@@ -24,11 +26,14 @@ import { OrganisationPresenter } from '../presenters/organisation.presenter';
 import { getActingUser } from '../../users/helpers/get-acting-user.helper';
 import { createDefaultMockRequest } from '../../testutils/factories/create-default-mock-request';
 import { checkCanViewOrganisation } from '../../users/helpers/check-can-view-organisation';
+import * as getProfessionsFromOrganisationModule from './../helpers/get-professions-from-organisation.helper';
 
 jest.mock('../presenters/organisation-summary.presenter');
 jest.mock('../presenters/organisation.presenter');
 jest.mock('../../users/helpers/get-acting-user.helper');
 jest.mock('../../users/helpers/check-can-view-organisation');
+jest.mock('../presenters/organisation-summary.presenter');
+jest.mock('../../professions/profession.entity');
 
 describe('OrganisationVersionsController', () => {
   let controller: OrganisationVersionsController;
@@ -121,19 +126,31 @@ describe('OrganisationVersionsController', () => {
   describe('show', () => {
     it('should return variables for the show template', async () => {
       const organisation = organisationFactory.build();
+      const professions = professionFactory.buildList(5);
+
       const version = organisationVersionFactory.build({
         organisation: organisation,
       });
       const organisationWithVersion = Organisation.withVersion(
         organisation,
         version,
-        true,
       );
 
       organisationVersionsService.findByIdWithOrganisation.mockResolvedValue(
         version,
       );
       organisationVersionsService.hasLiveVersion.mockResolvedValue(true);
+
+      const getProfessionsFromOrganisationSpy = jest.spyOn(
+        getProfessionsFromOrganisationModule,
+        'getProfessionsFromOrganisation',
+      );
+
+      getProfessionsFromOrganisationSpy.mockReturnValue(professions);
+
+      (Profession.withLatestLiveOrDraftVersion as jest.Mock).mockImplementation(
+        (profession) => profession,
+      );
 
       const showTemplate: ShowTemplate = {
         organisation,
@@ -167,6 +184,7 @@ describe('OrganisationVersionsController', () => {
 
       expect(OrganisationSummaryPresenter).toHaveBeenCalledWith(
         organisationWithVersion,
+        professions,
         i18nService,
       );
     });
@@ -179,7 +197,6 @@ describe('OrganisationVersionsController', () => {
       const organisationWithVersion = Organisation.withVersion(
         organisation,
         version,
-        true,
       );
 
       const request = createDefaultMockRequest({

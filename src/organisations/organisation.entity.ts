@@ -1,4 +1,3 @@
-import { Profession } from '../professions/profession.entity';
 import {
   OrganisationVersion,
   OrganisationVersionStatus,
@@ -34,9 +33,6 @@ export class Organisation {
     { eager: true },
   )
   versions: OrganisationVersion[];
-
-  @OneToMany(() => Profession, (profession) => profession.organisation)
-  professions: Profession[];
 
   @OneToMany(
     () => ProfessionToOrganisation,
@@ -100,18 +96,7 @@ export class Organisation {
   public static withVersion(
     organisation: Organisation,
     organisationVersion: OrganisationVersion,
-    showDraftProfessions = false,
   ): Organisation {
-    const professions = (organisation.professions || [])
-      .map((profession) => {
-        if (showDraftProfessions === true) {
-          return Profession.withLatestLiveOrDraftVersion(profession);
-        } else {
-          return Profession.withLatestLiveVersion(profession);
-        }
-      })
-      .filter(Boolean);
-
     return {
       ...organisation,
       alternateName: organisationVersion.alternateName,
@@ -123,7 +108,6 @@ export class Organisation {
       status: organisationVersion.status,
       lastModified: organisationVersion.updated_at,
       changedByUser: organisationVersion.user,
-      professions: professions,
     } as Organisation;
   }
 
@@ -135,7 +119,6 @@ export class Organisation {
     url?: string,
     email?: string,
     telephone?: string,
-    professions?: Profession[],
     users?: User[],
   ) {
     this.name = name || '';
@@ -145,7 +128,6 @@ export class Organisation {
     this.url = url || '';
     this.email = email || '';
     this.telephone = telephone || '';
-    this.professions = professions;
     this.users = users;
   }
 }

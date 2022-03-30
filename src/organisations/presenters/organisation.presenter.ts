@@ -192,11 +192,7 @@ export class OrganisationPresenter {
   }
 
   private async industries(): Promise<string> {
-    const professions = this.organisation.professions.map((profession) =>
-      Profession.withLatestLiveOrDraftVersion(profession),
-    );
-
-    const industries = professions
+    const industries = this.professions()
       .map((profession) => profession.industries)
       .flat();
 
@@ -211,15 +207,20 @@ export class OrganisationPresenter {
   }
 
   public async nations(): Promise<string> {
-    const professions = this.organisation.professions.map((profession) =>
-      Profession.withLatestLiveOrDraftVersion(profession),
-    );
-
-    const nationCodes = professions
+    const nationCodes = this.professions()
       .map((profession) => profession.occupationLocations || [])
       .flat();
     const nations = [...new Set(nationCodes)].map((code) => Nation.find(code));
 
     return await stringifyNations(nations, this.i18nService);
+  }
+
+  private professions(): Profession[] {
+    return this.organisation.professionToOrganisations.map(
+      (professionToOrganisation) =>
+        Profession.withLatestLiveOrDraftVersion(
+          professionToOrganisation.profession,
+        ),
+    );
   }
 }

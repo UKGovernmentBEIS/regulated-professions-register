@@ -85,19 +85,13 @@ describe('Searching an organisation', () => {
   });
 
   it('I can filter by nation', () => {
-    cy.readFile('./seeds/test/professions.json').then((professions) => {
-      const scottishProfessions = professions.filter((profession) =>
-        profession.versions.some(
-          (version) =>
-            version.occupationLocations &&
-            version.occupationLocations.includes('GB-SCT'),
-        ),
-      );
-
-      const organisations = scottishProfessions.map(
-        (profession) => profession.organisation,
-      );
-
+    findMatchingOrganisations((profession) =>
+      profession.versions.some(
+        (version) =>
+          version.occupationLocations &&
+          version.occupationLocations.includes('GB-SCT'),
+      ),
+    ).then((liveOrganisations) => {
       cy.get('input[name="nations[]"][value="GB-SCT"]').check();
 
       cy.get('button').click();
@@ -105,19 +99,21 @@ describe('Searching an organisation', () => {
 
       cy.get('input[name="nations[]"][value="GB-SCT"]').should('be.checked');
 
-      checkResultLength(organisations.length);
+      checkResultLength(liveOrganisations.length);
 
-      for (const organisation of organisations) {
-        cy.get('body').should('contain', organisation);
+      for (const organisation of liveOrganisations) {
+        cy.get('body').should('contain', organisation.name);
       }
     });
   });
 
   it('I can filter by industry', () => {
-    cy.readFile('./seeds/test/organisations.json').then((organisations) => {
-      const lawOrganisations = organisations.filter(
-        (org) => org.name === 'Law Society of England and Wales',
-      );
+    findMatchingOrganisations((profession) =>
+      profession.versions.some(
+        (version) =>
+          version.industries && version.industries.includes('industries.law'),
+      ),
+    ).then((lawOrganisations) => {
       cy.translate('industries.law').then((nameLabel) => {
         cy.get('label').contains(nameLabel).parent().find('input').check();
       });
@@ -133,25 +129,22 @@ describe('Searching an organisation', () => {
           .should('be.checked');
       });
 
-      cy.get('body').should('contain', 'Law Society of England and Wales');
       checkResultLength(lawOrganisations.length);
+
+      for (const organisation of lawOrganisations) {
+        cy.get('body').should('contain', organisation.name);
+      }
     });
   });
 
   it('I can filter by regulation type', () => {
-    cy.readFile('./seeds/test/professions.json').then((professions) => {
-      const cerificatedProfessions = professions.filter((profession) =>
-        profession.versions.some(
-          (version) =>
-            version.status === 'live' &&
-            version.regulationType === 'certification',
-        ),
-      );
-
-      const organisations = new Set(
-        cerificatedProfessions.map((profession) => profession.organisation),
-      );
-
+    findMatchingOrganisations((profession) =>
+      profession.versions.some(
+        (version) =>
+          version.status === 'live' &&
+          version.regulationType === 'certification',
+      ),
+    ).then((certifiedOrganisations) => {
       cy.translate('professions.regulationTypes.certification.name').then(
         (nameLabel) => {
           cy.get('label').contains(nameLabel).parent().find('input').check();
@@ -171,11 +164,11 @@ describe('Searching an organisation', () => {
         },
       );
 
-      checkResultLength(organisations.size);
+      checkResultLength(certifiedOrganisations.length);
 
-      organisations.forEach((organisation) => {
-        cy.get('body').should('contain', organisation);
-      });
+      for (const organisation of certifiedOrganisations) {
+        cy.get('body').should('contain', organisation.name);
+      }
     });
   });
 
@@ -236,4 +229,29 @@ function checkResultLength(expectedLength: number): void {
   cy.get('.govuk-grid-column-two-thirds')
     .find('h2')
     .should('have.length', expectedLength);
+}
+
+function findMatchingOrganisations(filter: (profession: any) => boolean) {
+  return cy.readFile('./seeds/test/professions.json').then((professions) => {
+    const matchingProfessions = professions.filter((profession) =>
+      filter(profession),
+    );
+
+    const organisationNames = matchingProfessions
+      .map((profession) => [
+        profession.organisation,
+        profession.additionalOrganisation,
+      ])
+      .flat();
+
+    cy.readFile('./seeds/test/organisations.json').then((organisations) => {
+      const liveOrganisations = organisations.filter(
+        (organisation) =>
+          organisationNames.includes(organisation.name) &&
+          organisation.versions.some((version) => version.status === 'live'),
+      );
+
+      return liveOrganisations;
+    });
+  });
 }
