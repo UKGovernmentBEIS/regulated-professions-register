@@ -10,9 +10,7 @@
         {{ title }}
       </h1>
 
-      {% for _i, paragraph in ("app.pages.index.intro" | t) %}
-        <p class="govuk-body">{{ paragraph }}</p>
-      {% endfor %}
+      {{ "app.pages.index.intro" | t | safe }}
 
       <ul class="govuk-list govuk-list--bullet">
         <li>
