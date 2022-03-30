@@ -141,7 +141,6 @@ describe('ProfessionPublicationController', () => {
           user,
         });
 
-        professionsService.find.mockResolvedValue(brandNewProfession);
         professionVersionsService.create.mockResolvedValue(newVersion);
 
         await controller.create(req, res, brandNewProfession.id, version.id);
@@ -307,14 +306,15 @@ describe('ProfessionPublicationController', () => {
       const profession = professionFactory.build();
       const version = professionVersionFactory.build({ profession });
 
+      professionVersionsService.findByIdWithProfession.mockResolvedValue(
+        version,
+      );
+
       (getPublicationBlockers as jest.Mock).mockReturnValue([]);
 
       await controller.create(req, res, profession.id, version.id);
 
-      expect(checkCanViewProfession).toHaveBeenCalledWith(
-        req,
-        Profession.withVersion(profession, version),
-      );
+      expect(checkCanViewProfession).toHaveBeenCalledWith(req, profession);
     });
   });
 

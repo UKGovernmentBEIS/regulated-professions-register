@@ -65,14 +65,14 @@ export class ProfessionPublicationController {
     @Param('professionId') professionId: string,
     @Param('versionId') versionId: string,
   ): Promise<void> {
-    const profession = await this.professionsService.find(professionId);
-
-    checkCanViewProfession(req, profession);
-
     const version = await this.professionVersionsService.findByIdWithProfession(
       professionId,
       versionId,
     );
+
+    const profession = version.profession;
+
+    checkCanViewProfession(req, profession);
 
     if (getPublicationBlockers(version).length) {
       throw new BadRequestException();
