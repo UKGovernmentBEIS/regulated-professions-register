@@ -15,6 +15,7 @@ import { Organisation } from '../organisations/organisation.entity';
 import { ProfessionVersionsService } from './profession-versions.service';
 import { getOrganisationsFromProfession } from './helpers/get-organisations-from-profession.helper';
 import { isUK } from '../helpers/nations.helper';
+import { NationsListPresenter } from '../nations/presenters/nations-list.presenter';
 
 @Controller()
 export class ProfessionsController {
@@ -44,10 +45,9 @@ export class ProfessionsController {
       (organisation) => Organisation.withLatestLiveVersion(organisation),
     );
 
-    const nations = await Promise.all(
-      (profession.occupationLocations || []).map(async (code) =>
-        Nation.find(code).translatedName(this.i18nService),
-      ),
+    const nations = new NationsListPresenter(
+      (profession.occupationLocations || []).map((code) => Nation.find(code)),
+      this.i18nService,
     );
 
     const industries = await Promise.all(
@@ -70,7 +70,7 @@ export class ProfessionsController {
               : true,
           )
         : null,
-      nations,
+      nations: await nations.htmlList(),
       industries,
       organisations,
     };

@@ -21,11 +21,16 @@ import organisationFactory from '../../testutils/factories/organisation';
 import * as getOrganisationsFromProfessionModule from '../helpers/get-organisations-from-profession.helper';
 import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
 import * as getPublicationBlockersModule from '../helpers/get-publication-blockers.helper';
+import { NationsListPresenter } from '../../nations/presenters/nations-list.presenter';
+import { Nation } from '../../nations/nation';
 
 jest.mock('../../organisations/organisation.entity');
 jest.mock('../presenters/profession.presenter');
 jest.mock('../../users/helpers/get-acting-user.helper');
 jest.mock('../../users/helpers/check-can-view-profession');
+jest.mock('../../nations/presenters/nations-list.presenter');
+
+const mockNationsHtml = '<ul><li>Mock nations html</li></ul>';
 
 describe('ProfessionVersionsController', () => {
   let controller: ProfessionVersionsController;
@@ -172,6 +177,10 @@ describe('ProfessionVersionsController', () => {
             (organisation) => organisation,
           );
 
+          (
+            NationsListPresenter.prototype.htmlList as jest.Mock
+          ).mockResolvedValue(mockNationsHtml);
+
           const getOrganisationsFromProfessionSpy = jest.spyOn(
             getOrganisationsFromProfessionModule,
             'getOrganisationsFromProfession',
@@ -198,7 +207,7 @@ describe('ProfessionVersionsController', () => {
               professionWithVersion.qualification,
               createMockI18nService(),
             ).summaryList(true, true),
-            nations: ['Translation of `nations.england`'],
+            nations: mockNationsHtml,
             industries: ['Translation of `industries.example`'],
             organisations: [
               profession.professionToOrganisations[0].organisation,
@@ -216,6 +225,10 @@ describe('ProfessionVersionsController', () => {
             professionWithVersion,
           );
           expect(getPublicationBlockersSpy).toHaveBeenCalledWith(version);
+          expect(NationsListPresenter).toHaveBeenCalledWith(
+            [Nation.find('GB-ENG')],
+            i18nService,
+          );
         });
       });
 
@@ -251,6 +264,10 @@ describe('ProfessionVersionsController', () => {
             (organisation) => organisation,
           );
 
+          (
+            NationsListPresenter.prototype.htmlList as jest.Mock
+          ).mockResolvedValue(mockNationsHtml);
+
           const getOrganisationsFromProfessionSpy = jest.spyOn(
             getOrganisationsFromProfessionModule,
             'getOrganisationsFromProfession',
@@ -277,7 +294,7 @@ describe('ProfessionVersionsController', () => {
               professionWithVersion.qualification,
               createMockI18nService(),
             ).summaryList(true, true),
-            nations: ['Translation of `nations.england`'],
+            nations: mockNationsHtml,
             industries: ['Translation of `industries.example`'],
             organisations: [organisation1, organisation2],
             publicationBlockers: [],
@@ -293,6 +310,10 @@ describe('ProfessionVersionsController', () => {
             professionWithVersion,
           );
           expect(getPublicationBlockersSpy).toHaveBeenCalledWith(version);
+          expect(NationsListPresenter).toHaveBeenCalledWith(
+            [Nation.find('GB-ENG')],
+            i18nService,
+          );
         });
       });
     });
@@ -323,6 +344,11 @@ describe('ProfessionVersionsController', () => {
         (Organisation.withLatestVersion as jest.Mock).mockImplementation(
           (organisation) => organisation,
         );
+
+        (
+          NationsListPresenter.prototype.htmlList as jest.Mock
+        ).mockResolvedValue(mockNationsHtml);
+
         const getPublicationBlockersSpy = jest
           .spyOn(getPublicationBlockersModule, 'getPublicationBlockers')
           .mockReturnValue([
@@ -348,7 +374,7 @@ describe('ProfessionVersionsController', () => {
             professionWithVersion.qualification,
             createMockI18nService(),
           ).summaryList(true, true),
-          nations: [translationOf('nations.england')],
+          nations: mockNationsHtml,
           industries: [translationOf('industries.example')],
           organisations: [profession.professionToOrganisations[0].organisation],
           publicationBlockers: [
@@ -360,6 +386,10 @@ describe('ProfessionVersionsController', () => {
         });
 
         expect(getPublicationBlockersSpy).toHaveBeenCalledWith(version);
+        expect(NationsListPresenter).toHaveBeenCalledWith(
+          [Nation.find('GB-ENG')],
+          i18nService,
+        );
       });
     });
 
@@ -395,6 +425,10 @@ describe('ProfessionVersionsController', () => {
           (organisation) => organisation,
         );
 
+        (
+          NationsListPresenter.prototype.htmlList as jest.Mock
+        ).mockResolvedValue(mockNationsHtml);
+
         const request = createDefaultMockRequest({ user: userFactory.build() });
 
         const getPublicationBlockersSpy = jest
@@ -424,7 +458,7 @@ describe('ProfessionVersionsController', () => {
             undefined,
             createMockI18nService(),
           ).summaryList(true, true),
-          nations: [],
+          nations: mockNationsHtml,
           industries: [],
           organisations: [profession.professionToOrganisations[0].organisation],
           publicationBlockers: [
@@ -446,6 +480,7 @@ describe('ProfessionVersionsController', () => {
           professionWithVersion,
         );
         expect(getPublicationBlockersSpy).toHaveBeenCalledWith(version);
+        expect(NationsListPresenter).toHaveBeenCalledWith([], i18nService);
       });
     });
   });

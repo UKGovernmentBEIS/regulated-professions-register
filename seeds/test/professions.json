@@ -126,7 +126,7 @@
     "additionalOrganisation": null,
     "versions": [
       {
-        "occupationLocations": ["GB-ENG", "GB-SCT", "GB-WLS", "GB-NIR"],
+        "occupationLocations": ["GB-ENG", "GB-NIR"],
         "industries": ["industries.education"],
         "description": "A description of the profession",
         "regulationType": "accreditation",

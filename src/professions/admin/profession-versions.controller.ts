@@ -28,6 +28,7 @@ import { ShowTemplate } from './interfaces/show-template.interface';
 import { isUK } from '../../helpers/nations.helper';
 import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
 import { getPublicationBlockers } from '../helpers/get-publication-blockers.helper';
+import { NationsListPresenter } from '../../nations/presenters/nations-list.presenter';
 
 @UseGuards(AuthenticationGuard)
 @Controller('/admin/professions')
@@ -75,10 +76,9 @@ export class ProfessionVersionsController {
       (organisation) => Organisation.withLatestVersion(organisation),
     );
 
-    const nations = await Promise.all(
-      (profession.occupationLocations || []).map(async (code) =>
-        Nation.find(code).translatedName(this.i18nService),
-      ),
+    const nations = new NationsListPresenter(
+      (profession.occupationLocations || []).map((code) => Nation.find(code)),
+      this.i18nService,
     );
 
     const industries = await Promise.all(
@@ -102,7 +102,7 @@ export class ProfessionVersionsController {
           ? !isUK(profession.occupationLocations)
           : true,
       ),
-      nations,
+      nations: await nations.htmlList(),
       industries,
       organisations,
       publicationBlockers: getPublicationBlockers(version),

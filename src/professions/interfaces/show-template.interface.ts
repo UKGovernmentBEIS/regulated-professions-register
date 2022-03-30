@@ -7,7 +7,7 @@ export interface ShowTemplate {
   profession: Profession;
   presenter?: ProfessionPresenter;
   qualificationSummaryList: SummaryList;
-  nations: string[];
+  nations: string;
   industries: string[];
   organisations: Organisation[];
 }

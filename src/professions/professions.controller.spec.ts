@@ -15,8 +15,13 @@ import { Organisation } from '../organisations/organisation.entity';
 
 import organisationFactory from '../testutils/factories/organisation';
 import * as getOrganisationsFromProfessionModule from './helpers/get-organisations-from-profession.helper';
+import { NationsListPresenter } from '../nations/presenters/nations-list.presenter';
+import { Nation } from '../nations/nation';
 
 jest.mock('../organisations/organisation.entity');
+jest.mock('../nations/presenters/nations-list.presenter');
+
+const mockNationsHtml = '<ul><li>Mock nations html</li></ul>';
 
 describe('ProfessionsController', () => {
   let controller: ProfessionsController;
@@ -66,6 +71,10 @@ describe('ProfessionsController', () => {
           (organisation) => organisation,
         );
 
+        (
+          NationsListPresenter.prototype.htmlList as jest.Mock
+        ).mockResolvedValue(mockNationsHtml);
+
         const getOrganisationsFromProfessionSpy = jest.spyOn(
           getOrganisationsFromProfessionModule,
           'getOrganisationsFromProfession',
@@ -79,7 +88,7 @@ describe('ProfessionsController', () => {
             profession.qualification,
             createMockI18nService(),
           ).summaryList(false, true),
-          nations: [translationOf('nations.england')],
+          nations: mockNationsHtml,
           industries: [translationOf('industries.example')],
           organisations: [profession.professionToOrganisations[0].organisation],
         });
@@ -88,6 +97,10 @@ describe('ProfessionsController', () => {
           'example-slug',
         );
         expect(getOrganisationsFromProfessionSpy).toBeCalledWith(profession);
+        expect(NationsListPresenter).toBeCalledWith(
+          [Nation.find('GB-ENG')],
+          i18nService,
+        );
       });
     });
 
@@ -113,6 +126,10 @@ describe('ProfessionsController', () => {
           (organisation) => organisation,
         );
 
+        (
+          NationsListPresenter.prototype.htmlList as jest.Mock
+        ).mockResolvedValue(mockNationsHtml);
+
         const getOrganisationsFromProfessionSpy = jest.spyOn(
           getOrganisationsFromProfessionModule,
           'getOrganisationsFromProfession',
@@ -126,7 +143,7 @@ describe('ProfessionsController', () => {
             profession.qualification,
             createMockI18nService(),
           ).summaryList(false, true),
-          nations: [translationOf('nations.england')],
+          nations: mockNationsHtml,
           industries: [translationOf('industries.example')],
           organisations: [organisation1, organisation2],
         });
@@ -135,6 +152,10 @@ describe('ProfessionsController', () => {
           'example-slug',
         );
         expect(getOrganisationsFromProfessionSpy).toBeCalledWith(profession);
+        expect(NationsListPresenter).toBeCalledWith(
+          [Nation.find('GB-ENG')],
+          i18nService,
+        );
       });
     });
 
@@ -164,9 +185,9 @@ describe('ProfessionsController', () => {
       });
 
       describe('when the Profession has no nations set', () => {
-        it('passes an empty array for the industries', async () => {
+        it('passes an empty array for NationsListPresenter', async () => {
           const profession = professionFactory.build({
-            occupationLocations: [],
+            occupationLocations: undefined,
           });
 
           professionVersionsService.findLiveBySlug.mockResolvedValue(
@@ -177,13 +198,9 @@ describe('ProfessionsController', () => {
             (organisation) => organisation,
           );
 
-          const result = await controller.show('example-slug');
+          await controller.show('example-slug');
 
-          expect(result).toEqual(
-            expect.objectContaining({
-              nations: [],
-            }),
-          );
+          expect(NationsListPresenter).toBeCalledWith([], i18nService);
         });
       });
 
@@ -203,12 +220,16 @@ describe('ProfessionsController', () => {
             (organisation) => organisation,
           );
 
+          (
+            NationsListPresenter.prototype.htmlList as jest.Mock
+          ).mockResolvedValue(mockNationsHtml);
+
           const result = await controller.show('example-slug');
 
           expect(result).toEqual({
             profession: profession,
             qualificationSummaryList: null,
-            nations: [translationOf('nations.england')],
+            nations: mockNationsHtml,
             industries: [translationOf('industries.example')],
             organisations: [
               profession.professionToOrganisations[0].organisation,

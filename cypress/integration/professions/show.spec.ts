@@ -14,6 +14,14 @@ describe('Showing a profession', () => {
       cy.get('body').should('contain', heading);
     });
 
+    cy.translate('app.unitedKingdom').then((uk) => {
+      cy.checkSummaryListRowValue('professions.show.overview.nations', uk);
+    });
+
+    cy.translate('industries.law').then((law) => {
+      cy.checkSummaryListRowList('professions.show.overview.industry', [law]);
+    });
+
     cy.get('h3').should('contain', 'Law Society of England and Wales');
     cy.get('h3')
       .contains('Law Society of England and Wales')
@@ -166,6 +174,25 @@ describe('Showing a profession', () => {
 
     cy.translate('professions.show.bodies.heading').then((heading) => {
       cy.get('body').should('contain', heading);
+    });
+
+    cy.translate('professions.show.bodies.heading').then((heading) => {
+      cy.get('body').should('contain', heading);
+    });
+
+    cy.translate('nations.england').then((england) => {
+      cy.translate('nations.northernIreland').then((northernIreland) => {
+        cy.checkSummaryListRowList('professions.show.overview.nations', [
+          england,
+          northernIreland,
+        ]);
+      });
+    });
+
+    cy.translate('industries.education').then((education) => {
+      cy.checkSummaryListRowList('professions.show.overview.industry', [
+        education,
+      ]);
     });
 
     cy.get('h3').should('contain', 'Organisation with no optional fields');
