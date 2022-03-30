@@ -7,6 +7,7 @@ The following links provide information on how to perform common tasks that migh
 - [How to deploy the service](./deployment.md)
 - [How to access a live console](./accessing-a-live-console.md)
 - [How to generate migrations](./generate-migrations.md)
+- [How to create a new user](./creating-users.md)
 
 ## Other common development tasks
 
