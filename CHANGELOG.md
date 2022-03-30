@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 
 - Small revisions to sign in/out text to follow GOV.UK style guidelines
+- Use UK spelling of "authorised" on error page
 
 ## [release-013] - 2022-03-29
 
