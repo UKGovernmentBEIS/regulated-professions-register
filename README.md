@@ -1,5 +1,23 @@
 # Regulated Professions Register
 
+Some professions are regulated in the UK, or parts of the UK. This means you
+may need certain qualifications or experience before working in them.
+
+The Regulated Professions Register (RPR) allows professionals to:
+
+- check if a profession is regulated
+- check the requirements for practising a profession
+- find the contact details of the regulator or professional body for a
+  particular profession
+
+You may need to do this if you:
+
+- gained your qualifications overseas and want to work in the UK
+- qualified in a certain area of the UK, like England, and want to work in a
+  different area, like Scotland
+- want to work in a regulated profession for the first time
+- are thinking about becoming a member of a professional body
+
 ## Setup
 
 Run the setup command. This drops and recreates the database, installs any
