@@ -80,7 +80,7 @@ describe('checkCanViewOrganisation', () => {
     });
 
     describe('when trying to view data with no organisation passed in e.g. for a service owner', () => {
-      it('returns true without throwing an Error', () => {
+      it('returns without throwing an Error', () => {
         const user = userFactory.build({
           serviceOwner: true,
           organisation: null,

@@ -4,7 +4,7 @@ import { getOrganisationsFromProfession } from './get-organisations-from-profess
 import { ProfessionToOrganisation } from '../profession-to-organisation.entity';
 
 describe('getOrganisationsFromProfession', () => {
-  describe('when the Organisation has one organisation', () => {
+  describe('when the Profession has one organisation', () => {
     it('returns a single-element array containing only that organisation', () => {
       const organisation = organisationFactory.build();
 
@@ -20,7 +20,7 @@ describe('getOrganisationsFromProfession', () => {
     });
   });
 
-  describe('when the Organisation has two organisations', () => {
+  describe('when the Profession has two organisations', () => {
     it('returns a two element array containing both organisations', () => {
       const organisation = organisationFactory.build();
       const additionalOrganisation = organisationFactory.build();
