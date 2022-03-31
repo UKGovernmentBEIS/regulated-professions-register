@@ -64,3 +64,21 @@ If you make any changes to the assets, run:
 ```
 npm run build:assets
 ```
+
+## Access
+
+### Staging
+
+The staging environment is hosted on GPaas: https://staging.regulated-professions.beis.gov.uk
+
+The public pages (anything other than `/admin/*`) are currently behind basic authentication. Credentials for this are stored under "Staging basic auth" in the BEIS RPR 1Password vault.
+
+The `main` branch is deployed to staging after a successful build via GitHub Actions.
+
+### Production
+
+The production environment is hosted on GPaas: https://www.regulated-professions.beis.gov.uk
+
+The public pages (anything other than `/admin/*`) are currently behind basic authentication. Credentials for this are stored under "Prod basic auth" in the BEIS RPR 1Password vault.
+
+Production deployments are triggered manually from the `main` branch. See [deployments](./doc/deployment.md) for more details.
