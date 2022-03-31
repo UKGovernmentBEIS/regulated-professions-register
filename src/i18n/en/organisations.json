@@ -171,6 +171,15 @@
     "url": "Website",
     "address": "Address",
     "email": "Email",
-    "telephone": "Phone number"
+    "telephone": "Phone number",
+    "roles": {
+      "primaryRegulator": "Primary Regulator",
+      "charteredBody": "Chartered Body",
+      "qualifyingBody": "Qualifying Body",
+      "additionalRegulator": "Additional Regulator",
+      "oversightBody": "Oversight Body",
+      "enforcementBody": "Enforcement Body",
+      "awardingBody": "Awarding Body"
+    }
   }
 }

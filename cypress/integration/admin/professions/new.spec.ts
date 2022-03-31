@@ -65,9 +65,21 @@ describe('Adding a new profession', () => {
         'not.contain',
         'Unconfirmed Organisation',
       );
+
+      cy.translate('organisations.label.roles.primaryRegulator').then(
+        (label) => {
+          cy.get('select[id="roles_1"]').select(label);
+        },
+      );
+
       cy.get('select[id="regulatoryBodies_2"]').select(
         'General Medical Council',
       );
+
+      cy.translate('organisations.label.roles.qualifyingBody').then((label) => {
+        cy.get('select[id="roles_2"]').select(label);
+      });
+
       cy.translate('app.continue').then((buttonText) => {
         cy.get('button').contains(buttonText).click();
       });

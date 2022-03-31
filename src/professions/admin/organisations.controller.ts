@@ -61,11 +61,9 @@ export class OrganisationsController {
 
     checkCanViewProfession(req, profession);
 
-    const organisations = getOrganisationsFromProfession(profession);
-
     return this.renderForm(
       res,
-      organisations,
+      profession.professionToOrganisations,
       profession,
       change === 'true',
       errors,
@@ -99,27 +97,25 @@ export class OrganisationsController {
 
     const submittedValues = validator.obj;
 
-    const regulatoryBodies = submittedValues.regulatoryBodies
+    const professionToOrganisations = submittedValues.professionToOrganisations
       ? await Promise.all(
-          submittedValues.regulatoryBodies.map(async (regulatoryBody) => {
-            return regulatoryBody
-              ? await this.organisationsService.find(regulatoryBody)
-              : null;
-          }),
-        )
-      : null;
+          submittedValues.professionToOrganisations.map(
+            async (professionToOrganisation) => {
+              const organisation = professionToOrganisation.organisation
+                ? await this.organisationsService.find(
+                    professionToOrganisation.organisation,
+                  )
+                : null;
 
-    const professionToOrganisations = regulatoryBodies
-      ? await Promise.all(
-          regulatoryBodies.map(async (regulatoryBody) => {
-            return regulatoryBody
-              ? new ProfessionToOrganisation(
-                  regulatoryBody,
-                  profession,
-                  OrganisationRole.PrimaryRegulator,
-                )
-              : null;
-          }),
+              return organisation
+                ? new ProfessionToOrganisation(
+                    organisation,
+                    profession,
+                    professionToOrganisation.role as OrganisationRole,
+                  )
+                : null;
+            },
+          ),
         )
       : null;
 
@@ -127,7 +123,7 @@ export class OrganisationsController {
       const errors = new ValidationFailedError(validator.errors).fullMessages();
       return this.renderForm(
         res,
-        regulatoryBodies,
+        professionToOrganisations,
         profession,
         submittedValues.change,
         errors,
@@ -150,7 +146,7 @@ export class OrganisationsController {
 
   private async renderForm(
     res: Response,
-    organisations: Organisation[],
+    professionToOrganisations: ProfessionToOrganisation[],
     profession: Profession,
     change: boolean,
     errors: object | undefined = undefined,
@@ -160,7 +156,7 @@ export class OrganisationsController {
 
     const selectArgsArray = await Promise.all(
       Array.from({
-        ...profession.professionToOrganisations,
+        ...professionToOrganisations,
         length: 5,
       }).map(async (professionToOrganisation) => {
         const presenter = new RegulatedAuthoritiesSelectPresenter(

@@ -54,6 +54,10 @@
         "regulatedAuthority": "Main authority regulating this profession",
         "additionalAuthority": "Additional regulator or professional body (optional)"
       },
+      "organisations": {
+        "name": "Name of the regulatory authority",
+        "role": "Role of this regulator"
+      },
       "scope": {
         "nations": "Where you regulate this profession",
         "certainNations": "One or more nations",

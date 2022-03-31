@@ -24,13 +24,27 @@
         {{
           govukSelect({
             label: {
-              text: ("professions.form.label.topLevelInformation.regulatedAuthority" | t),
+              text: ("professions.form.label.organisations.name" | t),
               classes: "govuk-label--m",
               isPageHeading: false
             },
             id: "regulatoryBodies_" + loop.index,
-            name: "regulatoryBodies[]",
+            name: "professionToOrganisations["+ loop.index +"][organisation]",
             items: selectArgs.authorities,
+            errorMessage: errors.regulatoryBody | tError
+          })
+        }}
+
+        {{
+          govukSelect({
+            label: {
+              text: ("professions.form.label.organisations.role" | t),
+              classes: "govuk-label--m",
+              isPageHeading: false
+            },
+            id: "roles_" + loop.index,
+            name: "professionToOrganisations["+ loop.index +"][role]",
+            items: selectArgs.roles,
             errorMessage: errors.regulatoryBody | tError
           })
         }}

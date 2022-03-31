@@ -212,7 +212,10 @@ describe('OrganisationsController', () => {
         professionsService.findWithVersions.mockResolvedValue(profession);
 
         const organisationsDto = {
-          regulatoryBodies: ['example-org-id', 'other-example-org-id'],
+          professionToOrganisations: [
+            { organisation: 'example-org-id', role: 'primaryRegulator' },
+            { organisation: 'other-example-org-id', role: 'awardingBody' },
+          ],
         };
 
         const newOrganisation = organisationFactory.build({
@@ -250,7 +253,7 @@ describe('OrganisationsController', () => {
           new ProfessionToOrganisation(
             newAdditionalOrganisation,
             profession,
-            OrganisationRole.PrimaryRegulator,
+            OrganisationRole.AwardingBody,
           ),
         ];
 
@@ -273,7 +276,9 @@ describe('OrganisationsController', () => {
       professionsService.findWithVersions.mockResolvedValue(profession);
 
       const organisationsDto = {
-        regulatoryBodies: ['example-org-id'],
+        professionToOrganisations: [
+          { organisation: 'example-org-id', role: 'primaryRegulator' },
+        ],
       };
 
       const newOrganisation = organisationFactory.build({
@@ -315,7 +320,7 @@ describe('OrganisationsController', () => {
     describe('when required parameters are not entered', () => {
       it('does not create a profession, and re-renders the top level information view with errors', async () => {
         const organisationsDtoWithNoAnswers = {
-          regulatoryBody: [],
+          professionToOrganisations: [],
         };
 
         const request = createDefaultMockRequest({
@@ -334,8 +339,8 @@ describe('OrganisationsController', () => {
           'admin/professions/organisations',
           expect.objectContaining({
             errors: {
-              regulatoryBodies: {
-                text: 'professions.form.errors.regulatoryBody.empty',
+              professionToOrganisations: {
+                text: 'professions.form.errors.professionToOrganisations.empty',
               },
             },
           }),

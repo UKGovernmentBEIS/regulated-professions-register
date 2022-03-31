@@ -1,12 +1,15 @@
 import { Transform } from 'class-transformer';
-import { IsNotEmpty } from 'class-validator';
+import { ArrayNotEmpty } from 'class-validator';
 import { parseBoolean } from '../../../helpers/parse-boolean.helper';
 
 export class OrganisationsDto {
-  @IsNotEmpty({
-    message: 'professions.form.errors.regulatoryBody.empty',
+  @ArrayNotEmpty({
+    message: 'professions.form.errors.professionToOrganisations.empty',
   })
-  regulatoryBodies: string[];
+  professionToOrganisations: Array<{
+    organisation: string;
+    role: string;
+  }>;
 
   @Transform(({ value }) => parseBoolean(value))
   change: boolean;
