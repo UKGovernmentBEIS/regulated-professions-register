@@ -640,4 +640,85 @@ describe('Editing an existing profession', () => {
       );
     });
   });
+
+  context('When I am logged in as organisation editor', () => {
+    beforeEach(() => {
+      cy.loginAuth0('orgeditor');
+    });
+
+    it('I can edit a profession where I belong to one of its organisations', () => {
+      cy.visitAndCheckAccessibility('/admin/professions');
+
+      cy.get('table')
+        .contains('tr', 'Profession with two tier-one Organisations')
+        .within(() => {
+          cy.contains('View details').click();
+        });
+
+      cy.checkAccessibility();
+
+      cy.get('[data-cy=changed-by-text]').should('not.exist');
+
+      cy.translate('professions.admin.button.edit.live').then((buttonText) => {
+        cy.contains(buttonText).click();
+      });
+
+      cy.checkAccessibility();
+
+      cy.clickSummaryListRowChangeLink(
+        'professions.form.label.regulatedActivities.regulationSummary',
+      );
+      cy.checkAccessibility();
+      cy.translate('professions.form.captions.edit', {
+        professionName: 'Profession with two tier-one Organisation',
+      }).then((editCaption) => {
+        cy.get('body').contains(editCaption);
+      });
+      cy.get('textarea[name="regulationSummary"]')
+        .clear()
+        .type('Updated regulation summary');
+      cy.translate('app.continue').then((buttonText) => {
+        cy.get('button').contains(buttonText).click();
+      });
+      cy.checkSummaryListRowValue(
+        'professions.form.label.regulatedActivities.regulationSummary',
+        'Updated regulation summary',
+      );
+
+      cy.translate('professions.form.button.saveAsDraft').then((buttonText) => {
+        cy.get('button').contains(buttonText).click();
+      });
+
+      cy.checkAccessibility();
+      cy.translate('professions.admin.changed.by').then((changedByText) => {
+        cy.get('[data-cy=changed-by-text]').should('contain', changedByText);
+      });
+      cy.get('[data-cy=changed-by-user-name]').should(
+        'contain',
+        'Organisation Editor',
+      );
+      cy.get('[data-cy=changed-by-user-email]').should(
+        'contain',
+        'beis-rpr+orgeditor@dxw.com',
+      );
+
+      cy.get('[data-cy=last-modified]').should(
+        'contain',
+        format(new Date(), 'd MMM yyyy'),
+      );
+
+      cy.translate('professions.admin.update.confirmation.heading').then(
+        (flashHeading) => {
+          cy.translate('professions.admin.update.confirmation.body', {
+            name: 'Profession with two tier-one Organisations',
+          }).then((flashBody) => {
+            cy.get('body')
+              .should('contain', flashHeading)
+              .should('contain.html', flashBody)
+              .should('contain', 'Profession with two tier-one Organisations');
+          });
+        },
+      );
+    });
+  });
 });
