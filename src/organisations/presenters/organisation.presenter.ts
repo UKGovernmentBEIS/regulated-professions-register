@@ -10,8 +10,8 @@ import { formatEmail } from '../../helpers/format-email.helper';
 import { Profession } from '../../professions/profession.entity';
 import { formatStatus } from '../../helpers/format-status.helper';
 import { Nation } from '../../nations/nation';
-import { stringifyNations } from '../../nations/helpers/stringifyNations';
 import { formatTelephone } from '../../helpers/format-telephone.helper';
+import { NationsListPresenter } from '../../nations/presenters/nations-list.presenter';
 
 interface OrganisationSummaryListOptions {
   classes?: string;
@@ -212,7 +212,7 @@ export class OrganisationPresenter {
       .flat();
     const nations = [...new Set(nationCodes)].map((code) => Nation.find(code));
 
-    return await stringifyNations(nations, this.i18nService);
+    return await new NationsListPresenter(nations, this.i18nService).textList();
   }
 
   private professions(): Profession[] {

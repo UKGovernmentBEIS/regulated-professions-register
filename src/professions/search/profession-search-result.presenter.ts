@@ -1,6 +1,6 @@
 import { I18nService } from 'nestjs-i18n';
-import { stringifyNations } from '../../nations/helpers/stringifyNations';
 import { Nation } from '../../nations/nation';
+import { NationsListPresenter } from '../../nations/presenters/nations-list.presenter';
 import { getOrganisationsFromProfession } from '../helpers/get-organisations-from-profession.helper';
 import { Profession } from '../profession.entity';
 import { ProfessionSearchResultTemplate } from './interfaces/profession-search-result-template.interface';
@@ -12,12 +12,12 @@ export class ProfessionSearchResultPresenter {
   ) {}
 
   async present(): Promise<ProfessionSearchResultTemplate> {
-    const nations = await stringifyNations(
+    const nations = await new NationsListPresenter(
       (this.profession.occupationLocations || []).map((code) =>
         Nation.find(code),
       ),
       this.i18nService,
-    );
+    ).textList();
 
     const industries = await Promise.all(
       (this.profession.industries || []).map(

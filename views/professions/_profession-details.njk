@@ -4,14 +4,6 @@
 
 <h1 class="govuk-heading-xl">{{ profession.name }}</h1>
 
-{% set nationsHtml %}
-  <ul class="govuk-list">
-    {% for nation in nations %}
-      <li>{{ nation }}</li>
-    {% endfor %}
-  </ul>
-{% endset %}
-
 {% set industriesHtml %}
   <ul class="govuk-list">
     {% for industry in industries %}
@@ -28,7 +20,7 @@
         text: ("professions.show.overview.nations" | t)
       },
       value: {
-        html: nationsHtml
+        html: nations
       }
     } if nations | length > 0 or showEmptyProfessionDetails else undefined,
     {

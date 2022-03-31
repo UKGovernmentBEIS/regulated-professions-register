@@ -2,8 +2,6 @@ import { Profession } from './../profession.entity';
 import { ProfessionPresenter } from './profession.presenter';
 import { Nation } from '../../nations/nation';
 
-import { stringifyNations } from '../../nations/helpers/stringifyNations';
-
 import professionFactory from '../../testutils/factories/profession';
 import industryFactory from '../../testutils/factories/industry';
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
@@ -13,11 +11,12 @@ import { formatDate } from '../../common/utils';
 import { ProfessionVersionStatus } from '../profession-version.entity';
 import { statusOf } from '../../testutils/status-of';
 import { formatStatus } from '../../helpers/format-status.helper';
+import { NationsListPresenter } from '../../nations/presenters/nations-list.presenter';
 
-jest.mock('../../nations/helpers/stringifyNations');
 jest.mock('../../helpers/format-multiline-string.helper');
 jest.mock('../../common/utils');
 jest.mock('../../helpers/format-status.helper');
+jest.mock('../../nations/presenters/nations-list.presenter');
 
 describe('ProfessionPresenter', () => {
   let profession: Profession;
@@ -136,7 +135,7 @@ describe('ProfessionPresenter', () => {
 
   describe('occupationLocations', () => {
     describe('when occupationLocations is defined', () => {
-      it('should pass the locations to stringifyNations', async () => {
+      it('should pass the locations to NationsListPresenter', async () => {
         const i18nService = createMockI18nService();
 
         profession = professionFactory.build({
@@ -150,12 +149,12 @@ describe('ProfessionPresenter', () => {
 
         await presenter.occupationLocations();
 
-        expect(stringifyNations).toHaveBeenCalledWith(nations, i18nService);
+        expect(NationsListPresenter).toHaveBeenCalledWith(nations, i18nService);
       });
     });
 
     describe('when occupationLocations is undefined', () => {
-      it('should pass an empty array to stringifyNations', async () => {
+      it('should pass an empty array to NationsListPresenter', async () => {
         const i18nService = createMockI18nService();
 
         profession = professionFactory.build({
@@ -166,7 +165,7 @@ describe('ProfessionPresenter', () => {
 
         await presenter.occupationLocations();
 
-        expect(stringifyNations).toHaveBeenCalledWith([], i18nService);
+        expect(NationsListPresenter).toHaveBeenCalledWith([], i18nService);
       });
     });
   });

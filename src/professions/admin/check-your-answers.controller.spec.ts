@@ -1,6 +1,8 @@
 import { DeepMocked, createMock } from '@golevelup/ts-jest';
 import { TestingModule, Test } from '@nestjs/testing';
 import { I18nService } from 'nestjs-i18n';
+import { Nation } from '../../nations/nation';
+import { NationsListPresenter } from '../../nations/presenters/nations-list.presenter';
 import QualificationPresenter from '../../qualifications/presenters/qualification.presenter';
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 import { createDefaultMockRequest } from '../../testutils/factories/create-default-mock-request';
@@ -21,6 +23,9 @@ import { CheckYourAnswersController } from './check-your-answers.controller';
 import { ProfessionToOrganisation } from '../profession-to-organisation.entity';
 
 jest.mock('../../users/helpers/check-can-view-profession');
+jest.mock('../../nations/presenters/nations-list.presenter');
+
+const mockNationsHtml = '<ul><li>Mock nations html</li></ul>';
 
 describe('CheckYourAnswersController', () => {
   let controller: CheckYourAnswersController;
@@ -100,6 +105,10 @@ describe('CheckYourAnswersController', () => {
           .spyOn(getPublicationBlockersModule, 'getPublicationBlockers')
           .mockReturnValue([]);
 
+        (
+          NationsListPresenter.prototype.htmlList as jest.Mock
+        ).mockResolvedValue(mockNationsHtml);
+
         const request = createDefaultMockRequest({
           user: userFactory.build(),
         });
@@ -112,9 +121,7 @@ describe('CheckYourAnswersController', () => {
         );
 
         expect(templateParams.name).toEqual('Gas Safe Engineer');
-        expect(templateParams.nations).toEqual([
-          translationOf('nations.england'),
-        ]);
+        expect(templateParams.nations).toEqual(mockNationsHtml);
         expect(templateParams.industries).toEqual([
           translationOf('industries.construction'),
         ]);
@@ -159,6 +166,10 @@ describe('CheckYourAnswersController', () => {
           professionVersionsService.findByIdWithProfession,
         ).toHaveBeenCalledWith('profession-id', 'version-id');
         expect(getPublicationBlockersSpy).toHaveBeenCalledWith(version);
+        expect(NationsListPresenter).toHaveBeenCalledWith(
+          [Nation.find('GB-ENG')],
+          i18nService,
+        );
       });
     });
 
@@ -197,6 +208,10 @@ describe('CheckYourAnswersController', () => {
             },
           ]);
 
+        (
+          NationsListPresenter.prototype.htmlList as jest.Mock
+        ).mockResolvedValue(mockNationsHtml);
+
         const request = createDefaultMockRequest({
           user: userFactory.build(),
         });
@@ -209,7 +224,7 @@ describe('CheckYourAnswersController', () => {
         );
 
         expect(templateParams.name).toEqual('Gas Safe Engineer');
-        expect(templateParams.nations).toEqual([]);
+        expect(templateParams.nations).toEqual(mockNationsHtml);
         expect(templateParams.industries).toEqual([]);
         expect(templateParams.organisations).toEqual(
           '<p class="govuk-body">Council of Gas Registered Engineers</p>',
@@ -236,6 +251,7 @@ describe('CheckYourAnswersController', () => {
           professionVersionsService.findByIdWithProfession,
         ).toHaveBeenCalledWith('profession-id', 'version-id');
         expect(getPublicationBlockersSpy).toHaveBeenCalledWith(version);
+        expect(NationsListPresenter).toHaveBeenCalledWith([], i18nService);
       });
     });
 

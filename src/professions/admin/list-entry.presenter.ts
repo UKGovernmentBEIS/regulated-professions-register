@@ -2,8 +2,8 @@ import { I18nService } from 'nestjs-i18n';
 import { TableCell } from '../../common/interfaces/table-cell';
 import { TableRow } from '../../common/interfaces/table-row';
 import { escape } from '../../helpers/escape.helper';
-import { stringifyNations } from '../../nations/helpers/stringifyNations';
 import { Nation } from '../../nations/nation';
+import { NationsListPresenter } from '../../nations/presenters/nations-list.presenter';
 import { getOrganisationsFromProfession } from '../helpers/get-organisations-from-profession.helper';
 import { ProfessionPresenter } from '../presenters/profession.presenter';
 import { Profession } from '../profession.entity';
@@ -68,12 +68,12 @@ export class ListEntryPresenter {
       this.i18nService,
     );
 
-    const nations = await stringifyNations(
+    const nations = await new NationsListPresenter(
       (this.profession.occupationLocations || []).map((code) =>
         Nation.find(code),
       ),
       this.i18nService,
-    );
+    ).textList();
 
     const industries = (
       await Promise.all(
