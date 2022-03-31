@@ -291,6 +291,7 @@ describe('OrganisationVersionsService', () => {
 
       expect(queryBuilder.distinctOn).toHaveBeenCalledWith([
         'organisation.name',
+        'organisation',
       ]);
 
       expect(queryBuilder.where).toHaveBeenCalledWith(
@@ -303,7 +304,9 @@ describe('OrganisationVersionsService', () => {
         },
       );
 
-      expect(queryBuilder.orderBy).toHaveBeenCalledWith('organisation.name');
+      expect(queryBuilder.orderBy).toHaveBeenCalledWith(
+        'organisation.name, organisation',
+      );
     });
   });
 
