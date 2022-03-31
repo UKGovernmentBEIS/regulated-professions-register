@@ -65,6 +65,10 @@ If you make any changes to the assets, run:
 npm run build:assets
 ```
 
+## Architecture decision records
+
+We use ADRs to document architectural decisions that we make. They can be found in `doc/architecture/decisions` and contributed to with the [adr-tools](https://github.com/npryce/adr-tools).
+
 ## Access
 
 ### Staging
