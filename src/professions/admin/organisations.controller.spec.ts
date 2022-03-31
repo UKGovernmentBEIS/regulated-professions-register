@@ -21,6 +21,7 @@ import {
 } from '../profession-to-organisation.entity';
 
 jest.mock('../../users/helpers/check-can-view-profession');
+jest.mock('./presenters/regulated-authorities-select-presenter');
 
 describe('OrganisationsController', () => {
   let controller: OrganisationsController;
@@ -68,6 +69,15 @@ describe('OrganisationsController', () => {
 
         const regulatedAuthoritiesSelectPresenter =
           new RegulatedAuthoritiesSelectPresenter(organisations, null);
+        const authoritiesAndRoles =
+          regulatedAuthoritiesSelectPresenter.authoritiesAndRoles(i18nService);
+
+        jest
+          .spyOn(
+            RegulatedAuthoritiesSelectPresenter.prototype,
+            'authoritiesAndRoles',
+          )
+          .mockImplementation(() => authoritiesAndRoles);
 
         const request = createDefaultMockRequest({
           user: userFactory.build(),
@@ -79,11 +89,11 @@ describe('OrganisationsController', () => {
           'admin/professions/organisations',
           expect.objectContaining({
             selectArgsArray: [
-              regulatedAuthoritiesSelectPresenter.selectArgs(),
-              regulatedAuthoritiesSelectPresenter.selectArgs(),
-              regulatedAuthoritiesSelectPresenter.selectArgs(),
-              regulatedAuthoritiesSelectPresenter.selectArgs(),
-              regulatedAuthoritiesSelectPresenter.selectArgs(),
+              authoritiesAndRoles,
+              authoritiesAndRoles,
+              authoritiesAndRoles,
+              authoritiesAndRoles,
+              authoritiesAndRoles,
             ],
             captionText: translationOf('professions.form.captions.add'),
           }),
@@ -102,16 +112,19 @@ describe('OrganisationsController', () => {
           id: 'example-org-id-2',
         });
 
-        const profession = professionFactory.build(
-          {
-            name: 'Example Profession',
-          },
-          {
-            transient: {
-              organisations: [organisation, additionalOrganisation],
+        const profession = professionFactory.build({
+          name: 'Example Profession',
+          professionToOrganisations: [
+            {
+              organisation: organisation,
+              role: OrganisationRole.AwardingBody,
             },
-          },
-        );
+            {
+              organisation: additionalOrganisation,
+              role: OrganisationRole.PrimaryRegulator,
+            },
+          ] as ProfessionToOrganisation[],
+        });
 
         professionsService.findWithVersions.mockResolvedValue(profession);
 
@@ -121,13 +134,19 @@ describe('OrganisationsController', () => {
           organisationFactory.build(),
         ];
         organisationVersionsService.allLive.mockResolvedValue(organisations);
+
         const regulatedAuthoritiesSelectPresenterWithSelectedOrganisation =
-          new RegulatedAuthoritiesSelectPresenter(organisations, organisation);
+          new RegulatedAuthoritiesSelectPresenter(
+            organisations,
+            organisation,
+            OrganisationRole.AwardingBody,
+          );
 
         const regulatedAuthoritiesSelectPresenterWithSelectedAdditionalOrganisation =
           new RegulatedAuthoritiesSelectPresenter(
             organisations,
             additionalOrganisation,
+            OrganisationRole.PrimaryRegulator,
           );
 
         const regulatedAuthoritiesSelectPresenter =
@@ -143,11 +162,21 @@ describe('OrganisationsController', () => {
           'admin/professions/organisations',
           expect.objectContaining({
             selectArgsArray: [
-              regulatedAuthoritiesSelectPresenterWithSelectedOrganisation.selectArgs(),
-              regulatedAuthoritiesSelectPresenterWithSelectedAdditionalOrganisation.selectArgs(),
-              regulatedAuthoritiesSelectPresenter.selectArgs(),
-              regulatedAuthoritiesSelectPresenter.selectArgs(),
-              regulatedAuthoritiesSelectPresenter.selectArgs(),
+              regulatedAuthoritiesSelectPresenterWithSelectedOrganisation.authoritiesAndRoles(
+                i18nService,
+              ),
+              regulatedAuthoritiesSelectPresenterWithSelectedAdditionalOrganisation.authoritiesAndRoles(
+                i18nService,
+              ),
+              regulatedAuthoritiesSelectPresenter.authoritiesAndRoles(
+                i18nService,
+              ),
+              regulatedAuthoritiesSelectPresenter.authoritiesAndRoles(
+                i18nService,
+              ),
+              regulatedAuthoritiesSelectPresenter.authoritiesAndRoles(
+                i18nService,
+              ),
             ],
             captionText: translationOf('professions.form.captions.edit'),
           }),

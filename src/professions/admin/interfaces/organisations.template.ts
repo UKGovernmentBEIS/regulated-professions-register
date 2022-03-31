@@ -1,7 +1,7 @@
-import { SelectItemArgs } from '../../../common/interfaces/select-item-args.interface';
+import { AuthorityAndRoleArgs } from './../interfaces/authority-and-role-args';
 
 export interface OrganisationsTemplate {
-  selectArgsArray: Array<SelectItemArgs[]>;
+  selectArgsArray: AuthorityAndRoleArgs[];
   captionText: string;
   change: boolean;
   errors: object | undefined;

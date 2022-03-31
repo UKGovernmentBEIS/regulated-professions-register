@@ -24,12 +24,10 @@ import { BackLink } from '../../common/decorators/back-link.decorator';
 import ViewUtils from './viewUtils';
 import { OrganisationsService } from '../../organisations/organisations.service';
 import { RegulatedAuthoritiesSelectPresenter } from './presenters/regulated-authorities-select-presenter';
-import { Organisation } from '../../organisations/organisation.entity';
 import { I18nService } from 'nestjs-i18n';
 import { OrganisationVersionsService } from '../../organisations/organisation-versions.service';
 import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
 import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
-import { getOrganisationsFromProfession } from '../helpers/get-organisations-from-profession.helper';
 import {
   ProfessionToOrganisation,
   OrganisationRole,
@@ -160,13 +158,18 @@ export class OrganisationsController {
     const regulatedAuthorities =
       await this.organisationVersionsService.allLive();
 
-    const selectArgsArray = Array.from({ ...organisations, length: 5 }).map(
-      (organisation) => {
-        return new RegulatedAuthoritiesSelectPresenter(
+    const selectArgsArray = await Promise.all(
+      Array.from({
+        ...profession.professionToOrganisations,
+        length: 5,
+      }).map(async (professionToOrganisation) => {
+        const presenter = new RegulatedAuthoritiesSelectPresenter(
           regulatedAuthorities,
-          organisation,
-        ).selectArgs();
-      },
+          professionToOrganisation?.organisation,
+          professionToOrganisation?.role,
+        );
+        return await presenter.authoritiesAndRoles(this.i18nService);
+      }),
     );
 
     const templateArgs: OrganisationsTemplate = {
