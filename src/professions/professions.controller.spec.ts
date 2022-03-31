@@ -17,6 +17,7 @@ import organisationFactory from '../testutils/factories/organisation';
 import * as getOrganisationsFromProfessionModule from './helpers/get-organisations-from-profession.helper';
 import { NationsListPresenter } from '../nations/presenters/nations-list.presenter';
 import { Nation } from '../nations/nation';
+import { ShowTemplate } from './interfaces/show-template.interface';
 
 jest.mock('../organisations/organisation.entity');
 jest.mock('../nations/presenters/nations-list.presenter');
@@ -84,14 +85,14 @@ describe('ProfessionsController', () => {
 
         expect(result).toEqual({
           profession: profession,
-          qualificationSummaryList: await new QualificationPresenter(
+          qualifications: await new QualificationPresenter(
             profession.qualification,
             createMockI18nService(),
           ).summaryList(false, true),
           nations: mockNationsHtml,
           industries: [translationOf('industries.example')],
           organisations: [profession.professionToOrganisations[0].organisation],
-        });
+        } as ShowTemplate);
 
         expect(professionVersionsService.findLiveBySlug).toBeCalledWith(
           'example-slug',
@@ -139,14 +140,14 @@ describe('ProfessionsController', () => {
 
         expect(result).toEqual({
           profession: profession,
-          qualificationSummaryList: await new QualificationPresenter(
+          qualifications: await new QualificationPresenter(
             profession.qualification,
             createMockI18nService(),
           ).summaryList(false, true),
           nations: mockNationsHtml,
           industries: [translationOf('industries.example')],
           organisations: [organisation1, organisation2],
-        });
+        } as ShowTemplate);
 
         expect(professionVersionsService.findLiveBySlug).toBeCalledWith(
           'example-slug',
@@ -228,13 +229,13 @@ describe('ProfessionsController', () => {
 
           expect(result).toEqual({
             profession: profession,
-            qualificationSummaryList: null,
+            qualifications: null,
             nations: mockNationsHtml,
             industries: [translationOf('industries.example')],
             organisations: [
               profession.professionToOrganisations[0].organisation,
             ],
-          });
+          } as ShowTemplate);
         });
       });
     });

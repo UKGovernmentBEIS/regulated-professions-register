@@ -130,13 +130,35 @@
   </div>
 {% endif %}
 
-{% if qualificationSummaryList %}
+{% if qualifications.overviewSummaryList or qualifications.ukSummaryList or qualifications.otherCountriesSummaryList or showEmptyProfessionDetails %}
 
 <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
 
-<h2 class="govuk-heading-l">{{ "professions.show.qualification.heading" | t}}</h2>
+<div>
+  <h2 class="govuk-heading-l">{{ "professions.show.qualification.heading" | t}}</h2>
 
-{{ govukSummaryList(qualificationSummaryList) }}
+  {% if qualifications.overviewSummaryList %}
+    <div class="rpr-details__sub-group">
+      <h3 class="govuk-heading-m rpr-details__sub-group-title">{{ "professions.show.qualification.overviewHeading" | t }}</h3>
+      {{ govukSummaryList(qualifications.overviewSummaryList) }}
+    </div>
+  {% endif %}
+
+  {% if qualifications.ukSummaryList %}
+    <div class="rpr-details__sub-group">
+      <h3 class="govuk-heading-m rpr-details__sub-group-title">{{ "professions.show.qualification.ukHeading" | t }}</h3>
+      {{ govukSummaryList(qualifications.ukSummaryList) }}
+    </div>
+  {% endif %}
+
+  {% if qualifications.otherCountriesSummaryList %}
+    <div class="rpr-details__sub-group">
+      <h3 class="govuk-heading-m rpr-details__sub-group-title">{{ "professions.show.qualification.otherCountriesHeading" | t }}</h3>
+      {{ govukSummaryList(qualifications.otherCountriesSummaryList) }}
+    </div>
+  {% endif %}
+
+</div>
 
 {% endif %}
 
