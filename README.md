@@ -82,3 +82,7 @@ The production environment is hosted on GPaas: https://www.regulated-professions
 The public pages (anything other than `/admin/*`) are currently behind basic authentication. Credentials for this are stored under "Prod basic auth" in the BEIS RPR 1Password vault.
 
 Production deployments are triggered manually from the `main` branch. See [deployments](./doc/deployment.md) for more details.
+
+## Documentation
+
+[Detailed documentation](./doc/0_front-line-support.md) for developers and support staff is found in `doc/`.
