@@ -135,6 +135,11 @@
       "regulatoryBody": {
         "empty": "Select a regulatory authority for the profession"
       },
+      "professionToOrganisations": {
+        "empty": "You must select at least one regulatory authority for the profession",
+        "missingRole": "You must select a role for each regulatory authority",
+        "missingAuthority": "One of your selections is missing a regulatory authority"
+      },
       "regulationSummary": {
         "empty": "Enter a regulation summary"
       },

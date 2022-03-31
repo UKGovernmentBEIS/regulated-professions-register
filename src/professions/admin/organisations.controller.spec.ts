@@ -340,7 +340,79 @@ describe('OrganisationsController', () => {
           expect.objectContaining({
             errors: {
               professionToOrganisations: {
-                text: 'professions.form.errors.professionToOrganisations.empty',
+                text: 'professions.form.errors.professionToOrganisations.blank',
+              },
+            },
+          }),
+        );
+
+        expect(professionsService.save).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('when an organisation is missing a role', () => {
+      it('does not create a profession, and re-renders the top level information view with errors', async () => {
+        const organisationsDtoWithNoAnswers = {
+          professionToOrganisations: [
+            { organisation: 'example-org-id', role: 'primaryRegulator' },
+            { organisation: 'example-org-id', role: '' },
+          ],
+        };
+
+        const request = createDefaultMockRequest({
+          user: userFactory.build(),
+        });
+
+        await controller.update(
+          organisationsDtoWithNoAnswers,
+          response,
+          'profession-id',
+          'version-id',
+          request,
+        );
+
+        expect(response.render).toHaveBeenCalledWith(
+          'admin/professions/organisations',
+          expect.objectContaining({
+            errors: {
+              professionToOrganisations: {
+                text: 'professions.form.errors.professionToOrganisations.missingRole',
+              },
+            },
+          }),
+        );
+
+        expect(professionsService.save).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('when a role is missing an organisation', () => {
+      it('does not create a profession, and re-renders the top level information view with errors', async () => {
+        const organisationsDtoWithNoAnswers = {
+          professionToOrganisations: [
+            { organisation: 'example-org-id', role: 'primaryRegulator' },
+            { organisation: '', role: 'primaryRegulator' },
+          ],
+        };
+
+        const request = createDefaultMockRequest({
+          user: userFactory.build(),
+        });
+
+        await controller.update(
+          organisationsDtoWithNoAnswers,
+          response,
+          'profession-id',
+          'version-id',
+          request,
+        );
+
+        expect(response.render).toHaveBeenCalledWith(
+          'admin/professions/organisations',
+          expect.objectContaining({
+            errors: {
+              professionToOrganisations: {
+                text: 'professions.form.errors.professionToOrganisations.missingAuthority',
               },
             },
           }),
@@ -354,7 +426,7 @@ describe('OrganisationsController', () => {
       const profession = professionFactory.build();
 
       const organisationsDto = {
-        regulatoryBodies: ['example-org-id', 'other-example-org-id'],
+        professionToOrganisations: [],
       };
 
       professionsService.findWithVersions.mockResolvedValue(profession);
