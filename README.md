@@ -41,11 +41,17 @@ script/bootstrap
 
 ## Running the application
 
+To run the server, from the root directory, run:
+
 ```
 script/server
 ```
 
+This runs the server on `localhost:3000`.
+
 ## Running the tests
+
+To run linting, unit and end-to-end tests, from the root directory, run:
 
 ```
 script/test
