@@ -12,6 +12,14 @@ export enum OrganisationRole {
   AwardingBody = 'awardingBody',
 }
 
+export const TierOneRoles = [
+  OrganisationRole.PrimaryRegulator,
+  OrganisationRole.CharteredBody,
+  OrganisationRole.QualifyingBody,
+  OrganisationRole.OversightBody,
+  OrganisationRole.AdditionalRegulator,
+];
+
 @Entity({ name: 'professionToOrganisation' })
 export class ProfessionToOrganisation {
   @PrimaryGeneratedColumn('uuid')

@@ -445,7 +445,11 @@ describe('ProfessionVersionsService', () => {
           ]),
         },
         order: { created_at: 'DESC' },
-        relations: ['profession'],
+        relations: [
+          'profession',
+          'profession.professionToOrganisations',
+          'profession.professionToOrganisations.organisation',
+        ],
       });
     });
   });

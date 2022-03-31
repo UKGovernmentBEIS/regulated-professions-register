@@ -51,6 +51,31 @@
     ]
   },
   {
+    "name": "Profession with two tier-one Organisations",
+    "slug": "profession-with-two-tier-one-organisations",
+    "organisation": "Department for Education",
+    "additionalOrganisation": "Organisation with no optional fields",
+    "versions": [
+      {
+        "alternateName": "Secondary school teacher",
+        "description": "Teaching work (known as specified work), as an activity, is regulated by law through the Education (Specified Work) (England) Regulations 2012/762. Regulation 5 lists the activities which are classed as specified work for the purposes of teaching in a school maintained by a local authority - which includes a maintained nursery - and a special school not so maintained:\n planning and preparing lessons and courses for pupils;\ndelivering lessons to pupils;\nassessing the development, progress and attainment of pupils; and\n reporting on the development, progress and attainment of pupils.",
+        "occupationLocations": ["GB-ENG"],
+        "regulationType": "licensing",
+        "industries": ["industries.education"],
+        "qualification": "To teach in a state school in England, you must have a degree, and gain Qualified Teacher Status (QTS) by following a programme of Initial Teacher Training (ITT). You must have achieved minimum requirements in GCSE English, maths, and science if you wish to teach at primary-level. You can teach in independent schools, academies, and free schools in England without QTS, but it’s a definite advantage to have it.",
+        "reservedActivities": "No information submitted",
+        "legislations": [
+          "The Education (School Teachers' Qualifications) (England) Regulations 2003/1662 (as amended)"
+        ],
+        "organisation": "Department for Education",
+        "mandatoryRegistration": "mandatory",
+        "status": "live",
+        "socCode": 2313,
+        "keywords": "Director of studies,Director of studies,Head, assistant,Head, assistant,Head, deputy,Head, deputy,Head of department,Head of department,Head of year,Instructor, training, physical,Instructor, woodwork,Instructor, woodwork,Instructor,Instructor,Instructor,Leader, curriculum,Lecturer, dance,Lecturer,Lecturer,Master, head, assistant,Master, head, assistant,Master, head, deputy,Master, head, deputy,Master, house,Master, house,Master, school,Master, school,Master,Master,Mistress, head, assistant,Mistress, head, assistant,Mistress, head, deputy,Mistress, head, deputy,Mistress, house,Mistress, house,Mistress, school,Mistress, school,Mistress,Mistress,Monk,Nun,Principal teacher of guidance,Teacher, art,Teacher, art and design,Teacher, biology,Teacher, chemistry,Teacher, college, form, sixth,Teacher, dance,Teacher, dancing,Teacher, design and technology,Teacher, drama,Teacher, economics, home,Teacher, economics,Teacher, education, physical,Teacher, education, religious,Teacher, English,Teacher, form, sixth,Teacher, French,Teacher, geography,Teacher, German,Teacher, head, assistant,Teacher, head, assistant,Teacher, head, deputy,Teacher, head, deputy,Teacher, history,Teacher, ICT,Teacher, IT,Teacher, Italian,Teacher, language,Teacher, languages, foreign, modern,Teacher, mathematics,Teacher, music,Teacher, PE,Teacher, physics,Teacher, psychology,Teacher, RE,Teacher, school, comprehensive,Teacher, school, secondary,Teacher, school, upper,Teacher, science, computer,Teacher, science,Teacher, secondary,Teacher, sociology,Teacher, Spanish,Teacher, technology, information,Teacher, technology, information and communication,Teacher, Welsh,Teacher,Teacher,Tutor,Tutor"
+      }
+    ]
+  },
+  {
     "name": "Gas Safe Engineer",
     "slug": "gas-safe-engineer",
     "organisation": "Council of Registered Gas Installers",

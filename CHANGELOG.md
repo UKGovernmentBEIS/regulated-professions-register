@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 
 - Read from and write to the new organisation - profession relation
+- Fix a bug causing Professions belonging to multiple Organisations to be uneditable by all but central users
 
 ## [release-014] - 2022-03-30
 
