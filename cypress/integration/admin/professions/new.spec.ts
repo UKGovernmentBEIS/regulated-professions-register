@@ -72,6 +72,10 @@ describe('Adding a new profession', () => {
         },
       );
 
+      cy.translate('professions.form.button.addRegulator').then((label) => {
+        cy.get('a').contains(label).click();
+      });
+
       cy.get('select[id="regulatoryBodies_2"]').select(
         'General Medical Council',
       );

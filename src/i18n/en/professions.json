@@ -102,7 +102,9 @@
     "button": {
       "edit": "Yes, continue",
       "publish": "Publish to register",
-      "saveAsDraft": "Save as draft"
+      "saveAsDraft": "Save as draft",
+      "addRegulator": "Add another regulator",
+      "removeRegulator": "Remove regulator"
     },
     "select": {
       "scope": {

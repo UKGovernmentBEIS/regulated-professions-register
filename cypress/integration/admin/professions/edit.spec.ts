@@ -576,6 +576,9 @@ describe('Editing an existing profession', () => {
           cy.get('select[id="roles_1"]').select(label);
         },
       );
+      cy.translate('professions.form.button.addRegulator').then((label) => {
+        cy.get('a').contains(label).click();
+      });
       cy.get('select[id="regulatoryBodies_2"]').select(
         'Council of Registered Gas Installers',
       );
