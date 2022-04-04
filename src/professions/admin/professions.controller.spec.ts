@@ -10,7 +10,7 @@ import { FilterInput } from '../../common/interfaces/filter-input.interface';
 import { Profession } from '../profession.entity';
 import { ProfessionsService } from '../professions.service';
 import { ProfessionsController as ProfessionsController } from './professions.controller';
-import { ProfessionsPresenter } from './professions.presenter';
+import { ProfessionsPresenter } from './presenters/professions.presenter';
 import industryFactory from '../../testutils/factories/industry';
 import organisationFactory from '../../testutils/factories/organisation';
 import professionFactory from '../../testutils/factories/profession';

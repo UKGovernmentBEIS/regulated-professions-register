@@ -1,20 +1,20 @@
 import { DeepMocked } from '@golevelup/ts-jest';
 import { I18nService } from 'nestjs-i18n';
-import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
-import { IndustriesCheckboxPresenter } from '../../industries/industries-checkbox.presenter';
-import { Nation } from '../../nations/nation';
-import { NationsCheckboxPresenter } from '../../nations/nations-checkbox.presenter';
-import { OrganisationsCheckboxPresenter } from '../../organisations/organisations-checkbox-presenter';
-import { FilterInput } from '../../common/interfaces/filter-input.interface';
-import { IndexTemplate } from './interfaces/index-template.interface';
+import { createMockI18nService } from '../../../testutils/create-mock-i18n-service';
+import { IndustriesCheckboxPresenter } from '../../../industries/industries-checkbox.presenter';
+import { Nation } from '../../../nations/nation';
+import { NationsCheckboxPresenter } from '../../../nations/nations-checkbox.presenter';
+import { OrganisationsCheckboxPresenter } from '../../../organisations/organisations-checkbox-presenter';
+import { FilterInput } from '../../../common/interfaces/filter-input.interface';
+import { IndexTemplate } from '../interfaces/index-template.interface';
 import { ProfessionsPresenter as ProfessionsPresenter } from './professions.presenter';
 import { ListEntryPresenter } from './list-entry.presenter';
-import industryFactory from '../../testutils/factories/industry';
-import organisationFactory from '../../testutils/factories/organisation';
-import professionFactory from '../../testutils/factories/profession';
-import { translationOf } from '../../testutils/translation-of';
-import { RegulationType } from '../profession-version.entity';
-import { RegulationTypesCheckboxPresenter } from './presenters/regulation-types-checkbox.presenter';
+import industryFactory from '../../../testutils/factories/industry';
+import organisationFactory from '../../../testutils/factories/organisation';
+import professionFactory from '../../../testutils/factories/profession';
+import { translationOf } from '../../../testutils/translation-of';
+import { RegulationType } from '../../profession-version.entity';
+import { RegulationTypesCheckboxPresenter } from './regulation-types-checkbox.presenter';
 
 const transportIndustry = industryFactory.build({
   id: 'transport',

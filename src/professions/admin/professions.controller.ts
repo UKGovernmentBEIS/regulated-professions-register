@@ -18,7 +18,7 @@ import { IndexTemplate } from './interfaces/index-template.interface';
 import {
   ProfessionsPresenter,
   ProfessionsPresenterView,
-} from './professions.presenter';
+} from './presenters/professions.presenter';
 import { AuthenticationGuard } from '../../common/authentication.guard';
 import { FilterDto } from './dto/filter.dto';
 import { Profession } from '../profession.entity';

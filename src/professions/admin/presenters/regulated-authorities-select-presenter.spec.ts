@@ -1,4 +1,4 @@
-import { Organisation } from '../../organisations/organisation.entity';
+import { Organisation } from '../../../organisations/organisation.entity';
 import { RegulatedAuthoritiesSelectPresenter } from './regulated-authorities-select-presenter';
 
 describe(RegulatedAuthoritiesSelectPresenter, () => {

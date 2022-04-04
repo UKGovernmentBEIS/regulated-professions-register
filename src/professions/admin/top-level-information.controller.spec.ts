@@ -5,7 +5,7 @@ import { OrganisationsService } from '../../organisations/organisations.service'
 import organisationFactory from '../../testutils/factories/organisation';
 import professionFactory from '../../testutils/factories/profession';
 import { ProfessionsService } from '../professions.service';
-import { RegulatedAuthoritiesSelectPresenter } from './regulated-authorities-select-presenter';
+import { RegulatedAuthoritiesSelectPresenter } from './presenters/regulated-authorities-select-presenter';
 import { TopLevelInformationController } from './top-level-information.controller';
 import { when } from 'jest-when';
 import { I18nService } from 'nestjs-i18n';

@@ -1,5 +1,5 @@
-import { SelectItemArgs } from '../../common/interfaces/select-item-args.interface';
-import { Organisation } from '../../organisations/organisation.entity';
+import { SelectItemArgs } from '../../../common/interfaces/select-item-args.interface';
+import { Organisation } from '../../../organisations/organisation.entity';
 
 export class RegulatedAuthoritiesSelectPresenter {
   constructor(

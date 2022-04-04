@@ -23,7 +23,7 @@ import { BackLink } from '../../common/decorators/back-link.decorator';
 
 import ViewUtils from './viewUtils';
 import { OrganisationsService } from '../../organisations/organisations.service';
-import { RegulatedAuthoritiesSelectPresenter } from './regulated-authorities-select-presenter';
+import { RegulatedAuthoritiesSelectPresenter } from './presenters/regulated-authorities-select-presenter';
 import { Organisation } from '../../organisations/organisation.entity';
 import { I18nService } from 'nestjs-i18n';
 import { OrganisationVersionsService } from '../../organisations/organisation-versions.service';
