@@ -1,3 +1,6 @@
+import { I18nService } from 'nestjs-i18n';
+import { NationsListPresenter } from '../nations/presenters/nations-list.presenter';
+import { Profession } from '../professions/profession.entity';
 import { Nation } from './../nations/nation';
 
 export function allNations(): string[] {
@@ -11,4 +14,17 @@ export function isUK(nationCodes: string[]) {
     nationCodes.length === nations.length &&
     nationCodes.every((e, i) => e === nations[i])
   );
+}
+
+export async function getNationsFromProfessions(
+  professions: Profession[],
+  i18nService: I18nService,
+): Promise<string> {
+  const nationCodes = professions
+    .map((profession) => profession.occupationLocations || [])
+    .flat();
+
+  const nations = [...new Set(nationCodes)].map((code) => Nation.find(code));
+
+  return new NationsListPresenter(nations, i18nService).textList();
 }
