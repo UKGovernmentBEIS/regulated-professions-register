@@ -43,7 +43,7 @@ describe('Editing an existing profession', () => {
       );
 
       cy.checkSummaryListRowValue(
-        'professions.form.label.topLevelInformation.regulatedAuthorities',
+        'professions.form.label.organisations.name',
         'Law Society of England and Wales',
       );
 
@@ -74,17 +74,23 @@ describe('Editing an existing profession', () => {
         },
       );
 
-      cy.translate(
-        'professions.form.label.topLevelInformation.regulatedAuthorities',
-      ).then((label) => {
-        cy.get('dt').contains(label).siblings().should('not.contain', 'Change');
-      });
+      cy.translate('professions.form.label.organisations.name').then(
+        (label) => {
+          cy.get('dt')
+            .contains(label)
+            .siblings()
+            .should('not.contain', 'Change');
+        },
+      );
 
-      cy.translate(
-        'professions.form.label.topLevelInformation.regulatedAuthorities',
-      ).then((label) => {
-        cy.get('dt').contains(label).siblings().should('not.contain', 'Change');
-      });
+      cy.translate('professions.form.label.organisations.name').then(
+        (label) => {
+          cy.get('dt')
+            .contains(label)
+            .siblings()
+            .should('not.contain', 'Change');
+        },
+      );
 
       cy.clickSummaryListRowChangeLink('professions.form.label.scope.nations');
 
@@ -560,7 +566,7 @@ describe('Editing an existing profession', () => {
       );
 
       cy.clickSummaryListRowChangeLink(
-        'professions.form.label.topLevelInformation.regulatedAuthorities',
+        'professions.form.label.organisations.name',
       );
       cy.checkAccessibility();
       cy.translate('professions.form.captions.edit', {
@@ -588,14 +594,32 @@ describe('Editing an existing profession', () => {
       cy.translate('app.continue').then((buttonText) => {
         cy.get('button').contains(buttonText).click();
       });
-      cy.checkSummaryListRowValue(
-        'professions.form.label.topLevelInformation.regulatedAuthorities',
+
+      cy.checkSummaryListRowValueFromSelector(
+        '[data-cy=profession-to-organisation-1]',
         'Department for Education',
       );
-      cy.checkSummaryListRowValue(
-        'professions.form.label.topLevelInformation.regulatedAuthorities',
+
+      cy.translate('organisations.label.roles.primaryRegulator').then(
+        (label) => {
+          cy.checkSummaryListRowValueFromSelector(
+            '[data-cy=profession-to-organisation-1]',
+            label,
+          );
+        },
+      );
+
+      cy.checkSummaryListRowValueFromSelector(
+        '[data-cy=profession-to-organisation-2]',
         'Council of Registered Gas Installers',
       );
+
+      cy.translate('organisations.label.roles.qualifyingBody').then((label) => {
+        cy.checkSummaryListRowValueFromSelector(
+          '[data-cy=profession-to-organisation-2]',
+          label,
+        );
+      });
 
       cy.translate('professions.form.button.saveAsDraft').then((buttonText) => {
         cy.get('button').contains(buttonText).click();

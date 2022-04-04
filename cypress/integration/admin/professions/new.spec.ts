@@ -55,7 +55,7 @@ describe('Adding a new profession', () => {
         [],
       );
       cy.clickSummaryListRowChangeLink(
-        'professions.form.label.topLevelInformation.regulatedAuthorities',
+        'professions.form.label.organisations.name',
       );
 
       cy.get('select[id="regulatoryBodies_1"]').select(
@@ -266,14 +266,32 @@ describe('Adding a new profession', () => {
         'professions.form.label.topLevelInformation.name',
         'Example Profession',
       );
-      cy.checkSummaryListRowValue(
-        'professions.form.label.topLevelInformation.regulatedAuthorities',
+
+      cy.checkSummaryListRowValueFromSelector(
+        '[data-cy=profession-to-organisation-1]',
         'Department for Education',
       );
-      cy.checkSummaryListRowValue(
-        'professions.form.label.topLevelInformation.regulatedAuthorities',
+
+      cy.translate('organisations.label.roles.primaryRegulator').then(
+        (label) => {
+          cy.checkSummaryListRowValueFromSelector(
+            '[data-cy=profession-to-organisation-1]',
+            label,
+          );
+        },
+      );
+
+      cy.checkSummaryListRowValueFromSelector(
+        '[data-cy=profession-to-organisation-2]',
         'General Medical Council',
       );
+
+      cy.translate('organisations.label.roles.qualifyingBody').then((label) => {
+        cy.checkSummaryListRowValueFromSelector(
+          '[data-cy=profession-to-organisation-2]',
+          label,
+        );
+      });
 
       cy.translate('nations.england').then((england) => {
         cy.checkSummaryListRowValue(

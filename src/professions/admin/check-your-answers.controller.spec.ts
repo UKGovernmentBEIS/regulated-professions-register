@@ -21,11 +21,13 @@ import { ProfessionVersionsService } from '../profession-versions.service';
 import { Profession } from '../profession.entity';
 import { CheckYourAnswersController } from './check-your-answers.controller';
 import { ProfessionToOrganisation } from '../profession-to-organisation.entity';
+import { ProfessionToOrganisationsPresenter } from './presenters/profession-to-organisations.presenter';
 
 jest.mock('../../users/helpers/check-can-view-profession');
 jest.mock('../../nations/presenters/nations-list.presenter');
 
 const mockNationsHtml = '<ul><li>Mock nations html</li></ul>';
+jest.mock('./presenters/profession-to-organisations.presenter');
 
 describe('CheckYourAnswersController', () => {
   let controller: CheckYourAnswersController;
@@ -104,13 +106,26 @@ describe('CheckYourAnswersController', () => {
         const getPublicationBlockersSpy = jest
           .spyOn(getPublicationBlockersModule, 'getPublicationBlockers')
           .mockReturnValue([]);
+        const user = userFactory.build();
+
+        const expectedSummaryList =
+          await new ProfessionToOrganisationsPresenter(
+            profession,
+            version,
+            i18nService,
+            user,
+          ).summaryLists();
+
+        (
+          ProfessionToOrganisationsPresenter.prototype as DeepMocked<ProfessionToOrganisationsPresenter>
+        ).summaryLists.mockResolvedValue(expectedSummaryList);
 
         (
           NationsListPresenter.prototype.htmlList as jest.Mock
         ).mockResolvedValue(mockNationsHtml);
 
         const request = createDefaultMockRequest({
-          user: userFactory.build(),
+          user: user,
         });
 
         const templateParams = await controller.show(
@@ -125,9 +140,7 @@ describe('CheckYourAnswersController', () => {
         expect(templateParams.industries).toEqual([
           translationOf('industries.construction'),
         ]);
-        expect(templateParams.organisations).toEqual(
-          '<p class="govuk-body">Council of Gas Registered Engineers</p>',
-        );
+        expect(templateParams.organisations).toEqual(expectedSummaryList);
         expect(templateParams.registrationRequirements).toEqual('Requirements');
         expect(templateParams.registrationUrl).toEqual(
           'https://example.com/requirement',
@@ -211,9 +224,22 @@ describe('CheckYourAnswersController', () => {
         (
           NationsListPresenter.prototype.htmlList as jest.Mock
         ).mockResolvedValue(mockNationsHtml);
+        const user = userFactory.build();
+
+        const expectedSummaryList =
+          await new ProfessionToOrganisationsPresenter(
+            profession,
+            version,
+            i18nService,
+            user,
+          ).summaryLists();
+
+        (
+          ProfessionToOrganisationsPresenter.prototype as DeepMocked<ProfessionToOrganisationsPresenter>
+        ).summaryLists.mockResolvedValue(expectedSummaryList);
 
         const request = createDefaultMockRequest({
-          user: userFactory.build(),
+          user: user,
         });
 
         const templateParams = await controller.show(
@@ -226,9 +252,7 @@ describe('CheckYourAnswersController', () => {
         expect(templateParams.name).toEqual('Gas Safe Engineer');
         expect(templateParams.nations).toEqual(mockNationsHtml);
         expect(templateParams.industries).toEqual([]);
-        expect(templateParams.organisations).toEqual(
-          '<p class="govuk-body">Council of Gas Registered Engineers</p>',
-        );
+        expect(templateParams.organisations).toEqual(expectedSummaryList);
         expect(templateParams.registrationRequirements).toEqual(undefined);
         expect(templateParams.registrationUrl).toEqual(undefined);
         expect(templateParams.regulationSummary).toEqual(undefined);

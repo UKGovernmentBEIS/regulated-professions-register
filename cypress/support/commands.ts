@@ -144,6 +144,17 @@ Cypress.Commands.add(
 );
 
 Cypress.Commands.add(
+  'checkSummaryListRowValueFromSelector',
+  (selector: string, value: string) => {
+    cy.get(`${selector} .govuk-summary-list__key`)
+      .siblings('.govuk-summary-list__value')
+      .then(($summaryListValue) => {
+        cy.wrap($summaryListValue).should('contain', value);
+      });
+  },
+);
+
+Cypress.Commands.add(
   'checkSummaryListRowMultilineValue',
   (key: string, lines: string[]) => {
     return cy.translate(key).then((label) => {

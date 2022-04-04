@@ -41,27 +41,16 @@
                     }
                   ]
                 } if 'createProfession' in permissions else undefined
-              },
-              {
-                key: {
-                  text: ("professions.form.label.topLevelInformation.regulatedAuthorities" | t)
-                },
-                value: {
-                  html: organisations
-                },
-                actions: {
-                  items: [
-                    {
-                      href: "/admin/professions/" + professionId + "/versions/" + versionId + "/organisations/edit?change=true",
-                      text: ("app.change" | t),
-                      visuallyHiddenText: ("professions.form.label.topLevelInformation.regulatedAuthorities" | t)
-                    }
-                  ]
-                } if 'createProfession' in permissions else undefined
               }
             ]
           })
         }}
+
+        <h2 class="govuk-heading-m">{{ ("professions.form.headings.organisations" | t) }}</h2>
+
+        {% for organisation in organisations %}
+          {{ govukSummaryList(organisation) }}
+        {% endfor %}
 
         <h2 class="govuk-heading-m">{{ ("professions.form.headings.scope" | t) }}</h2>
 
