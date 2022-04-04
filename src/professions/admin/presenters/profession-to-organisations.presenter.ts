@@ -1,6 +1,8 @@
 import { Profession } from '../../profession.entity';
 import { ProfessionVersion } from '../../profession-version.entity';
 import { ProfessionToOrganisation } from '../../profession-to-organisation.entity';
+import { UserPermission } from '../../../users/user-permission';
+import { getPermissionsFromUser } from '../../../users/helpers/get-permissions-from-user.helper';
 
 import { escape } from '../../../helpers/escape.helper';
 import {
@@ -9,12 +11,14 @@ import {
   SummaryListItem,
 } from '../../../common/interfaces/summary-list';
 import { I18nService } from 'nestjs-i18n';
+import { User } from '../../../users/user.entity';
 
 export class ProfessionToOrganisationsPresenter {
   constructor(
     private readonly profession: Profession,
     private readonly professionVersion: ProfessionVersion,
     private readonly i18nService: I18nService,
+    private readonly user: User,
   ) {}
 
   public async summaryLists(): Promise<SummaryList[]> {
@@ -74,17 +78,22 @@ export class ProfessionToOrganisationsPresenter {
     value: string,
     visuallyHiddenText: string,
   ): Promise<SummaryListItem> {
-    return {
+    const item = {
       key: {
         text: key,
       },
       value: {
         text: value,
       },
-      actions: {
-        items: [await this.actionsColumn(visuallyHiddenText)],
-      },
     };
+
+    if (this.userCanChangeOrganisations()) {
+      item['actions'] = {
+        items: [await this.actionsColumn(visuallyHiddenText)],
+      };
+    }
+
+    return item;
   }
 
   private async emptySummaryList(): Promise<SummaryList> {
@@ -110,5 +119,11 @@ export class ProfessionToOrganisationsPresenter {
         ),
       ],
     };
+  }
+
+  private userCanChangeOrganisations(): boolean {
+    return getPermissionsFromUser(this.user).includes(
+      UserPermission.CreateProfession,
+    );
   }
 }
