@@ -45,7 +45,7 @@ function addRemoveButton(container) {
   button.setAttribute('aria-controls', container.id);
 }
 
-function hideEmptyRegulators(items) {
+function initialize(items) {
   for (var i = 1; i < items.length; i++) {
     const item = items[i];
     const regulatoryAuthoritySelect = item.querySelector('select.organisation');
@@ -59,6 +59,8 @@ function hideEmptyRegulators(items) {
       roleSelect.value.length === 0
     ) {
       hideElement(item);
+    } else {
+      addRemoveButton(item);
     }
   }
 }
@@ -93,7 +95,7 @@ export function regulatoryAuthoritySelect() {
 
   if (items.length == 0) return;
 
-  hideEmptyRegulators(items);
+  initialize(items);
 
   showElement(addButton);
 

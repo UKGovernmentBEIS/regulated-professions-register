@@ -656,6 +656,71 @@ describe('Editing an existing profession', () => {
         },
       );
     });
+
+    it('allows me to remove a regulator', () => {
+      cy.visitAndCheckAccessibility('/admin/professions');
+
+      cy.get('table')
+        .contains('tr', 'Orthodontic Therapist')
+        .within(() => {
+          cy.contains('View details').click();
+        });
+
+      cy.translate('professions.admin.button.edit.draft').then((buttonText) => {
+        cy.contains(buttonText).click();
+      });
+
+      cy.clickSummaryListRowChangeLink(
+        'professions.form.label.organisations.name',
+      );
+
+      cy.translate('professions.form.button.addRegulator').then((label) => {
+        cy.get('a').contains(label).click();
+      });
+      cy.get('select[id="regulatoryBodies_2"]').select(
+        'Council of Registered Gas Installers',
+      );
+      cy.translate('organisations.label.roles.qualifyingBody').then((label) => {
+        cy.get('select[id="roles_2"]').select(label);
+      });
+      cy.translate('app.continue').then((buttonText) => {
+        cy.get('button').contains(buttonText).click();
+      });
+
+      cy.clickSummaryListRowChangeLink(
+        'professions.form.label.organisations.name',
+      );
+
+      cy.translate('professions.form.button.removeRegulator').then((label) => {
+        cy.get('#regulatoryBodies2 a').contains(label).click();
+      });
+
+      cy.get('select[id="regulatoryBodies_2"]').should('have.value', '');
+      cy.get('select[id="roles_2"]').should('have.value', '');
+
+      cy.translate('app.continue').then((buttonText) => {
+        cy.get('button').contains(buttonText).click();
+      });
+
+      cy.checkSummaryListRowValueFromSelector(
+        '[data-cy=profession-to-organisation-1]',
+        'General Medical Council',
+      );
+
+      cy.translate('organisations.label.roles.primaryRegulator').then(
+        (label) => {
+          cy.checkSummaryListRowValueFromSelector(
+            '[data-cy=profession-to-organisation-1]',
+            label,
+          );
+        },
+      );
+
+      cy.get('html').should(
+        'not.contain',
+        'Council of Registered Gas Installers',
+      );
+    });
   });
 
   context('When I am logged in as organisation editor', () => {
