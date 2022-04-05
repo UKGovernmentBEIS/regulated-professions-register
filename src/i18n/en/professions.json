@@ -11,7 +11,7 @@
       "confirmation": "New profession created",
       "amended": "Profession amended",
       "regulatedActivities": "Regulation",
-      "qualifications": "Qualifications",
+      "qualifications": "Qualifications and experience",
       "legislation": "Legislation",
       "publish": "Are you sure you want to publish {professionName}?"
     },
@@ -213,14 +213,17 @@
       "regulationUrl": "More about regulated activities and titles"
     },
     "qualification": {
-      "heading": "Qualification information",
+      "heading": "Qualifications and experience",
+      "overviewHeading": "New professionals",
+      "ukHeading": "Professionals from other UK nations",
+      "otherCountriesHeading": "Professionals from outside the UK",
       "routesToObtain": "Routes to qualification",
       "moreInformationUrl": "More about qualification",
       "ukRecognition": "Routes to recognition within the UK",
       "ukRecognitionUrl": "More about recognition within the UK",
       "otherCountriesRecognition": {
         "routes": {
-          "label": "Recognition for overseas professionals",
+          "label": "Recognition for professionals outside the UK",
           "all": "All - there are routes to recognition for professionals from all countries",
           "some": "Some - qualifications from some countries may be recognised, but professionals from other countries will have to re-qualify",
           "none": "None - all professionals must re-qualify"

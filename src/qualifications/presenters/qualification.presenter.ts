@@ -3,6 +3,7 @@ import { Qualification } from '../qualification.entity';
 import { I18nService } from 'nestjs-i18n';
 import { SummaryList } from '../../common/interfaces/summary-list';
 import { formatLink } from '../../helpers/format-link.helper';
+
 export default class QualificationPresenter {
   constructor(
     private readonly qualification: Qualification,
@@ -42,15 +43,29 @@ export default class QualificationPresenter {
   async summaryList(
     showEmptyFields: boolean,
     showUKRecognitionFields: boolean,
-  ): Promise<SummaryList> {
-    const summaryList: SummaryList = {
+  ): Promise<{
+    overviewSummaryList: SummaryList;
+    ukSummaryList: SummaryList;
+    otherCountriesSummaryList: SummaryList;
+  }> {
+    const overviewSummaryList: SummaryList = {
+      classes: 'govuk-summary-list--no-border',
+      rows: [],
+    };
+
+    const ukSummaryList: SummaryList = {
+      classes: 'govuk-summary-list--no-border',
+      rows: [],
+    };
+
+    const otherCountriesSummaryList: SummaryList = {
       classes: 'govuk-summary-list--no-border',
       rows: [],
     };
 
     if (showEmptyFields || this.routesToObtain) {
       await this.addHtmlRow(
-        summaryList,
+        overviewSummaryList,
         'professions.show.qualification.routesToObtain',
         this.routesToObtain,
       );
@@ -58,7 +73,7 @@ export default class QualificationPresenter {
 
     if (showEmptyFields || this.moreInformationUrl) {
       await this.addHtmlRow(
-        summaryList,
+        overviewSummaryList,
         'professions.show.qualification.moreInformationUrl',
         this.moreInformationUrl,
       );
@@ -67,7 +82,7 @@ export default class QualificationPresenter {
     if (showUKRecognitionFields) {
       if (showEmptyFields || this.ukRecognition) {
         await this.addHtmlRow(
-          summaryList,
+          ukSummaryList,
           'professions.show.qualification.ukRecognition',
           this.ukRecognition,
         );
@@ -75,7 +90,7 @@ export default class QualificationPresenter {
 
       if (showEmptyFields || this.ukRecognitionUrl) {
         await this.addHtmlRow(
-          summaryList,
+          ukSummaryList,
           'professions.show.qualification.ukRecognitionUrl',
           this.ukRecognitionUrl,
         );
@@ -84,7 +99,7 @@ export default class QualificationPresenter {
 
     if (showEmptyFields || this.publicOtherCountriesRecognitionRoutes) {
       await this.addTextRow(
-        summaryList,
+        otherCountriesSummaryList,
         'professions.show.qualification.otherCountriesRecognition.routes.label',
         this.publicOtherCountriesRecognitionRoutes &&
           (await this.i18nService.translate(
@@ -95,7 +110,7 @@ export default class QualificationPresenter {
 
     if (showEmptyFields || this.otherCountriesRecognitionSummary) {
       await this.addHtmlRow(
-        summaryList,
+        otherCountriesSummaryList,
         'professions.show.qualification.otherCountriesRecognition.summary',
         this.otherCountriesRecognitionSummary,
       );
@@ -103,13 +118,27 @@ export default class QualificationPresenter {
 
     if (showEmptyFields || this.otherCountriesRecognitionUrl) {
       await this.addHtmlRow(
-        summaryList,
+        otherCountriesSummaryList,
         'professions.show.qualification.otherCountriesRecognition.url',
         this.otherCountriesRecognitionUrl,
       );
     }
 
-    return summaryList;
+    return {
+      overviewSummaryList:
+        showEmptyFields || overviewSummaryList.rows.length
+          ? overviewSummaryList
+          : null,
+      ukSummaryList:
+        showUKRecognitionFields &&
+        (showEmptyFields || ukSummaryList.rows.length)
+          ? ukSummaryList
+          : null,
+      otherCountriesSummaryList:
+        showEmptyFields || otherCountriesSummaryList.rows.length
+          ? otherCountriesSummaryList
+          : null,
+    };
   }
 
   private async addTextRow(

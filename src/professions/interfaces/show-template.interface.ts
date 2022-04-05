@@ -6,7 +6,11 @@ import { Profession } from '../profession.entity';
 export interface ShowTemplate {
   profession: Profession;
   presenter?: ProfessionPresenter;
-  qualificationSummaryList: SummaryList;
+  qualifications: {
+    overviewSummaryList: SummaryList;
+    ukSummaryList: SummaryList;
+    otherCountriesSummaryList: SummaryList;
+  };
   nations: string;
   industries: string[];
   organisations: Organisation[];

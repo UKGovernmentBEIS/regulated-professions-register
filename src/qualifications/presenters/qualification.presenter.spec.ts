@@ -163,61 +163,69 @@ describe(QualificationPresenter, () => {
             );
 
             await expect(presenter.summaryList(true, false)).resolves.toEqual({
-              classes: 'govuk-summary-list--no-border',
-              rows: [
-                {
-                  key: {
-                    text: translationOf(
-                      'professions.show.qualification.routesToObtain',
-                    ),
+              overviewSummaryList: {
+                classes: 'govuk-summary-list--no-border',
+                rows: [
+                  {
+                    key: {
+                      text: translationOf(
+                        'professions.show.qualification.routesToObtain',
+                      ),
+                    },
+                    value: {
+                      html: presenter.routesToObtain,
+                    },
                   },
-                  value: {
-                    html: presenter.routesToObtain,
+                  {
+                    key: {
+                      text: translationOf(
+                        'professions.show.qualification.moreInformationUrl',
+                      ),
+                    },
+                    value: {
+                      html: presenter.moreInformationUrl,
+                    },
                   },
-                },
-                {
-                  key: {
-                    text: translationOf(
-                      'professions.show.qualification.moreInformationUrl',
-                    ),
+                ],
+              },
+              otherCountriesSummaryList: {
+                classes: 'govuk-summary-list--no-border',
+                rows: [
+                  {
+                    key: {
+                      text: translationOf(
+                        'professions.show.qualification.otherCountriesRecognition.routes.label',
+                      ),
+                    },
+                    value: {
+                      text: translationOf(
+                        `professions.show.qualification.otherCountriesRecognition.routes.${presenter.publicOtherCountriesRecognitionRoutes}`,
+                      ),
+                    },
                   },
-                  value: {
-                    html: presenter.moreInformationUrl,
+                  {
+                    key: {
+                      text: translationOf(
+                        'professions.show.qualification.otherCountriesRecognition.summary',
+                      ),
+                    },
+                    value: {
+                      html: presenter.otherCountriesRecognitionSummary,
+                    },
                   },
-                },
-                {
-                  key: {
-                    text: translationOf(
-                      'professions.show.qualification.otherCountriesRecognition.routes.label',
-                    ),
+                  {
+                    key: {
+                      text: translationOf(
+                        'professions.show.qualification.otherCountriesRecognition.url',
+                      ),
+                    },
+                    value: {
+                      html: presenter.otherCountriesRecognitionUrl,
+                    },
                   },
-                  value: {
-                    text: translationOf(
-                      `professions.show.qualification.otherCountriesRecognition.routes.${presenter.publicOtherCountriesRecognitionRoutes}`,
-                    ),
-                  },
-                },
-                {
-                  key: {
-                    text: translationOf(
-                      'professions.show.qualification.otherCountriesRecognition.summary',
-                    ),
-                  },
-                  value: {
-                    html: presenter.otherCountriesRecognitionSummary,
-                  },
-                },
-                {
-                  key: {
-                    text: translationOf(
-                      'professions.show.qualification.otherCountriesRecognition.url',
-                    ),
-                  },
-                  value: {
-                    html: presenter.otherCountriesRecognitionUrl,
-                  },
-                },
-              ],
+                ],
+              },
+              ukSummaryList: null,
             });
           });
         });
@@ -241,81 +249,93 @@ describe(QualificationPresenter, () => {
             );
 
             await expect(presenter.summaryList(true, true)).resolves.toEqual({
-              classes: 'govuk-summary-list--no-border',
-              rows: [
-                {
-                  key: {
-                    text: translationOf(
-                      'professions.show.qualification.routesToObtain',
-                    ),
+              overviewSummaryList: {
+                classes: 'govuk-summary-list--no-border',
+                rows: [
+                  {
+                    key: {
+                      text: translationOf(
+                        'professions.show.qualification.routesToObtain',
+                      ),
+                    },
+                    value: {
+                      html: presenter.routesToObtain,
+                    },
                   },
-                  value: {
-                    html: presenter.routesToObtain,
+                  {
+                    key: {
+                      text: translationOf(
+                        'professions.show.qualification.moreInformationUrl',
+                      ),
+                    },
+                    value: {
+                      html: presenter.moreInformationUrl,
+                    },
                   },
-                },
-                {
-                  key: {
-                    text: translationOf(
-                      'professions.show.qualification.moreInformationUrl',
-                    ),
+                ],
+              },
+              ukSummaryList: {
+                classes: 'govuk-summary-list--no-border',
+                rows: [
+                  {
+                    key: {
+                      text: translationOf(
+                        'professions.show.qualification.ukRecognition',
+                      ),
+                    },
+                    value: {
+                      html: presenter.ukRecognition,
+                    },
                   },
-                  value: {
-                    html: presenter.moreInformationUrl,
+                  {
+                    key: {
+                      text: translationOf(
+                        'professions.show.qualification.ukRecognitionUrl',
+                      ),
+                    },
+                    value: {
+                      html: presenter.ukRecognitionUrl,
+                    },
                   },
-                },
-                {
-                  key: {
-                    text: translationOf(
-                      'professions.show.qualification.ukRecognition',
-                    ),
+                ],
+              },
+              otherCountriesSummaryList: {
+                classes: 'govuk-summary-list--no-border',
+                rows: [
+                  {
+                    key: {
+                      text: translationOf(
+                        'professions.show.qualification.otherCountriesRecognition.routes.label',
+                      ),
+                    },
+                    value: {
+                      text: translationOf(
+                        `professions.show.qualification.otherCountriesRecognition.routes.${presenter.publicOtherCountriesRecognitionRoutes}`,
+                      ),
+                    },
                   },
-                  value: {
-                    html: presenter.ukRecognition,
+                  {
+                    key: {
+                      text: translationOf(
+                        'professions.show.qualification.otherCountriesRecognition.summary',
+                      ),
+                    },
+                    value: {
+                      html: presenter.otherCountriesRecognitionSummary,
+                    },
                   },
-                },
-                {
-                  key: {
-                    text: translationOf(
-                      'professions.show.qualification.ukRecognitionUrl',
-                    ),
+                  {
+                    key: {
+                      text: translationOf(
+                        'professions.show.qualification.otherCountriesRecognition.url',
+                      ),
+                    },
+                    value: {
+                      html: presenter.otherCountriesRecognitionUrl,
+                    },
                   },
-                  value: {
-                    html: presenter.ukRecognitionUrl,
-                  },
-                },
-                {
-                  key: {
-                    text: translationOf(
-                      'professions.show.qualification.otherCountriesRecognition.routes.label',
-                    ),
-                  },
-                  value: {
-                    text: translationOf(
-                      `professions.show.qualification.otherCountriesRecognition.routes.${presenter.publicOtherCountriesRecognitionRoutes}`,
-                    ),
-                  },
-                },
-                {
-                  key: {
-                    text: translationOf(
-                      'professions.show.qualification.otherCountriesRecognition.summary',
-                    ),
-                  },
-                  value: {
-                    html: presenter.otherCountriesRecognitionSummary,
-                  },
-                },
-                {
-                  key: {
-                    text: translationOf(
-                      'professions.show.qualification.otherCountriesRecognition.url',
-                    ),
-                  },
-                  value: {
-                    html: presenter.otherCountriesRecognitionUrl,
-                  },
-                },
-              ],
+                ],
+              },
             });
           });
         });
@@ -323,7 +343,7 @@ describe(QualificationPresenter, () => {
 
       describe('when a Qualification is missing fields', () => {
         describe('when `showEmptyFields` is true', () => {
-          it('returns a summary list of all Qualification fields', async () => {
+          it('returns summary lists of all Qualification fields', async () => {
             (formatMultilineString as jest.Mock).mockImplementation(
               multilineOf,
             );
@@ -333,6 +353,7 @@ describe(QualificationPresenter, () => {
 
             const qualification = qualificationFactory.build({
               url: '',
+              otherCountriesRecognitionRoutes: null,
             });
 
             const presenter = new QualificationPresenter(
@@ -341,66 +362,72 @@ describe(QualificationPresenter, () => {
             );
 
             await expect(presenter.summaryList(true, false)).resolves.toEqual({
-              classes: 'govuk-summary-list--no-border',
-              rows: [
-                {
-                  key: {
-                    text: translationOf(
-                      'professions.show.qualification.routesToObtain',
-                    ),
+              overviewSummaryList: {
+                classes: 'govuk-summary-list--no-border',
+                rows: [
+                  {
+                    key: {
+                      text: translationOf(
+                        'professions.show.qualification.routesToObtain',
+                      ),
+                    },
+                    value: {
+                      html: presenter.routesToObtain,
+                    },
                   },
-                  value: {
-                    html: presenter.routesToObtain,
+                  {
+                    key: {
+                      text: translationOf(
+                        'professions.show.qualification.moreInformationUrl',
+                      ),
+                    },
+                    value: {
+                      html: presenter.moreInformationUrl,
+                    },
                   },
-                },
-                {
-                  key: {
-                    text: translationOf(
-                      'professions.show.qualification.moreInformationUrl',
-                    ),
+                ],
+              },
+              otherCountriesSummaryList: {
+                classes: 'govuk-summary-list--no-border',
+                rows: [
+                  {
+                    key: {
+                      text: translationOf(
+                        'professions.show.qualification.otherCountriesRecognition.routes.label',
+                      ),
+                    },
+                    value: {
+                      text: null,
+                    },
                   },
-                  value: {
-                    html: presenter.moreInformationUrl,
+                  {
+                    key: {
+                      text: translationOf(
+                        'professions.show.qualification.otherCountriesRecognition.summary',
+                      ),
+                    },
+                    value: {
+                      html: presenter.otherCountriesRecognitionSummary,
+                    },
                   },
-                },
-                {
-                  key: {
-                    text: translationOf(
-                      'professions.show.qualification.otherCountriesRecognition.routes.label',
-                    ),
+                  {
+                    key: {
+                      text: translationOf(
+                        'professions.show.qualification.otherCountriesRecognition.url',
+                      ),
+                    },
+                    value: {
+                      html: presenter.otherCountriesRecognitionUrl,
+                    },
                   },
-                  value: {
-                    text: translationOf(
-                      `professions.show.qualification.otherCountriesRecognition.routes.${presenter.publicOtherCountriesRecognitionRoutes}`,
-                    ),
-                  },
-                },
-                {
-                  key: {
-                    text: translationOf(
-                      'professions.show.qualification.otherCountriesRecognition.summary',
-                    ),
-                  },
-                  value: {
-                    html: presenter.otherCountriesRecognitionSummary,
-                  },
-                },
-                {
-                  key: {
-                    text: translationOf(
-                      'professions.show.qualification.otherCountriesRecognition.url',
-                    ),
-                  },
-                  value: {
-                    html: presenter.otherCountriesRecognitionUrl,
-                  },
-                },
-              ],
+                ],
+              },
+              ukSummaryList: null,
             });
           });
         });
         describe('when `showEmptyFields` is false', () => {
-          it('returns a summary list of all non-empty Qualification fields', async () => {
+          it('returns summary lists of all non-empty Qualification fields', async () => {
             (formatMultilineString as jest.Mock).mockImplementation(
               multilineOf,
             );
@@ -410,6 +437,7 @@ describe(QualificationPresenter, () => {
 
             const qualification = qualificationFactory.build({
               url: '',
+              otherCountriesRecognitionRoutes: null,
             });
 
             const presenter = new QualificationPresenter(
@@ -418,31 +446,23 @@ describe(QualificationPresenter, () => {
             );
 
             await expect(presenter.summaryList(false, false)).resolves.toEqual({
-              classes: 'govuk-summary-list--no-border',
-              rows: [
-                {
-                  key: {
-                    text: translationOf(
-                      'professions.show.qualification.routesToObtain',
-                    ),
+              overviewSummaryList: {
+                classes: 'govuk-summary-list--no-border',
+                rows: [
+                  {
+                    key: {
+                      text: translationOf(
+                        'professions.show.qualification.routesToObtain',
+                      ),
+                    },
+                    value: {
+                      html: presenter.routesToObtain,
+                    },
                   },
-                  value: {
-                    html: presenter.routesToObtain,
-                  },
-                },
-                {
-                  key: {
-                    text: translationOf(
-                      'professions.show.qualification.otherCountriesRecognition.routes.label',
-                    ),
-                  },
-                  value: {
-                    text: translationOf(
-                      `professions.show.qualification.otherCountriesRecognition.routes.${presenter.publicOtherCountriesRecognitionRoutes}`,
-                    ),
-                  },
-                },
-              ],
+                ],
+              },
+              otherCountriesSummaryList: null,
+              ukSummaryList: null,
             });
           });
         });

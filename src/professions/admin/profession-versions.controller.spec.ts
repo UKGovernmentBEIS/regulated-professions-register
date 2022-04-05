@@ -23,6 +23,7 @@ import { checkCanViewProfession } from '../../users/helpers/check-can-view-profe
 import * as getPublicationBlockersModule from '../helpers/get-publication-blockers.helper';
 import { NationsListPresenter } from '../../nations/presenters/nations-list.presenter';
 import { Nation } from '../../nations/nation';
+import { ShowTemplate } from './interfaces/show-template.interface';
 
 jest.mock('../../organisations/organisation.entity');
 jest.mock('../presenters/profession.presenter');
@@ -203,7 +204,7 @@ describe('ProfessionVersionsController', () => {
             profession: professionWithVersion,
             presenter: {},
             hasLiveVersion: true,
-            qualificationSummaryList: await new QualificationPresenter(
+            qualifications: await new QualificationPresenter(
               professionWithVersion.qualification,
               createMockI18nService(),
             ).summaryList(true, true),
@@ -213,7 +214,7 @@ describe('ProfessionVersionsController', () => {
               profession.professionToOrganisations[0].organisation,
             ],
             publicationBlockers: [],
-          });
+          } as ShowTemplate);
 
           expect(
             professionVersionsService.findByIdWithProfession,
@@ -290,7 +291,7 @@ describe('ProfessionVersionsController', () => {
             profession: professionWithVersion,
             presenter: {},
             hasLiveVersion: true,
-            qualificationSummaryList: await new QualificationPresenter(
+            qualifications: await new QualificationPresenter(
               professionWithVersion.qualification,
               createMockI18nService(),
             ).summaryList(true, true),
@@ -298,7 +299,7 @@ describe('ProfessionVersionsController', () => {
             industries: ['Translation of `industries.example`'],
             organisations: [organisation1, organisation2],
             publicationBlockers: [],
-          });
+          } as ShowTemplate);
 
           expect(
             professionVersionsService.findByIdWithProfession,
@@ -370,7 +371,7 @@ describe('ProfessionVersionsController', () => {
           profession: professionWithVersion,
           presenter: {},
           hasLiveVersion: true,
-          qualificationSummaryList: await new QualificationPresenter(
+          qualifications: await new QualificationPresenter(
             professionWithVersion.qualification,
             createMockI18nService(),
           ).summaryList(true, true),
@@ -383,7 +384,7 @@ describe('ProfessionVersionsController', () => {
               section: 'qualifications',
             },
           ],
-        });
+        } as ShowTemplate);
 
         expect(getPublicationBlockersSpy).toHaveBeenCalledWith(version);
         expect(NationsListPresenter).toHaveBeenCalledWith(
@@ -454,7 +455,7 @@ describe('ProfessionVersionsController', () => {
           profession: professionWithVersion,
           presenter: {},
           hasLiveVersion: true,
-          qualificationSummaryList: await new QualificationPresenter(
+          qualifications: await new QualificationPresenter(
             undefined,
             createMockI18nService(),
           ).summaryList(true, true),
@@ -471,7 +472,7 @@ describe('ProfessionVersionsController', () => {
               section: 'legislation',
             },
           ],
-        });
+        } as ShowTemplate);
 
         expect(
           professionVersionsService.findByIdWithProfession,

@@ -70,9 +70,9 @@ describe('Showing a profession', () => {
 
     cy.translate('professions.show.regulatedActivities.heading').then(
       (heading) => {
-        cy.get('body h2').should('contain', heading);
+        cy.get('h2').should('contain', heading);
 
-        cy.get('body h2')
+        cy.get('h2')
           .contains(heading)
           .parent()
           .within(() => {
@@ -126,16 +126,54 @@ describe('Showing a profession', () => {
     );
 
     cy.translate('professions.show.qualification.heading').then((heading) => {
-      cy.get('body').should('contain', heading);
+      cy.get('h2').should('contain', heading);
+
+      cy.get('h2')
+        .contains(heading)
+        .parent()
+        .within(() => {
+          cy.translate('professions.show.qualification.overviewHeading').then(
+            (overviewHeading) => {
+              cy.get('h3').should('contain', overviewHeading);
+
+              cy.get('h3')
+                .contains(overviewHeading)
+                .parent()
+                .within(() => {
+                  cy.checkSummaryListRowValue(
+                    'professions.show.qualification.routesToObtain',
+                    'Have a degree in any subject that is equivalent to a UK degree or level 6 qualification, or other qualification and/or experience equivalent to this.',
+                  );
+
+                  cy.checkSummaryListRowValue(
+                    'professions.show.qualification.moreInformationUrl',
+                    'https://www.sra.org.uk/become-solicitor/qualified-lawyers/',
+                  );
+                });
+            },
+          );
+
+          cy.translate(
+            'professions.show.qualification.otherCountriesHeading',
+          ).then((otherCountriesHeading) => {
+            cy.get('h3').should('contain', otherCountriesHeading);
+
+            cy.get('h3')
+              .contains(otherCountriesHeading)
+              .parent()
+              .within(() => {
+                cy.translate(
+                  'professions.show.qualification.otherCountriesRecognition.routes.none',
+                ).then((noneRoutes) => {
+                  cy.checkSummaryListRowValue(
+                    'professions.show.qualification.otherCountriesRecognition.routes.label',
+                    noneRoutes,
+                  );
+                });
+              });
+          });
+        });
     });
-    cy.checkSummaryListRowValue(
-      'professions.show.qualification.routesToObtain',
-      'Have a degree in any subject that is equivalent to a UK degree or level 6 qualification, or other qualification and/or experience equivalent to this.',
-    );
-    cy.checkSummaryListRowValue(
-      'professions.show.qualification.moreInformationUrl',
-      'https://www.sra.org.uk/become-solicitor/qualified-lawyers/',
-    );
 
     cy.translate(
       'professions.show.qualification.otherCountriesRecognition.routes.none',
@@ -224,9 +262,9 @@ describe('Showing a profession', () => {
 
     cy.translate('professions.show.regulatedActivities.heading').then(
       (heading) => {
-        cy.get('body h2').should('contain', heading);
+        cy.get('h2').should('contain', heading);
 
-        cy.get('body h2')
+        cy.get('h2')
           .contains(heading)
           .parent()
           .within(($div) => {
@@ -279,25 +317,84 @@ describe('Showing a profession', () => {
     );
 
     cy.translate('professions.show.qualification.heading').then((heading) => {
-      cy.get('body').should('contain', heading);
-    });
-    cy.checkSummaryListRowValue(
-      'professions.show.qualification.routesToObtain',
-      'General post-secondary education',
-    );
-    cy.translate('professions.show.qualification.moreInformationUrl').then(
-      (moreInformationUrl) => {
-        cy.get('body').should('not.contain', moreInformationUrl);
-      },
-    );
+      cy.get('h2').should('contain', heading);
 
-    cy.translate(
-      'professions.show.qualification.otherCountriesRecognition.routes.all',
-    ).then((all) => {
-      cy.checkSummaryListRowValue(
-        'professions.show.qualification.otherCountriesRecognition.routes.label',
-        all,
-      );
+      cy.get('h2')
+        .contains(heading)
+        .parent()
+        .within(($div) => {
+          cy.translate('professions.show.qualification.overviewHeading').then(
+            (overviewHeading) => {
+              cy.get('h3').should('contain', overviewHeading);
+
+              cy.get('h3')
+                .contains(overviewHeading)
+                .parent()
+                .within(() => {
+                  cy.checkSummaryListRowValue(
+                    'professions.show.qualification.routesToObtain',
+                    'General post-secondary education',
+                  );
+                });
+            },
+          );
+
+          cy.translate(
+            'professions.show.qualification.otherCountriesHeading',
+          ).then((otherCountriesHeading) => {
+            cy.get('h3').should('contain', otherCountriesHeading);
+
+            cy.get('h3')
+              .contains(otherCountriesHeading)
+              .parent()
+              .within(() => {
+                cy.translate(
+                  'professions.show.qualification.otherCountriesRecognition.routes.all',
+                ).then((allRoutes) => {
+                  cy.checkSummaryListRowValue(
+                    'professions.show.qualification.otherCountriesRecognition.routes.label',
+                    allRoutes,
+                  );
+                });
+              });
+          });
+
+          cy.translate(
+            'professions.show.qualification.moreInformationUrl',
+          ).then((moreInformation) => {
+            cy.wrap($div).should('not.contain', moreInformation);
+          });
+
+          cy.translate('professions.show.qualification.ukHeading').then(
+            (ukHeading) => {
+              cy.wrap($div).should('not.contain', ukHeading);
+            },
+          );
+
+          cy.translate('professions.show.qualification.ukRecognition').then(
+            (ukRecognition) => {
+              cy.wrap($div).should('not.contain', ukRecognition);
+            },
+          );
+
+          cy.translate('professions.show.qualification.ukRecognitionUrl').then(
+            (ukRecognitionUrl) => {
+              cy.wrap($div).should('not.contain', ukRecognitionUrl);
+            },
+          );
+
+          cy.translate(
+            'professions.show.qualification.otherCountriesRecognition.summary',
+          ).then((otherCountriesSummary) => {
+            cy.wrap($div).should('not.contain', otherCountriesSummary);
+          });
+
+          cy.translate(
+            'professions.show.qualification.otherCountriesRecognition.url',
+          ).then((otherCountriesUrl) => {
+            cy.wrap($div).should('not.contain', otherCountriesUrl);
+          });
+        });
     });
 
     cy.translate('professions.show.registration.heading').then((heading) => {

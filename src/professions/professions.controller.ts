@@ -62,7 +62,7 @@ export class ProfessionsController {
 
     return {
       profession,
-      qualificationSummaryList: qualification
+      qualifications: qualification
         ? await qualification.summaryList(
             false,
             profession.occupationLocations
