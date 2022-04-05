@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fix a bug causing Professions belonging to multiple Organisations to be uneditable by all but central users
 - Consistently display "United Kingdom" where we would otherwise display a list of all four UK nations
 - Fix bug causing selecting more nations in our search filters to give fewer resutls
+- Split display of qualification data into overview, UK, and other countries sections
 
 ## [release-014] - 2022-03-30
 
