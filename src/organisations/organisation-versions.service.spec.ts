@@ -829,7 +829,7 @@ describe('OrganisationVersionsService', () => {
       expect(result).toEqual(expectedOrgs);
 
       expect(queryBuilder.andWhere).toHaveBeenCalledWith(
-        'professionVersions.occupationLocations @> :nations',
+        'professionVersions.occupationLocations && :nations',
         {
           nations: ['GB-ENG', 'GB-NIR'],
         },
@@ -970,7 +970,7 @@ describe('OrganisationVersionsService', () => {
       expect(result).toEqual(expectedOrgs);
 
       expect(queryBuilder.andWhere).toHaveBeenCalledWith(
-        'professionVersions.occupationLocations @> :nations',
+        'professionVersions.occupationLocations && :nations',
         {
           nations: ['GB-ENG', 'GB-NIR'],
         },

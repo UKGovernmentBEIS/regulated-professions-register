@@ -328,7 +328,7 @@ export class OrganisationVersionsService {
       const nations = filter.nations.map((n) => n.code);
 
       query = query.andWhere(
-        'professionVersions.occupationLocations @> :nations',
+        'professionVersions.occupationLocations && :nations',
         {
           nations: nations,
         },
