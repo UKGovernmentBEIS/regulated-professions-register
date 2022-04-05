@@ -18,12 +18,15 @@ jest.mock('../../search/helpers/has-selected-filters.helper');
 
 const organisation1 = organisationFactory.build({
   name: 'Example Organisation 1',
+  professionToOrganisations: [],
 });
 const organisation2 = organisationFactory.build({
   name: 'Example Organisation 2',
+  professionToOrganisations: [],
 });
 const organisation3 = organisationFactory.build({
   name: 'Example Organisation 3',
+  professionToOrganisations: [],
 });
 
 const industry1 = industryFactory.build({
@@ -100,9 +103,18 @@ describe('SearchPresenter', () => {
         industriesCheckboxItems,
         regulationTypesCheckboxItems,
         organisations: [
-          await new OrganisationSearchResultPresenter(organisation1).present(),
-          await new OrganisationSearchResultPresenter(organisation2).present(),
-          await new OrganisationSearchResultPresenter(organisation3).present(),
+          await new OrganisationSearchResultPresenter(
+            organisation1,
+            i18nService,
+          ).present(),
+          await new OrganisationSearchResultPresenter(
+            organisation2,
+            i18nService,
+          ).present(),
+          await new OrganisationSearchResultPresenter(
+            organisation3,
+            i18nService,
+          ).present(),
         ],
         hasSelectedFilters: true,
       };

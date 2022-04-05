@@ -38,6 +38,16 @@ describe('Searching an organisation', () => {
     });
   });
 
+  it("Shows the organisations' professions' nations", () => {
+    cy.get('.rpr-listing__ra-container')
+      .contains('div', 'Law Society of England and Wales')
+      .should('contain', 'United Kingdom');
+
+    cy.get('.rpr-listing__ra-container')
+      .contains('div', 'Law Society of England and Wales')
+      .should('contain', 'England');
+  });
+
   it('I can click an organisation to be taken to its details page', () => {
     cy.get('a').contains('General Medical Council').click();
     cy.checkAccessibility();

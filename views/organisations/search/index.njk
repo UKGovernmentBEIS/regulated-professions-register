@@ -1,3 +1,5 @@
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
 {% extends "base.njk" %}
 
 {% set title = ("organisations.search.heading" | t) %}
@@ -39,10 +41,26 @@
       <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
 
       {% for organisation in organisations %}
-        <div>
-          <h2>
-            <a class="govuk-link govuk-heading-m rpr-listing__ra-title" href="/regulatory-authorities/{{ organisation.slug }}">{{ organisation.name }}</a><br>
+        <div class="rpr-listing__ra-container">
+          <h2 class="govuk-heading-m">
+            <a class="govuk-link rpr-listing__ra-title" href="/regulatory-authorities/{{ organisation.slug }}">{{ organisation.name }}</a><br>
           </h2>
+
+          {{
+            govukSummaryList({
+              classes: 'govuk-summary-list--no-border rpr-listing__ra-summary-list',
+              rows: [
+                {
+                  key: {
+                    text: ("professions.search.profession.nations" | t)
+                  },
+                  value: {
+                    text: organisation.nations
+                  }
+                }
+              ]
+            })
+          }}
 
           {% if not loop.last %}
             <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
