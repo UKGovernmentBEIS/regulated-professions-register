@@ -26,6 +26,8 @@ import { ProfessionsSearchService } from './professions/professions-search.servi
 import { OrganisationsSearchService } from './organisations/organisations-search.service';
 
 import { SearchModule } from './search/search.module';
+import { DecisionDataset } from './decisions/decision-dataset.entity';
+import { DecisionDatasetsSeeder } from './decisions/decision-dataset.seeder';
 
 seeder({
   imports: [
@@ -49,6 +51,7 @@ seeder({
       Profession,
       ProfessionVersion,
       ProfessionToOrganisation,
+      DecisionDataset,
     ]),
     SearchModule.register(),
   ],
@@ -60,4 +63,5 @@ seeder({
   OrganisationsSeeder,
   ProfessionsSeeder,
   UsersSeeder,
+  DecisionDatasetsSeeder,
 ]);
