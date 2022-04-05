@@ -70,9 +70,9 @@ describe('Showing a profession', () => {
 
     cy.translate('professions.show.regulatedActivities.heading').then(
       (heading) => {
-        cy.get('body h2').should('contain', heading);
+        cy.get('h2').should('contain', heading);
 
-        cy.get('body h2')
+        cy.get('h2')
           .contains(heading)
           .parent()
           .within(() => {
@@ -224,9 +224,9 @@ describe('Showing a profession', () => {
 
     cy.translate('professions.show.regulatedActivities.heading').then(
       (heading) => {
-        cy.get('body h2').should('contain', heading);
+        cy.get('h2').should('contain', heading);
 
-        cy.get('body h2')
+        cy.get('h2')
           .contains(heading)
           .parent()
           .within(($div) => {

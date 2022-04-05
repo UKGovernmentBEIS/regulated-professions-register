@@ -99,7 +99,7 @@ describe('Creating a new user', () => {
       cy.translate('users.form.label.organisation').then(
         (organisationLabel) => {
           cy.translate('app.change').then((changeLink) => {
-            cy.get('body dt')
+            cy.get('dt')
               .contains(organisationLabel)
               .parent()
               .should('contain', changeLink);
@@ -287,7 +287,7 @@ describe('Creating a new user', () => {
       cy.translate('users.form.label.organisation').then(
         (organisationLabel) => {
           cy.translate('app.change').then((changeLink) => {
-            cy.get('body dt')
+            cy.get('dt')
               .contains(organisationLabel)
               .parent()
               .should('not.contain', changeLink);
