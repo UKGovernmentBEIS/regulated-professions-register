@@ -36,6 +36,7 @@ import {
   ProfessionToOrganisation,
   OrganisationRole,
 } from '../profession-to-organisation.entity';
+import { sortOrganisationsByRole } from '../helpers/sort-organisations-by-role';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
@@ -65,9 +66,11 @@ export class OrganisationsController {
 
     checkCanViewProfession(req, profession);
 
+    const professionToOrganisations = sortOrganisationsByRole(profession);
+
     return this.renderForm(
       res,
-      profession.professionToOrganisations,
+      professionToOrganisations,
       profession,
       change === 'true',
       errors,
