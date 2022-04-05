@@ -39,9 +39,12 @@ export class SearchPresenter {
       ).checkboxItems();
 
     const displayOrganisations = await Promise.all(
-      this.filteredOrganisations.map(async (organisation) =>
-        new OrganisationSearchResultPresenter(organisation).present(),
-      ),
+      this.filteredOrganisations.map(async (organisation) => {
+        return new OrganisationSearchResultPresenter(
+          organisation,
+          this.i18nService,
+        ).present();
+      }),
     );
 
     return {

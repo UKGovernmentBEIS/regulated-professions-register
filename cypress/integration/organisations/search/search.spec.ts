@@ -38,6 +38,26 @@ describe('Searching an organisation', () => {
     });
   });
 
+  it("Shows the organisations' professions' nations", () => {
+    cy.get('h2')
+      .contains('Law Society of England and Wales')
+      .then(($header) => {
+        const $h2 = $header.parent();
+        const $div = $h2.parent();
+
+        cy.wrap($div).should('contain', 'United Kingdom');
+      });
+
+    cy.get('h2')
+      .contains('Department for Education')
+      .then(($header) => {
+        const $h2 = $header.parent();
+        const $div = $h2.parent();
+
+        cy.wrap($div).should('contain', 'England');
+      });
+  });
+
   it('I can click an organisation to be taken to its details page', () => {
     cy.get('a').contains('General Medical Council').click();
     cy.checkAccessibility();

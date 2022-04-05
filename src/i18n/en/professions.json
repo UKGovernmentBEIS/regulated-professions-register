@@ -339,7 +339,8 @@
     },
     "profession": {
       "regulators": "Regulators",
-      "industry": "Sectors"
+      "industry": "Sectors",
+      "nations": "Nations"
     },
     "filter": {
       "keywords": {
