@@ -79,13 +79,16 @@ describe('Searching a profession', () => {
 
   it('I can filter by nation', () => {
     cy.get('input[name="nations[]"][value="GB-WLS"]').check();
+    cy.get('input[name="nations[]"][value="GB-NIR"]').check();
 
     cy.get('button').click();
     cy.checkAccessibility();
 
     cy.get('input[name="nations[]"][value="GB-WLS"]').should('be.checked');
+    cy.get('input[name="nations[]"][value="GB-NIR"]').should('be.checked');
 
     cy.get('body').should('contain', 'Registered Trademark Attorney');
+    cy.get('body').should('contain', 'Profession with no optional fields');
     cy.get('body').should(
       'not.contain',
       'Secondary School Teacher in State maintained schools (England)',

@@ -94,37 +94,63 @@ describe('Listing organisations', () => {
       expandFilters();
 
       cy.translate('nations.wales').then((wales) => {
-        cy.translate('app.unitedKingdom').then((unitedKingdom) => {
-          cy.get('label')
-            .contains(wales)
-            .parent()
-            .within(() => {
-              cy.get('input[name="nations[]"]').check();
+        cy.translate('nations.scotland').then((scotland) => {
+          cy.translate('app.unitedKingdom').then((unitedKingdom) => {
+            cy.get('label')
+              .contains(wales)
+              .parent()
+              .within(() => {
+                cy.get('input[name="nations[]"]').check();
+              });
+
+            cy.get('label')
+              .contains(scotland)
+              .parent()
+              .within(() => {
+                cy.get('input[name="nations[]"]').check();
+              });
+
+            clickFilterButtonAndCheckAccessibility();
+
+            cy.get('label')
+              .contains(wales)
+              .parent()
+              .within(() => {
+                cy.get('input[name="nations[]"]').should('be.checked');
+              });
+
+            cy.get('label')
+              .contains(scotland)
+              .parent()
+              .within(() => {
+                cy.get('input[name="nations[]"]').should('be.checked');
+              });
+
+            cy.get('tbody tr').each(($tr) => {
+              cy.wrap($tr).within(() => {
+                cy.get('td')
+                  .eq(0)
+                  .invoke('text')
+                  .then((cellText) => {
+                    expect(cellText).to.match(
+                      new RegExp(
+                        `(${wales}|${scotland}|${unitedKingdom})`,
+                        'g',
+                      ),
+                    );
+                  });
+              });
             });
 
-          clickFilterButtonAndCheckAccessibility();
+            cy.get('tbody tr td')
+              .contains(wales)
+              .should('not.contain', scotland);
+            cy.get('tbody tr td')
+              .contains(scotland)
+              .should('not.contain', wales);
 
-          cy.get('label')
-            .contains(wales)
-            .parent()
-            .within(() => {
-              cy.get('input[name="nations[]"]').should('be.checked');
-            });
-
-          cy.get('tbody tr').each(($tr) => {
-            cy.wrap($tr).within(() => {
-              cy.get('td')
-                .eq(0)
-                .invoke('text')
-                .then((cellText) => {
-                  expect(cellText).to.match(
-                    new RegExp(`(${wales}|${unitedKingdom})`, 'g'),
-                  );
-                });
-            });
+            cy.get('tbody tr').should('have.length.at.least', 1);
           });
-
-          cy.get('tbody tr').should('have.length.at.least', 1);
         });
       });
     });
