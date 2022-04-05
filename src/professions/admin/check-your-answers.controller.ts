@@ -14,7 +14,7 @@ import { getReferrer } from '../../common/utils';
 
 import { Nation } from '../../nations/nation';
 import QualificationPresenter from '../../qualifications/presenters/qualification.presenter';
-import { OrganisationsPresenter } from './presenters/organisations-presenter';
+import { ProfessionToOrganisationsPresenter } from './presenters/profession-to-organisations.presenter';
 import { CheckYourAnswersTemplate } from './interfaces/check-your-answers.template';
 import { Permissions } from '../../common/permissions.decorator';
 import { UserPermission } from '../../users/user-permission';
@@ -26,8 +26,8 @@ import { RequestWithAppSession } from '../../common/interfaces/request-with-app-
 import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
 import { getPublicationBlockers } from '../helpers/get-publication-blockers.helper';
 import { Profession } from '../profession.entity';
-import { getOrganisationsFromProfession } from '../helpers/get-organisations-from-profession.helper';
 import { NationsListPresenter } from '../../nations/presenters/nations-list.presenter';
+import { getActingUser } from '../../users/helpers/get-acting-user.helper';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
@@ -76,9 +76,12 @@ export class CheckYourAnswersController {
       this.i18nService,
     );
 
-    const organisations = new OrganisationsPresenter(
-      getOrganisationsFromProfession(profession),
-    );
+    const organisations = await new ProfessionToOrganisationsPresenter(
+      profession,
+      version,
+      this.i18nService,
+      getActingUser(request),
+    ).summaryLists();
 
     return {
       professionId,
@@ -86,7 +89,7 @@ export class CheckYourAnswersController {
       name: profession.name,
       nations: await nations.htmlList(),
       industries: industryNames,
-      organisations: organisations.list(),
+      organisations: organisations,
       registrationRequirements: version.registrationRequirements,
       registrationUrl: version.registrationUrl,
       regulationSummary: version.description,

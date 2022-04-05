@@ -1,0 +1,94 @@
+{% extends "admin/base.njk" %}
+
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+
+{% set heading = ("professions.form.headings.organisations" | t) %}
+{% set title =  captionText + " | " + heading %}
+
+{% block content %}
+
+{% include "../../shared/_errors.njk" %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <span class="govuk-caption-l">{{ captionText }}</span>
+    <h1 class="govuk-heading-l">{{ heading }}</h1>
+
+    <form method="post" action="./">
+      <input type="hidden" name="change" value="{{ change }}" />
+
+      <div id="regulatoryBodies">
+        {% for selectArgs in selectArgsArray %}
+          <div class="rpr-internal__regulatory-authority-input-container" id="regulatoryBodies{{ loop.index }}" >
+            {{
+              govukSelect({
+                label: {
+                  text: ("professions.form.label.organisations.name" | t),
+                  classes: "govuk-label--m",
+                  isPageHeading: false
+                },
+                id: "regulatoryBodies_" + loop.index,
+                name: "professionToOrganisations["+ loop.index +"][organisation]",
+                items: selectArgs.authorities,
+                classes: "organisation",
+                errorMessage: errors.regulatoryBody | tError
+              })
+            }}
+
+            {{
+              govukSelect({
+                label: {
+                  text: ("professions.form.label.organisations.role" | t),
+                  classes: "govuk-label--m",
+                  isPageHeading: false
+                },
+                id: "roles_" + loop.index,
+                name: "professionToOrganisations["+ loop.index +"][role]",
+                items: selectArgs.roles,
+                classes: "role",
+                errorMessage: errors.regulatoryBody | tError
+              })
+            }}
+          </div>
+        {% endfor %}
+      </div>
+
+      <p class="govuk-body">
+        {{
+          govukButton({
+            href: "#",
+            attributes: { id: "add-regulator", "aria-hidden": "true", "aria-controls": "regulatoryBodies" },
+            classes: "govuk-button--secondary govuk-visually-hidden",
+            text: ("professions.form.button.addRegulator" | t)
+          })
+        }}
+      </p>
+
+      {{
+        govukButton({
+          id: "submit-button",
+          type: "Submit",
+          text: ("app.continue" | t)
+        })
+      }}
+    </form>
+
+    <template id="removeButton" style="display:none">
+      {{
+        govukButton({
+          href: "#",
+          classes: "govuk-button--warning",
+          attributes: { "data-purpose": "removeRegulator" },
+          text: ("professions.form.button.removeRegulator" | t)
+        })
+      }}
+    </template>
+
+  </div>
+</div>
+
+{% endblock %}

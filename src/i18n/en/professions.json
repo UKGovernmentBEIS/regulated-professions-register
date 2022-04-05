@@ -3,6 +3,7 @@
     "headings": {
       "main": "Add a new profession",
       "topLevelInformation": "Profession",
+      "organisations": "Regulators",
       "scope": "Nations and sectors",
       "checkAnswers": "Check your answers",
       "originalAnswers": "Your original answers",
@@ -53,6 +54,10 @@
         "regulatedAuthority": "Main authority regulating this profession",
         "additionalAuthority": "Additional regulator or professional body (optional)"
       },
+      "organisations": {
+        "name": "Name of the regulatory authority",
+        "role": "Role of this regulator"
+      },
       "scope": {
         "nations": "Where you regulate this profession",
         "certainNations": "One or more nations",
@@ -97,7 +102,9 @@
     "button": {
       "edit": "Yes, continue",
       "publish": "Publish to register",
-      "saveAsDraft": "Save as draft"
+      "saveAsDraft": "Save as draft",
+      "addRegulator": "Add another regulator",
+      "removeRegulator": "Remove regulator"
     },
     "select": {
       "scope": {
@@ -129,6 +136,11 @@
       },
       "regulatoryBody": {
         "empty": "Select a regulatory authority for the profession"
+      },
+      "professionToOrganisations": {
+        "empty": "You must select at least one regulatory authority for the profession",
+        "missingRole": "You must select a role for each regulatory authority",
+        "missingAuthority": "One of your selections is missing a regulatory authority"
       },
       "regulationSummary": {
         "empty": "Enter a regulation summary"

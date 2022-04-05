@@ -45,16 +45,45 @@ describe('Adding a new profession', () => {
         cy.get('body').contains(addCaption);
       });
       cy.get('input[name="name"]').type('Example Profession');
-      cy.get('select[name="regulatoryBody"]').select(
+      cy.translate('app.continue').then((buttonText) => {
+        cy.get('button').contains(buttonText).click();
+      });
+
+      cy.checkAccessibility({ 'color-contrast': { enabled: false } });
+      cy.checkPublishBlocked(
+        ['scope', 'regulatedActivities', 'qualifications', 'legislation'],
+        [],
+      );
+      cy.clickSummaryListRowChangeLink(
+        'professions.form.label.organisations.name',
+      );
+
+      cy.get('select[id="regulatoryBodies_1"]').select(
         'Department for Education',
       );
-      cy.get('select[name="regulatoryBody"]').should(
+      cy.get('select[id="regulatoryBodies_2"]').should(
         'not.contain',
         'Unconfirmed Organisation',
       );
-      cy.get('select[name="additionalRegulatoryBody"]').select(
+
+      cy.translate('organisations.label.roles.primaryRegulator').then(
+        (label) => {
+          cy.get('select[id="roles_1"]').select(label);
+        },
+      );
+
+      cy.translate('professions.form.button.addRegulator').then((label) => {
+        cy.get('a').contains(label).click();
+      });
+
+      cy.get('select[id="regulatoryBodies_2"]').select(
         'General Medical Council',
       );
+
+      cy.translate('organisations.label.roles.qualifyingBody').then((label) => {
+        cy.get('select[id="roles_2"]').select(label);
+      });
+
       cy.translate('app.continue').then((buttonText) => {
         cy.get('button').contains(buttonText).click();
       });
@@ -237,14 +266,32 @@ describe('Adding a new profession', () => {
         'professions.form.label.topLevelInformation.name',
         'Example Profession',
       );
-      cy.checkSummaryListRowValue(
-        'professions.form.label.topLevelInformation.regulatedAuthorities',
+
+      cy.checkSummaryListRowValueFromSelector(
+        '[data-cy=profession-to-organisation-1]',
         'Department for Education',
       );
-      cy.checkSummaryListRowValue(
-        'professions.form.label.topLevelInformation.regulatedAuthorities',
+
+      cy.translate('organisations.label.roles.primaryRegulator').then(
+        (label) => {
+          cy.checkSummaryListRowValueFromSelector(
+            '[data-cy=profession-to-organisation-1]',
+            label,
+          );
+        },
+      );
+
+      cy.checkSummaryListRowValueFromSelector(
+        '[data-cy=profession-to-organisation-2]',
         'General Medical Council',
       );
+
+      cy.translate('organisations.label.roles.qualifyingBody').then((label) => {
+        cy.checkSummaryListRowValueFromSelector(
+          '[data-cy=profession-to-organisation-2]',
+          label,
+        );
+      });
 
       cy.translate('nations.england').then((england) => {
         cy.checkSummaryListRowValue(

@@ -13,9 +13,13 @@ import { Response, Request } from 'express';
 import { Validator } from '../../helpers/validator';
 import { ValidationFailedError } from '../../common/validation/validation-failed.error';
 import { Profession } from '../profession.entity';
+import { Organisation } from '../../organisations/organisation.entity';
 import { ProfessionsService } from '../professions.service';
-import { TopLevelDetailsDto } from './dto/top-level-details.dto';
-import { TopLevelDetailsTemplate } from './interfaces/top-level-details.template';
+import {
+  OrganisationsDto,
+  ProfessionToOrganisationParams,
+} from './dto/organisations.dto';
+import { OrganisationsTemplate } from './interfaces/organisations.template';
 import { AuthenticationGuard } from '../../common/authentication.guard';
 import { Permissions } from '../../common/permissions.decorator';
 import { UserPermission } from '../../users/user-permission';
@@ -23,13 +27,20 @@ import { BackLink } from '../../common/decorators/back-link.decorator';
 
 import ViewUtils from './viewUtils';
 import { OrganisationsService } from '../../organisations/organisations.service';
+import { RegulatedAuthoritiesSelectPresenter } from './presenters/regulated-authorities-select-presenter';
 import { I18nService } from 'nestjs-i18n';
 import { OrganisationVersionsService } from '../../organisations/organisation-versions.service';
 import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
 import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
+import {
+  ProfessionToOrganisation,
+  OrganisationRole,
+} from '../profession-to-organisation.entity';
+import { sortOrganisationsByRole } from '../helpers/sort-organisations-by-role';
+
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
-export class TopLevelInformationController {
+export class OrganisationsController {
   constructor(
     private readonly professionsService: ProfessionsService,
     private readonly organisationsService: OrganisationsService,
@@ -37,12 +48,10 @@ export class TopLevelInformationController {
     private readonly i18nService: I18nService,
   ) {}
 
-  @Get('/:professionId/versions/:versionId/top-level-information/edit')
+  @Get('/:professionId/versions/:versionId/organisations/edit')
   @Permissions(UserPermission.CreateProfession)
-  @BackLink((request: Request) =>
-    request.query.change === 'true'
-      ? '/admin/professions/:professionId/versions/:versionId/check-your-answers'
-      : '/admin/professions',
+  @BackLink(
+    '/admin/professions/:professionId/versions/:versionId/check-your-answers',
   )
   async edit(
     @Res() res: Response,
@@ -57,16 +66,18 @@ export class TopLevelInformationController {
 
     checkCanViewProfession(req, profession);
 
+    const professionToOrganisations = sortOrganisationsByRole(profession);
+
     return this.renderForm(
       res,
-      profession.name,
+      professionToOrganisations,
       profession,
       change === 'true',
       errors,
     );
   }
 
-  @Post('/:professionId/versions/:versionId/top-level-information')
+  @Post('/:professionId/versions/:versionId/organisations')
   @Permissions(UserPermission.CreateProfession)
   @BackLink((request: Request) =>
     request.body.change === 'true'
@@ -74,7 +85,7 @@ export class TopLevelInformationController {
       : '/admin/professions',
   )
   async update(
-    @Body() topLevelDetailsDto, // unfortunately we can't type this here without a validation error being thrown outside of this
+    @Body() organisationsDto,
     @Res() res: Response,
     @Param('professionId') professionId: string,
     @Param('versionId') versionId: string,
@@ -87,17 +98,30 @@ export class TopLevelInformationController {
     checkCanViewProfession(req, profession);
 
     const validator = await Validator.validate(
-      TopLevelDetailsDto,
-      topLevelDetailsDto,
+      OrganisationsDto,
+      organisationsDto,
     );
 
     const submittedValues = validator.obj;
+
+    const professionToOrganisations = submittedValues.professionToOrganisations
+      ? await Promise.all(
+          submittedValues.professionToOrganisations.map(
+            async (professionToOrganisation) => {
+              return this.relationFromSubmittedValue(
+                profession,
+                professionToOrganisation,
+              );
+            },
+          ),
+        )
+      : null;
 
     if (!validator.valid()) {
       const errors = new ValidationFailedError(validator.errors).fullMessages();
       return this.renderForm(
         res,
-        submittedValues.name,
+        professionToOrganisations,
         profession,
         submittedValues.change,
         errors,
@@ -107,7 +131,7 @@ export class TopLevelInformationController {
     const updatedProfession: Profession = {
       ...profession,
       ...{
-        name: submittedValues.name,
+        professionToOrganisations: professionToOrganisations,
       },
     };
 
@@ -120,18 +144,62 @@ export class TopLevelInformationController {
 
   private async renderForm(
     res: Response,
-    name: string,
+    professionToOrganisations: ProfessionToOrganisation[],
     profession: Profession,
     change: boolean,
     errors: object | undefined = undefined,
   ): Promise<void> {
-    const templateArgs: TopLevelDetailsTemplate = {
-      name,
+    const regulatedAuthorities =
+      await this.organisationVersionsService.allLive();
+
+    const selectArgsArray = await Promise.all(
+      Array.from({
+        ...professionToOrganisations,
+        length: 5,
+      }).map(async (professionToOrganisation) => {
+        const presenter = new RegulatedAuthoritiesSelectPresenter(
+          regulatedAuthorities,
+          professionToOrganisation?.organisation,
+          professionToOrganisation?.role,
+        );
+        return await presenter.authoritiesAndRoles(this.i18nService);
+      }),
+    );
+
+    const templateArgs: OrganisationsTemplate = {
+      selectArgsArray,
       captionText: await ViewUtils.captionText(this.i18nService, profession),
       change,
       errors,
     };
 
-    return res.render('admin/professions/top-level-information', templateArgs);
+    return res.render('admin/professions/organisations', templateArgs);
+  }
+
+  private async fetchOrganisationFromSubmittedValue(
+    professionToOrganisation: ProfessionToOrganisationParams,
+  ): Promise<Organisation | null> {
+    return professionToOrganisation.organisation
+      ? await this.organisationsService.find(
+          professionToOrganisation.organisation,
+        )
+      : null;
+  }
+
+  private async relationFromSubmittedValue(
+    profession: Profession,
+    submittedValue: ProfessionToOrganisationParams,
+  ): Promise<ProfessionToOrganisation> {
+    const organisation = await this.fetchOrganisationFromSubmittedValue(
+      submittedValue,
+    );
+
+    return organisation
+      ? new ProfessionToOrganisation(
+          organisation,
+          profession,
+          submittedValue.role as OrganisationRole,
+        )
+      : null;
   }
 }

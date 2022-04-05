@@ -1,13 +1,13 @@
 import { I18nService } from 'nestjs-i18n';
-import { TableCell } from '../../common/interfaces/table-cell';
-import { TableRow } from '../../common/interfaces/table-row';
-import { escape } from '../../helpers/escape.helper';
-import { Nation } from '../../nations/nation';
-import { NationsListPresenter } from '../../nations/presenters/nations-list.presenter';
-import { getOrganisationsFromProfession } from '../helpers/get-organisations-from-profession.helper';
-import { ProfessionPresenter } from '../presenters/profession.presenter';
-import { Profession } from '../profession.entity';
+import { TableCell } from '../../../common/interfaces/table-cell';
+import { TableRow } from '../../../common/interfaces/table-row';
+import { escape } from '../../../helpers/escape.helper';
+import { Nation } from '../../../nations/nation';
+import { getOrganisationsFromProfession } from '../../helpers/get-organisations-from-profession.helper';
+import { ProfessionPresenter } from '../../presenters/profession.presenter';
+import { Profession } from '../../profession.entity';
 import { ProfessionsPresenterView } from './professions.presenter';
+import { NationsListPresenter } from './../../../nations/presenters/nations-list.presenter';
 
 type Field =
   | 'profession'

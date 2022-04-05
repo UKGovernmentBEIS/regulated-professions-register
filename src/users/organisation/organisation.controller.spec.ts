@@ -6,7 +6,7 @@ import { I18nService } from 'nestjs-i18n';
 import { RadioButtonArgs } from '../../common/interfaces/radio-button-args.interface';
 import { SelectItemArgs } from '../../common/interfaces/select-item-args.interface';
 import { OrganisationsService } from '../../organisations/organisations.service';
-import { RegulatedAuthoritiesSelectPresenter } from '../../professions/admin/regulated-authorities-select-presenter';
+import { RegulatedAuthoritiesSelectPresenter } from '../../professions/admin/presenters/regulated-authorities-select-presenter';
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 import { createMockRequest } from '../../testutils/create-mock-request';
 import organisationFactory from '../../testutils/factories/organisation';
@@ -18,7 +18,9 @@ import { OrganisationController } from './organisation.controller';
 import { getActionTypeFromUser } from '../helpers/get-action-type-from-user';
 import { checkUserIsServiceOwner } from '../helpers/check-user-is-service-owner.helper';
 
-jest.mock('../../professions/admin/regulated-authorities-select-presenter');
+jest.mock(
+  '../../professions/admin/presenters/regulated-authorities-select-presenter',
+);
 jest.mock('../presenters/service-owner-radio-buttons.presenter');
 jest.mock('../helpers/get-action-type-from-user');
 jest.mock('../helpers/check-user-is-service-owner.helper');

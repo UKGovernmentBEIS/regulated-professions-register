@@ -1,18 +1,18 @@
-import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
-import { TableRow } from '../../common/interfaces/table-row';
+import { createMockI18nService } from '../../../testutils/create-mock-i18n-service';
+import { TableRow } from '../../../common/interfaces/table-row';
 import { ListEntryPresenter } from './list-entry.presenter';
-import industryFactory from '../../testutils/factories/industry';
-import organisationFactory from '../../testutils/factories/organisation';
-import professionFactory from '../../testutils/factories/profession';
-import { translationOf } from '../../testutils/translation-of';
-import userFactory from '../../testutils/factories/user';
-import { ProfessionPresenter } from '../presenters/profession.presenter';
-import professionVersionFactory from '../../testutils/factories/profession-version';
-import { Profession } from '../profession.entity';
-import { ProfessionVersionStatus } from '../profession-version.entity';
-import * as getOrganisationsFromProfessionModule from '../helpers/get-organisations-from-profession.helper';
+import industryFactory from '../../../testutils/factories/industry';
+import organisationFactory from '../../../testutils/factories/organisation';
+import professionFactory from '../../../testutils/factories/profession';
+import { translationOf } from '../../../testutils/translation-of';
+import userFactory from '../../../testutils/factories/user';
+import { ProfessionPresenter } from '../../presenters/profession.presenter';
+import professionVersionFactory from '../../../testutils/factories/profession-version';
+import { Profession } from '../../profession.entity';
+import { ProfessionVersionStatus } from '../../profession-version.entity';
+import * as getOrganisationsFromProfessionModule from '../../helpers/get-organisations-from-profession.helper';
 
-jest.mock('../presenters/profession.presenter');
+jest.mock('../../presenters/profession.presenter');
 
 describe('ListEntryPresenter', () => {
   describe('tableRow', () => {

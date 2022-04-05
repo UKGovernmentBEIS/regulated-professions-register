@@ -167,6 +167,14 @@ $small-screen: 768px;
   &__buttons-container {
     align-items: center;
   }
+
+  &__regulatory-authority-input-container {
+    padding-top: govuk-spacing(3);
+    padding-bottom: govuk-spacing(1);
+    padding-left: govuk-spacing(4);
+    margin-bottom: govuk-spacing(6);
+    border-left: $govuk-border-width solid $govuk-border-colour;
+  }
 }
 
 @media print {

@@ -35,33 +35,6 @@
       }}
 
       {{
-        govukSelect({
-          label: {
-            text: ("professions.form.label.topLevelInformation.regulatedAuthority" | t),
-            classes: "govuk-label--m",
-            isPageHeading: false
-          },
-          id: "regulatoryBody",
-          name: "regulatoryBody",
-          items: regulatedAuthoritiesSelectArgs,
-          errorMessage: errors.regulatoryBody | tError
-        })
-      }}
-
-      {{
-        govukSelect({
-          label: {
-            text: ("professions.form.label.topLevelInformation.additionalAuthority" | t),
-            classes: "govuk-label--m",
-            isPageHeading: false
-          },
-          id: "additionalRegulatoryBody",
-          name: "additionalRegulatoryBody",
-          items: additionalRegulatedAuthoritiesSelectArgs
-        })
-      }}
-
-      {{
         govukButton({
           id: "submit-button",
           type: "Submit",

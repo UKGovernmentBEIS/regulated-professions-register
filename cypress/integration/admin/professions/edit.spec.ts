@@ -43,7 +43,7 @@ describe('Editing an existing profession', () => {
       );
 
       cy.checkSummaryListRowValue(
-        'professions.form.label.topLevelInformation.regulatedAuthorities',
+        'professions.form.label.organisations.name',
         'Law Society of England and Wales',
       );
 
@@ -74,17 +74,23 @@ describe('Editing an existing profession', () => {
         },
       );
 
-      cy.translate(
-        'professions.form.label.topLevelInformation.regulatedAuthorities',
-      ).then((label) => {
-        cy.get('dt').contains(label).siblings().should('not.contain', 'Change');
-      });
+      cy.translate('professions.form.label.organisations.name').then(
+        (label) => {
+          cy.get('dt')
+            .contains(label)
+            .siblings()
+            .should('not.contain', 'Change');
+        },
+      );
 
-      cy.translate(
-        'professions.form.label.topLevelInformation.regulatedAuthorities',
-      ).then((label) => {
-        cy.get('dt').contains(label).siblings().should('not.contain', 'Change');
-      });
+      cy.translate('professions.form.label.organisations.name').then(
+        (label) => {
+          cy.get('dt')
+            .contains(label)
+            .siblings()
+            .should('not.contain', 'Change');
+        },
+      );
 
       cy.clickSummaryListRowChangeLink('professions.form.label.scope.nations');
 
@@ -560,7 +566,7 @@ describe('Editing an existing profession', () => {
       );
 
       cy.clickSummaryListRowChangeLink(
-        'professions.form.label.topLevelInformation.regulatedAuthorities',
+        'professions.form.label.organisations.name',
       );
       cy.checkAccessibility();
       cy.translate('professions.form.captions.edit', {
@@ -568,23 +574,52 @@ describe('Editing an existing profession', () => {
       }).then((editCaption) => {
         cy.get('body').contains(editCaption);
       });
-      cy.get('select[name="regulatoryBody"]').select(
+      cy.get('select[id="regulatoryBodies_1"]').select(
         'Department for Education',
       );
-      cy.get('select[name="additionalRegulatoryBody"]').select(
+      cy.translate('organisations.label.roles.primaryRegulator').then(
+        (label) => {
+          cy.get('select[id="roles_1"]').select(label);
+        },
+      );
+      cy.translate('professions.form.button.addRegulator').then((label) => {
+        cy.get('a').contains(label).click();
+      });
+      cy.get('select[id="regulatoryBodies_2"]').select(
         'Council of Registered Gas Installers',
       );
+      cy.translate('organisations.label.roles.qualifyingBody').then((label) => {
+        cy.get('select[id="roles_2"]').select(label);
+      });
       cy.translate('app.continue').then((buttonText) => {
         cy.get('button').contains(buttonText).click();
       });
-      cy.checkSummaryListRowValue(
-        'professions.form.label.topLevelInformation.regulatedAuthorities',
+
+      cy.checkSummaryListRowValueFromSelector(
+        '[data-cy=profession-to-organisation-1]',
         'Department for Education',
       );
-      cy.checkSummaryListRowValue(
-        'professions.form.label.topLevelInformation.regulatedAuthorities',
+
+      cy.translate('organisations.label.roles.primaryRegulator').then(
+        (label) => {
+          cy.checkSummaryListRowValueFromSelector(
+            '[data-cy=profession-to-organisation-1]',
+            label,
+          );
+        },
+      );
+
+      cy.checkSummaryListRowValueFromSelector(
+        '[data-cy=profession-to-organisation-2]',
         'Council of Registered Gas Installers',
       );
+
+      cy.translate('organisations.label.roles.qualifyingBody').then((label) => {
+        cy.checkSummaryListRowValueFromSelector(
+          '[data-cy=profession-to-organisation-2]',
+          label,
+        );
+      });
 
       cy.translate('professions.form.button.saveAsDraft').then((buttonText) => {
         cy.get('button').contains(buttonText).click();
@@ -619,6 +654,71 @@ describe('Editing an existing profession', () => {
               .should('contain', 'Updated name');
           });
         },
+      );
+    });
+
+    it('allows me to remove a regulator', () => {
+      cy.visitAndCheckAccessibility('/admin/professions');
+
+      cy.get('table')
+        .contains('tr', 'Orthodontic Therapist')
+        .within(() => {
+          cy.contains('View details').click();
+        });
+
+      cy.translate('professions.admin.button.edit.draft').then((buttonText) => {
+        cy.contains(buttonText).click();
+      });
+
+      cy.clickSummaryListRowChangeLink(
+        'professions.form.label.organisations.name',
+      );
+
+      cy.translate('professions.form.button.addRegulator').then((label) => {
+        cy.get('a').contains(label).click();
+      });
+      cy.get('select[id="regulatoryBodies_2"]').select(
+        'Council of Registered Gas Installers',
+      );
+      cy.translate('organisations.label.roles.qualifyingBody').then((label) => {
+        cy.get('select[id="roles_2"]').select(label);
+      });
+      cy.translate('app.continue').then((buttonText) => {
+        cy.get('button').contains(buttonText).click();
+      });
+
+      cy.clickSummaryListRowChangeLink(
+        'professions.form.label.organisations.name',
+      );
+
+      cy.translate('professions.form.button.removeRegulator').then((label) => {
+        cy.get('#regulatoryBodies2 a').contains(label).click();
+      });
+
+      cy.get('select[id="regulatoryBodies_2"]').should('have.value', '');
+      cy.get('select[id="roles_2"]').should('have.value', '');
+
+      cy.translate('app.continue').then((buttonText) => {
+        cy.get('button').contains(buttonText).click();
+      });
+
+      cy.checkSummaryListRowValueFromSelector(
+        '[data-cy=profession-to-organisation-1]',
+        'General Medical Council',
+      );
+
+      cy.translate('organisations.label.roles.primaryRegulator').then(
+        (label) => {
+          cy.checkSummaryListRowValueFromSelector(
+            '[data-cy=profession-to-organisation-1]',
+            label,
+          );
+        },
+      );
+
+      cy.get('html').should(
+        'not.contain',
+        'Council of Registered Gas Installers',
       );
     });
   });

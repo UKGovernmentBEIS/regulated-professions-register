@@ -18,7 +18,7 @@ import { ValidationFailedError } from '../../common/validation/validation-failed
 import { Validator } from '../../helpers/validator';
 import { Organisation } from '../../organisations/organisation.entity';
 import { OrganisationsService } from '../../organisations/organisations.service';
-import { RegulatedAuthoritiesSelectPresenter } from '../../professions/admin/regulated-authorities-select-presenter';
+import { RegulatedAuthoritiesSelectPresenter } from '../../professions/admin/presenters/regulated-authorities-select-presenter';
 import { User } from '../user.entity';
 import { UserPermission } from '../user-permission';
 import { UsersService } from '../users.service';

@@ -1,16 +1,16 @@
 import { I18nService } from 'nestjs-i18n';
-import { IndustriesCheckboxPresenter } from '../../industries/industries-checkbox.presenter';
-import { Industry } from '../../industries/industry.entity';
-import { Nation } from '../../nations/nation';
-import { NationsCheckboxPresenter } from '../../nations/nations-checkbox.presenter';
-import { Profession } from '../profession.entity';
-import { FilterInput } from '../../common/interfaces/filter-input.interface';
-import { IndexTemplate } from './interfaces/index-template.interface';
-import { ListEntryPresenter } from './list-entry.presenter';
-import { Organisation } from '../../organisations/organisation.entity';
-import { OrganisationsCheckboxPresenter } from '../../organisations/organisations-checkbox-presenter';
-import { Table } from '../../common/interfaces/table';
-import { RegulationTypesCheckboxPresenter } from './presenters/regulation-types-checkbox.presenter';
+import { IndustriesCheckboxPresenter } from '../../../industries/industries-checkbox.presenter';
+import { Industry } from '../../../industries/industry.entity';
+import { Nation } from '../../../nations/nation';
+import { NationsCheckboxPresenter } from '../../../nations/nations-checkbox.presenter';
+import { Profession } from '../../profession.entity';
+import { FilterInput } from '../../../common/interfaces/filter-input.interface';
+import { IndexTemplate } from './../interfaces/index-template.interface';
+import { ListEntryPresenter } from './../presenters/list-entry.presenter';
+import { Organisation } from '../../../organisations/organisation.entity';
+import { OrganisationsCheckboxPresenter } from '../../../organisations/organisations-checkbox-presenter';
+import { Table } from '../../../common/interfaces/table';
+import { RegulationTypesCheckboxPresenter } from './regulation-types-checkbox.presenter';
 
 export type ProfessionsPresenterView = 'overview' | 'single-organisation';
 

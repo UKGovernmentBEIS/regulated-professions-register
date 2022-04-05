@@ -4,6 +4,7 @@ import { Profession } from './profession.entity';
 import { ProfessionsService } from './professions.service';
 import { ProfessionsController } from './professions.controller';
 import { TopLevelInformationController } from './admin/top-level-information.controller';
+import { OrganisationsController } from './admin/organisations.controller';
 import { IndustriesService } from '../industries/industries.service';
 import { Industry } from '../industries/industry.entity';
 import { CheckYourAnswersController } from './admin/check-your-answers.controller';
@@ -52,6 +53,7 @@ import { SearchModule } from '../search/search.module';
     ProfessionsController,
     ProfessionVersionsController,
     TopLevelInformationController,
+    OrganisationsController,
     ScopeController,
     RegulatedActivitiesController,
     QualificationsController,

@@ -6,13 +6,6 @@ export class TopLevelDetailsDto {
   @IsNotEmpty({ message: 'professions.form.errors.name.empty' })
   name: string;
 
-  @IsNotEmpty({
-    message: 'professions.form.errors.regulatoryBody.empty',
-  })
-  regulatoryBody: string;
-
-  additionalRegulatoryBody: string;
-
   @Transform(({ value }) => parseBoolean(value))
   change: boolean;
 }
