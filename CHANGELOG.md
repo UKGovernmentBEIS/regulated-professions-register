@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Read from and write to the new organisation - profession relation
 - Fix a bug causing Professions belonging to multiple Organisations to be uneditable by all but central users
 - Consistently display "United Kingdom" where we would otherwise display a list of all four UK nations
+- Fix bug causing selecting more nations in our search filters to give fewer resutls
 
 ## [release-014] - 2022-03-30
 
