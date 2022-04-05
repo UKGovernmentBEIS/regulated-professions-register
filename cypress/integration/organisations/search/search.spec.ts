@@ -89,15 +89,18 @@ describe('Searching an organisation', () => {
       profession.versions.some(
         (version) =>
           version.occupationLocations &&
-          version.occupationLocations.includes('GB-SCT'),
+          (version.occupationLocations.includes('GB-SCT') ||
+            version.occupationLocations.includes('GB-WLS')),
       ),
     ).then((liveOrganisations) => {
       cy.get('input[name="nations[]"][value="GB-SCT"]').check();
+      cy.get('input[name="nations[]"][value="GB-WLS"]').check();
 
       cy.get('button').click();
       cy.checkAccessibility();
 
       cy.get('input[name="nations[]"][value="GB-SCT"]').should('be.checked');
+      cy.get('input[name="nations[]"][value="GB-WLS"]').should('be.checked');
 
       checkResultLength(liveOrganisations.length);
 

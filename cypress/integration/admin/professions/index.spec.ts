@@ -104,12 +104,15 @@ describe('Listing professions', () => {
       expandFilters();
 
       cy.get('input[name="nations[]"][value="GB-WLS"]').check();
+      cy.get('input[name="nations[]"][value="GB-NIR"]').check();
 
       clickFilterButtonAndCheckAccessibility();
 
       cy.get('input[name="nations[]"][value="GB-WLS"]').should('be.checked');
+      cy.get('input[name="nations[]"][value="GB-NIR"]').should('be.checked');
 
       cy.get('body').should('contain', 'Registered Trademark Attorney');
+      cy.get('body').should('contain', 'Profession with no optional fields');
       cy.get('body').should(
         'not.contain',
         'Secondary School Teacher in State maintained schools (England)',

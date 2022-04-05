@@ -917,7 +917,7 @@ describe('ProfessionVersionsService', () => {
       expect(result).toEqual(expectedProfessions);
 
       expect(queryBuilder.andWhere).toHaveBeenCalledWith(
-        'professionVersion.occupationLocations @> :nations',
+        'professionVersion.occupationLocations && :nations',
         {
           nations: ['GB-ENG', 'GB-NIR'],
         },
