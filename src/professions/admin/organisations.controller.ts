@@ -13,8 +13,12 @@ import { Response, Request } from 'express';
 import { Validator } from '../../helpers/validator';
 import { ValidationFailedError } from '../../common/validation/validation-failed.error';
 import { Profession } from '../profession.entity';
+import { Organisation } from '../../organisations/organisation.entity';
 import { ProfessionsService } from '../professions.service';
-import { OrganisationsDto } from './dto/organisations.dto';
+import {
+  OrganisationsDto,
+  ProfessionToOrganisationParams,
+} from './dto/organisations.dto';
 import { OrganisationsTemplate } from './interfaces/organisations.template';
 import { AuthenticationGuard } from '../../common/authentication.guard';
 import { Permissions } from '../../common/permissions.decorator';
@@ -101,19 +105,10 @@ export class OrganisationsController {
       ? await Promise.all(
           submittedValues.professionToOrganisations.map(
             async (professionToOrganisation) => {
-              const organisation = professionToOrganisation.organisation
-                ? await this.organisationsService.find(
-                    professionToOrganisation.organisation,
-                  )
-                : null;
-
-              return organisation
-                ? new ProfessionToOrganisation(
-                    organisation,
-                    profession,
-                    professionToOrganisation.role as OrganisationRole,
-                  )
-                : null;
+              return this.relationFromSubmittedValue(
+                profession,
+                professionToOrganisation,
+              );
             },
           ),
         )
@@ -176,5 +171,32 @@ export class OrganisationsController {
     };
 
     return res.render('admin/professions/organisations', templateArgs);
+  }
+
+  private async fetchOrganisationFromSubmittedValue(
+    professionToOrganisation: ProfessionToOrganisationParams,
+  ): Promise<Organisation | null> {
+    return professionToOrganisation.organisation
+      ? await this.organisationsService.find(
+          professionToOrganisation.organisation,
+        )
+      : null;
+  }
+
+  private async relationFromSubmittedValue(
+    profession: Profession,
+    submittedValue: ProfessionToOrganisationParams,
+  ): Promise<ProfessionToOrganisation> {
+    const organisation = await this.fetchOrganisationFromSubmittedValue(
+      submittedValue,
+    );
+
+    return organisation
+      ? new ProfessionToOrganisation(
+          organisation,
+          profession,
+          submittedValue.role as OrganisationRole,
+        )
+      : null;
   }
 }

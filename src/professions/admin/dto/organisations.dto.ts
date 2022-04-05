@@ -6,7 +6,7 @@ import {
 } from 'class-validator';
 import { parseBoolean } from '../../../helpers/parse-boolean.helper';
 
-type ProfessionToOrganisationParams = {
+export type ProfessionToOrganisationParams = {
   organisation: string;
   role: string;
 };
