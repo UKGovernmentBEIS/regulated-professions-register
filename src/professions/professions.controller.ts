@@ -13,7 +13,7 @@ import { ShowTemplate } from './interfaces/show-template.interface';
 import { BackLink } from '../common/decorators/back-link.decorator';
 import { Organisation } from '../organisations/organisation.entity';
 import { ProfessionVersionsService } from './profession-versions.service';
-import { getOrganisationsFromProfession } from './helpers/get-organisations-from-profession.helper';
+import { sortOrganisationsByRole } from './helpers/sort-organisations-by-role';
 import { isUK } from '../helpers/nations.helper';
 import { NationsListPresenter } from '../nations/presenters/nations-list.presenter';
 
@@ -41,8 +41,17 @@ export class ProfessionsController {
       );
     }
 
-    const organisations = getOrganisationsFromProfession(profession).map(
-      (organisation) => Organisation.withLatestLiveVersion(organisation),
+    const organisations = sortOrganisationsByRole(profession).map(
+      (professionToOrganisation) => {
+        const organisation = Organisation.withLatestLiveVersion(
+          professionToOrganisation.organisation,
+        );
+
+        return {
+          ...organisation,
+          role: professionToOrganisation.role,
+        };
+      },
     );
 
     const nations = new NationsListPresenter(

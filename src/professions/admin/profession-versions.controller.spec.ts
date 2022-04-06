@@ -4,6 +4,10 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { Response } from 'express';
 import { I18nService } from 'nestjs-i18n';
 import { Organisation } from '../../organisations/organisation.entity';
+import {
+  ProfessionToOrganisation,
+  OrganisationRole,
+} from './../profession-to-organisation.entity';
 import QualificationPresenter from '../../qualifications/presenters/qualification.presenter';
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 import industryFactory from '../../testutils/factories/industry';
@@ -18,7 +22,6 @@ import { ProfessionPresenter } from '../presenters/profession.presenter';
 import { getActingUser } from '../../users/helpers/get-acting-user.helper';
 import { createDefaultMockRequest } from '../../testutils/factories/create-default-mock-request';
 import organisationFactory from '../../testutils/factories/organisation';
-import * as getOrganisationsFromProfessionModule from '../helpers/get-organisations-from-profession.helper';
 import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
 import * as getPublicationBlockersModule from '../helpers/get-publication-blockers.helper';
 import { NationsListPresenter } from '../../nations/presenters/nations-list.presenter';
@@ -154,7 +157,16 @@ describe('ProfessionVersionsController', () => {
     describe('when the Profession is complete', () => {
       describe('when the Profession has a single Organisation', () => {
         it('should return populated template params', async () => {
-          const profession = professionFactory.build();
+          const organisation = organisationFactory.build();
+
+          const profession = professionFactory.build({
+            professionToOrganisations: [
+              {
+                organisation: organisation,
+                role: OrganisationRole.AdditionalRegulator,
+              },
+            ] as ProfessionToOrganisation[],
+          });
 
           const version = professionVersionFactory.build({
             profession: profession,
@@ -182,10 +194,6 @@ describe('ProfessionVersionsController', () => {
             NationsListPresenter.prototype.htmlList as jest.Mock
           ).mockResolvedValue(mockNationsHtml);
 
-          const getOrganisationsFromProfessionSpy = jest.spyOn(
-            getOrganisationsFromProfessionModule,
-            'getOrganisationsFromProfession',
-          );
           const getPublicationBlockersSpy = jest
             .spyOn(getPublicationBlockersModule, 'getPublicationBlockers')
             .mockReturnValue([]);
@@ -193,6 +201,12 @@ describe('ProfessionVersionsController', () => {
           const request = createDefaultMockRequest({
             user: userFactory.build(),
           });
+          const expectedOrganisations = [
+            {
+              ...organisation,
+              role: OrganisationRole.AdditionalRegulator,
+            },
+          ];
 
           const result = await controller.show(
             'profession-id',
@@ -210,9 +224,7 @@ describe('ProfessionVersionsController', () => {
             ).summaryList(true, true),
             nations: mockNationsHtml,
             industries: ['Translation of `industries.example`'],
-            organisations: [
-              profession.professionToOrganisations[0].organisation,
-            ],
+            organisations: expectedOrganisations,
             publicationBlockers: [],
           } as ShowTemplate);
 
@@ -220,9 +232,6 @@ describe('ProfessionVersionsController', () => {
             professionVersionsService.findByIdWithProfession,
           ).toHaveBeenCalledWith('profession-id', 'version-id');
           expect(professionVersionsService.hasLiveVersion).toHaveBeenCalledWith(
-            professionWithVersion,
-          );
-          expect(getOrganisationsFromProfessionSpy).toHaveBeenCalledWith(
             professionWithVersion,
           );
           expect(getPublicationBlockersSpy).toHaveBeenCalledWith(version);
@@ -238,10 +247,18 @@ describe('ProfessionVersionsController', () => {
           const organisation1 = organisationFactory.build();
           const organisation2 = organisationFactory.build();
 
-          const profession = professionFactory.build(
-            {},
-            { transient: { organisations: [organisation1, organisation2] } },
-          );
+          const profession = professionFactory.build({
+            professionToOrganisations: [
+              {
+                organisation: organisation1,
+                role: OrganisationRole.AdditionalRegulator,
+              },
+              {
+                organisation: organisation2,
+                role: OrganisationRole.PrimaryRegulator,
+              },
+            ] as ProfessionToOrganisation[],
+          });
 
           const version = professionVersionFactory.build({
             profession: profession,
@@ -269,13 +286,20 @@ describe('ProfessionVersionsController', () => {
             NationsListPresenter.prototype.htmlList as jest.Mock
           ).mockResolvedValue(mockNationsHtml);
 
-          const getOrganisationsFromProfessionSpy = jest.spyOn(
-            getOrganisationsFromProfessionModule,
-            'getOrganisationsFromProfession',
-          );
           const getPublicationBlockersSpy = jest
             .spyOn(getPublicationBlockersModule, 'getPublicationBlockers')
             .mockReturnValue([]);
+
+          const expectedOrganisations = [
+            {
+              ...organisation2,
+              role: OrganisationRole.PrimaryRegulator,
+            },
+            {
+              ...organisation1,
+              role: OrganisationRole.AdditionalRegulator,
+            },
+          ];
 
           const request = createDefaultMockRequest({
             user: userFactory.build(),
@@ -297,7 +321,7 @@ describe('ProfessionVersionsController', () => {
             ).summaryList(true, true),
             nations: mockNationsHtml,
             industries: ['Translation of `industries.example`'],
-            organisations: [organisation1, organisation2],
+            organisations: expectedOrganisations,
             publicationBlockers: [],
           } as ShowTemplate);
 
@@ -305,9 +329,6 @@ describe('ProfessionVersionsController', () => {
             professionVersionsService.findByIdWithProfession,
           ).toHaveBeenCalledWith('profession-id', 'version-id');
           expect(professionVersionsService.hasLiveVersion).toHaveBeenCalledWith(
-            professionWithVersion,
-          );
-          expect(getOrganisationsFromProfessionSpy).toHaveBeenCalledWith(
             professionWithVersion,
           );
           expect(getPublicationBlockersSpy).toHaveBeenCalledWith(version);

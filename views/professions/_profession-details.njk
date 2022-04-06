@@ -40,10 +40,18 @@
 
 {% for organisation in organisations %}
   <div class="rpr-details__sub-group">
-    <h3 class="govuk-heading-m rpr-details__sub-group-title">{{ organisation.name | escape }}</h3>
+    <h3 class="govuk-heading-m rpr-details__sub-group-title">{{ ("organisations.label.roles." +  organisation.role) | t }}</h3>
     {{ govukSummaryList({
       classes: 'govuk-summary-list--no-border',
       rows: [
+        {
+          key: {
+            text: ("professions.show.bodies.regulatedAuthority" | t)
+          },
+          value: {
+            html: "<a href='"+ ("/regulatory-authorities/" + organisation.slug) +"' class='govuk-link'>"+ organisation.name | escape +"</a>"
+          }
+        },
         {
           key: {
             text: ("professions.show.bodies.address" | t)

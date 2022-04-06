@@ -640,8 +640,23 @@ describe('Editing an existing profession', () => {
         format(new Date(), 'd MMM yyyy'),
       );
 
-      cy.get('h3').should('contain', 'Department for Education');
-      cy.get('h3').should('contain', 'Council of Registered Gas Installers');
+      cy.translate('organisations.label.roles.primaryRegulator').then(
+        (header) => {
+          cy.get('h3').should('contain', header);
+          cy.contains(header)
+            .parent('.rpr-details__sub-group')
+            .should('contain', 'Department for Education');
+        },
+      );
+
+      cy.translate('organisations.label.roles.qualifyingBody').then(
+        (header) => {
+          cy.get('h3').should('contain', header);
+          cy.contains(header)
+            .parent('.rpr-details__sub-group')
+            .should('contain', 'Council of Registered Gas Installers');
+        },
+      );
 
       cy.translate('professions.admin.update.confirmation.heading').then(
         (flashHeading) => {

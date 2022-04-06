@@ -1,5 +1,5 @@
 import { SummaryList } from '../../common/interfaces/summary-list';
-import { Organisation } from '../../organisations/organisation.entity';
+import { OrganisationWithRole } from '../../common/interfaces/organisation-with-role.interface';
 import { ProfessionPresenter } from '../presenters/profession.presenter';
 import { Profession } from '../profession.entity';
 
@@ -13,5 +13,5 @@ export interface ShowTemplate {
   };
   nations: string;
   industries: string[];
-  organisations: Organisation[];
+  organisations: OrganisationWithRole[];
 }

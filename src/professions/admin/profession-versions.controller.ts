@@ -23,7 +23,7 @@ import { ProfessionVersionsService } from '../profession-versions.service';
 import { Profession } from '../profession.entity';
 import { ProfessionPresenter } from '../presenters/profession.presenter';
 import { getActingUser } from '../../users/helpers/get-acting-user.helper';
-import { getOrganisationsFromProfession } from '../helpers/get-organisations-from-profession.helper';
+import { sortOrganisationsByRole } from './../helpers/sort-organisations-by-role';
 import { ShowTemplate } from './interfaces/show-template.interface';
 import { isUK } from '../../helpers/nations.helper';
 import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
@@ -72,8 +72,17 @@ export class ProfessionVersionsController {
       profession,
     );
 
-    const organisations = getOrganisationsFromProfession(profession).map(
-      (organisation) => Organisation.withLatestVersion(organisation),
+    const organisations = sortOrganisationsByRole(profession).map(
+      (professionToOrganisation) => {
+        const organisation = Organisation.withLatestVersion(
+          professionToOrganisation.organisation,
+        );
+
+        return {
+          ...organisation,
+          role: professionToOrganisation.role,
+        };
+      },
     );
 
     const nations = new NationsListPresenter(

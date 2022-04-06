@@ -12,9 +12,12 @@ import { ProfessionVersionsService } from './profession-versions.service';
 import { ProfessionsController } from './professions.controller';
 
 import { Organisation } from '../organisations/organisation.entity';
+import {
+  ProfessionToOrganisation,
+  OrganisationRole,
+} from './profession-to-organisation.entity';
 
 import organisationFactory from '../testutils/factories/organisation';
-import * as getOrganisationsFromProfessionModule from './helpers/get-organisations-from-profession.helper';
 import { NationsListPresenter } from '../nations/presenters/nations-list.presenter';
 import { Nation } from '../nations/nation';
 import { ShowTemplate } from './interfaces/show-template.interface';
@@ -76,10 +79,12 @@ describe('ProfessionsController', () => {
           NationsListPresenter.prototype.htmlList as jest.Mock
         ).mockResolvedValue(mockNationsHtml);
 
-        const getOrganisationsFromProfessionSpy = jest.spyOn(
-          getOrganisationsFromProfessionModule,
-          'getOrganisationsFromProfession',
-        );
+        const expectedOrganisations = [
+          {
+            ...profession.professionToOrganisations[0].organisation,
+            role: profession.professionToOrganisations[0].role,
+          },
+        ];
 
         const result = await controller.show('example-slug');
 
@@ -91,13 +96,12 @@ describe('ProfessionsController', () => {
           ).summaryList(false, true),
           nations: mockNationsHtml,
           industries: [translationOf('industries.example')],
-          organisations: [profession.professionToOrganisations[0].organisation],
+          organisations: expectedOrganisations,
         } as ShowTemplate);
 
         expect(professionVersionsService.findLiveBySlug).toBeCalledWith(
           'example-slug',
         );
-        expect(getOrganisationsFromProfessionSpy).toBeCalledWith(profession);
         expect(NationsListPresenter).toBeCalledWith(
           [Nation.find('GB-ENG')],
           i18nService,
@@ -111,15 +115,22 @@ describe('ProfessionsController', () => {
         const organisation1 = organisationFactory.build();
         const organisation2 = organisationFactory.build();
 
-        const profession = professionFactory.build(
-          {
-            id: 'profession-id',
-            name: 'Example Profession',
-            occupationLocations: ['GB-ENG'],
-            industries: [industry],
-          },
-          { transient: { organisations: [organisation1, organisation2] } },
-        );
+        const profession = professionFactory.build({
+          id: 'profession-id',
+          name: 'Example Profession',
+          occupationLocations: ['GB-ENG'],
+          industries: [industry],
+          professionToOrganisations: [
+            {
+              organisation: organisation1,
+              role: OrganisationRole.AdditionalRegulator,
+            },
+            {
+              organisation: organisation2,
+              role: OrganisationRole.PrimaryRegulator,
+            },
+          ] as ProfessionToOrganisation[],
+        });
 
         professionVersionsService.findLiveBySlug.mockResolvedValue(profession);
 
@@ -131,10 +142,16 @@ describe('ProfessionsController', () => {
           NationsListPresenter.prototype.htmlList as jest.Mock
         ).mockResolvedValue(mockNationsHtml);
 
-        const getOrganisationsFromProfessionSpy = jest.spyOn(
-          getOrganisationsFromProfessionModule,
-          'getOrganisationsFromProfession',
-        );
+        const expectedOrganisations = [
+          {
+            ...organisation2,
+            role: OrganisationRole.PrimaryRegulator,
+          },
+          {
+            ...organisation1,
+            role: OrganisationRole.AdditionalRegulator,
+          },
+        ];
 
         const result = await controller.show('example-slug');
 
@@ -146,13 +163,12 @@ describe('ProfessionsController', () => {
           ).summaryList(false, true),
           nations: mockNationsHtml,
           industries: [translationOf('industries.example')],
-          organisations: [organisation1, organisation2],
+          organisations: expectedOrganisations,
         } as ShowTemplate);
 
         expect(professionVersionsService.findLiveBySlug).toBeCalledWith(
           'example-slug',
         );
-        expect(getOrganisationsFromProfessionSpy).toBeCalledWith(profession);
         expect(NationsListPresenter).toBeCalledWith(
           [Nation.find('GB-ENG')],
           i18nService,
