@@ -10,7 +10,7 @@ import { Profession } from '../professions/profession.entity';
 import { User } from '../users/user.entity';
 import { DecisionRoute } from './interfaces/decision-route.interface';
 
-export enum DecisionStatus {
+export enum DecisionDatasetStatus {
   Unconfirmed = 'unconfirmed',
   Draft = 'draft',
   Live = 'live',
@@ -29,10 +29,10 @@ export class DecisionDataset {
 
   @Column({
     type: 'enum',
-    enum: DecisionStatus,
-    default: DecisionStatus.Unconfirmed,
+    enum: DecisionDatasetStatus,
+    default: DecisionDatasetStatus.Unconfirmed,
   })
-  status: DecisionStatus;
+  status: DecisionDatasetStatus;
 
   @Column({ type: 'json' })
   routes: DecisionRoute[];
