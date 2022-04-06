@@ -24,6 +24,7 @@ import { SearchController as OrganisationSearchController } from './organisation
 import { OrganisationsController } from './organisations/organisations.controller';
 import { ProfessionsController } from './professions/professions.controller';
 import { LandingController } from './landing/landing.controller';
+import { DecisionsModule } from './decisions/decisions.module';
 
 @Module({
   imports: [
@@ -58,6 +59,7 @@ import { LandingController } from './landing/landing.controller';
     LegislationsModule,
     OrganisationsModule,
     IndustriesModule,
+    DecisionsModule,
   ],
   controllers: [AppController, LandingController],
   providers: [MailerConsumer],
