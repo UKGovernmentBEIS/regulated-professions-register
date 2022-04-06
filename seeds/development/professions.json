@@ -2,8 +2,16 @@
   {
     "name": "Registered Trademark Attorney",
     "slug": "registered-trademark-attorney",
-    "organisation": "Law Society of England and Wales",
-    "additionalOrganisation": "Alternative Law Society",
+    "organisations": [
+      {
+        "name": "Law Society of England and Wales",
+        "role": "primaryRegulator"
+      },
+      {
+        "name": "Alternative Law Society",
+        "role": "additionalRegulator"
+      }
+    ],
     "versions": [
       {
         "alternateName": "Patent Agent / Trademark agent",
@@ -17,7 +25,6 @@
         "reservedActivities": "England and Wales: the exercise of a right of audience; the conduct of litigation; reserved instrument activities; probate activities; the administration of oaths (see section 12 Legal Services Act 2007).",
         "protectedTitles": "Trade Mark Agent",
         "legislations": ["The Trade Marks Act 1994"],
-        "organisation": "Law Society of England and Wales",
         "mandatoryRegistration": "voluntary",
         "status": "live",
         "socCode": 2419,
@@ -28,8 +35,12 @@
   {
     "name": "Secondary School Teacher in State maintained schools (England)",
     "slug": "secondary-school-teacher-in-state-maintained-schools-england",
-    "organisation": "Department for Education",
-    "additionalOrganisation": null,
+    "organisations": [
+      {
+        "name": "Department for Education",
+        "role": "primaryRegulator"
+      }
+    ],
     "versions": [
       {
         "alternateName": "Secondary school teacher",
@@ -42,7 +53,6 @@
         "legislations": [
           "The Education (School Teachers' Qualifications) (England) Regulations 2003/1662 (as amended)"
         ],
-        "organisation": "Department for Education",
         "mandatoryRegistration": "mandatory",
         "status": "live",
         "socCode": 2313,
@@ -53,8 +63,16 @@
   {
     "name": "Profession with two tier-one Organisations",
     "slug": "profession-with-two-tier-one-organisations",
-    "organisation": "Department for Education",
-    "additionalOrganisation": "Organisation with no optional fields",
+    "organisations": [
+      {
+        "name": "Department for Education",
+        "role": "primaryRegulator"
+      },
+      {
+        "name": "Organisation with no optional fields",
+        "role": "primaryRegulator"
+      }
+    ],
     "versions": [
       {
         "alternateName": "Secondary school teacher",
@@ -67,7 +85,6 @@
         "legislations": [
           "The Education (School Teachers' Qualifications) (England) Regulations 2003/1662 (as amended)"
         ],
-        "organisation": "Department for Education",
         "mandatoryRegistration": "mandatory",
         "status": "live",
         "socCode": 2313,
@@ -78,8 +95,12 @@
   {
     "name": "Gas Safe Engineer",
     "slug": "gas-safe-engineer",
-    "organisation": "Council of Registered Gas Installers",
-    "additionalOrganisation": null,
+    "organisations": [
+      {
+        "name": "Council of Registered Gas Installers",
+        "role": "primaryRegulator"
+      }
+    ],
     "versions": [
       {
         "alternateName": "Registered Gas Engineer",
@@ -90,7 +111,6 @@
         "qualification": "Evidence of gas safety competence is awarded through the process of proving to a recognised awarding body that you have the appropriate level of knowledge, understanding and practical skills to undertake gas work safely. All evidence of gas safety competence is sent by the awarding body electronically directly to Gas Safe Register and is only recognised once received from the awarding body concerned.",
         "reservedActivities": "Gas Safe Register is the official list of gas engineers in the UK, Isle of Man and Guernsey. To work on gas appliances and installations you must be on the gas safe register. The register exists to protect the public from unsafe gas work (EN)",
         "legislations": ["Gas Safety (Installation and Use) Regulations 1998"],
-        "organisation": "Council of Registered Gas Installers",
         "mandatoryRegistration": "voluntary",
         "status": "draft",
         "socCode": 5315,
@@ -101,8 +121,12 @@
   {
     "name": "Orthodontic Therapist",
     "slug": "orthodontic-therapist",
-    "organisation": "General Medical Council",
-    "additionalOrganisation": null,
+    "organisations": [
+      {
+        "name": "General Medical Council",
+        "role": "primaryRegulator"
+      }
+    ],
     "versions": [
       {
         "alternateName": "Orthodontic Auxiliary",
@@ -122,8 +146,12 @@
   {
     "name": "Profession with no optional fields",
     "slug": "no-optional-fields",
-    "organisation": "Organisation with no optional fields",
-    "additionalOrganisation": null,
+    "organisations": [
+      {
+        "name": "Organisation with no optional fields",
+        "role": "primaryRegulator"
+      }
+    ],
     "versions": [
       {
         "occupationLocations": ["GB-ENG", "GB-NIR"],
@@ -142,8 +170,12 @@
   {
     "name": "Profession with draft organisation",
     "slug": "profession-with-draft-organisation",
-    "organisation": "Draft Organisation",
-    "additionalOrganisation": null,
+    "organisations": [
+      {
+        "name": "Draft Organisation",
+        "role": "primaryRegulator"
+      }
+    ],
     "versions": [
       {
         "occupationLocations": ["GB-ENG", "GB-NIR"],
@@ -160,8 +192,16 @@
   {
     "name": "Draft Profession",
     "slug": "draft-profession",
-    "organisation": "Council of Registered Gas Installers",
-    "additionalOrganisation": "Department for Education",
+    "organisations": [
+      {
+        "name": "Council of Registered Gas Installers",
+        "role": "primaryRegulator"
+      },
+      {
+        "name": "Department for Education",
+        "role": "additionalRegulator"
+      }
+    ],
     "versions": [
       {
         "status": "draft"

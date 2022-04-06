@@ -27,11 +27,15 @@ import {
 } from './profession-to-organisation.entity';
 import { DecisionDataset } from '../decisions/decision-dataset.entity';
 
+type SeedOrganisation = {
+  name: string;
+  role: OrganisationRole;
+};
+
 type SeedProfession = {
   name: string;
   slug: string;
-  organisation: string;
-  additionalOrganisation: string;
+  organisations: SeedOrganisation[];
   versions: SeedVersion[];
 };
 
@@ -84,17 +88,6 @@ export class ProfessionsSeeder implements Seeder {
   async seed(): Promise<void> {
     await Promise.all(
       this.data.map(async (seedProfession) => {
-        const organisation = await this.organisationRepository.findOne({
-          where: { name: seedProfession.organisation },
-        });
-
-        const additionalOrganisation =
-          seedProfession.additionalOrganisation !== null
-            ? await this.organisationRepository.findOne({
-                where: { name: seedProfession.additionalOrganisation },
-              })
-            : null;
-
         const existingProfession = await this.professionsRepository.findOne({
           slug: seedProfession.slug,
         });
@@ -109,23 +102,19 @@ export class ProfessionsSeeder implements Seeder {
           ...newProfession,
         });
 
-        const professionToOrganisations = [
-          new ProfessionToOrganisation(
-            organisation,
-            savedProfession,
-            OrganisationRole.PrimaryRegulator,
-          ),
-        ];
+        const professionToOrganisations = await Promise.all(
+          seedProfession.organisations.map(async (seedOrganisation) => {
+            const organisation = await this.organisationRepository.findOne({
+              where: { name: seedOrganisation.name },
+            });
 
-        if (additionalOrganisation) {
-          professionToOrganisations.push(
-            new ProfessionToOrganisation(
-              additionalOrganisation,
+            return new ProfessionToOrganisation(
+              organisation,
               savedProfession,
-              OrganisationRole.PrimaryRegulator,
-            ),
-          );
-        }
+              seedOrganisation.role,
+            );
+          }),
+        );
 
         await this.professionToOrganisationRepository.save(
           professionToOrganisations,

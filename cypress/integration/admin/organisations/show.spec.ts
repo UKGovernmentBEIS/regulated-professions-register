@@ -28,7 +28,9 @@ describe('Showing organisations', () => {
 
               const professionsForOrganisation = professions.filter(
                 (profession: any) =>
-                  profession.organisation == organisation.name,
+                  profession.organisations.some(
+                    (item: any) => item.name == organisation.name,
+                  ),
               );
 
               professionsForOrganisation.forEach((profession: any) => {

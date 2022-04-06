@@ -252,10 +252,9 @@ function findMatchingOrganisations(filter: (profession: any) => boolean) {
 
     const organisationNames = matchingProfessions
       .map((profession) => [
-        profession.organisation,
-        profession.additionalOrganisation,
+        profession.organisations.map((organisation) => organisation.name),
       ])
-      .flat();
+      .flat(Infinity);
 
     cy.readFile('./seeds/test/organisations.json').then((organisations) => {
       const liveOrganisations = organisations.filter(
