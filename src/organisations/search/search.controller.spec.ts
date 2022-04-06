@@ -29,9 +29,11 @@ const industry3 = industryFactory.build({
 
 const organisation1 = organisationFactory.build({
   name: 'General Medical Council',
+  professionToOrganisations: [],
 });
 const organisation2 = organisationFactory.build({
   name: 'Department for Education',
+  professionToOrganisations: [],
 });
 
 const industries = [industry1, industry2, industry3];

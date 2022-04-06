@@ -25,6 +25,8 @@ import { statusOf } from '../../testutils/status-of';
 import { formatStatus } from '../../helpers/format-status.helper';
 import { formatTelephone } from '../../helpers/format-telephone.helper';
 import { telephoneOf } from '../../testutils/telephone-of';
+import * as nationsHelperModule from '../../helpers/nations.helper';
+import { Profession } from '../../professions/profession.entity';
 
 jest.mock('../../helpers/escape.helper');
 jest.mock('../../helpers/format-multiline-string.helper');
@@ -65,9 +67,19 @@ describe('OrganisationPresenter', () => {
           (escape as jest.Mock).mockImplementation(escapeOf);
           (formatStatus as jest.Mock).mockImplementation(statusOf);
 
+          const getNationsFromProfessionsSpy = jest
+            .spyOn(nationsHelperModule, 'getNationsFromProfessions')
+            .mockResolvedValue(
+              `${translationOf('nations.england')}, ${translationOf(
+                'nations.wales',
+              )}`,
+            );
+
+          const i18nService = createMockI18nService();
+
           const presenter = new OrganisationPresenter(
             organisation,
-            createMockI18nService(),
+            i18nService,
           );
           const tableRow = await presenter.tableRow();
 
@@ -103,6 +115,18 @@ describe('OrganisationPresenter', () => {
           });
 
           expect(escape).toBeCalledWith(organisation.name);
+
+          const expectedProfessions = professionToOrganisations.map(
+            (professionToOrganisation) =>
+              Profession.withLatestLiveOrDraftVersion(
+                professionToOrganisation.profession,
+              ),
+          );
+
+          expect(getNationsFromProfessionsSpy).toBeCalledWith(
+            expectedProfessions,
+            i18nService,
+          );
         });
       });
 
@@ -148,9 +172,19 @@ describe('OrganisationPresenter', () => {
           (escape as jest.Mock).mockImplementation(escapeOf);
           (formatStatus as jest.Mock).mockImplementation(statusOf);
 
+          const getNationsFromProfessionsSpy = jest
+            .spyOn(nationsHelperModule, 'getNationsFromProfessions')
+            .mockResolvedValue(
+              `${translationOf('nations.wales')}, ${translationOf(
+                'nations.scotland',
+              )}`,
+            );
+
+          const i18nService = createMockI18nService();
+
           const presenter = new OrganisationPresenter(
             organisation,
-            createMockI18nService(),
+            i18nService,
           );
           const tableRow = await presenter.tableRow();
 
@@ -179,6 +213,18 @@ describe('OrganisationPresenter', () => {
           expect(tableRow[5]).toEqual({
             html: statusOf(OrganisationVersionStatus.Draft),
           });
+
+          const expectedProfessions = professionToOrganisations.map(
+            (professionToOrganisation) =>
+              Profession.withLatestLiveOrDraftVersion(
+                professionToOrganisation.profession,
+              ),
+          );
+
+          expect(getNationsFromProfessionsSpy).toBeCalledWith(
+            expectedProfessions,
+            i18nService,
+          );
         });
       });
     });
