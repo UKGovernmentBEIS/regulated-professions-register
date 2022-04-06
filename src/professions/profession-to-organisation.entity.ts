@@ -12,13 +12,15 @@ export enum OrganisationRole {
   AwardingBody = 'awardingBody',
 }
 
-export const TierOneRoles = [
+export const TierOneRoles = <const>[
   OrganisationRole.PrimaryRegulator,
   OrganisationRole.CharteredBody,
   OrganisationRole.QualifyingBody,
-  OrganisationRole.OversightBody,
   OrganisationRole.AdditionalRegulator,
+  OrganisationRole.OversightBody,
 ];
+
+export type TierOneRoleTypes = typeof TierOneRoles[number];
 
 @Entity({ name: 'professionToOrganisation' })
 export class ProfessionToOrganisation {
