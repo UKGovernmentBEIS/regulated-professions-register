@@ -29,6 +29,7 @@ import { OrganisationVersion } from '../organisations/organisation-version.entit
 import { ProfessionsSearchService } from './professions-search.service';
 import { OrganisationsSearchService } from '../organisations/organisations-search.service';
 import { SearchModule } from '../search/search.module';
+
 @Module({
   imports: [
     TypeOrmModule.forFeature([Profession]),
