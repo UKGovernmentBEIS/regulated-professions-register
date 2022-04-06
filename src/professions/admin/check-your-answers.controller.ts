@@ -60,10 +60,8 @@ export class CheckYourAnswersController {
 
     checkCanViewProfession(request, profession);
 
-    const industryNames = await Promise.all(
-      version.industries.map(
-        async (industry) => await this.i18nService.translate(industry.name),
-      ),
+    const industryNames = version.industries.map((industry) =>
+      this.i18nService.translate<string>(industry.name),
     );
 
     const nations = new NationsListPresenter(

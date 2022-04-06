@@ -2,7 +2,7 @@ process.env.NODE_ENV ||= 'development';
 
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { I18nModule, I18nJsonParser } from 'nestjs-i18n';
+import { I18nModule } from 'nestjs-i18n';
 import { BullModule } from '@nestjs/bull';
 
 import * as path from 'path';
@@ -39,8 +39,7 @@ import { LandingController } from './landing/landing.controller';
     }),
     I18nModule.forRoot({
       fallbackLanguage: 'en',
-      parser: I18nJsonParser,
-      parserOptions: {
+      loaderOptions: {
         path: path.join(__dirname, '/i18n/'),
         watch: process.env.NODE_ENV === 'development',
       },
