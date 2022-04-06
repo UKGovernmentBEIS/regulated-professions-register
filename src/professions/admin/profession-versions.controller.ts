@@ -81,10 +81,8 @@ export class ProfessionVersionsController {
       this.i18nService,
     );
 
-    const industries = await Promise.all(
-      profession.industries.map(
-        async (industry) => await this.i18nService.translate(industry.name),
-      ),
+    const industries = profession.industries.map((industry) =>
+      this.i18nService.translate<string>(industry.name),
     );
 
     const qualification = new QualificationPresenter(

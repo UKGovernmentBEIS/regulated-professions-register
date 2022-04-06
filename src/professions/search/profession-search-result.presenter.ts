@@ -19,10 +19,8 @@ export class ProfessionSearchResultPresenter {
       this.i18nService,
     ).textList();
 
-    const industries = await Promise.all(
-      (this.profession.industries || []).map(
-        async (industry) => await this.i18nService.translate(industry.name),
-      ),
+    const industries = (this.profession.industries || []).map((industry) =>
+      this.i18nService.translate<string>(industry.name),
     );
 
     const organisations = getOrganisationsFromProfession(this.profession);

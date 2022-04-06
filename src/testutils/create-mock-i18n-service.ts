@@ -9,7 +9,7 @@ export function createMockI18nService(
 ): DeepMocked<I18nService> {
   const mock = createMock<I18nService>();
 
-  mock.translate.mockImplementation(async (text: string) => {
+  mock.translate.mockImplementation((text: string) => {
     return transations[text] || translationOf(text);
   });
 
