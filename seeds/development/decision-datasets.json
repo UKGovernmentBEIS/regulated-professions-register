@@ -1,0 +1,64 @@
+[
+  {
+    "profession": "Registered Trademark Attorney",
+    "organisation": "Law Society of England and Wales",
+    "year": 2022,
+    "status": "live",
+    "routes": [
+      {
+        "name": "Degree",
+        "countries": [
+          {
+            "country": "France",
+            "decisions": {
+              "yes": 4,
+              "no": 7,
+              "yesAfterComp": 2,
+              "noAfterComp": 3
+            }
+          },
+          {
+            "country": "Belgium",
+            "decisions": {
+              "yes": 2,
+              "no": 1,
+              "yesAfterComp": 9,
+              "noAfterComp": 4
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "profession": "Registered Trademark Attorney",
+    "organisation": "Alternative Law Society",
+    "year": 2022,
+    "status": "draft",
+    "routes": [
+      {
+        "name": "Other qualification",
+        "countries": [
+          {
+            "country": "Brazil",
+            "decisions": {
+              "yes": 2,
+              "no": 1,
+              "yesAfterComp": 6,
+              "noAfterComp": 0
+            }
+          },
+          {
+            "country": "Japan",
+            "decisions": {
+              "yes": 1,
+              "no": 2,
+              "yesAfterComp": 5,
+              "noAfterComp": 3
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

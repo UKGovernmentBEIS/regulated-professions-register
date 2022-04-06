@@ -25,6 +25,7 @@ import {
   ProfessionToOrganisation,
   OrganisationRole,
 } from './profession-to-organisation.entity';
+import { DecisionDataset } from '../decisions/decision-dataset.entity';
 
 type SeedProfession = {
   name: string;
@@ -75,6 +76,8 @@ export class ProfessionsSeeder implements Seeder {
     private readonly organisationVersionRepository: Repository<OrganisationVersion>,
     @InjectRepository(ProfessionToOrganisation)
     private readonly professionToOrganisationRepository: Repository<ProfessionToOrganisation>,
+    @InjectRepository(DecisionDataset)
+    private readonly decisionDatasetsRepository: Repository<DecisionDataset>,
     private readonly searchService: ProfessionsSearchService,
   ) {}
 
@@ -239,5 +242,6 @@ export class ProfessionsSeeder implements Seeder {
     await this.professionsRepository.delete({});
     await this.organisationVersionRepository.delete({});
     await this.organisationRepository.delete({});
+    await this.decisionDatasetsRepository.delete({});
   }
 }
