@@ -6,18 +6,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [unreleased]
 
+## [release-015] - 2022-04-06
+
 ### Added
 
 - Allow multiple regulators to be added to a profession
 - Display nations below organisations in search results
 - Data model for representing recognition decision data
+- Add back other countries routes to recognition with new radio buttons
 
 ### Changed
 
 - Read from and write to the new organisation - profession relation
 - Fix a bug causing Professions belonging to multiple Organisations to be uneditable by all but central users
 - Consistently display "United Kingdom" where we would otherwise display a list of all four UK nations
-- Fix bug causing selecting more nations in our search filters to give fewer resutls
+- Fix bug causing selecting more nations in our search filters to give fewer results
 - Split display of qualification data into overview, UK, and other countries sections
 
 ## [release-014] - 2022-03-30
@@ -43,7 +46,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 
 - New landing page for central users
-- Add back other countries routes to recognition with new radio buttons
 
 ### Changed
 
@@ -290,8 +292,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fix links in error messages when adding a new profession
 - Make validation errors more human readable
 
-[unreleased]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-014...HEAD
-[release-013]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release013...release-014
+[unreleased]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-015...HEAD
+[release-015]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release014...release-015
+[release-014]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release013...release-014
 [release-013]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release012...release-013
 [release-012]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release011...release-012
 [release-011]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release010...release-011
