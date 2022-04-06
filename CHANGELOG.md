@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 - Allow multiple regulators to be added to a profession
 - Display nations below organisations in search results
+- Data model for representing recognition decision data
 
 ### Changed
 
