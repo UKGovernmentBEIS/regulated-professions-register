@@ -21,7 +21,7 @@ export class DecisionDatasetsService {
         organisation: { id: organisationId },
         year,
       },
-      relations: ['profession', 'organisation'],
+      relations: ['profession', 'organisation', 'user'],
     });
   }
 

@@ -44,7 +44,7 @@ describe('DecisionDatasetsService', () => {
           organisation: { id: 'organisation-uuid' },
           year: 2024,
         },
-        relations: ['profession', 'organisation'],
+        relations: ['profession', 'organisation', 'user'],
       });
     });
   });
