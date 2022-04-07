@@ -1,0 +1,39 @@
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+<h1 class="govuk-heading-xl">
+  {{ "decisions.show.heading" | t }}
+  <span class="govuk-caption-l">{{ profession.name }}</span>
+</h1>
+
+{{
+  govukSummaryList({
+  classes: "govuk-summary-list--no-border rpr-decision-data__overview",
+    rows: [
+      {
+        key: {
+          text: ("decisions.show.regulator" | t)
+        },
+        value: {
+          text: organisation.name
+        }
+      },
+      {
+        key: {
+          text: ("decisions.show.year" | t)
+        },
+        value: {
+          text: year
+        }
+      }
+    ]
+  })
+}}
+
+{% for table in tables %}
+
+  <div>
+    {{ govukTable(table) }}
+  </div>
+
+{% endfor %}
