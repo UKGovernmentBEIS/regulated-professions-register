@@ -17,5 +17,14 @@
         "foundPlural": "{count} decision datasets found"
       }
     }
+  },
+  "show": {
+    "tableHeading": {
+      "country": "Country of qualification",
+      "yes": "Yes",
+      "no": "No",
+      "yesAfterComp": "Yes (after compensatory measure)",
+      "noAfterComp": "No (after compensatory measure)"
+    }
   }
 }
