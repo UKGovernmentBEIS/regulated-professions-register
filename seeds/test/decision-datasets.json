@@ -60,5 +60,58 @@
         ]
       }
     ]
+  },
+  {
+    "profession": "Secondary School Teacher in State maintained schools (England)",
+    "organisation": "Department for Education",
+    "year": 2018,
+    "status": "live",
+    "routes": [
+      {
+        "name": "Degree",
+        "countries": [
+          {
+            "country": "Morocco",
+            "decisions": {
+              "yes": 6,
+              "no": 4,
+              "yesAfterComp": 1,
+              "noAfterComp": 9
+            }
+          },
+          {
+            "country": "Poland",
+            "decisions": {
+              "yes": 8,
+              "no": 0,
+              "yesAfterComp": 1,
+              "noAfterComp": 7
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "profession": "Secondary School Teacher in State maintained schools (England)",
+    "organisation": "Department for Education",
+    "year": 2019,
+    "status": "live",
+    "routes": [
+      {
+        "name": "Other qualification",
+        "countries": [
+          {
+            "country": "Canada",
+            "decisions": {
+              "yes": 4,
+              "no": 5,
+              "yesAfterComp": 7,
+              "noAfterComp": 8
+            }
+          }
+        ]
+      }
+    ]
   }
 ]
