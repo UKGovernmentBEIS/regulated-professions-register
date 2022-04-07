@@ -12,6 +12,9 @@ echo "==> Installing application dependencies..."
 nodenv install --skip-existing
 npm install
 
+echo "==> Building..."
+npm run build
+
 echo "==> Building assets..."
 
 npm run build:assets
