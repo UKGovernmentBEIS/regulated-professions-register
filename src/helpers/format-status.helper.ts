@@ -1,9 +1,13 @@
 import { I18nService } from 'nestjs-i18n';
+import { DecisionDatasetStatus } from '../decisions/decision-dataset.entity';
 import { OrganisationVersionStatus } from '../organisations/organisation-version.entity';
 import { ProfessionVersionStatus } from '../professions/profession-version.entity';
 
 export async function formatStatus(
-  status: ProfessionVersionStatus | OrganisationVersionStatus,
+  status:
+    | ProfessionVersionStatus
+    | OrganisationVersionStatus
+    | DecisionDatasetStatus,
   i18nSerice: I18nService,
 ): Promise<string> {
   let colourClass: string;

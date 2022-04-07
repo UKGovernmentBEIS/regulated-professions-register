@@ -1,7 +1,7 @@
 import { Factory } from 'fishery';
 import {
   DecisionDataset,
-  DecisionStatus,
+  DecisionDatasetStatus,
 } from '../../decisions/decision-dataset.entity';
 import organisationFactory from './organisation';
 import professionFactory from './profession';
@@ -11,7 +11,7 @@ export default Factory.define<DecisionDataset>(({ sequence }) => ({
   profession: professionFactory.build(),
   organisation: organisationFactory.build(),
   year: sequence,
-  status: DecisionStatus.Live,
+  status: DecisionDatasetStatus.Live,
   routes: [],
   user: userFactory.build(),
   created_at: new Date(),

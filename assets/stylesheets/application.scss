@@ -118,6 +118,24 @@ $small-screen: 768px;
       }
     }
 
+    &__manage-decisions-container {
+      margin: 0;
+    }
+
+    &__manage-decisions-container-left {
+      float: left;
+      @media screen and (max-width: $small-screen) {
+        float: none;
+      }
+    }
+
+    &__manage-decisions-container-right {
+      float: right;
+      @media screen and (max-width: $small-screen) {
+        float: none;
+      }
+    }
+
     &__filters-container {
       background-color: govuk-colour('light-grey');
       padding: 1rem;

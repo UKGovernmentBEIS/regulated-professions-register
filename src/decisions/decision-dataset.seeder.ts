@@ -4,7 +4,10 @@ import { Seeder } from 'nestjs-seeder';
 import { InjectRepository } from '@nestjs/typeorm';
 import { InjectData } from '../common/decorators/seeds.decorator';
 import { Organisation } from '../organisations/organisation.entity';
-import { DecisionDataset, DecisionStatus } from './decision-dataset.entity';
+import {
+  DecisionDataset,
+  DecisionDatasetStatus,
+} from './decision-dataset.entity';
 import { Profession } from '../professions/profession.entity';
 import { DecisionRoute } from './interfaces/decision-route.interface';
 
@@ -12,7 +15,7 @@ type SeedDecisionDataset = {
   profession: string;
   organisation: string;
   year: number;
-  status: DecisionStatus;
+  status: DecisionDatasetStatus;
   routes: DecisionRoute[];
 };
 

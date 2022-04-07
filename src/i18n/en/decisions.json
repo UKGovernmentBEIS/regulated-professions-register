@@ -1,0 +1,21 @@
+{
+  "admin": {
+    "dashboard": {
+      "heading": "Recognition decision data",
+      "addButtonLabel": "Add decision data",
+      "manageHeading": "Manage existing decision data",
+      "viewDetails": "View details <span class='govuk-visually-hidden'>about {year} {organisaition} {profession} decision data</span>",
+      "tableHeading": {
+        "profession": "Profession",
+        "year": "Year",
+        "lastModified": "Last updated",
+        "status": "Status",
+        "actions": "Actions"
+      },
+      "search": {
+        "foundSingular": "{count} decision dataset found",
+        "foundPlural": "{count} decision datasets found"
+      }
+    }
+  }
+}
