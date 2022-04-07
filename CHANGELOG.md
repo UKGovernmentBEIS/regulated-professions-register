@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 
 - Placeholder dashboard for viewing recognition decision data
+- Placeholder page for showing a single decision dataset
 
 ## [release-015] - 2022-04-06
 
