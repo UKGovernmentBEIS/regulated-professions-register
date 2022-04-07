@@ -51,7 +51,7 @@
   "dependencies": {
     "@nestjs/bull": "^0.5.4",
     "@nestjs/cli": "^8.2.4",
-    "@nestjs/common": "^8.4.3",
+    "@nestjs/common": "^8.4.4",
     "@nestjs/config": "^2.0.0",
     "@nestjs/core": "^8.4.4",
     "@nestjs/platform-express": "^8.4.3",
