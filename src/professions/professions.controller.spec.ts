@@ -12,12 +12,8 @@ import { ProfessionVersionsService } from './profession-versions.service';
 import { ProfessionsController } from './professions.controller';
 
 import { Organisation } from '../organisations/organisation.entity';
-import {
-  ProfessionToOrganisation,
-  OrganisationRole,
-} from './profession-to-organisation.entity';
-
-import organisationFactory from '../testutils/factories/organisation';
+import * as getGroupedTierOneOrganisationsFromProfessionModule from './helpers/get-grouped-tier-one-organisations-from-profession.helper';
+import { GroupedTierOneOrganisations } from './helpers/get-grouped-tier-one-organisations-from-profession.helper';
 import { NationsListPresenter } from '../nations/presenters/nations-list.presenter';
 import { Nation } from '../nations/nation';
 import { ShowTemplate } from './interfaces/show-template.interface';
@@ -59,121 +55,56 @@ describe('ProfessionsController', () => {
       }).rejects.toThrowError(NotFoundException);
     });
 
-    describe('when the Profession has a single Organisation', () => {
-      it('should return populated template params', async () => {
-        const industry = industryFactory.build({ name: 'industries.example' });
-        const profession = professionFactory.build({
-          id: 'profession-id',
-          name: 'Example Profession',
-          occupationLocations: ['GB-ENG'],
-          industries: [industry],
-        });
-
-        professionVersionsService.findLiveBySlug.mockResolvedValue(profession);
-
-        (Organisation.withLatestLiveVersion as jest.Mock).mockImplementation(
-          (organisation) => organisation,
-        );
-
-        (
-          NationsListPresenter.prototype.htmlList as jest.Mock
-        ).mockResolvedValue(mockNationsHtml);
-
-        const expectedOrganisations = [
-          {
-            ...profession.professionToOrganisations[0].organisation,
-            role: profession.professionToOrganisations[0].role,
-          },
-        ];
-
-        const result = await controller.show('example-slug');
-
-        expect(result).toEqual({
-          profession: profession,
-          qualifications: await new QualificationPresenter(
-            profession.qualification,
-            createMockI18nService(),
-          ).summaryList(false, true),
-          nations: mockNationsHtml,
-          industries: [translationOf('industries.example')],
-          organisations: expectedOrganisations,
-        } as ShowTemplate);
-
-        expect(professionVersionsService.findLiveBySlug).toBeCalledWith(
-          'example-slug',
-        );
-        expect(NationsListPresenter).toBeCalledWith(
-          [Nation.find('GB-ENG')],
-          i18nService,
-        );
+    it('should return populated template params', async () => {
+      const industry = industryFactory.build({ name: 'industries.example' });
+      const profession = professionFactory.build({
+        id: 'profession-id',
+        name: 'Example Profession',
+        occupationLocations: ['GB-ENG'],
+        industries: [industry],
       });
-    });
 
-    describe('when the Profession has an additional Organisation', () => {
-      it('should return populated template params', async () => {
-        const industry = industryFactory.build({ name: 'industries.example' });
-        const organisation1 = organisationFactory.build();
-        const organisation2 = organisationFactory.build();
+      professionVersionsService.findLiveBySlug.mockResolvedValue(profession);
 
-        const profession = professionFactory.build({
-          id: 'profession-id',
-          name: 'Example Profession',
-          occupationLocations: ['GB-ENG'],
-          industries: [industry],
-          professionToOrganisations: [
-            {
-              organisation: organisation1,
-              role: OrganisationRole.AdditionalRegulator,
-            },
-            {
-              organisation: organisation2,
-              role: OrganisationRole.PrimaryRegulator,
-            },
-          ] as ProfessionToOrganisation[],
-        });
+      const expectedOrganisations = {} as GroupedTierOneOrganisations;
+      const getGroupedTierOneOrganisationsFromProfessionSpy = jest
+        .spyOn(
+          getGroupedTierOneOrganisationsFromProfessionModule,
+          'getGroupedTierOneOrganisationsFromProfession',
+        )
+        .mockReturnValue(expectedOrganisations);
 
-        professionVersionsService.findLiveBySlug.mockResolvedValue(profession);
+      (Organisation.withLatestLiveVersion as jest.Mock).mockImplementation(
+        (organisation) => organisation,
+      );
 
-        (Organisation.withLatestLiveVersion as jest.Mock).mockImplementation(
-          (organisation) => organisation,
-        );
+      (NationsListPresenter.prototype.htmlList as jest.Mock).mockResolvedValue(
+        mockNationsHtml,
+      );
 
-        (
-          NationsListPresenter.prototype.htmlList as jest.Mock
-        ).mockResolvedValue(mockNationsHtml);
+      const result = await controller.show('example-slug');
 
-        const expectedOrganisations = [
-          {
-            ...organisation2,
-            role: OrganisationRole.PrimaryRegulator,
-          },
-          {
-            ...organisation1,
-            role: OrganisationRole.AdditionalRegulator,
-          },
-        ];
+      expect(result).toEqual({
+        profession: profession,
+        qualifications: await new QualificationPresenter(
+          profession.qualification,
+          createMockI18nService(),
+        ).summaryList(false, true),
+        nations: mockNationsHtml,
+        industries: [translationOf('industries.example')],
+        organisations: expectedOrganisations,
+      } as ShowTemplate);
 
-        const result = await controller.show('example-slug');
-
-        expect(result).toEqual({
-          profession: profession,
-          qualifications: await new QualificationPresenter(
-            profession.qualification,
-            createMockI18nService(),
-          ).summaryList(false, true),
-          nations: mockNationsHtml,
-          industries: [translationOf('industries.example')],
-          organisations: expectedOrganisations,
-        } as ShowTemplate);
-
-        expect(professionVersionsService.findLiveBySlug).toBeCalledWith(
-          'example-slug',
-        );
-        expect(NationsListPresenter).toBeCalledWith(
-          [Nation.find('GB-ENG')],
-          i18nService,
-        );
-      });
+      expect(professionVersionsService.findLiveBySlug).toBeCalledWith(
+        'example-slug',
+      );
+      expect(NationsListPresenter).toBeCalledWith(
+        [Nation.find('GB-ENG')],
+        i18nService,
+      );
+      expect(
+        getGroupedTierOneOrganisationsFromProfessionSpy,
+      ).toHaveBeenCalledWith(profession, 'latestLiveVersion');
     });
 
     describe('publishing with missing data', () => {
@@ -233,9 +164,14 @@ describe('ProfessionsController', () => {
             profession,
           );
 
-          (Organisation.withLatestLiveVersion as jest.Mock).mockImplementation(
-            (organisation) => organisation,
-          );
+          const expectedOrganisations = {} as GroupedTierOneOrganisations;
+
+          jest
+            .spyOn(
+              getGroupedTierOneOrganisationsFromProfessionModule,
+              'getGroupedTierOneOrganisationsFromProfession',
+            )
+            .mockReturnValue(expectedOrganisations);
 
           (
             NationsListPresenter.prototype.htmlList as jest.Mock
@@ -248,9 +184,7 @@ describe('ProfessionsController', () => {
             qualifications: null,
             nations: mockNationsHtml,
             industries: [translationOf('industries.example')],
-            organisations: [
-              profession.professionToOrganisations[0].organisation,
-            ],
+            organisations: expectedOrganisations,
           } as ShowTemplate);
         });
       });

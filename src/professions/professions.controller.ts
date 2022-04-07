@@ -11,9 +11,8 @@ import { Nation } from '../nations/nation';
 import QualificationPresenter from '../qualifications/presenters/qualification.presenter';
 import { ShowTemplate } from './interfaces/show-template.interface';
 import { BackLink } from '../common/decorators/back-link.decorator';
-import { Organisation } from '../organisations/organisation.entity';
 import { ProfessionVersionsService } from './profession-versions.service';
-import { sortOrganisationsByRole } from './helpers/sort-organisations-by-role';
+import { getGroupedTierOneOrganisationsFromProfession } from './helpers/get-grouped-tier-one-organisations-from-profession.helper';
 import { isUK } from '../helpers/nations.helper';
 import { NationsListPresenter } from '../nations/presenters/nations-list.presenter';
 
@@ -41,17 +40,9 @@ export class ProfessionsController {
       );
     }
 
-    const organisations = sortOrganisationsByRole(profession).map(
-      (professionToOrganisation) => {
-        const organisation = Organisation.withLatestLiveVersion(
-          professionToOrganisation.organisation,
-        );
-
-        return {
-          ...organisation,
-          role: professionToOrganisation.role,
-        };
-      },
+    const tierOneOrganisations = getGroupedTierOneOrganisationsFromProfession(
+      profession,
+      'latestLiveVersion',
     );
 
     const nations = new NationsListPresenter(
@@ -79,7 +70,7 @@ export class ProfessionsController {
         : null,
       nations: await nations.htmlList(),
       industries,
-      organisations,
+      organisations: tierOneOrganisations,
     };
   }
 }
