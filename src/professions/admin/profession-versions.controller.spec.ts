@@ -20,6 +20,7 @@ import { Profession } from '../profession.entity';
 import { ProfessionPresenter } from '../presenters/profession.presenter';
 import { getActingUser } from '../../users/helpers/get-acting-user.helper';
 import * as getGroupedTierOneOrganisationsFromProfessionModule from './../helpers/get-grouped-tier-one-organisations-from-profession.helper';
+import * as getOrganisationsFromProfessionByRoleModule from './../helpers/get-organisations-from-profession-by-role';
 import { GroupedTierOneOrganisations } from './../helpers/get-grouped-tier-one-organisations-from-profession.helper';
 import { createDefaultMockRequest } from '../../testutils/factories/create-default-mock-request';
 import organisationFactory from '../../testutils/factories/organisation';
@@ -194,6 +195,14 @@ describe('ProfessionVersionsController', () => {
           )
           .mockReturnValue(expectedOrganisations);
 
+        const expectedAwardingBodies = organisationFactory.buildList(5);
+        const getOrganisationsFromProfessionByRoleSpy = jest
+          .spyOn(
+            getOrganisationsFromProfessionByRoleModule,
+            'getOrganisationsFromProfessionByRole',
+          )
+          .mockReturnValue(expectedAwardingBodies);
+
         (
           NationsListPresenter.prototype.htmlList as jest.Mock
         ).mockResolvedValue(mockNationsHtml);
@@ -219,6 +228,7 @@ describe('ProfessionVersionsController', () => {
           qualifications: await new QualificationPresenter(
             professionWithVersion.qualification,
             createMockI18nService(),
+            expectedAwardingBodies,
           ).summaryList(true, true),
           nations: mockNationsHtml,
           industries: ['Translation of `industries.example`'],
@@ -240,6 +250,11 @@ describe('ProfessionVersionsController', () => {
         expect(
           getGroupedTierOneOrganisationsFromProfessionSpy,
         ).toHaveBeenCalledWith(professionWithVersion, 'latestVersion');
+        expect(getOrganisationsFromProfessionByRoleSpy).toHaveBeenCalledWith(
+          professionWithVersion,
+          OrganisationRole.AwardingBody,
+          'latestVersion',
+        );
       });
     });
 
@@ -302,6 +317,7 @@ describe('ProfessionVersionsController', () => {
           qualifications: await new QualificationPresenter(
             professionWithVersion.qualification,
             createMockI18nService(),
+            [],
           ).summaryList(true, true),
           nations: mockNationsHtml,
           industries: [translationOf('industries.example')],
@@ -390,6 +406,7 @@ describe('ProfessionVersionsController', () => {
           qualifications: await new QualificationPresenter(
             undefined,
             createMockI18nService(),
+            [],
           ).summaryList(true, true),
           nations: mockNationsHtml,
           industries: [],

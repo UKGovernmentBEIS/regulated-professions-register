@@ -6,6 +6,7 @@ import QualificationPresenter from '../qualifications/presenters/qualification.p
 import { createMockI18nService } from '../testutils/create-mock-i18n-service';
 import industryFactory from '../testutils/factories/industry';
 import professionFactory from '../testutils/factories/profession';
+import organisationFactory from '../testutils/factories/organisation';
 import { translationOf } from '../testutils/translation-of';
 import { ProfessionVersionsService } from './profession-versions.service';
 
@@ -14,9 +15,12 @@ import { ProfessionsController } from './professions.controller';
 import { Organisation } from '../organisations/organisation.entity';
 import * as getGroupedTierOneOrganisationsFromProfessionModule from './helpers/get-grouped-tier-one-organisations-from-profession.helper';
 import { GroupedTierOneOrganisations } from './helpers/get-grouped-tier-one-organisations-from-profession.helper';
+import * as getOrganisationsFromProfessionByRoleModule from './helpers/get-organisations-from-profession-by-role';
+
 import { NationsListPresenter } from '../nations/presenters/nations-list.presenter';
 import { Nation } from '../nations/nation';
 import { ShowTemplate } from './interfaces/show-template.interface';
+import { OrganisationRole } from './profession-to-organisation.entity';
 
 jest.mock('../organisations/organisation.entity');
 jest.mock('../nations/presenters/nations-list.presenter');
@@ -74,6 +78,14 @@ describe('ProfessionsController', () => {
         )
         .mockReturnValue(expectedOrganisations);
 
+      const expectedAwardingBodies = organisationFactory.buildList(5);
+      const getOrganisationsFromProfessionByRoleSpy = jest
+        .spyOn(
+          getOrganisationsFromProfessionByRoleModule,
+          'getOrganisationsFromProfessionByRole',
+        )
+        .mockReturnValue(expectedAwardingBodies);
+
       (Organisation.withLatestLiveVersion as jest.Mock).mockImplementation(
         (organisation) => organisation,
       );
@@ -89,6 +101,7 @@ describe('ProfessionsController', () => {
         qualifications: await new QualificationPresenter(
           profession.qualification,
           createMockI18nService(),
+          expectedAwardingBodies,
         ).summaryList(false, true),
         nations: mockNationsHtml,
         industries: [translationOf('industries.example')],
@@ -105,6 +118,11 @@ describe('ProfessionsController', () => {
       expect(
         getGroupedTierOneOrganisationsFromProfessionSpy,
       ).toHaveBeenCalledWith(profession, 'latestLiveVersion');
+      expect(getOrganisationsFromProfessionByRoleSpy).toHaveBeenCalledWith(
+        profession,
+        OrganisationRole.AwardingBody,
+        'latestLiveVersion',
+      );
     });
 
     describe('publishing with missing data', () => {
