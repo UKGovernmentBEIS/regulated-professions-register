@@ -38,54 +38,58 @@
 
 <h2 class="govuk-heading-l">{{ "professions.show.bodies.heading" | t }}</h2>
 
-{% for organisation in organisations %}
+{% for role, orgs in organisations %}
   <div class="rpr-details__sub-group">
-    <h3 class="govuk-heading-m rpr-details__sub-group-title">{{ ("organisations.label.roles." +  organisation.role) | t }}</h3>
-    {{ govukSummaryList({
-      classes: 'govuk-summary-list--no-border',
-      rows: [
-        {
-          key: {
-            text: ("professions.show.bodies.regulatedAuthority" | t)
+    {% for organisation in orgs %}
+      <h3 class="govuk-heading-m rpr-details__sub-group-title">{{ ("organisations.label.roles." +  role) | t }}</h3>
+
+      {{ govukSummaryList({
+        classes: 'govuk-summary-list--no-border',
+        rows: [
+          {
+            key: {
+              text: ("professions.show.bodies.regulatedAuthority" | t)
+            },
+            value: {
+              html: "<a href='"+ ("/regulatory-authorities/" + organisation.slug) +"' class='govuk-link'>"+ organisation.name | escape +"</a>"
+            }
           },
-          value: {
-            html: "<a href='"+ ("/regulatory-authorities/" + organisation.slug) +"' class='govuk-link'>"+ organisation.name | escape +"</a>"
-          }
-        },
-        {
-          key: {
-            text: ("professions.show.bodies.address" | t)
-          },
-          value: {
-            html: organisation.address | multiline
-          }
-        } if (organisation.address or showEmptyProfessionDetails) else undefined,
-        {
-          key: {
-            text: ("professions.show.bodies.emailAddress" | t)
-          },
-          value: {
-            html: organisation.email | email
-          }
-        } if (organisation.email or showEmptyProfessionDetails) else undefined,
-        {
-          key: {
-            text: ("professions.show.bodies.url" | t)
-          },
-          value: {
-            html: organisation.url | link
-          }
-        } if (organisation.url or showEmptyProfessionDetails) else undefined,
-        {
-          key: {
-            text: ("professions.show.bodies.phoneNumber" | t)
-          },
-          value: {
-            text: organisation.telephone | telephone
-          }
-        } if (organisation.telephone or showEmptyProfessionDetails) else undefined
-      ]
-    }) }}
+          {
+            key: {
+              text: ("professions.show.bodies.address" | t)
+            },
+            value: {
+              html: organisation.address | multiline
+            }
+          } if (organisation.address or showEmptyProfessionDetails) else undefined,
+          {
+            key: {
+              text: ("professions.show.bodies.emailAddress" | t)
+            },
+            value: {
+              html: organisation.email | email
+            }
+          } if (organisation.email or showEmptyProfessionDetails) else undefined,
+          {
+            key: {
+              text: ("professions.show.bodies.url" | t)
+            },
+            value: {
+              html: organisation.url | link
+            }
+          } if (organisation.url or showEmptyProfessionDetails) else undefined,
+          {
+            key: {
+              text: ("professions.show.bodies.phoneNumber" | t)
+            },
+            value: {
+              text: organisation.telephone | telephone
+            }
+          } if (organisation.telephone or showEmptyProfessionDetails) else undefined
+        ]
+      }) }}
+    {% endfor %}
+
   </div>
 {% endfor %}
 

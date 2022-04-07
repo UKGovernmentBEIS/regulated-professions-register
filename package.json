@@ -101,6 +101,7 @@
     "@types/bull": "^3.15.8",
     "@types/express": "^4.17.13",
     "@types/jest": "^27.4.1",
+    "@types/jsdom": "^16.2.14",
     "@types/method-override": "^0.0.32",
     "@types/node": "^17.0.23",
     "@types/nunjucks": "^3.2.1",
@@ -135,6 +136,10 @@
       "<rootDir>/db/migrate/"
     ],
     "rootDir": "src",
+    "roots": [
+      "",
+      "../views"
+    ],
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
