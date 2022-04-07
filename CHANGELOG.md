@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [unreleased]
 
+### Changed
+
+- Show organisations grouped by their role on the profession view page
+
 ### Added
 
 - Placeholder dashboard for viewing recognition decision data
