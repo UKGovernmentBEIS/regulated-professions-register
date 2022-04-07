@@ -16,6 +16,8 @@ import { getGroupedTierOneOrganisationsFromProfession } from './helpers/get-grou
 import { getOrganisationsFromProfessionByRole } from './helpers/get-organisations-from-profession-by-role';
 import { isUK } from '../helpers/nations.helper';
 import { NationsListPresenter } from '../nations/presenters/nations-list.presenter';
+import { organisationList } from './presenters/organisation-list';
+
 import { OrganisationRole } from './profession-to-organisation.entity';
 @Controller()
 export class ProfessionsController {
@@ -52,6 +54,12 @@ export class ProfessionsController {
       'latestLiveVersion',
     );
 
+    const enforcementBodies = getOrganisationsFromProfessionByRole(
+      profession,
+      OrganisationRole.EnforcementBody,
+      'latestLiveVersion',
+    );
+
     const nations = new NationsListPresenter(
       (profession.occupationLocations || []).map((code) => Nation.find(code)),
       this.i18nService,
@@ -81,6 +89,7 @@ export class ProfessionsController {
         : null,
       nations: await nations.htmlList(),
       industries,
+      enforcementBodies: organisationList(enforcementBodies),
       organisations: tierOneOrganisations,
     };
   }

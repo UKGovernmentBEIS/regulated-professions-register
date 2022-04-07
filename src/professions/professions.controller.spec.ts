@@ -21,6 +21,7 @@ import { NationsListPresenter } from '../nations/presenters/nations-list.present
 import { Nation } from '../nations/nation';
 import { ShowTemplate } from './interfaces/show-template.interface';
 import { OrganisationRole } from './profession-to-organisation.entity';
+import { organisationList } from './presenters/organisation-list';
 
 jest.mock('../organisations/organisation.entity');
 jest.mock('../nations/presenters/nations-list.presenter');
@@ -79,12 +80,18 @@ describe('ProfessionsController', () => {
         .mockReturnValue(expectedOrganisations);
 
       const expectedAwardingBodies = organisationFactory.buildList(5);
+      const expectedEnforcementBodies = organisationFactory.buildList(3);
+
       const getOrganisationsFromProfessionByRoleSpy = jest
         .spyOn(
           getOrganisationsFromProfessionByRoleModule,
           'getOrganisationsFromProfessionByRole',
         )
-        .mockReturnValue(expectedAwardingBodies);
+        .mockImplementation((_profession, role) =>
+          role === OrganisationRole.AwardingBody
+            ? expectedAwardingBodies
+            : expectedEnforcementBodies,
+        );
 
       (Organisation.withLatestLiveVersion as jest.Mock).mockImplementation(
         (organisation) => organisation,
@@ -105,6 +112,7 @@ describe('ProfessionsController', () => {
         ).summaryList(false, true),
         nations: mockNationsHtml,
         industries: [translationOf('industries.example')],
+        enforcementBodies: organisationList(expectedEnforcementBodies),
         organisations: expectedOrganisations,
       } as ShowTemplate);
 
@@ -121,6 +129,11 @@ describe('ProfessionsController', () => {
       expect(getOrganisationsFromProfessionByRoleSpy).toHaveBeenCalledWith(
         profession,
         OrganisationRole.AwardingBody,
+        'latestLiveVersion',
+      );
+      expect(getOrganisationsFromProfessionByRoleSpy).toHaveBeenCalledWith(
+        profession,
+        OrganisationRole.EnforcementBody,
         'latestLiveVersion',
       );
     });
@@ -203,6 +216,7 @@ describe('ProfessionsController', () => {
             nations: mockNationsHtml,
             industries: [translationOf('industries.example')],
             organisations: expectedOrganisations,
+            enforcementBodies: organisationList([]),
           } as ShowTemplate);
         });
       });

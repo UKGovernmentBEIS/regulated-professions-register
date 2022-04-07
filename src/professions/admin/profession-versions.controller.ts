@@ -30,6 +30,7 @@ import { NationsListPresenter } from '../../nations/presenters/nations-list.pres
 import { getGroupedTierOneOrganisationsFromProfession } from './../helpers/get-grouped-tier-one-organisations-from-profession.helper';
 import { getOrganisationsFromProfessionByRole } from './../helpers/get-organisations-from-profession-by-role';
 import { OrganisationRole } from './../profession-to-organisation.entity';
+import { organisationList } from './../presenters/organisation-list';
 
 @UseGuards(AuthenticationGuard)
 @Controller('/admin/professions')
@@ -84,6 +85,12 @@ export class ProfessionVersionsController {
       'latestVersion',
     );
 
+    const enforcementBodies = getOrganisationsFromProfessionByRole(
+      profession,
+      OrganisationRole.EnforcementBody,
+      'latestVersion',
+    );
+
     const nations = new NationsListPresenter(
       (profession.occupationLocations || []).map((code) => Nation.find(code)),
       this.i18nService,
@@ -111,6 +118,7 @@ export class ProfessionVersionsController {
       ),
       nations: await nations.htmlList(),
       industries,
+      enforcementBodies: organisationList(enforcementBodies),
       organisations: tierOneOrganisations,
       publicationBlockers: getPublicationBlockers(version),
     };

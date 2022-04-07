@@ -29,6 +29,7 @@ import * as getPublicationBlockersModule from '../helpers/get-publication-blocke
 import { NationsListPresenter } from '../../nations/presenters/nations-list.presenter';
 import { Nation } from '../../nations/nation';
 import { ShowTemplate } from './interfaces/show-template.interface';
+import { organisationList } from './../presenters/organisation-list';
 
 jest.mock('../../organisations/organisation.entity');
 jest.mock('../presenters/profession.presenter');
@@ -196,12 +197,18 @@ describe('ProfessionVersionsController', () => {
           .mockReturnValue(expectedOrganisations);
 
         const expectedAwardingBodies = organisationFactory.buildList(5);
+        const expectedEnforcementBodies = organisationFactory.buildList(3);
+
         const getOrganisationsFromProfessionByRoleSpy = jest
           .spyOn(
             getOrganisationsFromProfessionByRoleModule,
             'getOrganisationsFromProfessionByRole',
           )
-          .mockReturnValue(expectedAwardingBodies);
+          .mockImplementation((_profession, role) =>
+            role === OrganisationRole.AwardingBody
+              ? expectedAwardingBodies
+              : expectedEnforcementBodies,
+          );
 
         (
           NationsListPresenter.prototype.htmlList as jest.Mock
@@ -233,6 +240,7 @@ describe('ProfessionVersionsController', () => {
           nations: mockNationsHtml,
           industries: ['Translation of `industries.example`'],
           organisations: expectedOrganisations,
+          enforcementBodies: organisationList(expectedEnforcementBodies),
           publicationBlockers: [],
         } as ShowTemplate);
 
@@ -253,6 +261,11 @@ describe('ProfessionVersionsController', () => {
         expect(getOrganisationsFromProfessionByRoleSpy).toHaveBeenCalledWith(
           professionWithVersion,
           OrganisationRole.AwardingBody,
+          'latestVersion',
+        );
+        expect(getOrganisationsFromProfessionByRoleSpy).toHaveBeenCalledWith(
+          professionWithVersion,
+          OrganisationRole.EnforcementBody,
           'latestVersion',
         );
       });
@@ -322,6 +335,7 @@ describe('ProfessionVersionsController', () => {
           nations: mockNationsHtml,
           industries: [translationOf('industries.example')],
           organisations: expectedOrganisations,
+          enforcementBodies: organisationList([]),
           publicationBlockers: [
             {
               type: 'incomplete-section',
@@ -411,6 +425,7 @@ describe('ProfessionVersionsController', () => {
           nations: mockNationsHtml,
           industries: [],
           organisations: expectedOrganisations,
+          enforcementBodies: organisationList([]),
           publicationBlockers: [
             {
               type: 'incomplete-section',
