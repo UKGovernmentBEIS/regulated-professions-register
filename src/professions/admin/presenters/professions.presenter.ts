@@ -17,7 +17,7 @@ export type ProfessionsPresenterView = 'overview' | 'single-organisation';
 export class ProfessionsPresenter {
   constructor(
     private readonly filterInput: FilterInput,
-    private readonly userOrganisaiton: Organisation | null,
+    private readonly userOrganisation: Organisation | null,
     private readonly allNations: Nation[],
     private readonly allOrganisations: Organisation[],
     private readonly allIndustries: Industry[],
@@ -29,7 +29,7 @@ export class ProfessionsPresenter {
     const organisation =
       view === 'overview'
         ? await this.i18nService.translate('app.beis')
-        : this.userOrganisaiton.name;
+        : this.userOrganisation.name;
 
     const nationsCheckboxItems = await new NationsCheckboxPresenter(
       this.allNations,
