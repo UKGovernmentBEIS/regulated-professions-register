@@ -12,6 +12,7 @@ export type GroupedTierOneOrganisations = Record<
 
 export function getGroupedTierOneOrganisationsFromProfession(
   profession: Profession,
+  organisationType: 'latestLiveVersion' | 'latestVersion',
 ): GroupedTierOneOrganisations {
   const record = {} as GroupedTierOneOrganisations;
   const roleOrder = Object.values(TierOneRoles as ReadonlyArray<string>);
@@ -20,14 +21,29 @@ export function getGroupedTierOneOrganisationsFromProfession(
     return record;
   }
 
+  // Remove all non-tier one organisations from the relation
   const tierOneRelations = profession.professionToOrganisations.filter(
     (relation) => roleOrder.indexOf(relation.role) > -1,
   );
 
-  const sortedTierOneRelations = tierOneRelations
-    .sort((a, b) => roleOrder.indexOf(a.role) - roleOrder.indexOf(b.role))
-    .filter((n) => n);
+  // Get the latest version from each organisation and apply it to the relation
+  const tierOneRelationsWithVersions = tierOneRelations
+    .map((relation) => {
+      relation.organisation =
+        organisationType === 'latestLiveVersion'
+          ? Organisation.withLatestLiveVersion(relation.organisation)
+          : Organisation.withLatestVersion(relation.organisation);
 
+      return relation;
+    })
+    .filter((n) => n.organisation);
+
+  // Sort the relations by role, as defined in `roleOrder`
+  const sortedTierOneRelations = tierOneRelationsWithVersions.sort(
+    (a, b) => roleOrder.indexOf(a.role) - roleOrder.indexOf(b.role),
+  );
+
+  // Group the organisations by their role
   return sortedTierOneRelations.reduce((a, b) => {
     a[b.role] = [...(a[b.role] || []), b.organisation];
     return a;
