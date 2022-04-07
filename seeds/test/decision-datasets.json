@@ -64,11 +64,11 @@
   {
     "profession": "Secondary School Teacher in State maintained schools (England)",
     "organisation": "Department for Education",
-    "year": 2018,
+    "year": 2019,
     "status": "live",
     "routes": [
       {
-        "name": "Degree",
+        "name": "EEA Route",
         "countries": [
           {
             "country": "Morocco",
@@ -89,13 +89,36 @@
             }
           }
         ]
+      },
+      {
+        "name": "International Route",
+        "countries": [
+          {
+            "country": "Germany",
+            "decisions": {
+              "yes": 1,
+              "no": 2,
+              "yesAfterComp": 7,
+              "noAfterComp": 4
+            }
+          },
+          {
+            "country": "Italy",
+            "decisions": {
+              "yes": 5,
+              "no": 8,
+              "yesAfterComp": 1,
+              "noAfterComp": 3
+            }
+          }
+        ]
       }
     ]
   },
   {
     "profession": "Secondary School Teacher in State maintained schools (England)",
     "organisation": "Department for Education",
-    "year": 2019,
+    "year": 2018,
     "status": "live",
     "routes": [
       {
