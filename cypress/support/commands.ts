@@ -311,6 +311,26 @@ Cypress.Commands.add('checkPublishNotBlocked', () => {
     });
 });
 
+Cypress.Commands.add('checkTable', (headings: string[], rows: string[][]) => {
+  headings.forEach((heading, index) => {
+    cy.translate(heading).then((translatedHeading) => {
+      cy.get('table thead tr th')
+        .eq(index)
+        .should('contain', translatedHeading);
+    });
+  });
+
+  rows.forEach((row, rowIndex) => {
+    cy.get('table tbody tr')
+      .eq(rowIndex)
+      .within(() => {
+        row.forEach((cell, cellIndex) => {
+          cy.get('td').eq(cellIndex).should('contain', cell);
+        });
+      });
+  });
+});
+
 Cypress.Commands.add('visitAndCheckAccessibility', (url: string) => {
   cy.visit(url);
   cy.checkAccessibility();
