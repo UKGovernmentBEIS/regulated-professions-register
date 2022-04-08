@@ -69,6 +69,7 @@ declare global {
         shouldHaveButton?: boolean,
       ): Chainable<string>;
       checkPublishNotBlocked(): Chainable<string>;
+      checkTable(headings: string[], rows: string[][]): void;
       visitAndCheckAccessibility(url: string): void;
       checkAccessibility(rules?: AxeRules): void;
       visitInternalDashboard(): void;

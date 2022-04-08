@@ -1,0 +1,16 @@
+{% set bodyClasses = "rpr-internal__page rpr-details__page" %}
+{% extends "admin/base.njk" %}
+
+{% set title = ("decisions.show.heading" | t) %}
+
+{% block content %}
+  {% include "../../_messages.njk" %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-three-quarters">
+      {% include "../../decisions/_decision-tables.njk" %}
+    </div>
+    <div class="govuk-grid-column-one-quarter">
+    </div>
+  </div>
+
+{% endblock %}
