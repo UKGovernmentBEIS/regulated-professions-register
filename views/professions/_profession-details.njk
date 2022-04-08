@@ -11,10 +11,29 @@
   {% endfor %}
   </ul>
 {% endset %}
+
+{% set regulatorsHtml %}
+  <ul class="govuk-list">
+    {% for professionToOrganisation in profession.professionToOrganisations %}
+      {% if professionToOrganisation.organisation %}
+        <li>{{ professionToOrganisation.organisation.name }}</li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+{% endset %}
+
 {{
   govukSummaryList({
   classes: 'govuk-summary-list--no-border',
   rows: [
+    {
+      key: {
+        text: ("professions.show.overview.regulators" | t)
+      },
+      value: {
+        html: regulatorsHtml
+      }
+    },
     {
       key: {
         text: ("professions.show.overview.nations" | t)

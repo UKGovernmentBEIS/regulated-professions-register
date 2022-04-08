@@ -7,6 +7,11 @@ import { nunjucksEnvironment } from '../testutils/nunjucksEnvironment';
 import organisationFactory from '../../src/testutils/factories/organisation';
 import professionFactory from '../../src/testutils/factories/profession';
 
+import {
+  ProfessionToOrganisation,
+  OrganisationRole,
+} from '../../src/professions/profession-to-organisation.entity';
+
 describe('show.njk', () => {
   beforeAll(async () => {
     await nunjucksEnvironment();
@@ -48,6 +53,48 @@ describe('show.njk', () => {
         );
 
         expect(subGroups[1].textContent).toMatch(organisation3.name);
+      },
+    );
+  });
+
+  it("should show a profession's organisations in the summary", () => {
+    const organisation1 = organisationFactory.build();
+    const organisation2 = organisationFactory.build();
+    const organisation3 = organisationFactory.build();
+
+    const profession = professionFactory.build({
+      professionToOrganisations: [
+        {
+          organisation: organisation1,
+        },
+        {
+          organisation: organisation2,
+        },
+        {
+          organisation: organisation3,
+        },
+      ] as ProfessionToOrganisation[],
+    });
+
+    nunjucks.render(
+      'professions/show.njk',
+      { profession },
+      function (_err, res) {
+        const dom = new JSDOM(res);
+
+        const rows = dom.window.document.querySelectorAll(
+          '.govuk-summary-list__row',
+        );
+
+        const regulatorRow = Array.from(rows).find((row) =>
+          row.textContent.includes(
+            translationOf('professions.show.overview.regulators'),
+          ),
+        );
+
+        expect(regulatorRow.textContent).toMatch(organisation1.name);
+        expect(regulatorRow.textContent).toMatch(organisation2.name);
+        expect(regulatorRow.textContent).toMatch(organisation3.name);
       },
     );
   });
