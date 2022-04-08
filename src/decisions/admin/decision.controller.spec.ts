@@ -72,13 +72,15 @@ describe('DecisionsController', () => {
 
         expect(result).toEqual(mockIndexTemplate);
 
-        expect(DecisionDatasetsPresenter).toBeCalledWith(
+        expect(DecisionDatasetsPresenter).toHaveBeenCalledWith(
           null,
           datasets,
           i18nService,
         );
-        expect(decisionsDatasetsService.all).toBeCalled();
-        expect(decisionsDatasetsService.allForOrganisation).not.toBeCalled();
+        expect(decisionsDatasetsService.all).toHaveBeenCalled();
+        expect(
+          decisionsDatasetsService.allForOrganisation,
+        ).not.toHaveBeenCalled();
       });
     });
 
@@ -106,15 +108,15 @@ describe('DecisionsController', () => {
 
         expect(result).toEqual(mockIndexTemplate);
 
-        expect(DecisionDatasetsPresenter).toBeCalledWith(
+        expect(DecisionDatasetsPresenter).toHaveBeenCalledWith(
           organisation,
           datasets,
           i18nService,
         );
-        expect(decisionsDatasetsService.allForOrganisation).toBeCalledWith(
-          organisation,
-        );
-        expect(decisionsDatasetsService.all).not.toBeCalled();
+        expect(
+          decisionsDatasetsService.allForOrganisation,
+        ).toHaveBeenCalledWith(organisation);
+        expect(decisionsDatasetsService.all).not.toHaveBeenCalled();
       });
     });
   });
