@@ -196,6 +196,10 @@
       "nations": "Nations",
       "industry": "Sectors"
     },
+    "enforcementBodies": {
+      "heading": "Enforcement bodies",
+      "regulators": "Regulators"
+    },
     "bodies": {
       "heading": "Regulatory / professional bodies",
       "regulatedAuthority": "Regulated authority",
