@@ -15,7 +15,6 @@ import { AuthenticationGuard } from '../../common/authentication.guard';
 import { BackLink } from '../../common/decorators/back-link.decorator';
 import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
 import { Nation } from '../../nations/nation';
-import { Organisation } from '../../organisations/organisation.entity';
 import QualificationPresenter from '../../qualifications/presenters/qualification.presenter';
 import { UserPermission } from '../../users/user-permission';
 import { Permissions } from '../../common/permissions.decorator';
@@ -23,12 +22,12 @@ import { ProfessionVersionsService } from '../profession-versions.service';
 import { Profession } from '../profession.entity';
 import { ProfessionPresenter } from '../presenters/profession.presenter';
 import { getActingUser } from '../../users/helpers/get-acting-user.helper';
-import { getOrganisationsFromProfession } from '../helpers/get-organisations-from-profession.helper';
 import { ShowTemplate } from './interfaces/show-template.interface';
 import { isUK } from '../../helpers/nations.helper';
 import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
 import { getPublicationBlockers } from '../helpers/get-publication-blockers.helper';
 import { NationsListPresenter } from '../../nations/presenters/nations-list.presenter';
+import { getGroupedTierOneOrganisationsFromProfession } from './../helpers/get-grouped-tier-one-organisations-from-profession.helper';
 
 @UseGuards(AuthenticationGuard)
 @Controller('/admin/professions')
@@ -72,8 +71,9 @@ export class ProfessionVersionsController {
       profession,
     );
 
-    const organisations = getOrganisationsFromProfession(profession).map(
-      (organisation) => Organisation.withLatestVersion(organisation),
+    const tierOneOrganisations = getGroupedTierOneOrganisationsFromProfession(
+      profession,
+      'latestVersion',
     );
 
     const nations = new NationsListPresenter(
@@ -102,7 +102,7 @@ export class ProfessionVersionsController {
       ),
       nations: await nations.htmlList(),
       industries,
-      organisations,
+      organisations: tierOneOrganisations,
       publicationBlockers: getPublicationBlockers(version),
     };
   }

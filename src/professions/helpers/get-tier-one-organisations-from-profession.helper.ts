@@ -7,7 +7,9 @@ export function getTierOneOrganisationsFromProfession(
 ): Organisation[] {
   return (
     profession.professionToOrganisations
-      ?.filter((relation) => TierOneRoles.includes(relation.role))
+      ?.filter((relation) =>
+        (TierOneRoles as ReadonlyArray<string>).includes(relation.role),
+      )
       ?.map((relation) => relation.organisation)
       .filter((n) => n) || []
   );

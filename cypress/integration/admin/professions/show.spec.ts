@@ -29,51 +29,68 @@ describe('Listing professions', () => {
         cy.checkSummaryListRowList('professions.show.overview.industry', [law]);
       });
 
-      cy.get('h3').should('contain', 'Law Society of England and Wales');
-      cy.get('h3')
-        .contains('Law Society of England and Wales')
-        .parent()
-        .within(() => {
-          cy.checkSummaryListRowMultilineValue(
-            'professions.show.bodies.address',
-            ['456 Example Street', 'London', 'EC1 1AB'],
-          );
-          cy.checkSummaryListRowValue(
-            'professions.show.bodies.emailAddress',
-            'law@example.com',
-          );
-          cy.checkSummaryListRowValue(
-            'professions.show.bodies.url',
-            'www.lawsociety.org.uk',
-          );
-          cy.checkSummaryListRowValue(
-            'professions.show.bodies.phoneNumber',
-            '+44 (0)123 456789',
-          );
-        });
+      cy.translate('organisations.label.roles.primaryRegulator').then(
+        (header) => {
+          cy.get('h3').should('contain', header);
 
-      cy.get('h3').should('contain', 'Alternative Law Society');
-      cy.get('h3')
-        .contains('Alternative Law Society')
-        .parent()
-        .within(() => {
-          cy.checkSummaryListRowMultilineValue(
-            'professions.show.bodies.address',
-            ['123 Example Street', 'London', 'WC1 1AB'],
-          );
-          cy.checkSummaryListRowValue(
-            'professions.show.bodies.emailAddress',
-            'alt-law@example.com',
-          );
-          cy.checkSummaryListRowValue(
-            'professions.show.bodies.url',
-            'www.alt-lawsociety.org.uk',
-          );
-          cy.checkSummaryListRowValue(
-            'professions.show.bodies.phoneNumber',
-            '+44 (0)123 987654',
-          );
-        });
+          cy.get('h3')
+            .contains(header)
+            .parent()
+            .within(() => {
+              cy.checkSummaryListRowValue(
+                'professions.show.bodies.regulatedAuthority',
+                'Law Society of England and Wales',
+              );
+              cy.checkSummaryListRowMultilineValue(
+                'professions.show.bodies.address',
+                ['456 Example Street', 'London', 'EC1 1AB'],
+              );
+              cy.checkSummaryListRowValue(
+                'professions.show.bodies.emailAddress',
+                'law@example.com',
+              );
+              cy.checkSummaryListRowValue(
+                'professions.show.bodies.url',
+                'www.lawsociety.org.uk',
+              );
+              cy.checkSummaryListRowValue(
+                'professions.show.bodies.phoneNumber',
+                '+44 (0)123 456789',
+              );
+            });
+        },
+      );
+
+      cy.translate('organisations.label.roles.additionalRegulator').then(
+        (header) => {
+          cy.get('h3').should('contain', header);
+          cy.get('h3')
+            .contains(header)
+            .parent()
+            .within(() => {
+              cy.checkSummaryListRowValue(
+                'professions.show.bodies.regulatedAuthority',
+                'Alternative Law Society',
+              );
+              cy.checkSummaryListRowMultilineValue(
+                'professions.show.bodies.address',
+                ['123 Example Street', 'London', 'WC1 1AB'],
+              );
+              cy.checkSummaryListRowValue(
+                'professions.show.bodies.emailAddress',
+                'alt-law@example.com',
+              );
+              cy.checkSummaryListRowValue(
+                'professions.show.bodies.url',
+                'www.alt-lawsociety.org.uk',
+              );
+              cy.checkSummaryListRowValue(
+                'professions.show.bodies.phoneNumber',
+                '+44 (0)123 987654',
+              );
+            });
+        },
+      );
 
       cy.translate('professions.show.regulatedActivities.heading').then(
         (heading) => {
@@ -243,25 +260,36 @@ describe('Listing professions', () => {
         ]);
       });
 
-      cy.get('h3').should('contain', 'Organisation with no optional fields');
-      cy.get('h3')
-        .contains('Organisation with no optional fields')
-        .parent()
-        .within(() => {
-          cy.checkSummaryListRowValue('professions.show.bodies.address', '');
-          cy.checkSummaryListRowValue(
-            'professions.show.bodies.emailAddress',
-            '',
-          );
-          cy.checkSummaryListRowValue(
-            'professions.show.bodies.url',
-            'http://www.example.com',
-          );
-          cy.checkSummaryListRowValue(
-            'professions.show.bodies.phoneNumber',
-            '',
-          );
-        });
+      cy.translate('organisations.label.roles.primaryRegulator').then(
+        (header) => {
+          cy.get('h3').should('contain', header);
+          cy.get('h3')
+            .contains(header)
+            .parent()
+            .within(() => {
+              cy.checkSummaryListRowValue(
+                'professions.show.bodies.regulatedAuthority',
+                'Organisation with no optional fields',
+              );
+              cy.checkSummaryListRowValue(
+                'professions.show.bodies.address',
+                '',
+              );
+              cy.checkSummaryListRowValue(
+                'professions.show.bodies.emailAddress',
+                '',
+              );
+              cy.checkSummaryListRowValue(
+                'professions.show.bodies.url',
+                'http://www.example.com',
+              );
+              cy.checkSummaryListRowValue(
+                'professions.show.bodies.phoneNumber',
+                '',
+              );
+            });
+        },
+      );
 
       cy.translate('professions.show.regulatedActivities.heading').then(
         (heading) => {

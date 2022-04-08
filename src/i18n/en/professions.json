@@ -192,6 +192,7 @@
   },
   "show": {
     "overview": {
+      "regulators": "Regulators",
       "nations": "Nations",
       "industry": "Sectors"
     },
