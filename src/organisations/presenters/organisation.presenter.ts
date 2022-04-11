@@ -209,11 +209,12 @@ export class OrganisationPresenter {
   }
 
   private professions(): Profession[] {
-    return this.organisation.professionToOrganisations.map(
-      (professionToOrganisation) =>
+    return this.organisation.professionToOrganisations
+      .filter((e) => e.profession)
+      .map((professionToOrganisation) =>
         Profession.withLatestLiveOrDraftVersion(
           professionToOrganisation.profession,
         ),
-    );
+      );
   }
 }
