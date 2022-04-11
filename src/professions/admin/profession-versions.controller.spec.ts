@@ -20,6 +20,7 @@ import { Profession } from '../profession.entity';
 import { ProfessionPresenter } from '../presenters/profession.presenter';
 import { getActingUser } from '../../users/helpers/get-acting-user.helper';
 import * as getGroupedTierOneOrganisationsFromProfessionModule from './../helpers/get-grouped-tier-one-organisations-from-profession.helper';
+import * as getOrganisationsFromProfessionByRoleModule from './../helpers/get-organisations-from-profession-by-role';
 import { GroupedTierOneOrganisations } from './../helpers/get-grouped-tier-one-organisations-from-profession.helper';
 import { createDefaultMockRequest } from '../../testutils/factories/create-default-mock-request';
 import organisationFactory from '../../testutils/factories/organisation';
@@ -28,6 +29,7 @@ import * as getPublicationBlockersModule from '../helpers/get-publication-blocke
 import { NationsListPresenter } from '../../nations/presenters/nations-list.presenter';
 import { Nation } from '../../nations/nation';
 import { ShowTemplate } from './interfaces/show-template.interface';
+import { organisationList } from './../presenters/organisation-list';
 
 jest.mock('../../organisations/organisation.entity');
 jest.mock('../presenters/profession.presenter');
@@ -194,6 +196,20 @@ describe('ProfessionVersionsController', () => {
           )
           .mockReturnValue(expectedOrganisations);
 
+        const expectedAwardingBodies = organisationFactory.buildList(5);
+        const expectedEnforcementBodies = organisationFactory.buildList(3);
+
+        const getOrganisationsFromProfessionByRoleSpy = jest
+          .spyOn(
+            getOrganisationsFromProfessionByRoleModule,
+            'getOrganisationsFromProfessionByRole',
+          )
+          .mockImplementation((_profession, role) =>
+            role === OrganisationRole.AwardingBody
+              ? expectedAwardingBodies
+              : expectedEnforcementBodies,
+          );
+
         (
           NationsListPresenter.prototype.htmlList as jest.Mock
         ).mockResolvedValue(mockNationsHtml);
@@ -219,10 +235,12 @@ describe('ProfessionVersionsController', () => {
           qualifications: await new QualificationPresenter(
             professionWithVersion.qualification,
             createMockI18nService(),
+            expectedAwardingBodies,
           ).summaryList(true, true),
           nations: mockNationsHtml,
           industries: ['Translation of `industries.example`'],
           organisations: expectedOrganisations,
+          enforcementBodies: organisationList(expectedEnforcementBodies),
           publicationBlockers: [],
         } as ShowTemplate);
 
@@ -240,6 +258,16 @@ describe('ProfessionVersionsController', () => {
         expect(
           getGroupedTierOneOrganisationsFromProfessionSpy,
         ).toHaveBeenCalledWith(professionWithVersion, 'latestVersion');
+        expect(getOrganisationsFromProfessionByRoleSpy).toHaveBeenCalledWith(
+          professionWithVersion,
+          OrganisationRole.AwardingBody,
+          'latestVersion',
+        );
+        expect(getOrganisationsFromProfessionByRoleSpy).toHaveBeenCalledWith(
+          professionWithVersion,
+          OrganisationRole.EnforcementBody,
+          'latestVersion',
+        );
       });
     });
 
@@ -302,10 +330,12 @@ describe('ProfessionVersionsController', () => {
           qualifications: await new QualificationPresenter(
             professionWithVersion.qualification,
             createMockI18nService(),
+            [],
           ).summaryList(true, true),
           nations: mockNationsHtml,
           industries: [translationOf('industries.example')],
           organisations: expectedOrganisations,
+          enforcementBodies: organisationList([]),
           publicationBlockers: [
             {
               type: 'incomplete-section',
@@ -390,10 +420,12 @@ describe('ProfessionVersionsController', () => {
           qualifications: await new QualificationPresenter(
             undefined,
             createMockI18nService(),
+            [],
           ).summaryList(true, true),
           nations: mockNationsHtml,
           industries: [],
           organisations: expectedOrganisations,
+          enforcementBodies: organisationList([]),
           publicationBlockers: [
             {
               type: 'incomplete-section',

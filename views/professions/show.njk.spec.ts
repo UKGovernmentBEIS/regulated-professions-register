@@ -98,4 +98,44 @@ describe('show.njk', () => {
       },
     );
   });
+
+  it('should show enforcement bodies', () => {
+    const profession = professionFactory.build();
+    const enforcementBodies = 'STUB_ENFORCEMENT_BODIES';
+
+    nunjucks.render(
+      'professions/show.njk',
+      { enforcementBodies, profession },
+      function (_err, res) {
+        expect(res).toMatch(
+          translationOf('professions.show.enforcementBodies.heading'),
+        );
+
+        expect(res).toMatch(
+          translationOf('professions.show.enforcementBodies.regulators'),
+        );
+
+        expect(res).toMatch('STUB_ENFORCEMENT_BODIES');
+      },
+    );
+  });
+
+  it('should not show enforcement bodies when there are none', () => {
+    const profession = professionFactory.build();
+    const enforcementBodies = '';
+
+    nunjucks.render(
+      'professions/show.njk',
+      { enforcementBodies, profession },
+      function (_err, res) {
+        expect(res).not.toMatch(
+          translationOf('professions.show.enforcementBodies.heading'),
+        );
+
+        expect(res).not.toMatch(
+          translationOf('professions.show.enforcementBodies.regulators'),
+        );
+      },
+    );
+  });
 });

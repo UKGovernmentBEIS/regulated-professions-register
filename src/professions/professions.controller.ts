@@ -13,9 +13,12 @@ import { ShowTemplate } from './interfaces/show-template.interface';
 import { BackLink } from '../common/decorators/back-link.decorator';
 import { ProfessionVersionsService } from './profession-versions.service';
 import { getGroupedTierOneOrganisationsFromProfession } from './helpers/get-grouped-tier-one-organisations-from-profession.helper';
+import { getOrganisationsFromProfessionByRole } from './helpers/get-organisations-from-profession-by-role';
 import { isUK } from '../helpers/nations.helper';
 import { NationsListPresenter } from '../nations/presenters/nations-list.presenter';
+import { organisationList } from './presenters/organisation-list';
 
+import { OrganisationRole } from './profession-to-organisation.entity';
 @Controller()
 export class ProfessionsController {
   constructor(
@@ -45,6 +48,18 @@ export class ProfessionsController {
       'latestLiveVersion',
     );
 
+    const awardingBodies = getOrganisationsFromProfessionByRole(
+      profession,
+      OrganisationRole.AwardingBody,
+      'latestLiveVersion',
+    );
+
+    const enforcementBodies = getOrganisationsFromProfessionByRole(
+      profession,
+      OrganisationRole.EnforcementBody,
+      'latestLiveVersion',
+    );
+
     const nations = new NationsListPresenter(
       (profession.occupationLocations || []).map((code) => Nation.find(code)),
       this.i18nService,
@@ -55,7 +70,11 @@ export class ProfessionsController {
     );
 
     const qualification = profession.qualification
-      ? new QualificationPresenter(profession.qualification, this.i18nService)
+      ? new QualificationPresenter(
+          profession.qualification,
+          this.i18nService,
+          awardingBodies,
+        )
       : null;
 
     return {
@@ -70,6 +89,7 @@ export class ProfessionsController {
         : null,
       nations: await nations.htmlList(),
       industries,
+      enforcementBodies: organisationList(enforcementBodies),
       organisations: tierOneOrganisations,
     };
   }

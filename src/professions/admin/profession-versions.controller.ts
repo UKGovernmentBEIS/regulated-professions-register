@@ -28,6 +28,9 @@ import { checkCanViewProfession } from '../../users/helpers/check-can-view-profe
 import { getPublicationBlockers } from '../helpers/get-publication-blockers.helper';
 import { NationsListPresenter } from '../../nations/presenters/nations-list.presenter';
 import { getGroupedTierOneOrganisationsFromProfession } from './../helpers/get-grouped-tier-one-organisations-from-profession.helper';
+import { getOrganisationsFromProfessionByRole } from './../helpers/get-organisations-from-profession-by-role';
+import { OrganisationRole } from './../profession-to-organisation.entity';
+import { organisationList } from './../presenters/organisation-list';
 
 @UseGuards(AuthenticationGuard)
 @Controller('/admin/professions')
@@ -76,6 +79,18 @@ export class ProfessionVersionsController {
       'latestVersion',
     );
 
+    const awardingBodies = getOrganisationsFromProfessionByRole(
+      profession,
+      OrganisationRole.AwardingBody,
+      'latestVersion',
+    );
+
+    const enforcementBodies = getOrganisationsFromProfessionByRole(
+      profession,
+      OrganisationRole.EnforcementBody,
+      'latestVersion',
+    );
+
     const nations = new NationsListPresenter(
       (profession.occupationLocations || []).map((code) => Nation.find(code)),
       this.i18nService,
@@ -88,6 +103,7 @@ export class ProfessionVersionsController {
     const qualification = new QualificationPresenter(
       profession.qualification,
       this.i18nService,
+      awardingBodies,
     );
 
     return {
@@ -102,6 +118,7 @@ export class ProfessionVersionsController {
       ),
       nations: await nations.htmlList(),
       industries,
+      enforcementBodies: organisationList(enforcementBodies),
       organisations: tierOneOrganisations,
       publicationBlockers: getPublicationBlockers(version),
     };

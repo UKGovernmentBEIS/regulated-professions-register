@@ -3,11 +3,13 @@ import { Qualification } from '../qualification.entity';
 import { I18nService } from 'nestjs-i18n';
 import { SummaryList } from '../../common/interfaces/summary-list';
 import { formatLink } from '../../helpers/format-link.helper';
+import { Organisation } from '../../organisations/organisation.entity';
 
 export default class QualificationPresenter {
   constructor(
     private readonly qualification: Qualification,
     private readonly i18nService: I18nService,
+    private readonly awardingBodies?: Organisation[],
   ) {}
 
   readonly routesToObtain = formatMultilineString(
@@ -76,6 +78,14 @@ export default class QualificationPresenter {
         overviewSummaryList,
         'professions.show.qualification.moreInformationUrl',
         this.moreInformationUrl,
+      );
+    }
+
+    if (this.awardingBodies?.length) {
+      await this.addHtmlRow(
+        overviewSummaryList,
+        'professions.show.qualification.awardingBodies',
+        this.listAwardingBodies(),
       );
     }
 
@@ -161,5 +171,17 @@ export default class QualificationPresenter {
       key: { text: await this.i18nService.translate(key) },
       value: { html: value },
     });
+  }
+
+  private listAwardingBodies(): string {
+    let list = '<ul class="govuk-list">';
+
+    for (const organisation of this.awardingBodies) {
+      list += `<li><a class="govuk-link" href="/regulatory-authorities/${organisation.slug}">${organisation.name}</a></li>`;
+    }
+
+    list += '</ul>';
+
+    return list;
   }
 }

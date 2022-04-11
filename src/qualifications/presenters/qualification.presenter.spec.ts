@@ -1,4 +1,5 @@
 import qualificationFactory from '../../testutils/factories/qualification';
+import organisationFactory from '../../testutils/factories/organisation';
 import QualificationPresenter from './qualification.presenter';
 import { formatMultilineString } from '../../helpers/format-multiline-string.helper';
 import { multilineOf } from '../../testutils/multiline-of';
@@ -465,6 +466,40 @@ describe(QualificationPresenter, () => {
               ukSummaryList: null,
             });
           });
+        });
+      });
+
+      describe('when awarding bodies are present', () => {
+        it('adds a list of awarding bodies', async () => {
+          const qualification = qualificationFactory.build({
+            url: '',
+            otherCountriesRecognitionRoutes: null,
+          });
+          const organisations = organisationFactory.buildList(3);
+
+          const presenter = new QualificationPresenter(
+            qualification,
+            createMockI18nService(),
+            organisations,
+          );
+
+          const summaryList = await presenter.summaryList(true, false);
+          const awardingBodyRole = summaryList.overviewSummaryList.rows.find(
+            (r) =>
+              r.key['text'] ===
+              translationOf('professions.show.qualification.awardingBodies'),
+          );
+          const html = awardingBodyRole.value['html'];
+
+          expect(html).toMatch('<ul class="govuk-list">');
+
+          expect(html).toMatch('</ul>');
+
+          for (const organisation of organisations) {
+            expect(html).toMatch(
+              `<li><a class="govuk-link" href="/regulatory-authorities/${organisation.slug}">${organisation.name}</a></li>`,
+            );
+          }
         });
       });
     });

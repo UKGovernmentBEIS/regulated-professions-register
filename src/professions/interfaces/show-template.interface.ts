@@ -14,4 +14,5 @@ export interface ShowTemplate {
   nations: string;
   industries: string[];
   organisations: GroupedTierOneOrganisations;
+  enforcementBodies: string;
 }
