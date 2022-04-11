@@ -21,11 +21,10 @@
         </div>
         <div class="rpr-internal-listing__manage-professions-container-right">
           {% if 'uploadDecisionData' in permissions %}
-            <form action="/admin/decisions" method="post" class="form">
-              {{ govukButton({
-                text: "decisions.admin.dashboard.addButtonLabel" | t
-              }) }}
-            </form>
+            {{ govukButton({
+              text: "decisions.admin.dashboard.addButtonLabel" | t,
+              href: "/admin/decisions/new"
+            }) }}
           {% endif %}    
         </div>
       </div>

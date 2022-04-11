@@ -3,7 +3,9 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { Response } from 'express';
 import { I18nService } from 'nestjs-i18n';
 import { Table } from '../../common/interfaces/table';
+import { OrganisationVersionsService } from '../../organisations/organisation-versions.service';
 import { OrganisationsService } from '../../organisations/organisations.service';
+import { ProfessionVersionsService } from '../../professions/profession-versions.service';
 import { ProfessionsService } from '../../professions/professions.service';
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 import { createDefaultMockRequest } from '../../testutils/factories/create-default-mock-request';
@@ -74,12 +76,16 @@ describe('DecisionsController', () => {
   let decisionsDatasetsService: DeepMocked<DecisionDatasetsService>;
   let professionsService: DeepMocked<ProfessionsService>;
   let organisationsService: DeepMocked<OrganisationsService>;
+  let professionVersionsService: DeepMocked<ProfessionVersionsService>;
+  let organisationVersionsService: DeepMocked<OrganisationVersionsService>;
   let i18nService: DeepMocked<I18nService>;
 
   beforeEach(async () => {
     decisionsDatasetsService = createMock<DecisionDatasetsService>();
     professionsService = createMock<ProfessionsService>();
     organisationsService = createMock<OrganisationsService>();
+    professionVersionsService = createMock<ProfessionVersionsService>();
+    organisationVersionsService = createMock<OrganisationVersionsService>();
     i18nService = createMockI18nService();
 
     const module: TestingModule = await Test.createTestingModule({
@@ -96,6 +102,14 @@ describe('DecisionsController', () => {
         {
           provide: OrganisationsService,
           useValue: organisationsService,
+        },
+        {
+          provide: ProfessionVersionsService,
+          useValue: professionVersionsService,
+        },
+        {
+          provide: OrganisationVersionsService,
+          useValue: organisationVersionsService,
         },
         {
           provide: I18nService,

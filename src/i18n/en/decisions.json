@@ -20,6 +20,15 @@
     "show": {
       "edit": "Edit"
     },
+    "new": {
+      "heading": "Recognition decision data",
+      "caption": "Adding new recognition decision data",
+      "labels": {
+        "organisation": "Regulator",
+        "profession": "Profession",
+        "year": "Year"
+      }
+    },
     "edit": {
       "heading": "Recognition decision data",
       "regulator": "Regulator",

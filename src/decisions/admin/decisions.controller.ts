@@ -26,7 +26,15 @@ import { DecisionDatasetsPresenter } from './presenters/decision-datasets.presen
 import { DecisionDatasetPresenter } from '../presenters/decision-dataset.presenter';
 import { Response } from 'express';
 import { OrganisationsService } from '../../organisations/organisations.service';
+import { RegulatedAuthoritiesSelectPresenter } from '../../professions/admin/presenters/regulated-authorities-select-presenter';
+import { OrganisationVersionsService } from '../../organisations/organisation-versions.service';
+import { NewTemplate } from './interfaces/new-template.interface';
+import { ProfessionVersionsService } from '../../professions/profession-versions.service';
+import { Profession } from '../../professions/profession.entity';
+import { ProfessionsSelectPresenter } from '../../professions/admin/presenters/professions-select.presenter';
+import { YearsSelectPresenter } from './presenters/years-select.presenter';
 import { EditTemplate } from './interfaces/edit-template.interface';
+import { NewDto } from './dto/new.dto';
 import { DecisionRoute } from '../interfaces/decision-route.interface';
 import { EditDto } from './dto/edit.dto';
 import {
@@ -53,6 +61,8 @@ export class DecisionsController {
     private readonly decisionDatasetsService: DecisionDatasetsService,
     private readonly professionsService: ProfessionsService,
     private readonly organisationsService: OrganisationsService,
+    private readonly professionVersionsService: ProfessionVersionsService,
+    private readonly organisationVersionsService: OrganisationVersionsService,
     private readonly i18Service: I18nService,
   ) {}
 
@@ -107,6 +117,81 @@ export class DecisionsController {
       year: dataset.year.toString(),
       tables: presenter.tables(),
     };
+  }
+
+  @Get('/new')
+  @Permissions(
+    UserPermission.UploadDecisionData,
+    UserPermission.DownloadDecisionData,
+    UserPermission.ViewDecisionData,
+  )
+  @Render('admin/decisions/new')
+  @BackLink('/admin/dashboard/index')
+  async new(@Req() request: RequestWithAppSession): Promise<NewTemplate> {
+    const actingUser = getActingUser(request);
+
+    const showAllOrgs = actingUser.serviceOwner;
+
+    const userOrganisation = showAllOrgs ? null : actingUser.organisation;
+
+    const professions = (
+      await (showAllOrgs
+        ? this.professionVersionsService.allLive()
+        : this.professionVersionsService.allLiveForOrganisation(
+            userOrganisation,
+          ))
+    ).map((version) => Profession.withVersion(version.profession, version));
+
+    const organisations = showAllOrgs
+      ? await this.organisationVersionsService.allLive()
+      : null;
+
+    const professionsPresenter = new ProfessionsSelectPresenter(
+      professions,
+      null,
+    );
+
+    const organisationsPresenter = new RegulatedAuthoritiesSelectPresenter(
+      organisations,
+      null,
+      null,
+    );
+
+    const yearsPresenter = new YearsSelectPresenter(
+      2000,
+      new Date().getFullYear(),
+      null,
+    );
+
+    return {
+      organisationsSelectArgs: actingUser.serviceOwner
+        ? organisationsPresenter.selectArgs()
+        : null,
+      professionsSelectArgs: professionsPresenter.selectArgs(),
+      yearsSelectArgs: yearsPresenter.selectArgs(),
+    };
+  }
+
+  @Post('/new')
+  @Permissions(
+    UserPermission.UploadDecisionData,
+    UserPermission.DownloadDecisionData,
+    UserPermission.ViewDecisionData,
+  )
+  newPost(
+    @Body() createDto: NewDto,
+    @Req() request: RequestWithAppSession,
+    @Res() response: Response,
+  ): void {
+    const actingUser = getActingUser(request);
+
+    const organisationId = actingUser.serviceOwner
+      ? createDto.organisation
+      : actingUser.organisation.id;
+
+    response.redirect(
+      `/admin/decisions/${createDto.profession}/${organisationId}/${createDto.year}/edit`,
+    );
   }
 
   @Get(':professionId/:organisationId/:year/edit')
