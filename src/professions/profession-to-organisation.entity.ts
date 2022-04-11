@@ -36,6 +36,7 @@ export class ProfessionToOrganisation {
   @ManyToOne(
     () => Profession,
     (profession) => profession.professionToOrganisations,
+    { orphanedRowAction: 'delete' },
   )
   profession!: Profession;
 
