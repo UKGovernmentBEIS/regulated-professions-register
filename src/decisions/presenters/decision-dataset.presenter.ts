@@ -1,6 +1,7 @@
 import { I18nService } from 'nestjs-i18n';
 import { Table } from '../../common/interfaces/table';
 import { TableRow } from '../../common/interfaces/table-row';
+import { decisionValueToString } from '../admin/helpers/decision-value-to-string.helper';
 import { DecisionRoute } from '../interfaces/decision-route.interface';
 
 export class DecisionDatasetPresenter {
@@ -50,16 +51,16 @@ export class DecisionDatasetPresenter {
               text: country.country,
             },
             {
-              text: country.decisions.yes.toString(),
+              text: decisionValueToString(country.decisions.yes),
             },
             {
-              text: country.decisions.yesAfterComp.toString(),
+              text: decisionValueToString(country.decisions.yesAfterComp),
             },
             {
-              text: country.decisions.no.toString(),
+              text: decisionValueToString(country.decisions.no),
             },
             {
-              text: country.decisions.noAfterComp.toString(),
+              text: decisionValueToString(country.decisions.noAfterComp),
             },
           ];
         }),
