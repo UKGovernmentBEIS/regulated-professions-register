@@ -12,7 +12,22 @@ export default Factory.define<DecisionDataset>(({ sequence }) => ({
   organisation: organisationFactory.build(),
   year: sequence,
   status: DecisionDatasetStatus.Live,
-  routes: [],
+  routes: [
+    {
+      name: 'Example route',
+      countries: [
+        {
+          country: 'Example country',
+          decisions: {
+            yes: 1,
+            no: 2,
+            yesAfterComp: 3,
+            noAfterComp: 4,
+          },
+        },
+      ],
+    },
+  ],
   user: userFactory.build(),
   created_at: new Date(),
   updated_at: new Date(),
