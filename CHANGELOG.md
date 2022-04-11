@@ -10,6 +10,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 - Hide edit and delete buttons for non Tier 1 users
 
+### Changed
+
+- Placeholder page for editing decision data
+
 ## [release-016] - 2022-04-11
 
 ### Changed
