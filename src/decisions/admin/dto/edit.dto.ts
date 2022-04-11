@@ -1,0 +1,9 @@
+export class EditDto {
+  routes: string[];
+  countries: string[][];
+  yeses: string[][];
+  noes: string[][];
+  yesAfterComps: string[][];
+  noAfterComps: string[][];
+  action: string;
+}
