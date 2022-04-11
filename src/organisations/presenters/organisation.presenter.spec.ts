@@ -227,6 +227,33 @@ describe('OrganisationPresenter', () => {
           );
         });
       });
+
+      describe('when there are no professionToOrganisations on the regulator', () => {
+        it('returns empty text for industries', async () => {
+          const professionToOrganisations = [];
+
+          const organisation = organisationFactory.build({
+            lastModified: new Date('01-01-2022'),
+            changedByUser: userFactory.build({ name: 'beis-rpr' }),
+            status: OrganisationVersionStatus.Draft,
+            professionToOrganisations: professionToOrganisations,
+          });
+          (escape as jest.Mock).mockImplementation(escapeOf);
+          (formatStatus as jest.Mock).mockImplementation(statusOf);
+
+          jest.spyOn(nationsHelperModule, 'getNationsFromProfessions');
+
+          const i18nService = createMockI18nService();
+
+          const presenter = new OrganisationPresenter(
+            organisation,
+            i18nService,
+          );
+          const tableRow = await presenter.tableRow();
+
+          expect(tableRow[2]).toEqual({ text: '' });
+        });
+      });
     });
   });
 
