@@ -17,6 +17,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Show Awarding Bodies against profession
 - Show Enforcement Bodies against profession
 
+### Changed
+
+- Allow users who are Editors and above to access and upload decision data
+
 ## [release-015] - 2022-04-06
 
 ### Added

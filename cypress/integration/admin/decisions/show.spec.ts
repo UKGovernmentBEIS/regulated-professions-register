@@ -1,7 +1,7 @@
 describe('Listing decision datasets', () => {
-  context('When I am logged in as admin', () => {
+  context('When I am logged in as editor', () => {
     beforeEach(() => {
-      cy.loginAuth0('admin');
+      cy.loginAuth0('editor');
       cy.visitAndCheckAccessibility('/admin/decisions');
     });
 
