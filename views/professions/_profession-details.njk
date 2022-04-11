@@ -1,5 +1,7 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
+{% set showEmptyProfessionDetails = (view === 'admin') %}
+
 <span class="govuk-caption-l">{{ organisation.name }}</span>
 
 <h1 class="govuk-heading-xl">{{ profession.name }}</h1>
@@ -61,6 +63,13 @@
   <div class="rpr-details__sub-group">
     {% for organisation in orgs %}
       <h3 class="govuk-heading-m rpr-details__sub-group-title">{{ ("organisations.label.roles." +  role) | t }}</h3>
+      {% set organisationLink %}
+        {% if view === 'admin' %}
+          <a href="/admin/organisations/{{organisation.id}}/versions/{{organisation.versionId}}" class="govuk-link" >{{organisation.name | escape}}</a>
+        {% else %}
+          <a href="/regulatory-authorities/{{organisation.slug}}" class="govuk-link">{{organisation.name | escape}}</a>
+        {% endif %}
+      {% endset %}
 
       {{ govukSummaryList({
         classes: 'govuk-summary-list--no-border',
@@ -70,7 +79,7 @@
               text: ("professions.show.bodies.regulatedAuthority" | t)
             },
             value: {
-              html: "<a href='"+ ("/regulatory-authorities/" + organisation.slug) +"' class='govuk-link'>"+ organisation.name | escape +"</a>"
+              html: organisationLink
             }
           },
           {

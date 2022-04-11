@@ -7,10 +7,7 @@ import { nunjucksEnvironment } from '../testutils/nunjucksEnvironment';
 import organisationFactory from '../../src/testutils/factories/organisation';
 import professionFactory from '../../src/testutils/factories/profession';
 
-import {
-  ProfessionToOrganisation,
-  OrganisationRole,
-} from '../../src/professions/profession-to-organisation.entity';
+import { ProfessionToOrganisation } from '../../src/professions/profession-to-organisation.entity';
 
 describe('show.njk', () => {
   beforeAll(async () => {
@@ -134,6 +131,32 @@ describe('show.njk', () => {
 
         expect(res).not.toMatch(
           translationOf('professions.show.enforcementBodies.regulators'),
+        );
+      },
+    );
+  });
+
+  it('should link to public facing page for organisation when user is not an admin', () => {
+    const profession = professionFactory.build();
+    const organisation1 = organisationFactory.build({
+      slug: 'organisation-1',
+    });
+
+    const organisations = {
+      role1: [organisation1],
+    };
+
+    nunjucks.render(
+      'professions/show.njk',
+      { organisations, profession },
+      function (_err, res) {
+        const dom = new JSDOM(res);
+
+        const links = dom.window.document.querySelectorAll(
+          '.rpr-details__sub-group .govuk-link',
+        );
+        expect(links[0].getAttribute('href')).toEqual(
+          '/regulatory-authorities/organisation-1',
         );
       },
     );
