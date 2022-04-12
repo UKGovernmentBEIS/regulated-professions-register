@@ -15,6 +15,7 @@ The following links provide information on how to perform common tasks that migh
 - [Seeding the database](./seeds.md)
 - [Re-indexing professions in the open search instance](./opensearch.md)
 - [Deleting data](./deleting-data.md)
+- [Adding a domain](./adding-a-domain.md)
 
 ## Further context
 
