@@ -124,37 +124,9 @@ describe('ProfessionVersionsController', () => {
         undefined,
       );
 
-      const request = createDefaultMockRequest({ user: userFactory.build() });
-
       await expect(async () => {
-        await controller.show('profession-id', 'version-id', request);
+        await controller.show('profession-id', 'version-id');
       }).rejects.toThrowError(NotFoundException);
-    });
-
-    it('should check the user has permission to view the profession', async () => {
-      const profession = professionFactory.build();
-
-      const version = professionVersionFactory.build({
-        profession: profession,
-        occupationLocations: ['GB-ENG'],
-        industries: [industryFactory.build({ name: 'industries.example' })],
-      });
-
-      professionVersionsService.findByIdWithProfession.mockResolvedValue(
-        version,
-      );
-      professionVersionsService.hasLiveVersion.mockResolvedValue(true);
-
-      const request = createDefaultMockRequest({
-        user: userFactory.build(),
-      });
-
-      await controller.show('profession-id', 'version-id', request);
-
-      expect(checkCanViewProfession).toHaveBeenCalledWith(
-        request,
-        Profession.withVersion(profession, version),
-      );
     });
 
     describe('when the Profession is complete', () => {
@@ -218,15 +190,7 @@ describe('ProfessionVersionsController', () => {
           .spyOn(getPublicationBlockersModule, 'getPublicationBlockers')
           .mockReturnValue([]);
 
-        const request = createDefaultMockRequest({
-          user: userFactory.build(),
-        });
-
-        const result = await controller.show(
-          'profession-id',
-          'version-id',
-          request,
-        );
+        const result = await controller.show('profession-id', 'version-id');
 
         expect(result).toEqual({
           profession: professionWithVersion,
@@ -315,13 +279,7 @@ describe('ProfessionVersionsController', () => {
             },
           ]);
 
-        const request = createDefaultMockRequest({ user: userFactory.build() });
-
-        const result = await controller.show(
-          'profession-id',
-          'version-id',
-          request,
-        );
+        const result = await controller.show('profession-id', 'version-id');
 
         expect(result).toEqual({
           profession: professionWithVersion,
@@ -392,8 +350,6 @@ describe('ProfessionVersionsController', () => {
           NationsListPresenter.prototype.htmlList as jest.Mock
         ).mockResolvedValue(mockNationsHtml);
 
-        const request = createDefaultMockRequest({ user: userFactory.build() });
-
         const getPublicationBlockersSpy = jest
           .spyOn(getPublicationBlockersModule, 'getPublicationBlockers')
           .mockReturnValue([
@@ -407,11 +363,7 @@ describe('ProfessionVersionsController', () => {
             },
           ]);
 
-        const result = await controller.show(
-          'profession-id',
-          'version-id',
-          request,
-        );
+        const result = await controller.show('profession-id', 'version-id');
 
         expect(result).toEqual({
           profession: professionWithVersion,

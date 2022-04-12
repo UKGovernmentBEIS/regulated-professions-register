@@ -51,7 +51,6 @@ export class ProfessionVersionsController {
   async show(
     @Param('professionId') professionId: string,
     @Param('versionId') versionId: string,
-    @Req() req: RequestWithAppSession,
   ): Promise<ShowTemplate> {
     const version = await this.professionVersionsService.findByIdWithProfession(
       professionId,
@@ -65,9 +64,6 @@ export class ProfessionVersionsController {
     }
 
     const profession = Profession.withVersion(version.profession, version);
-
-    checkCanViewProfession(req, profession);
-
     const presenter = new ProfessionPresenter(profession, this.i18nService);
 
     const hasLiveVersion = await this.professionVersionsService.hasLiveVersion(
