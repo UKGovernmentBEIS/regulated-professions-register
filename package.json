@@ -42,6 +42,7 @@
     "seed:test": "NODE_ENV=test node dist/seeder",
     "seed:production": "NODE_ENV=production node dist/seeder",
     "seed:test:refresh": "npm run build && NODE_ENV=test node dist/seeder --refresh",
+    "opensearch:purge": "curl -X DELETE 'http://admin:admin@localhost:9200/professions_development' &> /dev/null && curl -X DELETE 'http://admin:admin@localhost:9200/organisations_development' &> /dev/null",
     "opensearch:test:purge": "curl -X DELETE 'http://admin:admin@localhost:9200/professions_test' &> /dev/null && curl -X DELETE 'http://admin:admin@localhost:9200/organisations_test' &> /dev/null",
     "opensearch:reseed:professions": "npm run console -- opensearch:reseed:professions",
     "opensearch:reseed:organisations": "npm run console --  opensearch:reseed:organisations",
