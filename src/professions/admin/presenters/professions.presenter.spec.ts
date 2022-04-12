@@ -12,6 +12,7 @@ import { ListEntryPresenter } from './list-entry.presenter';
 import industryFactory from '../../../testutils/factories/industry';
 import organisationFactory from '../../../testutils/factories/organisation';
 import professionFactory from '../../../testutils/factories/profession';
+import userFactory from '../../../testutils/factories/user';
 import { translationOf } from '../../../testutils/translation-of';
 import { RegulationType } from '../../profession-version.entity';
 import { RegulationTypesCheckboxPresenter } from './regulation-types-checkbox.presenter';
@@ -92,6 +93,7 @@ describe('ProfessionsPresenter', () => {
       industries,
       [profession1, profession2, profession3],
       i18nService,
+      userFactory.build(),
     );
   });
 
@@ -111,9 +113,11 @@ describe('ProfessionsPresenter', () => {
           head: await ListEntryPresenter.headings(i18nService, 'overview'),
           rows: await Promise.all(
             [profession1, profession2, profession3].map((profession) =>
-              new ListEntryPresenter(profession, i18nService).tableRow(
-                'overview',
-              ),
+              new ListEntryPresenter(
+                profession,
+                i18nService,
+                userFactory.build(),
+              ).tableRow('overview'),
             ),
           ),
         },
@@ -167,9 +171,11 @@ describe('ProfessionsPresenter', () => {
           ),
           rows: await Promise.all(
             [profession1, profession2, profession3].map((profession) =>
-              new ListEntryPresenter(profession, i18nService).tableRow(
-                'single-organisation',
-              ),
+              new ListEntryPresenter(
+                profession,
+                i18nService,
+                userFactory.build(),
+              ).tableRow('single-organisation'),
             ),
           ),
         },
@@ -228,6 +234,7 @@ describe('ProfessionsPresenter', () => {
             industries,
             foundProfessions,
             i18nService,
+            userFactory.build(),
           );
 
           const result = await presenter.present('overview');
@@ -261,6 +268,7 @@ describe('ProfessionsPresenter', () => {
             industries,
             foundProfessions,
             i18nService,
+            userFactory.build(),
           );
 
           const result = await presenter.present('overview');

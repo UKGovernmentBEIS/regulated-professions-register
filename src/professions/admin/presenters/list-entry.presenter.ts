@@ -6,8 +6,10 @@ import { Nation } from '../../../nations/nation';
 import { getOrganisationsFromProfession } from '../../helpers/get-organisations-from-profession.helper';
 import { ProfessionPresenter } from '../../presenters/profession.presenter';
 import { Profession } from '../../profession.entity';
+import { User } from '../../../users/user.entity';
 import { ProfessionsPresenterView } from './professions.presenter';
 import { NationsListPresenter } from './../../../nations/presenters/nations-list.presenter';
+import { belongsToTierOneOrganisation } from '../../../users/helpers/belongs-to-tier-one-organisation';
 
 type Field =
   | 'profession'
@@ -60,6 +62,7 @@ export class ListEntryPresenter {
   constructor(
     private readonly profession: Profession,
     private readonly i18nService: I18nService,
+    private readonly actingUser: User,
   ) {}
 
   async tableRow(contents: ProfessionsPresenterView): Promise<TableRow> {
@@ -84,12 +87,19 @@ export class ListEntryPresenter {
       )
     ).join(', ');
 
-    const viewDetails = `<a class="govuk-link" href="/admin/professions/${
-      this.profession.id
-    }/versions/${this.profession.versionId}">${await this.i18nService.translate(
-      'professions.admin.viewDetails',
-      { args: { name: escape(this.profession.name) } },
-    )}</a>`;
+    let viewDetails: string;
+
+    if (belongsToTierOneOrganisation(this.profession, this.actingUser)) {
+      viewDetails = `<a class="govuk-link" href="/admin/professions/${
+        this.profession.id
+      }/versions/${
+        this.profession.versionId
+      }">${await this.i18nService.translate('professions.admin.viewDetails', {
+        args: { name: escape(this.profession.name) },
+      })}</a>`;
+    } else {
+      viewDetails = '';
+    }
 
     const organisations = getOrganisationsFromProfession(this.profession)
       .map((organisation) => organisation.name)

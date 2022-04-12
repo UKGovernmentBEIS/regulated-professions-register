@@ -8,6 +8,7 @@ import { FilterInput } from '../../../common/interfaces/filter-input.interface';
 import { IndexTemplate } from './../interfaces/index-template.interface';
 import { ListEntryPresenter } from './../presenters/list-entry.presenter';
 import { Organisation } from '../../../organisations/organisation.entity';
+import { User } from '../../../users/user.entity';
 import { OrganisationsCheckboxPresenter } from '../../../organisations/organisations-checkbox-presenter';
 import { Table } from '../../../common/interfaces/table';
 import { RegulationTypesCheckboxPresenter } from './regulation-types-checkbox.presenter';
@@ -23,6 +24,7 @@ export class ProfessionsPresenter {
     private readonly allIndustries: Industry[],
     private readonly filteredProfessions: Profession[],
     private readonly i18nService: I18nService,
+    private readonly actingUser: User,
   ) {}
 
   async present(view: ProfessionsPresenterView): Promise<IndexTemplate> {
@@ -57,7 +59,7 @@ export class ProfessionsPresenter {
     return {
       view,
       organisation,
-      professionsTable: await this.table(view),
+      professionsTable: await this.table(view, this.actingUser),
       nationsCheckboxItems,
       organisationsCheckboxItems,
       industriesCheckboxItems,
@@ -76,12 +78,19 @@ export class ProfessionsPresenter {
     };
   }
 
-  private async table(view: ProfessionsPresenterView): Promise<Table> {
+  private async table(
+    view: ProfessionsPresenterView,
+    actingUser: User,
+  ): Promise<Table> {
     const headings = await ListEntryPresenter.headings(this.i18nService, view);
 
     const rows = await Promise.all(
       this.filteredProfessions.map(async (profession) =>
-        new ListEntryPresenter(profession, this.i18nService).tableRow(view),
+        new ListEntryPresenter(
+          profession,
+          this.i18nService,
+          actingUser,
+        ).tableRow(view),
       ),
     );
 

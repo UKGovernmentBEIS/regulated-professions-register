@@ -8,6 +8,7 @@ import { Nation } from '../../nations/nation';
 import { Organisation } from '../../organisations/organisation.entity';
 import { FilterInput } from '../../common/interfaces/filter-input.interface';
 import { Profession } from '../profession.entity';
+import { User } from '../../users/user.entity';
 import { ProfessionsService } from '../professions.service';
 import { ProfessionsController as ProfessionsController } from './professions.controller';
 import { ProfessionsPresenter } from './presenters/professions.presenter';
@@ -202,10 +203,12 @@ describe('ProfessionsController', () => {
 
   describe('index', () => {
     describe('when the user is a service owner', () => {
+      let user: User;
+
       beforeEach(() => {
-        (getActingUser as jest.Mock).mockReturnValue(
-          userFactory.build({ serviceOwner: true }),
-        );
+        user = userFactory.build({ serviceOwner: true });
+
+        (getActingUser as jest.Mock).mockReturnValue(user);
       });
 
       it('returns template params poulated to show an overview of professions', async () => {
@@ -221,6 +224,7 @@ describe('ProfessionsController', () => {
           },
           null,
           [profession1, profession2, profession3],
+          user,
         ).present('overview');
 
         expect(result).toEqual(expected);
@@ -245,6 +249,7 @@ describe('ProfessionsController', () => {
           },
           null,
           [profession3],
+          user,
         ).present('overview');
 
         expect(result).toEqual(expected);
@@ -274,6 +279,7 @@ describe('ProfessionsController', () => {
           },
           null,
           [profession1],
+          user,
         ).present('overview');
 
         expect(result).toEqual(expected);
@@ -303,6 +309,7 @@ describe('ProfessionsController', () => {
           },
           null,
           [profession3],
+          user,
         ).present('overview');
 
         expect(result).toEqual(expected);
@@ -332,6 +339,7 @@ describe('ProfessionsController', () => {
           },
           null,
           [profession3],
+          user,
         ).present('overview');
 
         expect(result).toEqual(expected);
@@ -361,6 +369,7 @@ describe('ProfessionsController', () => {
           },
           null,
           [profession1],
+          user,
         ).present('overview');
 
         expect(result).toEqual(expected);
@@ -368,13 +377,15 @@ describe('ProfessionsController', () => {
     });
 
     describe('when the user is not a service owner', () => {
+      let user: User;
+
       beforeEach(() => {
-        (getActingUser as jest.Mock).mockReturnValue(
-          userFactory.build({
-            serviceOwner: false,
-            organisation: organisation1,
-          }),
-        );
+        user = userFactory.build({
+          serviceOwner: false,
+          organisation: organisation1,
+        });
+
+        (getActingUser as jest.Mock).mockReturnValue(user);
       });
 
       it('returns template params poulated to show professions for a single organisation', async () => {
@@ -388,6 +399,7 @@ describe('ProfessionsController', () => {
           },
           organisation1,
           [profession1, profession2],
+          user,
         ).present('single-organisation');
 
         expect(result).toEqual(expected);
@@ -412,6 +424,7 @@ describe('ProfessionsController', () => {
           },
           organisation1,
           [profession1],
+          user,
         ).present('single-organisation');
 
         expect(result).toEqual(expected);
@@ -436,6 +449,7 @@ describe('ProfessionsController', () => {
           },
           organisation1,
           [profession2],
+          user,
         ).present('single-organisation');
 
         expect(result).toEqual(expected);
@@ -453,6 +467,7 @@ function createPresenter(
   filterInput: FilterInput,
   userOrganisation: Organisation | null,
   professions: Profession[],
+  user: User,
 ): ProfessionsPresenter {
   return new ProfessionsPresenter(
     filterInput,
@@ -462,5 +477,6 @@ function createPresenter(
     industries,
     professions,
     i18nService,
+    user,
   );
 }

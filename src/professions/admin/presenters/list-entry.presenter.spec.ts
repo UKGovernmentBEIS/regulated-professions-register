@@ -9,6 +9,10 @@ import userFactory from '../../../testutils/factories/user';
 import { ProfessionPresenter } from '../../presenters/profession.presenter';
 import professionVersionFactory from '../../../testutils/factories/profession-version';
 import { Profession } from '../../profession.entity';
+import {
+  ProfessionToOrganisation,
+  OrganisationRole,
+} from '../../profession-to-organisation.entity';
 import { ProfessionVersionStatus } from '../../profession-version.entity';
 import * as getOrganisationsFromProfessionModule from '../../helpers/get-organisations-from-profession.helper';
 
@@ -18,31 +22,39 @@ describe('ListEntryPresenter', () => {
   describe('tableRow', () => {
     describe('when the Profession is complete', () => {
       it('returns a table row when called with `overview`', async () => {
-        const organisations = [
-          organisationFactory.build({
-            name: 'Example Organisation',
-          }),
-          organisationFactory.build({
-            name: 'Additional Example Organisation',
-          }),
-        ];
+        const organisation1 = organisationFactory.build({
+          name: 'Example Organisation',
+        });
 
-        const profession = professionFactory.build(
-          {
-            name: 'Example Profession',
-            id: 'profession-id',
-            occupationLocations: ['GB-SCT', 'GB-NIR'],
-            industries: [
-              industryFactory.build({ name: 'industries.law' }),
-              industryFactory.build({ name: 'industries.finance' }),
-            ],
-            status: ProfessionVersionStatus.Live,
-            changedByUser: userFactory.build({ name: 'Administrator' }),
-            lastModified: new Date('12-08-2003'),
-            versionId: 'version-id',
-          },
-          { transient: { organisations: organisations } },
-        );
+        const organisation2 = organisationFactory.build({
+          name: 'Additional Example Organisation',
+        });
+
+        const profession = professionFactory.build({
+          name: 'Example Profession',
+          id: 'profession-id',
+          occupationLocations: ['GB-SCT', 'GB-NIR'],
+          industries: [
+            industryFactory.build({ name: 'industries.law' }),
+            industryFactory.build({ name: 'industries.finance' }),
+          ],
+          status: ProfessionVersionStatus.Live,
+          changedByUser: userFactory.build({ name: 'Administrator' }),
+          lastModified: new Date('12-08-2003'),
+          versionId: 'version-id',
+          professionToOrganisations: [
+            {
+              organisation: organisation1,
+              role: OrganisationRole.PrimaryRegulator,
+            },
+            {
+              organisation: organisation2,
+              role: OrganisationRole.AdditionalRegulator,
+            },
+          ] as ProfessionToOrganisation[],
+        });
+
+        const user = userFactory.build({ organisation: organisation1 });
 
         (ProfessionPresenter as jest.Mock).mockReturnValue({
           changedBy: 'Administrator',
@@ -58,6 +70,7 @@ describe('ListEntryPresenter', () => {
         const presenter = new ListEntryPresenter(
           profession,
           createMockI18nService(),
+          user,
         );
 
         const expected: TableRow = [
@@ -88,30 +101,31 @@ describe('ListEntryPresenter', () => {
       });
 
       it('returns a table row when called with `single-organisation`', async () => {
-        const profession = professionFactory.build(
-          {
-            name: 'Example Profession',
-            id: 'profession-id',
-            occupationLocations: ['GB-SCT', 'GB-NIR'],
-            industries: [
-              industryFactory.build({ name: 'industries.law' }),
-              industryFactory.build({ name: 'industries.finance' }),
-            ],
-            status: ProfessionVersionStatus.Draft,
-            lastModified: new Date('12-08-2003'),
-            changedByUser: userFactory.build({ name: 'Editor' }),
-            versionId: 'version-id',
-          },
-          {
-            transient: {
-              organisations: [
-                organisationFactory.build({
-                  name: 'Example Organisation',
-                }),
-              ],
+        const organisation = organisationFactory.build({
+          name: 'Example Organisation',
+        });
+
+        const profession = professionFactory.build({
+          name: 'Example Profession',
+          id: 'profession-id',
+          occupationLocations: ['GB-SCT', 'GB-NIR'],
+          industries: [
+            industryFactory.build({ name: 'industries.law' }),
+            industryFactory.build({ name: 'industries.finance' }),
+          ],
+          status: ProfessionVersionStatus.Draft,
+          lastModified: new Date('12-08-2003'),
+          changedByUser: userFactory.build({ name: 'Editor' }),
+          versionId: 'version-id',
+          professionToOrganisations: [
+            {
+              organisation: organisation,
+              role: OrganisationRole.PrimaryRegulator,
             },
-          },
-        );
+          ] as ProfessionToOrganisation[],
+        });
+
+        const user = userFactory.build({ organisation: organisation });
 
         (ProfessionPresenter as jest.Mock).mockReturnValue({
           changedBy: { name: 'Editor' },
@@ -122,6 +136,7 @@ describe('ListEntryPresenter', () => {
         const presenter = new ListEntryPresenter(
           profession,
           createMockI18nService(),
+          user,
         );
 
         const expected: TableRow = [
@@ -150,14 +165,91 @@ describe('ListEntryPresenter', () => {
           presenter.tableRow(`single-organisation`),
         ).resolves.toEqual(expected);
       });
+
+      it('hides the view link if the user does not belong to a tier one organisation', async () => {
+        const organisation1 = organisationFactory.build();
+        const organisation2 = organisationFactory.build();
+
+        const profession = professionFactory.build({
+          name: 'Example Profession',
+          id: 'profession-id',
+          occupationLocations: ['GB-SCT', 'GB-NIR'],
+          industries: [
+            industryFactory.build({ name: 'industries.law' }),
+            industryFactory.build({ name: 'industries.finance' }),
+          ],
+          status: ProfessionVersionStatus.Draft,
+          lastModified: new Date('12-08-2003'),
+          changedByUser: userFactory.build({ name: 'Editor' }),
+          versionId: 'version-id',
+          professionToOrganisations: [
+            {
+              organisation: organisation1,
+              role: OrganisationRole.PrimaryRegulator,
+            },
+            {
+              organisation: organisation2,
+              role: OrganisationRole.AwardingBody,
+            },
+          ] as ProfessionToOrganisation[],
+        });
+
+        const user = userFactory.build({ organisation: organisation2 });
+
+        (ProfessionPresenter as jest.Mock).mockReturnValue({
+          changedBy: { name: 'Editor' },
+          lastModified: '12-08-2003',
+          status: new Promise((res) => res('Draft')),
+        });
+
+        const presenter = new ListEntryPresenter(
+          profession,
+          createMockI18nService(),
+          user,
+        );
+
+        const expected: TableRow = [
+          { text: 'Example Profession' },
+          {
+            text: `${translationOf('nations.scotland')}, ${translationOf(
+              'nations.northernIreland',
+            )}`,
+          },
+          {
+            text: `${translationOf('industries.law')}, ${translationOf(
+              'industries.finance',
+            )}`,
+          },
+          { text: '12-08-2003' },
+          { text: 'Editor' },
+          { html: 'Draft' },
+          {
+            html: '',
+          },
+        ];
+
+        await expect(
+          presenter.tableRow(`single-organisation`),
+        ).resolves.toEqual(expected);
+      });
     });
 
     describe('when the Profession has just been created by a service owner user', () => {
       it('returns a mostly empty table row', async () => {
+        const organisation = organisationFactory.build({
+          name: 'Example Organisation',
+        });
+
         const profession = professionFactory
           .justCreated('profession-id')
           .build({
             name: 'Example Profession',
+            professionToOrganisations: [
+              {
+                organisation: organisation,
+                role: OrganisationRole.PrimaryRegulator,
+              },
+            ] as ProfessionToOrganisation[],
           });
 
         const version = professionVersionFactory
@@ -173,6 +265,10 @@ describe('ListEntryPresenter', () => {
           version,
         );
 
+        const user = userFactory.build({
+          organisation: organisation,
+        });
+
         (ProfessionPresenter as jest.Mock).mockReturnValue({
           changedBy: { name: 'Editor' },
           lastModified: '12-08-2003',
@@ -182,6 +278,7 @@ describe('ListEntryPresenter', () => {
         const presenter = new ListEntryPresenter(
           professionWithVersion,
           createMockI18nService(),
+          user,
         );
 
         const expected: TableRow = [

@@ -127,6 +127,7 @@ export class ProfessionsController {
       allIndustries,
       filteredProfessions,
       this.i18Service,
+      actingUser,
     ).present(view);
   }
 }
