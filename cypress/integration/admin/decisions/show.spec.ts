@@ -1,4 +1,4 @@
-describe('Listing decision datasets', () => {
+describe('Showing a decision dataset', () => {
   context('When I am logged in as editor', () => {
     beforeEach(() => {
       cy.loginAuth0('editor');
