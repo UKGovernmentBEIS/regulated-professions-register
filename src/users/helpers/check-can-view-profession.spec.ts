@@ -3,7 +3,7 @@ import professionFactory from '../../testutils/factories/profession';
 import { checkCanViewProfession } from './check-can-view-profession';
 import userFactory from '../../testutils/factories/user';
 import * as getActingUserModule from './get-acting-user.helper';
-import * as getTierOneOrganisationsFromProfessionModule from '../../professions/helpers/get-tier-one-organisations-from-profession.helper';
+import * as belongsToTierOneOrganisationModule from './belongs-to-tier-one-organisation';
 import organisationFactory from '../../testutils/factories/organisation';
 import { UnauthorizedException } from '@nestjs/common';
 
@@ -11,9 +11,9 @@ describe('checkCanViewProfession', () => {
   describe('when called as a service owner user', () => {
     it('returns without throwing an Error', () => {
       const getActingUserSpy = jest.spyOn(getActingUserModule, 'getActingUser');
-      const getTierOneOrganisationsFromProfessionSpy = jest.spyOn(
-        getTierOneOrganisationsFromProfessionModule,
-        'getTierOneOrganisationsFromProfession',
+      const belongsToTierOneOrganisationSpy = jest.spyOn(
+        belongsToTierOneOrganisationModule,
+        'belongsToTierOneOrganisation',
       );
 
       const user = userFactory.build({ serviceOwner: true });
@@ -28,20 +28,20 @@ describe('checkCanViewProfession', () => {
       }).not.toThrowError();
 
       expect(getActingUserSpy).toBeCalledWith(request);
-      expect(getTierOneOrganisationsFromProfessionSpy).not.toBeCalled();
+      expect(belongsToTierOneOrganisationSpy).not.toBeCalled();
     });
   });
 
   describe('when called as a non-service owner user', () => {
-    describe('the profession has no tier-one organisations', () => {
+    describe('the acting user does not belong to a tier one organisation', () => {
       it('throws an UnauthorizedException', () => {
         const getActingUserSpy = jest.spyOn(
           getActingUserModule,
           'getActingUser',
         );
-        const getTierOneOrganisationsFromProfessionSpy = jest.spyOn(
-          getTierOneOrganisationsFromProfessionModule,
-          'getTierOneOrganisationsFromProfession',
+        const belongsToTierOneOrganisationSpy = jest.spyOn(
+          belongsToTierOneOrganisationModule,
+          'belongsToTierOneOrganisation',
         );
 
         const user = userFactory.build({
@@ -51,7 +51,7 @@ describe('checkCanViewProfession', () => {
         const profession = professionFactory.build();
 
         getActingUserSpy.mockReturnValue(user);
-        getTierOneOrganisationsFromProfessionSpy.mockReturnValue([]);
+        belongsToTierOneOrganisationSpy.mockReturnValue(false);
 
         const request = createDefaultMockRequest({ user });
 
@@ -60,21 +60,22 @@ describe('checkCanViewProfession', () => {
         }).toThrowError(UnauthorizedException);
 
         expect(getActingUserSpy).toBeCalledWith(request);
-        expect(getTierOneOrganisationsFromProfessionSpy).toBeCalledWith(
+        expect(belongsToTierOneOrganisationSpy).toBeCalledWith(
           profession,
+          user,
         );
       });
     });
 
-    describe("the profession has one tier-one organisation, which matches the user's", () => {
+    describe('the acting user belongs to a tier one organisation', () => {
       it('returns without throwing an Error', () => {
         const getActingUserSpy = jest.spyOn(
           getActingUserModule,
           'getActingUser',
         );
-        const getTierOneOrganisationsFromProfessionSpy = jest.spyOn(
-          getTierOneOrganisationsFromProfessionModule,
-          'getTierOneOrganisationsFromProfession',
+        const belongsToTierOneOrganisationSpy = jest.spyOn(
+          belongsToTierOneOrganisationModule,
+          'belongsToTierOneOrganisation',
         );
 
         const user = userFactory.build({
@@ -84,9 +85,7 @@ describe('checkCanViewProfession', () => {
         const profession = professionFactory.build();
 
         getActingUserSpy.mockReturnValue(user);
-        getTierOneOrganisationsFromProfessionSpy.mockReturnValue([
-          user.organisation,
-        ]);
+        belongsToTierOneOrganisationSpy.mockReturnValue(true);
 
         const request = createDefaultMockRequest({ user });
 
@@ -95,79 +94,9 @@ describe('checkCanViewProfession', () => {
         }).not.toThrowError();
 
         expect(getActingUserSpy).toBeCalledWith(request);
-        expect(getTierOneOrganisationsFromProfessionSpy).toBeCalledWith(
+        expect(belongsToTierOneOrganisationSpy).toBeCalledWith(
           profession,
-        );
-      });
-    });
-
-    describe("the profession has one tier-one organisation, which does not matches the user's", () => {
-      it('returns without throwing an Error', () => {
-        const getActingUserSpy = jest.spyOn(
-          getActingUserModule,
-          'getActingUser',
-        );
-        const getTierOneOrganisationsFromProfessionSpy = jest.spyOn(
-          getTierOneOrganisationsFromProfessionModule,
-          'getTierOneOrganisationsFromProfession',
-        );
-
-        const user = userFactory.build({
-          serviceOwner: false,
-          organisation: organisationFactory.build(),
-        });
-        const profession = professionFactory.build();
-
-        getActingUserSpy.mockReturnValue(user);
-        getTierOneOrganisationsFromProfessionSpy.mockReturnValue([
-          organisationFactory.build(),
-        ]);
-
-        const request = createDefaultMockRequest({ user });
-
-        expect(() => {
-          checkCanViewProfession(request, profession);
-        }).toThrowError(UnauthorizedException);
-
-        expect(getActingUserSpy).toBeCalledWith(request);
-        expect(getTierOneOrganisationsFromProfessionSpy).toBeCalledWith(
-          profession,
-        );
-      });
-    });
-
-    describe("the profession has one tier-one organisation, which matches the user's, and another tier-one organisation, which does not", () => {
-      it('returns without throwing an Error', () => {
-        const getActingUserSpy = jest.spyOn(
-          getActingUserModule,
-          'getActingUser',
-        );
-        const getTierOneOrganisationsFromProfessionSpy = jest.spyOn(
-          getTierOneOrganisationsFromProfessionModule,
-          'getTierOneOrganisationsFromProfession',
-        );
-
-        const user = userFactory.build({
-          serviceOwner: false,
-          organisation: organisationFactory.build(),
-        });
-        const profession = professionFactory.build();
-
-        getActingUserSpy.mockReturnValue(user);
-        getTierOneOrganisationsFromProfessionSpy.mockReturnValue([
-          user.organisation,
-          organisationFactory.build(),
-        ]);
-
-        const request = createDefaultMockRequest({ user });
-
-        expect(() => {
-          checkCanViewProfession(request, profession);
-        }).not.toThrowError();
-
-        expect(getActingUserSpy).toBeCalledWith(request);
-        expect(getTierOneOrganisationsFromProfessionSpy).toBeCalledWith(
-          profession,
+          user,
         );
       });
     });

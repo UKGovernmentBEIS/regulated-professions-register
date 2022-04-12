@@ -1,7 +1,7 @@
 import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
 import { Profession } from '../../professions/profession.entity';
 import { getActingUser } from './get-acting-user.helper';
-import { getTierOneOrganisationsFromProfession } from '../../professions/helpers/get-tier-one-organisations-from-profession.helper';
+import { belongsToTierOneOrganisation } from './belongs-to-tier-one-organisation';
 import { UnauthorizedException } from '@nestjs/common';
 
 export function checkCanViewProfession(
@@ -14,11 +14,7 @@ export function checkCanViewProfession(
     return;
   }
 
-  const belongsToTierOneOrganisation = getTierOneOrganisationsFromProfession(
-    profession,
-  ).some((organisation) => organisation.id === actingUser.organisation.id);
-
-  if (!belongsToTierOneOrganisation) {
+  if (!belongsToTierOneOrganisation(profession, actingUser)) {
     throw new UnauthorizedException();
   }
 }
