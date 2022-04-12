@@ -9,7 +9,7 @@ import { I18nService } from 'nestjs-i18n';
 import { flashMessage } from '../../common/flash-message';
 import { escape } from '../../helpers/escape.helper';
 import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
-import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
+import { checkCanChangeProfession } from '../../users/helpers/check-can-change-profession';
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
 export class ConfirmationController {
@@ -31,7 +31,7 @@ export class ConfirmationController {
       professionId,
     );
 
-    checkCanViewProfession(req, profession);
+    checkCanChangeProfession(req, profession);
 
     const version = await this.professionVersionsService.findWithProfession(
       versionId,

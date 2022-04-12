@@ -24,7 +24,7 @@ import { ProfessionPresenter } from '../presenters/profession.presenter';
 import { getActingUser } from '../../users/helpers/get-acting-user.helper';
 import { ShowTemplate } from './interfaces/show-template.interface';
 import { isUK } from '../../helpers/nations.helper';
-import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
+import { checkCanChangeProfession } from '../../users/helpers/check-can-change-profession';
 import { getPublicationBlockers } from '../helpers/get-publication-blockers.helper';
 import { NationsListPresenter } from '../../nations/presenters/nations-list.presenter';
 import { getGroupedTierOneOrganisationsFromProfession } from './../helpers/get-grouped-tier-one-organisations-from-profession.helper';
@@ -132,7 +132,7 @@ export class ProfessionVersionsController {
         professionId,
       );
 
-    checkCanViewProfession(req, latestVersion.profession);
+    checkCanChangeProfession(req, latestVersion.profession);
 
     const version = await this.professionVersionsService.create(
       latestVersion,

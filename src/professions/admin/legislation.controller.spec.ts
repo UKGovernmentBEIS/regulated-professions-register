@@ -9,13 +9,13 @@ import professionFactory from '../../testutils/factories/profession';
 import professionVersionFactory from '../../testutils/factories/profession-version';
 import userFactory from '../../testutils/factories/user';
 import { translationOf } from '../../testutils/translation-of';
-import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
+import { checkCanChangeProfession } from '../../users/helpers/check-can-change-profession';
 import { ProfessionVersionsService } from '../profession-versions.service';
 import { ProfessionsService } from '../professions.service';
 import LegislationDto from './dto/legislation.dto';
 import { LegislationController } from './legislation.controller';
 
-jest.mock('../../users/helpers/check-can-view-profession');
+jest.mock('../../users/helpers/check-can-change-profession');
 
 describe(LegislationController, () => {
   let controller: LegislationController;
@@ -93,7 +93,7 @@ describe(LegislationController, () => {
 
         await controller.edit(response, 'profession-id', 'version-id', request);
 
-        expect(checkCanViewProfession).toHaveBeenCalledWith(
+        expect(checkCanChangeProfession).toHaveBeenCalledWith(
           request,
           profession,
         );
@@ -409,7 +409,10 @@ describe(LegislationController, () => {
         request,
       );
 
-      expect(checkCanViewProfession).toHaveBeenCalledWith(request, profession);
+      expect(checkCanChangeProfession).toHaveBeenCalledWith(
+        request,
+        profession,
+      );
     });
   });
 

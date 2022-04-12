@@ -4,7 +4,7 @@ import { getActingUser } from './get-acting-user.helper';
 import { getTierOneOrganisationsFromProfession } from '../../professions/helpers/get-tier-one-organisations-from-profession.helper';
 import { UnauthorizedException } from '@nestjs/common';
 
-export function checkCanViewProfession(
+export function checkCanChangeProfession(
   request: RequestWithAppSession,
   profession: Profession,
 ) {

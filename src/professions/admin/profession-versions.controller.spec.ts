@@ -24,7 +24,7 @@ import * as getOrganisationsFromProfessionByRoleModule from './../helpers/get-or
 import { GroupedTierOneOrganisations } from './../helpers/get-grouped-tier-one-organisations-from-profession.helper';
 import { createDefaultMockRequest } from '../../testutils/factories/create-default-mock-request';
 import organisationFactory from '../../testutils/factories/organisation';
-import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
+import { checkCanChangeProfession } from '../../users/helpers/check-can-change-profession';
 import * as getPublicationBlockersModule from '../helpers/get-publication-blockers.helper';
 import { NationsListPresenter } from '../../nations/presenters/nations-list.presenter';
 import { Nation } from '../../nations/nation';
@@ -34,7 +34,7 @@ import { organisationList } from './../presenters/organisation-list';
 jest.mock('../../organisations/organisation.entity');
 jest.mock('../presenters/profession.presenter');
 jest.mock('../../users/helpers/get-acting-user.helper');
-jest.mock('../../users/helpers/check-can-view-profession');
+jest.mock('../../users/helpers/check-can-change-profession');
 jest.mock('../../nations/presenters/nations-list.presenter');
 
 const mockNationsHtml = '<ul><li>Mock nations html</li></ul>';
@@ -114,7 +114,7 @@ describe('ProfessionVersionsController', () => {
 
       await controller.create(res, req, 'some-uuid');
 
-      expect(checkCanViewProfession).toHaveBeenCalledWith(req, profession);
+      expect(checkCanChangeProfession).toHaveBeenCalledWith(req, profession);
     });
   });
 

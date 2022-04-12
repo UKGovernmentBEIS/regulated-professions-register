@@ -1,13 +1,13 @@
 import { createDefaultMockRequest } from '../../testutils/factories/create-default-mock-request';
 import professionFactory from '../../testutils/factories/profession';
-import { checkCanViewProfession } from './check-can-view-profession';
+import { checkCanChangeProfession } from './check-can-change-profession';
 import userFactory from '../../testutils/factories/user';
 import * as getActingUserModule from './get-acting-user.helper';
 import * as getTierOneOrganisationsFromProfessionModule from '../../professions/helpers/get-tier-one-organisations-from-profession.helper';
 import organisationFactory from '../../testutils/factories/organisation';
 import { UnauthorizedException } from '@nestjs/common';
 
-describe('checkCanViewProfession', () => {
+describe('checkCanChangeProfession', () => {
   describe('when called as a service owner user', () => {
     it('returns without throwing an Error', () => {
       const getActingUserSpy = jest.spyOn(getActingUserModule, 'getActingUser');
@@ -24,7 +24,7 @@ describe('checkCanViewProfession', () => {
       const request = createDefaultMockRequest({ user });
 
       expect(() => {
-        checkCanViewProfession(request, profession);
+        checkCanChangeProfession(request, profession);
       }).not.toThrowError();
 
       expect(getActingUserSpy).toBeCalledWith(request);
@@ -56,7 +56,7 @@ describe('checkCanViewProfession', () => {
         const request = createDefaultMockRequest({ user });
 
         expect(() => {
-          checkCanViewProfession(request, profession);
+          checkCanChangeProfession(request, profession);
         }).toThrowError(UnauthorizedException);
 
         expect(getActingUserSpy).toBeCalledWith(request);
@@ -91,7 +91,7 @@ describe('checkCanViewProfession', () => {
         const request = createDefaultMockRequest({ user });
 
         expect(() => {
-          checkCanViewProfession(request, profession);
+          checkCanChangeProfession(request, profession);
         }).not.toThrowError();
 
         expect(getActingUserSpy).toBeCalledWith(request);

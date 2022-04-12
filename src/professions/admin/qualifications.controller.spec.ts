@@ -15,11 +15,11 @@ import qualificationFactory from '../../testutils/factories/qualification';
 import { translationOf } from '../../testutils/translation-of';
 import userFactory from '../../testutils/factories/user';
 import { createDefaultMockRequest } from '../../testutils/factories/create-default-mock-request';
-import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
+import { checkCanChangeProfession } from '../../users/helpers/check-can-change-profession';
 import { OtherCountriesRecognitionRoutes } from '../../qualifications/qualification.entity';
 
 jest.mock('../../helpers/nations.helper');
-jest.mock('../../users/helpers/check-can-view-profession');
+jest.mock('../../users/helpers/check-can-change-profession');
 
 describe(QualificationsController, () => {
   let controller: QualificationsController;
@@ -141,7 +141,10 @@ describe(QualificationsController, () => {
 
       await controller.edit(response, 'profession-id', 'version-id', request);
 
-      expect(checkCanViewProfession).toHaveBeenCalledWith(request, profession);
+      expect(checkCanChangeProfession).toHaveBeenCalledWith(
+        request,
+        profession,
+      );
     });
   });
 
@@ -354,7 +357,10 @@ describe(QualificationsController, () => {
         request,
       );
 
-      expect(checkCanViewProfession).toHaveBeenCalledWith(request, profession);
+      expect(checkCanChangeProfession).toHaveBeenCalledWith(
+        request,
+        profession,
+      );
     });
   });
 

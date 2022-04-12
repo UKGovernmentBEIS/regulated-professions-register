@@ -10,14 +10,14 @@ import professionFactory from '../../testutils/factories/profession';
 import professionVersionFactory from '../../testutils/factories/profession-version';
 import userFactory from '../../testutils/factories/user';
 import { translationOf } from '../../testutils/translation-of';
-import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
+import { checkCanChangeProfession } from '../../users/helpers/check-can-change-profession';
 import { ProfessionVersionsService } from '../profession-versions.service';
 import { ProfessionsService } from '../professions.service';
 import { ConfirmationController } from './confirmation.controller';
 
 jest.mock('../../common/flash-message');
 jest.mock('../../helpers/escape.helper');
-jest.mock('../../users/helpers/check-can-view-profession');
+jest.mock('../../users/helpers/check-can-change-profession');
 
 describe('ConfirmationController', () => {
   let controller: ConfirmationController;
@@ -145,7 +145,7 @@ describe('ConfirmationController', () => {
 
       await controller.create(res, req, 'profession-id', 'version-id');
 
-      expect(checkCanViewProfession).toHaveBeenCalledWith(req, profession);
+      expect(checkCanChangeProfession).toHaveBeenCalledWith(req, profession);
     });
   });
 

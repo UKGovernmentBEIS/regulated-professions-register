@@ -16,7 +16,7 @@ import { RequestWithAppSession } from '../../common/interfaces/request-with-app-
 import { Permissions } from '../../common/permissions.decorator';
 import { escape } from '../../helpers/escape.helper';
 import { isConfirmed } from '../../helpers/is-confirmed';
-import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
+import { checkCanChangeProfession } from '../../users/helpers/check-can-change-profession';
 import { getActingUser } from '../../users/helpers/get-acting-user.helper';
 import { UserPermission } from '../../users/user-permission';
 import { getPublicationBlockers } from '../helpers/get-publication-blockers.helper';
@@ -52,7 +52,7 @@ export class ProfessionPublicationController {
 
     const profession = Profession.withVersion(version.profession, version);
 
-    checkCanViewProfession(req, profession);
+    checkCanChangeProfession(req, profession);
 
     return { profession };
   }
@@ -72,7 +72,7 @@ export class ProfessionPublicationController {
 
     const profession = version.profession;
 
-    checkCanViewProfession(req, profession);
+    checkCanChangeProfession(req, profession);
 
     if (getPublicationBlockers(version).length) {
       throw new BadRequestException();

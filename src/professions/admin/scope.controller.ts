@@ -30,7 +30,7 @@ import { ProfessionVersion } from '../profession-version.entity';
 import { allNations, isUK } from '../../helpers/nations.helper';
 import { ScopeDto } from './dto/scope.dto';
 import { Profession } from '../profession.entity';
-import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
+import { checkCanChangeProfession } from '../../users/helpers/check-can-change-profession';
 import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
 
 @UseGuards(AuthenticationGuard)
@@ -59,7 +59,7 @@ export class ScopeController {
       professionId,
     );
 
-    checkCanViewProfession(req, profession);
+    checkCanChangeProfession(req, profession);
 
     const version = await this.professionVersionsService.findWithProfession(
       versionId,
@@ -100,7 +100,7 @@ export class ScopeController {
       professionId,
     );
 
-    checkCanViewProfession(req, profession);
+    checkCanChangeProfession(req, profession);
 
     const version = await this.professionVersionsService.findWithProfession(
       versionId,

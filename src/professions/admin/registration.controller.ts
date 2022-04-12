@@ -34,7 +34,7 @@ import { RegistrationTemplate } from './interfaces/registration.template';
 import ViewUtils from './viewUtils';
 import { Profession } from '../profession.entity';
 import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
-import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
+import { checkCanChangeProfession } from '../../users/helpers/check-can-change-profession';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
@@ -60,7 +60,7 @@ export class RegistrationController {
       professionId,
     );
 
-    checkCanViewProfession(req, profession);
+    checkCanChangeProfession(req, profession);
 
     const version = await this.professionVersionsService.findWithProfession(
       versionId,
@@ -84,7 +84,7 @@ export class RegistrationController {
     const profession = await this.professionsService.findWithVersions(
       professionId,
     );
-    checkCanViewProfession(req, profession);
+    checkCanChangeProfession(req, profession);
 
     const validator = await Validator.validate(
       RegistrationDto,
