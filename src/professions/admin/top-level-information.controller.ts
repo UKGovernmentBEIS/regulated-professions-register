@@ -25,7 +25,7 @@ import ViewUtils from './viewUtils';
 import { OrganisationsService } from '../../organisations/organisations.service';
 import { I18nService } from 'nestjs-i18n';
 import { OrganisationVersionsService } from '../../organisations/organisation-versions.service';
-import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
+import { checkCanChangeProfession } from '../../users/helpers/check-can-change-profession';
 import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
@@ -55,7 +55,7 @@ export class TopLevelInformationController {
       professionId,
     );
 
-    checkCanViewProfession(req, profession);
+    checkCanChangeProfession(req, profession);
 
     return this.renderForm(
       res,
@@ -84,7 +84,7 @@ export class TopLevelInformationController {
       professionId,
     );
 
-    checkCanViewProfession(req, profession);
+    checkCanChangeProfession(req, profession);
 
     const validator = await Validator.validate(
       TopLevelDetailsDto,

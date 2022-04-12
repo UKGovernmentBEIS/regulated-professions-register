@@ -1,0 +1,47 @@
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% if profession.status !== 'archived' and canChangeProfession(profession) %}
+  <nav role="navigation" data-cy="actions">
+    <ul class="govuk-list">
+      {% if 'editProfession' in permissions %}
+      <li>
+          <form method="post" action="/admin/professions/{{ profession.id }}/versions">
+            {{
+              govukButton({
+                id: "submit-button",
+                type: "Submit",
+                classes: "govuk-button--secondary",
+                id: "edit-button",
+                text: (('professions.admin.button.edit.' + profession.status) | t)
+              })
+            }}
+          </form>
+      </li>
+      {% endif %}
+      {% if profession.status === 'draft' and 'publishProfession' in permissions and canChangeProfession(profession) %}
+        <li>
+          {{
+            govukButton({
+              text: ('professions.form.button.publish' | t),
+              attributes: { "data-cy": "publish-button" },
+              href: "/admin/professions/" + profession.id + "/versions/" + profession.versionId + "/publish",
+              disabled: publicationBlockers.length
+            })
+          }}
+        </li>
+      {% endif %}
+      {% if 'deleteProfession' in permissions and canChangeProfession(profession) %}
+      <li>
+          {{
+            govukButton({
+              text: ("professions.admin.button.archive" | t),
+              href: "/admin/professions/" + profession.id + "/versions/" + profession.versionId + "/archive",
+              classes: "govuk-button--warning"
+            })
+          }}
+      </li>
+      {% endif %}
+    </ul>
+  </nav>
+  {% include '../../shared/_publication-blockers.njk' %}
+{% endif %}

@@ -10,7 +10,7 @@ import organisationFactory from '../../testutils/factories/organisation';
 import professionFactory from '../../testutils/factories/profession';
 import userFactory from '../../testutils/factories/user';
 import * as checkCanViewOrganisationModule from '../../users/helpers/check-can-view-organisation';
-import * as checkCanViewProfessionModule from '../../users/helpers/check-can-view-profession';
+import * as checkCanChangeProfessionModule from '../../users/helpers/check-can-change-profession';
 import * as getActingUserModule from '../../users/helpers/get-acting-user.helper';
 import { DecisionDatasetsService } from '../decision-datasets.service';
 import { DecisionDatasetPresenter } from '../presenters/decision-dataset.presenter';
@@ -161,7 +161,7 @@ describe('DecisionsController', () => {
       const request = createDefaultMockRequest();
 
       const professionCheckSpy = jest
-        .spyOn(checkCanViewProfessionModule, 'checkCanViewProfession')
+        .spyOn(checkCanChangeProfessionModule, 'checkCanChangeProfession')
         .mockImplementation();
       const organisationCheckSpy = jest
         .spyOn(checkCanViewOrganisationModule, 'checkCanViewOrganisation')

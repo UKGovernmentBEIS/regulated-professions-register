@@ -16,9 +16,9 @@ import { RegulatedActivitiesController } from './regulated-activities.controller
 import { RegulationTypeRadioButtonsPresenter } from './presenters/regulation-type-radio-buttons.presenter';
 import userFactory from '../../testutils/factories/user';
 import { createDefaultMockRequest } from '../../testutils/factories/create-default-mock-request';
-import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
+import { checkCanChangeProfession } from '../../users/helpers/check-can-change-profession';
 
-jest.mock('../../users/helpers/check-can-view-profession');
+jest.mock('../../users/helpers/check-can-change-profession');
 
 describe(RegulatedActivitiesController, () => {
   let controller: RegulatedActivitiesController;
@@ -115,7 +115,10 @@ describe(RegulatedActivitiesController, () => {
 
       await controller.edit(response, 'profession-id', 'version-id', request);
 
-      expect(checkCanViewProfession).toHaveBeenCalledWith(request, profession);
+      expect(checkCanChangeProfession).toHaveBeenCalledWith(
+        request,
+        profession,
+      );
     });
   });
 
@@ -311,7 +314,10 @@ describe(RegulatedActivitiesController, () => {
         request,
       );
 
-      expect(checkCanViewProfession).toHaveBeenCalledWith(request, profession);
+      expect(checkCanChangeProfession).toHaveBeenCalledWith(
+        request,
+        profession,
+      );
     });
   });
 

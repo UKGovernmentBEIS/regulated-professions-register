@@ -29,7 +29,7 @@ import { Profession } from '../profession.entity';
 import { I18nService } from 'nestjs-i18n';
 import { RegulationTypeRadioButtonsPresenter } from './presenters/regulation-type-radio-buttons.presenter';
 import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
-import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
+import { checkCanChangeProfession } from '../../users/helpers/check-can-change-profession';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
@@ -55,7 +55,7 @@ export class RegulatedActivitiesController {
       professionId,
     );
 
-    checkCanViewProfession(req, profession);
+    checkCanChangeProfession(req, profession);
 
     const version = await this.professionVersionsService.findWithProfession(
       versionId,
@@ -88,7 +88,7 @@ export class RegulatedActivitiesController {
       professionId,
     );
 
-    checkCanViewProfession(req, profession);
+    checkCanChangeProfession(req, profession);
 
     const validator = await Validator.validate(
       RegulatedActivitiesDto,

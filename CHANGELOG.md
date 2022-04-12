@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [unreleased]
+
+### Added
+
+- Hide edit and delete buttons for non Tier 1 users
+
 ## [release-016] - 2022-04-11
 
 ### Changed

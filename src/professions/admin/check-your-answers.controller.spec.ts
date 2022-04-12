@@ -14,7 +14,7 @@ import professionVersionFactory from '../../testutils/factories/profession-versi
 import qualificationFactory from '../../testutils/factories/qualification';
 import userFactory from '../../testutils/factories/user';
 import { translationOf } from '../../testutils/translation-of';
-import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
+import { checkCanChangeProfession } from '../../users/helpers/check-can-change-profession';
 import * as getPublicationBlockersModule from '../helpers/get-publication-blockers.helper';
 import { RegulationType } from '../profession-version.entity';
 import { ProfessionVersionsService } from '../profession-versions.service';
@@ -23,7 +23,7 @@ import { CheckYourAnswersController } from './check-your-answers.controller';
 import { ProfessionToOrganisation } from '../profession-to-organisation.entity';
 import { ProfessionToOrganisationsPresenter } from './presenters/profession-to-organisations.presenter';
 
-jest.mock('../../users/helpers/check-can-view-profession');
+jest.mock('../../users/helpers/check-can-change-profession');
 jest.mock('../../nations/presenters/nations-list.presenter');
 
 const mockNationsHtml = '<ul><li>Mock nations html</li></ul>';
@@ -296,7 +296,7 @@ describe('CheckYourAnswersController', () => {
 
       await controller.show('profession-id', 'version-id', 'false', request);
 
-      expect(checkCanViewProfession).toHaveBeenCalledWith(
+      expect(checkCanChangeProfession).toHaveBeenCalledWith(
         request,
         Profession.withVersion(profession, version),
       );

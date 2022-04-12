@@ -24,7 +24,7 @@ import { ProfessionVersionsService } from '../profession-versions.service';
 import { I18nService } from 'nestjs-i18n';
 import { Profession } from '../profession.entity';
 import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
-import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
+import { checkCanChangeProfession } from '../../users/helpers/check-can-change-profession';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
@@ -50,7 +50,7 @@ export class LegislationController {
       professionId,
     );
 
-    checkCanViewProfession(request, profession);
+    checkCanChangeProfession(request, profession);
 
     const version = await this.professionVersionsService.findWithProfession(
       versionId,
@@ -80,7 +80,7 @@ export class LegislationController {
       professionId,
     );
 
-    checkCanViewProfession(request, profession);
+    checkCanChangeProfession(request, profession);
 
     const validator = await Validator.validate(LegislationDto, legislationDto);
     const submittedValues = validator.obj;

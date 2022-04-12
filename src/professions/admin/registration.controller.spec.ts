@@ -16,9 +16,9 @@ import { ProfessionsService } from '../professions.service';
 
 import { translationOf } from '../../testutils/translation-of';
 import { createDefaultMockRequest } from '../../testutils/factories/create-default-mock-request';
-import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
+import { checkCanChangeProfession } from '../../users/helpers/check-can-change-profession';
 
-jest.mock('../../users/helpers/check-can-view-profession');
+jest.mock('../../users/helpers/check-can-change-profession');
 
 describe(RegistrationController, () => {
   let controller: RegistrationController;
@@ -119,7 +119,10 @@ describe(RegistrationController, () => {
 
       await controller.edit(response, 'profession-id', 'version-id', request);
 
-      expect(checkCanViewProfession).toHaveBeenCalledWith(request, profession);
+      expect(checkCanChangeProfession).toHaveBeenCalledWith(
+        request,
+        profession,
+      );
     });
   });
 
@@ -267,7 +270,10 @@ describe(RegistrationController, () => {
         request,
       );
 
-      expect(checkCanViewProfession).toHaveBeenCalledWith(request, profession);
+      expect(checkCanChangeProfession).toHaveBeenCalledWith(
+        request,
+        profession,
+      );
     });
   });
 

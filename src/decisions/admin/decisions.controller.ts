@@ -11,7 +11,7 @@ import { DecisionDatasetsService } from '../decision-datasets.service';
 import { IndexTemplate } from './interfaces/index-template.interface';
 import { ShowTemplate } from './interfaces/show-template.interface';
 import { ProfessionsService } from '../../professions/professions.service';
-import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
+import { checkCanChangeProfession } from '../../users/helpers/check-can-change-profession';
 import { checkCanViewOrganisation } from '../../users/helpers/check-can-view-organisation';
 import { DecisionDatasetsPresenter } from './presenters/decision-datasets.presenter';
 import { DecisionDatasetPresenter } from '../presenters/decision-dataset.presenter';
@@ -55,7 +55,7 @@ export class DecisionsController {
       professionId,
     );
 
-    checkCanViewProfession(request, profession);
+    checkCanChangeProfession(request, profession);
 
     const dataset = await this.decisionDatasetsService.find(
       professionId,

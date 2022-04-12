@@ -23,7 +23,7 @@ import { BackLink } from '../../common/decorators/back-link.decorator';
 import { ProfessionVersionsService } from '../profession-versions.service';
 import { isUK } from '../../helpers/nations.helper';
 import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
-import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
+import { checkCanChangeProfession } from '../../users/helpers/check-can-change-profession';
 import { getPublicationBlockers } from '../helpers/get-publication-blockers.helper';
 import { Profession } from '../profession.entity';
 import { NationsListPresenter } from '../../nations/presenters/nations-list.presenter';
@@ -58,7 +58,7 @@ export class CheckYourAnswersController {
       throw new Error('Version not found');
     }
 
-    checkCanViewProfession(request, profession);
+    checkCanChangeProfession(request, profession);
 
     const industryNames = version.industries.map((industry) =>
       this.i18nService.translate<string>(industry.name),

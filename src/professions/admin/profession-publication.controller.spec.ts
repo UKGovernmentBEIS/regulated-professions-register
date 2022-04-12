@@ -11,7 +11,7 @@ import professionFactory from '../../testutils/factories/profession';
 import professionVersionFactory from '../../testutils/factories/profession-version';
 import userFactory from '../../testutils/factories/user';
 import { translationOf } from '../../testutils/translation-of';
-import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
+import { checkCanChangeProfession } from '../../users/helpers/check-can-change-profession';
 import { getActingUser } from '../../users/helpers/get-acting-user.helper';
 import {
   getPublicationBlockers,
@@ -25,7 +25,7 @@ import { ProfessionPublicationController } from './profession-publication.contro
 jest.mock('../../common/flash-message');
 jest.mock('../../users/helpers/get-acting-user.helper');
 jest.mock('../../helpers/escape.helper');
-jest.mock('../../users/helpers/check-can-view-profession');
+jest.mock('../../users/helpers/check-can-change-profession');
 jest.mock('../helpers/get-publication-blockers.helper');
 
 describe('ProfessionPublicationController', () => {
@@ -104,7 +104,7 @@ describe('ProfessionPublicationController', () => {
 
       await controller.new(profession.id, version.id, request);
 
-      expect(checkCanViewProfession).toHaveBeenCalledWith(
+      expect(checkCanChangeProfession).toHaveBeenCalledWith(
         request,
         Profession.withVersion(profession, version),
       );
@@ -314,7 +314,7 @@ describe('ProfessionPublicationController', () => {
 
       await controller.create(req, res, profession.id, version.id);
 
-      expect(checkCanViewProfession).toHaveBeenCalledWith(req, profession);
+      expect(checkCanChangeProfession).toHaveBeenCalledWith(req, profession);
     });
   });
 

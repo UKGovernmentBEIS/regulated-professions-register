@@ -14,13 +14,13 @@ import { translationOf } from '../../testutils/translation-of';
 import { OrganisationVersionsService } from '../../organisations/organisation-versions.service';
 import { createDefaultMockRequest } from '../../testutils/factories/create-default-mock-request';
 import userFactory from '../../testutils/factories/user';
-import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
+import { checkCanChangeProfession } from '../../users/helpers/check-can-change-profession';
 import {
   ProfessionToOrganisation,
   OrganisationRole,
 } from '../profession-to-organisation.entity';
 
-jest.mock('../../users/helpers/check-can-view-profession');
+jest.mock('../../users/helpers/check-can-change-profession');
 jest.mock('./presenters/regulated-authorities-select-presenter');
 
 describe('OrganisationsController', () => {
@@ -194,7 +194,7 @@ describe('OrganisationsController', () => {
 
         await controller.edit(response, 'profession-id', 'false', request);
 
-        expect(checkCanViewProfession).toHaveBeenCalledWith(
+        expect(checkCanChangeProfession).toHaveBeenCalledWith(
           request,
           profession,
         );
@@ -443,7 +443,10 @@ describe('OrganisationsController', () => {
         request,
       );
 
-      expect(checkCanViewProfession).toHaveBeenCalledWith(request, profession);
+      expect(checkCanChangeProfession).toHaveBeenCalledWith(
+        request,
+        profession,
+      );
     });
   });
 

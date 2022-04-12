@@ -26,7 +26,7 @@ import { isUK } from '../../helpers/nations.helper';
 import { ProfessionVersion } from '../profession-version.entity';
 import { Profession } from '../profession.entity';
 import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
-import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
+import { checkCanChangeProfession } from '../../users/helpers/check-can-change-profession';
 import { OtherCountriesRecognitionRoutesRadioButtonsPresenter } from './presenters/other-countries-recognition-routes-radio-buttons-presenter';
 
 @UseGuards(AuthenticationGuard)
@@ -53,7 +53,7 @@ export class QualificationsController {
       professionId,
     );
 
-    checkCanViewProfession(request, profession);
+    checkCanChangeProfession(request, profession);
 
     const version = await this.professionVersionsService.findWithProfession(
       versionId,
@@ -78,7 +78,7 @@ export class QualificationsController {
       professionId,
     );
 
-    checkCanViewProfession(request, profession);
+    checkCanChangeProfession(request, profession);
 
     const validator = await Validator.validate(
       QualificationsDto,

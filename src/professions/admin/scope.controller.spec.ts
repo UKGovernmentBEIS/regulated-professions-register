@@ -14,9 +14,9 @@ import { ProfessionVersionsService } from '../profession-versions.service';
 import professionVersionFactory from '../../testutils/factories/profession-version';
 import { createDefaultMockRequest } from '../../testutils/factories/create-default-mock-request';
 import userFactory from '../../testutils/factories/user';
-import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
+import { checkCanChangeProfession } from '../../users/helpers/check-can-change-profession';
 
-jest.mock('../../users/helpers/check-can-view-profession');
+jest.mock('../../users/helpers/check-can-change-profession');
 
 describe('ScopeController', () => {
   let controller: ScopeController;
@@ -268,7 +268,10 @@ describe('ScopeController', () => {
 
       await controller.edit(response, 'profession-id', 'version-id', request);
 
-      expect(checkCanViewProfession).toHaveBeenCalledWith(request, profession);
+      expect(checkCanChangeProfession).toHaveBeenCalledWith(
+        request,
+        profession,
+      );
     });
   });
 
@@ -428,7 +431,10 @@ describe('ScopeController', () => {
         request,
       );
 
-      expect(checkCanViewProfession).toHaveBeenCalledWith(request, profession);
+      expect(checkCanChangeProfession).toHaveBeenCalledWith(
+        request,
+        profession,
+      );
     });
   });
 

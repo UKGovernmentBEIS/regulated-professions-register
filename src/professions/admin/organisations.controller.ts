@@ -30,7 +30,7 @@ import { OrganisationsService } from '../../organisations/organisations.service'
 import { RegulatedAuthoritiesSelectPresenter } from './presenters/regulated-authorities-select-presenter';
 import { I18nService } from 'nestjs-i18n';
 import { OrganisationVersionsService } from '../../organisations/organisation-versions.service';
-import { checkCanViewProfession } from '../../users/helpers/check-can-view-profession';
+import { checkCanChangeProfession } from '../../users/helpers/check-can-change-profession';
 import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
 import {
   ProfessionToOrganisation,
@@ -64,7 +64,7 @@ export class OrganisationsController {
       professionId,
     );
 
-    checkCanViewProfession(req, profession);
+    checkCanChangeProfession(req, profession);
 
     const professionToOrganisations = sortOrganisationsByRole(profession);
 
@@ -95,7 +95,7 @@ export class OrganisationsController {
       professionId,
     );
 
-    checkCanViewProfession(req, profession);
+    checkCanChangeProfession(req, profession);
 
     const validator = await Validator.validate(
       OrganisationsDto,
