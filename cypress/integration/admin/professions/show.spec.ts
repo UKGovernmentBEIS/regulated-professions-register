@@ -1,4 +1,4 @@
-describe('Listing professions', () => {
+describe('Showing a profession', () => {
   context('When I am logged in as editor', () => {
     beforeEach(() => {
       cy.loginAuth0('editor');

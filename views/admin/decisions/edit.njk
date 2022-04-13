@@ -1,0 +1,188 @@
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set bodyClasses = "rpr-internal__page rpr-details__page" %}
+{% extends "admin/base.njk" %}
+
+{% set title = ("decisions.show.heading" | t) %}
+
+{% block content %}
+  {% include "../../_messages.njk" %}
+  <form action="/admin/decisions/{{ profession.id }}/{{ organisation.id }}/{{ year }}/edit" method="post">
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-three-quarters">
+
+        <h1 class="govuk-heading-xl">
+          {{ "decisions.admin.edit.heading" | t }}
+          <span class="govuk-caption-l">{{ profession.name }}</span>
+        </h1>
+
+        {{
+          govukSummaryList({
+          classes: "govuk-summary-list--no-border rpr-decision-data__overview",
+            rows: [
+              {
+                key: {
+                  text: ("decisions.admin.edit.regulator" | t)
+                },
+                value: {
+                  text: organisation.name
+                }
+              },
+              {
+                key: {
+                  text: ("decisions.admin.edit.year" | t)
+                },
+                value: {
+                  text: year
+                }
+              }
+            ]
+          })
+        }}
+
+        <div>
+          {% for route in routes %}
+            {% set outerLoop = loop %}
+            <div>
+              <table class="govuk-table">
+                <caption class="govuk-table__caption govuk-table__caption--m">
+                  {{ govukInput({
+                    label: {
+                      text: "decisions.admin.edit.route" | t,
+                      classes: "govuk-label--s"
+                    },
+                    name: "routes[" + loop.index + "]",
+                    id: "routes[" + loop.index + "]",
+                    value: route.name
+                  }) }}
+                </caption>
+                <thead class="govuk-table__head">
+                  <tr class="govuk-table__row">
+                    <th scope="col" class="govuk-table__header">{{ "decisions.admin.edit.tableHeading.country" | t }}</th>
+                    <th scope="col" class="govuk-table__header">{{ "decisions.admin.edit.tableHeading.yes" | t }}</th>
+                    <th scope="col" class="govuk-table__header">{{ "decisions.admin.edit.tableHeading.yesAfterComp" | t }}</th>
+                    <th scope="col" class="govuk-table__header">{{ "decisions.admin.edit.tableHeading.no" | t }}</th>
+                    <th scope="col" class="govuk-table__header">{{ "decisions.admin.edit.tableHeading.noAfterComp" | t }}*</th>
+                    <th scope="col" class="govuk-table__header"></th>
+                  </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                  {% for country in route.countries %}
+                    {% set index = "[" + outerLoop.index + "][" + loop.index + "]" %}
+
+                    <tr class="govuk-table__row">
+                      <td class="govuk-table__cell">
+                        {{ govukSelect({
+                          label: {
+                            text: "decisions.admin.edit.labels.country" | t({route: outerLoop.index, country: loop.index}),
+                            classes: "govuk-visually-hidden"
+                          },
+                          name: "countries" + index,
+                          id: "countries" + index,
+                          items: country.countrySelectArgs
+                        }) }}
+                      </td>
+                      <td class="govuk-table__cell">
+                        {{ govukInput({
+                          label: {
+                            text: "decisions.admin.edit.labels.yes" | t({route: outerLoop.index, country: loop.index}),
+                            classes: "govuk-visually-hidden"
+                          },
+                          name: "yeses" + index,
+                          id: "yeses" + index,
+                          value: country.decisions.yes
+                        }) }}
+                      </td>
+                      <td class="govuk-table__cell">
+                        {{ govukInput({
+                          label: {
+                            text: "decisions.admin.edit.labels.yesAfterComp" | t({route: outerLoop.index, country: loop.index}),
+                            classes: "govuk-visually-hidden"
+                          },
+                          name: "yesAfterComps" + index,
+                          id: "yesAfterComps" + index,
+                          value: country.decisions.yesAfterComp
+                        }) }}
+                      </td>
+                      <td class="govuk-table__cell">
+                        {{ govukInput({
+                          label: {
+                            text: "decisions.admin.edit.labels.no" | t({route: outerLoop.index, country: loop.index}),
+                            classes: "govuk-visually-hidden"
+                          },
+                          name: "noes" + index,
+                          id: "noes" + index,
+                          value: country.decisions.no
+                        }) }}
+                      </td>
+                      <td class="govuk-table__cell">
+                        {{ govukInput({
+                          label: {
+                            text: "decisions.admin.edit.labels.noAfterComp" | t({route: outerLoop.index, country: loop.index}),
+                            classes: "govuk-visually-hidden"
+                          },
+                          name: "noAfterComps" + index,
+                          id: "noAfterComps" + index,
+                          value: country.decisions.noAfterComp
+                        }) }}
+                      </td>
+                      <td class="govuk-table__cell">
+                          {{ govukButton({
+                              text: "decisions.admin.buttons.removeCountry" | t,
+                              name: 'action',
+                              value: 'removeCountry:' + outerLoop.index + ":" + loop.index,
+                              classes: "govuk-button--warning",
+                              disabled: route.countries.length <= 1
+                          }) }}
+                      </td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+
+              {{ govukButton({
+                text: "decisions.admin.buttons.addCountry" | t,
+                name: 'action',
+                value: 'addCountry:' + loop.index,
+                classes: "govuk-button--secondary"
+              }) }}
+
+              {{ govukButton({
+                text: "decisions.admin.buttons.removeRoute" | t,
+                name: 'action',
+                value: 'removeRoute:' + loop.index,
+                classes: "govuk-button--warning",
+                disabled: routes.length <= 1
+              }) }}
+            </div>
+
+          {% endfor %}
+        </div>
+        {{ govukButton({
+            text: "decisions.admin.buttons.addRoute" | t,
+            name: 'action',
+            value: 'addRoute',
+            classes: "govuk-button--secondary"
+        }) }}
+      </div>
+      <div class="govuk-grid-column-one-quarter">
+        {{ govukButton({
+          text: "decisions.admin.buttons.saveAsDraft" | t,
+          name: 'action',
+          value: 'save',
+          classes: "govuk-button--secondary"
+        }) }}
+
+        {{ govukButton({
+          text: "decisions.admin.buttons.publish" | t,
+          name: 'action',
+          value: 'publish'
+        }) }}
+      </div>
+    </div>
+  </form>
+{% endblock %}

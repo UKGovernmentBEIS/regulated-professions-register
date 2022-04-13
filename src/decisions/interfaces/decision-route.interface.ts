@@ -3,10 +3,10 @@ export interface DecisionRoute {
   countries: {
     country: string;
     decisions: {
-      yes: number;
-      no: number;
-      yesAfterComp: number;
-      noAfterComp: number;
+      yes: number | null;
+      no: number | null;
+      yesAfterComp: number | null;
+      noAfterComp: number | null;
     };
   }[];
 }

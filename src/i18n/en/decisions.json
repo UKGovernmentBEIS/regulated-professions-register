@@ -16,6 +16,37 @@
         "foundSingular": "{count} decision dataset found",
         "foundPlural": "{count} decision datasets found"
       }
+    },
+    "show": {
+      "edit": "Edit"
+    },
+    "edit": {
+      "heading": "Recognition decision data",
+      "regulator": "Regulator",
+      "year": "Year",
+      "route": "Route",
+      "tableHeading": {
+        "country": "Country of qualification",
+        "yes": "Yes",
+        "no": "No",
+        "yesAfterComp": "Yes (after compensatory measure)",
+        "noAfterComp": "No (after compensatory measure)"
+      },
+      "labels": {
+        "country": "Country of qualification (route {route}, country {country})",
+        "yes": "Yes (route {route}, country {country})",
+        "no": "No (route {route}, country {country})",
+        "yesAfterComp": "Yes (after compensatory measure) (route {route}, country {country})",
+        "noAfterComp": "No (after compensatory measure) (route {route}, country {country})"
+      }
+    },
+    "buttons": {
+      "removeCountry": "Remove country",
+      "addCountry": "Add country",
+      "removeRoute": "Remove route",
+      "addRoute": "Add route",
+      "saveAsDraft": "Save as draft",
+      "publish": "Publish"
     }
   },
   "show": {

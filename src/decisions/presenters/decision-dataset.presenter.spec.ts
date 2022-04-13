@@ -2,6 +2,7 @@ import { Table } from '../../common/interfaces/table';
 import { TableRow } from '../../common/interfaces/table-row';
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 import { translationOf } from '../../testutils/translation-of';
+import * as decisionValueToStringModule from '../admin/helpers/decision-value-to-string.helper';
 import { DecisionRoute } from '../interfaces/decision-route.interface';
 import { DecisionDatasetPresenter } from './decision-dataset.presenter';
 
@@ -49,6 +50,11 @@ describe('DecisionDatasetPresenter', () => {
           ],
         },
       ];
+
+      const decisionValueToStringSpy = jest.spyOn(
+        decisionValueToStringModule,
+        'decisionValueToString',
+      );
 
       const presenter = new DecisionDatasetPresenter(routes, i18nService);
 
@@ -143,6 +149,13 @@ describe('DecisionDatasetPresenter', () => {
       const result = presenter.tables();
 
       expect(expected).toEqual(result);
+
+      expect(decisionValueToStringSpy).toHaveBeenCalledTimes(12);
+      expect(decisionValueToStringSpy).nthCalledWith(7, 8);
     });
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
   });
 });
