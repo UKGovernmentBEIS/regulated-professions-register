@@ -20,6 +20,26 @@
     "show": {
       "edit": "Edit"
     },
+    "new": {
+      "heading": "Recognition decision data",
+      "caption": "Adding new recognition decision data",
+      "labels": {
+        "organisation": "Regulator",
+        "profession": "Profession",
+        "year": "Year"
+      },
+      "errors": {
+        "profession": {
+          "empty": "You must select a profession to enter decision data for"
+        },
+        "organisation": {
+          "empty": "You must select an organisation"
+        },
+        "year": {
+          "empty": "You must select a year to enter decision data for"
+        }
+      }
+    },
     "edit": {
       "heading": "Recognition decision data",
       "regulator": "Regulator",
