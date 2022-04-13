@@ -14,7 +14,7 @@ describe('show.njk', () => {
     await nunjucksEnvironment();
   });
 
-  it('should group organisations together', async () => {
+  it('should group organisations together', () => {
     const profession = professionFactory.build();
     const organisation1 = organisationFactory.build();
     const organisation2 = organisationFactory.build();
