@@ -1,6 +1,15 @@
-import { Controller, Get, Param, Render, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Render,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
-
 import { AuthenticationGuard } from '../../common/authentication.guard';
 import { BackLink } from '../../common/decorators/back-link.decorator';
 import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
@@ -15,6 +24,28 @@ import { checkCanChangeProfession } from '../../users/helpers/check-can-change-p
 import { checkCanViewOrganisation } from '../../users/helpers/check-can-view-organisation';
 import { DecisionDatasetsPresenter } from './presenters/decision-datasets.presenter';
 import { DecisionDatasetPresenter } from '../presenters/decision-dataset.presenter';
+import { Response } from 'express';
+import { OrganisationsService } from '../../organisations/organisations.service';
+import { EditTemplate } from './interfaces/edit-template.interface';
+import { DecisionRoute } from '../interfaces/decision-route.interface';
+import { EditDto } from './dto/edit.dto';
+import {
+  DecisionDataset,
+  DecisionDatasetStatus,
+} from '../decision-dataset.entity';
+import { DecisionDatasetEditPresenter } from './presenters/decision-dataset-edit.presenter';
+import { parseEditDtoDecisionRoutes } from './helpers/parse-edit-dto-decision-routes.helper';
+import { modifyDecisionRoutes } from './helpers/modify-decision-routes.helper';
+
+const emptyCountry = {
+  country: null,
+  decisions: {
+    yes: null,
+    no: null,
+    yesAfterComp: null,
+    noAfterComp: null,
+  },
+};
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/decisions')
@@ -22,6 +53,7 @@ export class DecisionsController {
   constructor(
     private readonly decisionDatasetsService: DecisionDatasetsService,
     private readonly professionsService: ProfessionsService,
+    private readonly organisationsService: OrganisationsService,
     private readonly i18Service: I18nService,
   ) {}
 
@@ -76,6 +108,113 @@ export class DecisionsController {
       year: dataset.year.toString(),
       tables: presenter.tables(),
     };
+  }
+
+  @Get(':professionId/:organisationId/:year/edit')
+  @Permissions(
+    UserPermission.UploadDecisionData,
+    UserPermission.DownloadDecisionData,
+    UserPermission.ViewDecisionData,
+  )
+  @Render('admin/decisions/edit')
+  async edit(
+    @Param('professionId') professionId: string,
+    @Param('organisationId') organisationId: string,
+    @Param('year') year: string,
+    @Req() request: RequestWithAppSession,
+  ): Promise<EditTemplate> {
+    const profession = await this.professionsService.findWithVersions(
+      professionId,
+    );
+
+    checkCanChangeProfession(request, profession);
+
+    const organisation = await this.organisationsService.find(organisationId);
+
+    checkCanViewOrganisation(request, organisation);
+
+    const dataset = await this.decisionDatasetsService.find(
+      professionId,
+      organisationId,
+      parseInt(year),
+    );
+
+    const routes: DecisionRoute[] = dataset
+      ? dataset.routes
+      : [
+          {
+            name: '',
+            countries: [emptyCountry],
+          },
+        ];
+
+    return {
+      year,
+      profession,
+      organisation,
+
+      routes: new DecisionDatasetEditPresenter(routes).present(),
+    };
+  }
+
+  @Post(':professionId/:organisationId/:year/edit')
+  @Permissions(
+    UserPermission.UploadDecisionData,
+    UserPermission.DownloadDecisionData,
+    UserPermission.ViewDecisionData,
+  )
+  async editPost(
+    @Param('professionId') professionId: string,
+    @Param('organisationId') organisationId: string,
+    @Param('year') year: string,
+    @Body() editDto: EditDto,
+    @Req() request: RequestWithAppSession,
+    @Res() response: Response,
+  ): Promise<void> {
+    const profession = await this.professionsService.findWithVersions(
+      professionId,
+    );
+
+    checkCanChangeProfession(request, profession);
+
+    const organisation = await this.organisationsService.find(organisationId);
+
+    checkCanViewOrganisation(request, organisation);
+
+    const routes = parseEditDtoDecisionRoutes(editDto);
+
+    const action = editDto.action;
+
+    if (action === 'publish' || action === 'save') {
+      const newDataset: DecisionDataset = {
+        organisation,
+        profession,
+        user: getActingUser(request),
+        year: parseInt(year),
+        status:
+          action === 'publish'
+            ? DecisionDatasetStatus.Live
+            : DecisionDatasetStatus.Draft,
+        routes,
+        updated_at: undefined,
+        created_at: undefined,
+      };
+
+      await this.decisionDatasetsService.save(newDataset);
+
+      response.redirect(
+        `/admin/decisions/${profession.id}/${organisation.id}/${year}`,
+      );
+    } else {
+      modifyDecisionRoutes(routes, action);
+
+      response.render('admin/decisions/edit', {
+        profession,
+        organisation,
+        year,
+        routes: new DecisionDatasetEditPresenter(routes).present(),
+      } as EditTemplate);
+    }
   }
 
   private async createListEntries(

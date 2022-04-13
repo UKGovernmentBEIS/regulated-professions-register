@@ -17,6 +17,9 @@
         "foundPlural": "{count} decision datasets found"
       }
     },
+    "show": {
+      "edit": "Edit"
+    },
     "edit": {
       "heading": "Recognition decision data",
       "regulator": "Regulator",
