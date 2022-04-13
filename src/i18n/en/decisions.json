@@ -33,10 +33,12 @@
           "empty": "You must select a profession to enter decision data for"
         },
         "organisation": {
-          "empty": "You must select an organisation"
+          "empty": "You must select a regulatory authority",
+          "notValidForProfession": "You must select a regulator that regulates the selected profession"
         },
         "year": {
-          "empty": "You must select a year to enter decision data for"
+          "empty": "You must select a year to enter decision data for",
+          "exists": "Decision data already exists for this year"
         }
       }
     },
