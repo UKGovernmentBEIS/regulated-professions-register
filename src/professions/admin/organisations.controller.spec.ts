@@ -19,6 +19,7 @@ import {
   ProfessionToOrganisation,
   OrganisationRole,
 } from '../profession-to-organisation.entity';
+import { AuthorityAndRoleArgs } from './interfaces/authority-and-role-args';
 
 jest.mock('../../users/helpers/check-can-change-profession');
 jest.mock('./presenters/regulated-authorities-select-presenter');
@@ -67,17 +68,17 @@ describe('OrganisationsController', () => {
         const organisations = organisationFactory.buildList(2);
         organisationVersionsService.allLive.mockResolvedValue(organisations);
 
-        const regulatedAuthoritiesSelectPresenter =
-          new RegulatedAuthoritiesSelectPresenter(organisations, null);
-        const authoritiesAndRoles =
-          regulatedAuthoritiesSelectPresenter.authoritiesAndRoles(i18nService);
+        const authoritiesAndRoles: AuthorityAndRoleArgs = {
+          authorities: [],
+          roles: [],
+        };
 
         jest
           .spyOn(
             RegulatedAuthoritiesSelectPresenter.prototype,
             'authoritiesAndRoles',
           )
-          .mockImplementation(() => authoritiesAndRoles);
+          .mockImplementation(async () => authoritiesAndRoles);
 
         const request = createDefaultMockRequest({
           user: userFactory.build(),
