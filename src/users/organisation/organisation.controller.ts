@@ -138,7 +138,6 @@ export class OrganisationController {
     name: string,
     change: boolean,
     action: ActionType,
-
     errors: object | undefined = undefined,
   ): Promise<void> {
     const organisations = await this.organisationsService.all();
