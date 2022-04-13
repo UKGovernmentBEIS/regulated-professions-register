@@ -155,7 +155,7 @@ export class OrganisationsController {
     const selectArgsArray = await Promise.all(
       Array.from({
         ...professionToOrganisations,
-        length: 5,
+        length: 25,
       }).map(async (professionToOrganisation) => {
         const presenter = new RegulatedAuthoritiesSelectPresenter(
           regulatedAuthorities,
