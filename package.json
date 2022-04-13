@@ -109,7 +109,7 @@
     "@types/supertest": "^2.0.12",
     "@typescript-eslint/eslint-plugin": "^5.18.0",
     "@typescript-eslint/parser": "^5.18.0",
-    "cypress": "^9.5.3",
+    "cypress": "^9.5.4",
     "cypress-axe": "^0.14.0",
     "eslint": "^8.13.0",
     "eslint-config-prettier": "^8.5.0",
