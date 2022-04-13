@@ -89,13 +89,10 @@ describe('OrganisationsController', () => {
         expect(response.render).toHaveBeenCalledWith(
           'admin/professions/organisations',
           expect.objectContaining({
-            selectArgsArray: [
-              authoritiesAndRoles,
-              authoritiesAndRoles,
-              authoritiesAndRoles,
-              authoritiesAndRoles,
-              authoritiesAndRoles,
-            ],
+            selectArgsArray: Array.from({ length: 25 }, () => ({
+              ...authoritiesAndRoles,
+            })),
+
             captionText: translationOf('professions.form.captions.add'),
           }),
         );
@@ -169,14 +166,10 @@ describe('OrganisationsController', () => {
               regulatedAuthoritiesSelectPresenterWithSelectedAdditionalOrganisation.authoritiesAndRoles(
                 i18nService,
               ),
-              regulatedAuthoritiesSelectPresenter.authoritiesAndRoles(
-                i18nService,
-              ),
-              regulatedAuthoritiesSelectPresenter.authoritiesAndRoles(
-                i18nService,
-              ),
-              regulatedAuthoritiesSelectPresenter.authoritiesAndRoles(
-                i18nService,
+              ...Array.from({ length: 23 }, () =>
+                regulatedAuthoritiesSelectPresenter.authoritiesAndRoles(
+                  i18nService,
+                ),
               ),
             ],
             captionText: translationOf('professions.form.captions.edit'),
