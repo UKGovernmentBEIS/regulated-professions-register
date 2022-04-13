@@ -1,3 +1,4 @@
+import { I18nService } from 'nestjs-i18n';
 import { SelectItemArgs } from '../../../common/interfaces/select-item-args.interface';
 
 const countries = [
@@ -13,12 +14,15 @@ const countries = [
 ];
 
 export class CountriesSelectPresenter {
-  constructor(private readonly selectedCountry: string | null) {}
+  constructor(
+    private readonly selectedCountry: string | null,
+    private readonly i18nService: I18nService,
+  ) {}
 
   selectArgs(): SelectItemArgs[] {
     const options = [
       {
-        text: '--- Please Select ---',
+        text: this.i18nService.translate<string>('app.pleaseSelect'),
         value: '',
         selected: null,
       },

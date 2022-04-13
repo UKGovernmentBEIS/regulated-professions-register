@@ -161,8 +161,9 @@ export class OrganisationsController {
           regulatedAuthorities,
           professionToOrganisation?.organisation,
           professionToOrganisation?.role,
+          this.i18nService,
         );
-        return await presenter.authoritiesAndRoles(this.i18nService);
+        return presenter.authoritiesAndRoles();
       }),
     );
 

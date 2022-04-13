@@ -1,15 +1,20 @@
 import { SelectItemArgs } from '../../../common/interfaces/select-item-args.interface';
+import { createMockI18nService } from '../../../testutils/create-mock-i18n-service';
+import { translationOf } from '../../../testutils/translation-of';
 import { CountriesSelectPresenter } from './countries-select.presenter';
 
 describe('CountrySelectPresenter', () => {
   describe('selectArgs', () => {
     describe('when given a null selected country', () => {
       it('returns a list of countries, with no country selected', () => {
-        const presenter = new CountriesSelectPresenter(null);
+        const presenter = new CountriesSelectPresenter(
+          null,
+          createMockI18nService(),
+        );
 
         const expected: SelectItemArgs[] = [
           {
-            text: '--- Please Select ---',
+            text: translationOf('app.pleaseSelect'),
             value: '',
             selected: null,
           },
@@ -68,11 +73,14 @@ describe('CountrySelectPresenter', () => {
 
     describe('when given a selected country', () => {
       it('returns a list of countries, with the given country selected', () => {
-        const presenter = new CountriesSelectPresenter('Morocco');
+        const presenter = new CountriesSelectPresenter(
+          'Morocco',
+          createMockI18nService(),
+        );
 
         const expected: SelectItemArgs[] = [
           {
-            text: '--- Please Select ---',
+            text: translationOf('app.pleaseSelect'),
             value: '',
             selected: null,
           },

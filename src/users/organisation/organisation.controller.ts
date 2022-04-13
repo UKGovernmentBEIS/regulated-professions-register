@@ -145,6 +145,8 @@ export class OrganisationController {
     const organisationsSelectArgs = new RegulatedAuthoritiesSelectPresenter(
       organisations,
       organisation,
+      null,
+      this.i18nService,
     ).selectArgs();
 
     const serviceOwnerRadioButtonArgs =

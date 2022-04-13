@@ -1,10 +1,14 @@
+import { I18nService } from 'nestjs-i18n';
 import { DecisionRoute } from '../../interfaces/decision-route.interface';
 import { decisionValueToString } from '../helpers/decision-value-to-string.helper';
 import { RouteTemplate } from '../interfaces/route-template.interface';
 import { CountriesSelectPresenter } from './countries-select.presenter';
 
 export class DecisionDatasetEditPresenter {
-  constructor(private readonly routes: DecisionRoute[]) {}
+  constructor(
+    private readonly routes: DecisionRoute[],
+    private readonly i18nService: I18nService,
+  ) {}
 
   present(): RouteTemplate[] {
     return this.routes.map((route) => ({
@@ -12,6 +16,7 @@ export class DecisionDatasetEditPresenter {
       countries: route.countries.map((country) => ({
         countriesSelectArgs: new CountriesSelectPresenter(
           country.country,
+          this.i18nService,
         ).selectArgs(),
         decisions: {
           yes: decisionValueToString(country.decisions.yes),

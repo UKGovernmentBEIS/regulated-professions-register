@@ -78,7 +78,7 @@ describe('OrganisationsController', () => {
             RegulatedAuthoritiesSelectPresenter.prototype,
             'authoritiesAndRoles',
           )
-          .mockImplementation(async () => authoritiesAndRoles);
+          .mockImplementation(() => authoritiesAndRoles);
 
         const request = createDefaultMockRequest({
           user: userFactory.build(),
@@ -138,6 +138,7 @@ describe('OrganisationsController', () => {
             organisations,
             organisation,
             OrganisationRole.AwardingBody,
+            createMockI18nService(),
           );
 
         const regulatedAuthoritiesSelectPresenterWithSelectedAdditionalOrganisation =
@@ -145,10 +146,16 @@ describe('OrganisationsController', () => {
             organisations,
             additionalOrganisation,
             OrganisationRole.PrimaryRegulator,
+            i18nService,
           );
 
         const regulatedAuthoritiesSelectPresenter =
-          new RegulatedAuthoritiesSelectPresenter(organisations, null);
+          new RegulatedAuthoritiesSelectPresenter(
+            organisations,
+            null,
+            null,
+            i18nService,
+          );
 
         const request = createDefaultMockRequest({
           user: userFactory.build(),
@@ -160,16 +167,10 @@ describe('OrganisationsController', () => {
           'admin/professions/organisations',
           expect.objectContaining({
             selectArgsArray: [
-              regulatedAuthoritiesSelectPresenterWithSelectedOrganisation.authoritiesAndRoles(
-                i18nService,
-              ),
-              regulatedAuthoritiesSelectPresenterWithSelectedAdditionalOrganisation.authoritiesAndRoles(
-                i18nService,
-              ),
+              regulatedAuthoritiesSelectPresenterWithSelectedOrganisation.authoritiesAndRoles(),
+              regulatedAuthoritiesSelectPresenterWithSelectedAdditionalOrganisation.authoritiesAndRoles(),
               ...Array.from({ length: 23 }, () =>
-                regulatedAuthoritiesSelectPresenter.authoritiesAndRoles(
-                  i18nService,
-                ),
+                regulatedAuthoritiesSelectPresenter.authoritiesAndRoles(),
               ),
             ],
             captionText: translationOf('professions.form.captions.edit'),

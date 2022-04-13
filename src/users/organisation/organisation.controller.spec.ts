@@ -149,6 +149,8 @@ describe('OrganisationController', () => {
         expect(RegulatedAuthoritiesSelectPresenter).toBeCalledWith(
           [organisation1, organisation2],
           organisation1,
+          null,
+          i18nService,
         );
         expect(
           RegulatedAuthoritiesSelectPresenter.prototype.selectArgs,
@@ -306,6 +308,8 @@ describe('OrganisationController', () => {
         expect(RegulatedAuthoritiesSelectPresenter).toBeCalledWith(
           [organisation1, organisation2],
           undefined,
+          null,
+          i18nService,
         );
         expect(
           RegulatedAuthoritiesSelectPresenter.prototype.selectArgs,

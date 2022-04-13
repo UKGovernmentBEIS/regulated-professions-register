@@ -1,4 +1,5 @@
 import { SelectItemArgs } from '../../../common/interfaces/select-item-args.interface';
+import { createMockI18nService } from '../../../testutils/create-mock-i18n-service';
 import { DecisionRoute } from '../../interfaces/decision-route.interface';
 import * as decisionValueToStringModule from '../helpers/decision-value-to-string.helper';
 import { RouteTemplate } from '../interfaces/route-template.interface';
@@ -107,14 +108,19 @@ describe('DecisionDatasetEditPresenter', () => {
         },
       ];
 
-      const presenter = new DecisionDatasetEditPresenter(routes);
+      const i18nService = createMockI18nService();
+      const presenter = new DecisionDatasetEditPresenter(routes, i18nService);
 
       const result = presenter.present();
 
       expect(result).toEqual(expected);
 
       expect(CountriesSelectPresenter).toHaveBeenCalledTimes(3);
-      expect(CountriesSelectPresenter).nthCalledWith(3, 'Example country 3');
+      expect(CountriesSelectPresenter).nthCalledWith(
+        3,
+        'Example country 3',
+        i18nService,
+      );
       expect(
         CountriesSelectPresenter.prototype.selectArgs,
       ).toHaveBeenCalledTimes(3);

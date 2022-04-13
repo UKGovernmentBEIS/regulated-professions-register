@@ -311,6 +311,7 @@ describe('DecisionsController', () => {
 
         expect(DecisionDatasetEditPresenter).toHaveBeenCalledWith(
           dataset.routes,
+          i18nService,
         );
         expect(
           DecisionDatasetEditPresenter.prototype.present,
@@ -382,22 +383,25 @@ describe('DecisionsController', () => {
           2016,
         );
 
-        expect(DecisionDatasetEditPresenter).toHaveBeenCalledWith([
-          {
-            name: '',
-            countries: [
-              {
-                country: null,
-                decisions: {
-                  yes: null,
-                  no: null,
-                  yesAfterComp: null,
-                  noAfterComp: null,
+        expect(DecisionDatasetEditPresenter).toHaveBeenCalledWith(
+          [
+            {
+              name: '',
+              countries: [
+                {
+                  country: null,
+                  decisions: {
+                    yes: null,
+                    no: null,
+                    yesAfterComp: null,
+                    noAfterComp: null,
+                  },
                 },
-              },
-            ],
-          },
-        ] as DecisionRoute[]);
+              ],
+            },
+          ] as DecisionRoute[],
+          i18nService,
+        );
         expect(
           DecisionDatasetEditPresenter.prototype.present,
         ).toHaveBeenCalled();
@@ -713,6 +717,7 @@ describe('DecisionsController', () => {
 
         expect(DecisionDatasetEditPresenter).toHaveBeenCalledWith(
           decisionRoutes,
+          i18nService,
         );
         expect(
           DecisionDatasetEditPresenter.prototype.present,

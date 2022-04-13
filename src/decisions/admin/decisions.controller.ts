@@ -153,7 +153,10 @@ export class DecisionsController {
       profession,
       organisation,
 
-      routes: new DecisionDatasetEditPresenter(routes).present(),
+      routes: new DecisionDatasetEditPresenter(
+        routes,
+        this.i18nService,
+      ).present(),
     };
   }
 
@@ -212,7 +215,10 @@ export class DecisionsController {
         profession,
         organisation,
         year,
-        routes: new DecisionDatasetEditPresenter(routes).present(),
+        routes: new DecisionDatasetEditPresenter(
+          routes,
+          this.i18nService,
+        ).present(),
       } as EditTemplate);
     }
   }
