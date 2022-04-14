@@ -72,13 +72,13 @@ const mockRouteTemplates: RouteTemplate[] = [
 describe('DecisionsController', () => {
   let controller: DecisionsController;
 
-  let decisionsDatasetsService: DeepMocked<DecisionDatasetsService>;
+  let decisionDatasetsService: DeepMocked<DecisionDatasetsService>;
   let professionsService: DeepMocked<ProfessionsService>;
   let organisationsService: DeepMocked<OrganisationsService>;
   let i18nService: DeepMocked<I18nService>;
 
   beforeEach(async () => {
-    decisionsDatasetsService = createMock<DecisionDatasetsService>();
+    decisionDatasetsService = createMock<DecisionDatasetsService>();
     professionsService = createMock<ProfessionsService>();
     organisationsService = createMock<OrganisationsService>();
     i18nService = createMockI18nService();
@@ -88,7 +88,7 @@ describe('DecisionsController', () => {
       providers: [
         {
           provide: DecisionDatasetsService,
-          useValue: decisionsDatasetsService,
+          useValue: decisionDatasetsService,
         },
         {
           provide: ProfessionsService,
@@ -122,7 +122,7 @@ describe('DecisionsController', () => {
 
         const datasets = decisionDatasetFactory.buildList(3);
 
-        decisionsDatasetsService.all.mockResolvedValue(datasets);
+        decisionDatasetsService.all.mockResolvedValue(datasets);
         (
           DecisionDatasetsPresenter.prototype.present as jest.Mock
         ).mockResolvedValue(mockIndexTemplate);
@@ -136,9 +136,9 @@ describe('DecisionsController', () => {
           datasets,
           i18nService,
         );
-        expect(decisionsDatasetsService.all).toHaveBeenCalled();
+        expect(decisionDatasetsService.all).toHaveBeenCalled();
         expect(
-          decisionsDatasetsService.allForOrganisation,
+          decisionDatasetsService.allForOrganisation,
         ).not.toHaveBeenCalled();
       });
     });
@@ -158,7 +158,7 @@ describe('DecisionsController', () => {
 
         const datasets = decisionDatasetFactory.buildList(3);
 
-        decisionsDatasetsService.allForOrganisation.mockResolvedValue(datasets);
+        decisionDatasetsService.allForOrganisation.mockResolvedValue(datasets);
         (
           DecisionDatasetsPresenter.prototype.present as jest.Mock
         ).mockResolvedValue(mockIndexTemplate);
@@ -172,10 +172,10 @@ describe('DecisionsController', () => {
           datasets,
           i18nService,
         );
-        expect(
-          decisionsDatasetsService.allForOrganisation,
-        ).toHaveBeenCalledWith(organisation);
-        expect(decisionsDatasetsService.all).not.toHaveBeenCalled();
+        expect(decisionDatasetsService.allForOrganisation).toHaveBeenCalledWith(
+          organisation,
+        );
+        expect(decisionDatasetsService.all).not.toHaveBeenCalled();
       });
     });
   });
@@ -205,7 +205,7 @@ describe('DecisionsController', () => {
         .mockImplementation();
 
       professionsService.findWithVersions.mockResolvedValueOnce(profession);
-      decisionsDatasetsService.find.mockResolvedValue(dataset);
+      decisionDatasetsService.find.mockResolvedValue(dataset);
 
       (DecisionDatasetPresenter.prototype.tables as jest.Mock).mockReturnValue(
         mockTables,
@@ -233,7 +233,7 @@ describe('DecisionsController', () => {
       expect(professionsService.findWithVersions).toHaveBeenCalledWith(
         'example-profession-id',
       );
-      expect(decisionsDatasetsService.find).toHaveBeenCalledWith(
+      expect(decisionDatasetsService.find).toHaveBeenCalledWith(
         'example-profession-id',
         'example-organisation-id',
         2017,
@@ -266,7 +266,7 @@ describe('DecisionsController', () => {
 
         professionsService.findWithVersions.mockResolvedValue(profession);
         organisationsService.find.mockResolvedValue(organisation);
-        decisionsDatasetsService.find.mockResolvedValue(dataset);
+        decisionDatasetsService.find.mockResolvedValue(dataset);
 
         (
           DecisionDatasetEditPresenter.prototype.present as jest.Mock
@@ -303,7 +303,7 @@ describe('DecisionsController', () => {
         expect(organisationsService.find).toHaveBeenCalledWith(
           'example-organisation-id',
         );
-        expect(decisionsDatasetsService.find).toHaveBeenCalledWith(
+        expect(decisionDatasetsService.find).toHaveBeenCalledWith(
           'example-profession-id',
           'example-organisation-id',
           2016,
@@ -339,7 +339,7 @@ describe('DecisionsController', () => {
 
         professionsService.findWithVersions.mockResolvedValue(profession);
         organisationsService.find.mockResolvedValue(organisation);
-        decisionsDatasetsService.find.mockResolvedValue(null);
+        decisionDatasetsService.find.mockResolvedValue(null);
 
         (
           DecisionDatasetEditPresenter.prototype.present as jest.Mock
@@ -376,7 +376,7 @@ describe('DecisionsController', () => {
         expect(organisationsService.find).toHaveBeenCalledWith(
           'example-organisation-id',
         );
-        expect(decisionsDatasetsService.find).toHaveBeenCalledWith(
+        expect(decisionDatasetsService.find).toHaveBeenCalledWith(
           'example-profession-id',
           'example-organisation-id',
           2016,
@@ -498,7 +498,7 @@ describe('DecisionsController', () => {
         expect(organisationsService.find).toHaveBeenCalledWith(
           'example-organisation-id',
         );
-        expect(decisionsDatasetsService.save).toHaveBeenCalledWith({
+        expect(decisionDatasetsService.save).toHaveBeenCalledWith({
           profession,
           organisation,
           year: 2016,
@@ -604,7 +604,7 @@ describe('DecisionsController', () => {
         expect(organisationsService.find).toHaveBeenCalledWith(
           'example-organisation-id',
         );
-        expect(decisionsDatasetsService.save).toHaveBeenCalledWith({
+        expect(decisionDatasetsService.save).toHaveBeenCalledWith({
           profession,
           organisation,
           year: 2016,
