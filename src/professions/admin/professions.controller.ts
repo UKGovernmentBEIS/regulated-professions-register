@@ -40,7 +40,7 @@ export class ProfessionsController {
     private readonly professionVersionsService: ProfessionVersionsService,
     private readonly organisationVersionsService: OrganisationVersionsService,
     private readonly industriesService: IndustriesService,
-    private readonly i18Service: I18nService,
+    private readonly i18nService: I18nService,
   ) {}
 
   @Post()
@@ -126,7 +126,7 @@ export class ProfessionsController {
       allOrganisations,
       allIndustries,
       filteredProfessions,
-      this.i18Service,
+      this.i18nService,
     ).present(view);
   }
 }

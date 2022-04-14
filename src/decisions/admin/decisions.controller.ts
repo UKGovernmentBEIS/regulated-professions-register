@@ -54,7 +54,7 @@ export class DecisionsController {
     private readonly decisionDatasetsService: DecisionDatasetsService,
     private readonly professionsService: ProfessionsService,
     private readonly organisationsService: OrganisationsService,
-    private readonly i18Service: I18nService,
+    private readonly i18nService: I18nService,
   ) {}
 
   @Get()
@@ -99,7 +99,7 @@ export class DecisionsController {
 
     const presenter = new DecisionDatasetPresenter(
       dataset.routes,
-      this.i18Service,
+      this.i18nService,
     );
 
     return {
@@ -233,7 +233,7 @@ export class DecisionsController {
     return new DecisionDatasetsPresenter(
       userOrganisation,
       allDecisionDatasets,
-      this.i18Service,
+      this.i18nService,
     ).present();
   }
 }
