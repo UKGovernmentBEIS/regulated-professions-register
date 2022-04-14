@@ -96,12 +96,12 @@ export const nunjucksConfig = async (
 
   env.addFilter(
     'status',
-    async (...args) => {
+    (...args) => {
       const callback = args.pop();
       const status = args[0];
       try {
         const result = new nunjucks.runtime.SafeString(
-          await formatStatus(status, i18nHelper.i18nService),
+          formatStatus(status, i18nHelper.i18nService),
         );
         callback(null, result);
       } catch (error) {

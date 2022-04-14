@@ -14,7 +14,7 @@ describe('ListEntryPresenter', () => {
     it('returns a table row for the given DecisionDataset', async () => {
       const formatStatusSpy = jest
         .spyOn(formatStatusModule, 'formatStatus')
-        .mockImplementation(async (status) => statusOf(status));
+        .mockImplementation((status) => statusOf(status));
       const formatDateSpy = jest
         .spyOn(formatDateModule, 'formatDate')
         .mockImplementation(dateOf);
@@ -32,7 +32,7 @@ describe('ListEntryPresenter', () => {
         { text: 'Example Profession' },
         { text: '2013' },
         { text: dateOf(new Date(2022, 6, 12)) },
-        { html: await statusOf(DecisionDatasetStatus.Draft) },
+        { html: statusOf(DecisionDatasetStatus.Draft) },
         {
           html: `<a class="govuk-link" href="/admin/decisions/${
             dataset.profession.id
@@ -42,7 +42,7 @@ describe('ListEntryPresenter', () => {
         },
       ];
 
-      const result = await presenter.tableRow();
+      const result = presenter.tableRow();
 
       expect(result).toEqual(expected);
       expect(formatStatusSpy).toBeCalledWith(

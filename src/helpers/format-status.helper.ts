@@ -3,13 +3,13 @@ import { DecisionDatasetStatus } from '../decisions/decision-dataset.entity';
 import { OrganisationVersionStatus } from '../organisations/organisation-version.entity';
 import { ProfessionVersionStatus } from '../professions/profession-version.entity';
 
-export async function formatStatus(
+export function formatStatus(
   status:
     | ProfessionVersionStatus
     | OrganisationVersionStatus
     | DecisionDatasetStatus,
   i18nSerice: I18nService,
-): Promise<string> {
+): string {
   let colourClass: string;
 
   if (
@@ -31,7 +31,7 @@ export async function formatStatus(
     return '';
   }
 
-  const text = await i18nSerice.translate(`app.status.${status}`);
+  const text = i18nSerice.translate(`app.status.${status}`);
 
   return `<strong class="govuk-tag ${colourClass}">${text}</strong>`;
 }
