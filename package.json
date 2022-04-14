@@ -9,6 +9,7 @@
     "prebuild": "rimraf dist",
     "build": "nest build",
     "build:assets": "encore dev",
+    "build:assets:watch": "encore dev --watch",
     "build:assets:prod": "encore production",
     "console": "ts-node --transpile-only ./src/console.ts",
     "heroku-postbuild": "npm run build && npm run build:assets:prod",
