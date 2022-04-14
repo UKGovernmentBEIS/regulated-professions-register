@@ -1,22 +1,25 @@
-@startuml C4_Elements
+@startuml system_context
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
-LAYOUT_AS_SKETCH()
+!include ../sprites/govuk.puml
+!include ../sprites/auth0.puml
+
+left to right direction
 
 Person(public, "Public User", "People searching for information on regulated professions")
 Person(regulators, "Regulatory Authority", "Users who maintain their information in the system")
-Person(beis, "BEIS Service Owners", "Users who manage access and approve changes")
+Person(beis, "Service Owners", "Users who manage access and approve changes")
 
-System(rpr, "Regulated Professions Register")
+System(rpr, "Regulated Professions Register", $sprite="govuk")
 Rel(public, rpr, "Uses", "HTTPS")
 Rel(regulators, rpr, "Uses", "HTTPS")
 Rel(beis, rpr, "Uses", "HTTPS")
 
-System_Ext(notify, "GOV.UK Notify")
+System_Ext(notify, "GOV.UK Notify", $sprite="govuk")
 Rel(rpr, notify, "Send notifications", "HTTPS")
 Rel(notify, regulators, "Notifies", "email")
 Rel(notify, beis, "Notifies", "email")
 
-System_Ext(auth0, "Auth0")
+System_Ext(auth0, "Auth0", $sprite="auth0")
 Rel(rpr, auth0, "Manage users", "HTTPS / OAuth2")
 Rel(regulators, auth0, "Log in", "HTTPS")
 Rel(beis, auth0, "Log in", "HTTPS")

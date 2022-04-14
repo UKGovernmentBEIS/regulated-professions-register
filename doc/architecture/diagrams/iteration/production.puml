@@ -1,0 +1,13 @@
+@startuml production
+
+partition "Production Environment" {
+  start
+  :Create a release branch from main;
+  :Update Changelog;
+  :Create a Release Pull Request;
+  :Unit tests, integration tests, security and linting are run in Github Actions;
+  :Review by at least one contributor;
+  :Approve and Merge;
+  :Create and push a release tag;
+  :Code is automatically deployed to production via Github Actions;
+}

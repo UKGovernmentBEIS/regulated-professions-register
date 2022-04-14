@@ -1,21 +1,24 @@
-@startuml
+@startuml deployment
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Deployment.puml
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+!define DEVICONS2 https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons2
 
-LAYOUT_AS_SKETCH()
+!include DEVICONS/postgresql.puml
+!include DEVICONS/docker.puml
+!include DEVICONS/redis.puml
+!include DEVICONS2/nestjs.puml
+!include ../sprites/govuk.puml
 
-Deployment_Node(gpaas, "GPaaS", "GOV.UK PaaS"){
-  Deployment_Node(webappDocker, "Docker container") {
-    Container(webApp, "Web Application", "NestJS")
+Deployment_Node(gpaas, "GPaaS", "GOV.UK PaaS", $sprite="govuk"){
+  Deployment_Node(webappDocker, "Docker container", $sprite="docker") {
+    Container(webApp, "Web Application", "NestJS", $sprite="nestjs")
   }
 
-  Deployment_Node(workerDocker, "Docker container") {
-    Container(worker, "Worker Node", "NodeJS")
-  }
+  ContainerDb_Ext(postgres, "PostgreSQL database", "PostgreSQL", $sprite="postgresql")
+  ContainerDb_Ext(redis, "Redis database", "Redis", $sprite="redis")
 
-  ContainerDb_Ext(postgres, "PostgreSQL database", "PostgreSQL")
-
-  Rel(webApp, postgres, "Read/write")
-  Rel(worker, postgres, "Read/write")
+  BiRel(webApp, postgres, "Read/write")
+  BiRel(webApp, redis, "Read/write")
 }
 
 SHOW_LEGEND()
