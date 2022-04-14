@@ -32,7 +32,7 @@ export class ListEntryPresenter {
     private readonly i18nService: I18nService,
   ) {}
 
-  async tableRow(): Promise<TableRow> {
+  tableRow(): TableRow {
     const viewDetails = `<a class="govuk-link" href="/admin/decisions/${
       this.dataset.profession.id
     }/${this.dataset.organisation.id}/${
@@ -53,7 +53,7 @@ export class ListEntryPresenter {
       year: { text: this.dataset.year.toString() },
       lastModified: { text: formatDate(this.dataset.updated_at) },
       status: {
-        html: await formatStatus(this.dataset.status, this.i18nService),
+        html: formatStatus(this.dataset.status, this.i18nService),
       },
       actions: { html: viewDetails },
     };

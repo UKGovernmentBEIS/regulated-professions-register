@@ -6,20 +6,20 @@ import { formatStatus } from './format-status.helper';
 
 describe('formatStatus', () => {
   describe('when given `null`', () => {
-    it('returns an empty string', async () => {
+    it('returns an empty string', () => {
       const i18nService = createMockI18nService();
 
-      const result = await formatStatus(null, i18nService);
+      const result = formatStatus(null, i18nService);
 
       expect(result).toEqual('');
     });
   });
 
   describe('when given an unrecognised status', () => {
-    it('returns an empty string', async () => {
+    it('returns an empty string', () => {
       const i18nService = createMockI18nService();
 
-      const result = await formatStatus(
+      const result = formatStatus(
         'not a status' as ProfessionVersionStatus,
         i18nService,
       );
@@ -29,10 +29,10 @@ describe('formatStatus', () => {
   });
 
   describe('when given a "unconfirmed" status', () => {
-    it('returns an empty string', async () => {
+    it('returns an empty string', () => {
       const i18nService = createMockI18nService();
 
-      const result = await formatStatus(
+      const result = formatStatus(
         OrganisationVersionStatus.Unconfirmed,
         i18nService,
       );
@@ -42,10 +42,10 @@ describe('formatStatus', () => {
   });
 
   describe('when given a "archived" status', () => {
-    it('returns a grey tag', async () => {
+    it('returns a grey tag', () => {
       const i18nService = createMockI18nService();
 
-      const result = await formatStatus(
+      const result = formatStatus(
         ProfessionVersionStatus.Archived,
         i18nService,
       );
@@ -59,13 +59,10 @@ describe('formatStatus', () => {
   });
 
   describe('when given a "draft" status', () => {
-    it('returns a yellow tag', async () => {
+    it('returns a yellow tag', () => {
       const i18nService = createMockI18nService();
 
-      const result = await formatStatus(
-        OrganisationVersionStatus.Draft,
-        i18nService,
-      );
+      const result = formatStatus(OrganisationVersionStatus.Draft, i18nService);
 
       expect(result).toEqual(
         `<strong class="govuk-tag govuk-tag--yellow">${translationOf(
@@ -76,13 +73,10 @@ describe('formatStatus', () => {
   });
 
   describe('when given a "live" status', () => {
-    it('returns a turquoise tag', async () => {
+    it('returns a turquoise tag', () => {
       const i18nService = createMockI18nService();
 
-      const result = await formatStatus(
-        ProfessionVersionStatus.Live,
-        i18nService,
-      );
+      const result = formatStatus(ProfessionVersionStatus.Live, i18nService);
 
       expect(result).toEqual(
         `<strong class="govuk-tag govuk-tag--turquoise">${translationOf(

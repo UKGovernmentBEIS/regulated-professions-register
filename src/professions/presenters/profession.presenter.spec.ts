@@ -119,11 +119,11 @@ describe('ProfessionPresenter', () => {
 
       const presenter = new ProfessionPresenter(profession, i18nService);
 
-      (formatStatus as jest.Mock).mockImplementation(async (status) =>
+      (formatStatus as jest.Mock).mockImplementation((status) =>
         statusOf(status),
       );
 
-      const result = await presenter.status;
+      const result = presenter.status;
 
       expect(result).toEqual(statusOf(ProfessionVersionStatus.Draft));
       expect(formatStatus).toBeCalledWith(

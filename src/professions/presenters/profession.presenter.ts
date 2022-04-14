@@ -55,7 +55,7 @@ export class ProfessionPresenter {
     return formatDate(this.profession.lastModified);
   }
 
-  get status(): Promise<string> {
+  get status(): string {
     return formatStatus(this.profession.status, this.i18nService);
   }
 

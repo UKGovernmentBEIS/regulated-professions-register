@@ -49,7 +49,7 @@ export class OrganisationPresenter {
         },
       },
       {
-        html: await formatStatus(this.organisation.status, this.i18nService),
+        html: formatStatus(this.organisation.status, this.i18nService),
       },
       {
         html: `<a class="govuk-link" href="/admin/organisations/${
