@@ -10,18 +10,19 @@ function showRegulator(event) {
 
   const latestRegulator = items[0];
 
-  showElement(latestRegulator);
+  if (latestRegulator) {
+    showElement(latestRegulator);
 
-  const regulatoryAuthoritySelect = latestRegulator.querySelector(
-    'select.organisation',
-  );
-  const roleSelect = latestRegulator.querySelector('select.role');
+    const regulatoryAuthoritySelect = latestRegulator.querySelector(
+      'select.organisation',
+    );
+    const roleSelect = latestRegulator.querySelector('select.role');
 
-  regulatoryAuthoritySelect.removeAttribute('tabindex');
-  roleSelect.removeAttribute('tabindex');
+    regulatoryAuthoritySelect.removeAttribute('tabindex');
+    roleSelect.removeAttribute('tabindex');
 
-  addRemoveButton(latestRegulator);
-
+    addRemoveButton(latestRegulator);
+  }
   // If there are no more hidden containers left, hide the button.
   if (
     document.querySelectorAll(hiddenRegulatoryAuthorityContainerSelector)
