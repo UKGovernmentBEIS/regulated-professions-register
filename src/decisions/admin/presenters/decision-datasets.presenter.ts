@@ -12,24 +12,22 @@ export class DecisionDatasetsPresenter {
     private readonly i18nService: I18nService,
   ) {}
 
-  async present(): Promise<IndexTemplate> {
+  present(): IndexTemplate {
     const organisation = !this.userOrganisation
       ? this.i18nService.translate('app.beis')
       : this.userOrganisation.name;
 
     return {
       organisation,
-      decisionDatasetsTable: await this.table(),
+      decisionDatasetsTable: this.table(),
     };
   }
 
-  private async table(): Promise<Table> {
+  private table(): Table {
     const headings = ListEntryPresenter.headings(this.i18nService);
 
-    const rows = await Promise.all(
-      this.decisionDatasets.map(async (dataset) =>
-        new ListEntryPresenter(dataset, this.i18nService).tableRow(),
-      ),
+    const rows = this.decisionDatasets.map((dataset) =>
+      new ListEntryPresenter(dataset, this.i18nService).tableRow(),
     );
 
     const numberOfResults = rows.length;

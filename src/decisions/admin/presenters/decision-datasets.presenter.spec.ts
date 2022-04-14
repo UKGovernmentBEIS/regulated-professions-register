@@ -24,7 +24,7 @@ const mockTableHeadingRow: TableRow = [
 describe('DecisionDatasetsPresenter', () => {
   describe('table', () => {
     describe('when given a user organisation', () => {
-      it('returns a populated IndexTemplate', async () => {
+      it('returns a populated IndexTemplate', () => {
         const i18nService = createMockI18nService();
 
         const organisation = organisationFactory.build();
@@ -39,7 +39,7 @@ describe('DecisionDatasetsPresenter', () => {
         (ListEntryPresenter.headings as jest.Mock).mockReturnValue(
           mockTableHeadingRow,
         );
-        (ListEntryPresenter.prototype.tableRow as jest.Mock).mockResolvedValue(
+        (ListEntryPresenter.prototype.tableRow as jest.Mock).mockReturnValue(
           mockTableRow,
         );
 
@@ -56,7 +56,7 @@ describe('DecisionDatasetsPresenter', () => {
           },
         };
 
-        const result = await presenter.present();
+        const result = presenter.present();
 
         expect(result).toEqual(expected);
         expect(ListEntryPresenter.headings).toBeCalled();
@@ -65,7 +65,7 @@ describe('DecisionDatasetsPresenter', () => {
     });
 
     describe('when given no user organisation', () => {
-      it('returns a populated IndexTemplate', async () => {
+      it('returns a populated IndexTemplate', () => {
         const i18nService = createMockI18nService();
 
         const datasets = decisionDatasetFactory.buildList(3);
@@ -79,7 +79,7 @@ describe('DecisionDatasetsPresenter', () => {
         (ListEntryPresenter.headings as jest.Mock).mockReturnValue(
           mockTableHeadingRow,
         );
-        (ListEntryPresenter.prototype.tableRow as jest.Mock).mockResolvedValue(
+        (ListEntryPresenter.prototype.tableRow as jest.Mock).mockReturnValue(
           mockTableRow,
         );
 
@@ -96,7 +96,7 @@ describe('DecisionDatasetsPresenter', () => {
           },
         };
 
-        const result = await presenter.present();
+        const result = presenter.present();
 
         expect(result).toEqual(expected);
         expect(ListEntryPresenter.headings).toBeCalled();
