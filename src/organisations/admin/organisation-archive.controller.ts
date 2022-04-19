@@ -47,9 +47,13 @@ export class OrganisationArchiveController {
       version,
     );
 
+    const professions = organisation.professionToOrganisations.map(
+      (professionToOrganisation) => professionToOrganisation.profession,
+    );
+
     checkCanViewOrganisation(req, organisation);
 
-    return { organisation };
+    return { organisation, professions };
   }
 
   @Delete(':organisationId/versions/:versionId/archive')
@@ -65,7 +69,6 @@ export class OrganisationArchiveController {
         organisationId,
         versionId,
       );
-
     checkCanViewOrganisation(req, version.organisation);
 
     const user = getActingUser(req);

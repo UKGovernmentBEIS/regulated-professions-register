@@ -4,10 +4,12 @@ import { Response } from 'express';
 import { I18nService } from 'nestjs-i18n';
 import { flashMessage } from '../../common/flash-message';
 import { escape } from '../../helpers/escape.helper';
+import { ProfessionToOrganisation } from '../../professions/profession-to-organisation.entity';
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 import { createDefaultMockRequest } from '../../testutils/factories/create-default-mock-request';
 import organisationFactory from '../../testutils/factories/organisation';
 import organisationVersionFactory from '../../testutils/factories/organisation-version';
+import professionFactory from '../../testutils/factories/profession';
 import userFactory from '../../testutils/factories/user';
 import { translationOf } from '../../testutils/translation-of';
 import { checkCanViewOrganisation } from '../../users/helpers/check-can-view-organisation';
@@ -52,7 +54,14 @@ describe('OrganisationArchiveController', () => {
 
   describe('new', () => {
     it('fetches the Organisation to render on the page', async () => {
-      const organisation = organisationFactory.build();
+      const profession1 = professionFactory.build({ name: 'profession1' });
+      const profession2 = professionFactory.build({ name: 'profession2' });
+      const organisation = organisationFactory.build({
+        professionToOrganisations: [
+          { profession: profession1 },
+          { profession: profession2 },
+        ] as ProfessionToOrganisation[],
+      });
       const version = organisationVersionFactory.build({
         organisation,
       });
@@ -72,11 +81,17 @@ describe('OrganisationArchiveController', () => {
       ).toHaveBeenCalledWith(organisation.id, version.id);
       expect(result).toEqual({
         organisation: Organisation.withVersion(organisation, version),
+        professions: [profession1, profession2],
       });
     });
 
     it('checks the acting user has permission to archive the Organisation', async () => {
-      const organisation = organisationFactory.build();
+      const profession = professionFactory.build({ name: 'profession' });
+      const organisation = organisationFactory.build({
+        professionToOrganisations: [
+          { profession },
+        ] as ProfessionToOrganisation[],
+      });
       const version = organisationVersionFactory.build({
         organisation,
       });
