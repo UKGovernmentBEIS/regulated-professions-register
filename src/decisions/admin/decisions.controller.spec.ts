@@ -57,7 +57,7 @@ const mockRouteTemplates: RouteTemplate[] = [
     name: 'Example route',
     countries: [
       {
-        countrySelectArgs: [],
+        countriesSelectArgs: [],
         decisions: {
           yes: '5',
           no: '8',

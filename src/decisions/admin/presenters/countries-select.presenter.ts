@@ -12,7 +12,7 @@ const countries = [
   'Canada',
 ];
 
-export class CountrySelectPresenter {
+export class CountriesSelectPresenter {
   constructor(private readonly selectedCountry: string | null) {}
 
   selectArgs(): SelectItemArgs[] {

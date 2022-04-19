@@ -1,10 +1,10 @@
 import { SelectItemArgs } from '../../../common/interfaces/select-item-args.interface';
-import { CountrySelectPresenter } from './country-select.presenter';
+import { CountriesSelectPresenter } from './countries-select.presenter';
 
 describe('CountrySelectPresenter', () => {
   describe('when given a null selected country', () => {
     it('retunrs a list of countries, with no country selected', () => {
-      const presenter = new CountrySelectPresenter(null);
+      const presenter = new CountriesSelectPresenter(null);
 
       const expected: SelectItemArgs[] = [
         {
@@ -67,7 +67,7 @@ describe('CountrySelectPresenter', () => {
 
   describe('when given a selected country', () => {
     it('returns a list of countries, with the given country selected', () => {
-      const presenter = new CountrySelectPresenter('Morocco');
+      const presenter = new CountriesSelectPresenter('Morocco');
 
       const expected: SelectItemArgs[] = [
         {

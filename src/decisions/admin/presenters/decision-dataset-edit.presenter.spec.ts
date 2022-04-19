@@ -2,12 +2,12 @@ import { SelectItemArgs } from '../../../common/interfaces/select-item-args.inte
 import { DecisionRoute } from '../../interfaces/decision-route.interface';
 import * as decisionValueToStringModule from '../helpers/decision-value-to-string.helper';
 import { RouteTemplate } from '../interfaces/route-template.interface';
-import { CountrySelectPresenter } from './country-select.presenter';
+import { CountriesSelectPresenter } from './countries-select.presenter';
 import { DecisionDatasetEditPresenter } from './decision-dataset-edit.presenter';
 
-jest.mock('./country-select.presenter');
+jest.mock('./countries-select.presenter');
 
-const mockCountrySelectArgs: SelectItemArgs[] = [
+const mockCountriesSelectArgs: SelectItemArgs[] = [
   {
     text: 'Example country',
     value: 'Example country',
@@ -24,8 +24,8 @@ describe('DecisionDatasetEditPresenter', () => {
       );
 
       (
-        CountrySelectPresenter.prototype.selectArgs as jest.Mock
-      ).mockReturnValue(mockCountrySelectArgs);
+        CountriesSelectPresenter.prototype.selectArgs as jest.Mock
+      ).mockReturnValue(mockCountriesSelectArgs);
 
       const routes: DecisionRoute[] = [
         {
@@ -72,7 +72,7 @@ describe('DecisionDatasetEditPresenter', () => {
           name: 'Example route 1',
           countries: [
             {
-              countrySelectArgs: mockCountrySelectArgs,
+              countriesSelectArgs: mockCountriesSelectArgs,
               decisions: {
                 yes: '4',
                 no: '5',
@@ -81,7 +81,7 @@ describe('DecisionDatasetEditPresenter', () => {
               },
             },
             {
-              countrySelectArgs: mockCountrySelectArgs,
+              countriesSelectArgs: mockCountriesSelectArgs,
               decisions: {
                 yes: '5',
                 no: '8',
@@ -95,7 +95,7 @@ describe('DecisionDatasetEditPresenter', () => {
           name: 'Example route 2',
           countries: [
             {
-              countrySelectArgs: mockCountrySelectArgs,
+              countriesSelectArgs: mockCountriesSelectArgs,
               decisions: {
                 yes: '1',
                 no: '3',
@@ -113,11 +113,11 @@ describe('DecisionDatasetEditPresenter', () => {
 
       expect(result).toEqual(expected);
 
-      expect(CountrySelectPresenter).toHaveBeenCalledTimes(3);
-      expect(CountrySelectPresenter).nthCalledWith(3, 'Example country 3');
-      expect(CountrySelectPresenter.prototype.selectArgs).toHaveBeenCalledTimes(
-        3,
-      );
+      expect(CountriesSelectPresenter).toHaveBeenCalledTimes(3);
+      expect(CountriesSelectPresenter).nthCalledWith(3, 'Example country 3');
+      expect(
+        CountriesSelectPresenter.prototype.selectArgs,
+      ).toHaveBeenCalledTimes(3);
 
       expect(decisionValueToStringSpy).toHaveBeenCalledTimes(12);
       expect(decisionValueToStringSpy).nthCalledWith(3, 6);

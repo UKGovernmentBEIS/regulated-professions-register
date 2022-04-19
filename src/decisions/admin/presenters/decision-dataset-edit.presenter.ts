@@ -1,7 +1,7 @@
 import { DecisionRoute } from '../../interfaces/decision-route.interface';
 import { decisionValueToString } from '../helpers/decision-value-to-string.helper';
 import { RouteTemplate } from '../interfaces/route-template.interface';
-import { CountrySelectPresenter } from './country-select.presenter';
+import { CountriesSelectPresenter } from './countries-select.presenter';
 
 export class DecisionDatasetEditPresenter {
   constructor(private readonly routes: DecisionRoute[]) {}
@@ -10,7 +10,7 @@ export class DecisionDatasetEditPresenter {
     return this.routes.map((route) => ({
       name: route.name,
       countries: route.countries.map((country) => ({
-        countrySelectArgs: new CountrySelectPresenter(
+        countriesSelectArgs: new CountriesSelectPresenter(
           country.country,
         ).selectArgs(),
         decisions: {
