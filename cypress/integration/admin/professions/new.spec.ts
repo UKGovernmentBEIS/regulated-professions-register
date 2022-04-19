@@ -420,5 +420,40 @@ describe('Adding a new profession', () => {
         format(new Date(), 'd MMM yyyy'),
       );
     });
+    it("hides 'Add a Regulator' button when the maximum number of regulators (25) is reached ", () => {
+      cy.visit('/admin/professions');
+
+      cy.translate('professions.admin.addButtonLabel').then((buttonText) => {
+        cy.get('button').contains(buttonText).click();
+      });
+
+      cy.get('input[name="name"]').type('Example Profession');
+
+      cy.translate('app.continue').then((buttonText) => {
+        cy.get('button').contains(buttonText).click();
+      });
+
+      cy.clickSummaryListRowChangeLink(
+        'professions.form.label.organisations.name',
+      );
+
+      cy.get('select[id="regulatoryBodies_1"]').select(
+        'Department for Education',
+      );
+
+      for (let i = 0; i < 24; i++) {
+        cy.translate('professions.form.button.addRegulator').then((label) => {
+          cy.get('a').contains(label).click();
+        });
+      }
+      cy.checkAccessibility();
+
+      cy.get('#add-regulator').should('not.be.visible');
+
+      cy.get('[data-purpose="removeRegulator"]').first().click();
+      cy.get('#add-regulator').should('be.visible');
+
+      cy.checkAccessibility();
+    });
   });
 });
