@@ -5,6 +5,6 @@ import { Profession } from '../../../professions/profession.entity';
 export interface ShowTemplate {
   profession: Profession;
   organisation: Organisation;
-  year: string;
+  year: number;
   tables: Table[];
 }

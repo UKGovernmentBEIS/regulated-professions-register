@@ -261,13 +261,13 @@ describe('DecisionsController', () => {
         profession,
         organisation,
         tables: mockTables,
-        year: '2017',
+        year: 2017,
       };
 
       const result = await controller.show(
         'example-profession-id',
         'example-organisation-id',
-        '2017',
+        2017,
         request,
       );
 
@@ -871,14 +871,14 @@ describe('DecisionsController', () => {
         const expected: EditTemplate = {
           profession,
           organisation,
-          year: '2016',
+          year: 2016,
           routes: mockRouteTemplates,
         };
 
         const result = await controller.edit(
           'example-profession-id',
           'example-organisation-id',
-          '2016',
+          2016,
           request,
         );
 
@@ -945,14 +945,14 @@ describe('DecisionsController', () => {
         const expected: EditTemplate = {
           profession,
           organisation,
-          year: '2016',
+          year: 2016,
           routes: mockRouteTemplates,
         };
 
         const result = await controller.edit(
           'example-profession-id',
           'example-organisation-id',
-          '2016',
+          2016,
           request,
         );
 
@@ -1073,7 +1073,7 @@ describe('DecisionsController', () => {
         await controller.editPost(
           'example-profession-id',
           'example-organisation-id',
-          '2016',
+          2016,
           editDto,
           request,
           response,
@@ -1179,7 +1179,7 @@ describe('DecisionsController', () => {
         await controller.editPost(
           'example-profession-id',
           'example-organisation-id',
-          '2016',
+          2016,
           editDto,
           request,
           response,
@@ -1282,7 +1282,7 @@ describe('DecisionsController', () => {
         await controller.editPost(
           'example-profession-id',
           'example-organisation-id',
-          '2017',
+          2017,
           editDto,
           request,
           response,
@@ -1291,7 +1291,7 @@ describe('DecisionsController', () => {
         expect(response.render).toHaveBeenCalledWith('admin/decisions/edit', {
           profession,
           organisation,
-          year: '2017',
+          year: 2017,
           routes: mockRouteTemplates,
         } as EditTemplate);
 

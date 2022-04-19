@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Param,
+  ParseIntPipe,
   Post,
   Render,
   Req,
@@ -96,7 +97,7 @@ export class DecisionsController {
   async show(
     @Param('professionId') professionId: string,
     @Param('organisationId') organisationId: string,
-    @Param('year') year: string,
+    @Param('year', ParseIntPipe) year: number,
     @Req() request: RequestWithAppSession,
   ): Promise<ShowTemplate> {
     const profession = await this.professionsService.findWithVersions(
@@ -108,7 +109,7 @@ export class DecisionsController {
     const dataset = await this.decisionDatasetsService.find(
       professionId,
       organisationId,
-      parseInt(year),
+      year,
     );
 
     checkCanViewOrganisation(request, dataset.organisation);
@@ -121,7 +122,7 @@ export class DecisionsController {
     return {
       profession: profession,
       organisation: dataset.organisation,
-      year: dataset.year.toString(),
+      year,
       tables: presenter.tables(),
     };
   }
@@ -241,7 +242,7 @@ export class DecisionsController {
   async edit(
     @Param('professionId') professionId: string,
     @Param('organisationId') organisationId: string,
-    @Param('year') year: string,
+    @Param('year', ParseIntPipe) year: number,
     @Req() request: RequestWithAppSession,
   ): Promise<EditTemplate> {
     const profession = await this.professionsService.findWithVersions(
@@ -257,7 +258,7 @@ export class DecisionsController {
     const dataset = await this.decisionDatasetsService.find(
       professionId,
       organisationId,
-      parseInt(year),
+      year,
     );
 
     const routes: DecisionRoute[] = dataset
@@ -290,7 +291,7 @@ export class DecisionsController {
   async editPost(
     @Param('professionId') professionId: string,
     @Param('organisationId') organisationId: string,
-    @Param('year') year: string,
+    @Param('year', ParseIntPipe) year: number,
     @Body() editDto: EditDto,
     @Req() request: RequestWithAppSession,
     @Res() response: Response,
@@ -314,7 +315,7 @@ export class DecisionsController {
         organisation,
         profession,
         user: getActingUser(request),
-        year: parseInt(year),
+        year,
         status:
           action === 'publish'
             ? DecisionDatasetStatus.Live
