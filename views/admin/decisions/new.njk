@@ -1,0 +1,76 @@
+{% set bodyClasses = "rpr-internal__listing rpr-internal__page" %}
+{% extends "admin/base.njk" %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% set title = ("decisions.admin.new.heading" | t) %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-three-quarters">
+      <h1 class="govuk-heading-xl">
+        <span class="govuk-caption-l">{{ ("decisions.admin.new.caption" | t) }}</span>
+        {{ title }}
+      </h1>
+
+      {% include "../../shared/_errors.njk" %}
+
+      <form action="/admin/decisions/new" method="post">
+
+      <input type="hidden" name="serviceOwner" value="{{ user.serviceOwner }}" />
+
+      {{
+        govukSelect({
+          label: {
+            text: "decisions.admin.new.labels.profession" | t,
+            classes: "govuk-label--m"
+          },
+          id: "profession",
+          name: "profession",
+          items: professionsSelectArgs,
+          errorMessage: errors.profession | tError
+        })
+      }}
+
+      {% if organisationsSelectArgs %}
+        {{
+          govukSelect({
+            label: {
+              text: "decisions.admin.new.labels.organisation" | t,
+              classes: "govuk-label--m"
+            },
+            id: "organisation",
+            name: "organisation",
+            items: organisationsSelectArgs,
+            errorMessage: errors.organisation | tError
+          })
+        }}
+      {% endif %}
+
+      {{
+        govukSelect({
+          label: {
+            text: "decisions.admin.new.labels.year" | t,
+            classes: "govuk-label--m"
+          },
+          id: "year",
+          name: "year",
+          items: yearsSelectArgs,
+          errorMessage: errors.year | tError
+        })
+      }}
+
+      {{
+        govukButton({
+          text: "app.continue" | t
+        })
+      }}
+
+      </form>
+    </div>
+  </div>
+{% endblock %}

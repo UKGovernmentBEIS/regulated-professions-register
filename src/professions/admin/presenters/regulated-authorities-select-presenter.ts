@@ -3,17 +3,19 @@ import { AuthorityAndRoleArgs } from './../interfaces/authority-and-role-args';
 import { Organisation } from '../../../organisations/organisation.entity';
 import { OrganisationRole } from '../../profession-to-organisation.entity';
 import { I18nService } from 'nestjs-i18n';
+
 export class RegulatedAuthoritiesSelectPresenter {
   constructor(
     private readonly allOrganisations: Organisation[],
     private readonly selectedOrganisation: Organisation | null,
-    private readonly selectedRole?: OrganisationRole | null,
+    private readonly selectedRole: OrganisationRole | null,
+    private readonly i18nService: I18nService,
   ) {}
 
   selectArgs(): SelectItemArgs[] {
     const options = [
       {
-        text: '--- Please Select ---',
+        text: this.i18nService.translate<string>('app.pleaseSelect'),
         value: '',
         selected: null,
       },
@@ -32,10 +34,10 @@ export class RegulatedAuthoritiesSelectPresenter {
     return options;
   }
 
-  async roleArgs(i18nService: I18nService): Promise<SelectItemArgs[]> {
+  roleArgs(): SelectItemArgs[] {
     const options = [
       {
-        text: '--- Please Select ---',
+        text: this.i18nService.translate<string>('app.pleaseSelect'),
         value: '',
         selected: null,
       },
@@ -43,7 +45,9 @@ export class RegulatedAuthoritiesSelectPresenter {
 
     for (const role of Object.values(OrganisationRole)) {
       options.push({
-        text: await i18nService.translate(`organisations.label.roles.${role}`),
+        text: this.i18nService.translate<string>(
+          `organisations.label.roles.${role}`,
+        ),
         value: role,
         selected: this.selectedRole ? this.selectedRole === role : false,
       });
@@ -52,12 +56,10 @@ export class RegulatedAuthoritiesSelectPresenter {
     return options;
   }
 
-  async authoritiesAndRoles(
-    i18nService: I18nService,
-  ): Promise<AuthorityAndRoleArgs> {
+  authoritiesAndRoles(): AuthorityAndRoleArgs {
     return {
       authorities: this.selectArgs(),
-      roles: await this.roleArgs(i18nService),
+      roles: this.roleArgs(),
     };
   }
 }

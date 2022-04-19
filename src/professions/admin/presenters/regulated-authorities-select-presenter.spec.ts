@@ -12,15 +12,17 @@ describe(RegulatedAuthoritiesSelectPresenter, () => {
   exampleOrganisation2.id = 'org2-id';
 
   describe('selectArgs', () => {
-    it('should return no selected item when called no selected Organisation', async () => {
+    it('should return no selected item when called no selected Organisation', () => {
       const presenter = new RegulatedAuthoritiesSelectPresenter(
         [exampleOrganisation1, exampleOrganisation2],
         null,
+        null,
+        createMockI18nService(),
       );
 
       expect(presenter.selectArgs()).toEqual([
         {
-          text: '--- Please Select ---',
+          text: translationOf('app.pleaseSelect'),
           value: '',
           selected: null,
         },
@@ -37,15 +39,17 @@ describe(RegulatedAuthoritiesSelectPresenter, () => {
       ]);
     });
 
-    it('should return a selected option when called with a selected Organisation', async () => {
+    it('should return a selected option when called with a selected Organisation', () => {
       const presenter = new RegulatedAuthoritiesSelectPresenter(
         [exampleOrganisation1, exampleOrganisation2],
         exampleOrganisation1,
+        null,
+        createMockI18nService(),
       );
 
       expect(presenter.selectArgs()).toEqual([
         {
-          text: '--- Please Select ---',
+          text: translationOf('app.pleaseSelect'),
           value: '',
           selected: null,
         },
@@ -64,18 +68,18 @@ describe(RegulatedAuthoritiesSelectPresenter, () => {
   });
 
   describe('roleArgs', () => {
-    it('should return no selected item when called with no selected role', async () => {
+    it('should return no selected item when called with no selected role', () => {
       const presenter = new RegulatedAuthoritiesSelectPresenter(
         [exampleOrganisation1, exampleOrganisation2],
         null,
         null,
+        createMockI18nService(),
       );
-      const i18nService = createMockI18nService();
 
-      expect(await presenter.roleArgs(i18nService)).toEqual([
+      expect(presenter.roleArgs()).toEqual([
         {
           selected: null,
-          text: '--- Please Select ---',
+          text: translationOf('app.pleaseSelect'),
           value: '',
         },
         {
@@ -120,18 +124,18 @@ describe(RegulatedAuthoritiesSelectPresenter, () => {
       ]);
     });
 
-    it('should return a selected item when called with a selected role', async () => {
+    it('should return a selected item when called with a selected role', () => {
       const presenter = new RegulatedAuthoritiesSelectPresenter(
         [exampleOrganisation1, exampleOrganisation2],
         null,
         OrganisationRole.AwardingBody,
+        createMockI18nService(),
       );
-      const i18nService = createMockI18nService();
 
-      expect(await presenter.roleArgs(i18nService)).toEqual([
+      expect(presenter.roleArgs()).toEqual([
         {
           selected: null,
-          text: '--- Please Select ---',
+          text: translationOf('app.pleaseSelect'),
           value: '',
         },
         {
@@ -178,17 +182,17 @@ describe(RegulatedAuthoritiesSelectPresenter, () => {
   });
 
   describe('authoritiesAndRoles', () => {
-    it('should return an object with authorities and roles included', async () => {
+    it('should return an object with authorities and roles included', () => {
       const presenter = new RegulatedAuthoritiesSelectPresenter(
         [exampleOrganisation1, exampleOrganisation2],
         null,
         null,
+        createMockI18nService(),
       );
-      const i18nService = createMockI18nService();
 
-      expect(await presenter.authoritiesAndRoles(i18nService)).toEqual({
+      expect(presenter.authoritiesAndRoles()).toEqual({
         authorities: presenter.selectArgs(),
-        roles: await presenter.roleArgs(i18nService),
+        roles: presenter.roleArgs(),
       });
     });
   });

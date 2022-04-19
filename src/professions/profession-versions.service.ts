@@ -223,6 +223,20 @@ export class ProfessionVersionsService {
       .getMany();
   }
 
+  async allLiveForOrganisation(
+    organisation: Organisation,
+  ): Promise<ProfessionVersion[]> {
+    return await this.versionsWithJoins()
+      .where('professionVersion.status = :status', {
+        status: ProfessionVersionStatus.Live,
+      })
+      .andWhere('organisation.id = :organisationId', {
+        organisationId: organisation.id,
+      })
+      .orderBy('profession.name')
+      .getMany();
+  }
+
   async allWithLatestVersion(): Promise<Profession[]> {
     const versions = await this.versionsWithJoins()
       .distinctOn([

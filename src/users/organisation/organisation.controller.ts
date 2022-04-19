@@ -138,7 +138,6 @@ export class OrganisationController {
     name: string,
     change: boolean,
     action: ActionType,
-
     errors: object | undefined = undefined,
   ): Promise<void> {
     const organisations = await this.organisationsService.all();
@@ -146,6 +145,8 @@ export class OrganisationController {
     const organisationsSelectArgs = new RegulatedAuthoritiesSelectPresenter(
       organisations,
       organisation,
+      null,
+      this.i18nService,
     ).selectArgs();
 
     const serviceOwnerRadioButtonArgs =

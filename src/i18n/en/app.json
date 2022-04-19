@@ -93,5 +93,6 @@
   "filters": {
     "filterButton": "Filter results",
     "clearAllButton": "Clear all filters"
-  }
+  },
+  "pleaseSelect": "--- Please Select ---"
 }

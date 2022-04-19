@@ -3,7 +3,9 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { Response } from 'express';
 import { I18nService } from 'nestjs-i18n';
 import { Table } from '../../common/interfaces/table';
+import { OrganisationVersionsService } from '../../organisations/organisation-versions.service';
 import { OrganisationsService } from '../../organisations/organisations.service';
+import { ProfessionVersionsService } from '../../professions/profession-versions.service';
 import { ProfessionsService } from '../../professions/professions.service';
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 import { createDefaultMockRequest } from '../../testutils/factories/create-default-mock-request';
@@ -31,10 +33,18 @@ import { RouteTemplate } from './interfaces/route-template.interface';
 import { ShowTemplate } from './interfaces/show-template.interface';
 import { DecisionDatasetEditPresenter } from './presenters/decision-dataset-edit.presenter';
 import { DecisionDatasetsPresenter } from './presenters/decision-datasets.presenter';
+import professionVersionFactory from '../../testutils/factories/profession-version';
+import * as getDecisionsEndYearModule from './helpers/get-decisions-end-year.helper';
+import { NewDecisionDatasetPresenter } from './presenters/new-decision-dataset.presenter';
+import { Profession } from '../../professions/profession.entity';
+import { NewTemplate } from './interfaces/new-template.interface';
+import { NewDto } from './dto/new.dto';
+import * as getOrganisationsFromProfessionModule from '../../professions/helpers/get-organisations-from-profession.helper';
 
 jest.mock('./presenters/decision-datasets.presenter');
 jest.mock('../presenters/decision-dataset.presenter');
 jest.mock('./presenters/decision-dataset-edit.presenter');
+jest.mock('./presenters/new-decision-dataset.presenter');
 
 const mockIndexTemplate: IndexTemplate = {
   organisation: 'Example Organisation',
@@ -57,7 +67,7 @@ const mockRouteTemplates: RouteTemplate[] = [
     name: 'Example route',
     countries: [
       {
-        countrySelectArgs: [],
+        countriesSelectArgs: [],
         decisions: {
           yes: '5',
           no: '8',
@@ -69,18 +79,46 @@ const mockRouteTemplates: RouteTemplate[] = [
   },
 ];
 
+const mockNewTemplate: NewTemplate = {
+  professionsSelectArgs: [
+    {
+      text: 'Example Profession',
+      value: 'example-profession',
+      selected: false,
+    },
+  ],
+  organisationsSelectArgs: [
+    {
+      text: 'Example Organisation',
+      value: 'example-organisation',
+      selected: false,
+    },
+  ],
+  yearsSelectArgs: [
+    {
+      text: '2022',
+      value: '2022',
+      selected: false,
+    },
+  ],
+};
+
 describe('DecisionsController', () => {
   let controller: DecisionsController;
 
-  let decisionsDatasetsService: DeepMocked<DecisionDatasetsService>;
+  let decisionDatasetsService: DeepMocked<DecisionDatasetsService>;
   let professionsService: DeepMocked<ProfessionsService>;
   let organisationsService: DeepMocked<OrganisationsService>;
+  let professionVersionsService: DeepMocked<ProfessionVersionsService>;
+  let organisationVersionsService: DeepMocked<OrganisationVersionsService>;
   let i18nService: DeepMocked<I18nService>;
 
   beforeEach(async () => {
-    decisionsDatasetsService = createMock<DecisionDatasetsService>();
+    decisionDatasetsService = createMock<DecisionDatasetsService>();
     professionsService = createMock<ProfessionsService>();
     organisationsService = createMock<OrganisationsService>();
+    professionVersionsService = createMock<ProfessionVersionsService>();
+    organisationVersionsService = createMock<OrganisationVersionsService>();
     i18nService = createMockI18nService();
 
     const module: TestingModule = await Test.createTestingModule({
@@ -88,7 +126,7 @@ describe('DecisionsController', () => {
       providers: [
         {
           provide: DecisionDatasetsService,
-          useValue: decisionsDatasetsService,
+          useValue: decisionDatasetsService,
         },
         {
           provide: ProfessionsService,
@@ -97,6 +135,14 @@ describe('DecisionsController', () => {
         {
           provide: OrganisationsService,
           useValue: organisationsService,
+        },
+        {
+          provide: ProfessionVersionsService,
+          useValue: professionVersionsService,
+        },
+        {
+          provide: OrganisationVersionsService,
+          useValue: organisationVersionsService,
         },
         {
           provide: I18nService,
@@ -122,7 +168,7 @@ describe('DecisionsController', () => {
 
         const datasets = decisionDatasetFactory.buildList(3);
 
-        decisionsDatasetsService.all.mockResolvedValue(datasets);
+        decisionDatasetsService.all.mockResolvedValue(datasets);
         (
           DecisionDatasetsPresenter.prototype.present as jest.Mock
         ).mockResolvedValue(mockIndexTemplate);
@@ -136,9 +182,9 @@ describe('DecisionsController', () => {
           datasets,
           i18nService,
         );
-        expect(decisionsDatasetsService.all).toHaveBeenCalled();
+        expect(decisionDatasetsService.all).toHaveBeenCalled();
         expect(
-          decisionsDatasetsService.allForOrganisation,
+          decisionDatasetsService.allForOrganisation,
         ).not.toHaveBeenCalled();
       });
     });
@@ -158,7 +204,7 @@ describe('DecisionsController', () => {
 
         const datasets = decisionDatasetFactory.buildList(3);
 
-        decisionsDatasetsService.allForOrganisation.mockResolvedValue(datasets);
+        decisionDatasetsService.allForOrganisation.mockResolvedValue(datasets);
         (
           DecisionDatasetsPresenter.prototype.present as jest.Mock
         ).mockResolvedValue(mockIndexTemplate);
@@ -172,10 +218,10 @@ describe('DecisionsController', () => {
           datasets,
           i18nService,
         );
-        expect(
-          decisionsDatasetsService.allForOrganisation,
-        ).toHaveBeenCalledWith(organisation);
-        expect(decisionsDatasetsService.all).not.toHaveBeenCalled();
+        expect(decisionDatasetsService.allForOrganisation).toHaveBeenCalledWith(
+          organisation,
+        );
+        expect(decisionDatasetsService.all).not.toHaveBeenCalled();
       });
     });
   });
@@ -205,7 +251,7 @@ describe('DecisionsController', () => {
         .mockImplementation();
 
       professionsService.findWithVersions.mockResolvedValueOnce(profession);
-      decisionsDatasetsService.find.mockResolvedValue(dataset);
+      decisionDatasetsService.find.mockResolvedValue(dataset);
 
       (DecisionDatasetPresenter.prototype.tables as jest.Mock).mockReturnValue(
         mockTables,
@@ -233,7 +279,7 @@ describe('DecisionsController', () => {
       expect(professionsService.findWithVersions).toHaveBeenCalledWith(
         'example-profession-id',
       );
-      expect(decisionsDatasetsService.find).toHaveBeenCalledWith(
+      expect(decisionDatasetsService.find).toHaveBeenCalledWith(
         'example-profession-id',
         'example-organisation-id',
         2017,
@@ -244,6 +290,547 @@ describe('DecisionsController', () => {
         i18nService,
       );
       expect(DecisionDatasetPresenter.prototype.tables).toHaveBeenCalled();
+    });
+  });
+
+  describe('new', () => {
+    describe('when the user is a service owner', () => {
+      it('returns a populated NewTemplate', async () => {
+        const user = userFactory.build({
+          serviceOwner: true,
+        });
+
+        const professionVersions = professionVersionFactory.buildList(5);
+        const organisations = organisationFactory.buildList(5);
+
+        const request = createDefaultMockRequest();
+        const response = createMock<Response>();
+
+        const getActingUserSpy = jest
+          .spyOn(getActingUserModule, 'getActingUser')
+          .mockReturnValue(user);
+        const getDecisionsEndYearSpy = jest
+          .spyOn(getDecisionsEndYearModule, 'getDecisionsEndYear')
+          .mockReturnValue(2024);
+
+        professionVersionsService.allLive.mockResolvedValue(professionVersions);
+
+        (
+          NewDecisionDatasetPresenter.prototype.present as jest.Mock
+        ).mockReturnValue(mockNewTemplate);
+
+        await controller.new(request, response);
+
+        expect(getActingUserSpy).toHaveBeenCalledWith(request);
+        expect(getDecisionsEndYearSpy).toHaveBeenCalled();
+
+        expect(professionVersionsService.allLive).toHaveBeenCalled();
+        expect(
+          professionVersionsService.allLiveForOrganisation,
+        ).not.toHaveBeenCalled();
+
+        expect(organisationVersionsService.allLive).toHaveBeenCalled();
+
+        expect(NewDecisionDatasetPresenter).toHaveBeenCalledWith(
+          professionVersions.map((version) =>
+            Profession.withVersion(version.profession, version),
+          ),
+          organisations,
+          2020,
+          2024,
+          null,
+          null,
+          null,
+          i18nService,
+        );
+        expect(
+          NewDecisionDatasetPresenter.prototype.present,
+        ).toHaveBeenCalled();
+
+        expect(response.render).toHaveBeenCalledWith(
+          'admin/decisions/new',
+          mockNewTemplate,
+        );
+      });
+    });
+
+    describe('when the user is not a service owner', () => {
+      it('returns a populated NewTemplate', async () => {
+        const userOrganisation = organisationFactory.build();
+
+        const user = userFactory.build({
+          serviceOwner: false,
+          organisation: userOrganisation,
+        });
+
+        const professionVersions = professionVersionFactory.buildList(5);
+
+        const request = createDefaultMockRequest();
+        const response = createMock<Response>();
+
+        const getActingUserSpy = jest
+          .spyOn(getActingUserModule, 'getActingUser')
+          .mockReturnValue(user);
+        const getDecisionsEndYearSpy = jest
+          .spyOn(getDecisionsEndYearModule, 'getDecisionsEndYear')
+          .mockReturnValue(2024);
+
+        professionVersionsService.allLiveForOrganisation.mockResolvedValue(
+          professionVersions,
+        );
+
+        (
+          NewDecisionDatasetPresenter.prototype.present as jest.Mock
+        ).mockReturnValue(mockNewTemplate);
+
+        await controller.new(request, response);
+
+        expect(getActingUserSpy).toHaveBeenCalledWith(request);
+        expect(getDecisionsEndYearSpy).toHaveBeenCalled();
+
+        expect(professionVersionsService.allLive).not.toHaveBeenCalled();
+        expect(
+          professionVersionsService.allLiveForOrganisation,
+        ).toHaveBeenCalledWith(userOrganisation);
+
+        expect(organisationVersionsService.allLive).not.toHaveBeenCalled();
+
+        expect(NewDecisionDatasetPresenter).toHaveBeenCalledWith(
+          professionVersions.map((version) =>
+            Profession.withVersion(version.profession, version),
+          ),
+          null,
+          2020,
+          2024,
+          null,
+          null,
+          null,
+          i18nService,
+        );
+        expect(
+          NewDecisionDatasetPresenter.prototype.present,
+        ).toHaveBeenCalled();
+
+        expect(response.render).toHaveBeenCalledWith(
+          'admin/decisions/new',
+          mockNewTemplate,
+        );
+      });
+    });
+  });
+
+  describe('newPost', () => {
+    describe('when a service owner submits a valid DTO', () => {
+      it('redirects to the edit page', async () => {
+        const profession = professionFactory.build({
+          id: 'profession-id',
+        });
+
+        const organisation = organisationFactory.build({
+          id: 'organisation-id',
+        });
+
+        const user = userFactory.build({
+          serviceOwner: true,
+        });
+
+        const request = createDefaultMockRequest();
+        const response = createMock<Response>();
+
+        const newDto: NewDto = {
+          serviceOwner: true,
+          profession: 'profession-id',
+          organisation: 'organisation-id',
+          year: '2023',
+        };
+
+        const getActingUserSpy = jest
+          .spyOn(getActingUserModule, 'getActingUser')
+          .mockReturnValue(user);
+        const getOrganisationsFromProfessionSpy = jest
+          .spyOn(
+            getOrganisationsFromProfessionModule,
+            'getOrganisationsFromProfession',
+          )
+          .mockReturnValue([organisation]);
+
+        professionsService.findWithVersions.mockResolvedValue(profession);
+        organisationsService.find.mockResolvedValue(organisation);
+        decisionDatasetsService.find.mockResolvedValue(null);
+
+        await controller.newPost(request, response, newDto);
+
+        expect(getActingUserSpy).toHaveBeenCalledWith(request);
+        expect(getOrganisationsFromProfessionSpy).toHaveBeenCalledWith(
+          profession,
+        );
+
+        expect(professionsService.findWithVersions).toHaveBeenCalledWith(
+          'profession-id',
+        );
+        expect(organisationsService.find).toBeCalledWith('organisation-id');
+        expect(decisionDatasetsService.find).toHaveBeenCalledWith(
+          'profession-id',
+          'organisation-id',
+          2023,
+        );
+
+        expect(response.redirect).toHaveBeenCalledWith(
+          '/admin/decisions/profession-id/organisation-id/2023/edit',
+        );
+      });
+    });
+
+    describe('when a non-service owner submits a valid DTO', () => {
+      it('redirects to the edit page', async () => {
+        const profession = professionFactory.build({
+          id: 'profession-id',
+        });
+
+        const userOrganisation = organisationFactory.build({
+          id: 'organisation-id',
+        });
+
+        const user = userFactory.build({
+          serviceOwner: false,
+          organisation: userOrganisation,
+        });
+
+        const request = createDefaultMockRequest();
+        const response = createMock<Response>();
+
+        const newDto: NewDto = {
+          serviceOwner: false,
+          profession: 'profession-id',
+          organisation: undefined,
+          year: '2023',
+        };
+
+        const getActingUserSpy = jest
+          .spyOn(getActingUserModule, 'getActingUser')
+          .mockReturnValue(user);
+        const getOrganisationsFromProfessionSpy = jest
+          .spyOn(
+            getOrganisationsFromProfessionModule,
+            'getOrganisationsFromProfession',
+          )
+          .mockReturnValue([userOrganisation]);
+
+        professionsService.findWithVersions.mockResolvedValue(profession);
+        organisationsService.find.mockResolvedValue(userOrganisation);
+        decisionDatasetsService.find.mockResolvedValue(null);
+
+        await controller.newPost(request, response, newDto);
+
+        expect(getActingUserSpy).toHaveBeenCalledWith(request);
+        expect(getOrganisationsFromProfessionSpy).toHaveBeenCalledWith(
+          profession,
+        );
+
+        expect(professionsService.findWithVersions).toHaveBeenCalledWith(
+          'profession-id',
+        );
+        expect(organisationsService.find).toBeCalledWith('organisation-id');
+        expect(decisionDatasetsService.find).toHaveBeenCalledWith(
+          'profession-id',
+          'organisation-id',
+          2023,
+        );
+
+        expect(response.redirect).toHaveBeenCalledWith(
+          '/admin/decisions/profession-id/organisation-id/2023/edit',
+        );
+      });
+    });
+
+    describe('when a user submits a DTO with missing fields', () => {
+      it('returns a NewTemplate populated with errors', async () => {
+        const professionVersions = professionVersionFactory.buildList(5);
+        const organisations = organisationFactory.buildList(5);
+
+        const user = userFactory.build({
+          serviceOwner: true,
+        });
+
+        const request = createDefaultMockRequest();
+        const response = createMock<Response>();
+
+        const newDto: NewDto = {
+          serviceOwner: true,
+          profession: '',
+          organisation: '',
+          year: '',
+        };
+
+        const getActingUserSpy = jest
+          .spyOn(getActingUserModule, 'getActingUser')
+          .mockReturnValue(user);
+        const getOrganisationsFromProfessionSpy = jest.spyOn(
+          getOrganisationsFromProfessionModule,
+          'getOrganisationsFromProfession',
+        );
+        const getDecisionsEndYearSpy = jest
+          .spyOn(getDecisionsEndYearModule, 'getDecisionsEndYear')
+          .mockReturnValue(2024);
+
+        professionVersionsService.allLive.mockResolvedValue(professionVersions);
+        organisationVersionsService.allLive.mockResolvedValue(organisations);
+
+        (
+          NewDecisionDatasetPresenter.prototype.present as jest.Mock
+        ).mockReturnValue(mockNewTemplate);
+
+        await controller.newPost(request, response, newDto);
+
+        expect(getActingUserSpy).toHaveBeenCalledWith(request);
+        expect(getOrganisationsFromProfessionSpy).not.toHaveBeenCalled();
+
+        expect(getDecisionsEndYearSpy).toBeCalled();
+
+        expect(professionsService.findWithVersions).not.toHaveBeenCalled();
+        expect(organisationsService.find).not.toHaveBeenCalled();
+        expect(decisionDatasetsService.find).not.toHaveBeenCalled();
+
+        expect(professionVersionsService.allLive).toHaveBeenCalled();
+        expect(organisationVersionsService.allLive).toHaveBeenCalled();
+
+        expect(NewDecisionDatasetPresenter).toHaveBeenCalledWith(
+          professionVersions.map((version) =>
+            Profession.withVersion(version.profession, version),
+          ),
+          organisations,
+          2020,
+          2024,
+          null,
+          null,
+          null,
+          i18nService,
+        );
+        expect(
+          NewDecisionDatasetPresenter.prototype.present,
+        ).toHaveBeenCalled();
+
+        expect(response.render).toHaveBeenCalledWith('admin/decisions/new', {
+          ...mockNewTemplate,
+          errors: {
+            organisation: {
+              text: 'decisions.admin.new.errors.organisation.empty',
+            },
+            profession: {
+              text: 'decisions.admin.new.errors.profession.empty',
+            },
+            year: {
+              text: 'decisions.admin.new.errors.year.empty',
+            },
+          },
+        });
+      });
+    });
+
+    describe('when a user submits a DTO for a dataset that already exists', () => {
+      it('returns a NewTemplate populated with errors', async () => {
+        const profession = professionFactory.build({
+          id: 'profession-id',
+        });
+        const organisation = organisationFactory.build({
+          id: 'organisation-id',
+        });
+        const dataset = decisionDatasetFactory.build({
+          organisation,
+          profession,
+          year: 2020,
+        });
+
+        const professionVersions = professionVersionFactory.buildList(5);
+        const organisations = organisationFactory.buildList(5);
+
+        const user = userFactory.build({
+          serviceOwner: true,
+        });
+
+        const request = createDefaultMockRequest();
+        const response = createMock<Response>();
+
+        const newDto: NewDto = {
+          serviceOwner: true,
+          profession: 'profession-id',
+          organisation: 'organisation-id',
+          year: '2020',
+        };
+
+        const getActingUserSpy = jest
+          .spyOn(getActingUserModule, 'getActingUser')
+          .mockReturnValue(user);
+        const getOrganisationsFromProfessionSpy = jest
+          .spyOn(
+            getOrganisationsFromProfessionModule,
+            'getOrganisationsFromProfession',
+          )
+          .mockReturnValue([organisation]);
+        const getDecisionsEndYearSpy = jest
+          .spyOn(getDecisionsEndYearModule, 'getDecisionsEndYear')
+          .mockReturnValue(2024);
+
+        professionsService.findWithVersions.mockResolvedValue(profession);
+        organisationsService.find.mockResolvedValue(organisation);
+        decisionDatasetsService.find.mockResolvedValue(dataset);
+
+        professionVersionsService.allLive.mockResolvedValue(professionVersions);
+        organisationVersionsService.allLive.mockResolvedValue(organisations);
+
+        (
+          NewDecisionDatasetPresenter.prototype.present as jest.Mock
+        ).mockReturnValue(mockNewTemplate);
+
+        await controller.newPost(request, response, newDto);
+
+        expect(getActingUserSpy).toHaveBeenCalledWith(request);
+        expect(getOrganisationsFromProfessionSpy).toHaveBeenCalled();
+
+        expect(getDecisionsEndYearSpy).toBeCalled();
+
+        expect(professionsService.findWithVersions).toHaveBeenCalledWith(
+          'profession-id',
+        );
+        expect(organisationsService.find).toHaveBeenCalledWith(
+          'organisation-id',
+        );
+        expect(decisionDatasetsService.find).toHaveBeenCalledWith(
+          'profession-id',
+          'organisation-id',
+          2020,
+        );
+
+        expect(professionVersionsService.allLive).toHaveBeenCalled();
+        expect(organisationVersionsService.allLive).toHaveBeenCalled();
+
+        expect(NewDecisionDatasetPresenter).toHaveBeenCalledWith(
+          professionVersions.map((version) =>
+            Profession.withVersion(version.profession, version),
+          ),
+          organisations,
+          2020,
+          2024,
+          profession,
+          organisation,
+          2020,
+          i18nService,
+        );
+        expect(
+          NewDecisionDatasetPresenter.prototype.present,
+        ).toHaveBeenCalled();
+
+        expect(response.render).toHaveBeenCalledWith('admin/decisions/new', {
+          ...mockNewTemplate,
+          errors: {
+            year: {
+              text: 'decisions.admin.new.errors.year.exists',
+            },
+          },
+        });
+      });
+    });
+
+    describe('when a user submits a DTO with an invalid organisation for the profession', () => {
+      it('returns a NewTemplate populated with errors', async () => {
+        const profession = professionFactory.build({
+          id: 'profession-id',
+        });
+        const organisation = organisationFactory.build({
+          id: 'organisation-id',
+        });
+        const otherOrganisation = organisationFactory.build({
+          id: 'other-organisation-id',
+        });
+
+        const professionVersions = professionVersionFactory.buildList(5);
+        const organisations = organisationFactory.buildList(5);
+
+        const user = userFactory.build({
+          serviceOwner: true,
+        });
+
+        const request = createDefaultMockRequest();
+        const response = createMock<Response>();
+
+        const newDto: NewDto = {
+          serviceOwner: true,
+          profession: 'profession-id',
+          organisation: 'organisation-id',
+          year: '2020',
+        };
+
+        const getActingUserSpy = jest
+          .spyOn(getActingUserModule, 'getActingUser')
+          .mockReturnValue(user);
+        const getOrganisationsFromProfessionSpy = jest
+          .spyOn(
+            getOrganisationsFromProfessionModule,
+            'getOrganisationsFromProfession',
+          )
+          .mockReturnValue([otherOrganisation]);
+        const getDecisionsEndYearSpy = jest
+          .spyOn(getDecisionsEndYearModule, 'getDecisionsEndYear')
+          .mockReturnValue(2024);
+
+        professionsService.findWithVersions.mockResolvedValue(profession);
+        organisationsService.find.mockResolvedValue(organisation);
+        decisionDatasetsService.find.mockResolvedValue(null);
+
+        professionVersionsService.allLive.mockResolvedValue(professionVersions);
+        organisationVersionsService.allLive.mockResolvedValue(organisations);
+
+        (
+          NewDecisionDatasetPresenter.prototype.present as jest.Mock
+        ).mockReturnValue(mockNewTemplate);
+
+        await controller.newPost(request, response, newDto);
+
+        expect(getActingUserSpy).toHaveBeenCalledWith(request);
+        expect(getOrganisationsFromProfessionSpy).toHaveBeenCalled();
+
+        expect(getDecisionsEndYearSpy).toBeCalled();
+
+        expect(professionsService.findWithVersions).toHaveBeenCalledWith(
+          'profession-id',
+        );
+        expect(organisationsService.find).toHaveBeenCalledWith(
+          'organisation-id',
+        );
+        expect(decisionDatasetsService.find).toHaveBeenCalledWith(
+          'profession-id',
+          'organisation-id',
+          2020,
+        );
+
+        expect(professionVersionsService.allLive).toHaveBeenCalled();
+        expect(organisationVersionsService.allLive).toHaveBeenCalled();
+
+        expect(NewDecisionDatasetPresenter).toHaveBeenCalledWith(
+          professionVersions.map((version) =>
+            Profession.withVersion(version.profession, version),
+          ),
+          organisations,
+          2020,
+          2024,
+          profession,
+          organisation,
+          2020,
+          i18nService,
+        );
+        expect(
+          NewDecisionDatasetPresenter.prototype.present,
+        ).toHaveBeenCalled();
+
+        expect(response.render).toHaveBeenCalledWith('admin/decisions/new', {
+          ...mockNewTemplate,
+          errors: {
+            organisation: {
+              text: 'decisions.admin.new.errors.organisation.notValidForProfession',
+            },
+          },
+        });
+      });
     });
   });
 
@@ -266,7 +853,7 @@ describe('DecisionsController', () => {
 
         professionsService.findWithVersions.mockResolvedValue(profession);
         organisationsService.find.mockResolvedValue(organisation);
-        decisionsDatasetsService.find.mockResolvedValue(dataset);
+        decisionDatasetsService.find.mockResolvedValue(dataset);
 
         (
           DecisionDatasetEditPresenter.prototype.present as jest.Mock
@@ -303,7 +890,7 @@ describe('DecisionsController', () => {
         expect(organisationsService.find).toHaveBeenCalledWith(
           'example-organisation-id',
         );
-        expect(decisionsDatasetsService.find).toHaveBeenCalledWith(
+        expect(decisionDatasetsService.find).toHaveBeenCalledWith(
           'example-profession-id',
           'example-organisation-id',
           2016,
@@ -311,6 +898,7 @@ describe('DecisionsController', () => {
 
         expect(DecisionDatasetEditPresenter).toHaveBeenCalledWith(
           dataset.routes,
+          i18nService,
         );
         expect(
           DecisionDatasetEditPresenter.prototype.present,
@@ -339,7 +927,7 @@ describe('DecisionsController', () => {
 
         professionsService.findWithVersions.mockResolvedValue(profession);
         organisationsService.find.mockResolvedValue(organisation);
-        decisionsDatasetsService.find.mockResolvedValue(null);
+        decisionDatasetsService.find.mockResolvedValue(null);
 
         (
           DecisionDatasetEditPresenter.prototype.present as jest.Mock
@@ -376,28 +964,31 @@ describe('DecisionsController', () => {
         expect(organisationsService.find).toHaveBeenCalledWith(
           'example-organisation-id',
         );
-        expect(decisionsDatasetsService.find).toHaveBeenCalledWith(
+        expect(decisionDatasetsService.find).toHaveBeenCalledWith(
           'example-profession-id',
           'example-organisation-id',
           2016,
         );
 
-        expect(DecisionDatasetEditPresenter).toHaveBeenCalledWith([
-          {
-            name: '',
-            countries: [
-              {
-                country: null,
-                decisions: {
-                  yes: null,
-                  no: null,
-                  yesAfterComp: null,
-                  noAfterComp: null,
+        expect(DecisionDatasetEditPresenter).toHaveBeenCalledWith(
+          [
+            {
+              name: '',
+              countries: [
+                {
+                  country: null,
+                  decisions: {
+                    yes: null,
+                    no: null,
+                    yesAfterComp: null,
+                    noAfterComp: null,
+                  },
                 },
-              },
-            ],
-          },
-        ] as DecisionRoute[]);
+              ],
+            },
+          ] as DecisionRoute[],
+          i18nService,
+        );
         expect(
           DecisionDatasetEditPresenter.prototype.present,
         ).toHaveBeenCalled();
@@ -498,7 +1089,7 @@ describe('DecisionsController', () => {
         expect(organisationsService.find).toHaveBeenCalledWith(
           'example-organisation-id',
         );
-        expect(decisionsDatasetsService.save).toHaveBeenCalledWith({
+        expect(decisionDatasetsService.save).toHaveBeenCalledWith({
           profession,
           organisation,
           year: 2016,
@@ -604,7 +1195,7 @@ describe('DecisionsController', () => {
         expect(organisationsService.find).toHaveBeenCalledWith(
           'example-organisation-id',
         );
-        expect(decisionsDatasetsService.save).toHaveBeenCalledWith({
+        expect(decisionDatasetsService.save).toHaveBeenCalledWith({
           profession,
           organisation,
           year: 2016,
@@ -713,6 +1304,7 @@ describe('DecisionsController', () => {
 
         expect(DecisionDatasetEditPresenter).toHaveBeenCalledWith(
           decisionRoutes,
+          i18nService,
         );
         expect(
           DecisionDatasetEditPresenter.prototype.present,

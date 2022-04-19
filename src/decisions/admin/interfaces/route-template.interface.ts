@@ -3,7 +3,7 @@ import { SelectItemArgs } from '../../../common/interfaces/select-item-args.inte
 export interface RouteTemplate {
   name: string;
   countries: {
-    countrySelectArgs: SelectItemArgs[];
+    countriesSelectArgs: SelectItemArgs[];
     decisions: {
       yes: string;
       no: string;
