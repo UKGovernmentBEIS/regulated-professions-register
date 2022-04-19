@@ -50,7 +50,7 @@ import { ValidationFailedError } from '../../common/validation/validation-failed
 import { Organisation } from '../../organisations/organisation.entity';
 import { getOrganisationsFromProfession } from '../../professions/helpers/get-organisations-from-profession.helper';
 import { NewDecisionDatasetPresenter } from './presenters/new-decision-dataset.presenter';
-import { getDecisionsEndYear } from './helpers/get-decisions-end-year.helper';
+import { getDecisionsYearsRange } from './helpers/get-decisions-years-range';
 
 const emptyCountry = {
   country: null,
@@ -395,8 +395,7 @@ export class DecisionsController {
       ? await this.organisationVersionsService.allLive()
       : null;
 
-    const startYear = 2020;
-    const endYear = getDecisionsEndYear();
+    const { start: startYear, end: endYear } = getDecisionsYearsRange();
 
     const presenter = new NewDecisionDatasetPresenter(
       professions,

@@ -34,7 +34,7 @@ import { ShowTemplate } from './interfaces/show-template.interface';
 import { DecisionDatasetEditPresenter } from './presenters/decision-dataset-edit.presenter';
 import { DecisionDatasetsPresenter } from './presenters/decision-datasets.presenter';
 import professionVersionFactory from '../../testutils/factories/profession-version';
-import * as getDecisionsEndYearModule from './helpers/get-decisions-end-year.helper';
+import * as getDecisionsYearsRangeModule from './helpers/get-decisions-years-range';
 import { NewDecisionDatasetPresenter } from './presenters/new-decision-dataset.presenter';
 import { Profession } from '../../professions/profession.entity';
 import { NewTemplate } from './interfaces/new-template.interface';
@@ -309,9 +309,9 @@ describe('DecisionsController', () => {
         const getActingUserSpy = jest
           .spyOn(getActingUserModule, 'getActingUser')
           .mockReturnValue(user);
-        const getDecisionsEndYearSpy = jest
-          .spyOn(getDecisionsEndYearModule, 'getDecisionsEndYear')
-          .mockReturnValue(2024);
+        const getDecisionsYearsRangeSpy = jest
+          .spyOn(getDecisionsYearsRangeModule, 'getDecisionsYearsRange')
+          .mockReturnValue({ start: 2020, end: 2024 });
 
         professionVersionsService.allLive.mockResolvedValue(professionVersions);
 
@@ -322,7 +322,7 @@ describe('DecisionsController', () => {
         await controller.new(request, response);
 
         expect(getActingUserSpy).toHaveBeenCalledWith(request);
-        expect(getDecisionsEndYearSpy).toHaveBeenCalled();
+        expect(getDecisionsYearsRangeSpy).toHaveBeenCalled();
 
         expect(professionVersionsService.allLive).toHaveBeenCalled();
         expect(
@@ -372,8 +372,8 @@ describe('DecisionsController', () => {
           .spyOn(getActingUserModule, 'getActingUser')
           .mockReturnValue(user);
         const getDecisionsEndYearSpy = jest
-          .spyOn(getDecisionsEndYearModule, 'getDecisionsEndYear')
-          .mockReturnValue(2024);
+          .spyOn(getDecisionsYearsRangeModule, 'getDecisionsYearsRange')
+          .mockReturnValue({ start: 2020, end: 2024 });
 
         professionVersionsService.allLiveForOrganisation.mockResolvedValue(
           professionVersions,
@@ -569,9 +569,9 @@ describe('DecisionsController', () => {
           getOrganisationsFromProfessionModule,
           'getOrganisationsFromProfession',
         );
-        const getDecisionsEndYearSpy = jest
-          .spyOn(getDecisionsEndYearModule, 'getDecisionsEndYear')
-          .mockReturnValue(2024);
+        const getDecisionsYearsRangeSpy = jest
+          .spyOn(getDecisionsYearsRangeModule, 'getDecisionsYearsRange')
+          .mockReturnValue({ start: 2020, end: 2024 });
 
         professionVersionsService.allLive.mockResolvedValue(professionVersions);
         organisationVersionsService.allLive.mockResolvedValue(organisations);
@@ -585,7 +585,7 @@ describe('DecisionsController', () => {
         expect(getActingUserSpy).toHaveBeenCalledWith(request);
         expect(getOrganisationsFromProfessionSpy).not.toHaveBeenCalled();
 
-        expect(getDecisionsEndYearSpy).toBeCalled();
+        expect(getDecisionsYearsRangeSpy).toBeCalled();
 
         expect(professionsService.findWithVersions).not.toHaveBeenCalled();
         expect(organisationsService.find).not.toHaveBeenCalled();
@@ -667,9 +667,9 @@ describe('DecisionsController', () => {
             'getOrganisationsFromProfession',
           )
           .mockReturnValue([organisation]);
-        const getDecisionsEndYearSpy = jest
-          .spyOn(getDecisionsEndYearModule, 'getDecisionsEndYear')
-          .mockReturnValue(2024);
+        const getDecisionsYearsRangeSpy = jest
+          .spyOn(getDecisionsYearsRangeModule, 'getDecisionsYearsRange')
+          .mockReturnValue({ start: 2020, end: 2024 });
 
         professionsService.findWithVersions.mockResolvedValue(profession);
         organisationsService.find.mockResolvedValue(organisation);
@@ -687,7 +687,7 @@ describe('DecisionsController', () => {
         expect(getActingUserSpy).toHaveBeenCalledWith(request);
         expect(getOrganisationsFromProfessionSpy).toHaveBeenCalled();
 
-        expect(getDecisionsEndYearSpy).toBeCalled();
+        expect(getDecisionsYearsRangeSpy).toBeCalled();
 
         expect(professionsService.findWithVersions).toHaveBeenCalledWith(
           'profession-id',
@@ -769,9 +769,9 @@ describe('DecisionsController', () => {
             'getOrganisationsFromProfession',
           )
           .mockReturnValue([otherOrganisation]);
-        const getDecisionsEndYearSpy = jest
-          .spyOn(getDecisionsEndYearModule, 'getDecisionsEndYear')
-          .mockReturnValue(2024);
+        const getDecisionsYearsRangeSpy = jest
+          .spyOn(getDecisionsYearsRangeModule, 'getDecisionsYearsRange')
+          .mockReturnValue({ start: 2020, end: 2024 });
 
         professionsService.findWithVersions.mockResolvedValue(profession);
         organisationsService.find.mockResolvedValue(organisation);
@@ -789,7 +789,7 @@ describe('DecisionsController', () => {
         expect(getActingUserSpy).toHaveBeenCalledWith(request);
         expect(getOrganisationsFromProfessionSpy).toHaveBeenCalled();
 
-        expect(getDecisionsEndYearSpy).toBeCalled();
+        expect(getDecisionsYearsRangeSpy).toBeCalled();
 
         expect(professionsService.findWithVersions).toHaveBeenCalledWith(
           'profession-id',
