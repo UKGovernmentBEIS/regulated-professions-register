@@ -2,6 +2,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% set title = ("organisations.admin.archive.heading" | t) %}
+{% set canArchiveOrganisation = not professions.length %}
 
 {% block title %}
   {{ "organisations.admin.archive.heading" | t }}
@@ -13,15 +14,30 @@
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-      <p class="govuk-body">{{ 'organisations.admin.archive.details' | t }}</p>
+      {% if canArchiveOrganisation %}
+        <form action="/admin/organisations/{{ organisation.id }}/versions/{{ organisation.versionId }}/archive?_method=DELETE" method="post">
+          {{
+            govukButton({
+              text: ("organisations.admin.button.archive" | t)
+            })
+          }}
+        </form>
+      {% else %}
+        <h2 class="govuk-heading-m">{{ 'organisations.admin.archive.forbidden' | t }}</h2>
+        <ul class="govuk-list govuk-list--bullet">
+          {% for profession in professions %}
 
-      <form action="/admin/organisations/{{ organisation.id }}/versions/{{ organisation.versionId }}/archive?_method=DELETE" method="post">
+            <li class="govuk-body-m">{{profession.name}}</li>
+          {% endfor %}
+        </ul>
+
         {{
-          govukButton({
-            text: ("organisations.admin.button.archive" | t)
-          })
-        }}
-      </form>
+            govukButton({
+              text: ("organisations.admin.button.backToRegulator" | t),
+              href: backLink
+            })
+          }}
+      {% endif %}
     </div>
 
   </div>

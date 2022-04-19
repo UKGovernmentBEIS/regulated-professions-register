@@ -69,7 +69,8 @@
       "confirmation": {
         "heading": "Regulatory authority archived",
         "body": "The regulator <strong>{name}</strong> has been archived."
-      }
+      },
+      "forbidden": "This organisation cannot be archived yet. Before you can archive, remove the regulator from the following professions:"
     },
     "tableHeading": {
       "name": "Name",
@@ -120,7 +121,8 @@
       },
       "archive": "Archive this regulatory authority",
       "saveAsDraft": "Save as draft",
-      "publish": "Publish to register"
+      "publish": "Publish to register",
+      "backToRegulator": "Back to regulator"
     },
     "publicFacingLink": {
       "heading": "Currently published version",
