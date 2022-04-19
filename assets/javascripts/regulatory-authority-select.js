@@ -7,6 +7,7 @@ function showRegulator(event) {
   const items = document.querySelectorAll(
     hiddenRegulatoryAuthorityContainerSelector,
   );
+  const addRegulatorButton = document.querySelector('#add-regulator');
 
   const latestRegulator = items[0];
 
@@ -28,7 +29,8 @@ function showRegulator(event) {
     document.querySelectorAll(hiddenRegulatoryAuthorityContainerSelector)
       .length == 0
   ) {
-    hideElement(addButton);
+    addRegulatorButton.classList.add('rpr-hidden-element');
+    addRegulatorButton.setAttribute('aria-hidden', true);
   }
 
   event.preventDefault();
@@ -69,14 +71,18 @@ function initialize(items) {
 function removeRegulator(event) {
   const button = event.target;
   const container = button.parentElement;
-
-  hideElement(container);
+  const addRegulatorButton = document.querySelector('#add-regulator');
 
   container.querySelector('select.organisation').value = '';
   container.querySelector('select.role').value = '';
 
   button.remove();
-
+  container.classList.add('rpr-hidden-element');
+  container.setAttribute('aria-hidden', true);
+  if (addRegulatorButton.classList.contains('rpr-hidden-element')) {
+    addRegulatorButton.classList.remove('rpr-hidden-element');
+    addRegulatorButton.setAttribute('aria-hidden', false);
+  }
   event.preventDefault();
 }
 
