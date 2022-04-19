@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [unreleased]
 
+### Changed
+
+- Allow Professions to have up to 25 regulators (previously 5)
+
 ### Added
 
 - Hide edit and delete buttons for non Tier 1 users
