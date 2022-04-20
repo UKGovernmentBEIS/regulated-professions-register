@@ -21,8 +21,6 @@ import { DecisionDatasetsService } from '../decision-datasets.service';
 import { IndexTemplate } from './interfaces/index-template.interface';
 import { ShowTemplate } from './interfaces/show-template.interface';
 import { ProfessionsService } from '../../professions/professions.service';
-import { checkCanChangeProfession } from '../../users/helpers/check-can-change-profession';
-import { checkCanViewOrganisation } from '../../users/helpers/check-can-view-organisation';
 import {
   DecisionDatasetsPresenter,
   DecisionDatasetsPresenterView,
@@ -50,6 +48,7 @@ import { ValidationFailedError } from '../../common/validation/validation-failed
 import { Organisation } from '../../organisations/organisation.entity';
 import { getOrganisationsFromProfession } from '../../professions/helpers/get-organisations-from-profession.helper';
 import { NewDecisionDatasetPresenter } from './presenters/new-decision-dataset.presenter';
+import { checkCanChangeDataset } from './helpers/check-can-change-dataset.helper';
 import { getDecisionsYearsRange } from './helpers/get-decisions-years-range';
 
 const emptyCountry = {
@@ -104,15 +103,15 @@ export class DecisionsController {
       professionId,
     );
 
-    checkCanChangeProfession(request, profession);
-
     const dataset = await this.decisionDatasetsService.find(
       professionId,
       organisationId,
       year,
     );
 
-    checkCanViewOrganisation(request, dataset.organisation);
+    const organisation = dataset.organisation;
+
+    checkCanChangeDataset(request, profession, organisation, year, true);
 
     const presenter = new DecisionDatasetPresenter(
       dataset.routes,
@@ -120,8 +119,8 @@ export class DecisionsController {
     );
 
     return {
-      profession: profession,
-      organisation: dataset.organisation,
+      profession,
+      organisation,
       year,
       tables: presenter.tables(),
     };
@@ -249,17 +248,15 @@ export class DecisionsController {
       professionId,
     );
 
-    checkCanChangeProfession(request, profession);
-
     const organisation = await this.organisationsService.find(organisationId);
-
-    checkCanViewOrganisation(request, organisation);
 
     const dataset = await this.decisionDatasetsService.find(
       professionId,
       organisationId,
       year,
     );
+
+    checkCanChangeDataset(request, profession, organisation, year, !!dataset);
 
     const routes: DecisionRoute[] = dataset
       ? dataset.routes
@@ -300,11 +297,15 @@ export class DecisionsController {
       professionId,
     );
 
-    checkCanChangeProfession(request, profession);
-
     const organisation = await this.organisationsService.find(organisationId);
 
-    checkCanViewOrganisation(request, organisation);
+    const dataset = await this.decisionDatasetsService.find(
+      professionId,
+      organisationId,
+      year,
+    );
+
+    checkCanChangeDataset(request, profession, organisation, year, !!dataset);
 
     const routes = parseEditDtoDecisionRoutes(editDto);
 
