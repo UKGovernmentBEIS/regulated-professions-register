@@ -1,5 +1,6 @@
 import { DeepMocked, createMock } from '@golevelup/ts-jest';
 import { TestingModule, Test } from '@nestjs/testing';
+import { BadRequestException } from '@nestjs/common';
 import { Response } from 'express';
 import { I18nService } from 'nestjs-i18n';
 import { flashMessage } from '../../common/flash-message';
@@ -193,6 +194,33 @@ describe('OrganisationArchiveController', () => {
       await controller.delete(req, res, organisation.id, version.id);
 
       expect(checkCanViewOrganisation).toHaveBeenCalledWith(req, organisation);
+    });
+    it('throws BadRequestException when request is made to archive organisation with professions', async () => {
+      const profession = professionFactory.build({
+        name: 'profession',
+      });
+      const organisation = organisationFactory.build({
+        professionToOrganisations: [
+          { profession },
+        ] as ProfessionToOrganisation[],
+      });
+      const version = organisationVersionFactory.build({
+        organisation: organisation,
+      });
+
+      const req = createDefaultMockRequest({
+        user: userFactory.build(),
+      });
+
+      const res = createMock<Response>({});
+
+      organisationVersionsService.findByIdWithOrganisation.mockResolvedValue(
+        version,
+      );
+
+      await expect(
+        controller.delete(req, res, profession.id, version.id),
+      ).rejects.toThrowError(BadRequestException);
     });
   });
 });
