@@ -86,7 +86,7 @@ export class OrganisationArchiveController {
       user,
     );
 
-    await this.organisationVersionsService.archive(versionToArchive, user);
+    await this.organisationVersionsService.archive(versionToArchive);
 
     const messageTitle = await this.i18nService.translate(
       'organisations.admin.archive.confirmation.heading',
