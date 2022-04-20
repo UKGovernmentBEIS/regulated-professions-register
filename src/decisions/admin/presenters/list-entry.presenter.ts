@@ -5,20 +5,41 @@ import { escape } from '../../../helpers/escape.helper';
 import { DecisionDataset } from '../../decision-dataset.entity';
 import { formatDate } from '../../../common/utils';
 import { formatStatus } from '../../../helpers/format-status.helper';
+import { DecisionDatasetsPresenterView } from './decision-datasets.presenter';
+import { ProfessionsPresenterView } from '../../../professions/admin/presenters/professions.presenter';
 
-type Field = 'profession' | 'year' | 'lastModified' | 'status' | 'actions';
+type Field =
+  | 'profession'
+  | 'year'
+  | 'lastModified'
+  | 'status'
+  | 'actions'
+  | 'regulator';
 
-const fields: Field[] = [
-  'profession',
-  'year',
-  'lastModified',
-  'status',
-  'actions',
-];
+const fields = {
+  overview: [
+    'profession',
+    'regulator',
+    'year',
+    'lastModified',
+    'status',
+    'actions',
+  ],
+  'single-organisation': [
+    'profession',
+    'year',
+    'lastModified',
+    'status',
+    'actions',
+  ],
+} as { [K in DecisionDatasetsPresenterView]: Field[] };
 
 export class ListEntryPresenter {
-  static headings(i18nService: I18nService): TableRow {
-    return fields
+  static headings(
+    i18nService: I18nService,
+    contents: DecisionDatasetsPresenterView,
+  ): TableRow {
+    return fields[contents]
       .map((field) =>
         i18nService.translate<string>(
           `decisions.admin.dashboard.tableHeading.${field}`,
@@ -32,7 +53,7 @@ export class ListEntryPresenter {
     private readonly i18nService: I18nService,
   ) {}
 
-  tableRow(): TableRow {
+  tableRow(contents: ProfessionsPresenterView): TableRow {
     const viewDetails = `<a class="govuk-link" href="/admin/decisions/${
       this.dataset.profession.id
     }/${this.dataset.organisation.id}/${
@@ -50,6 +71,7 @@ export class ListEntryPresenter {
 
     const entries: { [K in Field]: TableCell } = {
       profession: { text: this.dataset.profession.name },
+      regulator: { text: this.dataset.organisation.name },
       year: { text: this.dataset.year.toString() },
       lastModified: { text: formatDate(this.dataset.updated_at) },
       status: {
@@ -58,6 +80,6 @@ export class ListEntryPresenter {
       actions: { html: viewDetails },
     };
 
-    return fields.map((field) => entries[field]);
+    return fields[contents].map((field) => entries[field]);
   }
 }

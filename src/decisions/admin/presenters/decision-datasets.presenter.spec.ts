@@ -22,9 +22,9 @@ const mockTableHeadingRow: TableRow = [
 ];
 
 describe('DecisionDatasetsPresenter', () => {
-  describe('table', () => {
-    describe('when given a user organisation', () => {
-      it('returns a populated IndexTemplate', () => {
+  describe('present', () => {
+    describe('when called with `single-organisation`', () => {
+      it("returns a populated IndexTemplate with the user's organisation listed", async () => {
         const i18nService = createMockI18nService();
 
         const organisation = organisationFactory.build();
@@ -56,16 +56,16 @@ describe('DecisionDatasetsPresenter', () => {
           },
         };
 
-        const result = presenter.present();
+        const result = presenter.present('single-organisation');
 
         expect(result).toEqual(expected);
-        expect(ListEntryPresenter.headings).toBeCalled();
+        expect(ListEntryPresenter.headings).toBeCalledWith(false, i18nService);
         expect(ListEntryPresenter.prototype.tableRow).toBeCalledTimes(3);
       });
     });
 
-    describe('when given no user organisation', () => {
-      it('returns a populated IndexTemplate', () => {
+    describe('when called with `overview`', () => {
+      it('returns a populated IndexTemplate with the BEIS organisation listed', async () => {
         const i18nService = createMockI18nService();
 
         const datasets = decisionDatasetFactory.buildList(3);
@@ -96,10 +96,10 @@ describe('DecisionDatasetsPresenter', () => {
           },
         };
 
-        const result = presenter.present();
+        const result = presenter.present('overview');
 
         expect(result).toEqual(expected);
-        expect(ListEntryPresenter.headings).toBeCalled();
+        expect(ListEntryPresenter.headings).toBeCalledWith(true, i18nService);
         expect(ListEntryPresenter.prototype.tableRow).toBeCalledTimes(3);
       });
     });

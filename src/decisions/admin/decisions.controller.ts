@@ -22,7 +22,10 @@ import { ShowTemplate } from './interfaces/show-template.interface';
 import { ProfessionsService } from '../../professions/professions.service';
 import { checkCanChangeProfession } from '../../users/helpers/check-can-change-profession';
 import { checkCanViewOrganisation } from '../../users/helpers/check-can-view-organisation';
-import { DecisionDatasetsPresenter } from './presenters/decision-datasets.presenter';
+import {
+  DecisionDatasetsPresenter,
+  DecisionDatasetsPresenterView,
+} from './presenters/decision-datasets.presenter';
 import { DecisionDatasetPresenter } from '../presenters/decision-dataset.presenter';
 import { Response } from 'express';
 import { OrganisationsService } from '../../organisations/organisations.service';
@@ -350,6 +353,10 @@ export class DecisionsController {
 
     const userOrganisation = showAllOrgs ? null : actingUser.organisation;
 
+    const view: DecisionDatasetsPresenterView = showAllOrgs
+      ? 'overview'
+      : 'single-organisation';
+
     const allDecisionDatasets = await (showAllOrgs
       ? this.decisionDatasetsService.all()
       : this.decisionDatasetsService.allForOrganisation(userOrganisation));
@@ -358,7 +365,7 @@ export class DecisionsController {
       userOrganisation,
       allDecisionDatasets,
       this.i18nService,
-    ).present();
+    ).present(view);
   }
 
   private async renderNew(
