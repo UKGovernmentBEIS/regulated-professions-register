@@ -2,6 +2,6 @@
   "collection": "@nestjs/schematics",
   "sourceRoot": "src",
   "compilerOptions": {
-    "assets": ["i18n/**/*", "config/nations.json"]
+    "assets": ["i18n/**/*", "config/nations.json", "config/countries.json"]
   }
 }
