@@ -1,6 +1,6 @@
-import { SelectItemArgs } from '../../../common/interfaces/select-item-args.interface';
-import { createMockI18nService } from '../../../testutils/create-mock-i18n-service';
-import { translationOf } from '../../../testutils/translation-of';
+import { SelectItemArgs } from '../../common/interfaces/select-item-args.interface';
+import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
+import { translationOf } from '../../testutils/translation-of';
 import { CountriesSelectPresenter } from './countries-select.presenter';
 
 describe('CountrySelectPresenter', () => {

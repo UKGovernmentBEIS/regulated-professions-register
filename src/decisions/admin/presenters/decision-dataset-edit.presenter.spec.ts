@@ -1,12 +1,12 @@
 import { SelectItemArgs } from '../../../common/interfaces/select-item-args.interface';
+import { CountriesSelectPresenter } from '../../../countries/presenters/countries-select.presenter';
 import { createMockI18nService } from '../../../testutils/create-mock-i18n-service';
 import { DecisionRoute } from '../../interfaces/decision-route.interface';
 import * as decisionValueToStringModule from '../helpers/decision-value-to-string.helper';
 import { RouteTemplate } from '../interfaces/route-template.interface';
-import { CountriesSelectPresenter } from './countries-select.presenter';
 import { DecisionDatasetEditPresenter } from './decision-dataset-edit.presenter';
 
-jest.mock('./countries-select.presenter');
+jest.mock('../../../countries/presenters/countries-select.presenter');
 
 const mockCountriesSelectArgs: SelectItemArgs[] = [
   {

@@ -1,5 +1,5 @@
 import { I18nService } from 'nestjs-i18n';
-import { SelectItemArgs } from '../../../common/interfaces/select-item-args.interface';
+import { SelectItemArgs } from '../../common/interfaces/select-item-args.interface';
 
 const countries = [
   'France',
