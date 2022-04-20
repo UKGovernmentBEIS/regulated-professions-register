@@ -7,6 +7,7 @@
       "viewDetails": "View details <span class='govuk-visually-hidden'>about {year} {organisaition} {profession} decision data</span>",
       "tableHeading": {
         "profession": "Profession",
+        "regulator": "Regulator",
         "year": "Year",
         "lastModified": "Last updated",
         "status": "Status",

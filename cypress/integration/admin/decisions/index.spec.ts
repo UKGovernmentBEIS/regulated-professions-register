@@ -14,7 +14,7 @@ describe('Listing decision datasets', () => {
       cy.visitAndCheckAccessibility('/admin/decisions');
     });
 
-    it('Lists all decision datasets', () => {
+    it('Lists all decision datasets with their organisation', () => {
       cy.readFile('./seeds/test/decision-datasets.json').then(
         (datasets: SeedDecisionDataset[]) => {
           const datasetsToShow = getDisplayedDatasets(datasets);
@@ -30,6 +30,7 @@ describe('Listing decision datasets', () => {
               .eq(index)
               .then(($row) => {
                 cy.wrap($row).should('contain', dataset.profession);
+                cy.wrap($row).should('contain', dataset.organisation);
                 cy.wrap($row).should('contain', dataset.year.toString());
 
                 cy.get('[data-cy=changed-by-text]').should('not.exist');
@@ -72,6 +73,7 @@ describe('Listing decision datasets', () => {
               .eq(index)
               .then(($row) => {
                 cy.wrap($row).should('contain', dataset.profession);
+                cy.wrap($row).should('not.contain', dataset.organisation);
                 cy.wrap($row).should('contain', dataset.year.toString());
 
                 cy.get('[data-cy=changed-by-text]').should('not.exist');

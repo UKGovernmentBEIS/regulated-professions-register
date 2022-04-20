@@ -5,6 +5,8 @@ import { Organisation } from '../../../organisations/organisation.entity';
 import { Table } from '../../../common/interfaces/table';
 import { DecisionDataset } from '../../decision-dataset.entity';
 
+export type DecisionDatasetsPresenterView = 'overview' | 'single-organisation';
+
 export class DecisionDatasetsPresenter {
   constructor(
     private readonly userOrganisation: Organisation | null,
@@ -12,24 +14,23 @@ export class DecisionDatasetsPresenter {
     private readonly i18nService: I18nService,
   ) {}
 
-  async present(): Promise<IndexTemplate> {
-    const organisation = !this.userOrganisation
-      ? this.i18nService.translate('app.beis')
-      : this.userOrganisation.name;
+  present(view: DecisionDatasetsPresenterView): IndexTemplate {
+    const organisation =
+      view === 'overview'
+        ? this.i18nService.translate('app.beis')
+        : this.userOrganisation.name;
 
     return {
       organisation,
-      decisionDatasetsTable: await this.table(),
+      decisionDatasetsTable: this.table(view),
     };
   }
 
-  private async table(): Promise<Table> {
-    const headings = ListEntryPresenter.headings(this.i18nService);
+  private table(view: DecisionDatasetsPresenterView): Table {
+    const headings = ListEntryPresenter.headings(this.i18nService, view);
 
-    const rows = await Promise.all(
-      this.decisionDatasets.map(async (dataset) =>
-        new ListEntryPresenter(dataset, this.i18nService).tableRow(),
-      ),
+    const rows = this.decisionDatasets.map((dataset) =>
+      new ListEntryPresenter(dataset, this.i18nService).tableRow(view),
     );
 
     const numberOfResults = rows.length;
