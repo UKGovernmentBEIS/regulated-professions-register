@@ -1,8 +1,9 @@
 import { I18nService } from 'nestjs-i18n';
+import { Country } from '../../../countries/country';
+import { CountriesSelectPresenter } from '../../../countries/presenters/countries-select.presenter';
 import { DecisionRoute } from '../../interfaces/decision-route.interface';
 import { decisionValueToString } from '../helpers/decision-value-to-string.helper';
 import { RouteTemplate } from '../interfaces/route-template.interface';
-import { CountriesSelectPresenter } from './countries-select.presenter';
 
 export class DecisionDatasetEditPresenter {
   constructor(
@@ -15,7 +16,8 @@ export class DecisionDatasetEditPresenter {
       name: route.name,
       countries: route.countries.map((country) => ({
         countriesSelectArgs: new CountriesSelectPresenter(
-          country.country,
+          Country.all(),
+          country.code ? Country.find(country.code) : null,
           this.i18nService,
         ).selectArgs(),
         decisions: {

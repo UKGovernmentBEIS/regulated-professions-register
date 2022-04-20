@@ -2,14 +2,14 @@
   {
     "profession": "Registered Trademark Attorney",
     "organisation": "Law Society of England and Wales",
-    "year": 2018,
+    "year": 2020,
     "status": "live",
     "routes": [
       {
         "name": "Degree",
         "countries": [
           {
-            "country": "France",
+            "code": "FR",
             "decisions": {
               "yes": 4,
               "no": 7,
@@ -18,7 +18,7 @@
             }
           },
           {
-            "country": "Belgium",
+            "code": "BE",
             "decisions": {
               "yes": 2,
               "no": 1,
@@ -33,14 +33,14 @@
   {
     "profession": "Registered Trademark Attorney",
     "organisation": "Alternative Law Society",
-    "year": 2018,
+    "year": 2020,
     "status": "draft",
     "routes": [
       {
         "name": "Other qualification",
         "countries": [
           {
-            "country": "Brazil",
+            "code": "BR",
             "decisions": {
               "yes": 2,
               "no": 1,
@@ -49,7 +49,7 @@
             }
           },
           {
-            "country": "Japan",
+            "code": "JP",
             "decisions": {
               "yes": 1,
               "no": 2,
@@ -71,7 +71,7 @@
         "name": "EEA Route",
         "countries": [
           {
-            "country": "Morocco",
+            "code": "MA",
             "decisions": {
               "yes": 6,
               "no": 4,
@@ -80,7 +80,7 @@
             }
           },
           {
-            "country": "Poland",
+            "code": "PL",
             "decisions": {
               "yes": 8,
               "no": 0,
@@ -94,7 +94,7 @@
         "name": "International Route",
         "countries": [
           {
-            "country": "Germany",
+            "code": "DE",
             "decisions": {
               "yes": 1,
               "no": 2,
@@ -103,7 +103,7 @@
             }
           },
           {
-            "country": "Italy",
+            "code": "IT",
             "decisions": {
               "yes": 5,
               "no": 8,
@@ -125,7 +125,7 @@
         "name": "Other qualification",
         "countries": [
           {
-            "country": "Canada",
+            "code": "CA",
             "decisions": {
               "yes": 4,
               "no": 5,

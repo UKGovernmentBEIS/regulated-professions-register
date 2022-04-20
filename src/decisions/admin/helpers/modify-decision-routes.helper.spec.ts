@@ -9,7 +9,7 @@ describe('modifyDecisionRoutes', () => {
           name: 'Example route 1',
           countries: [
             {
-              country: 'Germany',
+              code: 'DE',
               decisions: {
                 yes: 7,
                 no: 4,
@@ -18,7 +18,7 @@ describe('modifyDecisionRoutes', () => {
               },
             },
             {
-              country: 'Poland',
+              code: 'PL',
               decisions: {
                 yes: 3,
                 no: 5,
@@ -32,7 +32,7 @@ describe('modifyDecisionRoutes', () => {
           name: 'Example route 2',
           countries: [
             {
-              country: 'France',
+              code: 'FR',
               decisions: {
                 yes: 2,
                 no: null,
@@ -41,7 +41,7 @@ describe('modifyDecisionRoutes', () => {
               },
             },
             {
-              country: 'Belgium',
+              code: 'BE',
               decisions: {
                 yes: 2,
                 no: 3,
@@ -58,7 +58,7 @@ describe('modifyDecisionRoutes', () => {
           name: 'Example route 1',
           countries: [
             {
-              country: 'Germany',
+              code: 'DE',
               decisions: {
                 yes: 7,
                 no: 4,
@@ -67,7 +67,7 @@ describe('modifyDecisionRoutes', () => {
               },
             },
             {
-              country: 'Poland',
+              code: 'PL',
               decisions: {
                 yes: 3,
                 no: 5,
@@ -81,7 +81,7 @@ describe('modifyDecisionRoutes', () => {
           name: 'Example route 2',
           countries: [
             {
-              country: 'France',
+              code: 'FR',
               decisions: {
                 yes: 2,
                 no: null,
@@ -90,7 +90,7 @@ describe('modifyDecisionRoutes', () => {
               },
             },
             {
-              country: 'Belgium',
+              code: 'BE',
               decisions: {
                 yes: 2,
                 no: 3,
@@ -104,7 +104,7 @@ describe('modifyDecisionRoutes', () => {
           name: '',
           countries: [
             {
-              country: null,
+              code: null,
               decisions: {
                 yes: null,
                 no: null,
@@ -129,7 +129,7 @@ describe('modifyDecisionRoutes', () => {
           name: 'Example route 1',
           countries: [
             {
-              country: 'Germany',
+              code: 'DE',
               decisions: {
                 yes: 7,
                 no: 4,
@@ -138,7 +138,7 @@ describe('modifyDecisionRoutes', () => {
               },
             },
             {
-              country: 'Poland',
+              code: 'PL',
               decisions: {
                 yes: 3,
                 no: 5,
@@ -152,7 +152,7 @@ describe('modifyDecisionRoutes', () => {
           name: 'Example route 2',
           countries: [
             {
-              country: 'France',
+              code: 'FR',
               decisions: {
                 yes: 2,
                 no: null,
@@ -161,7 +161,7 @@ describe('modifyDecisionRoutes', () => {
               },
             },
             {
-              country: 'Belgium',
+              code: 'BE',
               decisions: {
                 yes: 2,
                 no: 3,
@@ -178,7 +178,7 @@ describe('modifyDecisionRoutes', () => {
           name: 'Example route 1',
           countries: [
             {
-              country: 'Germany',
+              code: 'DE',
               decisions: {
                 yes: 7,
                 no: 4,
@@ -187,7 +187,7 @@ describe('modifyDecisionRoutes', () => {
               },
             },
             {
-              country: 'Poland',
+              code: 'PL',
               decisions: {
                 yes: 3,
                 no: 5,
@@ -212,7 +212,7 @@ describe('modifyDecisionRoutes', () => {
           name: 'Example route 1',
           countries: [
             {
-              country: 'Germany',
+              code: 'DE',
               decisions: {
                 yes: 7,
                 no: 4,
@@ -221,7 +221,7 @@ describe('modifyDecisionRoutes', () => {
               },
             },
             {
-              country: 'Poland',
+              code: 'PL',
               decisions: {
                 yes: 3,
                 no: 5,
@@ -235,7 +235,7 @@ describe('modifyDecisionRoutes', () => {
           name: 'Example route 2',
           countries: [
             {
-              country: 'France',
+              code: 'FR',
               decisions: {
                 yes: 2,
                 no: null,
@@ -244,7 +244,7 @@ describe('modifyDecisionRoutes', () => {
               },
             },
             {
-              country: 'Belgium',
+              code: 'BE',
               decisions: {
                 yes: 2,
                 no: 3,
@@ -261,7 +261,7 @@ describe('modifyDecisionRoutes', () => {
           name: 'Example route 1',
           countries: [
             {
-              country: 'Germany',
+              code: 'DE',
               decisions: {
                 yes: 7,
                 no: 4,
@@ -270,7 +270,7 @@ describe('modifyDecisionRoutes', () => {
               },
             },
             {
-              country: 'Poland',
+              code: 'PL',
               decisions: {
                 yes: 3,
                 no: 5,
@@ -279,7 +279,7 @@ describe('modifyDecisionRoutes', () => {
               },
             },
             {
-              country: null,
+              code: null,
               decisions: {
                 yes: null,
                 no: null,
@@ -293,7 +293,7 @@ describe('modifyDecisionRoutes', () => {
           name: 'Example route 2',
           countries: [
             {
-              country: 'France',
+              code: 'FR',
               decisions: {
                 yes: 2,
                 no: null,
@@ -302,7 +302,7 @@ describe('modifyDecisionRoutes', () => {
               },
             },
             {
-              country: 'Belgium',
+              code: 'BE',
               decisions: {
                 yes: 2,
                 no: 3,
@@ -327,7 +327,7 @@ describe('modifyDecisionRoutes', () => {
           name: 'Example route 1',
           countries: [
             {
-              country: 'Germany',
+              code: 'DE',
               decisions: {
                 yes: 7,
                 no: 4,
@@ -336,7 +336,7 @@ describe('modifyDecisionRoutes', () => {
               },
             },
             {
-              country: 'Poland',
+              code: 'PL',
               decisions: {
                 yes: 3,
                 no: 5,
@@ -350,7 +350,7 @@ describe('modifyDecisionRoutes', () => {
           name: 'Example route 2',
           countries: [
             {
-              country: 'France',
+              code: 'FR',
               decisions: {
                 yes: 2,
                 no: null,
@@ -359,7 +359,7 @@ describe('modifyDecisionRoutes', () => {
               },
             },
             {
-              country: 'Belgium',
+              code: 'BE',
               decisions: {
                 yes: 2,
                 no: 3,
@@ -376,7 +376,7 @@ describe('modifyDecisionRoutes', () => {
           name: 'Example route 1',
           countries: [
             {
-              country: 'Germany',
+              code: 'DE',
               decisions: {
                 yes: 7,
                 no: 4,
@@ -385,7 +385,7 @@ describe('modifyDecisionRoutes', () => {
               },
             },
             {
-              country: 'Poland',
+              code: 'PL',
               decisions: {
                 yes: 3,
                 no: 5,
@@ -399,7 +399,7 @@ describe('modifyDecisionRoutes', () => {
           name: 'Example route 2',
           countries: [
             {
-              country: 'Belgium',
+              code: 'BE',
               decisions: {
                 yes: 2,
                 no: 3,

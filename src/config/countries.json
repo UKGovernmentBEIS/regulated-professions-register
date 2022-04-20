@@ -1,0 +1,782 @@
+[
+  {
+    "code": "AF",
+    "name": "countries.af"
+  },
+  {
+    "code": "AL",
+    "name": "countries.al"
+  },
+  {
+    "code": "DZ",
+    "name": "countries.dz"
+  },
+  {
+    "code": "AD",
+    "name": "countries.ad"
+  },
+  {
+    "code": "AO",
+    "name": "countries.ao"
+  },
+  {
+    "code": "AG",
+    "name": "countries.ag"
+  },
+  {
+    "code": "AR",
+    "name": "countries.ar"
+  },
+  {
+    "code": "AM",
+    "name": "countries.am"
+  },
+  {
+    "code": "AU",
+    "name": "countries.au"
+  },
+  {
+    "code": "AT",
+    "name": "countries.at"
+  },
+  {
+    "code": "AZ",
+    "name": "countries.az"
+  },
+  {
+    "code": "BH",
+    "name": "countries.bh"
+  },
+  {
+    "code": "BD",
+    "name": "countries.bd"
+  },
+  {
+    "code": "BB",
+    "name": "countries.bb"
+  },
+  {
+    "code": "BY",
+    "name": "countries.by"
+  },
+  {
+    "code": "BE",
+    "name": "countries.be"
+  },
+  {
+    "code": "BZ",
+    "name": "countries.bz"
+  },
+  {
+    "code": "BJ",
+    "name": "countries.bj"
+  },
+  {
+    "code": "BT",
+    "name": "countries.bt"
+  },
+  {
+    "code": "BO",
+    "name": "countries.bo"
+  },
+  {
+    "code": "BA",
+    "name": "countries.ba"
+  },
+  {
+    "code": "BW",
+    "name": "countries.bw"
+  },
+  {
+    "code": "BR",
+    "name": "countries.br"
+  },
+  {
+    "code": "BN",
+    "name": "countries.bn"
+  },
+  {
+    "code": "BG",
+    "name": "countries.bg"
+  },
+  {
+    "code": "BF",
+    "name": "countries.bf"
+  },
+  {
+    "code": "BI",
+    "name": "countries.bi"
+  },
+  {
+    "code": "KH",
+    "name": "countries.kh"
+  },
+  {
+    "code": "CM",
+    "name": "countries.cm"
+  },
+  {
+    "code": "CA",
+    "name": "countries.ca"
+  },
+  {
+    "code": "CV",
+    "name": "countries.cv"
+  },
+  {
+    "code": "CF",
+    "name": "countries.cf"
+  },
+  {
+    "code": "TD",
+    "name": "countries.td"
+  },
+  {
+    "code": "CL",
+    "name": "countries.cl"
+  },
+  {
+    "code": "CN",
+    "name": "countries.cn"
+  },
+  {
+    "code": "CO",
+    "name": "countries.co"
+  },
+  {
+    "code": "KM",
+    "name": "countries.km"
+  },
+  {
+    "code": "CG",
+    "name": "countries.cg"
+  },
+  {
+    "code": "CD",
+    "name": "countries.cd"
+  },
+  {
+    "code": "CR",
+    "name": "countries.cr"
+  },
+  {
+    "code": "HR",
+    "name": "countries.hr"
+  },
+  {
+    "code": "CU",
+    "name": "countries.cu"
+  },
+  {
+    "code": "CY",
+    "name": "countries.cy"
+  },
+  {
+    "code": "CZ",
+    "name": "countries.cz"
+  },
+  {
+    "code": "DK",
+    "name": "countries.dk"
+  },
+  {
+    "code": "DJ",
+    "name": "countries.dj"
+  },
+  {
+    "code": "DM",
+    "name": "countries.dm"
+  },
+  {
+    "code": "DO",
+    "name": "countries.do"
+  },
+  {
+    "code": "TL",
+    "name": "countries.tl"
+  },
+  {
+    "code": "EC",
+    "name": "countries.ec"
+  },
+  {
+    "code": "EG",
+    "name": "countries.eg"
+  },
+  {
+    "code": "SV",
+    "name": "countries.sv"
+  },
+  {
+    "code": "GQ",
+    "name": "countries.gq"
+  },
+  {
+    "code": "ER",
+    "name": "countries.er"
+  },
+  {
+    "code": "EE",
+    "name": "countries.ee"
+  },
+  {
+    "code": "SZ",
+    "name": "countries.sz"
+  },
+  {
+    "code": "ET",
+    "name": "countries.et"
+  },
+  {
+    "code": "FJ",
+    "name": "countries.fj"
+  },
+  {
+    "code": "FI",
+    "name": "countries.fi"
+  },
+  {
+    "code": "FR",
+    "name": "countries.fr"
+  },
+  {
+    "code": "GA",
+    "name": "countries.ga"
+  },
+  {
+    "code": "GE",
+    "name": "countries.ge"
+  },
+  {
+    "code": "DE",
+    "name": "countries.de"
+  },
+  {
+    "code": "GH",
+    "name": "countries.gh"
+  },
+  {
+    "code": "GR",
+    "name": "countries.gr"
+  },
+  {
+    "code": "GD",
+    "name": "countries.gd"
+  },
+  {
+    "code": "GT",
+    "name": "countries.gt"
+  },
+  {
+    "code": "GN",
+    "name": "countries.gn"
+  },
+  {
+    "code": "GW",
+    "name": "countries.gw"
+  },
+  {
+    "code": "GY",
+    "name": "countries.gy"
+  },
+  {
+    "code": "HT",
+    "name": "countries.ht"
+  },
+  {
+    "code": "HN",
+    "name": "countries.hn"
+  },
+  {
+    "code": "HU",
+    "name": "countries.hu"
+  },
+  {
+    "code": "IS",
+    "name": "countries.is"
+  },
+  {
+    "code": "IN",
+    "name": "countries.in"
+  },
+  {
+    "code": "ID",
+    "name": "countries.id"
+  },
+  {
+    "code": "IR",
+    "name": "countries.ir"
+  },
+  {
+    "code": "IQ",
+    "name": "countries.iq"
+  },
+  {
+    "code": "IE",
+    "name": "countries.ie"
+  },
+  {
+    "code": "IL",
+    "name": "countries.il"
+  },
+  {
+    "code": "IT",
+    "name": "countries.it"
+  },
+  {
+    "code": "CI",
+    "name": "countries.ci"
+  },
+  {
+    "code": "JM",
+    "name": "countries.jm"
+  },
+  {
+    "code": "JP",
+    "name": "countries.jp"
+  },
+  {
+    "code": "JO",
+    "name": "countries.jo"
+  },
+  {
+    "code": "KZ",
+    "name": "countries.kz"
+  },
+  {
+    "code": "KE",
+    "name": "countries.ke"
+  },
+  {
+    "code": "KI",
+    "name": "countries.ki"
+  },
+  {
+    "code": "XK",
+    "name": "countries.xk"
+  },
+  {
+    "code": "KW",
+    "name": "countries.kw"
+  },
+  {
+    "code": "KG",
+    "name": "countries.kg"
+  },
+  {
+    "code": "LA",
+    "name": "countries.la"
+  },
+  {
+    "code": "LV",
+    "name": "countries.lv"
+  },
+  {
+    "code": "LB",
+    "name": "countries.lb"
+  },
+  {
+    "code": "LS",
+    "name": "countries.ls"
+  },
+  {
+    "code": "LR",
+    "name": "countries.lr"
+  },
+  {
+    "code": "LY",
+    "name": "countries.ly"
+  },
+  {
+    "code": "LI",
+    "name": "countries.li"
+  },
+  {
+    "code": "LT",
+    "name": "countries.lt"
+  },
+  {
+    "code": "LU",
+    "name": "countries.lu"
+  },
+  {
+    "code": "MG",
+    "name": "countries.mg"
+  },
+  {
+    "code": "MW",
+    "name": "countries.mw"
+  },
+  {
+    "code": "MY",
+    "name": "countries.my"
+  },
+  {
+    "code": "MV",
+    "name": "countries.mv"
+  },
+  {
+    "code": "ML",
+    "name": "countries.ml"
+  },
+  {
+    "code": "MT",
+    "name": "countries.mt"
+  },
+  {
+    "code": "MH",
+    "name": "countries.mh"
+  },
+  {
+    "code": "MR",
+    "name": "countries.mr"
+  },
+  {
+    "code": "MU",
+    "name": "countries.mu"
+  },
+  {
+    "code": "MX",
+    "name": "countries.mx"
+  },
+  {
+    "code": "FM",
+    "name": "countries.fm"
+  },
+  {
+    "code": "MD",
+    "name": "countries.md"
+  },
+  {
+    "code": "MC",
+    "name": "countries.mc"
+  },
+  {
+    "code": "MN",
+    "name": "countries.mn"
+  },
+  {
+    "code": "ME",
+    "name": "countries.me"
+  },
+  {
+    "code": "MA",
+    "name": "countries.ma"
+  },
+  {
+    "code": "MZ",
+    "name": "countries.mz"
+  },
+  {
+    "code": "MM",
+    "name": "countries.mm"
+  },
+  {
+    "code": "NA",
+    "name": "countries.na"
+  },
+  {
+    "code": "NR",
+    "name": "countries.nr"
+  },
+  {
+    "code": "NP",
+    "name": "countries.np"
+  },
+  {
+    "code": "NL",
+    "name": "countries.nl"
+  },
+  {
+    "code": "NZ",
+    "name": "countries.nz"
+  },
+  {
+    "code": "NI",
+    "name": "countries.ni"
+  },
+  {
+    "code": "NE",
+    "name": "countries.ne"
+  },
+  {
+    "code": "NG",
+    "name": "countries.ng"
+  },
+  {
+    "code": "KP",
+    "name": "countries.kp"
+  },
+  {
+    "code": "MK",
+    "name": "countries.mk"
+  },
+  {
+    "code": "NO",
+    "name": "countries.no"
+  },
+  {
+    "code": "OM",
+    "name": "countries.om"
+  },
+  {
+    "code": "PK",
+    "name": "countries.pk"
+  },
+  {
+    "code": "PW",
+    "name": "countries.pw"
+  },
+  {
+    "code": "PA",
+    "name": "countries.pa"
+  },
+  {
+    "code": "PG",
+    "name": "countries.pg"
+  },
+  {
+    "code": "PY",
+    "name": "countries.py"
+  },
+  {
+    "code": "PE",
+    "name": "countries.pe"
+  },
+  {
+    "code": "PH",
+    "name": "countries.ph"
+  },
+  {
+    "code": "PL",
+    "name": "countries.pl"
+  },
+  {
+    "code": "PT",
+    "name": "countries.pt"
+  },
+  {
+    "code": "QA",
+    "name": "countries.qa"
+  },
+  {
+    "code": "RO",
+    "name": "countries.ro"
+  },
+  {
+    "code": "RU",
+    "name": "countries.ru"
+  },
+  {
+    "code": "RW",
+    "name": "countries.rw"
+  },
+  {
+    "code": "WS",
+    "name": "countries.ws"
+  },
+  {
+    "code": "SM",
+    "name": "countries.sm"
+  },
+  {
+    "code": "ST",
+    "name": "countries.st"
+  },
+  {
+    "code": "SA",
+    "name": "countries.sa"
+  },
+  {
+    "code": "SN",
+    "name": "countries.sn"
+  },
+  {
+    "code": "RS",
+    "name": "countries.rs"
+  },
+  {
+    "code": "SC",
+    "name": "countries.sc"
+  },
+  {
+    "code": "SL",
+    "name": "countries.sl"
+  },
+  {
+    "code": "SG",
+    "name": "countries.sg"
+  },
+  {
+    "code": "SK",
+    "name": "countries.sk"
+  },
+  {
+    "code": "SI",
+    "name": "countries.si"
+  },
+  {
+    "code": "SB",
+    "name": "countries.sb"
+  },
+  {
+    "code": "SO",
+    "name": "countries.so"
+  },
+  {
+    "code": "ZA",
+    "name": "countries.za"
+  },
+  {
+    "code": "KR",
+    "name": "countries.kr"
+  },
+  {
+    "code": "SS",
+    "name": "countries.ss"
+  },
+  {
+    "code": "ES",
+    "name": "countries.es"
+  },
+  {
+    "code": "LK",
+    "name": "countries.lk"
+  },
+  {
+    "code": "KN",
+    "name": "countries.kn"
+  },
+  {
+    "code": "LC",
+    "name": "countries.lc"
+  },
+  {
+    "code": "VC",
+    "name": "countries.vc"
+  },
+  {
+    "code": "SD",
+    "name": "countries.sd"
+  },
+  {
+    "code": "SR",
+    "name": "countries.sr"
+  },
+  {
+    "code": "SE",
+    "name": "countries.se"
+  },
+  {
+    "code": "CH",
+    "name": "countries.ch"
+  },
+  {
+    "code": "SY",
+    "name": "countries.sy"
+  },
+  {
+    "code": "TJ",
+    "name": "countries.tj"
+  },
+  {
+    "code": "TZ",
+    "name": "countries.tz"
+  },
+  {
+    "code": "TH",
+    "name": "countries.th"
+  },
+  {
+    "code": "BS",
+    "name": "countries.bs"
+  },
+  {
+    "code": "GM",
+    "name": "countries.gm"
+  },
+  {
+    "code": "TG",
+    "name": "countries.tg"
+  },
+  {
+    "code": "TO",
+    "name": "countries.to"
+  },
+  {
+    "code": "TT",
+    "name": "countries.tt"
+  },
+  {
+    "code": "TN",
+    "name": "countries.tn"
+  },
+  {
+    "code": "TR",
+    "name": "countries.tr"
+  },
+  {
+    "code": "TM",
+    "name": "countries.tm"
+  },
+  {
+    "code": "TV",
+    "name": "countries.tv"
+  },
+  {
+    "code": "UG",
+    "name": "countries.ug"
+  },
+  {
+    "code": "UA",
+    "name": "countries.ua"
+  },
+  {
+    "code": "AE",
+    "name": "countries.ae"
+  },
+  {
+    "code": "GB",
+    "name": "countries.gb"
+  },
+  {
+    "code": "US",
+    "name": "countries.us"
+  },
+  {
+    "code": "UY",
+    "name": "countries.uy"
+  },
+  {
+    "code": "UZ",
+    "name": "countries.uz"
+  },
+  {
+    "code": "VU",
+    "name": "countries.vu"
+  },
+  {
+    "code": "VA",
+    "name": "countries.va"
+  },
+  {
+    "code": "VE",
+    "name": "countries.ve"
+  },
+  {
+    "code": "VN",
+    "name": "countries.vn"
+  },
+  {
+    "code": "YE",
+    "name": "countries.ye"
+  },
+  {
+    "code": "ZM",
+    "name": "countries.zm"
+  },
+  {
+    "code": "ZW",
+    "name": "countries.zw"
+  }
+]

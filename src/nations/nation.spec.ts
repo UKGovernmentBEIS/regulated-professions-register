@@ -1,9 +1,9 @@
-import { createMock } from '@golevelup/ts-jest';
-import { I18nService } from 'nestjs-i18n';
+import { createMockI18nService } from '../testutils/create-mock-i18n-service';
+import { translationOf } from '../testutils/translation-of';
 import { Nation } from './nation';
 
 describe(Nation, () => {
-  describe('.all', () => {
+  describe('all', () => {
     it('returns all nations in the Nations config file', () => {
       expect(Nation.all()).toEqual([
         new Nation('nations.england', 'GB-ENG'),
@@ -14,7 +14,7 @@ describe(Nation, () => {
     });
   });
 
-  describe('.find', () => {
+  describe('find', () => {
     describe('when a Nation exists with the requested code in the Nations config', () => {
       it('returns that Nation', () => {
         expect(Nation.find('GB-ENG')).toEqual(
@@ -35,11 +35,10 @@ describe(Nation, () => {
   describe('translatedName', () => {
     it('calls the translation service to return a translated version of the name', async () => {
       const nation = new Nation('nations.england', 'GB-ENG');
-      const i18nService = createMock<I18nService>();
-      i18nService.translate.mockReturnValue('England');
+      const i18nService = createMockI18nService();
 
       await expect(nation.translatedName(i18nService)).resolves.toEqual(
-        'England',
+        translationOf('nations.england'),
       );
       expect(i18nService.translate).toHaveBeenCalledWith('nations.england');
     });

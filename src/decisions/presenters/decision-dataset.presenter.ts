@@ -1,6 +1,7 @@
 import { I18nService } from 'nestjs-i18n';
 import { Table } from '../../common/interfaces/table';
 import { TableRow } from '../../common/interfaces/table-row';
+import { Country } from '../../countries/country';
 import { decisionValueToString } from '../admin/helpers/decision-value-to-string.helper';
 import { DecisionRoute } from '../interfaces/decision-route.interface';
 
@@ -48,7 +49,9 @@ export class DecisionDatasetPresenter {
         rows: route.countries.map((country) => {
           return [
             {
-              text: country.country,
+              text: country.code
+                ? Country.find(country.code).translatedName(this.i18nService)
+                : '',
             },
             {
               text: decisionValueToString(country.decisions.yes),

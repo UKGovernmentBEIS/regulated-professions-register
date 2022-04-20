@@ -970,7 +970,7 @@ describe('DecisionsController', () => {
               name: '',
               countries: [
                 {
-                  country: null,
+                  code: null,
                   decisions: {
                     yes: null,
                     no: null,
@@ -1016,7 +1016,7 @@ describe('DecisionsController', () => {
             name: 'Example route',
             countries: [
               {
-                country: 'Brazil',
+                code: 'BR',
                 decisions: {
                   yes: 1,
                   no: 5,
@@ -1125,7 +1125,7 @@ describe('DecisionsController', () => {
             name: 'Example route',
             countries: [
               {
-                country: 'Germany',
+                code: 'DE',
                 decisions: {
                   yes: 1,
                   no: 8,
@@ -1234,7 +1234,7 @@ describe('DecisionsController', () => {
             name: 'Example route',
             countries: [
               {
-                country: 'Japan',
+                code: 'JP',
                 decisions: {
                   yes: 4,
                   no: 5,

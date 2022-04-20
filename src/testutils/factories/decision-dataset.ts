@@ -17,7 +17,7 @@ export default Factory.define<DecisionDataset>(({ sequence }) => ({
       name: 'Example route',
       countries: [
         {
-          country: 'Example country',
+          code: 'GB',
           decisions: {
             yes: 1,
             no: 2,
