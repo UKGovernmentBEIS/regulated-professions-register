@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 
 - Allow Professions to have up to 25 regulators (previously 5)
+- Show full list of countries when editing/adding decision data
 
 ### Added
 
