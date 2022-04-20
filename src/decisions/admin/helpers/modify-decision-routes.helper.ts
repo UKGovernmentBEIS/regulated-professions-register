@@ -1,7 +1,7 @@
 import { DecisionRoute } from '../../interfaces/decision-route.interface';
 
 const emptyCountry = {
-  country: null,
+  code: null,
   decisions: {
     yes: null,
     no: null,

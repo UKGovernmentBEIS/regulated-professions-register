@@ -48,7 +48,7 @@ describe('Editing a decision dataset', () => {
                   .should('have.attr', 'disabled', 'disabled');
               },
             );
-            cy.get('select').invoke('val').should('equal', 'Germany');
+            cy.get('select').invoke('val').should('equal', 'DE');
           });
 
         cy.translate('decisions.admin.buttons.addCountry').then(
@@ -65,7 +65,7 @@ describe('Editing a decision dataset', () => {
         cy.get('tbody tr')
           .eq(0)
           .within(() => {
-            cy.get('select').invoke('val').should('equal', 'Germany');
+            cy.get('select').invoke('val').should('equal', 'DE');
             cy.get('select').select('Morocco');
 
             cy.get('input').eq(0).clear().type('11');

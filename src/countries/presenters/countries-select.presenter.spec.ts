@@ -2,12 +2,21 @@ import { SelectItemArgs } from '../../common/interfaces/select-item-args.interfa
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 import { translationOf } from '../../testutils/translation-of';
 import { CountriesSelectPresenter } from './countries-select.presenter';
+import { Country } from '../country';
+
+const mockCountries = <const>[
+  new Country('countries.fr', 'FR'),
+  new Country('countries.be', 'BE'),
+  new Country('countries.cy', 'CY'),
+  new Country('countries.jp', 'JP'),
+];
 
 describe('CountrySelectPresenter', () => {
   describe('selectArgs', () => {
     describe('when given a null selected country', () => {
       it('returns a list of countries, with no country selected', () => {
         const presenter = new CountriesSelectPresenter(
+          mockCountries,
           null,
           createMockI18nService(),
         );
@@ -19,48 +28,23 @@ describe('CountrySelectPresenter', () => {
             selected: null,
           },
           {
-            text: 'France',
-            value: 'France',
+            text: translationOf('countries.fr'),
+            value: 'FR',
             selected: false,
           },
           {
-            text: 'Belgium',
-            value: 'Belgium',
+            text: translationOf('countries.be'),
+            value: 'BE',
             selected: false,
           },
           {
-            text: 'Brazil',
-            value: 'Brazil',
+            text: translationOf('countries.cy'),
+            value: 'CY',
             selected: false,
           },
           {
-            text: 'Japan',
-            value: 'Japan',
-            selected: false,
-          },
-          {
-            text: 'Morocco',
-            value: 'Morocco',
-            selected: false,
-          },
-          {
-            text: 'Poland',
-            value: 'Poland',
-            selected: false,
-          },
-          {
-            text: 'Germany',
-            value: 'Germany',
-            selected: false,
-          },
-          {
-            text: 'Italy',
-            value: 'Italy',
-            selected: false,
-          },
-          {
-            text: 'Canada',
-            value: 'Canada',
+            text: translationOf('countries.jp'),
+            value: 'JP',
             selected: false,
           },
         ];
@@ -74,7 +58,8 @@ describe('CountrySelectPresenter', () => {
     describe('when given a selected country', () => {
       it('returns a list of countries, with the given country selected', () => {
         const presenter = new CountriesSelectPresenter(
-          'Morocco',
+          mockCountries,
+          new Country('countries.be', 'BE'),
           createMockI18nService(),
         );
 
@@ -85,51 +70,27 @@ describe('CountrySelectPresenter', () => {
             selected: null,
           },
           {
-            text: 'France',
-            value: 'France',
+            text: translationOf('countries.fr'),
+            value: 'FR',
             selected: false,
           },
           {
-            text: 'Belgium',
-            value: 'Belgium',
-            selected: false,
-          },
-          {
-            text: 'Brazil',
-            value: 'Brazil',
-            selected: false,
-          },
-          {
-            text: 'Japan',
-            value: 'Japan',
-            selected: false,
-          },
-          {
-            text: 'Morocco',
-            value: 'Morocco',
+            text: translationOf('countries.be'),
+            value: 'BE',
             selected: true,
           },
           {
-            text: 'Poland',
-            value: 'Poland',
+            text: translationOf('countries.cy'),
+            value: 'CY',
             selected: false,
           },
           {
-            text: 'Germany',
-            value: 'Germany',
-            selected: false,
-          },
-          {
-            text: 'Italy',
-            value: 'Italy',
-            selected: false,
-          },
-          {
-            text: 'Canada',
-            value: 'Canada',
+            text: translationOf('countries.jp'),
+            value: 'JP',
             selected: false,
           },
         ];
+
         const result = presenter.selectArgs();
 
         expect(expected).toEqual(result);

@@ -2,6 +2,9 @@ import { EditDto } from '../dto/edit.dto';
 import { parseEditDtoDecisionRoutes } from './parse-edit-dto-decision-routes.helper';
 import * as parseDecisionValueModule from './parse-decision-value.helper';
 import { DecisionRoute } from '../../interfaces/decision-route.interface';
+import { Country } from '../../../countries/country';
+
+jest.mock('../../../countries/country');
 
 describe('parseEditDtoDecisionRoutes', () => {
   describe('when given an empty DTO', () => {
@@ -12,17 +15,21 @@ describe('parseEditDtoDecisionRoutes', () => {
 
   describe('when given a populated DTO', () => {
     it('returns a list of decision routes', () => {
+      (Country.find as jest.Mock).mockImplementation((code) => ({ code }));
+
       const parseDecisionValueSpy = jest.spyOn(
         parseDecisionValueModule,
         'parseDecisionValue',
       );
 
+      const spotCheckCountryCode = 'MA';
       const spotCheckValue = '2';
+
       const editDto: EditDto = {
         routes: ['Example route 1', 'Example route 2'],
         countries: [
-          ['Japan', 'Canada'],
-          ['Morocco', 'France'],
+          ['JP', 'CA'],
+          [spotCheckCountryCode, 'FR'],
         ],
         yeses: [
           ['9', '6'],
@@ -48,7 +55,7 @@ describe('parseEditDtoDecisionRoutes', () => {
           name: 'Example route 1',
           countries: [
             {
-              country: 'Japan',
+              code: 'JP',
               decisions: {
                 yes: 9,
                 no: null,
@@ -57,7 +64,7 @@ describe('parseEditDtoDecisionRoutes', () => {
               },
             },
             {
-              country: 'Canada',
+              code: 'CA',
               decisions: {
                 yes: 6,
                 no: 7,
@@ -71,7 +78,7 @@ describe('parseEditDtoDecisionRoutes', () => {
           name: 'Example route 2',
           countries: [
             {
-              country: 'Morocco',
+              code: 'MA',
               decisions: {
                 yes: 1,
                 no: 3,
@@ -80,7 +87,7 @@ describe('parseEditDtoDecisionRoutes', () => {
               },
             },
             {
-              country: 'France',
+              code: 'FR',
               decisions: {
                 yes: 1,
                 no: 4,
@@ -94,8 +101,15 @@ describe('parseEditDtoDecisionRoutes', () => {
 
       expect(parseEditDtoDecisionRoutes(editDto)).toEqual(expected);
 
+      expect(Country.find).toHaveBeenCalledTimes(4);
+      expect(Country.find).toHaveBeenNthCalledWith(3, spotCheckCountryCode);
+
       expect(parseDecisionValueSpy).toHaveBeenCalledTimes(16);
       expect(parseDecisionValueSpy).toHaveBeenNthCalledWith(4, spotCheckValue);
     });
+  });
+
+  afterEach(() => {
+    jest.resetAllMocks();
   });
 });

@@ -1,3 +1,4 @@
+import { Country } from '../../../countries/country';
 import { DecisionRoute } from '../../interfaces/decision-route.interface';
 import { EditDto } from '../dto/edit.dto';
 import { parseDecisionValue } from './parse-decision-value.helper';
@@ -35,10 +36,12 @@ export function parseEditDtoDecisionRoutes(editDto: EditDto): DecisionRoute[] {
       countryIndex < Math.min(countriesCount, maxCountryCount);
       countryIndex++
     ) {
-      type Country = DecisionRoute['countries'][0];
+      type DecisionCountry = DecisionRoute['countries'][0];
 
-      const country: Country = {
-        country: countries[countryIndex],
+      const country: DecisionCountry = {
+        code: countries[countryIndex]
+          ? Country.find(countries[countryIndex]).code
+          : null,
         decisions: {
           yes: parseDecisionValue(yeses[countryIndex]),
           no: parseDecisionValue(noes[countryIndex]),

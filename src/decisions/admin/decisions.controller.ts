@@ -52,7 +52,7 @@ import { checkCanChangeDataset } from './helpers/check-can-change-dataset.helper
 import { getDecisionsYearsRange } from './helpers/get-decisions-years-range';
 
 const emptyCountry = {
-  country: null,
+  code: null,
   decisions: {
     yes: null,
     no: null,

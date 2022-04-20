@@ -1,22 +1,34 @@
 import { Table } from '../../common/interfaces/table';
 import { TableRow } from '../../common/interfaces/table-row';
+import { Country } from '../../countries/country';
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 import { translationOf } from '../../testutils/translation-of';
 import * as decisionValueToStringModule from '../admin/helpers/decision-value-to-string.helper';
 import { DecisionRoute } from '../interfaces/decision-route.interface';
 import { DecisionDatasetPresenter } from './decision-dataset.presenter';
 
+jest.mock('../../countries/country');
+
 describe('DecisionDatasetPresenter', () => {
   describe('tables', () => {
     it('returns a tables of decision data', () => {
+      (Country.find as jest.Mock).mockImplementation((code: string) => ({
+        code,
+        translatedName: () =>
+          translationOf(`countries.${code.toLocaleLowerCase()}`),
+      }));
+
       const i18nService = createMockI18nService();
+
+      const spotCheckCountryCode = 'CY';
+      const spotCheckValue = 8;
 
       const routes: DecisionRoute[] = [
         {
           name: 'Example route 1',
           countries: [
             {
-              country: 'Example country 1',
+              code: spotCheckCountryCode,
               decisions: {
                 yes: 4,
                 no: 5,
@@ -25,10 +37,10 @@ describe('DecisionDatasetPresenter', () => {
               },
             },
             {
-              country: 'Example country 2',
+              code: 'FR',
               decisions: {
                 yes: 5,
-                no: 8,
+                no: spotCheckValue,
                 yesAfterComp: 0,
                 noAfterComp: 4,
               },
@@ -39,7 +51,7 @@ describe('DecisionDatasetPresenter', () => {
           name: 'Example route 2',
           countries: [
             {
-              country: 'Example country 3',
+              code: 'JP',
               decisions: {
                 yes: 1,
                 no: 3,
@@ -85,7 +97,7 @@ describe('DecisionDatasetPresenter', () => {
           rows: [
             [
               {
-                text: 'Example country 1',
+                text: translationOf('countries.cy'),
               },
               {
                 text: '4',
@@ -102,7 +114,7 @@ describe('DecisionDatasetPresenter', () => {
             ],
             [
               {
-                text: 'Example country 2',
+                text: translationOf('countries.fr'),
               },
               {
                 text: '5',
@@ -127,7 +139,7 @@ describe('DecisionDatasetPresenter', () => {
           rows: [
             [
               {
-                text: 'Example country 3',
+                text: translationOf('countries.jp'),
               },
               {
                 text: '1',
@@ -150,12 +162,16 @@ describe('DecisionDatasetPresenter', () => {
 
       expect(expected).toEqual(result);
 
+      expect(Country.find).toHaveBeenCalledTimes(3);
+      expect(Country.find).toHaveBeenNthCalledWith(1, spotCheckCountryCode);
+
       expect(decisionValueToStringSpy).toHaveBeenCalledTimes(12);
-      expect(decisionValueToStringSpy).nthCalledWith(7, 8);
+      expect(decisionValueToStringSpy).nthCalledWith(7, spotCheckValue);
     });
   });
 
   afterEach(() => {
+    jest.resetAllMocks();
     jest.restoreAllMocks();
   });
 });

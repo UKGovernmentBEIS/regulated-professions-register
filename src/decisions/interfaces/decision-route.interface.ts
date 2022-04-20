@@ -1,7 +1,7 @@
 export interface DecisionRoute {
   name: string;
   countries: {
-    country: string;
+    code: string | null;
     decisions: {
       yes: number | null;
       no: number | null;

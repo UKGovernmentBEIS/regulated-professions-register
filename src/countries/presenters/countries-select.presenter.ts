@@ -1,43 +1,34 @@
 import { I18nService } from 'nestjs-i18n';
 import { SelectItemArgs } from '../../common/interfaces/select-item-args.interface';
-
-const countries = [
-  'France',
-  'Belgium',
-  'Brazil',
-  'Japan',
-  'Morocco',
-  'Poland',
-  'Germany',
-  'Italy',
-  'Canada',
-];
+import { Country } from '../country';
 
 export class CountriesSelectPresenter {
   constructor(
-    private readonly selectedCountry: string | null,
+    private readonly allCountries: readonly Country[],
+    private readonly selectedCountry: Country | null,
     private readonly i18nService: I18nService,
   ) {}
 
   selectArgs(): SelectItemArgs[] {
-    const options = [
+    return [
       {
         text: this.i18nService.translate<string>('app.pleaseSelect'),
         value: '',
         selected: null,
       },
+      ...this.allCountries.map((country) =>
+        this.countryToSelectItemArgs(country),
+      ),
     ];
+  }
 
-    countries.forEach((country) => {
-      options.push({
-        text: country,
-        value: country,
-        selected: this.selectedCountry
-          ? this.selectedCountry === country
-          : false,
-      });
-    });
-
-    return options;
+  private countryToSelectItemArgs(country: Country): SelectItemArgs {
+    return {
+      text: this.i18nService.translate<string>(country.name),
+      value: country.code,
+      selected: this.selectedCountry
+        ? this.selectedCountry.code === country.code
+        : false,
+    };
   }
 }
