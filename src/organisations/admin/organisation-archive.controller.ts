@@ -6,6 +6,7 @@ import {
   Render,
   Req,
   Res,
+  BadRequestException,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { I18nService } from 'nestjs-i18n';
@@ -69,6 +70,13 @@ export class OrganisationArchiveController {
         organisationId,
         versionId,
       );
+
+    const professions = version.organisation.professionToOrganisations?.find(
+      (professionToOrganisation) => !!professionToOrganisation.profession,
+    );
+
+    if (professions) throw new BadRequestException();
+
     checkCanViewOrganisation(req, version.organisation);
 
     const user = getActingUser(req);
