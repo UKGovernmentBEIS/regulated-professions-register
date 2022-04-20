@@ -156,7 +156,6 @@ describe('OrganisationArchiveController', () => {
 
       expect(organisationVersionsService.archive).toHaveBeenCalledWith(
         versionToArchive,
-        user,
       );
 
       expect(flashMock).toHaveBeenCalledWith(
@@ -195,6 +194,7 @@ describe('OrganisationArchiveController', () => {
 
       expect(checkCanViewOrganisation).toHaveBeenCalledWith(req, organisation);
     });
+
     it('throws BadRequestException when request is made to archive organisation with professions', async () => {
       const profession = professionFactory.build({
         name: 'profession',

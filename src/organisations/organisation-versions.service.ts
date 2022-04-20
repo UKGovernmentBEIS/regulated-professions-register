@@ -11,13 +11,11 @@ import { User } from '../users/user.entity';
 import { ProfessionVersionStatus } from '../professions/profession-version.entity';
 import { FilterInput } from '../common/interfaces/filter-input.interface';
 
-import { ProfessionVersionsService } from '../professions/profession-versions.service';
 @Injectable()
 export class OrganisationVersionsService {
   constructor(
     @InjectRepository(OrganisationVersion)
     private repository: Repository<OrganisationVersion>,
-    private professionVersionsService: ProfessionVersionsService,
     private organisationsSearchService: OrganisationsSearchService,
     private connection: Connection,
   ) {}
@@ -233,10 +231,7 @@ export class OrganisationVersionsService {
     return version;
   }
 
-  async archive(
-    version: OrganisationVersion,
-    user: User,
-  ): Promise<OrganisationVersion> {
+  async archive(version: OrganisationVersion): Promise<OrganisationVersion> {
     const queryRunner = this.connection.createQueryRunner();
     const organisation = version.organisation;
 
@@ -250,27 +245,8 @@ export class OrganisationVersionsService {
 
     try {
       if (liveVersion) {
-        liveVersion.status = OrganisationVersionStatus.Draft;
+        liveVersion.status = OrganisationVersionStatus.Archived;
         await this.repository.save(liveVersion);
-      }
-
-      for (const professionToOrganisation of version.organisation
-        .professionToOrganisations) {
-        const profession = professionToOrganisation.profession;
-        const professionVersion =
-          await this.professionVersionsService.latestVersion(profession);
-
-        if (professionVersion) {
-          const professionVersionToBeArchived =
-            await this.professionVersionsService.create(
-              professionVersion,
-              user,
-            );
-
-          await this.professionVersionsService.archive(
-            professionVersionToBeArchived,
-          );
-        }
       }
 
       version.status = OrganisationVersionStatus.Archived;

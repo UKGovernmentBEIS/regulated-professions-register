@@ -14,7 +14,6 @@ import {
   OrganisationVersionStatus,
 } from './organisation-version.entity';
 import { Organisation } from './organisation.entity';
-import { User } from '../users/user.entity';
 import { Nation } from '../nations/nation';
 
 import { OrganisationVersionsService } from './organisation-versions.service';
@@ -22,15 +21,12 @@ import { OrganisationsSearchService } from './organisations-search.service';
 
 import organisationVersionFactory from '../testutils/factories/organisation-version';
 import organisationFactory from '../testutils/factories/organisation';
-import professionVersionFactory from '../testutils/factories/profession-version';
-import professionFactory from '../testutils/factories/profession';
 import userFactory from '../testutils/factories/user';
 import industryFactory from '../testutils/factories/industry';
 
 import { ProfessionVersionStatus } from '../professions/profession-version.entity';
 import { ProfessionVersionsService } from '../professions/profession-versions.service';
 import { RegulationType } from '../professions/profession-version.entity';
-import { ProfessionToOrganisation } from '../professions/profession-to-organisation.entity';
 
 describe('OrganisationVersionsService', () => {
   let service: OrganisationVersionsService;
@@ -538,7 +534,6 @@ describe('OrganisationVersionsService', () => {
 
   describe('archive', () => {
     let queryRunner: DeepMocked<QueryRunner>;
-    const user: User = userFactory.build();
 
     beforeEach(() => {
       queryRunner = createMock<QueryRunner>();
@@ -549,27 +544,35 @@ describe('OrganisationVersionsService', () => {
     });
 
     it('archives the draft version', async () => {
-      const version = organisationVersionFactory.build({
+      const draftVersion = organisationVersionFactory.build({
         status: OrganisationVersionStatus.Draft,
         organisation: organisationFactory.build({
           professionToOrganisations: [],
         }),
       });
 
-      const findSpy = jest.spyOn(repo, 'findOne');
-      const saveSpy = jest.spyOn(repo, 'save').mockResolvedValue(version);
+      const archivedVersion = {
+        ...draftVersion,
+        status: OrganisationVersionStatus.Archived,
+      };
 
-      const result = await service.archive(version, user);
+      const findSpy = jest.spyOn(repo, 'findOne');
+
+      const saveSpy = jest
+        .spyOn(repo, 'save')
+        .mockResolvedValue(archivedVersion);
+
+      const result = await service.archive(draftVersion);
 
       expect(result.status).toBe(OrganisationVersionStatus.Archived);
 
       expect(findSpy).toHaveBeenCalledWith({
-        organisation: version.organisation,
+        organisation: draftVersion.organisation,
         status: OrganisationVersionStatus.Live,
       });
 
       expect(saveSpy).toHaveBeenCalledWith({
-        ...version,
+        ...draftVersion,
         status: OrganisationVersionStatus.Archived,
       });
 
@@ -577,7 +580,7 @@ describe('OrganisationVersionsService', () => {
       expect(queryRunner.release).toHaveBeenCalled();
     });
 
-    it('demotes the latest live version', async () => {
+    it('archives the latest live version', async () => {
       const liveVersion = organisationVersionFactory.build({
         status: OrganisationVersionStatus.Live,
       });
@@ -597,7 +600,7 @@ describe('OrganisationVersionsService', () => {
         .spyOn(repo, 'findOne')
         .mockResolvedValue(liveVersion);
 
-      const result = await service.archive(draftVersion, user);
+      const result = await service.archive(draftVersion);
 
       expect(result.status).toBe(OrganisationVersionStatus.Archived);
 
@@ -608,7 +611,7 @@ describe('OrganisationVersionsService', () => {
 
       expect(saveSpy).toHaveBeenCalledWith({
         ...liveVersion,
-        status: OrganisationVersionStatus.Draft,
+        status: OrganisationVersionStatus.Archived,
       });
 
       expect(saveSpy).toHaveBeenCalledWith({
@@ -629,79 +632,10 @@ describe('OrganisationVersionsService', () => {
         throw Error;
       });
 
-      await service.archive(version, user);
+      await service.archive(version);
 
       expect(queryRunner.rollbackTransaction).toHaveBeenCalled();
       expect(queryRunner.commitTransaction).not.toHaveBeenCalled();
-    });
-
-    it('archives any associated professions when they have a latest version available', async () => {
-      const profession1 = professionFactory.build({
-        name: 'draft-profession',
-        versions: [professionVersionFactory.build()],
-      });
-      const profession2 = professionFactory.build({
-        name: 'live-profession',
-        versions: [professionVersionFactory.build()],
-      });
-      const profession3 = professionFactory.build({
-        name: 'archived-profession',
-        versions: [],
-      });
-
-      const organisation = organisationFactory.build({
-        professionToOrganisations: [
-          {
-            profession: profession1,
-          },
-          { profession: profession2 },
-          { profession: profession3 },
-        ] as ProfessionToOrganisation[],
-      });
-
-      // Mock the `latestVersion` method to only return a version when one is available
-      professionVersionsService.latestVersion.mockImplementation(
-        async (profession) => {
-          return profession.versions[0];
-        },
-      );
-
-      // Mock the `create` call to pass the version straight through for ease of testing
-      professionVersionsService.create.mockImplementation(
-        async (professionVersion) => {
-          return professionVersion;
-        },
-      );
-
-      const version = organisationVersionFactory.build({
-        status: OrganisationVersionStatus.Draft,
-        organisation: organisation,
-      });
-
-      const result = await service.archive(version, user);
-
-      expect(result.status).toBe(OrganisationVersionStatus.Archived);
-
-      expect(professionVersionsService.create).toHaveBeenCalledTimes(2);
-      expect(professionVersionsService.archive).toHaveBeenCalledTimes(2);
-
-      expect(professionVersionsService.create).toHaveBeenCalledWith(
-        profession1.versions[0],
-        user,
-      );
-
-      expect(professionVersionsService.create).toHaveBeenCalledWith(
-        profession2.versions[0],
-        user,
-      );
-
-      expect(professionVersionsService.archive).toHaveBeenCalledWith(
-        profession1.versions[0],
-      );
-
-      expect(professionVersionsService.archive).toHaveBeenCalledWith(
-        profession2.versions[0],
-      );
     });
   });
 
