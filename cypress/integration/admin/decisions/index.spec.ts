@@ -62,9 +62,14 @@ describe('Listing decision datasets', () => {
             (dataset) => dataset.organisation === 'Department for Education',
           );
 
-          cy.translate('decisions.admin.dashboard.search.foundPlural', {
-            count: datasetsToShow.length,
-          }).then((foundText) => {
+          cy.translate(
+            `decisions.admin.dashboard.search.${
+              datasetsToShow.length > 1 ? 'foundPlural' : 'foundSingular'
+            }`,
+            {
+              count: datasetsToShow.length,
+            },
+          ).then((foundText) => {
             cy.get('body').should('contain', foundText);
           });
 

@@ -13,8 +13,6 @@ import decisionDatasetFactory from '../../testutils/factories/decision-dataset';
 import organisationFactory from '../../testutils/factories/organisation';
 import professionFactory from '../../testutils/factories/profession';
 import userFactory from '../../testutils/factories/user';
-import * as checkCanViewOrganisationModule from '../../users/helpers/check-can-view-organisation';
-import * as checkCanChangeProfessionModule from '../../users/helpers/check-can-change-profession';
 import * as getActingUserModule from '../../users/helpers/get-acting-user.helper';
 import {
   DecisionDataset,
@@ -34,12 +32,13 @@ import { ShowTemplate } from './interfaces/show-template.interface';
 import { DecisionDatasetEditPresenter } from './presenters/decision-dataset-edit.presenter';
 import { DecisionDatasetsPresenter } from './presenters/decision-datasets.presenter';
 import professionVersionFactory from '../../testutils/factories/profession-version';
-import * as getDecisionsEndYearModule from './helpers/get-decisions-end-year.helper';
+import * as getDecisionsYearsRangeModule from './helpers/get-decisions-years-range';
 import { NewDecisionDatasetPresenter } from './presenters/new-decision-dataset.presenter';
 import { Profession } from '../../professions/profession.entity';
 import { NewTemplate } from './interfaces/new-template.interface';
 import { NewDto } from './dto/new.dto';
 import * as getOrganisationsFromProfessionModule from '../../professions/helpers/get-organisations-from-profession.helper';
+import * as checkCanChangeDatasetModule from './helpers/check-can-change-dataset.helper';
 
 jest.mock('./presenters/decision-datasets.presenter');
 jest.mock('../presenters/decision-dataset.presenter');
@@ -243,11 +242,8 @@ describe('DecisionsController', () => {
 
       const request = createDefaultMockRequest();
 
-      const professionCheckSpy = jest
-        .spyOn(checkCanChangeProfessionModule, 'checkCanChangeProfession')
-        .mockImplementation();
-      const organisationCheckSpy = jest
-        .spyOn(checkCanViewOrganisationModule, 'checkCanViewOrganisation')
+      const checkCanChangeDatasetSpy = jest
+        .spyOn(checkCanChangeDatasetModule, 'checkCanChangeDataset')
         .mockImplementation();
 
       professionsService.findWithVersions.mockResolvedValueOnce(profession);
@@ -261,20 +257,25 @@ describe('DecisionsController', () => {
         profession,
         organisation,
         tables: mockTables,
-        year: '2017',
+        year: 2017,
       };
 
       const result = await controller.show(
         'example-profession-id',
         'example-organisation-id',
-        '2017',
+        2017,
         request,
       );
 
       expect(result).toEqual(expected);
 
-      expect(professionCheckSpy).toHaveBeenCalledWith(request, profession);
-      expect(organisationCheckSpy).toHaveBeenCalledWith(request, organisation);
+      expect(checkCanChangeDatasetSpy).toHaveBeenCalledWith(
+        request,
+        profession,
+        organisation,
+        2017,
+        true,
+      );
 
       expect(professionsService.findWithVersions).toHaveBeenCalledWith(
         'example-profession-id',
@@ -309,9 +310,9 @@ describe('DecisionsController', () => {
         const getActingUserSpy = jest
           .spyOn(getActingUserModule, 'getActingUser')
           .mockReturnValue(user);
-        const getDecisionsEndYearSpy = jest
-          .spyOn(getDecisionsEndYearModule, 'getDecisionsEndYear')
-          .mockReturnValue(2024);
+        const getDecisionsYearsRangeSpy = jest
+          .spyOn(getDecisionsYearsRangeModule, 'getDecisionsYearsRange')
+          .mockReturnValue({ start: 2020, end: 2024 });
 
         professionVersionsService.allLive.mockResolvedValue(professionVersions);
 
@@ -322,7 +323,7 @@ describe('DecisionsController', () => {
         await controller.new(request, response);
 
         expect(getActingUserSpy).toHaveBeenCalledWith(request);
-        expect(getDecisionsEndYearSpy).toHaveBeenCalled();
+        expect(getDecisionsYearsRangeSpy).toHaveBeenCalled();
 
         expect(professionVersionsService.allLive).toHaveBeenCalled();
         expect(
@@ -372,8 +373,8 @@ describe('DecisionsController', () => {
           .spyOn(getActingUserModule, 'getActingUser')
           .mockReturnValue(user);
         const getDecisionsEndYearSpy = jest
-          .spyOn(getDecisionsEndYearModule, 'getDecisionsEndYear')
-          .mockReturnValue(2024);
+          .spyOn(getDecisionsYearsRangeModule, 'getDecisionsYearsRange')
+          .mockReturnValue({ start: 2020, end: 2024 });
 
         professionVersionsService.allLiveForOrganisation.mockResolvedValue(
           professionVersions,
@@ -569,9 +570,9 @@ describe('DecisionsController', () => {
           getOrganisationsFromProfessionModule,
           'getOrganisationsFromProfession',
         );
-        const getDecisionsEndYearSpy = jest
-          .spyOn(getDecisionsEndYearModule, 'getDecisionsEndYear')
-          .mockReturnValue(2024);
+        const getDecisionsYearsRangeSpy = jest
+          .spyOn(getDecisionsYearsRangeModule, 'getDecisionsYearsRange')
+          .mockReturnValue({ start: 2020, end: 2024 });
 
         professionVersionsService.allLive.mockResolvedValue(professionVersions);
         organisationVersionsService.allLive.mockResolvedValue(organisations);
@@ -585,7 +586,7 @@ describe('DecisionsController', () => {
         expect(getActingUserSpy).toHaveBeenCalledWith(request);
         expect(getOrganisationsFromProfessionSpy).not.toHaveBeenCalled();
 
-        expect(getDecisionsEndYearSpy).toBeCalled();
+        expect(getDecisionsYearsRangeSpy).toBeCalled();
 
         expect(professionsService.findWithVersions).not.toHaveBeenCalled();
         expect(organisationsService.find).not.toHaveBeenCalled();
@@ -667,9 +668,9 @@ describe('DecisionsController', () => {
             'getOrganisationsFromProfession',
           )
           .mockReturnValue([organisation]);
-        const getDecisionsEndYearSpy = jest
-          .spyOn(getDecisionsEndYearModule, 'getDecisionsEndYear')
-          .mockReturnValue(2024);
+        const getDecisionsYearsRangeSpy = jest
+          .spyOn(getDecisionsYearsRangeModule, 'getDecisionsYearsRange')
+          .mockReturnValue({ start: 2020, end: 2024 });
 
         professionsService.findWithVersions.mockResolvedValue(profession);
         organisationsService.find.mockResolvedValue(organisation);
@@ -687,7 +688,7 @@ describe('DecisionsController', () => {
         expect(getActingUserSpy).toHaveBeenCalledWith(request);
         expect(getOrganisationsFromProfessionSpy).toHaveBeenCalled();
 
-        expect(getDecisionsEndYearSpy).toBeCalled();
+        expect(getDecisionsYearsRangeSpy).toBeCalled();
 
         expect(professionsService.findWithVersions).toHaveBeenCalledWith(
           'profession-id',
@@ -769,9 +770,9 @@ describe('DecisionsController', () => {
             'getOrganisationsFromProfession',
           )
           .mockReturnValue([otherOrganisation]);
-        const getDecisionsEndYearSpy = jest
-          .spyOn(getDecisionsEndYearModule, 'getDecisionsEndYear')
-          .mockReturnValue(2024);
+        const getDecisionsYearsRangeSpy = jest
+          .spyOn(getDecisionsYearsRangeModule, 'getDecisionsYearsRange')
+          .mockReturnValue({ start: 2020, end: 2024 });
 
         professionsService.findWithVersions.mockResolvedValue(profession);
         organisationsService.find.mockResolvedValue(organisation);
@@ -789,7 +790,7 @@ describe('DecisionsController', () => {
         expect(getActingUserSpy).toHaveBeenCalledWith(request);
         expect(getOrganisationsFromProfessionSpy).toHaveBeenCalled();
 
-        expect(getDecisionsEndYearSpy).toBeCalled();
+        expect(getDecisionsYearsRangeSpy).toBeCalled();
 
         expect(professionsService.findWithVersions).toHaveBeenCalledWith(
           'profession-id',
@@ -859,11 +860,8 @@ describe('DecisionsController', () => {
           DecisionDatasetEditPresenter.prototype.present as jest.Mock
         ).mockReturnValue(mockRouteTemplates);
 
-        const checkCanChangeProfessionSpy = jest
-          .spyOn(checkCanChangeProfessionModule, 'checkCanChangeProfession')
-          .mockImplementation();
-        const checkCanViewOrganisationSpy = jest
-          .spyOn(checkCanViewOrganisationModule, 'checkCanViewOrganisation')
+        const checkCanChangeDatasetSpy = jest
+          .spyOn(checkCanChangeDatasetModule, 'checkCanChangeDataset')
           .mockImplementation();
 
         const request = createDefaultMockRequest();
@@ -871,14 +869,14 @@ describe('DecisionsController', () => {
         const expected: EditTemplate = {
           profession,
           organisation,
-          year: '2016',
+          year: 2016,
           routes: mockRouteTemplates,
         };
 
         const result = await controller.edit(
           'example-profession-id',
           'example-organisation-id',
-          '2016',
+          2016,
           request,
         );
 
@@ -904,13 +902,12 @@ describe('DecisionsController', () => {
           DecisionDatasetEditPresenter.prototype.present,
         ).toHaveBeenCalled();
 
-        expect(checkCanChangeProfessionSpy).toHaveBeenCalledWith(
+        expect(checkCanChangeDatasetSpy).toHaveBeenCalledWith(
           request,
           profession,
-        );
-        expect(checkCanViewOrganisationSpy).toHaveBeenCalledWith(
-          request,
           organisation,
+          2016,
+          true,
         );
       });
     });
@@ -933,11 +930,8 @@ describe('DecisionsController', () => {
           DecisionDatasetEditPresenter.prototype.present as jest.Mock
         ).mockReturnValue(mockRouteTemplates);
 
-        const checkCanChangeProfessionSpy = jest
-          .spyOn(checkCanChangeProfessionModule, 'checkCanChangeProfession')
-          .mockImplementation();
-        const checkCanViewOrganisationSpy = jest
-          .spyOn(checkCanViewOrganisationModule, 'checkCanViewOrganisation')
+        const checkCanChangeDatasetSpy = jest
+          .spyOn(checkCanChangeDatasetModule, 'checkCanChangeDataset')
           .mockImplementation();
 
         const request = createDefaultMockRequest();
@@ -945,14 +939,14 @@ describe('DecisionsController', () => {
         const expected: EditTemplate = {
           profession,
           organisation,
-          year: '2016',
+          year: 2016,
           routes: mockRouteTemplates,
         };
 
         const result = await controller.edit(
           'example-profession-id',
           'example-organisation-id',
-          '2016',
+          2016,
           request,
         );
 
@@ -993,13 +987,12 @@ describe('DecisionsController', () => {
           DecisionDatasetEditPresenter.prototype.present,
         ).toHaveBeenCalled();
 
-        expect(checkCanChangeProfessionSpy).toHaveBeenCalledWith(
+        expect(checkCanChangeDatasetSpy).toHaveBeenCalledWith(
           request,
           profession,
-        );
-        expect(checkCanViewOrganisationSpy).toHaveBeenCalledWith(
-          request,
           organisation,
+          2016,
+          false,
         );
       });
     });
@@ -1047,12 +1040,10 @@ describe('DecisionsController', () => {
 
         professionsService.findWithVersions.mockResolvedValue(profession);
         organisationsService.find.mockResolvedValue(organisation);
+        decisionDatasetsService.find.mockResolvedValue(undefined);
 
-        const checkCanChangeProfessionSpy = jest
-          .spyOn(checkCanChangeProfessionModule, 'checkCanChangeProfession')
-          .mockImplementation();
-        const checkCanViewOrganisationSpy = jest
-          .spyOn(checkCanViewOrganisationModule, 'checkCanViewOrganisation')
+        const checkCanChangeDatasetSpy = jest
+          .spyOn(checkCanChangeDatasetModule, 'checkCanChangeDataset')
           .mockImplementation();
 
         const getActingUserSpy = jest
@@ -1073,7 +1064,7 @@ describe('DecisionsController', () => {
         await controller.editPost(
           'example-profession-id',
           'example-organisation-id',
-          '2016',
+          2016,
           editDto,
           request,
           response,
@@ -1089,6 +1080,12 @@ describe('DecisionsController', () => {
         expect(organisationsService.find).toHaveBeenCalledWith(
           'example-organisation-id',
         );
+        expect(decisionDatasetsService.find).toHaveBeenCalledWith(
+          'example-profession-id',
+          'example-organisation-id',
+          2016,
+        );
+
         expect(decisionDatasetsService.save).toHaveBeenCalledWith({
           profession,
           organisation,
@@ -1098,13 +1095,12 @@ describe('DecisionsController', () => {
           routes: decisionRoutes,
         } as DecisionDataset);
 
-        expect(checkCanChangeProfessionSpy).toHaveBeenCalledWith(
+        expect(checkCanChangeDatasetSpy).toHaveBeenCalledWith(
           request,
           profession,
-        );
-        expect(checkCanViewOrganisationSpy).toHaveBeenCalledWith(
-          request,
           organisation,
+          2016,
+          false,
         );
         expect(getActingUserSpy).toHaveBeenCalledWith(request);
         expect(parseEditDtoDecisionRoutesSpy).toHaveBeenCalledWith(editDto);
@@ -1153,12 +1149,10 @@ describe('DecisionsController', () => {
 
         professionsService.findWithVersions.mockResolvedValue(profession);
         organisationsService.find.mockResolvedValue(organisation);
+        decisionDatasetsService.find.mockResolvedValue(undefined);
 
-        const checkCanChangeProfessionSpy = jest
-          .spyOn(checkCanChangeProfessionModule, 'checkCanChangeProfession')
-          .mockImplementation();
-        const checkCanViewOrganisationSpy = jest
-          .spyOn(checkCanViewOrganisationModule, 'checkCanViewOrganisation')
+        const checkCanChangeDatasetSpy = jest
+          .spyOn(checkCanChangeDatasetModule, 'checkCanChangeDataset')
           .mockImplementation();
 
         const getActingUserSpy = jest
@@ -1179,7 +1173,7 @@ describe('DecisionsController', () => {
         await controller.editPost(
           'example-profession-id',
           'example-organisation-id',
-          '2016',
+          2016,
           editDto,
           request,
           response,
@@ -1195,6 +1189,12 @@ describe('DecisionsController', () => {
         expect(organisationsService.find).toHaveBeenCalledWith(
           'example-organisation-id',
         );
+        expect(decisionDatasetsService.find).toHaveBeenCalledWith(
+          'example-profession-id',
+          'example-organisation-id',
+          2016,
+        );
+
         expect(decisionDatasetsService.save).toHaveBeenCalledWith({
           profession,
           organisation,
@@ -1204,13 +1204,12 @@ describe('DecisionsController', () => {
           routes: decisionRoutes,
         } as DecisionDataset);
 
-        expect(checkCanChangeProfessionSpy).toHaveBeenCalledWith(
+        expect(checkCanChangeDatasetSpy).toHaveBeenCalledWith(
           request,
           profession,
-        );
-        expect(checkCanViewOrganisationSpy).toHaveBeenCalledWith(
-          request,
           organisation,
+          2016,
+          false,
         );
         expect(getActingUserSpy).toHaveBeenCalledWith(request);
         expect(parseEditDtoDecisionRoutesSpy).toHaveBeenCalledWith(editDto);
@@ -1257,16 +1256,14 @@ describe('DecisionsController', () => {
 
         professionsService.findWithVersions.mockResolvedValue(profession);
         organisationsService.find.mockResolvedValue(organisation);
+        decisionDatasetsService.find.mockResolvedValue(undefined);
 
         (
           DecisionDatasetEditPresenter.prototype.present as jest.Mock
         ).mockReturnValue(mockRouteTemplates);
 
-        const checkCanChangeProfessionSpy = jest
-          .spyOn(checkCanChangeProfessionModule, 'checkCanChangeProfession')
-          .mockImplementation();
-        const checkCanViewOrganisationSpy = jest
-          .spyOn(checkCanViewOrganisationModule, 'checkCanViewOrganisation')
+        const checkCanChangeDatasetSpy = jest
+          .spyOn(checkCanChangeDatasetModule, 'checkCanChangeDataset')
           .mockImplementation();
 
         const parseEditDtoDecisionRoutesSpy = jest
@@ -1282,7 +1279,7 @@ describe('DecisionsController', () => {
         await controller.editPost(
           'example-profession-id',
           'example-organisation-id',
-          '2017',
+          2017,
           editDto,
           request,
           response,
@@ -1291,7 +1288,7 @@ describe('DecisionsController', () => {
         expect(response.render).toHaveBeenCalledWith('admin/decisions/edit', {
           profession,
           organisation,
-          year: '2017',
+          year: 2017,
           routes: mockRouteTemplates,
         } as EditTemplate);
 
@@ -1300,6 +1297,11 @@ describe('DecisionsController', () => {
         );
         expect(organisationsService.find).toHaveBeenCalledWith(
           'example-organisation-id',
+        );
+        expect(decisionDatasetsService.find).toHaveBeenCalledWith(
+          'example-profession-id',
+          'example-organisation-id',
+          2017,
         );
 
         expect(DecisionDatasetEditPresenter).toHaveBeenCalledWith(
@@ -1310,13 +1312,12 @@ describe('DecisionsController', () => {
           DecisionDatasetEditPresenter.prototype.present,
         ).toHaveBeenCalled();
 
-        expect(checkCanChangeProfessionSpy).toHaveBeenCalledWith(
+        expect(checkCanChangeDatasetSpy).toHaveBeenCalledWith(
           request,
           profession,
-        );
-        expect(checkCanViewOrganisationSpy).toHaveBeenCalledWith(
-          request,
           organisation,
+          2017,
+          false,
         );
         expect(parseEditDtoDecisionRoutesSpy).toHaveBeenCalledWith(editDto);
         expect(modifyDecisionRoutesSpy).toHaveBeenCalledWith(

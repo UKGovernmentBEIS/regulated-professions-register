@@ -110,7 +110,7 @@ describe('Creating a decision dataset', () => {
     });
 
     it('I can create a decision dataset for my organisation', () => {
-      cy.get('body').should('not.contain', '2021');
+      cy.get('body').should('not.contain', '2020');
 
       cy.translate('decisions.admin.dashboard.addButtonLabel').then((add) => {
         cy.get('a').contains(add).click();
@@ -136,7 +136,7 @@ describe('Creating a decision dataset', () => {
           .contains(profession)
           .parent()
           .within(() => {
-            cy.get('select').select('2021');
+            cy.get('select').select('2020');
           });
       });
 
@@ -153,7 +153,7 @@ describe('Creating a decision dataset', () => {
         'decisions.admin.edit.regulator',
         'Department for Education',
       );
-      cy.checkSummaryListRowValue('decisions.admin.edit.year', '2021');
+      cy.checkSummaryListRowValue('decisions.admin.edit.year', '2020');
 
       cy.get('input[name="routes[1]"]').type('New route');
       cy.get('select[name="countries[1][1]"]').select('Brazil');
@@ -182,7 +182,7 @@ describe('Creating a decision dataset', () => {
       cy.visitAndCheckAccessibility('/admin/decisions');
 
       cy.get('td')
-        .contains('2021')
+        .contains('2020')
         .parent()
         .parent()
         .within(($row) => {

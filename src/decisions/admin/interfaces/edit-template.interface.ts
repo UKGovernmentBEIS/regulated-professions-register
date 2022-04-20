@@ -5,7 +5,7 @@ import { RouteTemplate } from './route-template.interface';
 export interface EditTemplate {
   profession: Profession;
   organisation: Organisation;
-  year: string;
+  year: number;
 
   routes: RouteTemplate[];
 }

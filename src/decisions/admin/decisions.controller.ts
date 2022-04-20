@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Param,
+  ParseIntPipe,
   Post,
   Render,
   Req,
@@ -20,8 +21,6 @@ import { DecisionDatasetsService } from '../decision-datasets.service';
 import { IndexTemplate } from './interfaces/index-template.interface';
 import { ShowTemplate } from './interfaces/show-template.interface';
 import { ProfessionsService } from '../../professions/professions.service';
-import { checkCanChangeProfession } from '../../users/helpers/check-can-change-profession';
-import { checkCanViewOrganisation } from '../../users/helpers/check-can-view-organisation';
 import {
   DecisionDatasetsPresenter,
   DecisionDatasetsPresenterView,
@@ -49,7 +48,8 @@ import { ValidationFailedError } from '../../common/validation/validation-failed
 import { Organisation } from '../../organisations/organisation.entity';
 import { getOrganisationsFromProfession } from '../../professions/helpers/get-organisations-from-profession.helper';
 import { NewDecisionDatasetPresenter } from './presenters/new-decision-dataset.presenter';
-import { getDecisionsEndYear } from './helpers/get-decisions-end-year.helper';
+import { checkCanChangeDataset } from './helpers/check-can-change-dataset.helper';
+import { getDecisionsYearsRange } from './helpers/get-decisions-years-range';
 
 const emptyCountry = {
   country: null,
@@ -96,22 +96,22 @@ export class DecisionsController {
   async show(
     @Param('professionId') professionId: string,
     @Param('organisationId') organisationId: string,
-    @Param('year') year: string,
+    @Param('year', ParseIntPipe) year: number,
     @Req() request: RequestWithAppSession,
   ): Promise<ShowTemplate> {
     const profession = await this.professionsService.findWithVersions(
       professionId,
     );
 
-    checkCanChangeProfession(request, profession);
-
     const dataset = await this.decisionDatasetsService.find(
       professionId,
       organisationId,
-      parseInt(year),
+      year,
     );
 
-    checkCanViewOrganisation(request, dataset.organisation);
+    const organisation = dataset.organisation;
+
+    checkCanChangeDataset(request, profession, organisation, year, true);
 
     const presenter = new DecisionDatasetPresenter(
       dataset.routes,
@@ -119,9 +119,9 @@ export class DecisionsController {
     );
 
     return {
-      profession: profession,
-      organisation: dataset.organisation,
-      year: dataset.year.toString(),
+      profession,
+      organisation,
+      year,
       tables: presenter.tables(),
     };
   }
@@ -241,24 +241,22 @@ export class DecisionsController {
   async edit(
     @Param('professionId') professionId: string,
     @Param('organisationId') organisationId: string,
-    @Param('year') year: string,
+    @Param('year', ParseIntPipe) year: number,
     @Req() request: RequestWithAppSession,
   ): Promise<EditTemplate> {
     const profession = await this.professionsService.findWithVersions(
       professionId,
     );
 
-    checkCanChangeProfession(request, profession);
-
     const organisation = await this.organisationsService.find(organisationId);
-
-    checkCanViewOrganisation(request, organisation);
 
     const dataset = await this.decisionDatasetsService.find(
       professionId,
       organisationId,
-      parseInt(year),
+      year,
     );
+
+    checkCanChangeDataset(request, profession, organisation, year, !!dataset);
 
     const routes: DecisionRoute[] = dataset
       ? dataset.routes
@@ -290,7 +288,7 @@ export class DecisionsController {
   async editPost(
     @Param('professionId') professionId: string,
     @Param('organisationId') organisationId: string,
-    @Param('year') year: string,
+    @Param('year', ParseIntPipe) year: number,
     @Body() editDto: EditDto,
     @Req() request: RequestWithAppSession,
     @Res() response: Response,
@@ -299,11 +297,15 @@ export class DecisionsController {
       professionId,
     );
 
-    checkCanChangeProfession(request, profession);
-
     const organisation = await this.organisationsService.find(organisationId);
 
-    checkCanViewOrganisation(request, organisation);
+    const dataset = await this.decisionDatasetsService.find(
+      professionId,
+      organisationId,
+      year,
+    );
+
+    checkCanChangeDataset(request, profession, organisation, year, !!dataset);
 
     const routes = parseEditDtoDecisionRoutes(editDto);
 
@@ -314,7 +316,7 @@ export class DecisionsController {
         organisation,
         profession,
         user: getActingUser(request),
-        year: parseInt(year),
+        year,
         status:
           action === 'publish'
             ? DecisionDatasetStatus.Live
@@ -394,8 +396,7 @@ export class DecisionsController {
       ? await this.organisationVersionsService.allLive()
       : null;
 
-    const startYear = 2020;
-    const endYear = getDecisionsEndYear();
+    const { start: startYear, end: endYear } = getDecisionsYearsRange();
 
     const presenter = new NewDecisionDatasetPresenter(
       professions,

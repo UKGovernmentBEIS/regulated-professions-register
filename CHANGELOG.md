@@ -17,6 +17,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Placeholder page for adding decision data
 - Add Regulator column to decision data table for central admin users
 
+# Changed
+
+- Decision data can be submitted for any regulatory authority that regulates a profession in any role
+
 ## [release-016] - 2022-04-11
 
 ### Changed
