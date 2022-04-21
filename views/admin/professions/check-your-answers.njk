@@ -435,12 +435,13 @@
             </li>
             {% if 'publishProfession' in permissions %}
               <li>
+                {% set disabled = publicationBlockers.length %}
                 {{
                   govukButton({
                     text: ('professions.form.button.publish' | t),
                     id: "publish-button",
-                    href: "/admin/professions/" + professionId + "/versions/" + versionId + "/publish?fromEdit=true",
-                    disabled: publicationBlockers.length
+                    href: "/admin/professions/" + professionId + "/versions/" + versionId + "/publish?fromEdit=true" if not disabled else undefined,
+                    disabled: disabled
                   })
                 }}
               </li>

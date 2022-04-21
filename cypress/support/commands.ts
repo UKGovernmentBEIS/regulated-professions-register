@@ -286,7 +286,7 @@ Cypress.Commands.add(
 
         cy.translate('professions.form.button.publish').then((publishLabel) => {
           if (shouldHaveButton) {
-            cy.get('a')
+            cy.get('button')
               .contains(publishLabel)
               .should('have.class', 'govuk-button--disabled');
           } else {

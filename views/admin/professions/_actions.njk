@@ -20,12 +20,13 @@
       {% endif %}
       {% if profession.status === 'draft' and 'publishProfession' in permissions and canChangeProfession(profession) %}
         <li>
+          {% set disabled = publicationBlockers.length %}
           {{
             govukButton({
               text: ('professions.form.button.publish' | t),
               attributes: { "data-cy": "publish-button" },
-              href: "/admin/professions/" + profession.id + "/versions/" + profession.versionId + "/publish",
-              disabled: publicationBlockers.length
+              href: "/admin/professions/" + profession.id + "/versions/" + profession.versionId + "/publish" if not disabled else undefined,
+              disabled: disabled
             })
           }}
         </li>
