@@ -5,6 +5,7 @@ import {
   ParseIntPipe,
   Render,
   Req,
+  Res,
   UseGuards,
 } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
@@ -24,6 +25,8 @@ import {
 } from './presenters/decision-datasets.presenter';
 import { DecisionDatasetPresenter } from '../presenters/decision-dataset.presenter';
 import { checkCanChangeDataset } from './helpers/check-can-change-dataset.helper';
+import { DecisionsCsvWriter } from './helpers/decisions-csv-writer.helper';
+import { Response } from 'express';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/decisions')
@@ -44,6 +47,36 @@ export class DecisionsController {
   @BackLink('/admin/dashboard')
   async index(@Req() request: RequestWithAppSession): Promise<IndexTemplate> {
     return this.createListEntries(request);
+  }
+
+  @Get('export')
+  @Permissions(
+    UserPermission.UploadDecisionData,
+    UserPermission.DownloadDecisionData,
+    UserPermission.ViewDecisionData,
+  )
+  async export(
+    @Req() request: RequestWithAppSession,
+    @Res() response: Response,
+  ): Promise<void> {
+    const actingUser = getActingUser(request);
+
+    const showAllOrgs = actingUser.serviceOwner;
+
+    const userOrganisation = showAllOrgs ? null : actingUser.organisation;
+
+    const allDecisionDatasets = await (showAllOrgs
+      ? this.decisionDatasetsService.all()
+      : this.decisionDatasetsService.allForOrganisation(userOrganisation));
+
+    const writer = new DecisionsCsvWriter(
+      response,
+      'decisions',
+      allDecisionDatasets,
+      this.i18nService,
+    );
+
+    writer.write();
   }
 
   @Get(':professionId/:organisationId/:year')
