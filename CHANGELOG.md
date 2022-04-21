@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [unreleased]
 
+### Added
+
+- "Total" column on internal decision data tables
+- Add bulk decision data download link
+
 ## [release-017] - 2022-04-25
 
 ### Changed
@@ -23,7 +28,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Placeholder page for editing decision data
 - Placeholder page for adding decision data
 - Add Regulator column to decision data table for central admin users
-- "Total" column on internal decision data tables
 
 # Changed
 
