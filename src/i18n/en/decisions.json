@@ -83,5 +83,18 @@
       "yesAfterComp": "Yes (after compensatory measure)",
       "noAfterComp": "No (after compensatory measure)"
     }
+  },
+  "csv": {
+    "heading": {
+      "profession": "Profession",
+      "organisation": "Regulatory authority",
+      "year": "Year",
+      "route": "Route",
+      "country": "Country of qualification",
+      "yes": "Yes",
+      "no": "No",
+      "yesAfterComp": "Yes (after compensatory measure)",
+      "noAfterComp": "No (after compensatory measure)"
+    }
   }
 }
