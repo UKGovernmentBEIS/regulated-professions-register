@@ -17,6 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Placeholder page for editing decision data
 - Placeholder page for adding decision data
 - Add Regulator column to decision data table for central admin users
+- Add bulk decision data download link
 
 # Changed
 
