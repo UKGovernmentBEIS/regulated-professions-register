@@ -39,11 +39,13 @@ import { NewTemplate } from './interfaces/new-template.interface';
 import { NewDto } from './dto/new.dto';
 import * as getOrganisationsFromProfessionModule from '../../professions/helpers/get-organisations-from-profession.helper';
 import * as checkCanChangeDatasetModule from './helpers/check-can-change-dataset.helper';
+import { DecisionsCsvWriter } from './helpers/decisions-csv-writer.helper';
 
 jest.mock('./presenters/decision-datasets.presenter');
 jest.mock('../presenters/decision-dataset.presenter');
 jest.mock('./presenters/decision-dataset-edit.presenter');
 jest.mock('./presenters/new-decision-dataset.presenter');
+jest.mock('./helpers/decisions-csv-writer.helper');
 
 const mockIndexTemplate: IndexTemplate = {
   organisation: 'Example Organisation',
@@ -217,6 +219,74 @@ describe('DecisionsController', () => {
           datasets,
           i18nService,
         );
+        expect(decisionDatasetsService.allForOrganisation).toHaveBeenCalledWith(
+          organisation,
+        );
+        expect(decisionDatasetsService.all).not.toHaveBeenCalled();
+      });
+    });
+  });
+
+  describe('export', () => {
+    describe('when called by a service owner user', () => {
+      it('exports a CSV file of all decision datasets', async () => {
+        const request = createDefaultMockRequest();
+        const response = createMock<Response>();
+
+        jest.spyOn(getActingUserModule, 'getActingUser').mockReturnValue(
+          userFactory.build({
+            serviceOwner: true,
+            organisation: null,
+          }),
+        );
+
+        const datasets = decisionDatasetFactory.buildList(3);
+
+        decisionDatasetsService.all.mockResolvedValue(datasets);
+
+        await controller.export(request, response);
+
+        expect(DecisionsCsvWriter).toHaveBeenCalledWith(
+          response,
+          'decisions',
+          datasets,
+          i18nService,
+        );
+        expect(DecisionsCsvWriter.prototype.write).toHaveBeenCalled();
+        expect(decisionDatasetsService.all).toHaveBeenCalled();
+        expect(
+          decisionDatasetsService.allForOrganisation,
+        ).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('when called by a non-service owner user', () => {
+      it("exports a CSV file of all decision datasets for the user's organisation", async () => {
+        const request = createDefaultMockRequest();
+        const response = createMock<Response>();
+
+        const organisation = organisationFactory.build();
+
+        jest.spyOn(getActingUserModule, 'getActingUser').mockReturnValue(
+          userFactory.build({
+            serviceOwner: false,
+            organisation,
+          }),
+        );
+
+        const datasets = decisionDatasetFactory.buildList(3);
+
+        decisionDatasetsService.all.mockResolvedValue(datasets);
+
+        await controller.export(request, response);
+
+        expect(DecisionsCsvWriter).toHaveBeenCalledWith(
+          response,
+          'decisions',
+          datasets,
+          i18nService,
+        );
+        expect(DecisionsCsvWriter.prototype.write).toHaveBeenCalled();
         expect(decisionDatasetsService.allForOrganisation).toHaveBeenCalledWith(
           organisation,
         );
