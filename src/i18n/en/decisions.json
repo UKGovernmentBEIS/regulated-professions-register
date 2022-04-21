@@ -16,7 +16,8 @@
       "search": {
         "foundSingular": "{count} decision dataset found",
         "foundPlural": "{count} decision datasets found"
-      }
+      },
+      "download": "Download datasets"
     },
     "show": {
       "edit": "Edit"
