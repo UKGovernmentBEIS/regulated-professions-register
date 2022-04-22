@@ -747,6 +747,7 @@ describe('OrganisationVersionsService', () => {
     const versions = organisationVersionFactory.buildList(5);
     const queryBuilder = createMock<SelectQueryBuilder<OrganisationVersion>>({
       leftJoinAndSelect: () => queryBuilder,
+      distinctOn: () => queryBuilder,
       where: () => queryBuilder,
       orderBy: () => queryBuilder,
       andWhere: () => queryBuilder,
@@ -775,6 +776,11 @@ describe('OrganisationVersionsService', () => {
       expect(result).toEqual(expectedOrgs);
 
       expectJoinsToHaveBeenApplied(queryBuilder);
+
+      expect(queryBuilder.distinctOn).toHaveBeenCalledWith([
+        'organisation.name',
+        'organisation',
+      ]);
 
       expect(queryBuilder.where).toHaveBeenCalledWith(
         'organisationVersion.status = :status',
