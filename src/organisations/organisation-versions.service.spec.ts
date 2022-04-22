@@ -230,11 +230,12 @@ describe('OrganisationVersionsService', () => {
   });
 
   describe('allLive', () => {
-    it('fetches all of currently live organisations', async () => {
+    it('fetches all currently live organisations', async () => {
       const versions = organisationVersionFactory.buildList(5);
       const queryBuilder = createMock<SelectQueryBuilder<OrganisationVersion>>({
         leftJoinAndSelect: () => queryBuilder,
         where: () => queryBuilder,
+        distinctOn: () => queryBuilder,
         orderBy: () => queryBuilder,
         getMany: async () => versions,
       });
@@ -260,7 +261,14 @@ describe('OrganisationVersionsService', () => {
         },
       );
 
-      expect(queryBuilder.orderBy).toHaveBeenCalledWith('organisation.name');
+      expect(queryBuilder.distinctOn).toHaveBeenCalledWith([
+        'organisation.name',
+        'organisation',
+      ]);
+
+      expect(queryBuilder.orderBy).toHaveBeenCalledWith(
+        'organisation.name, organisation',
+      );
     });
   });
 

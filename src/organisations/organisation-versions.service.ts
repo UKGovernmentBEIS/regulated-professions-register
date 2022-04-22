@@ -78,10 +78,11 @@ export class OrganisationVersionsService {
 
   async allLive(): Promise<Organisation[]> {
     const versions = await this.versionsWithJoins()
+      .distinctOn(['organisation.name', 'organisation'])
       .where('organisationVersion.status = :status', {
         status: OrganisationVersionStatus.Live,
       })
-      .orderBy('organisation.name')
+      .orderBy('organisation.name, organisation')
       .getMany();
 
     return versions.map((version) =>
