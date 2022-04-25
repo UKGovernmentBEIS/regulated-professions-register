@@ -216,7 +216,7 @@ describe('PersonalDetailsController', () => {
           email,
           errors: {
             email: {
-              text: 'A user with this email address already exists',
+              text: 'users.form.errors.email.alreadyExists',
             },
           },
         },
