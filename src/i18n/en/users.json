@@ -24,8 +24,12 @@
       "archive": "Archive user"
     },
     "errors": {
+      "name": {
+        "empty": "Enter a name"
+      },
       "email": {
-        "alreadyExists": "A user with this email address already exists"
+        "alreadyExists": "A user with this email address already exists",
+        "invalid": "Enter a valid email address"
       },
       "organisation": {
         "empty": "Select an organisation for this user"

@@ -38,7 +38,7 @@
           id: "name-input",
           name: "name",
           value: name,
-          errorMessage: errors.name
+          errorMessage: (errors.name | tError)
         }) }}
       </div>
 
@@ -54,7 +54,7 @@
           id: "email-input",
           name: "email",
           value: email,
-          errorMessage: errors.email
+          errorMessage: (errors.email | tError)
         }) }}
       </div>
 

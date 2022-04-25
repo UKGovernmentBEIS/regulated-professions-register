@@ -4,11 +4,12 @@ import { parseBoolean } from '../../../helpers/parse-boolean.helper';
 import { preprocessEmail } from '../../../helpers/preprocess-email.helper';
 
 export class PersonalDetailsDto {
-  @IsNotEmpty()
+  @IsNotEmpty({
+    message: 'users.form.errors.name.empty',
+  })
   name: string;
 
-  @IsNotEmpty()
-  @IsEmail()
+  @IsEmail({}, { message: 'users.form.errors.email.invalid' })
   @Transform(({ value }) => preprocessEmail(value))
   email: string;
 
