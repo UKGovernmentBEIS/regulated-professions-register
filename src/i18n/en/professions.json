@@ -201,8 +201,8 @@
       "regulators": "Regulators"
     },
     "bodies": {
-      "heading": "Regulatory / professional bodies",
-      "regulatedAuthority": "Regulated authority",
+      "heading": "Regulatory or professional bodies",
+      "regulatedAuthority": "Regulatory authority",
       "name": "Name",
       "address": "Address",
       "emailAddress": "Email address",

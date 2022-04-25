@@ -92,7 +92,7 @@
   },
   "filters": {
     "filterButton": "Filter results",
-    "clearAllButton": "Clear all filters"
+    "clearAllButton": "Clear filters"
   },
-  "pleaseSelect": "--- Please Select ---"
+  "pleaseSelect": "--- Please select ---"
 }
