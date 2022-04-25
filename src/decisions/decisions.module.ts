@@ -14,6 +14,8 @@ import { OrganisationVersion } from '../organisations/organisation-version.entit
 import { OrganisationsSearchService } from '../organisations/organisations-search.service';
 import { Organisation } from '../organisations/organisation.entity';
 import { OrganisationsService } from '../organisations/organisations.service';
+import { NewController } from './admin/new.controller';
+import { EditController } from './admin/edit.controller';
 
 @Module({
   imports: [
@@ -33,6 +35,6 @@ import { OrganisationsService } from '../organisations/organisations.service';
     ProfessionsSearchService,
     OrganisationsSearchService,
   ],
-  controllers: [DecisionsController],
+  controllers: [DecisionsController, NewController, EditController],
 })
 export class DecisionsModule {}
