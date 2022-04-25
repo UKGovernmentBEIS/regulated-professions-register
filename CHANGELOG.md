@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [unreleased]
 
+## [release-017] - 2022-04-25
+
 ### Changed
 
 - Prevent Organisation from being archived if they have related Professions - Regulator must have Professions removed before it can be archived
@@ -329,7 +331,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fix links in error messages when adding a new profession
 - Make validation errors more human readable
 
-[unreleased]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-016...HEAD
+[unreleased]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-017...HEAD
+[release-017]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release016...release-017
 [release-016]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release015...release-016
 [release-015]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release014...release-015
 [release-014]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release013...release-014
