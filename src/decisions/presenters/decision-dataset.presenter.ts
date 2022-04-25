@@ -38,6 +38,11 @@ export class DecisionDatasetPresenter {
           'decisions.show.tableHeading.noAfterComp',
         ),
       },
+      {
+        text: this.i18nService.translate<string>(
+          'decisions.show.tableHeading.total',
+        ),
+      },
     ];
 
     return this.routes.map((route) => {
@@ -65,11 +70,30 @@ export class DecisionDatasetPresenter {
             {
               text: decisionValueToString(country.decisions.noAfterComp),
             },
+            {
+              text: this.computeTotal(country.decisions).toString(),
+            },
           ];
         }),
       };
 
       return table;
     });
+  }
+
+  private computeTotal(decisions: {
+    yes: number;
+    no: number;
+    yesAfterComp: number;
+    noAfterComp: number;
+  }): number {
+    const yes = typeof decisions.yes === 'number' ? decisions.yes : 0;
+    const no = typeof decisions.no === 'number' ? decisions.no : 0;
+    const yesAfterComp =
+      typeof decisions.yesAfterComp === 'number' ? decisions.yesAfterComp : 0;
+    const noAfterComp =
+      typeof decisions.noAfterComp === 'number' ? decisions.noAfterComp : 0;
+
+    return yes + no + yesAfterComp + noAfterComp;
   }
 }

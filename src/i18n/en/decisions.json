@@ -81,7 +81,8 @@
       "yes": "Yes",
       "no": "No",
       "yesAfterComp": "Yes (after compensatory measure)",
-      "noAfterComp": "No (after compensatory measure)"
+      "noAfterComp": "No (after compensatory measure)",
+      "total": "Total"
     }
   }
 }
