@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 
 - Prevent Organisation from being archived if they have related Professions - Regulator must have Professions removed before it can be archived
+- Correct missing error copy when clicking CTA whilst amending a profession without selecting regulator name **and** regulator role
 - Allow Professions to have up to 25 regulators (previously 5)
 - Show full list of countries when editing/adding decision data
 - Fix bug where publish button could still be clicked despite being disabled
