@@ -28,13 +28,13 @@
         "alreadyExists": "A user with this email address already exists"
       },
       "organisation": {
-        "empty": "You must select an organisation for the user"
+        "empty": "Select an organisation for this user"
       },
       "serviceOwner": {
-        "empty": "You must select if the user belongs to the Regulated Professions Register or a regulatory authority"
+        "empty": "Select if the user belongs to the Regulated Professions Register or a regulatory authority"
       },
       "roles": {
-        "empty": "You must select a role"
+        "empty": "Select a role"
       }
     },
     "headings": {
@@ -61,7 +61,7 @@
     "manageExisting": "Existing users"
   },
   "body": {
-    "intro": "You can add a new user here.",
+    "intro": "Add a new user and choose their permissions.",
     "new": {
       "panel": "User <strong>{email}</strong> has been added"
     },
