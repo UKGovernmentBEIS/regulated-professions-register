@@ -17,15 +17,15 @@
       },
       "nations": {
         "label": "Nations",
-        "hint": "Select all that apply."
+        "hint": "Select all that apply"
       },
       "industries": {
         "label": "Sectors",
-        "hint": "Select all that apply."
+        "hint": "Select all that apply"
       },
       "regulationTypes": {
         "label": "Regulation types",
-        "hint": "Select all that apply."
+        "hint": "Select all that apply"
       }
     },
     "edit": {
@@ -146,15 +146,15 @@
       },
       "nations": {
         "label": "Nations",
-        "hint": "Select all that apply."
+        "hint": "Select all that apply"
       },
       "industries": {
         "label": "Sectors",
-        "hint": "Select all that apply."
+        "hint": "Select all that apply"
       },
       "regulationTypes": {
         "label": "Regulation types",
-        "hint": "Select all that apply."
+        "hint": "Select all that apply"
       },
       "button": "Filter results"
     }
