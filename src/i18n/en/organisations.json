@@ -175,13 +175,13 @@
     "email": "Email",
     "telephone": "Phone number",
     "roles": {
-      "primaryRegulator": "Primary Regulator",
-      "charteredBody": "Chartered Body",
-      "qualifyingBody": "Qualifying Body",
-      "additionalRegulator": "Additional Regulator",
-      "oversightBody": "Oversight Body",
-      "enforcementBody": "Enforcement Body",
-      "awardingBody": "Awarding Body"
+      "primaryRegulator": "Primary regulator",
+      "charteredBody": "Chartered body",
+      "qualifyingBody": "Qualifying body",
+      "additionalRegulator": "Additional regulator",
+      "oversightBody": "Oversight body",
+      "enforcementBody": "Enforcement body",
+      "awardingBody": "Awarding body"
     }
   }
 }
