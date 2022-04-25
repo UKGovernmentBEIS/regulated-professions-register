@@ -104,13 +104,13 @@
         },
         "phone": {
           "empty": "Enter the UK telephone number for the regulatory authority",
-          "invalid": "Enter a valid UK telephone number, without a country code, for the regulatory authority"
+          "invalid": "Enter a valid UK telephone number without country code"
         },
         "email": {
-          "invalid": "Please enter a valid email address"
+          "invalid": "Enter a valid email address"
         },
         "url": {
-          "invalid": "Please enter a valid website address"
+          "invalid": "Enter a valid website address"
         }
       }
     },

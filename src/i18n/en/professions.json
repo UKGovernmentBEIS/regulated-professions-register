@@ -152,26 +152,26 @@
         "empty": "Enter reserved activities"
       },
       "regulationUrl": {
-        "invalid": "Please enter a valid website address"
+        "invalid": "Enter a valid website address"
       },
       "registrationUrl": {
-        "invalid": "Please enter a valid website address"
+        "invalid": "Enter a valid website address"
       },
       "qualification": {
         "routesToObtain": {
           "empty": "Enter routes to obtain the qualification"
         },
         "moreInformationUrl": {
-          "invalid": "Please enter a valid website address"
+          "invalid": "Enter a valid website address"
         },
         "ukRecognitionUrl": {
-          "invalid": "Please enter a valid website address"
+          "invalid": "Enter a valid website address"
         },
         "otherCountriesRecognitionRoutes": {
-          "empty": "Select what recognition routes exist for professionals qualified in another country"
+          "empty": "Select which recognition routes exist for professionals qualified in another country"
         },
         "otherCountriesRecognitionUrl": {
-          "invalid": "Please enter a valid website address"
+          "invalid": "Enter a valid website address"
         }
       },
       "legislation": {
