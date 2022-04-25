@@ -1,10 +1,15 @@
 import { format } from 'date-fns';
+import { parse } from 'csv-parse/dist/esm/sync';
+import path from 'path';
 
 type SeedDecisionDataset = {
   profession: string;
   organisation: string;
   year: number;
   status: string;
+  routes: {
+    countries: [];
+  }[];
 };
 
 describe('Listing decision datasets', () => {
@@ -46,6 +51,31 @@ describe('Listing decision datasets', () => {
           });
         },
       );
+    });
+
+    it('I can download visible decision data', () => {
+      cy.translate('decisions.admin.dashboard.download').then((download) => {
+        clickDownloadLink(download);
+      });
+
+      const filename = path.join(
+        Cypress.config('downloadsFolder'),
+        'decisions.csv',
+      );
+
+      cy.readFile(filename).then((file) => {
+        const rows = parse(file);
+
+        cy.readFile('./seeds/test/decision-datasets.json').then(
+          (datasets: SeedDecisionDataset[]) => {
+            const countries = datasets
+              .flatMap((dataset) => dataset.routes)
+              .flatMap((route) => route.countries);
+
+            expect(rows).to.have.length(countries.length + 1);
+          },
+        );
+      });
     });
   });
 
@@ -95,6 +125,35 @@ describe('Listing decision datasets', () => {
         },
       );
     });
+
+    it('I can download visible decision data', () => {
+      cy.translate('decisions.admin.dashboard.download').then((download) => {
+        clickDownloadLink(download);
+      });
+
+      const filename = path.join(
+        Cypress.config('downloadsFolder'),
+        'decisions.csv',
+      );
+
+      cy.readFile(filename).then((file) => {
+        const rows = parse(file);
+
+        cy.readFile('./seeds/test/decision-datasets.json').then(
+          (datasets: SeedDecisionDataset[]) => {
+            const organisationDatasets = datasets.filter(
+              (dataset) => dataset.organisation === 'Department for Education',
+            );
+
+            const countries = organisationDatasets
+              .flatMap((dataset) => dataset.routes)
+              .flatMap((route) => route.countries);
+
+            expect(rows).to.have.length(countries.length + 1);
+          },
+        );
+      });
+    });
   });
 });
 
@@ -126,4 +185,21 @@ function getDisplayedDatasets(
   });
 
   return result;
+}
+
+function clickDownloadLink(link: string): void {
+  // This is a workaround for a Cypress bug to prevent it waiting
+  // indefinitely for a new page to load after clicking the download link
+  // See https://github.com/cypress-io/cypress/issues/14857
+  cy.window()
+    .document()
+    .then(function (doc) {
+      doc.addEventListener('click', () => {
+        setTimeout(function () {
+          doc.location.reload();
+        }, 5000);
+      });
+    });
+
+  cy.get('body').contains(link).click();
 }
