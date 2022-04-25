@@ -54,83 +54,472 @@ describe('DecisionDatasetsService', () => {
   });
 
   describe('all', () => {
-    it('returns all live and draft DecisionDatasets', async () => {
-      const datasets = decisionDatasetFactory.buildList(3);
+    describe('when an empty FilterInput is given', () => {
+      it('returns all live and draft DecisionDatasets', async () => {
+        const queryResultDatasets = decisionDatasetFactory.buildList(3);
 
-      const queryBuilder = createMock<SelectQueryBuilder<DecisionDataset>>({
-        leftJoinAndSelect: () => queryBuilder,
-        where: () => queryBuilder,
-        orderBy: () => queryBuilder,
-        getMany: async () => datasets,
+        const queryBuilder = createMock<SelectQueryBuilder<DecisionDataset>>({
+          leftJoinAndSelect: () => queryBuilder,
+          where: () => queryBuilder,
+          orderBy: () => queryBuilder,
+          getMany: async () => queryResultDatasets,
+        });
+
+        jest
+          .spyOn(repo, 'createQueryBuilder')
+          .mockImplementation(() => queryBuilder);
+
+        const result = await service.all({});
+
+        expect(result).toEqual(queryResultDatasets);
+        expect(queryBuilder).toHaveJoined([
+          'decisionDataset.profession',
+          'decisionDataset.organisation',
+          'decisionDataset.user',
+        ]);
+        expect(queryBuilder.where).toBeCalledWith(
+          'decisionDataset.status IN(:...status)',
+          {
+            status: [DecisionDatasetStatus.Live, DecisionDatasetStatus.Draft],
+          },
+        );
+        expect(queryBuilder.orderBy).toBeCalledWith({
+          'profession.name': 'ASC',
+          'organisation.name': 'ASC',
+          year: 'DESC',
+        });
+        expect(queryBuilder.getMany).toBeCalledWith();
       });
+    });
 
-      jest
-        .spyOn(repo, 'createQueryBuilder')
-        .mockImplementation(() => queryBuilder);
+    describe('when a FilterInput with keywords is given', () => {
+      it('returns all live and draft DecisionDatasets for the given keywords', async () => {
+        const queryResultDatasets = decisionDatasetFactory.buildList(3);
 
-      const result = await service.all();
+        const queryBuilder = createMock<SelectQueryBuilder<DecisionDataset>>({
+          leftJoinAndSelect: () => queryBuilder,
+          where: () => queryBuilder,
+          andWhere: () => queryBuilder,
+          orderBy: () => queryBuilder,
+          getMany: async () => queryResultDatasets,
+        });
 
-      expect(result).toEqual(datasets);
-      expect(queryBuilder).toHaveJoined([
-        'decisionDataset.profession',
-        'decisionDataset.organisation',
-        'decisionDataset.user',
-      ]);
-      expect(queryBuilder.where).toBeCalledWith(
-        'decisionDataset.status IN(:...status)',
-        {
-          status: [DecisionDatasetStatus.Live, DecisionDatasetStatus.Draft],
-        },
-      );
-      expect(queryBuilder.orderBy).toBeCalledWith({
-        'profession.name': 'ASC',
-        'organisation.name': 'ASC',
-        year: 'DESC',
+        jest
+          .spyOn(repo, 'createQueryBuilder')
+          .mockImplementation(() => queryBuilder);
+
+        const result = await service.all({
+          keywords: 'safe-keyword uns%fe-keyword',
+        });
+
+        expect(result).toEqual(queryResultDatasets);
+        expect(queryBuilder).toHaveJoined([
+          'decisionDataset.profession',
+          'decisionDataset.organisation',
+          'decisionDataset.user',
+        ]);
+        expect(queryBuilder.where).toBeCalledWith(
+          'decisionDataset.status IN(:...status)',
+          {
+            status: [DecisionDatasetStatus.Live, DecisionDatasetStatus.Draft],
+          },
+        );
+        expect(queryBuilder.andWhere).toBeCalledWith(
+          '(LOWER(profession.name) LIKE :keyword0 OR LOWER(profession.name) LIKE :keyword1)',
+          { keyword0: '%safe-keyword%', keyword1: '%uns\\%fe-keyword%' },
+        );
+        expect(queryBuilder.orderBy).toBeCalledWith({
+          'profession.name': 'ASC',
+          'organisation.name': 'ASC',
+          year: 'DESC',
+        });
+        expect(queryBuilder.getMany).toBeCalledWith();
       });
-      expect(queryBuilder.getMany).toBeCalledWith();
+    });
+
+    describe('when a FilterInput with organisations is given', () => {
+      it('returns all live and draft DecisionDatasets for the given organisations', async () => {
+        const queryResultDatasets = decisionDatasetFactory.buildList(3);
+
+        const queryBuilder = createMock<SelectQueryBuilder<DecisionDataset>>({
+          leftJoinAndSelect: () => queryBuilder,
+          where: () => queryBuilder,
+          andWhere: () => queryBuilder,
+          orderBy: () => queryBuilder,
+          getMany: async () => queryResultDatasets,
+        });
+
+        jest
+          .spyOn(repo, 'createQueryBuilder')
+          .mockImplementation(() => queryBuilder);
+
+        const organisation = organisationFactory.build({
+          id: 'organisation-id',
+        });
+
+        const result = await service.all({
+          organisations: [organisation],
+        });
+
+        expect(result).toEqual(queryResultDatasets);
+        expect(queryBuilder).toHaveJoined([
+          'decisionDataset.profession',
+          'decisionDataset.organisation',
+          'decisionDataset.user',
+        ]);
+        expect(queryBuilder.where).toBeCalledWith(
+          'decisionDataset.status IN(:...status)',
+          {
+            status: [DecisionDatasetStatus.Live, DecisionDatasetStatus.Draft],
+          },
+        );
+        expect(queryBuilder.andWhere).toBeCalledWith(
+          'organisation.id IN(:...organisations)',
+          { organisations: ['organisation-id'] },
+        );
+        expect(queryBuilder.orderBy).toBeCalledWith({
+          'profession.name': 'ASC',
+          'organisation.name': 'ASC',
+          year: 'DESC',
+        });
+        expect(queryBuilder.getMany).toBeCalledWith();
+      });
+    });
+
+    describe('when a FilterInput with years is given', () => {
+      it('returns all live and draft DecisionDatasets for the given years', async () => {
+        const queryResultDatasets = decisionDatasetFactory.buildList(3);
+
+        const queryBuilder = createMock<SelectQueryBuilder<DecisionDataset>>({
+          leftJoinAndSelect: () => queryBuilder,
+          where: () => queryBuilder,
+          andWhere: () => queryBuilder,
+          orderBy: () => queryBuilder,
+          getMany: async () => queryResultDatasets,
+        });
+
+        jest
+          .spyOn(repo, 'createQueryBuilder')
+          .mockImplementation(() => queryBuilder);
+
+        const result = await service.all({
+          years: [2024, 2025],
+        });
+
+        expect(result).toEqual(queryResultDatasets);
+        expect(queryBuilder).toHaveJoined([
+          'decisionDataset.profession',
+          'decisionDataset.organisation',
+          'decisionDataset.user',
+        ]);
+        expect(queryBuilder.where).toBeCalledWith(
+          'decisionDataset.status IN(:...status)',
+          {
+            status: [DecisionDatasetStatus.Live, DecisionDatasetStatus.Draft],
+          },
+        );
+        expect(queryBuilder.andWhere).toBeCalledWith('year IN(:...years)', {
+          years: [2024, 2025],
+        });
+        expect(queryBuilder.orderBy).toBeCalledWith({
+          'profession.name': 'ASC',
+          'organisation.name': 'ASC',
+          year: 'DESC',
+        });
+        expect(queryBuilder.getMany).toBeCalledWith();
+      });
+    });
+
+    describe('when a FilterInput with decision dataset statuses is given', () => {
+      it('returns all live and draft DecisionDatasets for the given decision dataset statuses', async () => {
+        const queryResultDatasets = decisionDatasetFactory.buildList(3);
+
+        const queryBuilder = createMock<SelectQueryBuilder<DecisionDataset>>({
+          leftJoinAndSelect: () => queryBuilder,
+          where: () => queryBuilder,
+          andWhere: () => queryBuilder,
+          orderBy: () => queryBuilder,
+          getMany: async () => queryResultDatasets,
+        });
+
+        jest
+          .spyOn(repo, 'createQueryBuilder')
+          .mockImplementation(() => queryBuilder);
+
+        const result = await service.all({
+          statuses: [DecisionDatasetStatus.Draft],
+        });
+
+        expect(result).toEqual(queryResultDatasets);
+        expect(queryBuilder).toHaveJoined([
+          'decisionDataset.profession',
+          'decisionDataset.organisation',
+          'decisionDataset.user',
+        ]);
+        expect(queryBuilder.where).toBeCalledWith(
+          'decisionDataset.status IN(:...status)',
+          {
+            status: [DecisionDatasetStatus.Live, DecisionDatasetStatus.Draft],
+          },
+        );
+        expect(queryBuilder.andWhere).toBeCalledWith(
+          'status IN(:...statuses)',
+          {
+            statuses: [DecisionDatasetStatus.Draft],
+          },
+        );
+        expect(queryBuilder.orderBy).toBeCalledWith({
+          'profession.name': 'ASC',
+          'organisation.name': 'ASC',
+          year: 'DESC',
+        });
+        expect(queryBuilder.getMany).toBeCalledWith();
+      });
     });
   });
 
   describe('allForOrganisation', () => {
-    it('returns all live and draft DecisionDatasets for the given organisation', async () => {
-      const datasets = decisionDatasetFactory.buildList(3);
-      const organisation = organisationFactory.build();
+    describe('when an empty FilterInput is given', () => {
+      it('returns all live and draft DecisionDatasets for the given organisation', async () => {
+        const queryResultDatasets = decisionDatasetFactory.buildList(3);
+        const organisation = organisationFactory.build();
 
-      const queryBuilder = createMock<SelectQueryBuilder<DecisionDataset>>({
-        leftJoinAndSelect: () => queryBuilder,
-        where: () => queryBuilder,
-        andWhere: () => queryBuilder,
-        orderBy: () => queryBuilder,
-        getMany: async () => datasets,
+        const queryBuilder = createMock<SelectQueryBuilder<DecisionDataset>>({
+          leftJoinAndSelect: () => queryBuilder,
+          where: () => queryBuilder,
+          andWhere: () => queryBuilder,
+          orderBy: () => queryBuilder,
+          getMany: async () => queryResultDatasets,
+        });
+
+        jest
+          .spyOn(repo, 'createQueryBuilder')
+          .mockImplementation(() => queryBuilder);
+
+        const result = await service.allForOrganisation(organisation, {});
+
+        expect(result).toEqual(queryResultDatasets);
+        expect(queryBuilder).toHaveJoined([
+          'decisionDataset.profession',
+          'decisionDataset.organisation',
+          'decisionDataset.user',
+        ]);
+        expect(queryBuilder.where).toBeCalledWith(
+          'decisionDataset.status IN(:...status)',
+          {
+            status: [DecisionDatasetStatus.Live, DecisionDatasetStatus.Draft],
+          },
+        );
+        expect(queryBuilder.andWhere).toBeCalledWith({
+          organisation: { id: organisation.id },
+        });
+        expect(queryBuilder.orderBy).toBeCalledWith({
+          'profession.name': 'ASC',
+          'organisation.name': 'ASC',
+          year: 'DESC',
+        });
+        expect(queryBuilder.getMany).toBeCalledWith();
       });
+    });
 
-      jest
-        .spyOn(repo, 'createQueryBuilder')
-        .mockImplementation(() => queryBuilder);
+    describe('when a FilterInput with keywords is given', () => {
+      it('returns all live and draft DecisionDatasets for the given keywords', async () => {
+        const queryResultDatasets = decisionDatasetFactory.buildList(3);
+        const organisation = organisationFactory.build();
 
-      const result = await service.allForOrganisation(organisation);
+        const queryBuilder = createMock<SelectQueryBuilder<DecisionDataset>>({
+          leftJoinAndSelect: () => queryBuilder,
+          where: () => queryBuilder,
+          andWhere: () => queryBuilder,
+          orderBy: () => queryBuilder,
+          getMany: async () => queryResultDatasets,
+        });
 
-      expect(result).toEqual(datasets);
-      expect(queryBuilder).toHaveJoined([
-        'decisionDataset.profession',
-        'decisionDataset.organisation',
-        'decisionDataset.user',
-      ]);
-      expect(queryBuilder.where).toBeCalledWith(
-        'decisionDataset.status IN(:...status)',
-        {
-          status: [DecisionDatasetStatus.Live, DecisionDatasetStatus.Draft],
-        },
-      );
-      expect(queryBuilder.andWhere).toBeCalledWith({
-        organisation: { id: organisation.id },
+        jest
+          .spyOn(repo, 'createQueryBuilder')
+          .mockImplementation(() => queryBuilder);
+
+        const result = await service.allForOrganisation(organisation, {
+          keywords: 'safe-keyword uns%fe-keyword',
+        });
+
+        expect(result).toEqual(queryResultDatasets);
+        expect(queryBuilder).toHaveJoined([
+          'decisionDataset.profession',
+          'decisionDataset.organisation',
+          'decisionDataset.user',
+        ]);
+        expect(queryBuilder.where).toBeCalledWith(
+          'decisionDataset.status IN(:...status)',
+          {
+            status: [DecisionDatasetStatus.Live, DecisionDatasetStatus.Draft],
+          },
+        );
+        expect(queryBuilder.andWhere).toBeCalledWith({
+          organisation: { id: organisation.id },
+        });
+        expect(queryBuilder.andWhere).toBeCalledWith(
+          '(LOWER(profession.name) LIKE :keyword0 OR LOWER(profession.name) LIKE :keyword1)',
+          { keyword0: '%safe-keyword%', keyword1: '%uns\\%fe-keyword%' },
+        );
+        expect(queryBuilder.orderBy).toBeCalledWith({
+          'profession.name': 'ASC',
+          'organisation.name': 'ASC',
+          year: 'DESC',
+        });
+        expect(queryBuilder.getMany).toBeCalledWith();
       });
-      expect(queryBuilder.orderBy).toBeCalledWith({
-        'profession.name': 'ASC',
-        'organisation.name': 'ASC',
-        year: 'DESC',
+    });
+
+    describe('when a FilterInput with organisations is given', () => {
+      it('returns all live and draft DecisionDatasets for the given organisations', async () => {
+        const queryResultDatasets = decisionDatasetFactory.buildList(3);
+        const organisation = organisationFactory.build();
+        const filterOrganisation = organisationFactory.build({
+          id: 'organisation-id',
+        });
+
+        const queryBuilder = createMock<SelectQueryBuilder<DecisionDataset>>({
+          leftJoinAndSelect: () => queryBuilder,
+          where: () => queryBuilder,
+          andWhere: () => queryBuilder,
+          orderBy: () => queryBuilder,
+          getMany: async () => queryResultDatasets,
+        });
+
+        jest
+          .spyOn(repo, 'createQueryBuilder')
+          .mockImplementation(() => queryBuilder);
+
+        const result = await service.allForOrganisation(organisation, {
+          organisations: [filterOrganisation],
+        });
+
+        expect(result).toEqual(queryResultDatasets);
+        expect(queryBuilder).toHaveJoined([
+          'decisionDataset.profession',
+          'decisionDataset.organisation',
+          'decisionDataset.user',
+        ]);
+        expect(queryBuilder.where).toBeCalledWith(
+          'decisionDataset.status IN(:...status)',
+          {
+            status: [DecisionDatasetStatus.Live, DecisionDatasetStatus.Draft],
+          },
+        );
+        expect(queryBuilder.andWhere).toBeCalledWith({
+          organisation: { id: organisation.id },
+        });
+        expect(queryBuilder.andWhere).toBeCalledWith(
+          'organisation.id IN(:...organisations)',
+          { organisations: ['organisation-id'] },
+        );
+        expect(queryBuilder.orderBy).toBeCalledWith({
+          'profession.name': 'ASC',
+          'organisation.name': 'ASC',
+          year: 'DESC',
+        });
+        expect(queryBuilder.getMany).toBeCalledWith();
       });
-      expect(queryBuilder.getMany).toBeCalledWith();
+    });
+
+    describe('when a FilterInput with years is given', () => {
+      it('returns all live and draft DecisionDatasets for the given years', async () => {
+        const queryResultDatasets = decisionDatasetFactory.buildList(3);
+        const organisation = organisationFactory.build();
+
+        const queryBuilder = createMock<SelectQueryBuilder<DecisionDataset>>({
+          leftJoinAndSelect: () => queryBuilder,
+          where: () => queryBuilder,
+          andWhere: () => queryBuilder,
+          orderBy: () => queryBuilder,
+          getMany: async () => queryResultDatasets,
+        });
+
+        jest
+          .spyOn(repo, 'createQueryBuilder')
+          .mockImplementation(() => queryBuilder);
+
+        const result = await service.allForOrganisation(organisation, {
+          years: [2024, 2025],
+        });
+
+        expect(result).toEqual(queryResultDatasets);
+        expect(queryBuilder).toHaveJoined([
+          'decisionDataset.profession',
+          'decisionDataset.organisation',
+          'decisionDataset.user',
+        ]);
+        expect(queryBuilder.where).toBeCalledWith(
+          'decisionDataset.status IN(:...status)',
+          {
+            status: [DecisionDatasetStatus.Live, DecisionDatasetStatus.Draft],
+          },
+        );
+        expect(queryBuilder.andWhere).toBeCalledWith({
+          organisation: { id: organisation.id },
+        });
+        expect(queryBuilder.andWhere).toBeCalledWith('year IN(:...years)', {
+          years: [2024, 2025],
+        });
+        expect(queryBuilder.orderBy).toBeCalledWith({
+          'profession.name': 'ASC',
+          'organisation.name': 'ASC',
+          year: 'DESC',
+        });
+        expect(queryBuilder.getMany).toBeCalledWith();
+      });
+    });
+
+    describe('when a FilterInput with decision dataset statuses is given', () => {
+      it('returns all live and draft DecisionDatasets for the given decision dataset statuses', async () => {
+        const queryResultDatasets = decisionDatasetFactory.buildList(3);
+        const organisation = organisationFactory.build();
+
+        const queryBuilder = createMock<SelectQueryBuilder<DecisionDataset>>({
+          leftJoinAndSelect: () => queryBuilder,
+          where: () => queryBuilder,
+          andWhere: () => queryBuilder,
+          orderBy: () => queryBuilder,
+          getMany: async () => queryResultDatasets,
+        });
+
+        jest
+          .spyOn(repo, 'createQueryBuilder')
+          .mockImplementation(() => queryBuilder);
+
+        const result = await service.allForOrganisation(organisation, {
+          statuses: [DecisionDatasetStatus.Live],
+        });
+
+        expect(result).toEqual(queryResultDatasets);
+        expect(queryBuilder).toHaveJoined([
+          'decisionDataset.profession',
+          'decisionDataset.organisation',
+          'decisionDataset.user',
+        ]);
+        expect(queryBuilder.where).toBeCalledWith(
+          'decisionDataset.status IN(:...status)',
+          {
+            status: [DecisionDatasetStatus.Live, DecisionDatasetStatus.Draft],
+          },
+        );
+        expect(queryBuilder.andWhere).toBeCalledWith({
+          organisation: { id: organisation.id },
+        });
+        expect(queryBuilder.andWhere).toBeCalledWith(
+          'status IN(:...statuses)',
+          {
+            statuses: [DecisionDatasetStatus.Live],
+          },
+        );
+        expect(queryBuilder.orderBy).toBeCalledWith({
+          'profession.name': 'ASC',
+          'organisation.name': 'ASC',
+          year: 'DESC',
+        });
+        expect(queryBuilder.getMany).toBeCalledWith();
+      });
     });
   });
 

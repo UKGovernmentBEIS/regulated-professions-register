@@ -67,8 +67,8 @@ export class DecisionsController {
     const userOrganisation = showAllOrgs ? null : actingUser.organisation;
 
     const allDecisionDatasets = await (showAllOrgs
-      ? this.decisionDatasetsService.all()
-      : this.decisionDatasetsService.allForOrganisation(userOrganisation));
+      ? this.decisionDatasetsService.all({})
+      : this.decisionDatasetsService.allForOrganisation(userOrganisation, {}));
 
     const writer = new DecisionsCsvWriter(
       response,
@@ -136,8 +136,8 @@ export class DecisionsController {
       : 'single-organisation';
 
     const allDecisionDatasets = await (showAllOrgs
-      ? this.decisionDatasetsService.all()
-      : this.decisionDatasetsService.allForOrganisation(userOrganisation));
+      ? this.decisionDatasetsService.all({})
+      : this.decisionDatasetsService.allForOrganisation(userOrganisation, {}));
 
     return new DecisionDatasetsPresenter(
       userOrganisation,

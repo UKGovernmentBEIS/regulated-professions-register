@@ -172,7 +172,7 @@ describe('DecisionsController', () => {
           i18nService,
         );
         expect(DecisionsCsvWriter.prototype.write).toHaveBeenCalled();
-        expect(decisionDatasetsService.all).toHaveBeenCalled();
+        expect(decisionDatasetsService.all).toHaveBeenCalledWith({});
         expect(
           decisionDatasetsService.allForOrganisation,
         ).not.toHaveBeenCalled();
@@ -208,6 +208,7 @@ describe('DecisionsController', () => {
         expect(DecisionsCsvWriter.prototype.write).toHaveBeenCalled();
         expect(decisionDatasetsService.allForOrganisation).toHaveBeenCalledWith(
           organisation,
+          {}
         );
         expect(decisionDatasetsService.all).not.toHaveBeenCalled();
       });
