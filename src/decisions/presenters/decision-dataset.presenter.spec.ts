@@ -86,6 +86,9 @@ describe('DecisionDatasetPresenter', () => {
         {
           text: translationOf('decisions.show.tableHeading.noAfterComp'),
         },
+        {
+          text: translationOf('decisions.show.tableHeading.total'),
+        },
       ];
 
       const expected: Table[] = [
@@ -111,6 +114,9 @@ describe('DecisionDatasetPresenter', () => {
               {
                 text: '7',
               },
+              {
+                text: '22',
+              },
             ],
             [
               {
@@ -127,6 +133,9 @@ describe('DecisionDatasetPresenter', () => {
               },
               {
                 text: '4',
+              },
+              {
+                text: '17',
               },
             ],
           ],
@@ -152,6 +161,9 @@ describe('DecisionDatasetPresenter', () => {
               },
               {
                 text: '2',
+              },
+              {
+                text: '17',
               },
             ],
           ],
