@@ -78,10 +78,11 @@ export class OrganisationVersionsService {
 
   async allLive(): Promise<Organisation[]> {
     const versions = await this.versionsWithJoins()
+      .distinctOn(['organisation.name', 'organisation'])
       .where('organisationVersion.status = :status', {
         status: OrganisationVersionStatus.Live,
       })
-      .orderBy('organisation.name')
+      .orderBy('organisation.name, organisation')
       .getMany();
 
     return versions.map((version) =>
@@ -91,29 +92,13 @@ export class OrganisationVersionsService {
 
   async searchLive(filter: FilterInput): Promise<Organisation[]> {
     const query = this.versionsWithJoins()
-      .orderBy('organisation.name')
+      .distinctOn(['organisation.name', 'organisation'])
+      .orderBy('organisation.name, organisation')
       .where('organisationVersion.status = :status', {
         status: OrganisationVersionStatus.Live,
       });
 
     return await this.filter(query, filter);
-  }
-
-  async allLiveAndDraft(): Promise<Organisation[]> {
-    const versions = await this.versionsWithJoins()
-      .distinctOn(['organisation.name', 'organisation'])
-      .where('organisationVersion.status IN(:...status)', {
-        status: [
-          OrganisationVersionStatus.Live,
-          OrganisationVersionStatus.Draft,
-        ],
-      })
-      .orderBy('organisation.name, organisation')
-      .getMany();
-
-    return versions.map((version) =>
-      Organisation.withVersion(version.organisation, version),
-    );
   }
 
   async searchWithLatestVersion(filter: FilterInput): Promise<Organisation[]> {

@@ -230,11 +230,12 @@ describe('OrganisationVersionsService', () => {
   });
 
   describe('allLive', () => {
-    it('fetches all of currently live organisations', async () => {
+    it('fetches all currently live organisations', async () => {
       const versions = organisationVersionFactory.buildList(5);
       const queryBuilder = createMock<SelectQueryBuilder<OrganisationVersion>>({
         leftJoinAndSelect: () => queryBuilder,
         where: () => queryBuilder,
+        distinctOn: () => queryBuilder,
         orderBy: () => queryBuilder,
         getMany: async () => versions,
       });
@@ -260,49 +261,10 @@ describe('OrganisationVersionsService', () => {
         },
       );
 
-      expect(queryBuilder.orderBy).toHaveBeenCalledWith('organisation.name');
-    });
-  });
-
-  describe('allLiveAndDraft', () => {
-    it('fetches all of the live and draft organisations', async () => {
-      const versions = organisationVersionFactory.buildList(5);
-      const queryBuilder = createMock<SelectQueryBuilder<OrganisationVersion>>({
-        leftJoinAndSelect: () => queryBuilder,
-        distinctOn: () => queryBuilder,
-        where: () => queryBuilder,
-        orderBy: () => queryBuilder,
-        getMany: async () => versions,
-      });
-
-      jest
-        .spyOn(repo, 'createQueryBuilder')
-        .mockImplementation(() => queryBuilder);
-
-      const result = await service.allLiveAndDraft();
-
-      const expectedOrganisations = versions.map((version) =>
-        Organisation.withVersion(version.organisation, version),
-      );
-
-      expect(result).toEqual(expectedOrganisations);
-
-      expectJoinsToHaveBeenApplied(queryBuilder);
-
       expect(queryBuilder.distinctOn).toHaveBeenCalledWith([
         'organisation.name',
         'organisation',
       ]);
-
-      expect(queryBuilder.where).toHaveBeenCalledWith(
-        'organisationVersion.status IN(:...status)',
-        {
-          status: [
-            OrganisationVersionStatus.Live,
-            OrganisationVersionStatus.Draft,
-          ],
-        },
-      );
 
       expect(queryBuilder.orderBy).toHaveBeenCalledWith(
         'organisation.name, organisation',
@@ -747,6 +709,7 @@ describe('OrganisationVersionsService', () => {
     const versions = organisationVersionFactory.buildList(5);
     const queryBuilder = createMock<SelectQueryBuilder<OrganisationVersion>>({
       leftJoinAndSelect: () => queryBuilder,
+      distinctOn: () => queryBuilder,
       where: () => queryBuilder,
       orderBy: () => queryBuilder,
       andWhere: () => queryBuilder,
@@ -775,6 +738,11 @@ describe('OrganisationVersionsService', () => {
       expect(result).toEqual(expectedOrgs);
 
       expectJoinsToHaveBeenApplied(queryBuilder);
+
+      expect(queryBuilder.distinctOn).toHaveBeenCalledWith([
+        'organisation.name',
+        'organisation',
+      ]);
 
       expect(queryBuilder.where).toHaveBeenCalledWith(
         'organisationVersion.status = :status',
