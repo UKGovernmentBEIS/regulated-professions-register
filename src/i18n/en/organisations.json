@@ -17,15 +17,15 @@
       },
       "nations": {
         "label": "Nations",
-        "hint": "Select all that apply."
+        "hint": "Select all that apply"
       },
       "industries": {
         "label": "Sectors",
-        "hint": "Select all that apply."
+        "hint": "Select all that apply"
       },
       "regulationTypes": {
         "label": "Regulation types",
-        "hint": "Select all that apply."
+        "hint": "Select all that apply"
       }
     },
     "edit": {
@@ -104,13 +104,13 @@
         },
         "phone": {
           "empty": "Enter the UK telephone number for the regulatory authority",
-          "invalid": "Enter a valid UK telephone number, without a country code, for the regulatory authority"
+          "invalid": "Enter a valid UK telephone number without country code"
         },
         "email": {
-          "invalid": "Please enter a valid email address"
+          "invalid": "Enter a valid email address"
         },
         "url": {
-          "invalid": "Please enter a valid website address"
+          "invalid": "Enter a valid website address"
         }
       }
     },
@@ -146,15 +146,15 @@
       },
       "nations": {
         "label": "Nations",
-        "hint": "Select all that apply."
+        "hint": "Select all that apply"
       },
       "industries": {
         "label": "Sectors",
-        "hint": "Select all that apply."
+        "hint": "Select all that apply"
       },
       "regulationTypes": {
         "label": "Regulation types",
-        "hint": "Select all that apply."
+        "hint": "Select all that apply"
       },
       "button": "Filter results"
     }
@@ -175,13 +175,13 @@
     "email": "Email",
     "telephone": "Phone number",
     "roles": {
-      "primaryRegulator": "Primary Regulator",
-      "charteredBody": "Chartered Body",
-      "qualifyingBody": "Qualifying Body",
-      "additionalRegulator": "Additional Regulator",
-      "oversightBody": "Oversight Body",
-      "enforcementBody": "Enforcement Body",
-      "awardingBody": "Awarding Body"
+      "primaryRegulator": "Primary regulator",
+      "charteredBody": "Chartered body",
+      "qualifyingBody": "Qualifying body",
+      "additionalRegulator": "Additional regulator",
+      "oversightBody": "Oversight body",
+      "enforcementBody": "Enforcement body",
+      "awardingBody": "Awarding body"
     }
   }
 }

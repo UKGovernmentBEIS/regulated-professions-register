@@ -73,14 +73,14 @@
     "admin": {
       "heading": "Admin",
       "dashboard": {
-        "subHeading": "What can you do from this page",
+        "subHeading": "What you can do from this page",
         "editProfessionsCentralAdmin": "Edit information about professions",
         "editProfessionsRegulators": "Edit information about the professions you regulate",
         "editRegulatorsCentralAdmin": "Edit information about regulators",
         "editRegulatorsRegulators": "Edit information about your regulator",
-        "manageAccessCentralAdmin": "Manage access to this service",
-        "manageAccessRegulators": "Manage access to this service",
-        "guidance": "Guidance for regulators"
+        "manageAccessCentralAdmin": "Manage who uses this service",
+        "manageAccessRegulators": "Manage who uses this service",
+        "guidance": "Read how to use this service"
       }
     }
   },
@@ -92,7 +92,7 @@
   },
   "filters": {
     "filterButton": "Filter results",
-    "clearAllButton": "Clear all filters"
+    "clearAllButton": "Clear filters"
   },
-  "pleaseSelect": "--- Please Select ---"
+  "pleaseSelect": "--- Please select ---"
 }

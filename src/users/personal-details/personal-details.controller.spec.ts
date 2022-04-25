@@ -166,7 +166,7 @@ describe('PersonalDetailsController', () => {
           email,
           errors: {
             name: {
-              text: 'name should not be empty',
+              text: 'users.form.errors.name.empty',
             },
           },
         },
@@ -188,7 +188,7 @@ describe('PersonalDetailsController', () => {
           email: '',
           errors: {
             email: {
-              text: 'email must be an email,email should not be empty',
+              text: 'users.form.errors.email.invalid',
             },
           },
         },
@@ -216,7 +216,7 @@ describe('PersonalDetailsController', () => {
           email,
           errors: {
             email: {
-              text: 'A user with this email address already exists',
+              text: 'users.form.errors.email.alreadyExists',
             },
           },
         },

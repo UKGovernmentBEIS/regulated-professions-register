@@ -95,7 +95,7 @@ export class PersonalDetailsController {
 
     if (existingUser && existingUser.id !== user.id) {
       const errors = {
-        email: { text: 'A user with this email address already exists' },
+        email: { text: 'users.form.errors.email.alreadyExists' },
       };
 
       this.renderWithErrors(res, submittedValues, errors, action);
