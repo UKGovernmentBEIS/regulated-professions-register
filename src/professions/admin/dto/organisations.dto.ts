@@ -63,7 +63,7 @@ class ProfessionToOrganisationNotBlank implements ValidatorConstraintInterface {
 
 export class OrganisationsDto {
   @Validate(ProfessionToOrganisationNotBlank, {
-    message: 'professions.form.errors.professionToOrganisations.blank',
+    message: 'professions.form.errors.professionToOrganisations.empty',
   })
   @Validate(ProfessionToOrganisationMustHaveRole, {
     message: 'professions.form.errors.professionToOrganisations.missingRole',
