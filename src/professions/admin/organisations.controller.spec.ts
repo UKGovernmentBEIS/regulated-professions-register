@@ -335,7 +335,7 @@ describe('OrganisationsController', () => {
           expect.objectContaining({
             errors: {
               professionToOrganisations: {
-                text: 'professions.form.errors.professionToOrganisations.blank',
+                text: 'professions.form.errors.professionToOrganisations.empty',
               },
             },
           }),
