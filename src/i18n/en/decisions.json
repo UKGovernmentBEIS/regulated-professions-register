@@ -22,6 +22,15 @@
     "show": {
       "edit": "Edit"
     },
+    "publication": {
+      "caption": "Publishing decision data",
+      "heading": "Are you sure you want to publish the following decision data?",
+      "labels": {
+        "organisation": "Regulator: ",
+        "profession": "Profession: ",
+        "year": "Year: "
+      }
+    },
     "new": {
       "heading": "Recognition decision data",
       "caption": "Adding new recognition decision data",
@@ -70,7 +79,7 @@
       "removeRoute": "Remove route",
       "addRoute": "Add route",
       "saveAsDraft": "Save as draft",
-      "publish": "Publish"
+      "publish": "Publish to register"
     }
   },
   "show": {

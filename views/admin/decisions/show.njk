@@ -1,3 +1,5 @@
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
 {% set bodyClasses = "rpr-internal__page rpr-details__page" %}
 {% extends "admin/base.njk" %}
 
@@ -12,6 +14,22 @@
     <div class="govuk-grid-column-one-quarter">
       <a class="govuk-link" href="/admin/decisions/{{profession.id}}/{{organisation.id}}/{{year}}/edit">{{ "decisions.admin.show.edit" | t }}</a>
     </div>
+
+    <nav role="navigation" data-cy="actions">
+      <ul class="govuk-list">
+        {% if 'publishDecisionData' in permissions %}
+          <li>
+            {{
+              govukButton({
+                text: "decisions.admin.buttons.publish" | t,
+                href: "/admin/decisions/" + profession.id + "/" + organisation.id + "/" + year + "/publish",
+                name: 'publish'
+              })
+            }}
+          </li>
+        {% endif %}
+      </ul>
+    </nav>
   </div>
 
 {% endblock %}
