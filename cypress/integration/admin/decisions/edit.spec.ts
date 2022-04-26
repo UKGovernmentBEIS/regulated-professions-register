@@ -158,6 +158,12 @@ describe('Editing a decision dataset', () => {
 
       cy.checkAccessibility();
 
+      cy.translate('decisions.admin.saveAsDraft.confirmation.heading').then(
+        (confirmationHeading) => {
+          cy.get('body').should('contain', confirmationHeading);
+        },
+      );
+
       cy.get('table caption')
         .contains('International Route')
         .parent()
@@ -223,6 +229,14 @@ describe('Editing a decision dataset', () => {
       cy.translate('decisions.admin.buttons.publish').then((publish) => {
         cy.get('button').contains(publish).click();
       });
+
+      cy.checkAccessibility();
+
+      cy.translate('decisions.admin.publication.confirmation.heading').then(
+        (confirmationHeading) => {
+          cy.get('body').should('contain', confirmationHeading);
+        },
+      );
 
       cy.visitAndCheckAccessibility('/admin/decisions');
 

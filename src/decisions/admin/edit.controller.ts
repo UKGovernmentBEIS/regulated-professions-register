@@ -32,6 +32,7 @@ import { parseEditDtoDecisionRoutes } from './helpers/parse-edit-dto-decision-ro
 import { modifyDecisionRoutes } from './helpers/modify-decision-routes.helper';
 import { checkCanChangeDataset } from './helpers/check-can-change-dataset.helper';
 import { checkCanPublishDataset } from './helpers/check-can-publish-dataset.helper';
+import { flashMessage } from '../../common/flash-message';
 
 const emptyCountry = {
   code: null,
@@ -153,6 +154,21 @@ export class EditController {
       };
 
       await this.decisionDatasetsService.save(newDataset);
+
+      const localisationId =
+        action === 'publish' ? 'publication' : 'saveAsDraft';
+
+      const messageTitle = await this.i18nService.translate(
+        `decisions.admin.${localisationId}.confirmation.heading`,
+      );
+
+      const messageBody = await this.i18nService.translate(
+        `decisions.admin.${localisationId}.confirmation.body`,
+      );
+
+      const flashType = action === 'publish' ? 'success' : 'info';
+
+      request.flash(flashType, flashMessage(messageTitle, messageBody));
 
       response.redirect(
         `/admin/decisions/${profession.id}/${organisation.id}/${year}`,

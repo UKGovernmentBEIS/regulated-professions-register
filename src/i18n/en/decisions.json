@@ -35,6 +35,12 @@
         "body": "<a href='/admin/decisions' class='govuk-link'>Back to recognition decision data listing page</a>."
       }
     },
+    "saveAsDraft": {
+      "confirmation": {
+        "heading": "This recognition decision dataset has been saved.",
+        "body": "<p class='govuk-body-m'>The changes have not been published yet.</p><a href='/admin/decisions' class='govuk-link'>Back to recognition decision data listing page</a>."
+      }
+    },
     "new": {
       "heading": "Recognition decision data",
       "caption": "Adding new recognition decision data",
