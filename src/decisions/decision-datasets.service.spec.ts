@@ -145,6 +145,28 @@ describe('DecisionDatasetsService', () => {
     });
   });
 
+  describe('publish', () => {
+    it('sets the status of the DecisionDataset to Live', async () => {
+      const draftDataset = decisionDatasetFactory.build({
+        status: DecisionDatasetStatus.Draft,
+      });
+
+      const publishedDataset = {
+        ...draftDataset,
+        status: DecisionDatasetStatus.Live,
+      };
+
+      const repoSpy = jest
+        .spyOn(repo, 'save')
+        .mockResolvedValue(publishedDataset);
+
+      const result = await service.publish(draftDataset);
+
+      expect(result).toEqual(publishedDataset);
+      expect(repoSpy).toBeCalledWith(publishedDataset);
+    });
+  });
+
   afterEach(() => {
     jest.restoreAllMocks();
   });
