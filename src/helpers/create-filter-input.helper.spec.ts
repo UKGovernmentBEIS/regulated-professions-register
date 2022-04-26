@@ -1,11 +1,12 @@
 import { FilterInput } from '../common/interfaces/filter-input.interface';
+import { DecisionDatasetStatus } from '../decisions/decision-dataset.entity';
 import { Nation } from '../nations/nation';
 import { RegulationType } from '../professions/profession-version.entity';
 import industryFactory from '../testutils/factories/industry';
 import organisationFactory from '../testutils/factories/organisation';
 import { createFilterInput } from './create-filter-input.helper';
 
-describe('create-filter-input', () => {
+describe('createFilterInput', () => {
   describe('when given keywords', () => {
     it('returns `FilterInput` with those keywords', () => {
       const result = createFilterInput({ keywords: 'example keywords' });
@@ -90,8 +91,38 @@ describe('create-filter-input', () => {
     });
   });
 
-  describe('when given a mixture of keywords, nation codes, organisation IDs, industry IDs, and regulation types', () => {
-    it('return `FilterInput` for those keywords, nations, organisations, industries, and regulation types', () => {
+  describe('when given years', () => {
+    it('returns `FilterInput` with the given years', () => {
+      const result = createFilterInput({
+        keywords: '',
+        years: ['2020', '2021'],
+      });
+      const expected: FilterInput = {
+        keywords: '',
+        years: [2020, 2021],
+      };
+
+      expect(result).toEqual(expected);
+    });
+  });
+
+  describe('when given decision dataset statuses', () => {
+    it('returns `FilterInput` with the given statuses', () => {
+      const result = createFilterInput({
+        keywords: '',
+        statuses: [DecisionDatasetStatus.Draft, DecisionDatasetStatus.Live],
+      });
+      const expected: FilterInput = {
+        keywords: '',
+        statuses: [DecisionDatasetStatus.Draft, DecisionDatasetStatus.Live],
+      };
+
+      expect(result).toEqual(expected);
+    });
+  });
+
+  describe('when given a mixture of keywords, nation codes, organisation IDs, industry IDs, regulation types, years, and decision dataset statuses', () => {
+    it('returns `FilterInput` for those keywords, nations, organisations, industries, regulation types, years, and decision dataset statuses', () => {
       const nations = Nation.all();
       const organsiations = organisationFactory.buildList(3);
       const industries = industryFactory.buildList(3);
@@ -109,6 +140,8 @@ describe('create-filter-input', () => {
         industries: [industries[0].id],
         allIndustries: industries,
         regulationTypes: [RegulationType.Licensing],
+        years: ['2021', '2022'],
+        statuses: [DecisionDatasetStatus.Draft],
       });
 
       const expected: FilterInput = {
@@ -117,6 +150,8 @@ describe('create-filter-input', () => {
         organisations: [organsiations[0], organsiations[1], organsiations[2]],
         industries: [industries[0]],
         regulationTypes: [RegulationType.Licensing],
+        years: [2021, 2022],
+        statuses: [DecisionDatasetStatus.Draft],
       };
 
       expect(result).toEqual(expected);

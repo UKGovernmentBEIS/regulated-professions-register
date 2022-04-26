@@ -1,4 +1,5 @@
 import { FilterInput } from '../common/interfaces/filter-input.interface';
+import { DecisionDatasetStatus } from '../decisions/decision-dataset.entity';
 import { Industry } from '../industries/industry.entity';
 import { Nation } from '../nations/nation';
 import { Organisation } from '../organisations/organisation.entity';
@@ -14,6 +15,8 @@ export function createFilterInput(
     AllOrNone<{ organisations?: string[]; allOrganisations: Organisation[] }> &
     AllOrNone<{ industries?: string[]; allIndustries: Industry[] }> & {
       regulationTypes?: RegulationType[];
+      years?: string[];
+      statuses?: DecisionDatasetStatus[];
     },
 ): FilterInput {
   const nations = filter.allNations
@@ -32,11 +35,17 @@ export function createFilterInput(
       )
     : undefined;
 
+  const years = filter.years
+    ? filter.years.map((yearString) => parseInt(yearString))
+    : undefined;
+
   return {
     keywords: filter.keywords,
     nations,
     organisations,
     industries,
     regulationTypes: filter.regulationTypes,
+    years,
+    statuses: filter.statuses,
   };
 }
