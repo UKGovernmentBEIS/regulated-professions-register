@@ -234,6 +234,41 @@ describe('Editing a decision dataset', () => {
       });
     });
   });
+
+  context('When I am logged in as an org user', () => {
+    beforeEach(() => {
+      cy.loginAuth0('orgadmin');
+      cy.visitAndCheckAccessibility('/admin/decisions');
+    });
+
+    it('I cannot publish decision data', () => {
+      cy.translate('app.status.draft').then((draft) => {
+        cy.get('tr')
+          .contains(
+            'Secondary School Teacher in State maintained schools (England)',
+          )
+          .parent()
+          .contains(draft)
+          .parent()
+          .parent()
+          .within(() => {
+            cy.get('a').contains('View details').click();
+          });
+      });
+
+      cy.checkAccessibility();
+
+      cy.translate('decisions.admin.show.edit').then((edit) => {
+        cy.get('a').contains(edit).click();
+      });
+
+      cy.checkAccessibility();
+
+      cy.translate('decisions.admin.buttons.publish').then((publish) => {
+        cy.get('button').should('not.contain', publish);
+      });
+    });
+  });
 });
 
 function withinEditTableDiv(tableName: string, func: () => void) {

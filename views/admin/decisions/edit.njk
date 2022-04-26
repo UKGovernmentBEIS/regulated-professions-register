@@ -177,11 +177,13 @@
           classes: "govuk-button--secondary"
         }) }}
 
-        {{ govukButton({
-          text: "decisions.admin.buttons.publish" | t,
-          name: 'action',
-          value: 'publish'
-        }) }}
+        {% if 'publishDecisionData' in permissions %}
+          {{ govukButton({
+            text: "decisions.admin.buttons.publish" | t,
+            name: 'action',
+            value: 'publish'
+          }) }}
+        {% endif %}
       </div>
     </div>
   </form>

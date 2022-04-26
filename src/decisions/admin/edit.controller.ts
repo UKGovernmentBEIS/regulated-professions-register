@@ -31,6 +31,7 @@ import { DecisionDatasetEditPresenter } from './presenters/decision-dataset-edit
 import { parseEditDtoDecisionRoutes } from './helpers/parse-edit-dto-decision-routes.helper';
 import { modifyDecisionRoutes } from './helpers/modify-decision-routes.helper';
 import { checkCanChangeDataset } from './helpers/check-can-change-dataset.helper';
+import { checkCanPublishDataset } from './helpers/check-can-publish-dataset.helper';
 
 const emptyCountry = {
   code: null,
@@ -133,6 +134,10 @@ export class EditController {
     const action = editDto.action;
 
     if (action === 'publish' || action === 'save') {
+      if (action === 'publish') {
+        checkCanPublishDataset(request);
+      }
+
       const newDataset: DecisionDataset = {
         organisation,
         profession,
