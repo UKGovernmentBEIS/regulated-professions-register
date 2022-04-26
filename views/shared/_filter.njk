@@ -96,6 +96,44 @@
       </div>
     {% endif %}
 
+    {% if yearsCheckboxItems %}
+      <div class="{{ filterColumnClass }}">
+        {{ govukCheckboxes({
+          name: "years[]",
+          classes: filterCheckboxClasses,
+          fieldset: {
+            legend: {
+            text: (filterTextPrefix + ".filter.years.label") | t,
+            classes: "govuk-fieldset__legend--s"
+            }
+          },
+          hint: {
+            text: (filterTextPrefix + ".filter.years.hint") | t
+          },
+          items: yearsCheckboxItems
+        }) }}
+      </div>
+    {% endif %}
+
+    {% if statusesCheckboxItems %}
+      <div class="{{ filterColumnClass }}">
+        {{ govukCheckboxes({
+          name: "statuses[]",
+          classes: filterCheckboxClasses,
+          fieldset: {
+            legend: {
+            text: (filterTextPrefix + ".filter.statuses.label") | t,
+            classes: "govuk-fieldset__legend--s"
+            }
+          },
+          hint: {
+            text: (filterTextPrefix + ".filter.statuses.hint") | t
+          },
+          items: statusesCheckboxItems
+        }) }}
+      </div>
+    {% endif %}
+
   </div>
 
   <div class="{{ filterRowClass }}">
