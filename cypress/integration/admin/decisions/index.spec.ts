@@ -19,7 +19,7 @@ describe('Listing decision datasets', () => {
       cy.visitAndCheckAccessibility('/admin/decisions');
     });
 
-    it('Lists all decision datasets with their organisation', () => {
+    it('Lists all decision datasets', () => {
       cy.readFile('./seeds/test/decision-datasets.json').then(
         (datasets: SeedDecisionDataset[]) => {
           const datasetsToShow = getDisplayedDatasets(datasets);
@@ -48,6 +48,153 @@ describe('Listing decision datasets', () => {
                   cy.wrap($row).should('contain', status);
                 });
               });
+          });
+        },
+      );
+    });
+
+    it('I can filter by keyword', () => {
+      cy.expandFilters('decisions.admin.dashboard');
+
+      cy.get('input[name="keywords"]').type('Trademark');
+
+      cy.clickFilterButtonAndCheckAccessibility();
+
+      cy.get('tbody tr').each(($tr) => {
+        cy.wrap($tr).should('contain', 'Trademark');
+      });
+
+      cy.get('tbody tr').should('have.length.at.least', 1);
+    });
+
+    it('I can filter by organisation', () => {
+      cy.expandFilters('decisions.admin.dashboard');
+
+      cy.get('label')
+        .contains('Law Society of England and Wales')
+        .parent()
+        .find('input')
+        .check();
+
+      cy.clickFilterButtonAndCheckAccessibility();
+
+      cy.get('label')
+        .contains('Law Society of England and Wales')
+        .parent()
+        .find('input')
+        .should('be.checked');
+
+      cy.get('tbody tr').each(($tr) => {
+        cy.wrap($tr).should('contain', 'Law Society of England and Wales');
+      });
+
+      cy.get('tbody tr').should('have.length.at.least', 1);
+    });
+
+    it('I can filter by year', () => {
+      cy.expandFilters('decisions.admin.dashboard');
+
+      cy.get('label').contains('2021').parent().find('input').check();
+
+      cy.clickFilterButtonAndCheckAccessibility();
+
+      cy.get('label')
+        .contains('2021')
+        .parent()
+        .find('input')
+        .should('be.checked');
+
+      cy.get('tbody tr').each(($tr) => {
+        cy.wrap($tr).should('contain', '2021');
+      });
+
+      cy.get('tbody tr').should('have.length.at.least', 1);
+    });
+
+    it('I can filter by status', () => {
+      cy.expandFilters('decisions.admin.dashboard');
+
+      cy.translate('app.status.live').then((live) => {
+        cy.get('input[name="statuses[]"]')
+          .parent()
+          .contains(live)
+          .parent()
+          .find('input')
+          .check();
+
+        cy.clickFilterButtonAndCheckAccessibility();
+
+        cy.get('input[name="statuses[]"]')
+          .parent()
+          .contains(live)
+          .parent()
+          .find('input')
+          .should('be.checked');
+
+        cy.get('tbody tr').each(($tr) => {
+          cy.wrap($tr).should('contain', live);
+        });
+
+        cy.get('tbody tr').should('have.length.at.least', 1);
+      });
+    });
+
+    it('I can clear all filters', () => {
+      cy.expandFilters('decisions.admin.dashboard');
+
+      cy.get('input[name="keywords"]').type('Teacher');
+
+      cy.get('label')
+        .contains('Department for Education')
+        .parent()
+        .find('input')
+        .check();
+
+      cy.get('label').contains('2020').parent().find('input').check();
+
+      cy.translate('app.status.draft').then((draft) => {
+        cy.get('input[name="statuses[]"]')
+          .parent()
+          .contains(draft)
+          .parent()
+          .find('input')
+          .check();
+      });
+
+      cy.clickFilterButtonAndCheckAccessibility();
+      cy.expandFilters('decisions.admin.dashboard');
+
+      cy.translate('app.filters.clearAllButton').then((clearAllButton) => {
+        cy.get('a').contains(clearAllButton).click();
+      });
+      cy.checkAccessibility();
+      cy.expandFilters('decisions.admin.dashboard');
+
+      cy.get('input[name="keywords"]').should('have.value', '');
+
+      cy.get('label')
+        .contains('Department for Education')
+        .parent()
+        .find('input')
+        .should('not.be.checked');
+
+      cy.translate('app.status.draft').then((draft) => {
+        cy.get('input[name="statuses[]"]')
+          .parent()
+          .contains(draft)
+          .parent()
+          .find('input')
+          .should('not.be.checked');
+      });
+
+      cy.readFile('./seeds/test/decision-datasets.json').then(
+        (datasets: SeedDecisionDataset[]) => {
+          const datasetsToShow = getDisplayedDatasets(datasets);
+
+          cy.translate('decisions.admin.dashboard.search.foundPlural', {
+            count: datasetsToShow.length,
+          }).then((foundText) => {
+            cy.get('body').should('contain', foundText);
           });
         },
       );

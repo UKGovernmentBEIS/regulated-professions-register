@@ -4,7 +4,32 @@
       "heading": "Recognition decision data",
       "addButtonLabel": "Add decision data",
       "manageHeading": "Manage existing decision data",
+      "showFilters": "Use the filters to choose the datasets to see and download",
       "viewDetails": "View details <span class='govuk-visually-hidden'>about {year} {organisaition} {profession} decision data</span>",
+      "filter": {
+        "keywords": {
+          "label": "Keyword",
+          "hint": "For example, RP155, nuclear"
+        },
+        "organisations": {
+          "label": "Regulators",
+          "hint": "Select all that apply"
+        },
+        "years": {
+          "label": "Years",
+          "hint": "Select all that apply"
+        },
+        "statuses": {
+          "label": "Statuses",
+          "hint": "Select all that apply"
+        }
+      },
+      "labels": {
+        "keywords": "Keywords:",
+        "organisations": "Regulators:",
+        "years": "Years:",
+        "statuses": "Statuses:"
+      },
       "tableHeading": {
         "profession": "Profession",
         "regulator": "Regulator",
