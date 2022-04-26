@@ -5,12 +5,15 @@ import {
   ParseIntPipe,
   Put,
   Render,
+  Req,
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { Response } from 'express';
+import { Request, Response } from 'express';
+import { I18nService } from 'nestjs-i18n';
 import { AuthenticationGuard } from '../../common/authentication.guard';
 import { BackLink } from '../../common/decorators/back-link.decorator';
+import { flashMessage } from '../../common/flash-message';
 import { Permissions } from '../../common/permissions.decorator';
 import { OrganisationsService } from '../../organisations/organisations.service';
 import { ProfessionsService } from '../../professions/professions.service';
@@ -25,6 +28,7 @@ export class PublicationController {
     private readonly decisionDatasetsService: DecisionDatasetsService,
     private readonly professionsService: ProfessionsService,
     private readonly organisationsService: OrganisationsService,
+    private readonly i18nService: I18nService,
   ) {}
 
   @Get('/:professionId/:organisationId/:year/publish')
@@ -66,6 +70,7 @@ export class PublicationController {
     @Param('organisationId') organisationId: string,
     @Param('year', ParseIntPipe) year: number,
     @Res() response: Response,
+    @Req() request: Request,
   ) {
     const dataset = await this.decisionDatasetsService.find(
       professionId,
@@ -74,6 +79,16 @@ export class PublicationController {
     );
 
     await this.decisionDatasetsService.publish(dataset);
+
+    const messageTitle = await this.i18nService.translate(
+      'decisions.admin.publication.confirmation.heading',
+    );
+
+    const messageBody = await this.i18nService.translate(
+      'decisions.admin.publication.confirmation.body',
+    );
+
+    request.flash('success', flashMessage(messageTitle, messageBody));
 
     response.redirect(
       `/admin/decisions/${professionId}/${organisationId}/${year}`,

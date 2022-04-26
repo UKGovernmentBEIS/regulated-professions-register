@@ -29,6 +29,10 @@
         "organisation": "Regulator: ",
         "profession": "Profession: ",
         "year": "Year: "
+      },
+      "confirmation": {
+        "heading": "This recognition decision dataset has been published.",
+        "body": "<a href='/admin/decisions' class='govuk-link'>Back to recognition decision data listing page</a>."
       }
     },
     "new": {

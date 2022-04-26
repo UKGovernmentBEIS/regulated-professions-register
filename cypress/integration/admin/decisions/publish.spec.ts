@@ -46,6 +46,12 @@ describe('Publishing a decision dataset', () => {
         cy.get('body').should('contain', heading);
       });
 
+      cy.translate('decisions.admin.publication.confirmation.heading').then(
+        (confirmationHeading) => {
+          cy.get('body').should('contain', confirmationHeading);
+        },
+      );
+
       // Temporary check until we display the status on the "show" page
       cy.visitAndCheckAccessibility('/admin/decisions');
 
