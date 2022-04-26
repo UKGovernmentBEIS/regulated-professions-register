@@ -79,7 +79,8 @@
       "removeRoute": "Remove route",
       "addRoute": "Add route",
       "saveAsDraft": "Save as draft",
-      "publish": "Publish to register"
+      "publish": "Publish to register",
+      "edit": "Edit data"
     }
   },
   "show": {

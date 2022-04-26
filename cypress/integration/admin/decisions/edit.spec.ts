@@ -17,7 +17,7 @@ describe('Editing a decision dataset', () => {
 
       cy.checkAccessibility();
 
-      cy.translate('decisions.admin.show.edit').then((edit) => {
+      cy.translate('decisions.admin.buttons.edit').then((edit) => {
         cy.get('a').contains(edit).click();
       });
       cy.checkAccessibility();
@@ -214,7 +214,7 @@ describe('Editing a decision dataset', () => {
 
       cy.checkAccessibility();
 
-      cy.translate('decisions.admin.show.edit').then((edit) => {
+      cy.translate('decisions.admin.buttons.edit').then((edit) => {
         cy.get('a').contains(edit).click();
       });
 
@@ -258,7 +258,7 @@ describe('Editing a decision dataset', () => {
 
       cy.checkAccessibility();
 
-      cy.translate('decisions.admin.show.edit').then((edit) => {
+      cy.translate('decisions.admin.buttons.edit').then((edit) => {
         cy.get('a').contains(edit).click();
       });
 
