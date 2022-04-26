@@ -16,6 +16,7 @@ import { Organisation } from '../organisations/organisation.entity';
 import { OrganisationsService } from '../organisations/organisations.service';
 import { NewController } from './admin/new.controller';
 import { EditController } from './admin/edit.controller';
+import { PublicationController } from './admin/publication.controller';
 
 @Module({
   imports: [
@@ -35,6 +36,11 @@ import { EditController } from './admin/edit.controller';
     ProfessionsSearchService,
     OrganisationsSearchService,
   ],
-  controllers: [DecisionsController, NewController, EditController],
+  controllers: [
+    DecisionsController,
+    NewController,
+    EditController,
+    PublicationController,
+  ],
 })
 export class DecisionsModule {}
