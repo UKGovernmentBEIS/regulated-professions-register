@@ -7,4 +7,5 @@ export interface ShowTemplate {
   organisation: Organisation;
   year: number;
   tables: Table[];
+  isPublished: boolean;
 }
