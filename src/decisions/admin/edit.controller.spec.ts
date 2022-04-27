@@ -26,8 +26,11 @@ import { DecisionDatasetEditPresenter } from './presenters/decision-dataset-edit
 import * as checkCanChangeDatasetModule from './helpers/check-can-change-dataset.helper';
 import * as checkCanPublishDatasetModule from './helpers/check-can-publish-dataset.helper';
 import { EditController } from './edit.controller';
+import { flashMessage } from '../../common/flash-message';
+import { translationOf } from '../../testutils/translation-of';
 
 jest.mock('./presenters/decision-dataset-edit.presenter');
+jest.mock('../../common/flash-message');
 
 const mockRouteTemplates: RouteTemplate[] = [
   {
@@ -313,6 +316,8 @@ describe('EditController', () => {
 
         const request = createDefaultMockRequest();
         const response = createMock<Response>();
+        const flashMock = flashMessage as jest.Mock;
+        flashMock.mockImplementation(() => 'STUB_FLASH_MESSAGE');
 
         await controller.update(
           'example-profession-id',
@@ -324,6 +329,11 @@ describe('EditController', () => {
         );
 
         expect(checkCanPublishDatasetSpy).toHaveBeenCalledWith(request);
+
+        expect(flashMock).toHaveBeenCalledWith(
+          translationOf('decisions.admin.publication.confirmation.heading'),
+          translationOf('decisions.admin.publication.confirmation.body'),
+        );
 
         expect(response.redirect).toHaveBeenCalledWith(
           '/admin/decisions/example-profession-id/example-organisation-id/2016',
@@ -425,6 +435,9 @@ describe('EditController', () => {
         const request = createDefaultMockRequest();
         const response = createMock<Response>();
 
+        const flashMock = flashMessage as jest.Mock;
+        flashMock.mockImplementation(() => 'STUB_FLASH_MESSAGE');
+
         await controller.update(
           'example-profession-id',
           'example-organisation-id',
@@ -432,6 +445,11 @@ describe('EditController', () => {
           editDto,
           request,
           response,
+        );
+
+        expect(flashMock).toHaveBeenCalledWith(
+          translationOf('decisions.admin.saveAsDraft.confirmation.heading'),
+          translationOf('decisions.admin.saveAsDraft.confirmation.body'),
         );
 
         expect(response.redirect).toHaveBeenCalledWith(
