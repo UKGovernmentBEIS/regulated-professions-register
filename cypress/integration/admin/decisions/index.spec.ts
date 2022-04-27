@@ -273,6 +273,64 @@ describe('Listing decision datasets', () => {
       );
     });
 
+    it('Contains the expected columns and filters', () => {
+      cy.translate('decisions.admin.dashboard.tableHeading.profession').then(
+        (profession) => {
+          cy.get('thead tr').should('contain', profession);
+        },
+      );
+
+      cy.translate('decisions.admin.dashboard.tableHeading.regulator').then(
+        (regulator) => {
+          cy.get('thead tr').should('not.contain', regulator);
+        },
+      );
+
+      cy.translate('decisions.admin.dashboard.tableHeading.year').then(
+        (year) => {
+          cy.get('thead tr').should('contain', year);
+        },
+      );
+
+      cy.translate('decisions.admin.dashboard.tableHeading.lastModified').then(
+        (lastModified) => {
+          cy.get('thead tr').should('contain', lastModified);
+        },
+      );
+
+      cy.translate('decisions.admin.dashboard.tableHeading.status').then(
+        (status) => {
+          cy.get('thead tr').should('contain', status);
+        },
+      );
+
+      cy.expandFilters('decisions.admin.dashboard');
+
+      cy.translate('decisions.admin.dashboard.filter.keywords.label').then(
+        (keywords) => {
+          cy.get('label').should('contain', keywords);
+        },
+      );
+
+      cy.translate('decisions.admin.dashboard.filter.organisations.label').then(
+        (organisations) => {
+          cy.get('legend').should('not.contain', organisations);
+        },
+      );
+
+      cy.translate('decisions.admin.dashboard.filter.years.label').then(
+        (years) => {
+          cy.get('legend').should('contain', years);
+        },
+      );
+
+      cy.translate('decisions.admin.dashboard.filter.statuses.label').then(
+        (statuses) => {
+          cy.get('legend').should('contain', statuses);
+        },
+      );
+    });
+
     it('I can download visible decision data', () => {
       cy.translate('decisions.admin.dashboard.download').then((download) => {
         clickDownloadLink(download);
