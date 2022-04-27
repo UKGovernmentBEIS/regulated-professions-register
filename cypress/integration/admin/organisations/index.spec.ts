@@ -81,7 +81,7 @@ describe('Listing organisations', () => {
 
       cy.get('input[name="keywords"]').type('Medical');
 
-      clickFilterButtonAndCheckAccessibility();
+      cy.clickFilterButtonAndCheckAccessibility();
 
       cy.get('tbody tr').each(($tr) => {
         cy.wrap($tr).should('contain', 'Medical');
@@ -110,7 +110,7 @@ describe('Listing organisations', () => {
                 cy.get('input[name="nations[]"]').check();
               });
 
-            clickFilterButtonAndCheckAccessibility();
+            cy.clickFilterButtonAndCheckAccessibility();
 
             cy.get('label')
               .contains(wales)
@@ -166,7 +166,7 @@ describe('Listing organisations', () => {
             cy.get('input[name="industries[]"]').check();
           });
 
-        clickFilterButtonAndCheckAccessibility();
+        cy.clickFilterButtonAndCheckAccessibility();
 
         cy.get('label')
           .contains(lawText)
@@ -191,7 +191,7 @@ describe('Listing organisations', () => {
           },
         );
 
-        clickFilterButtonAndCheckAccessibility();
+        cy.clickFilterButtonAndCheckAccessibility();
 
         cy.translate('professions.regulationTypes.licensing.name').then(
           (nameLabel) => {
@@ -242,7 +242,7 @@ describe('Listing organisations', () => {
             });
         });
 
-        clickFilterButtonAndCheckAccessibility();
+        cy.clickFilterButtonAndCheckAccessibility();
         expandFilters();
 
         cy.translate('app.filters.clearAllButton').then((clearAllButton) => {
@@ -306,14 +306,6 @@ describe('Listing organisations', () => {
       cy.get('tbody tr').should('contain', format(new Date(), 'd MMM yyyy'));
     });
   });
-
-  function clickFilterButtonAndCheckAccessibility(): void {
-    cy.translate('app.filters.filterButton').then((buttonLabel) => {
-      cy.get('button').contains(buttonLabel).click();
-    });
-
-    cy.checkAccessibility();
-  }
 
   function expandFilters(): void {
     cy.translate('organisations.admin.showFilters').then((showFilters) => {

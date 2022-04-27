@@ -89,7 +89,7 @@ describe('Listing professions', () => {
 
       cy.get('input[name="keywords"]').type('Attorney');
 
-      clickFilterButtonAndCheckAccessibility();
+      cy.clickFilterButtonAndCheckAccessibility();
 
       cy.get('input[name="keywords"]').should('have.value', 'Attorney');
 
@@ -106,7 +106,7 @@ describe('Listing professions', () => {
       cy.get('input[name="nations[]"][value="GB-WLS"]').check();
       cy.get('input[name="nations[]"][value="GB-NIR"]').check();
 
-      clickFilterButtonAndCheckAccessibility();
+      cy.clickFilterButtonAndCheckAccessibility();
 
       cy.get('input[name="nations[]"][value="GB-WLS"]').should('be.checked');
       cy.get('input[name="nations[]"][value="GB-NIR"]').should('be.checked');
@@ -130,7 +130,7 @@ describe('Listing professions', () => {
         .find('input')
         .check();
 
-      clickFilterButtonAndCheckAccessibility();
+      cy.clickFilterButtonAndCheckAccessibility();
 
       cy.get('label')
         .contains('Law Society of England and Wales')
@@ -152,7 +152,7 @@ describe('Listing professions', () => {
         cy.get('label').contains(nameLabel).parent().find('input').check();
       });
 
-      clickFilterButtonAndCheckAccessibility();
+      cy.clickFilterButtonAndCheckAccessibility();
 
       cy.translate('industries.education').then((nameLabel) => {
         cy.get('label')
@@ -178,7 +178,7 @@ describe('Listing professions', () => {
         },
       );
 
-      clickFilterButtonAndCheckAccessibility();
+      cy.clickFilterButtonAndCheckAccessibility();
 
       cy.translate('professions.regulationTypes.certification.name').then(
         (nameLabel) => {
@@ -220,7 +220,7 @@ describe('Listing professions', () => {
         },
       );
 
-      clickFilterButtonAndCheckAccessibility();
+      cy.clickFilterButtonAndCheckAccessibility();
 
       expandFilters();
 
@@ -316,14 +316,6 @@ describe('Listing professions', () => {
       cy.get('body').should('not.contain', 'Registered Trademark Attorney');
     });
   });
-
-  function clickFilterButtonAndCheckAccessibility(): void {
-    cy.translate('app.filters.filterButton').then((buttonLabel) => {
-      cy.get('button').contains(buttonLabel).click();
-    });
-
-    cy.checkAccessibility();
-  }
 
   function expandFilters(): void {
     cy.translate('professions.admin.showFilters').then((showFilters) => {
