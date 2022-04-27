@@ -29,6 +29,8 @@ export function formatStatus(
     status === DecisionDatasetStatus.Live
   ) {
     colourClass = 'govuk-tag--turquoise';
+  } else if (status === DecisionDatasetStatus.Submitted) {
+    colourClass = 'govuk-tag--pink';
   } else {
     return '';
   }

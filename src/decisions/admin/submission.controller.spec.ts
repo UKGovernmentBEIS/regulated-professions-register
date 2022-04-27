@@ -3,6 +3,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { Request, Response } from 'express';
 import { I18nService } from 'nestjs-i18n';
 import { flashMessage } from '../../common/flash-message';
+import { OrganisationsService } from '../../organisations/organisations.service';
+import { ProfessionsService } from '../../professions/professions.service';
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 import decisionDatasetFactory from '../../testutils/factories/decision-dataset';
 import organisationFactory from '../../testutils/factories/organisation';
@@ -17,10 +19,14 @@ describe('SubmissionController', () => {
   let controller: SubmissionController;
 
   let decisionDatasetsService: DeepMocked<DecisionDatasetsService>;
+  let professionsService: DeepMocked<ProfessionsService>;
+  let organisationsService: DeepMocked<OrganisationsService>;
   let i18nService: DeepMocked<I18nService>;
 
   beforeEach(async () => {
     decisionDatasetsService = createMock<DecisionDatasetsService>();
+    professionsService = createMock<ProfessionsService>();
+    organisationsService = createMock<OrganisationsService>();
     i18nService = createMockI18nService();
 
     const module: TestingModule = await Test.createTestingModule({
@@ -31,6 +37,14 @@ describe('SubmissionController', () => {
           useValue: decisionDatasetsService,
         },
         {
+          provide: ProfessionsService,
+          useValue: professionsService,
+        },
+        {
+          provide: OrganisationsService,
+          useValue: organisationsService,
+        },
+        {
           provide: I18nService,
           useValue: i18nService,
         },
@@ -38,6 +52,46 @@ describe('SubmissionController', () => {
     }).compile();
 
     controller = module.get<SubmissionController>(SubmissionController);
+  });
+
+  describe('new', () => {
+    it('passes dataset details to a confirmation screen', async () => {
+      const profession = professionFactory.build({
+        id: 'example-profession-id',
+      });
+
+      const organisation = organisationFactory.build({
+        id: 'example-organisation-id',
+      });
+
+      const dataset = decisionDatasetFactory.build({
+        profession,
+        organisation,
+        year: 2016,
+      });
+
+      professionsService.findWithVersions.mockResolvedValue(profession);
+      organisationsService.find.mockResolvedValue(organisation);
+      decisionDatasetsService.find.mockResolvedValue(dataset);
+
+      expect(
+        await controller.new(
+          'example-profession-id',
+          'example-organisation-id',
+          2016,
+        ),
+      ).toEqual({
+        profession,
+        organisation,
+        year: 2016,
+      });
+
+      expect(decisionDatasetsService.find).toHaveBeenCalledWith(
+        'example-profession-id',
+        'example-organisation-id',
+        2016,
+      );
+    });
   });
 
   describe('create', () => {

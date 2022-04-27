@@ -6,16 +6,21 @@ import { DecisionDatasetStatusesCheckboxPresenter } from './decision-dataset-sta
 describe('DecisionDatasetStatusesCheckboxPresenter', () => {
   describe('checkboxItems', () => {
     describe('when called with an empty list of statuses', () => {
-      it('should return unchecked checkbox arguments', async () => {
+      it('should return unchecked checkbox arguments', () => {
         const presenter = new DecisionDatasetStatusesCheckboxPresenter(
           [],
           createMockI18nService(),
         );
 
-        await expect(presenter.checkboxItems()).toEqual([
+        expect(presenter.checkboxItems()).toEqual([
           {
             text: translationOf('app.status.draft'),
             value: DecisionDatasetStatus.Draft,
+            checked: false,
+          },
+          {
+            text: translationOf('app.status.submitted'),
+            value: DecisionDatasetStatus.Submitted,
             checked: false,
           },
           {
@@ -28,16 +33,21 @@ describe('DecisionDatasetStatusesCheckboxPresenter', () => {
     });
 
     describe('when called with a non-empty list of statuses', () => {
-      it('should return some checked checkbox arguments', async () => {
+      it('should return some checked checkbox arguments', () => {
         const presenter = new DecisionDatasetStatusesCheckboxPresenter(
           [DecisionDatasetStatus.Live],
           createMockI18nService(),
         );
 
-        await expect(presenter.checkboxItems()).toEqual([
+        expect(presenter.checkboxItems()).toEqual([
           {
             text: translationOf('app.status.draft'),
             value: DecisionDatasetStatus.Draft,
+            checked: false,
+          },
+          {
+            text: translationOf('app.status.submitted'),
+            value: DecisionDatasetStatus.Submitted,
             checked: false,
           },
           {

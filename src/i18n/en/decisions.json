@@ -69,6 +69,8 @@
       }
     },
     "submission": {
+      "caption": "Submitting decision data",
+      "heading": "Are you sure you want to submit the following decision data to be reviewed before publication?",
       "confirmation": {
         "heading": "This recognition decision dataset has been submitted to central administrators before publication.",
         "body": "<p class='govuk-body-m'>It has not been published yet.</p><a href='/admin/decisions' class='govuk-link'>Back to recognition decision data listing page</a>."
@@ -123,7 +125,8 @@
       "addRoute": "Add route",
       "saveAsDraft": "Save as draft",
       "publish": "Publish to register",
-      "edit": "Edit data"
+      "edit": "Edit data",
+      "submit": "Submit for publication"
     }
   },
   "show": {
