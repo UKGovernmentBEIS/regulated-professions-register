@@ -10,11 +10,7 @@
     <div class="govuk-grid-column-two-thirds">
       <span class="govuk-caption-l">{{ title }}</span>
       <h1 class="govuk-heading-l">{{ ('decisions.admin.publication.heading' | t )}}</h1>
-      <ul class="govuk-list govuk-list--bullet">
-        <li><b>{{ 'decisions.admin.publication.labels.profession' | t }}</b>{{ profession.name }}</li>
-        <li><b>{{ 'decisions.admin.publication.labels.organisation' | t }}</b>{{ organisation.name }}</li>
-        <li><b>{{ 'decisions.admin.publication.labels.year' | t }}</b>{{ year }}</li>
-      </ul>
+      {% include "../_dataset-details.njk" %}
       <form action="/admin/decisions/{{profession.id}}/{{organisation.id}}/{{year}}/publish?_method=PUT" method="post">
         {{
           govukButton({

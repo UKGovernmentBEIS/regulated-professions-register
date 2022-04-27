@@ -47,14 +47,16 @@
     "show": {
       "edit": "Edit"
     },
-    "publication": {
-      "caption": "Publishing decision data",
-      "heading": "Are you sure you want to publish the following decision data?",
+    "confirmation": {
       "labels": {
         "organisation": "Regulator: ",
         "profession": "Profession: ",
         "year": "Year: "
-      },
+      }
+    },
+    "publication": {
+      "caption": "Publishing decision data",
+      "heading": "Are you sure you want to publish the following decision data?",
       "confirmation": {
         "heading": "This recognition decision dataset has been published.",
         "body": "<a href='/admin/decisions' class='govuk-link'>Back to recognition decision data listing page</a>."
