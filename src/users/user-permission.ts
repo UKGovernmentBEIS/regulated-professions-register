@@ -11,6 +11,7 @@ export enum UserPermission {
   EditProfession = 'editProfession',
   PublishProfession = 'publishProfession',
   UploadDecisionData = 'uploadDecisionData',
+  PublishDecisionData = 'publishDecisionData',
   DownloadDecisionData = 'downloadDecisionData',
   ViewDecisionData = 'viewDecisionData',
 }

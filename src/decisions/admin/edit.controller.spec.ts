@@ -24,6 +24,7 @@ import { EditTemplate } from './interfaces/edit-template.interface';
 import { RouteTemplate } from './interfaces/route-template.interface';
 import { DecisionDatasetEditPresenter } from './presenters/decision-dataset-edit.presenter';
 import * as checkCanChangeDatasetModule from './helpers/check-can-change-dataset.helper';
+import * as checkCanPublishDatasetModule from './helpers/check-can-publish-dataset.helper';
 import { EditController } from './edit.controller';
 
 jest.mock('./presenters/decision-dataset-edit.presenter');
@@ -306,6 +307,9 @@ describe('EditController', () => {
           modifyDecisionRoutesModule,
           'modifyDecisionRoutes',
         );
+        const checkCanPublishDatasetSpy = jest
+          .spyOn(checkCanPublishDatasetModule, 'checkCanPublishDataset')
+          .mockReturnValue(undefined);
 
         const request = createDefaultMockRequest();
         const response = createMock<Response>();
@@ -318,6 +322,8 @@ describe('EditController', () => {
           request,
           response,
         );
+
+        expect(checkCanPublishDatasetSpy).toHaveBeenCalledWith(request);
 
         expect(response.redirect).toHaveBeenCalledWith(
           '/admin/decisions/example-profession-id/example-organisation-id/2016',

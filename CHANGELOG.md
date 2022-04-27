@@ -11,6 +11,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - "Total" column on internal decision data tables
 - Add bulk decision data download link
 
+### Changed
+
+- Only allow central admin users to publish decision data
+- Allow decision data to be published without having to edit the data
+
 ## [release-017] - 2022-04-25
 
 ### Changed

@@ -64,6 +64,12 @@ export class DecisionDatasetsService {
     return this.repository.save(dataset);
   }
 
+  async publish(dataset: DecisionDataset): Promise<DecisionDataset> {
+    dataset.status = DecisionDatasetStatus.Live;
+
+    return this.repository.save(dataset);
+  }
+
   private datasetsWithJoins(): SelectQueryBuilder<DecisionDataset> {
     return this.repository
       .createQueryBuilder('decisionDataset')

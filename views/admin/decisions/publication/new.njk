@@ -1,0 +1,30 @@
+{% extends "admin/base.njk" %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set title = ("decisions.admin.publication.caption" | t) %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <span class="govuk-caption-l">{{ title }}</span>
+      <h1 class="govuk-heading-l">{{ ('decisions.admin.publication.heading' | t )}}</h1>
+      <ul class="govuk-list govuk-list--bullet">
+        <li><b>{{ 'decisions.admin.publication.labels.profession' | t }}</b>{{ profession.name }}</li>
+        <li><b>{{ 'decisions.admin.publication.labels.organisation' | t }}</b>{{ organisation.name }}</li>
+        <li><b>{{ 'decisions.admin.publication.labels.year' | t }}</b>{{ year }}</li>
+      </ul>
+      <form action="/admin/decisions/{{profession.id}}/{{organisation.id}}/{{year}}/publish?_method=PUT" method="post">
+        {{
+          govukButton({
+            text: "decisions.admin.buttons.publish" | t,
+            classes: "govuk-button",
+            id: 'publish-button'
+          })
+        }}
+      </form>
+    </div>
+  </div>
+
+{% endblock %}

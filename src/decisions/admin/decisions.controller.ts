@@ -27,6 +27,7 @@ import { DecisionDatasetPresenter } from '../presenters/decision-dataset.present
 import { checkCanChangeDataset } from './helpers/check-can-change-dataset.helper';
 import { DecisionsCsvWriter } from './helpers/decisions-csv-writer.helper';
 import { Response } from 'express';
+import { DecisionDatasetStatus } from '../decision-dataset.entity';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/decisions')
@@ -117,6 +118,7 @@ export class DecisionsController {
       organisation,
       year,
       tables: presenter.tables(),
+      isPublished: dataset.status === DecisionDatasetStatus.Live,
     };
   }
 

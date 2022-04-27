@@ -1,3 +1,5 @@
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
 {% set bodyClasses = "rpr-internal__page rpr-details__page" %}
 {% extends "admin/base.njk" %}
 
@@ -10,7 +12,33 @@
       {% include "../../decisions/_decision-tables.njk" %}
     </div>
     <div class="govuk-grid-column-one-quarter">
-      <a class="govuk-link" href="/admin/decisions/{{profession.id}}/{{organisation.id}}/{{year}}/edit">{{ "decisions.admin.show.edit" | t }}</a>
+      <nav role="navigation" data-cy="actions">
+        <ul class="govuk-list">
+          {% if 'uploadDecisionData' in permissions %}
+            <li>
+              {{
+                govukButton({
+                  text: "decisions.admin.buttons.edit" | t,
+                  href: "/admin/decisions/" + profession.id + "/" + organisation.id + "/" + year + "/edit",
+                  classes: 'govuk-button--secondary',
+                  name: 'publish'
+                })
+              }}
+            </li>
+          {% endif %}
+          {% if 'publishDecisionData' in permissions and not isPublished %}
+            <li>
+              {{
+                govukButton({
+                  text: "decisions.admin.buttons.publish" | t,
+                  href: "/admin/decisions/" + profession.id + "/" + organisation.id + "/" + year + "/publish",
+                  name: 'publish'
+                })
+              }}
+            </li>
+          {% endif %}
+        </ul>
+      </nav>
     </div>
   </div>
 
