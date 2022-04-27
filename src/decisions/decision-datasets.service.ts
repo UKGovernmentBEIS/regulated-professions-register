@@ -71,6 +71,12 @@ export class DecisionDatasetsService {
     return this.repository.save(dataset);
   }
 
+  async submit(dataset: DecisionDataset): Promise<DecisionDataset> {
+    dataset.status = DecisionDatasetStatus.Submitted;
+
+    return this.repository.save(dataset);
+  }
+
   async publish(dataset: DecisionDataset): Promise<DecisionDataset> {
     dataset.status = DecisionDatasetStatus.Live;
 

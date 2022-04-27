@@ -534,6 +534,28 @@ describe('DecisionDatasetsService', () => {
     });
   });
 
+  describe('submit', () => {
+    it('sets the status of the DecisionDataset to Submitted', async () => {
+      const draftDataset = decisionDatasetFactory.build({
+        status: DecisionDatasetStatus.Draft,
+      });
+
+      const submittedDataset = {
+        ...draftDataset,
+        status: DecisionDatasetStatus.Submitted,
+      };
+
+      const repoSpy = jest
+        .spyOn(repo, 'save')
+        .mockResolvedValue(submittedDataset);
+
+      const result = await service.submit(draftDataset);
+
+      expect(result).toEqual(submittedDataset);
+      expect(repoSpy).toBeCalledWith(submittedDataset);
+    });
+  });
+
   describe('publish', () => {
     it('sets the status of the DecisionDataset to Live', async () => {
       const draftDataset = decisionDatasetFactory.build({
