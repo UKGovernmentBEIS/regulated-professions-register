@@ -4,12 +4,20 @@ import { ListEntryPresenter } from './list-entry.presenter';
 import { Organisation } from '../../../organisations/organisation.entity';
 import { Table } from '../../../common/interfaces/table';
 import { DecisionDataset } from '../../decision-dataset.entity';
+import { FilterInput } from '../../../common/interfaces/filter-input.interface';
+import { OrganisationsCheckboxPresenter } from '../../../organisations/organisations-checkbox-presenter';
+import { YearsCheckboxPresenter } from './years-checkbox.presenter';
+import { DecisionDatasetStatusesCheckboxPresenter } from './decision-dataset-statuses-checkbox.presenter';
 
 export type DecisionDatasetsPresenterView = 'overview' | 'single-organisation';
 
 export class DecisionDatasetsPresenter {
   constructor(
+    private readonly filterInput: FilterInput,
     private readonly userOrganisation: Organisation | null,
+    private readonly allOrganisations: Organisation[],
+    private readonly startYear: number,
+    private readonly endYear: number,
     private readonly decisionDatasets: DecisionDataset[],
     private readonly i18nService: I18nService,
   ) {}
@@ -20,9 +28,37 @@ export class DecisionDatasetsPresenter {
         ? this.i18nService.translate('app.beis')
         : this.userOrganisation.name;
 
+    const organisationsCheckboxItems = new OrganisationsCheckboxPresenter(
+      this.allOrganisations,
+      this.filterInput.organisations || [],
+    ).checkboxItems();
+
+    const yearsCheckboxItems = new YearsCheckboxPresenter(
+      this.startYear,
+      this.endYear,
+      this.filterInput.years,
+    ).checkboxItems();
+
+    const statusesCheckboxItems = new DecisionDatasetStatusesCheckboxPresenter(
+      this.filterInput.statuses,
+      this.i18nService,
+    ).checkboxItems();
+
     return {
+      view,
       organisation,
       decisionDatasetsTable: this.table(view),
+      filters: {
+        keywords: this.filterInput.keywords || '',
+        organisations: (this.filterInput.organisations || []).map(
+          (organisation) => organisation.name,
+        ),
+        years: this.filterInput.years || [],
+        statuses: this.filterInput.statuses || [],
+      },
+      organisationsCheckboxItems,
+      yearsCheckboxItems,
+      statusesCheckboxItems,
     };
   }
 

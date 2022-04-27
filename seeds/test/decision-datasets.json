@@ -32,6 +32,37 @@
   },
   {
     "profession": "Registered Trademark Attorney",
+    "organisation": "Law Society of England and Wales",
+    "year": 2021,
+    "status": "live",
+    "routes": [
+      {
+        "name": "EEA Route",
+        "countries": [
+          {
+            "code": "MW",
+            "decisions": {
+              "yes": 8,
+              "no": 4,
+              "yesAfterComp": 1,
+              "noAfterComp": 2
+            }
+          },
+          {
+            "code": "MX",
+            "decisions": {
+              "yes": 7,
+              "no": 9,
+              "yesAfterComp": 3,
+              "noAfterComp": 2
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "profession": "Registered Trademark Attorney",
     "organisation": "Alternative Law Society",
     "year": 2020,
     "status": "draft",

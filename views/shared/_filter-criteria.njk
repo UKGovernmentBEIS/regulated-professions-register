@@ -33,3 +33,19 @@
     {% endfor %}
   </p>
 {% endif %}
+
+{% if filters.years | length %}
+  <p class="govuk-body-m rpr-listing__search-criteria-container"><span class="govuk-!-font-weight-bold">{{ (filterCriteriaTextPrefix + ".labels.years") | t }}</span>
+    {% for year in filters.years %}
+      <strong class="govuk-tag">{{ year }}</strong>
+    {% endfor %}
+  </p>
+{% endif %}
+
+{% if filters.statuses | length %}
+  <p class="govuk-body-m rpr-listing__search-criteria-container"><span class="govuk-!-font-weight-bold">{{ (filterCriteriaTextPrefix + ".labels.statuses") | t }}</span>
+    {% for status in filters.statuses %}
+      <strong class="govuk-tag">{{ ('app.status.' + status) | t }}</strong>
+    {% endfor %}
+  </p>
+{% endif %}

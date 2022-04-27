@@ -20,17 +20,31 @@ import * as checkCanChangeDatasetModule from './helpers/check-can-change-dataset
 import { DecisionsCsvWriter } from './helpers/decisions-csv-writer.helper';
 import { Response } from 'express';
 import { DecisionDatasetStatus } from '../decision-dataset.entity';
+import { OrganisationVersionsService } from '../../organisations/organisation-versions.service';
+import { FilterDto } from './dto/filter.dto';
+import * as createFilterInputModule from '../../helpers/create-filter-input.helper';
+import * as getDecisionsYearsRangeModule from './helpers/get-decisions-years-range';
 
 jest.mock('./presenters/decision-datasets.presenter');
 jest.mock('../presenters/decision-dataset.presenter');
 jest.mock('./helpers/decisions-csv-writer.helper');
 
 const mockIndexTemplate: IndexTemplate = {
+  view: 'overview',
   organisation: 'Example Organisation',
   decisionDatasetsTable: {
     head: [],
     rows: [],
   },
+  filters: {
+    keywords: 'example keywords',
+    organisations: ['Organisation 1', 'Organisation 2'],
+    years: [2020, 2021],
+    statuses: [DecisionDatasetStatus.Live],
+  },
+  organisationsCheckboxItems: [],
+  yearsCheckboxItems: [],
+  statusesCheckboxItems: [],
 };
 
 const mockTables: Table[] = [
@@ -46,11 +60,13 @@ describe('DecisionsController', () => {
 
   let decisionDatasetsService: DeepMocked<DecisionDatasetsService>;
   let professionsService: DeepMocked<ProfessionsService>;
+  let organisationVersionsService: DeepMocked<OrganisationVersionsService>;
   let i18nService: DeepMocked<I18nService>;
 
   beforeEach(async () => {
     decisionDatasetsService = createMock<DecisionDatasetsService>();
     professionsService = createMock<ProfessionsService>();
+    organisationVersionsService = createMock<OrganisationVersionsService>();
     i18nService = createMockI18nService();
 
     const module: TestingModule = await Test.createTestingModule({
@@ -63,6 +79,10 @@ describe('DecisionsController', () => {
         {
           provide: ProfessionsService,
           useValue: professionsService,
+        },
+        {
+          provide: OrganisationVersionsService,
+          useValue: organisationVersionsService,
         },
         {
           provide: I18nService,
@@ -79,30 +99,74 @@ describe('DecisionsController', () => {
       it('presents all decision datasets', async () => {
         const request = createDefaultMockRequest();
 
-        jest.spyOn(getActingUserModule, 'getActingUser').mockReturnValue(
-          userFactory.build({
-            serviceOwner: true,
-            organisation: null,
-          }),
-        );
+        const getActingUserSpy = jest
+          .spyOn(getActingUserModule, 'getActingUser')
+          .mockReturnValue(
+            userFactory.build({
+              serviceOwner: true,
+              organisation: null,
+            }),
+          );
+
+        const createFilterInputSpy = jest
+          .spyOn(createFilterInputModule, 'createFilterInput')
+          .mockReturnValue({
+            keywords: 'example keywords',
+          });
+
+        const getDecisionsYearsRangeSpy = jest
+          .spyOn(getDecisionsYearsRangeModule, 'getDecisionsYearsRange')
+          .mockReturnValue({
+            start: 2020,
+            end: 2024,
+          });
 
         const datasets = decisionDatasetFactory.buildList(3);
+        const allOrganisations = organisationFactory.buildList(3);
 
         decisionDatasetsService.all.mockResolvedValue(datasets);
+        organisationVersionsService.allLive.mockResolvedValue(allOrganisations);
+
         (
           DecisionDatasetsPresenter.prototype.present as jest.Mock
         ).mockResolvedValue(mockIndexTemplate);
 
-        const result = await controller.index(request);
+        const filter: FilterDto = {
+          keywords: 'example keywords',
+          organisations: [],
+          years: [],
+          statuses: [],
+        };
+
+        const result = await controller.index(request, filter);
 
         expect(result).toEqual(mockIndexTemplate);
 
+        expect(getActingUserSpy).toHaveBeenCalledWith(request);
+        expect(createFilterInputSpy).toHaveBeenCalledWith({
+          ...filter,
+          allOrganisations,
+        });
+        expect(getDecisionsYearsRangeSpy).toHaveBeenCalled();
+
         expect(DecisionDatasetsPresenter).toHaveBeenCalledWith(
+          {
+            keywords: 'example keywords',
+          },
           null,
+          allOrganisations,
+          2020,
+          2024,
           datasets,
           i18nService,
         );
-        expect(decisionDatasetsService.all).toHaveBeenCalled();
+        expect(
+          DecisionDatasetsPresenter.prototype.present,
+        ).toHaveBeenCalledWith('overview');
+        expect(organisationVersionsService.allLive).toHaveBeenCalled();
+        expect(decisionDatasetsService.all).toHaveBeenCalledWith({
+          keywords: 'example keywords',
+        });
         expect(
           decisionDatasetsService.allForOrganisation,
         ).not.toHaveBeenCalled();
@@ -113,33 +177,77 @@ describe('DecisionsController', () => {
       it("presents decision datasets for the user's organisation", async () => {
         const request = createDefaultMockRequest();
 
-        const organisation = organisationFactory.build();
+        const userOrganisation = organisationFactory.build();
 
-        jest.spyOn(getActingUserModule, 'getActingUser').mockReturnValue(
-          userFactory.build({
-            serviceOwner: false,
-            organisation,
-          }),
-        );
+        const getActingUserSpy = jest
+          .spyOn(getActingUserModule, 'getActingUser')
+          .mockReturnValue(
+            userFactory.build({
+              serviceOwner: false,
+              organisation: userOrganisation,
+            }),
+          );
+
+        const createFilterInputSpy = jest
+          .spyOn(createFilterInputModule, 'createFilterInput')
+          .mockReturnValue({
+            keywords: 'example keywords',
+          });
+
+        const getDecisionsYearsRangeSpy = jest
+          .spyOn(getDecisionsYearsRangeModule, 'getDecisionsYearsRange')
+          .mockReturnValue({
+            start: 2020,
+            end: 2024,
+          });
 
         const datasets = decisionDatasetFactory.buildList(3);
+        const allOrganisations = organisationFactory.buildList(3);
 
         decisionDatasetsService.allForOrganisation.mockResolvedValue(datasets);
+        organisationVersionsService.allLive.mockResolvedValue(allOrganisations);
+
         (
           DecisionDatasetsPresenter.prototype.present as jest.Mock
         ).mockResolvedValue(mockIndexTemplate);
 
-        const result = await controller.index(request);
+        const filter: FilterDto = {
+          keywords: 'example keywords',
+          organisations: [],
+          years: [],
+          statuses: [],
+        };
+
+        const result = await controller.index(request, filter);
 
         expect(result).toEqual(mockIndexTemplate);
 
+        expect(getActingUserSpy).toHaveBeenCalledWith(request);
+        expect(createFilterInputSpy).toHaveBeenCalledWith({
+          ...filter,
+          allOrganisations,
+        });
+        expect(getDecisionsYearsRangeSpy).toHaveBeenCalled();
+
         expect(DecisionDatasetsPresenter).toHaveBeenCalledWith(
-          organisation,
+          {
+            keywords: 'example keywords',
+          },
+          userOrganisation,
+          allOrganisations,
+          2020,
+          2024,
           datasets,
           i18nService,
         );
+        expect(
+          DecisionDatasetsPresenter.prototype.present,
+        ).toHaveBeenCalledWith('single-organisation');
         expect(decisionDatasetsService.allForOrganisation).toHaveBeenCalledWith(
-          organisation,
+          userOrganisation,
+          {
+            keywords: 'example keywords',
+          },
         );
         expect(decisionDatasetsService.all).not.toHaveBeenCalled();
       });
@@ -172,7 +280,7 @@ describe('DecisionsController', () => {
           i18nService,
         );
         expect(DecisionsCsvWriter.prototype.write).toHaveBeenCalled();
-        expect(decisionDatasetsService.all).toHaveBeenCalled();
+        expect(decisionDatasetsService.all).toHaveBeenCalledWith({});
         expect(
           decisionDatasetsService.allForOrganisation,
         ).not.toHaveBeenCalled();
@@ -208,6 +316,7 @@ describe('DecisionsController', () => {
         expect(DecisionsCsvWriter.prototype.write).toHaveBeenCalled();
         expect(decisionDatasetsService.allForOrganisation).toHaveBeenCalledWith(
           organisation,
+          {},
         );
         expect(decisionDatasetsService.all).not.toHaveBeenCalled();
       });

@@ -345,3 +345,17 @@ Cypress.Commands.add('checkAccessibility', (rules: AxeRules = undefined) => {
 Cypress.Commands.add('visitInternalDashboard', () => {
   cy.visitAndCheckAccessibility('/admin/dashboard');
 });
+
+Cypress.Commands.add('clickFilterButtonAndCheckAccessibility', () => {
+  cy.translate('app.filters.filterButton').then((buttonLabel) => {
+    cy.get('button').contains(buttonLabel).click();
+  });
+
+  cy.checkAccessibility();
+});
+
+Cypress.Commands.add('expandFilters', (prefix: string) => {
+  cy.translate(`${prefix}.showFilters`).then((showFilters) => {
+    cy.get('span').contains(showFilters).click();
+  });
+});

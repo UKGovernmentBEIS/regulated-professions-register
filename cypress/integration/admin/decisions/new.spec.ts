@@ -6,7 +6,7 @@ describe('Creating a decision dataset', () => {
     });
 
     it('I can create a decision dataset for a chosen organisation', () => {
-      cy.get('body').should(
+      cy.get('tbody').should(
         'not.contain',
         'Profession with two tier-one Organisations',
       );
@@ -110,7 +110,7 @@ describe('Creating a decision dataset', () => {
     });
 
     it('I can create a decision dataset for my organisation', () => {
-      cy.get('body').should('not.contain', '2020');
+      cy.get('tbody').should('not.contain', '2020');
 
       cy.translate('decisions.admin.dashboard.addButtonLabel').then((add) => {
         cy.get('a').contains(add).click();

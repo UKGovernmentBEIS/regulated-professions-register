@@ -7,6 +7,9 @@
 {% if nationsCheckboxItems %}
   {% set filterColumns = filterColumns + 1 %}
 {% endif %}
+{% if yearsCheckboxItems %}
+  {% set filterColumns = filterColumns + 1 %}
+{% endif %}
 {% if organisationsCheckboxItems %}
   {% set filterColumns = filterColumns + 1 %}
 {% endif %}
@@ -14,6 +17,9 @@
   {% set filterColumns = filterColumns + 1 %}
 {% endif %}
 {% if regulationTypesCheckboxItems %}
+  {% set filterColumns = filterColumns + 1 %}
+{% endif %}
+{% if statusesCheckboxItems %}
   {% set filterColumns = filterColumns + 1 %}
 {% endif %}
 
@@ -28,7 +34,7 @@
 <div class="rpr-internal-listing__filters-container">
   <details class="govuk-details" data-module="govuk-details">
     <summary class="govuk-details__summary rpr-internal-listing__filters-details-summary">
-      <span class="govuk-details__summary-text">{{ "professions.admin.showFilters" | t }}</span>
+      <span class="govuk-details__summary-text">{{ (filterTextPrefix + ".showFilters") | t }}</span>
     </summary>
     <div class="govuk-details__text">
         {% include "./_filter.njk" %}

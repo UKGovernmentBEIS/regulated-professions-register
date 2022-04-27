@@ -19,7 +19,7 @@ describe('Listing decision datasets', () => {
       cy.visitAndCheckAccessibility('/admin/decisions');
     });
 
-    it('Lists all decision datasets with their organisation', () => {
+    it('Lists all decision datasets', () => {
       cy.readFile('./seeds/test/decision-datasets.json').then(
         (datasets: SeedDecisionDataset[]) => {
           const datasetsToShow = getDisplayedDatasets(datasets);
@@ -48,6 +48,153 @@ describe('Listing decision datasets', () => {
                   cy.wrap($row).should('contain', status);
                 });
               });
+          });
+        },
+      );
+    });
+
+    it('I can filter by keyword', () => {
+      cy.expandFilters('decisions.admin.dashboard');
+
+      cy.get('input[name="keywords"]').type('Trademark');
+
+      cy.clickFilterButtonAndCheckAccessibility();
+
+      cy.get('tbody tr').each(($tr) => {
+        cy.wrap($tr).should('contain', 'Trademark');
+      });
+
+      cy.get('tbody tr').should('have.length.at.least', 1);
+    });
+
+    it('I can filter by organisation', () => {
+      cy.expandFilters('decisions.admin.dashboard');
+
+      cy.get('label')
+        .contains('Law Society of England and Wales')
+        .parent()
+        .find('input')
+        .check();
+
+      cy.clickFilterButtonAndCheckAccessibility();
+
+      cy.get('label')
+        .contains('Law Society of England and Wales')
+        .parent()
+        .find('input')
+        .should('be.checked');
+
+      cy.get('tbody tr').each(($tr) => {
+        cy.wrap($tr).should('contain', 'Law Society of England and Wales');
+      });
+
+      cy.get('tbody tr').should('have.length.at.least', 1);
+    });
+
+    it('I can filter by year', () => {
+      cy.expandFilters('decisions.admin.dashboard');
+
+      cy.get('label').contains('2021').parent().find('input').check();
+
+      cy.clickFilterButtonAndCheckAccessibility();
+
+      cy.get('label')
+        .contains('2021')
+        .parent()
+        .find('input')
+        .should('be.checked');
+
+      cy.get('tbody tr').each(($tr) => {
+        cy.wrap($tr).should('contain', '2021');
+      });
+
+      cy.get('tbody tr').should('have.length.at.least', 1);
+    });
+
+    it('I can filter by status', () => {
+      cy.expandFilters('decisions.admin.dashboard');
+
+      cy.translate('app.status.live').then((live) => {
+        cy.get('input[name="statuses[]"]')
+          .parent()
+          .contains(live)
+          .parent()
+          .find('input')
+          .check();
+
+        cy.clickFilterButtonAndCheckAccessibility();
+
+        cy.get('input[name="statuses[]"]')
+          .parent()
+          .contains(live)
+          .parent()
+          .find('input')
+          .should('be.checked');
+
+        cy.get('tbody tr').each(($tr) => {
+          cy.wrap($tr).should('contain', live);
+        });
+
+        cy.get('tbody tr').should('have.length.at.least', 1);
+      });
+    });
+
+    it('I can clear all filters', () => {
+      cy.expandFilters('decisions.admin.dashboard');
+
+      cy.get('input[name="keywords"]').type('Teacher');
+
+      cy.get('label')
+        .contains('Department for Education')
+        .parent()
+        .find('input')
+        .check();
+
+      cy.get('label').contains('2020').parent().find('input').check();
+
+      cy.translate('app.status.draft').then((draft) => {
+        cy.get('input[name="statuses[]"]')
+          .parent()
+          .contains(draft)
+          .parent()
+          .find('input')
+          .check();
+      });
+
+      cy.clickFilterButtonAndCheckAccessibility();
+      cy.expandFilters('decisions.admin.dashboard');
+
+      cy.translate('app.filters.clearAllButton').then((clearAllButton) => {
+        cy.get('a').contains(clearAllButton).click();
+      });
+      cy.checkAccessibility();
+      cy.expandFilters('decisions.admin.dashboard');
+
+      cy.get('input[name="keywords"]').should('have.value', '');
+
+      cy.get('label')
+        .contains('Department for Education')
+        .parent()
+        .find('input')
+        .should('not.be.checked');
+
+      cy.translate('app.status.draft').then((draft) => {
+        cy.get('input[name="statuses[]"]')
+          .parent()
+          .contains(draft)
+          .parent()
+          .find('input')
+          .should('not.be.checked');
+      });
+
+      cy.readFile('./seeds/test/decision-datasets.json').then(
+        (datasets: SeedDecisionDataset[]) => {
+          const datasetsToShow = getDisplayedDatasets(datasets);
+
+          cy.translate('decisions.admin.dashboard.search.foundPlural', {
+            count: datasetsToShow.length,
+          }).then((foundText) => {
+            cy.get('body').should('contain', foundText);
           });
         },
       );
@@ -122,6 +269,64 @@ describe('Listing decision datasets', () => {
                 });
               });
           });
+        },
+      );
+    });
+
+    it('Contains the expected columns and filters', () => {
+      cy.translate('decisions.admin.dashboard.tableHeading.profession').then(
+        (profession) => {
+          cy.get('thead tr').should('contain', profession);
+        },
+      );
+
+      cy.translate('decisions.admin.dashboard.tableHeading.regulator').then(
+        (regulator) => {
+          cy.get('thead tr').should('not.contain', regulator);
+        },
+      );
+
+      cy.translate('decisions.admin.dashboard.tableHeading.year').then(
+        (year) => {
+          cy.get('thead tr').should('contain', year);
+        },
+      );
+
+      cy.translate('decisions.admin.dashboard.tableHeading.lastModified').then(
+        (lastModified) => {
+          cy.get('thead tr').should('contain', lastModified);
+        },
+      );
+
+      cy.translate('decisions.admin.dashboard.tableHeading.status').then(
+        (status) => {
+          cy.get('thead tr').should('contain', status);
+        },
+      );
+
+      cy.expandFilters('decisions.admin.dashboard');
+
+      cy.translate('decisions.admin.dashboard.filter.keywords.label').then(
+        (keywords) => {
+          cy.get('label').should('contain', keywords);
+        },
+      );
+
+      cy.translate('decisions.admin.dashboard.filter.organisations.label').then(
+        (organisations) => {
+          cy.get('legend').should('not.contain', organisations);
+        },
+      );
+
+      cy.translate('decisions.admin.dashboard.filter.years.label').then(
+        (years) => {
+          cy.get('legend').should('contain', years);
+        },
+      );
+
+      cy.translate('decisions.admin.dashboard.filter.statuses.label').then(
+        (statuses) => {
+          cy.get('legend').should('contain', statuses);
         },
       );
     });

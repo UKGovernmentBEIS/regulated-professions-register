@@ -73,6 +73,8 @@ declare global {
       visitAndCheckAccessibility(url: string): void;
       checkAccessibility(rules?: AxeRules): void;
       visitInternalDashboard(): void;
+      clickFilterButtonAndCheckAccessibility(): void;
+      expandFilters(prefix: string): void;
     }
   }
 }

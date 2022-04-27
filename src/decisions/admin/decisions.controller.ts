@@ -3,6 +3,7 @@ import {
   Get,
   Param,
   ParseIntPipe,
+  Query,
   Render,
   Req,
   Res,
@@ -25,9 +26,13 @@ import {
 } from './presenters/decision-datasets.presenter';
 import { DecisionDatasetPresenter } from '../presenters/decision-dataset.presenter';
 import { checkCanChangeDataset } from './helpers/check-can-change-dataset.helper';
+import { FilterDto } from './dto/filter.dto';
+import { createFilterInput } from '../../helpers/create-filter-input.helper';
+import { getDecisionsYearsRange } from './helpers/get-decisions-years-range';
 import { DecisionsCsvWriter } from './helpers/decisions-csv-writer.helper';
 import { Response } from 'express';
 import { DecisionDatasetStatus } from '../decision-dataset.entity';
+import { OrganisationVersionsService } from '../../organisations/organisation-versions.service';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/decisions')
@@ -35,6 +40,7 @@ export class DecisionsController {
   constructor(
     private readonly decisionDatasetsService: DecisionDatasetsService,
     private readonly professionsService: ProfessionsService,
+    private readonly organisationVersionsService: OrganisationVersionsService,
     private readonly i18nService: I18nService,
   ) {}
 
@@ -46,8 +52,11 @@ export class DecisionsController {
   )
   @Render('admin/decisions/index')
   @BackLink('/admin/dashboard')
-  async index(@Req() request: RequestWithAppSession): Promise<IndexTemplate> {
-    return this.createListEntries(request);
+  async index(
+    @Req() request: RequestWithAppSession,
+    @Query() filter: FilterDto = null,
+  ): Promise<IndexTemplate> {
+    return this.createListEntries(request, filter);
   }
 
   @Get('export')
@@ -67,8 +76,8 @@ export class DecisionsController {
     const userOrganisation = showAllOrgs ? null : actingUser.organisation;
 
     const allDecisionDatasets = await (showAllOrgs
-      ? this.decisionDatasetsService.all()
-      : this.decisionDatasetsService.allForOrganisation(userOrganisation));
+      ? this.decisionDatasetsService.all({})
+      : this.decisionDatasetsService.allForOrganisation(userOrganisation, {}));
 
     const writer = new DecisionsCsvWriter(
       response,
@@ -124,6 +133,7 @@ export class DecisionsController {
 
   private async createListEntries(
     request: RequestWithAppSession,
+    filter: FilterDto,
   ): Promise<IndexTemplate> {
     const actingUser = getActingUser(request);
 
@@ -135,12 +145,28 @@ export class DecisionsController {
       ? 'overview'
       : 'single-organisation';
 
+    const allOrganisations = await this.organisationVersionsService.allLive();
+
+    const filterInput = createFilterInput({
+      ...filter,
+      allOrganisations,
+    });
+
     const allDecisionDatasets = await (showAllOrgs
-      ? this.decisionDatasetsService.all()
-      : this.decisionDatasetsService.allForOrganisation(userOrganisation));
+      ? this.decisionDatasetsService.all(filterInput)
+      : this.decisionDatasetsService.allForOrganisation(
+          userOrganisation,
+          filterInput,
+        ));
+
+    const { start: startYear, end: endYear } = getDecisionsYearsRange();
 
     return new DecisionDatasetsPresenter(
+      filterInput,
       userOrganisation,
+      allOrganisations,
+      startYear,
+      endYear,
       allDecisionDatasets,
       this.i18nService,
     ).present(view);

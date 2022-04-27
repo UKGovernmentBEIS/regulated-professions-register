@@ -10,7 +10,7 @@ describe('Listing professions', () => {
 
       cy.translate('professions.admin.tableHeading.changedBy').then(
         (changedBy) => {
-          cy.get('tr').eq(0).should('not.contain', changedBy);
+          cy.get('thead tr').should('not.contain', changedBy);
         },
       );
 
@@ -53,43 +53,43 @@ describe('Listing professions', () => {
     it('The list page contains the expected columns', () => {
       cy.translate('professions.admin.tableHeading.changedBy').then(
         (changedBy) => {
-          cy.get('tr').eq(0).should('not.contain', changedBy);
+          cy.get('thead tr').should('not.contain', changedBy);
         },
       );
 
       cy.translate('professions.admin.tableHeading.organisation').then(
         (organisation) => {
-          cy.get('tr').eq(0).should('contain', organisation);
+          cy.get('thead tr').should('contain', organisation);
         },
       );
 
       cy.translate('professions.admin.tableHeading.nations').then((nations) => {
-        cy.get('tr').eq(0).should('contain', nations);
+        cy.get('thead tr').should('contain', nations);
       });
 
       cy.translate('professions.admin.tableHeading.industry').then(
         (industry) => {
-          cy.get('tr').eq(0).should('contain', industry);
+          cy.get('thead tr').should('contain', industry);
         },
       );
 
       cy.translate('professions.admin.tableHeading.lastModified').then(
         (lastModified) => {
-          cy.get('tr').eq(0).should('contain', lastModified);
+          cy.get('thead tr').should('contain', lastModified);
         },
       );
 
       cy.translate('professions.admin.tableHeading.status').then((status) => {
-        cy.get('tr').eq(0).should('contain', status);
+        cy.get('thead tr').should('contain', status);
       });
     });
 
     it('I can filter by keyword', () => {
-      expandFilters();
+      cy.expandFilters('professions.admin');
 
       cy.get('input[name="keywords"]').type('Attorney');
 
-      clickFilterButtonAndCheckAccessibility();
+      cy.clickFilterButtonAndCheckAccessibility();
 
       cy.get('input[name="keywords"]').should('have.value', 'Attorney');
 
@@ -101,12 +101,12 @@ describe('Listing professions', () => {
     });
 
     it('I can filter by nation', () => {
-      expandFilters();
+      cy.expandFilters('professions.admin');
 
       cy.get('input[name="nations[]"][value="GB-WLS"]').check();
       cy.get('input[name="nations[]"][value="GB-NIR"]').check();
 
-      clickFilterButtonAndCheckAccessibility();
+      cy.clickFilterButtonAndCheckAccessibility();
 
       cy.get('input[name="nations[]"][value="GB-WLS"]').should('be.checked');
       cy.get('input[name="nations[]"][value="GB-NIR"]').should('be.checked');
@@ -120,7 +120,7 @@ describe('Listing professions', () => {
     });
 
     it('I can filter by live, draft and archived organisation', () => {
-      expandFilters();
+      cy.expandFilters('professions.admin');
 
       cy.get('label').should('not.contain', 'Unconfirmed Organisation');
 
@@ -130,7 +130,7 @@ describe('Listing professions', () => {
         .find('input')
         .check();
 
-      clickFilterButtonAndCheckAccessibility();
+      cy.clickFilterButtonAndCheckAccessibility();
 
       cy.get('label')
         .contains('Law Society of England and Wales')
@@ -146,13 +146,13 @@ describe('Listing professions', () => {
     });
 
     it('I can filter by industry', () => {
-      expandFilters();
+      cy.expandFilters('professions.admin');
 
       cy.translate('industries.education').then((nameLabel) => {
         cy.get('label').contains(nameLabel).parent().find('input').check();
       });
 
-      clickFilterButtonAndCheckAccessibility();
+      cy.clickFilterButtonAndCheckAccessibility();
 
       cy.translate('industries.education').then((nameLabel) => {
         cy.get('label')
@@ -170,7 +170,7 @@ describe('Listing professions', () => {
     });
 
     it('I can filter by regulation type', () => {
-      expandFilters();
+      cy.expandFilters('professions.admin');
 
       cy.translate('professions.regulationTypes.certification.name').then(
         (nameLabel) => {
@@ -178,7 +178,7 @@ describe('Listing professions', () => {
         },
       );
 
-      clickFilterButtonAndCheckAccessibility();
+      cy.clickFilterButtonAndCheckAccessibility();
 
       cy.translate('professions.regulationTypes.certification.name').then(
         (nameLabel) => {
@@ -198,7 +198,7 @@ describe('Listing professions', () => {
     });
 
     it('I can clear all filters and view the original search results', () => {
-      expandFilters();
+      cy.expandFilters('professions.admin');
 
       cy.get('input[name="keywords"]').type('Attorney');
 
@@ -220,9 +220,9 @@ describe('Listing professions', () => {
         },
       );
 
-      clickFilterButtonAndCheckAccessibility();
+      cy.clickFilterButtonAndCheckAccessibility();
 
-      expandFilters();
+      cy.expandFilters('professions.admin');
 
       cy.translate('app.filters.clearAllButton').then((clearAllButton) => {
         cy.get('a').contains(clearAllButton).click();
@@ -276,34 +276,34 @@ describe('Listing professions', () => {
     it('The list page contains the expected columns', () => {
       cy.translate('professions.admin.tableHeading.regulators').then(
         (regulators) => {
-          cy.get('tr').eq(0).should('not.contain', regulators);
+          cy.get('thead tr').should('not.contain', regulators);
         },
       );
 
       cy.translate('professions.admin.tableHeading.nations').then((nations) => {
-        cy.get('tr').eq(0).should('contain', nations);
+        cy.get('thead tr').should('contain', nations);
       });
 
       cy.translate('professions.admin.tableHeading.industry').then(
         (industry) => {
-          cy.get('tr').eq(0).should('contain', industry);
+          cy.get('thead tr').should('contain', industry);
         },
       );
 
       cy.translate('professions.admin.tableHeading.lastModified').then(
         (lastModified) => {
-          cy.get('tr').eq(0).should('contain', lastModified);
+          cy.get('thead tr').should('contain', lastModified);
         },
       );
 
       cy.translate('professions.admin.tableHeading.changedBy').then(
         (changedBy) => {
-          cy.get('tr').eq(0).should('contain', changedBy);
+          cy.get('thead tr').should('contain', changedBy);
         },
       );
 
       cy.translate('professions.admin.tableHeading.status').then((status) => {
-        cy.get('tr').eq(0).should('contain', status);
+        cy.get('thead tr').should('contain', status);
       });
     });
 
@@ -316,18 +316,4 @@ describe('Listing professions', () => {
       cy.get('body').should('not.contain', 'Registered Trademark Attorney');
     });
   });
-
-  function clickFilterButtonAndCheckAccessibility(): void {
-    cy.translate('app.filters.filterButton').then((buttonLabel) => {
-      cy.get('button').contains(buttonLabel).click();
-    });
-
-    cy.checkAccessibility();
-  }
-
-  function expandFilters(): void {
-    cy.translate('professions.admin.showFilters').then((showFilters) => {
-      cy.get('span').contains(showFilters).click();
-    });
-  }
 });
