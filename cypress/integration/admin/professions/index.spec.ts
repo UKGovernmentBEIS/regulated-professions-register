@@ -10,7 +10,7 @@ describe('Listing professions', () => {
 
       cy.translate('professions.admin.tableHeading.changedBy').then(
         (changedBy) => {
-          cy.get('tr').eq(0).should('not.contain', changedBy);
+          cy.get('thead tr').should('not.contain', changedBy);
         },
       );
 
@@ -53,34 +53,34 @@ describe('Listing professions', () => {
     it('The list page contains the expected columns', () => {
       cy.translate('professions.admin.tableHeading.changedBy').then(
         (changedBy) => {
-          cy.get('tr').eq(0).should('not.contain', changedBy);
+          cy.get('thead tr').should('not.contain', changedBy);
         },
       );
 
       cy.translate('professions.admin.tableHeading.organisation').then(
         (organisation) => {
-          cy.get('tr').eq(0).should('contain', organisation);
+          cy.get('thead tr').should('contain', organisation);
         },
       );
 
       cy.translate('professions.admin.tableHeading.nations').then((nations) => {
-        cy.get('tr').eq(0).should('contain', nations);
+        cy.get('thead tr').should('contain', nations);
       });
 
       cy.translate('professions.admin.tableHeading.industry').then(
         (industry) => {
-          cy.get('tr').eq(0).should('contain', industry);
+          cy.get('thead tr').should('contain', industry);
         },
       );
 
       cy.translate('professions.admin.tableHeading.lastModified').then(
         (lastModified) => {
-          cy.get('tr').eq(0).should('contain', lastModified);
+          cy.get('thead tr').should('contain', lastModified);
         },
       );
 
       cy.translate('professions.admin.tableHeading.status').then((status) => {
-        cy.get('tr').eq(0).should('contain', status);
+        cy.get('thead tr').should('contain', status);
       });
     });
 
@@ -276,34 +276,34 @@ describe('Listing professions', () => {
     it('The list page contains the expected columns', () => {
       cy.translate('professions.admin.tableHeading.regulators').then(
         (regulators) => {
-          cy.get('tr').eq(0).should('not.contain', regulators);
+          cy.get('thead tr').should('not.contain', regulators);
         },
       );
 
       cy.translate('professions.admin.tableHeading.nations').then((nations) => {
-        cy.get('tr').eq(0).should('contain', nations);
+        cy.get('thead tr').should('contain', nations);
       });
 
       cy.translate('professions.admin.tableHeading.industry').then(
         (industry) => {
-          cy.get('tr').eq(0).should('contain', industry);
+          cy.get('thead tr').should('contain', industry);
         },
       );
 
       cy.translate('professions.admin.tableHeading.lastModified').then(
         (lastModified) => {
-          cy.get('tr').eq(0).should('contain', lastModified);
+          cy.get('thead tr').should('contain', lastModified);
         },
       );
 
       cy.translate('professions.admin.tableHeading.changedBy').then(
         (changedBy) => {
-          cy.get('tr').eq(0).should('contain', changedBy);
+          cy.get('thead tr').should('contain', changedBy);
         },
       );
 
       cy.translate('professions.admin.tableHeading.status').then((status) => {
-        cy.get('tr').eq(0).should('contain', status);
+        cy.get('thead tr').should('contain', status);
       });
     });
 
