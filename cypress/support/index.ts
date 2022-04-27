@@ -74,6 +74,7 @@ declare global {
       checkAccessibility(rules?: AxeRules): void;
       visitInternalDashboard(): void;
       clickFilterButtonAndCheckAccessibility(): void;
+      expandFilters(prefix: string): void;
     }
   }
 }

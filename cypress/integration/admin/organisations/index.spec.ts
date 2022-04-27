@@ -77,7 +77,7 @@ describe('Listing organisations', () => {
     });
 
     it('I can filter by keyword', () => {
-      expandFilters();
+      cy.expandFilters('organisations.admin');
 
       cy.get('input[name="keywords"]').type('Medical');
 
@@ -91,7 +91,7 @@ describe('Listing organisations', () => {
     });
 
     it('I can filter by nation', () => {
-      expandFilters();
+      cy.expandFilters('organisations.admin');
 
       cy.translate('nations.wales').then((wales) => {
         cy.translate('nations.scotland').then((scotland) => {
@@ -156,7 +156,7 @@ describe('Listing organisations', () => {
     });
 
     it('I can filter by industry', () => {
-      expandFilters();
+      cy.expandFilters('organisations.admin');
 
       cy.translate('industries.law').then((lawText) => {
         cy.get('label')
@@ -183,7 +183,7 @@ describe('Listing organisations', () => {
       });
 
       it('I can filter by regulation type', () => {
-        expandFilters();
+        cy.expandFilters('organisations.admin');
 
         cy.translate('professions.regulationTypes.licensing.name').then(
           (nameLabel) => {
@@ -215,7 +215,7 @@ describe('Listing organisations', () => {
     });
 
     it('I can clear all filters', () => {
-      expandFilters();
+      cy.expandFilters('organisations.admin');
 
       cy.get('input[name="keywords"]').type('Medical');
 
@@ -243,13 +243,13 @@ describe('Listing organisations', () => {
         });
 
         cy.clickFilterButtonAndCheckAccessibility();
-        expandFilters();
+        cy.expandFilters('organisations.admin');
 
         cy.translate('app.filters.clearAllButton').then((clearAllButton) => {
           cy.get('a').contains(clearAllButton).click();
         });
         cy.checkAccessibility();
-        expandFilters();
+        cy.expandFilters('organisations.admin');
 
         cy.get('input[name="keywords"]').should('not.have.value', 'Medical');
 
@@ -306,10 +306,4 @@ describe('Listing organisations', () => {
       cy.get('tbody tr').should('contain', format(new Date(), 'd MMM yyyy'));
     });
   });
-
-  function expandFilters(): void {
-    cy.translate('organisations.admin.showFilters').then((showFilters) => {
-      cy.get('span').contains(showFilters).click();
-    });
-  }
 });

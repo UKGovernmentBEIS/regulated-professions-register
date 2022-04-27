@@ -85,7 +85,7 @@ describe('Listing professions', () => {
     });
 
     it('I can filter by keyword', () => {
-      expandFilters();
+      cy.expandFilters('professions.admin');
 
       cy.get('input[name="keywords"]').type('Attorney');
 
@@ -101,7 +101,7 @@ describe('Listing professions', () => {
     });
 
     it('I can filter by nation', () => {
-      expandFilters();
+      cy.expandFilters('professions.admin');
 
       cy.get('input[name="nations[]"][value="GB-WLS"]').check();
       cy.get('input[name="nations[]"][value="GB-NIR"]').check();
@@ -120,7 +120,7 @@ describe('Listing professions', () => {
     });
 
     it('I can filter by live, draft and archived organisation', () => {
-      expandFilters();
+      cy.expandFilters('professions.admin');
 
       cy.get('label').should('not.contain', 'Unconfirmed Organisation');
 
@@ -146,7 +146,7 @@ describe('Listing professions', () => {
     });
 
     it('I can filter by industry', () => {
-      expandFilters();
+      cy.expandFilters('professions.admin');
 
       cy.translate('industries.education').then((nameLabel) => {
         cy.get('label').contains(nameLabel).parent().find('input').check();
@@ -170,7 +170,7 @@ describe('Listing professions', () => {
     });
 
     it('I can filter by regulation type', () => {
-      expandFilters();
+      cy.expandFilters('professions.admin');
 
       cy.translate('professions.regulationTypes.certification.name').then(
         (nameLabel) => {
@@ -198,7 +198,7 @@ describe('Listing professions', () => {
     });
 
     it('I can clear all filters and view the original search results', () => {
-      expandFilters();
+      cy.expandFilters('professions.admin');
 
       cy.get('input[name="keywords"]').type('Attorney');
 
@@ -222,7 +222,7 @@ describe('Listing professions', () => {
 
       cy.clickFilterButtonAndCheckAccessibility();
 
-      expandFilters();
+      cy.expandFilters('professions.admin');
 
       cy.translate('app.filters.clearAllButton').then((clearAllButton) => {
         cy.get('a').contains(clearAllButton).click();
@@ -316,10 +316,4 @@ describe('Listing professions', () => {
       cy.get('body').should('not.contain', 'Registered Trademark Attorney');
     });
   });
-
-  function expandFilters(): void {
-    cy.translate('professions.admin.showFilters').then((showFilters) => {
-      cy.get('span').contains(showFilters).click();
-    });
-  }
 });

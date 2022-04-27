@@ -353,3 +353,9 @@ Cypress.Commands.add('clickFilterButtonAndCheckAccessibility', () => {
 
   cy.checkAccessibility();
 });
+
+Cypress.Commands.add('expandFilters', (prefix: string) => {
+  cy.translate(`${prefix}.showFilters`).then((showFilters) => {
+    cy.get('span').contains(showFilters).click();
+  });
+});
