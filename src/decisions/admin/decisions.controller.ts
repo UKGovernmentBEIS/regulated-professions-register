@@ -56,7 +56,41 @@ export class DecisionsController {
     @Req() request: RequestWithAppSession,
     @Query() filter: FilterDto = null,
   ): Promise<IndexTemplate> {
-    return this.createListEntries(request, filter);
+    const actingUser = getActingUser(request);
+
+    const showAllOrgs = actingUser.serviceOwner;
+
+    const userOrganisation = showAllOrgs ? null : actingUser.organisation;
+
+    const view: DecisionDatasetsPresenterView = showAllOrgs
+      ? 'overview'
+      : 'single-organisation';
+
+    const allOrganisations = await this.organisationVersionsService.allLive();
+
+    const filterInput = createFilterInput({
+      ...filter,
+      allOrganisations,
+    });
+
+    const allDecisionDatasets = await (showAllOrgs
+      ? this.decisionDatasetsService.all(filterInput)
+      : this.decisionDatasetsService.allForOrganisation(
+          userOrganisation,
+          filterInput,
+        ));
+
+    const { start: startYear, end: endYear } = getDecisionsYearsRange();
+
+    return new DecisionDatasetsPresenter(
+      filterInput,
+      userOrganisation,
+      allOrganisations,
+      startYear,
+      endYear,
+      allDecisionDatasets,
+      this.i18nService,
+    ).present(view);
   }
 
   @Get('export')
@@ -129,46 +163,5 @@ export class DecisionsController {
       tables: presenter.tables(),
       isPublished: dataset.status === DecisionDatasetStatus.Live,
     };
-  }
-
-  private async createListEntries(
-    request: RequestWithAppSession,
-    filter: FilterDto,
-  ): Promise<IndexTemplate> {
-    const actingUser = getActingUser(request);
-
-    const showAllOrgs = actingUser.serviceOwner;
-
-    const userOrganisation = showAllOrgs ? null : actingUser.organisation;
-
-    const view: DecisionDatasetsPresenterView = showAllOrgs
-      ? 'overview'
-      : 'single-organisation';
-
-    const allOrganisations = await this.organisationVersionsService.allLive();
-
-    const filterInput = createFilterInput({
-      ...filter,
-      allOrganisations,
-    });
-
-    const allDecisionDatasets = await (showAllOrgs
-      ? this.decisionDatasetsService.all(filterInput)
-      : this.decisionDatasetsService.allForOrganisation(
-          userOrganisation,
-          filterInput,
-        ));
-
-    const { start: startYear, end: endYear } = getDecisionsYearsRange();
-
-    return new DecisionDatasetsPresenter(
-      filterInput,
-      userOrganisation,
-      allOrganisations,
-      startYear,
-      endYear,
-      allDecisionDatasets,
-      this.i18nService,
-    ).present(view);
   }
 }
