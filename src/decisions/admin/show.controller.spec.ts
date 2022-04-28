@@ -14,8 +14,11 @@ import { ShowController } from './show.controller';
 import { DecisionDatasetPresenter } from '../presenters/decision-dataset.presenter';
 import { Table } from '../../common/interfaces/table';
 import { ShowTemplate } from './interfaces/show-template.interface';
+import { DecisionsCsvWriter } from './helpers/decisions-csv-writer.helper';
+import { Response } from 'express';
 
 jest.mock('../presenters/decision-dataset.presenter');
+jest.mock('./helpers/decisions-csv-writer.helper');
 
 const mockTables: Table[] = [
   {
@@ -145,6 +148,69 @@ describe('ShowController', () => {
         i18nService,
       );
       expect(DecisionDatasetPresenter.prototype.tables).toHaveBeenCalled();
+    });
+  });
+
+  describe('export', () => {
+    it('exports a CSV file of the specified decision dataset', async () => {
+      const profession = professionFactory.build({
+        id: 'example-profession-id',
+        slug: 'example-profession',
+      });
+      const organisation = organisationFactory.build({
+        id: 'example-organisation-id',
+        slug: 'example-organisation',
+      });
+
+      const dataset = decisionDatasetFactory.build({
+        profession: profession,
+        organisation: organisation,
+        year: 2017,
+        status: DecisionDatasetStatus.Live,
+      });
+
+      const request = createDefaultMockRequest();
+      const response = createMock<Response>();
+
+      const checkCanChangeDatasetSpy = jest
+        .spyOn(checkCanChangeDatasetModule, 'checkCanChangeDataset')
+        .mockImplementation();
+
+      professionsService.findWithVersions.mockResolvedValueOnce(profession);
+      decisionDatasetsService.find.mockResolvedValue(dataset);
+
+      await controller.export(
+        'example-profession-id',
+        'example-organisation-id',
+        2017,
+        request,
+        response,
+      );
+
+      expect(DecisionsCsvWriter).toHaveBeenCalledWith(
+        response,
+        'decisions-example-profession-example-organisation-2017',
+        [dataset],
+        i18nService,
+      );
+      expect(DecisionsCsvWriter.prototype.write).toHaveBeenCalled();
+
+      expect(checkCanChangeDatasetSpy).toHaveBeenCalledWith(
+        request,
+        profession,
+        organisation,
+        2017,
+        true,
+      );
+
+      expect(professionsService.findWithVersions).toHaveBeenCalledWith(
+        'example-profession-id',
+      );
+      expect(decisionDatasetsService.find).toHaveBeenCalledWith(
+        'example-profession-id',
+        'example-organisation-id',
+        2017,
+      );
     });
   });
 

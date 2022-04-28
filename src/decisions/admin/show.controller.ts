@@ -5,6 +5,7 @@ import {
   ParseIntPipe,
   Render,
   Req,
+  Res,
   UseGuards,
 } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
@@ -19,6 +20,8 @@ import { BackLink } from '../../common/decorators/back-link.decorator';
 import { ShowTemplate } from './interfaces/show-template.interface';
 import { DecisionDatasetStatus } from '../decision-dataset.entity';
 import { DecisionDatasetPresenter } from '../presenters/decision-dataset.presenter';
+import { DecisionsCsvWriter } from './helpers/decisions-csv-writer.helper';
+import { Response } from 'express';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/decisions')
@@ -69,5 +72,38 @@ export class ShowController {
       changedBy: presenter.changedBy,
       lastModified: presenter.lastModified,
     };
+  }
+
+  @Get(':professionId/:organisationId/:year/export')
+  @Permissions(UserPermission.DownloadDecisionData)
+  async export(
+    @Param('professionId') professionId: string,
+    @Param('organisationId') organisationId: string,
+    @Param('year', ParseIntPipe) year: number,
+    @Req() request: RequestWithAppSession,
+    @Res() response: Response,
+  ): Promise<void> {
+    const profession = await this.professionsService.findWithVersions(
+      professionId,
+    );
+
+    const dataset = await this.decisionDatasetsService.find(
+      professionId,
+      organisationId,
+      year,
+    );
+
+    const organisation = dataset.organisation;
+
+    checkCanChangeDataset(request, profession, organisation, year, true);
+
+    const writer = new DecisionsCsvWriter(
+      response,
+      `decisions-${profession.slug}-${organisation.slug}-${year}`,
+      [dataset],
+      this.i18nService,
+    );
+
+    writer.write();
   }
 }
