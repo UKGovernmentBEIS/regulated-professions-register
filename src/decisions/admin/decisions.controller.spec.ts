@@ -24,12 +24,13 @@ import { OrganisationVersionsService } from '../../organisations/organisation-ve
 import { FilterDto } from './dto/filter.dto';
 import * as createFilterInputModule from '../../helpers/create-filter-input.helper';
 import * as getDecisionsYearsRangeModule from './helpers/get-decisions-years-range';
+import * as getQueryStringModule from './helpers/get-query-string.helper';
 
 jest.mock('./presenters/decision-datasets.presenter');
 jest.mock('../presenters/decision-dataset.presenter');
 jest.mock('./helpers/decisions-csv-writer.helper');
 
-const mockIndexTemplate: IndexTemplate = {
+const mockIndexTemplate: Omit<IndexTemplate, 'filterQuery'> = {
   view: 'overview',
   organisation: 'Example Organisation',
   decisionDatasetsTable: {
@@ -121,6 +122,10 @@ describe('DecisionsController', () => {
             end: 2024,
           });
 
+        const getQueryStringSpy = jest
+          .spyOn(getQueryStringModule, 'getQueryString')
+          .mockReturnValue('some&filter=query');
+
         const datasets = decisionDatasetFactory.buildList(3);
         const allOrganisations = organisationFactory.buildList(3);
 
@@ -129,7 +134,7 @@ describe('DecisionsController', () => {
 
         (
           DecisionDatasetsPresenter.prototype.present as jest.Mock
-        ).mockResolvedValue(mockIndexTemplate);
+        ).mockReturnValue(mockIndexTemplate);
 
         const filter: FilterDto = {
           keywords: 'example keywords',
@@ -140,7 +145,10 @@ describe('DecisionsController', () => {
 
         const result = await controller.index(request, filter);
 
-        expect(result).toEqual(mockIndexTemplate);
+        expect(result).toEqual({
+          ...mockIndexTemplate,
+          filterQuery: 'some&filter=query',
+        } as IndexTemplate);
 
         expect(getActingUserSpy).toHaveBeenCalledWith(request);
         expect(createFilterInputSpy).toHaveBeenCalledWith({
@@ -148,6 +156,7 @@ describe('DecisionsController', () => {
           allOrganisations,
         });
         expect(getDecisionsYearsRangeSpy).toHaveBeenCalled();
+        expect(getQueryStringSpy).toHaveBeenCalledWith(request);
 
         expect(DecisionDatasetsPresenter).toHaveBeenCalledWith(
           {
@@ -201,6 +210,10 @@ describe('DecisionsController', () => {
             end: 2024,
           });
 
+        const getQueryStringSpy = jest
+          .spyOn(getQueryStringModule, 'getQueryString')
+          .mockReturnValue('some&filter=query');
+
         const datasets = decisionDatasetFactory.buildList(3);
         const allOrganisations = organisationFactory.buildList(3);
 
@@ -209,7 +222,7 @@ describe('DecisionsController', () => {
 
         (
           DecisionDatasetsPresenter.prototype.present as jest.Mock
-        ).mockResolvedValue(mockIndexTemplate);
+        ).mockReturnValue(mockIndexTemplate);
 
         const filter: FilterDto = {
           keywords: 'example keywords',
@@ -220,7 +233,10 @@ describe('DecisionsController', () => {
 
         const result = await controller.index(request, filter);
 
-        expect(result).toEqual(mockIndexTemplate);
+        expect(result).toEqual({
+          ...mockIndexTemplate,
+          filterQuery: 'some&filter=query',
+        } as IndexTemplate);
 
         expect(getActingUserSpy).toHaveBeenCalledWith(request);
         expect(createFilterInputSpy).toHaveBeenCalledWith({
@@ -228,6 +244,7 @@ describe('DecisionsController', () => {
           allOrganisations,
         });
         expect(getDecisionsYearsRangeSpy).toHaveBeenCalled();
+        expect(getQueryStringSpy).toHaveBeenCalledWith(request);
 
         expect(DecisionDatasetsPresenter).toHaveBeenCalledWith(
           {
@@ -243,6 +260,7 @@ describe('DecisionsController', () => {
         expect(
           DecisionDatasetsPresenter.prototype.present,
         ).toHaveBeenCalledWith('single-organisation');
+        expect(organisationVersionsService.allLive).toHaveBeenCalled();
         expect(decisionDatasetsService.allForOrganisation).toHaveBeenCalledWith(
           userOrganisation,
           {

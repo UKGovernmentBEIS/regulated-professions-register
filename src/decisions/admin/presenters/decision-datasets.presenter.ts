@@ -22,7 +22,9 @@ export class DecisionDatasetsPresenter {
     private readonly i18nService: I18nService,
   ) {}
 
-  present(view: DecisionDatasetsPresenterView): IndexTemplate {
+  present(
+    view: DecisionDatasetsPresenterView,
+  ): Omit<IndexTemplate, 'filterQuery'> {
     const organisation =
       view === 'overview'
         ? this.i18nService.translate('app.beis')

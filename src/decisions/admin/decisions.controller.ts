@@ -33,6 +33,7 @@ import { DecisionsCsvWriter } from './helpers/decisions-csv-writer.helper';
 import { Response } from 'express';
 import { DecisionDatasetStatus } from '../decision-dataset.entity';
 import { OrganisationVersionsService } from '../../organisations/organisation-versions.service';
+import { getQueryString } from './helpers/get-query-string.helper';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/decisions')
@@ -82,15 +83,18 @@ export class DecisionsController {
 
     const { start: startYear, end: endYear } = getDecisionsYearsRange();
 
-    return new DecisionDatasetsPresenter(
-      filterInput,
-      userOrganisation,
-      allOrganisations,
-      startYear,
-      endYear,
-      allDecisionDatasets,
-      this.i18nService,
-    ).present(view);
+    return {
+      ...new DecisionDatasetsPresenter(
+        filterInput,
+        userOrganisation,
+        allOrganisations,
+        startYear,
+        endYear,
+        allDecisionDatasets,
+        this.i18nService,
+      ).present(view),
+      filterQuery: getQueryString(request),
+    };
   }
 
   @Get('export')
