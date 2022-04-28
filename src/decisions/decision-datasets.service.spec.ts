@@ -605,6 +605,46 @@ describe('DecisionDatasetsService', () => {
     });
   });
 
+  describe('allLiveYearsForProfession', () => {
+    it('returns all live DecisionDataset years for the give Profession', async () => {
+      const findResultDatasets = [
+        decisionDatasetFactory.build({
+          year: 2025,
+        }),
+        decisionDatasetFactory.build({
+          year: 2024,
+        }),
+        decisionDatasetFactory.build({
+          year: 2022,
+        }),
+        decisionDatasetFactory.build({
+          year: 2021,
+        }),
+      ];
+
+      const queryProfession = professionFactory.build({
+        id: 'profession-uuid',
+      });
+
+      const repoSpy = jest
+        .spyOn(repo, 'find')
+        .mockResolvedValue(findResultDatasets);
+      const result = await service.allLiveYearsForProfession(queryProfession);
+
+      expect(result).toEqual([2025, 2024, 2022, 2021]);
+      expect(repoSpy).toBeCalledWith({
+        where: {
+          profession: { id: 'profession-uuid' },
+          status: DecisionDatasetStatus.Live,
+        },
+        order: {
+          year: 'DESC',
+        },
+        select: ['year'],
+      });
+    });
+  });
+
   describe('save', () => {
     it('saves the DecisionDataset', async () => {
       const dataset = decisionDatasetFactory.build();

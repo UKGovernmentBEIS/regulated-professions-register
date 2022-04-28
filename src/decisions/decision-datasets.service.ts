@@ -92,6 +92,21 @@ export class DecisionDatasetsService {
       .getMany();
   }
 
+  async allLiveYearsForProfession(profession: Profession): Promise<number[]> {
+    return (
+      await this.repository.find({
+        where: {
+          profession: { id: profession.id },
+          status: DecisionDatasetStatus.Live,
+        },
+        order: {
+          year: 'DESC',
+        },
+        select: ['year'],
+      })
+    ).map((dataset) => dataset.year);
+  }
+
   async save(dataset: DecisionDataset): Promise<DecisionDataset> {
     return this.repository.save(dataset);
   }
