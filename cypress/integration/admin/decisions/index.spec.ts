@@ -336,7 +336,7 @@ function checkCsvDownload(
 
   const filename = path.join(
     Cypress.config('downloadsFolder'),
-    'decisions.csv',
+    `decisions-${format(new Date(), 'yyyyMMdd')}.csv`,
   );
 
   cy.readFile(filename).then((file) => {

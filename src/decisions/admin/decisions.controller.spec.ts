@@ -25,6 +25,7 @@ import { FilterDto } from './dto/filter.dto';
 import * as createFilterInputModule from '../../helpers/create-filter-input.helper';
 import * as getDecisionsYearsRangeModule from './helpers/get-decisions-years-range';
 import * as getQueryStringModule from './helpers/get-query-string.helper';
+import * as getExportTimestampModule from './helpers/get-export-timestamp.helper';
 
 jest.mock('./presenters/decision-datasets.presenter');
 jest.mock('../presenters/decision-dataset.presenter');
@@ -293,6 +294,10 @@ describe('DecisionsController', () => {
             keywords: 'example keywords',
           });
 
+        const getExportTimestampSpy = jest
+          .spyOn(getExportTimestampModule, 'getExportTimestamp')
+          .mockReturnValue('20240525');
+
         const datasets = decisionDatasetFactory.buildList(3);
         const allOrganisations = organisationFactory.buildList(3);
 
@@ -313,10 +318,11 @@ describe('DecisionsController', () => {
           ...filter,
           allOrganisations,
         });
+        expect(getExportTimestampSpy).toHaveBeenCalled();
 
         expect(DecisionsCsvWriter).toHaveBeenCalledWith(
           response,
-          'decisions',
+          'decisions-20240525',
           datasets,
           i18nService,
         );
@@ -353,6 +359,10 @@ describe('DecisionsController', () => {
             keywords: 'example keywords',
           });
 
+        const getExportTimestampSpy = jest
+          .spyOn(getExportTimestampModule, 'getExportTimestamp')
+          .mockReturnValue('20240525');
+
         const datasets = decisionDatasetFactory.buildList(3);
         const allOrganisations = organisationFactory.buildList(3);
 
@@ -373,10 +383,11 @@ describe('DecisionsController', () => {
           ...filter,
           allOrganisations,
         });
+        expect(getExportTimestampSpy).toHaveBeenCalled();
 
         expect(DecisionsCsvWriter).toHaveBeenCalledWith(
           response,
-          'decisions',
+          'decisions-20240525',
           datasets,
           i18nService,
         );

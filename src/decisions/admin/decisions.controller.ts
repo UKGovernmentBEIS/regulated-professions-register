@@ -34,6 +34,7 @@ import { Response } from 'express';
 import { DecisionDatasetStatus } from '../decision-dataset.entity';
 import { OrganisationVersionsService } from '../../organisations/organisation-versions.service';
 import { getQueryString } from './helpers/get-query-string.helper';
+import { getExportTimestamp } from './helpers/get-export-timestamp.helper';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/decisions')
@@ -129,7 +130,7 @@ export class DecisionsController {
 
     const writer = new DecisionsCsvWriter(
       response,
-      'decisions',
+      `decisions-${getExportTimestamp()}`,
       allDecisionDatasets,
       this.i18nService,
     );
