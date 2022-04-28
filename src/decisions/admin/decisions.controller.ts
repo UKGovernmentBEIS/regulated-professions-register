@@ -99,11 +99,7 @@ export class DecisionsController {
   }
 
   @Get('export')
-  @Permissions(
-    UserPermission.UploadDecisionData,
-    UserPermission.DownloadDecisionData,
-    UserPermission.ViewDecisionData,
-  )
+  @Permissions(UserPermission.DownloadDecisionData)
   async export(
     @Req() request: RequestWithAppSession,
     @Res() response: Response,
