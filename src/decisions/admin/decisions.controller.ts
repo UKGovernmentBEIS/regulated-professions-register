@@ -106,16 +106,26 @@ export class DecisionsController {
   async export(
     @Req() request: RequestWithAppSession,
     @Res() response: Response,
+    @Query() filter: FilterDto = null,
   ): Promise<void> {
     const actingUser = getActingUser(request);
 
     const showAllOrgs = actingUser.serviceOwner;
 
     const userOrganisation = showAllOrgs ? null : actingUser.organisation;
+    const allOrganisations = await this.organisationVersionsService.allLive();
+
+    const filterInput = createFilterInput({
+      ...filter,
+      allOrganisations,
+    });
 
     const allDecisionDatasets = await (showAllOrgs
-      ? this.decisionDatasetsService.all({})
-      : this.decisionDatasetsService.allForOrganisation(userOrganisation, {}));
+      ? this.decisionDatasetsService.all(filterInput)
+      : this.decisionDatasetsService.allForOrganisation(
+          userOrganisation,
+          filterInput,
+        ));
 
     const writer = new DecisionsCsvWriter(
       response,
