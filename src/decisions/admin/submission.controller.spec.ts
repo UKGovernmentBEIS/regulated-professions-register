@@ -1,11 +1,13 @@
 import { createMock, DeepMocked } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { I18nService } from 'nestjs-i18n';
 import { flashMessage } from '../../common/flash-message';
 import { OrganisationsService } from '../../organisations/organisations.service';
 import { ProfessionsService } from '../../professions/professions.service';
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
+import { createDefaultMockRequest } from '../../testutils/factories/create-default-mock-request';
+import * as checkCanChangeDatasetModule from './helpers/check-can-change-dataset.helper';
 import decisionDatasetFactory from '../../testutils/factories/decision-dataset';
 import organisationFactory from '../../testutils/factories/organisation';
 import professionFactory from '../../testutils/factories/profession';
@@ -70,21 +72,36 @@ describe('SubmissionController', () => {
         year: 2016,
       });
 
+      const request = createDefaultMockRequest();
+
       professionsService.findWithVersions.mockResolvedValue(profession);
       organisationsService.find.mockResolvedValue(organisation);
       decisionDatasetsService.find.mockResolvedValue(dataset);
+
+      const checkCanChangeDatasetSpy = jest
+        .spyOn(checkCanChangeDatasetModule, 'checkCanChangeDataset')
+        .mockReturnValue(undefined);
 
       expect(
         await controller.new(
           'example-profession-id',
           'example-organisation-id',
           2016,
+          request,
         ),
       ).toEqual({
         profession,
         organisation,
         year: 2016,
       });
+
+      expect(checkCanChangeDatasetSpy).toHaveBeenCalledWith(
+        request,
+        profession,
+        organisation,
+        2016,
+        true,
+      );
 
       expect(decisionDatasetsService.find).toHaveBeenCalledWith(
         'example-profession-id',
@@ -97,7 +114,7 @@ describe('SubmissionController', () => {
   describe('create', () => {
     it('submits the given dataset', async () => {
       const response = createMock<Response>();
-      const request = createMock<Request>();
+      const request = createDefaultMockRequest();
 
       const flashMock = flashMessage as jest.Mock;
       flashMock.mockImplementation(() => 'STUB_FLASH_MESSAGE');
@@ -116,6 +133,14 @@ describe('SubmissionController', () => {
         year: 2016,
       });
 
+      professionsService.findWithVersions.mockResolvedValue(profession);
+      organisationsService.find.mockResolvedValue(organisation);
+      decisionDatasetsService.find.mockResolvedValue(dataset);
+
+      const checkCanChangeDatasetSpy = jest
+        .spyOn(checkCanChangeDatasetModule, 'checkCanChangeDataset')
+        .mockReturnValue(undefined);
+
       await controller.create(
         'example-profession-id',
         'example-organisation-id',
@@ -128,6 +153,14 @@ describe('SubmissionController', () => {
         'example-profession-id',
         'example-organisation-id',
         2016,
+      );
+
+      expect(checkCanChangeDatasetSpy).toHaveBeenCalledWith(
+        request,
+        profession,
+        organisation,
+        2016,
+        true,
       );
 
       expect(decisionDatasetsService.submit).toHaveBeenCalledWith(dataset);

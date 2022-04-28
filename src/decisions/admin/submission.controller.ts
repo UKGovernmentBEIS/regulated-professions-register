@@ -9,16 +9,18 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { I18nService } from 'nestjs-i18n';
 import { AuthenticationGuard } from '../../common/authentication.guard';
 import { BackLink } from '../../common/decorators/back-link.decorator';
 import { flashMessage } from '../../common/flash-message';
+import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
 import { Permissions } from '../../common/permissions.decorator';
 import { OrganisationsService } from '../../organisations/organisations.service';
 import { ProfessionsService } from '../../professions/professions.service';
 import { UserPermission } from '../../users/user-permission';
 import { DecisionDatasetsService } from '../decision-datasets.service';
+import { checkCanChangeDataset } from './helpers/check-can-change-dataset.helper';
 import { PublicationTemplate } from './interfaces/publication-template.interface';
 
 @UseGuards(AuthenticationGuard)
@@ -39,6 +41,7 @@ export class SubmissionController {
     @Param('professionId') professionId: string,
     @Param('organisationId') organisationId: string,
     @Param('year', ParseIntPipe) year: number,
+    @Req() request: RequestWithAppSession,
   ): Promise<PublicationTemplate> {
     const profession = await this.professionsService.findWithVersions(
       professionId,
@@ -56,6 +59,8 @@ export class SubmissionController {
       throw new Error('Dataset not found');
     }
 
+    checkCanChangeDataset(request, profession, organisation, year, !!dataset);
+
     return {
       profession: profession,
       organisation: organisation,
@@ -70,13 +75,21 @@ export class SubmissionController {
     @Param('organisationId') organisationId: string,
     @Param('year', ParseIntPipe) year: number,
     @Res() response: Response,
-    @Req() request: Request,
+    @Req() request: RequestWithAppSession,
   ) {
     const dataset = await this.decisionDatasetsService.find(
       professionId,
       organisationId,
       year,
     );
+
+    const profession = await this.professionsService.findWithVersions(
+      professionId,
+    );
+
+    const organisation = await this.organisationsService.find(organisationId);
+
+    checkCanChangeDataset(request, profession, organisation, year, !!dataset);
 
     await this.decisionDatasetsService.submit(dataset);
 
