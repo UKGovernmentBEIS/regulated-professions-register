@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { DecisionsController } from './admin/decisions.controller';
+import { DecisionsController as AdminDecisionsController } from './admin/decisions.controller';
 import { DecisionDatasetsService } from './decision-datasets.service';
 import { DecisionDataset } from './decision-dataset.entity';
 import { Profession } from '../professions/profession.entity';
@@ -19,6 +19,7 @@ import { EditController } from './admin/edit.controller';
 import { PublicationController } from './admin/publication.controller';
 import { SubmissionController } from './admin/submission.controller';
 import { ShowController } from './admin/show.controller';
+import { DecisionsController } from './decisions.controller';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { ShowController } from './admin/show.controller';
   ],
   controllers: [
     DecisionsController,
+    AdminDecisionsController,
     ShowController,
     NewController,
     EditController,
