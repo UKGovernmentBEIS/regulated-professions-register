@@ -148,6 +148,16 @@
       "total": "Total"
     }
   },
+  "public": {
+    "heading": "Recognition decision data",
+    "tableHeading": {
+      "yes": "Accepted - qualifications recognised",
+      "no": "Not accepted - qualifications not recognised",
+      "yesAfterComp": "Accepted - additional conditions met",
+      "noAfterComp": "Not accepted - additional conditions not met",
+      "total": "Total"
+    }
+  },
   "csv": {
     "heading": {
       "profession": "Profession",
