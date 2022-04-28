@@ -44,6 +44,9 @@ export class DecisionsCsvWriter {
         dataset.profession.name,
         dataset.organisation.name,
         dataset.year.toString(),
+        this.i18nService.translate<string>(
+          `decisions.csv.status.${dataset.status}`,
+        ),
         route.name,
         country.code || '',
         decisionValueToString(country.decisions.yes),
@@ -60,6 +63,7 @@ export class DecisionsCsvWriter {
         'decisions.csv.heading.profession',
         'decisions.csv.heading.organisation',
         'decisions.csv.heading.year',
+        'decisions.csv.heading.status',
         'decisions.csv.heading.route',
         'decisions.csv.heading.country',
         'decisions.csv.heading.yes',

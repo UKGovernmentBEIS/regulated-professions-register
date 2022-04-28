@@ -6,6 +6,7 @@ import decisionDatasetFactory from '../../../testutils/factories/decision-datase
 import organisation from '../../../testutils/factories/organisation';
 import professionFactory from '../../../testutils/factories/profession';
 import { translationOf } from '../../../testutils/translation-of';
+import { DecisionDatasetStatus } from '../../decision-dataset.entity';
 import { DecisionsCsvWriter } from './decisions-csv-writer.helper';
 
 describe('DecisionsCsvWriter', () => {
@@ -27,6 +28,7 @@ describe('DecisionsCsvWriter', () => {
             name: 'Example organisation 1',
           }),
           year: 2020,
+          status: DecisionDatasetStatus.Live,
           routes: [
             {
               name: 'Example route 1',
@@ -52,6 +54,7 @@ describe('DecisionsCsvWriter', () => {
             name: 'Example organisation 2',
           }),
           year: 2022,
+          status: DecisionDatasetStatus.Draft,
           routes: [
             {
               name: 'Example route 2',
@@ -91,6 +94,7 @@ describe('DecisionsCsvWriter', () => {
             name: 'Example organisation 3',
           }),
           year: 2021,
+          status: DecisionDatasetStatus.Draft,
           routes: [
             {
               name: 'Example route 4',
@@ -141,6 +145,7 @@ describe('DecisionsCsvWriter', () => {
         translationOf('decisions.csv.heading.profession'),
         translationOf('decisions.csv.heading.organisation'),
         translationOf('decisions.csv.heading.year'),
+        translationOf('decisions.csv.heading.status'),
         translationOf('decisions.csv.heading.route'),
         translationOf('decisions.csv.heading.country'),
         translationOf('decisions.csv.heading.yes'),
@@ -153,6 +158,7 @@ describe('DecisionsCsvWriter', () => {
         'Example profession 1',
         'Example organisation 1',
         '2020',
+        translationOf('decisions.csv.status.live'),
         'Example route 1',
         'CY',
         '3',
@@ -165,6 +171,7 @@ describe('DecisionsCsvWriter', () => {
         'Example profession 1',
         'Example organisation 2',
         '2022',
+        translationOf('decisions.csv.status.draft'),
         'Example route 2',
         'GB',
         '6',
@@ -177,6 +184,7 @@ describe('DecisionsCsvWriter', () => {
         'Example profession 1',
         'Example organisation 2',
         '2022',
+        translationOf('decisions.csv.status.draft'),
         'Example route 3',
         'JP',
         '',
@@ -189,6 +197,7 @@ describe('DecisionsCsvWriter', () => {
         'Example profession 2',
         'Example organisation 3',
         '2021',
+        translationOf('decisions.csv.status.draft'),
         'Example route 4',
         'FR',
         '7',
@@ -201,6 +210,7 @@ describe('DecisionsCsvWriter', () => {
         'Example profession 2',
         'Example organisation 3',
         '2021',
+        translationOf('decisions.csv.status.draft'),
         'Example route 4',
         'PL',
         '7',

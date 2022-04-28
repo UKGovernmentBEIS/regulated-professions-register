@@ -136,12 +136,18 @@
       "profession": "Profession",
       "organisation": "Regulatory authority",
       "year": "Year",
+      "status": "Status",
       "route": "Route",
       "country": "Country of qualification",
       "yes": "Yes",
       "no": "No",
       "yesAfterComp": "Yes (after compensatory measure)",
       "noAfterComp": "No (after compensatory measure)"
+    },
+    "status": {
+      "live": "Published",
+      "draft": "Draft",
+      "submitted": "Submitted"
     }
   }
 }
