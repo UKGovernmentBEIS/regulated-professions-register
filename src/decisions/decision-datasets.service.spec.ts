@@ -4,6 +4,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository, SelectQueryBuilder } from 'typeorm';
 import decisionDatasetFactory from '../testutils/factories/decision-dataset';
 import organisationFactory from '../testutils/factories/organisation';
+import professionFactory from '../testutils/factories/profession';
 import {
   DecisionDataset,
   DecisionDatasetStatus,
@@ -560,6 +561,47 @@ describe('DecisionDatasetsService', () => {
         });
         expect(queryBuilder.getMany).toBeCalledWith();
       });
+    });
+  });
+
+  describe('allLiveForProfessionAndYear', () => {
+    it('returns all live DecisionDatasets for the give Profession and year', async () => {
+      const queryResultDatasets = decisionDatasetFactory.buildList(3);
+
+      const queryBuilder = createMock<SelectQueryBuilder<DecisionDataset>>({
+        leftJoinAndSelect: () => queryBuilder,
+        where: () => queryBuilder,
+        orderBy: () => queryBuilder,
+        getMany: async () => queryResultDatasets,
+      });
+
+      jest
+        .spyOn(repo, 'createQueryBuilder')
+        .mockImplementation(() => queryBuilder);
+
+      const queryProfession = professionFactory.build();
+      const queryYear = 2024;
+
+      const result = await service.allLiveForProfessionAndYear(
+        queryProfession,
+        queryYear,
+      );
+
+      expect(result).toEqual(queryResultDatasets);
+      expect(queryBuilder).toHaveJoined([
+        'decisionDataset.profession',
+        'decisionDataset.organisation',
+        'decisionDataset.user',
+      ]);
+      expect(queryBuilder.where).toBeCalledWith({
+        profession: { id: queryProfession.id },
+        year: queryYear,
+        status: DecisionDatasetStatus.Live,
+      });
+      expect(queryBuilder.orderBy).toBeCalledWith({
+        'organisation.name': 'ASC',
+      });
+      expect(queryBuilder.getMany).toBeCalledWith();
     });
   });
 
