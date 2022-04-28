@@ -100,7 +100,7 @@ describe('DecisionDatasetsPresenter', () => {
             .checkboxItems as jest.Mock
         ).mockReturnValue(mockStatusesCheckboxItems);
 
-        const expected: IndexTemplate = {
+        const expected: Omit<IndexTemplate, 'filterQuery'> = {
           view: 'single-organisation',
           organisation: 'Example Organisation',
           decisionDatasetsTable: {
@@ -205,7 +205,7 @@ describe('DecisionDatasetsPresenter', () => {
             .checkboxItems as jest.Mock
         ).mockReturnValue(mockStatusesCheckboxItems);
 
-        const expected: IndexTemplate = {
+        const expected: Omit<IndexTemplate, 'filterQuery'> = {
           view: 'overview',
           organisation: translationOf('app.beis'),
           decisionDatasetsTable: {

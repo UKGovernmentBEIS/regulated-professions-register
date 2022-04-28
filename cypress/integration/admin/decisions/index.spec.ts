@@ -51,6 +51,8 @@ describe('Listing decision datasets', () => {
           });
         },
       );
+
+      checkCsvDownload(() => true);
     });
 
     it('I can filter by keyword', () => {
@@ -65,6 +67,8 @@ describe('Listing decision datasets', () => {
       });
 
       cy.get('tbody tr').should('have.length.at.least', 1);
+
+      checkCsvDownload((dataset) => dataset.profession.includes('Trademark'));
     });
 
     it('I can filter by organisation', () => {
@@ -89,6 +93,11 @@ describe('Listing decision datasets', () => {
       });
 
       cy.get('tbody tr').should('have.length.at.least', 1);
+
+      checkCsvDownload(
+        (dataset) =>
+          dataset.organisation === 'Law Society of England and Wales',
+      );
     });
 
     it('I can filter by year', () => {
@@ -109,6 +118,8 @@ describe('Listing decision datasets', () => {
       });
 
       cy.get('tbody tr').should('have.length.at.least', 1);
+
+      checkCsvDownload((dataset) => dataset.year === 2021);
     });
 
     it('I can filter by status', () => {
@@ -137,6 +148,8 @@ describe('Listing decision datasets', () => {
 
         cy.get('tbody tr').should('have.length.at.least', 1);
       });
+
+      checkCsvDownload((dataset) => dataset.status === 'live');
     });
 
     it('I can clear all filters', () => {
@@ -198,31 +211,8 @@ describe('Listing decision datasets', () => {
           });
         },
       );
-    });
 
-    it('I can download visible decision data', () => {
-      cy.translate('decisions.admin.dashboard.download').then((download) => {
-        clickDownloadLink(download);
-      });
-
-      const filename = path.join(
-        Cypress.config('downloadsFolder'),
-        'decisions.csv',
-      );
-
-      cy.readFile(filename).then((file) => {
-        const rows = parse(file);
-
-        cy.readFile('./seeds/test/decision-datasets.json').then(
-          (datasets: SeedDecisionDataset[]) => {
-            const countries = datasets
-              .flatMap((dataset) => dataset.routes)
-              .flatMap((route) => route.countries);
-
-            expect(rows).to.have.length(countries.length + 1);
-          },
-        );
-      });
+      checkCsvDownload(() => true);
     });
   });
 
@@ -270,6 +260,10 @@ describe('Listing decision datasets', () => {
               });
           });
         },
+      );
+
+      checkCsvDownload(
+        (dataset) => dataset.organisation === 'Department for Education',
       );
     });
 
@@ -330,37 +324,37 @@ describe('Listing decision datasets', () => {
         },
       );
     });
-
-    it('I can download visible decision data', () => {
-      cy.translate('decisions.admin.dashboard.download').then((download) => {
-        clickDownloadLink(download);
-      });
-
-      const filename = path.join(
-        Cypress.config('downloadsFolder'),
-        'decisions.csv',
-      );
-
-      cy.readFile(filename).then((file) => {
-        const rows = parse(file);
-
-        cy.readFile('./seeds/test/decision-datasets.json').then(
-          (datasets: SeedDecisionDataset[]) => {
-            const organisationDatasets = datasets.filter(
-              (dataset) => dataset.organisation === 'Department for Education',
-            );
-
-            const countries = organisationDatasets
-              .flatMap((dataset) => dataset.routes)
-              .flatMap((route) => route.countries);
-
-            expect(rows).to.have.length(countries.length + 1);
-          },
-        );
-      });
-    });
   });
 });
+
+function checkCsvDownload(
+  filter: (dataset: SeedDecisionDataset) => boolean,
+): void {
+  cy.translate('decisions.admin.dashboard.download').then((download) => {
+    clickDownloadLink(download);
+  });
+
+  const filename = path.join(
+    Cypress.config('downloadsFolder'),
+    `decisions-${format(new Date(), 'yyyyMMdd')}.csv`,
+  );
+
+  cy.readFile(filename).then((file) => {
+    const rows: string[][] = parse(file);
+
+    cy.readFile('./seeds/test/decision-datasets.json').then(
+      (datasets: SeedDecisionDataset[]) => {
+        datasets = getDisplayedDatasets(datasets).filter(filter);
+
+        const countries = datasets
+          .flatMap((dataset) => dataset.routes)
+          .flatMap((route) => route.countries);
+
+        expect(rows).to.have.length(countries.length + 1);
+      },
+    );
+  });
+}
 
 function getDisplayedDatasets(
   datasets: SeedDecisionDataset[],

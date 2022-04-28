@@ -19,4 +19,6 @@ export interface IndexTemplate {
   organisationsCheckboxItems: CheckboxItems[];
   yearsCheckboxItems: CheckboxItems[];
   statusesCheckboxItems: CheckboxItems[];
+
+  filterQuery: string;
 }

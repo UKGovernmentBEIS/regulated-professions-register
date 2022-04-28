@@ -24,12 +24,14 @@ import { OrganisationVersionsService } from '../../organisations/organisation-ve
 import { FilterDto } from './dto/filter.dto';
 import * as createFilterInputModule from '../../helpers/create-filter-input.helper';
 import * as getDecisionsYearsRangeModule from './helpers/get-decisions-years-range';
+import * as getQueryStringModule from './helpers/get-query-string.helper';
+import * as getExportTimestampModule from './helpers/get-export-timestamp.helper';
 
 jest.mock('./presenters/decision-datasets.presenter');
 jest.mock('../presenters/decision-dataset.presenter');
 jest.mock('./helpers/decisions-csv-writer.helper');
 
-const mockIndexTemplate: IndexTemplate = {
+const mockIndexTemplate: Omit<IndexTemplate, 'filterQuery'> = {
   view: 'overview',
   organisation: 'Example Organisation',
   decisionDatasetsTable: {
@@ -121,6 +123,10 @@ describe('DecisionsController', () => {
             end: 2024,
           });
 
+        const getQueryStringSpy = jest
+          .spyOn(getQueryStringModule, 'getQueryString')
+          .mockReturnValue('some&filter=query');
+
         const datasets = decisionDatasetFactory.buildList(3);
         const allOrganisations = organisationFactory.buildList(3);
 
@@ -129,7 +135,7 @@ describe('DecisionsController', () => {
 
         (
           DecisionDatasetsPresenter.prototype.present as jest.Mock
-        ).mockResolvedValue(mockIndexTemplate);
+        ).mockReturnValue(mockIndexTemplate);
 
         const filter: FilterDto = {
           keywords: 'example keywords',
@@ -140,7 +146,10 @@ describe('DecisionsController', () => {
 
         const result = await controller.index(request, filter);
 
-        expect(result).toEqual(mockIndexTemplate);
+        expect(result).toEqual({
+          ...mockIndexTemplate,
+          filterQuery: 'some&filter=query',
+        } as IndexTemplate);
 
         expect(getActingUserSpy).toHaveBeenCalledWith(request);
         expect(createFilterInputSpy).toHaveBeenCalledWith({
@@ -148,6 +157,7 @@ describe('DecisionsController', () => {
           allOrganisations,
         });
         expect(getDecisionsYearsRangeSpy).toHaveBeenCalled();
+        expect(getQueryStringSpy).toHaveBeenCalledWith(request);
 
         expect(DecisionDatasetsPresenter).toHaveBeenCalledWith(
           {
@@ -201,6 +211,10 @@ describe('DecisionsController', () => {
             end: 2024,
           });
 
+        const getQueryStringSpy = jest
+          .spyOn(getQueryStringModule, 'getQueryString')
+          .mockReturnValue('some&filter=query');
+
         const datasets = decisionDatasetFactory.buildList(3);
         const allOrganisations = organisationFactory.buildList(3);
 
@@ -209,7 +223,7 @@ describe('DecisionsController', () => {
 
         (
           DecisionDatasetsPresenter.prototype.present as jest.Mock
-        ).mockResolvedValue(mockIndexTemplate);
+        ).mockReturnValue(mockIndexTemplate);
 
         const filter: FilterDto = {
           keywords: 'example keywords',
@@ -220,7 +234,10 @@ describe('DecisionsController', () => {
 
         const result = await controller.index(request, filter);
 
-        expect(result).toEqual(mockIndexTemplate);
+        expect(result).toEqual({
+          ...mockIndexTemplate,
+          filterQuery: 'some&filter=query',
+        } as IndexTemplate);
 
         expect(getActingUserSpy).toHaveBeenCalledWith(request);
         expect(createFilterInputSpy).toHaveBeenCalledWith({
@@ -228,6 +245,7 @@ describe('DecisionsController', () => {
           allOrganisations,
         });
         expect(getDecisionsYearsRangeSpy).toHaveBeenCalled();
+        expect(getQueryStringSpy).toHaveBeenCalledWith(request);
 
         expect(DecisionDatasetsPresenter).toHaveBeenCalledWith(
           {
@@ -243,6 +261,7 @@ describe('DecisionsController', () => {
         expect(
           DecisionDatasetsPresenter.prototype.present,
         ).toHaveBeenCalledWith('single-organisation');
+        expect(organisationVersionsService.allLive).toHaveBeenCalled();
         expect(decisionDatasetsService.allForOrganisation).toHaveBeenCalledWith(
           userOrganisation,
           {
@@ -260,27 +279,58 @@ describe('DecisionsController', () => {
         const request = createDefaultMockRequest();
         const response = createMock<Response>();
 
-        jest.spyOn(getActingUserModule, 'getActingUser').mockReturnValue(
-          userFactory.build({
-            serviceOwner: true,
-            organisation: null,
-          }),
-        );
+        const getActingUserSpy = jest
+          .spyOn(getActingUserModule, 'getActingUser')
+          .mockReturnValue(
+            userFactory.build({
+              serviceOwner: true,
+              organisation: null,
+            }),
+          );
+
+        const createFilterInputSpy = jest
+          .spyOn(createFilterInputModule, 'createFilterInput')
+          .mockReturnValue({
+            keywords: 'example keywords',
+          });
+
+        const getExportTimestampSpy = jest
+          .spyOn(getExportTimestampModule, 'getExportTimestamp')
+          .mockReturnValue('20240525');
 
         const datasets = decisionDatasetFactory.buildList(3);
+        const allOrganisations = organisationFactory.buildList(3);
 
-        decisionDatasetsService.all.mockResolvedValue(datasets);
+        decisionDatasetsService.allForOrganisation.mockResolvedValue(datasets);
+        organisationVersionsService.allLive.mockResolvedValue(allOrganisations);
 
-        await controller.export(request, response);
+        const filter: FilterDto = {
+          keywords: 'example keywords',
+          organisations: [],
+          years: [],
+          statuses: [],
+        };
+
+        await controller.export(request, response, filter);
+
+        expect(getActingUserSpy).toHaveBeenCalledWith(request);
+        expect(createFilterInputSpy).toHaveBeenCalledWith({
+          ...filter,
+          allOrganisations,
+        });
+        expect(getExportTimestampSpy).toHaveBeenCalled();
 
         expect(DecisionsCsvWriter).toHaveBeenCalledWith(
           response,
-          'decisions',
+          'decisions-20240525',
           datasets,
           i18nService,
         );
         expect(DecisionsCsvWriter.prototype.write).toHaveBeenCalled();
-        expect(decisionDatasetsService.all).toHaveBeenCalledWith({});
+        expect(organisationVersionsService.allLive).toHaveBeenCalled();
+        expect(decisionDatasetsService.all).toHaveBeenCalledWith({
+          keywords: 'example keywords',
+        });
         expect(
           decisionDatasetsService.allForOrganisation,
         ).not.toHaveBeenCalled();
@@ -292,31 +342,62 @@ describe('DecisionsController', () => {
         const request = createDefaultMockRequest();
         const response = createMock<Response>();
 
-        const organisation = organisationFactory.build();
+        const userOrganisation = organisationFactory.build();
 
-        jest.spyOn(getActingUserModule, 'getActingUser').mockReturnValue(
-          userFactory.build({
-            serviceOwner: false,
-            organisation,
-          }),
-        );
+        const getActingUserSpy = jest
+          .spyOn(getActingUserModule, 'getActingUser')
+          .mockReturnValue(
+            userFactory.build({
+              serviceOwner: false,
+              organisation: userOrganisation,
+            }),
+          );
+
+        const createFilterInputSpy = jest
+          .spyOn(createFilterInputModule, 'createFilterInput')
+          .mockReturnValue({
+            keywords: 'example keywords',
+          });
+
+        const getExportTimestampSpy = jest
+          .spyOn(getExportTimestampModule, 'getExportTimestamp')
+          .mockReturnValue('20240525');
 
         const datasets = decisionDatasetFactory.buildList(3);
+        const allOrganisations = organisationFactory.buildList(3);
 
-        decisionDatasetsService.all.mockResolvedValue(datasets);
+        decisionDatasetsService.allForOrganisation.mockResolvedValue(datasets);
+        organisationVersionsService.allLive.mockResolvedValue(allOrganisations);
 
-        await controller.export(request, response);
+        const filter: FilterDto = {
+          keywords: 'example keywords',
+          organisations: [],
+          years: [],
+          statuses: [],
+        };
+
+        await controller.export(request, response, filter);
+
+        expect(getActingUserSpy).toHaveBeenCalledWith(request);
+        expect(createFilterInputSpy).toHaveBeenCalledWith({
+          ...filter,
+          allOrganisations,
+        });
+        expect(getExportTimestampSpy).toHaveBeenCalled();
 
         expect(DecisionsCsvWriter).toHaveBeenCalledWith(
           response,
-          'decisions',
+          'decisions-20240525',
           datasets,
           i18nService,
         );
         expect(DecisionsCsvWriter.prototype.write).toHaveBeenCalled();
+        expect(organisationVersionsService.allLive).toHaveBeenCalled();
         expect(decisionDatasetsService.allForOrganisation).toHaveBeenCalledWith(
-          organisation,
-          {},
+          userOrganisation,
+          {
+            keywords: 'example keywords',
+          },
         );
         expect(decisionDatasetsService.all).not.toHaveBeenCalled();
       });

@@ -33,6 +33,8 @@ import { DecisionsCsvWriter } from './helpers/decisions-csv-writer.helper';
 import { Response } from 'express';
 import { DecisionDatasetStatus } from '../decision-dataset.entity';
 import { OrganisationVersionsService } from '../../organisations/organisation-versions.service';
+import { getQueryString } from './helpers/get-query-string.helper';
+import { getExportTimestamp } from './helpers/get-export-timestamp.helper';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/decisions')
@@ -56,7 +58,44 @@ export class DecisionsController {
     @Req() request: RequestWithAppSession,
     @Query() filter: FilterDto = null,
   ): Promise<IndexTemplate> {
-    return this.createListEntries(request, filter);
+    const actingUser = getActingUser(request);
+
+    const showAllOrgs = actingUser.serviceOwner;
+
+    const userOrganisation = showAllOrgs ? null : actingUser.organisation;
+
+    const view: DecisionDatasetsPresenterView = showAllOrgs
+      ? 'overview'
+      : 'single-organisation';
+
+    const allOrganisations = await this.organisationVersionsService.allLive();
+
+    const filterInput = createFilterInput({
+      ...filter,
+      allOrganisations,
+    });
+
+    const allDecisionDatasets = await (showAllOrgs
+      ? this.decisionDatasetsService.all(filterInput)
+      : this.decisionDatasetsService.allForOrganisation(
+          userOrganisation,
+          filterInput,
+        ));
+
+    const { start: startYear, end: endYear } = getDecisionsYearsRange();
+
+    return {
+      ...new DecisionDatasetsPresenter(
+        filterInput,
+        userOrganisation,
+        allOrganisations,
+        startYear,
+        endYear,
+        allDecisionDatasets,
+        this.i18nService,
+      ).present(view),
+      filterQuery: getQueryString(request),
+    };
   }
 
   @Get('export')
@@ -68,20 +107,30 @@ export class DecisionsController {
   async export(
     @Req() request: RequestWithAppSession,
     @Res() response: Response,
+    @Query() filter: FilterDto = null,
   ): Promise<void> {
     const actingUser = getActingUser(request);
 
     const showAllOrgs = actingUser.serviceOwner;
 
     const userOrganisation = showAllOrgs ? null : actingUser.organisation;
+    const allOrganisations = await this.organisationVersionsService.allLive();
+
+    const filterInput = createFilterInput({
+      ...filter,
+      allOrganisations,
+    });
 
     const allDecisionDatasets = await (showAllOrgs
-      ? this.decisionDatasetsService.all({})
-      : this.decisionDatasetsService.allForOrganisation(userOrganisation, {}));
+      ? this.decisionDatasetsService.all(filterInput)
+      : this.decisionDatasetsService.allForOrganisation(
+          userOrganisation,
+          filterInput,
+        ));
 
     const writer = new DecisionsCsvWriter(
       response,
-      'decisions',
+      `decisions-${getExportTimestamp()}`,
       allDecisionDatasets,
       this.i18nService,
     );
@@ -129,46 +178,5 @@ export class DecisionsController {
       tables: presenter.tables(),
       isPublished: dataset.status === DecisionDatasetStatus.Live,
     };
-  }
-
-  private async createListEntries(
-    request: RequestWithAppSession,
-    filter: FilterDto,
-  ): Promise<IndexTemplate> {
-    const actingUser = getActingUser(request);
-
-    const showAllOrgs = actingUser.serviceOwner;
-
-    const userOrganisation = showAllOrgs ? null : actingUser.organisation;
-
-    const view: DecisionDatasetsPresenterView = showAllOrgs
-      ? 'overview'
-      : 'single-organisation';
-
-    const allOrganisations = await this.organisationVersionsService.allLive();
-
-    const filterInput = createFilterInput({
-      ...filter,
-      allOrganisations,
-    });
-
-    const allDecisionDatasets = await (showAllOrgs
-      ? this.decisionDatasetsService.all(filterInput)
-      : this.decisionDatasetsService.allForOrganisation(
-          userOrganisation,
-          filterInput,
-        ));
-
-    const { start: startYear, end: endYear } = getDecisionsYearsRange();
-
-    return new DecisionDatasetsPresenter(
-      filterInput,
-      userOrganisation,
-      allOrganisations,
-      startYear,
-      endYear,
-      allDecisionDatasets,
-      this.i18nService,
-    ).present(view);
   }
 }
