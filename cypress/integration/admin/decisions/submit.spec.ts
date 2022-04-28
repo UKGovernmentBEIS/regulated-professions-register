@@ -66,8 +66,14 @@ describe('Submiting a decision dataset', () => {
         .within(() => {
           cy.translate('app.status.submitted').then((submitted) => {
             cy.contains(submitted);
+            cy.get('a').contains('View details').click();
           });
         });
+
+      cy.checkAccessibility();
+      cy.translate('decisions.admin.buttons.submit').then((submit) => {
+        cy.get('a').should('not.contain', submit);
+      });
     });
   });
 

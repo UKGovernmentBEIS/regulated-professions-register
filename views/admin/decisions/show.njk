@@ -26,7 +26,7 @@
               }}
             </li>
           {% endif %}
-          {% if 'submitDecisionData' in permissions %}
+          {% if 'submitDecisionData' in permissions and not (datasetStatus === 'submitted') %}
             <li>
               {{
                 govukButton({
@@ -37,7 +37,7 @@
               }}
             </li>
           {% endif %}
-          {% if 'publishDecisionData' in permissions and not isPublished %}
+          {% if 'publishDecisionData' in permissions and not (datasetStatus === 'live') %}
             <li>
               {{
                 govukButton({
