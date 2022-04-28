@@ -18,6 +18,7 @@ import { NewController } from './admin/new.controller';
 import { EditController } from './admin/edit.controller';
 import { PublicationController } from './admin/publication.controller';
 import { SubmissionController } from './admin/submission.controller';
+import { ShowController } from './admin/show.controller';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { SubmissionController } from './admin/submission.controller';
   ],
   controllers: [
     DecisionsController,
+    ShowController,
     NewController,
     EditController,
     PublicationController,

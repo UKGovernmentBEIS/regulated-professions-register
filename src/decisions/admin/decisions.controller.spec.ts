@@ -1,22 +1,17 @@
 import { createMock, DeepMocked } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { I18nService } from 'nestjs-i18n';
-import { Table } from '../../common/interfaces/table';
 import { ProfessionsService } from '../../professions/professions.service';
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 import { createDefaultMockRequest } from '../../testutils/factories/create-default-mock-request';
 import decisionDatasetFactory from '../../testutils/factories/decision-dataset';
 import organisationFactory from '../../testutils/factories/organisation';
-import professionFactory from '../../testutils/factories/profession';
 import userFactory from '../../testutils/factories/user';
 import * as getActingUserModule from '../../users/helpers/get-acting-user.helper';
 import { DecisionDatasetsService } from '../decision-datasets.service';
-import { DecisionDatasetPresenter } from '../presenters/decision-dataset.presenter';
 import { DecisionsController } from './decisions.controller';
 import { IndexTemplate } from './interfaces/index-template.interface';
-import { ShowTemplate } from './interfaces/show-template.interface';
 import { DecisionDatasetsPresenter } from './presenters/decision-datasets.presenter';
-import * as checkCanChangeDatasetModule from './helpers/check-can-change-dataset.helper';
 import { DecisionsCsvWriter } from './helpers/decisions-csv-writer.helper';
 import { Response } from 'express';
 import { DecisionDatasetStatus } from '../decision-dataset.entity';
@@ -28,7 +23,6 @@ import * as getQueryStringModule from './helpers/get-query-string.helper';
 import * as getExportTimestampModule from './helpers/get-export-timestamp.helper';
 
 jest.mock('./presenters/decision-datasets.presenter');
-jest.mock('../presenters/decision-dataset.presenter');
 jest.mock('./helpers/decisions-csv-writer.helper');
 
 const mockIndexTemplate: Omit<IndexTemplate, 'filterQuery'> = {
@@ -48,14 +42,6 @@ const mockIndexTemplate: Omit<IndexTemplate, 'filterQuery'> = {
   yearsCheckboxItems: [],
   statusesCheckboxItems: [],
 };
-
-const mockTables: Table[] = [
-  {
-    caption: 'Example route',
-    head: [],
-    rows: [],
-  },
-];
 
 describe('DecisionsController', () => {
   let controller: DecisionsController;
@@ -401,96 +387,6 @@ describe('DecisionsController', () => {
         );
         expect(decisionDatasetsService.all).not.toHaveBeenCalled();
       });
-    });
-  });
-
-  describe('show', () => {
-    it('presents the specified decision dataset', async () => {
-      const profession = professionFactory.build({
-        id: 'example-profession-id',
-      });
-      const organisation = organisationFactory.build({
-        id: 'example-organisation-id',
-      });
-
-      const dataset = decisionDatasetFactory.build({
-        profession: profession,
-        organisation: organisation,
-        year: 2017,
-        status: DecisionDatasetStatus.Live,
-      });
-
-      const request = createDefaultMockRequest();
-
-      const checkCanChangeDatasetSpy = jest
-        .spyOn(checkCanChangeDatasetModule, 'checkCanChangeDataset')
-        .mockImplementation();
-
-      professionsService.findWithVersions.mockResolvedValueOnce(profession);
-      decisionDatasetsService.find.mockResolvedValue(dataset);
-
-      (DecisionDatasetPresenter.prototype.tables as jest.Mock).mockReturnValue(
-        mockTables,
-      );
-
-      Object.defineProperties(DecisionDatasetPresenter.prototype, {
-        changedBy: {
-          get() {
-            return {
-              name: 'name',
-              email: 'email',
-            };
-          },
-        },
-        lastModified: {
-          get() {
-            return '29 Apr 2022';
-          },
-        },
-      });
-
-      const expected: ShowTemplate = {
-        profession,
-        organisation,
-        changedBy: { name: 'name', email: 'email' },
-        lastModified: '29 Apr 2022',
-        tables: mockTables,
-        year: 2017,
-        isPublished: true,
-        datasetStatus: DecisionDatasetStatus.Live,
-      };
-
-      const result = await controller.show(
-        'example-profession-id',
-        'example-organisation-id',
-        2017,
-        request,
-      );
-
-      expect(result).toEqual(expected);
-
-      expect(checkCanChangeDatasetSpy).toHaveBeenCalledWith(
-        request,
-        profession,
-        organisation,
-        2017,
-        true,
-      );
-
-      expect(professionsService.findWithVersions).toHaveBeenCalledWith(
-        'example-profession-id',
-      );
-      expect(decisionDatasetsService.find).toHaveBeenCalledWith(
-        'example-profession-id',
-        'example-organisation-id',
-        2017,
-      );
-
-      expect(DecisionDatasetPresenter).toHaveBeenCalledWith(
-        dataset,
-        i18nService,
-      );
-      expect(DecisionDatasetPresenter.prototype.tables).toHaveBeenCalled();
     });
   });
 

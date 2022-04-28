@@ -1,8 +1,6 @@
 import {
   Controller,
   Get,
-  Param,
-  ParseIntPipe,
   Query,
   Render,
   Req,
@@ -18,14 +16,10 @@ import { Permissions } from '../../common/permissions.decorator';
 import { getActingUser } from '../../users/helpers/get-acting-user.helper';
 import { DecisionDatasetsService } from '../decision-datasets.service';
 import { IndexTemplate } from './interfaces/index-template.interface';
-import { ShowTemplate } from './interfaces/show-template.interface';
-import { ProfessionsService } from '../../professions/professions.service';
 import {
   DecisionDatasetsPresenter,
   DecisionDatasetsPresenterView,
 } from './presenters/decision-datasets.presenter';
-import { DecisionDatasetPresenter } from '../presenters/decision-dataset.presenter';
-import { checkCanChangeDataset } from './helpers/check-can-change-dataset.helper';
 import { FilterDto } from './dto/filter.dto';
 import { createFilterInput } from '../../helpers/create-filter-input.helper';
 import { getDecisionsYearsRange } from './helpers/get-decisions-years-range';
@@ -34,14 +28,12 @@ import { Response } from 'express';
 import { OrganisationVersionsService } from '../../organisations/organisation-versions.service';
 import { getQueryString } from './helpers/get-query-string.helper';
 import { getExportTimestamp } from './helpers/get-export-timestamp.helper';
-import { DecisionDatasetStatus } from '../decision-dataset.entity';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/decisions')
 export class DecisionsController {
   constructor(
     private readonly decisionDatasetsService: DecisionDatasetsService,
-    private readonly professionsService: ProfessionsService,
     private readonly organisationVersionsService: OrganisationVersionsService,
     private readonly i18nService: I18nService,
   ) {}
@@ -132,45 +124,5 @@ export class DecisionsController {
     );
 
     writer.write();
-  }
-
-  @Get(':professionId/:organisationId/:year')
-  @Permissions(
-    UserPermission.UploadDecisionData,
-    UserPermission.DownloadDecisionData,
-    UserPermission.ViewDecisionData,
-  )
-  @Render('admin/decisions/show')
-  @BackLink('/admin/decisions')
-  async show(
-    @Param('professionId') professionId: string,
-    @Param('organisationId') organisationId: string,
-    @Param('year', ParseIntPipe) year: number,
-    @Req() request: RequestWithAppSession,
-  ): Promise<ShowTemplate> {
-    const profession = await this.professionsService.findWithVersions(
-      professionId,
-    );
-
-    const dataset = await this.decisionDatasetsService.find(
-      professionId,
-      organisationId,
-      year,
-    );
-
-    const organisation = dataset.organisation;
-
-    checkCanChangeDataset(request, profession, organisation, year, true);
-    const presenter = new DecisionDatasetPresenter(dataset, this.i18nService);
-    return {
-      profession,
-      organisation,
-      year,
-      tables: presenter.tables(),
-      datasetStatus: dataset.status,
-      isPublished: dataset.status === DecisionDatasetStatus.Live,
-      changedBy: presenter.changedBy,
-      lastModified: presenter.lastModified,
-    };
   }
 }
