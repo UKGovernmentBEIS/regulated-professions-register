@@ -34,15 +34,20 @@
         "profession": "Profession",
         "regulator": "Regulator",
         "year": "Year",
-        "lastModified": "Last updated",
+        "lastModified": "Last modified",
         "status": "Status",
-        "actions": "Actions"
+        "actions": "Actions",
+        "changedBy": "Changed by"
       },
       "search": {
         "foundSingular": "{count} decision dataset found",
         "foundPlural": "{count} decision datasets found"
       },
       "download": "Download datasets"
+    },
+    "publicFacingLink": {
+      "heading": "Currently published version",
+      "label": "Public facing link"
     },
     "show": {
       "edit": "Edit"
