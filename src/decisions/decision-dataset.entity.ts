@@ -13,6 +13,7 @@ import { DecisionRoute } from './interfaces/decision-route.interface';
 export enum DecisionDatasetStatus {
   Unconfirmed = 'unconfirmed',
   Draft = 'draft',
+  Submitted = 'submitted',
   Live = 'live',
 }
 

@@ -17,6 +17,7 @@ import { OrganisationsService } from '../organisations/organisations.service';
 import { NewController } from './admin/new.controller';
 import { EditController } from './admin/edit.controller';
 import { PublicationController } from './admin/publication.controller';
+import { SubmissionController } from './admin/submission.controller';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { PublicationController } from './admin/publication.controller';
     NewController,
     EditController,
     PublicationController,
+    SubmissionController,
   ],
 })
 export class DecisionsModule {}

@@ -80,7 +80,11 @@ describe('DecisionDatasetsService', () => {
         expect(queryBuilder.where).toBeCalledWith(
           'decisionDataset.status IN(:...status)',
           {
-            status: [DecisionDatasetStatus.Live, DecisionDatasetStatus.Draft],
+            status: [
+              DecisionDatasetStatus.Live,
+              DecisionDatasetStatus.Submitted,
+              DecisionDatasetStatus.Draft,
+            ],
           },
         );
         expect(queryBuilder.orderBy).toBeCalledWith({
@@ -121,7 +125,11 @@ describe('DecisionDatasetsService', () => {
         expect(queryBuilder.where).toBeCalledWith(
           'decisionDataset.status IN(:...status)',
           {
-            status: [DecisionDatasetStatus.Live, DecisionDatasetStatus.Draft],
+            status: [
+              DecisionDatasetStatus.Live,
+              DecisionDatasetStatus.Submitted,
+              DecisionDatasetStatus.Draft,
+            ],
           },
         );
         expect(queryBuilder.andWhere).toBeCalledWith(
@@ -170,7 +178,11 @@ describe('DecisionDatasetsService', () => {
         expect(queryBuilder.where).toBeCalledWith(
           'decisionDataset.status IN(:...status)',
           {
-            status: [DecisionDatasetStatus.Live, DecisionDatasetStatus.Draft],
+            status: [
+              DecisionDatasetStatus.Live,
+              DecisionDatasetStatus.Submitted,
+              DecisionDatasetStatus.Draft,
+            ],
           },
         );
         expect(queryBuilder.andWhere).toBeCalledWith(
@@ -215,7 +227,11 @@ describe('DecisionDatasetsService', () => {
         expect(queryBuilder.where).toBeCalledWith(
           'decisionDataset.status IN(:...status)',
           {
-            status: [DecisionDatasetStatus.Live, DecisionDatasetStatus.Draft],
+            status: [
+              DecisionDatasetStatus.Live,
+              DecisionDatasetStatus.Submitted,
+              DecisionDatasetStatus.Draft,
+            ],
           },
         );
         expect(queryBuilder.andWhere).toBeCalledWith('year IN(:...years)', {
@@ -259,7 +275,11 @@ describe('DecisionDatasetsService', () => {
         expect(queryBuilder.where).toBeCalledWith(
           'decisionDataset.status IN(:...status)',
           {
-            status: [DecisionDatasetStatus.Live, DecisionDatasetStatus.Draft],
+            status: [
+              DecisionDatasetStatus.Live,
+              DecisionDatasetStatus.Submitted,
+              DecisionDatasetStatus.Draft,
+            ],
           },
         );
         expect(queryBuilder.andWhere).toBeCalledWith(
@@ -307,7 +327,11 @@ describe('DecisionDatasetsService', () => {
         expect(queryBuilder.where).toBeCalledWith(
           'decisionDataset.status IN(:...status)',
           {
-            status: [DecisionDatasetStatus.Live, DecisionDatasetStatus.Draft],
+            status: [
+              DecisionDatasetStatus.Live,
+              DecisionDatasetStatus.Submitted,
+              DecisionDatasetStatus.Draft,
+            ],
           },
         );
         expect(queryBuilder.andWhere).toBeCalledWith({
@@ -352,7 +376,11 @@ describe('DecisionDatasetsService', () => {
         expect(queryBuilder.where).toBeCalledWith(
           'decisionDataset.status IN(:...status)',
           {
-            status: [DecisionDatasetStatus.Live, DecisionDatasetStatus.Draft],
+            status: [
+              DecisionDatasetStatus.Live,
+              DecisionDatasetStatus.Submitted,
+              DecisionDatasetStatus.Draft,
+            ],
           },
         );
         expect(queryBuilder.andWhere).toBeCalledWith({
@@ -404,7 +432,11 @@ describe('DecisionDatasetsService', () => {
         expect(queryBuilder.where).toBeCalledWith(
           'decisionDataset.status IN(:...status)',
           {
-            status: [DecisionDatasetStatus.Live, DecisionDatasetStatus.Draft],
+            status: [
+              DecisionDatasetStatus.Live,
+              DecisionDatasetStatus.Submitted,
+              DecisionDatasetStatus.Draft,
+            ],
           },
         );
         expect(queryBuilder.andWhere).toBeCalledWith({
@@ -453,7 +485,11 @@ describe('DecisionDatasetsService', () => {
         expect(queryBuilder.where).toBeCalledWith(
           'decisionDataset.status IN(:...status)',
           {
-            status: [DecisionDatasetStatus.Live, DecisionDatasetStatus.Draft],
+            status: [
+              DecisionDatasetStatus.Live,
+              DecisionDatasetStatus.Submitted,
+              DecisionDatasetStatus.Draft,
+            ],
           },
         );
         expect(queryBuilder.andWhere).toBeCalledWith({
@@ -501,7 +537,11 @@ describe('DecisionDatasetsService', () => {
         expect(queryBuilder.where).toBeCalledWith(
           'decisionDataset.status IN(:...status)',
           {
-            status: [DecisionDatasetStatus.Live, DecisionDatasetStatus.Draft],
+            status: [
+              DecisionDatasetStatus.Live,
+              DecisionDatasetStatus.Submitted,
+              DecisionDatasetStatus.Draft,
+            ],
           },
         );
         expect(queryBuilder.andWhere).toBeCalledWith({
@@ -531,6 +571,28 @@ describe('DecisionDatasetsService', () => {
 
       expect(result).toEqual(dataset);
       expect(repoSpy).toBeCalledWith(dataset);
+    });
+  });
+
+  describe('submit', () => {
+    it('sets the status of the DecisionDataset to Submitted', async () => {
+      const draftDataset = decisionDatasetFactory.build({
+        status: DecisionDatasetStatus.Draft,
+      });
+
+      const submittedDataset = {
+        ...draftDataset,
+        status: DecisionDatasetStatus.Submitted,
+      };
+
+      const repoSpy = jest
+        .spyOn(repo, 'save')
+        .mockResolvedValue(submittedDataset);
+
+      const result = await service.submit(draftDataset);
+
+      expect(result).toEqual(submittedDataset);
+      expect(repoSpy).toBeCalledWith(submittedDataset);
     });
   });
 

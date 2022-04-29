@@ -33,7 +33,11 @@ export class DecisionDatasetsService {
   async all(filter: FilterInput): Promise<DecisionDataset[]> {
     return this.applyFilter(
       this.datasetsWithJoins().where('decisionDataset.status IN(:...status)', {
-        status: [DecisionDatasetStatus.Live, DecisionDatasetStatus.Draft],
+        status: [
+          DecisionDatasetStatus.Live,
+          DecisionDatasetStatus.Submitted,
+          DecisionDatasetStatus.Draft,
+        ],
       }),
       filter,
     )
@@ -52,7 +56,11 @@ export class DecisionDatasetsService {
     return this.applyFilter(
       this.datasetsWithJoins()
         .where('decisionDataset.status IN(:...status)', {
-          status: [DecisionDatasetStatus.Live, DecisionDatasetStatus.Draft],
+          status: [
+            DecisionDatasetStatus.Live,
+            DecisionDatasetStatus.Submitted,
+            DecisionDatasetStatus.Draft,
+          ],
         })
         .andWhere({
           organisation: { id: organisation.id },
@@ -68,6 +76,12 @@ export class DecisionDatasetsService {
   }
 
   async save(dataset: DecisionDataset): Promise<DecisionDataset> {
+    return this.repository.save(dataset);
+  }
+
+  async submit(dataset: DecisionDataset): Promise<DecisionDataset> {
+    dataset.status = DecisionDatasetStatus.Submitted;
+
     return this.repository.save(dataset);
   }
 

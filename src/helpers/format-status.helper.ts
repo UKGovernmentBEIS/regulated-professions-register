@@ -19,14 +19,18 @@ export function formatStatus(
     colourClass = 'govuk-tag--grey';
   } else if (
     status === ProfessionVersionStatus.Draft ||
-    status === OrganisationVersionStatus.Draft
+    status === OrganisationVersionStatus.Draft ||
+    status === DecisionDatasetStatus.Draft
   ) {
     colourClass = 'govuk-tag--yellow';
   } else if (
     status === ProfessionVersionStatus.Live ||
-    status === OrganisationVersionStatus.Live
+    status === OrganisationVersionStatus.Live ||
+    status === DecisionDatasetStatus.Live
   ) {
     colourClass = 'govuk-tag--turquoise';
+  } else if (status === DecisionDatasetStatus.Submitted) {
+    colourClass = 'govuk-tag--pink';
   } else {
     return '';
   }

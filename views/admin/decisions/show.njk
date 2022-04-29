@@ -26,7 +26,18 @@
               }}
             </li>
           {% endif %}
-          {% if 'publishDecisionData' in permissions and not isPublished %}
+          {% if 'submitDecisionData' in permissions and not (datasetStatus === 'submitted') %}
+            <li>
+              {{
+                govukButton({
+                  text: "decisions.admin.buttons.submit" | t,
+                  href: "/admin/decisions/" + profession.id + "/" + organisation.id + "/" + year + "/submit",
+                  name: 'submit'
+                })
+              }}
+            </li>
+          {% endif %}
+          {% if 'publishDecisionData' in permissions and not (datasetStatus === 'live') %}
             <li>
               {{
                 govukButton({

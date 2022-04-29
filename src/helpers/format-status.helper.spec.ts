@@ -1,3 +1,4 @@
+import { DecisionDatasetStatus } from '../decisions/decision-dataset.entity';
 import { OrganisationVersionStatus } from '../organisations/organisation-version.entity';
 import { ProfessionVersionStatus } from '../professions/profession-version.entity';
 import { createMockI18nService } from '../testutils/create-mock-i18n-service';
@@ -81,6 +82,20 @@ describe('formatStatus', () => {
       expect(result).toEqual(
         `<strong class="govuk-tag govuk-tag--turquoise">${translationOf(
           'app.status.live',
+        )}</strong>`,
+      );
+    });
+  });
+
+  describe('when given a "submitted" status', () => {
+    it('returns a pink tag', () => {
+      const i18nService = createMockI18nService();
+
+      const result = formatStatus(DecisionDatasetStatus.Submitted, i18nService);
+
+      expect(result).toEqual(
+        `<strong class="govuk-tag govuk-tag--pink">${translationOf(
+          'app.status.submitted',
         )}</strong>`,
       );
     });

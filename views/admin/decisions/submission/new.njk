@@ -2,21 +2,21 @@
 
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
-{% set title = ("decisions.admin.publication.caption" | t) %}
+{% set title = ("decisions.admin.submission.caption" | t) %}
 
 {% block content %}
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <span class="govuk-caption-l">{{ title }}</span>
-      <h1 class="govuk-heading-l">{{ ('decisions.admin.publication.heading' | t )}}</h1>
+      <h1 class="govuk-heading-l">{{ ('decisions.admin.submission.heading' | t )}}</h1>
       {% include "../_dataset-details.njk" %}
-      <form action="/admin/decisions/{{profession.id}}/{{organisation.id}}/{{year}}/publish?_method=PUT" method="post">
+      <form action="/admin/decisions/{{profession.id}}/{{organisation.id}}/{{year}}/submit?_method=PUT" method="post">
         {{
           govukButton({
-            text: "decisions.admin.buttons.publish" | t,
+            text: "decisions.admin.buttons.submit" | t,
             classes: "govuk-button",
-            id: 'publish-button'
+            id: 'submit-button'
           })
         }}
       </form>

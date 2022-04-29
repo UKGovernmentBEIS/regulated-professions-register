@@ -438,7 +438,7 @@ describe('DecisionsController', () => {
         organisation,
         tables: mockTables,
         year: 2017,
-        isPublished: true,
+        datasetStatus: DecisionDatasetStatus.Live,
       };
 
       const result = await controller.show(
@@ -472,46 +472,6 @@ describe('DecisionsController', () => {
         i18nService,
       );
       expect(DecisionDatasetPresenter.prototype.tables).toHaveBeenCalled();
-    });
-
-    describe('when the dataset has not yet been published', () => {
-      it('sets `isPublished` to false', async () => {
-        const profession = professionFactory.build({
-          id: 'example-profession-id',
-        });
-        const organisation = organisationFactory.build({
-          id: 'example-organisation-id',
-        });
-
-        const dataset = decisionDatasetFactory.build({
-          profession: profession,
-          organisation: organisation,
-          year: 2017,
-          status: DecisionDatasetStatus.Draft,
-        });
-
-        const request = createDefaultMockRequest();
-
-        jest
-          .spyOn(checkCanChangeDatasetModule, 'checkCanChangeDataset')
-          .mockImplementation();
-
-        professionsService.findWithVersions.mockResolvedValueOnce(profession);
-        decisionDatasetsService.find.mockResolvedValue(dataset);
-
-        (
-          DecisionDatasetPresenter.prototype.tables as jest.Mock
-        ).mockReturnValue(mockTables);
-
-        const result = await controller.show(
-          'example-profession-id',
-          'example-organisation-id',
-          2017,
-          request,
-        );
-
-        expect(result.isPublished).toEqual(false);
-      });
     });
   });
 

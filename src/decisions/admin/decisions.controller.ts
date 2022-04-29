@@ -31,7 +31,6 @@ import { createFilterInput } from '../../helpers/create-filter-input.helper';
 import { getDecisionsYearsRange } from './helpers/get-decisions-years-range';
 import { DecisionsCsvWriter } from './helpers/decisions-csv-writer.helper';
 import { Response } from 'express';
-import { DecisionDatasetStatus } from '../decision-dataset.entity';
 import { OrganisationVersionsService } from '../../organisations/organisation-versions.service';
 import { getQueryString } from './helpers/get-query-string.helper';
 import { getExportTimestamp } from './helpers/get-export-timestamp.helper';
@@ -176,7 +175,7 @@ export class DecisionsController {
       organisation,
       year,
       tables: presenter.tables(),
-      isPublished: dataset.status === DecisionDatasetStatus.Live,
+      datasetStatus: dataset.status,
     };
   }
 }
