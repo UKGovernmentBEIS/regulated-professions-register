@@ -253,7 +253,7 @@ describe('EditController', () => {
 
   describe('update', () => {
     describe('when the `action` is "publish"', () => {
-      it('saves the given dataset with the published status', async () => {
+      it('saves the given dataset as draft and redirects to the publication confirmation page', async () => {
         const editDto: EditDto = {
           routes: ['Example route'],
           countries: [['Brazil']],
@@ -330,13 +330,8 @@ describe('EditController', () => {
 
         expect(checkCanPublishDatasetSpy).toHaveBeenCalledWith(request);
 
-        expect(flashMock).toHaveBeenCalledWith(
-          translationOf('decisions.admin.publication.confirmation.heading'),
-          translationOf('decisions.admin.publication.confirmation.body'),
-        );
-
         expect(response.redirect).toHaveBeenCalledWith(
-          '/admin/decisions/example-profession-id/example-organisation-id/2016',
+          '/admin/decisions/example-profession-id/example-organisation-id/2016/publish?fromEdit=true',
         );
 
         expect(professionsService.findWithVersions).toHaveBeenCalledWith(
@@ -356,7 +351,7 @@ describe('EditController', () => {
           organisation,
           year: 2016,
           user,
-          status: DecisionDatasetStatus.Live,
+          status: DecisionDatasetStatus.Draft,
           routes: decisionRoutes,
         } as DecisionDataset);
 

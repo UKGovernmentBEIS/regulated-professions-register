@@ -205,7 +205,7 @@ describe('Editing a decision dataset', () => {
         });
     });
 
-    it('I can publish a decision dataset', () => {
+    it('I can publish a decision dataset from the edit page', () => {
       cy.translate('app.status.draft').then((draft) => {
         cy.get('tr')
           .contains('Registered Trademark Attorney')
@@ -228,6 +228,26 @@ describe('Editing a decision dataset', () => {
 
       cy.translate('decisions.admin.buttons.publish').then((publish) => {
         cy.get('button').contains(publish).click();
+      });
+
+      cy.checkAccessibility();
+
+      cy.translate('decisions.admin.publication.caption').then(
+        (publishCaption) => {
+          cy.get('body').contains(publishCaption);
+        },
+      );
+
+      cy.translate('decisions.admin.publication.heading').then((heading) => {
+        cy.contains(heading);
+      });
+
+      cy.contains('Registered Trademark Attorney');
+      cy.contains('Alternative Law Society');
+      cy.contains('2020');
+
+      cy.translate('decisions.admin.buttons.publish').then((publishButton) => {
+        cy.get('button').contains(publishButton).click();
       });
 
       cy.checkAccessibility();

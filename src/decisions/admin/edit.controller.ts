@@ -144,10 +144,7 @@ export class EditController {
         profession,
         user: getActingUser(request),
         year,
-        status:
-          action === 'publish'
-            ? DecisionDatasetStatus.Live
-            : DecisionDatasetStatus.Draft,
+        status: DecisionDatasetStatus.Draft,
         routes,
         updated_at: undefined,
         created_at: undefined,
@@ -155,20 +152,21 @@ export class EditController {
 
       await this.decisionDatasetsService.save(newDataset);
 
-      const localisationId =
-        action === 'publish' ? 'publication' : 'saveAsDraft';
+      if (action === 'publish') {
+        return response.redirect(
+          `/admin/decisions/${profession.id}/${organisation.id}/${year}/publish?fromEdit=true`,
+        );
+      }
 
       const messageTitle = await this.i18nService.translate(
-        `decisions.admin.${localisationId}.confirmation.heading`,
+        `decisions.admin.saveAsDraft.confirmation.heading`,
       );
 
       const messageBody = await this.i18nService.translate(
-        `decisions.admin.${localisationId}.confirmation.body`,
+        `decisions.admin.saveAsDraft.confirmation.body`,
       );
 
-      const flashType = action === 'publish' ? 'success' : 'info';
-
-      request.flash(flashType, flashMessage(messageTitle, messageBody));
+      request.flash('info', flashMessage(messageTitle, messageBody));
 
       response.redirect(
         `/admin/decisions/${profession.id}/${organisation.id}/${year}`,
