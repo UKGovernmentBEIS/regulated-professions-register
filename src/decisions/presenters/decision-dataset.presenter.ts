@@ -3,11 +3,15 @@ import { Table } from '../../common/interfaces/table';
 import { TableRow } from '../../common/interfaces/table-row';
 import { Country } from '../../countries/country';
 import { decisionValueToString } from '../admin/helpers/decision-value-to-string.helper';
-import { DecisionRoute } from '../interfaces/decision-route.interface';
+import { formatDate } from '../../common/utils';
+import {
+  DecisionDataset,
+  DecisionDatasetStatus,
+} from '../decision-dataset.entity';
 
 export class DecisionDatasetPresenter {
   constructor(
-    private readonly routes: DecisionRoute[],
+    private readonly dataset: DecisionDataset,
     private readonly i18nService: I18nService,
   ) {}
 
@@ -45,7 +49,7 @@ export class DecisionDatasetPresenter {
       },
     ];
 
-    return this.routes.map((route) => {
+    return this.dataset.routes.map((route) => {
       const table: Table = {
         classes: 'rpr-decision-data__table-container',
         captionClasses: 'govuk-table__caption--l',
@@ -79,6 +83,23 @@ export class DecisionDatasetPresenter {
 
       return table;
     });
+  }
+  get changedBy(): { name: string; email: string } {
+    const user = this.dataset.user;
+    return user
+      ? {
+          name: user.name,
+          email: user.email,
+        }
+      : null;
+  }
+
+  get lastModified(): string {
+    return formatDate(this.dataset.updated_at);
+  }
+
+  get status(): DecisionDatasetStatus {
+    return this.dataset.status;
   }
 
   private computeTotal(decisions: {

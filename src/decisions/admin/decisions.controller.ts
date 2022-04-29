@@ -34,6 +34,7 @@ import { Response } from 'express';
 import { OrganisationVersionsService } from '../../organisations/organisation-versions.service';
 import { getQueryString } from './helpers/get-query-string.helper';
 import { getExportTimestamp } from './helpers/get-export-timestamp.helper';
+import { DecisionDatasetStatus } from '../decision-dataset.entity';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/decisions')
@@ -164,18 +165,16 @@ export class DecisionsController {
     const organisation = dataset.organisation;
 
     checkCanChangeDataset(request, profession, organisation, year, true);
-
-    const presenter = new DecisionDatasetPresenter(
-      dataset.routes,
-      this.i18nService,
-    );
-
+    const presenter = new DecisionDatasetPresenter(dataset, this.i18nService);
     return {
       profession,
       organisation,
       year,
       tables: presenter.tables(),
       datasetStatus: dataset.status,
+      isPublished: dataset.status === DecisionDatasetStatus.Live,
+      changedBy: presenter.changedBy,
+      lastModified: presenter.lastModified,
     };
   }
 }

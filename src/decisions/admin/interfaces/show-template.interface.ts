@@ -7,6 +7,9 @@ export interface ShowTemplate {
   profession: Profession;
   organisation: Organisation;
   year: number;
-  tables: Table[];
   datasetStatus: DecisionDatasetStatus;
+  isPublished: boolean;
+  tables: Table[];
+  changedBy: { name: string; email: string };
+  lastModified: string;
 }
