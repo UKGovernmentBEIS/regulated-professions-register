@@ -11,7 +11,32 @@
     <div class="govuk-grid-column-three-quarters">
       {% include "../../decisions/_decision-tables.njk" %}
     </div>
-    <div class="govuk-grid-column-one-quarter">
+    <aside class="govuk-grid-column-one-quarter">
+
+      <h2 class="govuk-heading-s" data-status>
+        {{ "decisions.admin.dashboard.tableHeading.status" | t }}<br>
+        {{ datasetStatus | status }}
+      </h2>
+
+      <h2 class="govuk-heading-s" data-cy="last-modified-text">
+        {{ "decisions.admin.dashboard.tableHeading.lastModified" | t }}<br>
+        <span class="govuk-body" data-cy="last-modified">{{ lastModified }}</span>
+      </h2>
+
+      {% if changedBy %}
+        <h2 class="govuk-heading-s" data-cy="changed-by-text">
+          {{ "decisions.admin.dashboard.tableHeading.changedBy" | t }}<br>
+          <span class="govuk-body" data-cy="changed-by-user-name">{{ changedBy.name }}</span><br>
+          <span class="govuk-body" data-cy="changed-by-user-email">{{ changedBy.email | email }}</span>
+        </h2>
+      {% endif %}
+      <h2 class="govuk-heading-s" data-cy="currently-published-version-text">
+        {{ "decisions.admin.publicFacingLink.heading" | t }}<br>
+        <span class="govuk-body" data-cy="currently-published-version">
+          <a href="">{{ "decisions.admin.publicFacingLink.label" | t }}</a>
+        </span>
+      </h2>
+
       <nav role="navigation" data-cy="actions">
         <ul class="govuk-list">
           {% if 'uploadDecisionData' in permissions %}
@@ -50,7 +75,10 @@
           {% endif %}
         </ul>
       </nav>
-    </div>
-  </div>
+    </aside>
+  </aside>
+</div>
+
+</div>
 
 {% endblock %}
