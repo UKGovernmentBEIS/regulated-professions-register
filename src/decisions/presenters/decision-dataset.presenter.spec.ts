@@ -4,8 +4,9 @@ import { Country } from '../../countries/country';
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 import { translationOf } from '../../testutils/translation-of';
 import * as decisionValueToStringModule from '../admin/helpers/decision-value-to-string.helper';
-import { DecisionRoute } from '../interfaces/decision-route.interface';
 import { DecisionDatasetPresenter } from './decision-dataset.presenter';
+import userFactory from '../../testutils/factories/user';
+import decisionDatasetFactory from '../../testutils/factories/decision-dataset';
 
 jest.mock('../../countries/country');
 
@@ -22,53 +23,54 @@ describe('DecisionDatasetPresenter', () => {
 
       const spotCheckCountryCode = 'CY';
       const spotCheckValue = 8;
-
-      const routes: DecisionRoute[] = [
-        {
-          name: 'Example route 1',
-          countries: [
-            {
-              code: spotCheckCountryCode,
-              decisions: {
-                yes: 4,
-                no: 5,
-                yesAfterComp: 6,
-                noAfterComp: 7,
+      const dataset = decisionDatasetFactory.build({
+        routes: [
+          {
+            name: 'Example route 1',
+            countries: [
+              {
+                code: spotCheckCountryCode,
+                decisions: {
+                  yes: 4,
+                  no: 5,
+                  yesAfterComp: 6,
+                  noAfterComp: 7,
+                },
               },
-            },
-            {
-              code: 'FR',
-              decisions: {
-                yes: 5,
-                no: spotCheckValue,
-                yesAfterComp: 0,
-                noAfterComp: 4,
+              {
+                code: 'FR',
+                decisions: {
+                  yes: 5,
+                  no: spotCheckValue,
+                  yesAfterComp: 0,
+                  noAfterComp: 4,
+                },
               },
-            },
-          ],
-        },
-        {
-          name: 'Example route 2',
-          countries: [
-            {
-              code: 'JP',
-              decisions: {
-                yes: 1,
-                no: 3,
-                yesAfterComp: 11,
-                noAfterComp: 2,
+            ],
+          },
+          {
+            name: 'Example route 2',
+            countries: [
+              {
+                code: 'JP',
+                decisions: {
+                  yes: 1,
+                  no: 3,
+                  yesAfterComp: 11,
+                  noAfterComp: 2,
+                },
               },
-            },
-          ],
-        },
-      ];
+            ],
+          },
+        ],
+      });
 
       const decisionValueToStringSpy = jest.spyOn(
         decisionValueToStringModule,
         'decisionValueToString',
       );
 
-      const presenter = new DecisionDatasetPresenter(routes, i18nService);
+      const presenter = new DecisionDatasetPresenter(dataset, i18nService);
 
       const expectedHead: TableRow = [
         {
@@ -179,6 +181,33 @@ describe('DecisionDatasetPresenter', () => {
 
       expect(decisionValueToStringSpy).toHaveBeenCalledTimes(12);
       expect(decisionValueToStringSpy).nthCalledWith(7, spotCheckValue);
+    });
+
+    describe('changedBy', () => {
+      it('if the dataset has a user it returns their name and email address', () => {
+        const user = userFactory.build({
+          name: 'example',
+          email: 'test@test.com',
+        });
+        const dataset = decisionDatasetFactory.build({ user });
+        const i18nService = createMockI18nService();
+
+        const presenter = new DecisionDatasetPresenter(dataset, i18nService);
+
+        expect(presenter.changedBy).toEqual({
+          name: 'example',
+          email: 'test@test.com',
+        });
+      });
+
+      it("if the dataset doesn't have a user it returns null", () => {
+        const dataset = decisionDatasetFactory.build({ user: undefined });
+        const i18nService = createMockI18nService();
+
+        const presenter = new DecisionDatasetPresenter(dataset, i18nService);
+
+        expect(presenter.changedBy).toEqual(null);
+      });
     });
   });
 

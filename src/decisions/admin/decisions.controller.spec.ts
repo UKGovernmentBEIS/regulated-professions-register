@@ -433,11 +433,30 @@ describe('DecisionsController', () => {
         mockTables,
       );
 
+      Object.defineProperties(DecisionDatasetPresenter.prototype, {
+        changedBy: {
+          get() {
+            return {
+              name: 'name',
+              email: 'email',
+            };
+          },
+        },
+        lastModified: {
+          get() {
+            return '29 Apr 2022';
+          },
+        },
+      });
+
       const expected: ShowTemplate = {
         profession,
         organisation,
+        changedBy: { name: 'name', email: 'email' },
+        lastModified: '29 Apr 2022',
         tables: mockTables,
         year: 2017,
+        isPublished: true,
         datasetStatus: DecisionDatasetStatus.Live,
       };
 
@@ -468,7 +487,7 @@ describe('DecisionsController', () => {
       );
 
       expect(DecisionDatasetPresenter).toHaveBeenCalledWith(
-        dataset.routes,
+        dataset,
         i18nService,
       );
       expect(DecisionDatasetPresenter.prototype.tables).toHaveBeenCalled();
