@@ -3,6 +3,7 @@ import { Repository } from 'typeorm';
 import { Seeder } from 'nestjs-seeder';
 import { InjectRepository } from '@nestjs/typeorm';
 import { InjectData } from '../common/decorators/seeds.decorator';
+import { User } from '../users/user.entity';
 import { Organisation } from '../organisations/organisation.entity';
 import {
   DecisionDataset,
@@ -17,6 +18,7 @@ type SeedDecisionDataset = {
   year: number;
   status: DecisionDatasetStatus;
   routes: DecisionRoute[];
+  user: User;
 };
 
 @Injectable()
@@ -31,6 +33,8 @@ export class DecisionDatasetsSeeder implements Seeder {
     private readonly professionsRepository: Repository<Profession>,
     @InjectRepository(Organisation)
     private readonly organisationRepository: Repository<Organisation>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
   ) {}
 
   async seed(): Promise<void> {
@@ -44,13 +48,17 @@ export class DecisionDatasetsSeeder implements Seeder {
           where: { name: seedDataset.organisation },
         });
 
+        const user = await this.userRepository.findOne({
+          where: { email: seedDataset.user.email },
+        });
+
         const dataset: DecisionDataset = {
           profession,
           organisation,
+          user,
           year: seedDataset.year,
           status: seedDataset.status,
           routes: seedDataset.routes,
-          user: null,
           created_at: undefined,
           updated_at: undefined,
         };

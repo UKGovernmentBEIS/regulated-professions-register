@@ -4,6 +4,9 @@
     "organisation": "Law Society of England and Wales",
     "year": 2020,
     "status": "live",
+    "user": {
+      "email": "beis-rpr@dxw.com"
+    },
     "routes": [
       {
         "name": "Degree",
@@ -35,6 +38,9 @@
     "organisation": "Law Society of England and Wales",
     "year": 2021,
     "status": "live",
+    "user": {
+      "email": "beis-rpr+orgeditor@dxw.com"
+    },
     "routes": [
       {
         "name": "EEA Route",
@@ -66,6 +72,9 @@
     "organisation": "Alternative Law Society",
     "year": 2020,
     "status": "draft",
+    "user": {
+      "email": "beis-rpr+orgadmin@dxw.com"
+    },
     "routes": [
       {
         "name": "Other qualification",
@@ -97,6 +106,9 @@
     "organisation": "Department for Education",
     "year": 2019,
     "status": "draft",
+    "user": {
+      "email": "beis-rpr@dxw.com"
+    },
     "routes": [
       {
         "name": "EEA Route",
@@ -151,6 +163,9 @@
     "organisation": "Department for Education",
     "year": 2018,
     "status": "live",
+    "user": {
+      "email": "beis-rpr@dxw.com"
+    },
     "routes": [
       {
         "name": "Other qualification",
