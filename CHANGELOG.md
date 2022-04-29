@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Display confirmation banner when saving or publishing decision data
 - Filters on decision data dashboard, applying to displayed data and exported CSV data
 - "Submitted" status for decision datasets to make it clear that they're ready for publishing
+- Add sidebar to admin decision data page
 
 ### Changed
 
