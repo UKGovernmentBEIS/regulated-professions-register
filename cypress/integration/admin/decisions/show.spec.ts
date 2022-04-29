@@ -1,3 +1,5 @@
+import { format } from 'date-fns';
+
 describe('Showing a decision dataset', () => {
   context('When I am logged in as editor', () => {
     beforeEach(() => {
@@ -76,6 +78,75 @@ describe('Showing a decision dataset', () => {
             ],
           );
         });
+    });
+
+    it('the sidebar shows the correct data', () => {
+      cy.get('tr')
+        .contains('Registered Trademark Attorney')
+        .parent()
+        .within(() => {
+          cy.get('a').contains('View details').click();
+        });
+
+      cy.get('h2')
+        .contains('Status')
+        .get('.govuk-tag--yellow')
+        .contains('Draft');
+
+      cy.get('h2')
+        .contains('Last modified')
+        .get('[data-cy=last-modified]')
+        .should('contain', format(new Date(), 'd MMM yyyy'));
+
+      cy.get('h2')
+        .contains('Changed by')
+        .get('[data-cy=changed-by-text]')
+        .should('contain', 'Organisation Admin')
+        .should('contain', 'beis-rpr+orgadmin@dxw.com');
+
+      cy.get('nav').find('ul').should('have.length', 2);
+    });
+
+    it('I can edit the data by clicking the edit button', () => {
+      cy.get('tr')
+        .contains('Registered Trademark Attorney')
+        .parent()
+        .within(() => {
+          cy.get('a').contains('View details').click();
+        });
+      cy.translate('decisions.admin.buttons.edit').then((editButtonText) => {
+        cy.get('a')
+          .contains(editButtonText)
+          .click()
+          .url()
+          .should('contain', 'edit');
+      });
+    });
+
+    it('I can view the "Currently published version" by clicking the link button', () => {
+      cy.get('tr')
+        .contains('Registered Trademark Attorney')
+        .parent()
+        .within(() => {
+          cy.get('a').contains('View details').click();
+        });
+      cy.translate('decisions.admin.publicFacingLink.label').then(
+        (publicFacingLinkButtonText) => {
+          cy.get('[data-cy="currently-published-version-text"]').contains(
+            publicFacingLinkButtonText,
+          );
+        },
+      );
+      cy.translate('decisions.admin.publicFacingLink.heading').then(
+        (publicFacingLinkButtonText) => {
+          cy.get('[data-cy="currently-published-version-text"]')
+            .contains(publicFacingLinkButtonText)
+            .contains('a')
+            .click()
+            .url()
+            .should('contain', '');
+        },
+      );
     });
   });
 });
