@@ -134,7 +134,7 @@ export class EditController {
 
     const action = editDto.action;
 
-    if (action === 'publish' || action === 'save') {
+    if (action === 'publish' || action === 'save' || action === 'submit') {
       if (action === 'publish') {
         checkCanPublishDataset(request);
       }
@@ -155,6 +155,12 @@ export class EditController {
       if (action === 'publish') {
         return response.redirect(
           `/admin/decisions/${profession.id}/${organisation.id}/${year}/publish?fromEdit=true`,
+        );
+      }
+
+      if (action === 'submit') {
+        return response.redirect(
+          `/admin/decisions/${profession.id}/${organisation.id}/${year}/submit?fromEdit=true`,
         );
       }
 

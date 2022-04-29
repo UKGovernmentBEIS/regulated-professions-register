@@ -36,7 +36,11 @@ export class SubmissionController {
   @Get('/:professionId/:organisationId/:year/submit')
   @Permissions(UserPermission.SubmitDecisionData)
   @Render('admin/decisions/submission/new')
-  @BackLink('/admin/decisions/:professionId/:organisationId/:year')
+  @BackLink((request) =>
+    request.query.fromEdit === 'true'
+      ? '/admin/decisions/:professionId/:organisationId/:year/edit'
+      : '/admin/decisions/:professionId/:organisationId/:year',
+  )
   async new(
     @Param('professionId') professionId: string,
     @Param('organisationId') organisationId: string,
