@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [unreleased]
 
+## [release-018] - 2022-05-03
+
 ### Added
 
 - "Total" column on internal decision data tables
@@ -345,7 +347,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fix links in error messages when adding a new profession
 - Make validation errors more human readable
 
-[unreleased]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-017...HEAD
+[unreleased]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-018...HEAD
+[release-018]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release017...release-018
 [release-017]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release016...release-017
 [release-016]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release015...release-016
 [release-015]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release014...release-015
