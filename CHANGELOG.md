@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [unreleased]
 
+## [release-019] - 2022-05-04
+
 ### Changed
 
 - Increase timeout on invitation emails to 30 days
@@ -352,7 +354,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fix links in error messages when adding a new profession
 - Make validation errors more human readable
 
-[unreleased]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-018...HEAD
+[unreleased]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-019...HEAD
+[release-019]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release018...release-019
 [release-018]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release017...release-018
 [release-017]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release016...release-017
 [release-016]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release015...release-016
