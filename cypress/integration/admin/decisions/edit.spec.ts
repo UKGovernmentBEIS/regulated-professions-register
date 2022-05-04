@@ -205,7 +205,7 @@ describe('Editing a decision dataset', () => {
         });
     });
 
-    it('I can publish a decision dataset', () => {
+    it('I can publish a decision dataset from the edit page', () => {
       cy.translate('app.status.draft').then((draft) => {
         cy.get('tr')
           .contains('Registered Trademark Attorney')
@@ -232,6 +232,26 @@ describe('Editing a decision dataset', () => {
 
       cy.checkAccessibility();
 
+      cy.translate('decisions.admin.publication.caption').then(
+        (publishCaption) => {
+          cy.get('body').contains(publishCaption);
+        },
+      );
+
+      cy.translate('decisions.admin.publication.heading').then((heading) => {
+        cy.contains(heading);
+      });
+
+      cy.contains('Registered Trademark Attorney');
+      cy.contains('Alternative Law Society');
+      cy.contains('2020');
+
+      cy.translate('decisions.admin.buttons.publish').then((publishButton) => {
+        cy.get('button').contains(publishButton).click();
+      });
+
+      cy.checkAccessibility();
+
       cy.translate('decisions.admin.publication.confirmation.heading').then(
         (confirmationHeading) => {
           cy.get('body').should('contain', confirmationHeading);
@@ -245,6 +265,34 @@ describe('Editing a decision dataset', () => {
           .contains('Registered Trademark Attorney')
           .parent()
           .should('not.contain', draft);
+      });
+    });
+
+    it('I cannot submit decision data', () => {
+      cy.translate('app.status.draft').then((draft) => {
+        cy.get('tr')
+          .contains(
+            'Secondary School Teacher in State maintained schools (England)',
+          )
+          .parent()
+          .contains(draft)
+          .parent()
+          .parent()
+          .within(() => {
+            cy.get('a').contains('View details').click();
+          });
+      });
+
+      cy.checkAccessibility();
+
+      cy.translate('decisions.admin.buttons.edit').then((edit) => {
+        cy.get('a').contains(edit).click();
+      });
+
+      cy.checkAccessibility();
+
+      cy.translate('decisions.admin.buttons.submit').then((submit) => {
+        cy.get('button').should('not.contain', submit);
       });
     });
   });
@@ -281,6 +329,67 @@ describe('Editing a decision dataset', () => {
       cy.translate('decisions.admin.buttons.publish').then((publish) => {
         cy.get('button').should('not.contain', publish);
       });
+    });
+
+    it('I can submit decision data from the edit page', () => {
+      cy.translate('app.status.draft').then((draft) => {
+        cy.get('tr')
+          .contains(
+            'Secondary School Teacher in State maintained schools (England)',
+          )
+          .parent()
+          .contains(draft)
+          .parent()
+          .parent()
+          .within(() => {
+            cy.get('a').contains('View details').click();
+          });
+      });
+
+      cy.checkAccessibility();
+
+      cy.translate('decisions.admin.buttons.edit').then((edit) => {
+        cy.get('a').contains(edit).click();
+      });
+
+      cy.checkAccessibility();
+
+      cy.translate('decisions.admin.buttons.submit').then((submitButton) => {
+        cy.get('button').contains(submitButton).click();
+      });
+
+      cy.checkAccessibility();
+
+      cy.translate('decisions.admin.submission.caption').then(
+        (submitCaption) => {
+          cy.get('body').contains(submitCaption);
+        },
+      );
+
+      cy.translate('decisions.admin.submission.heading').then((heading) => {
+        cy.contains(heading);
+      });
+
+      cy.contains(
+        'Secondary School Teacher in State maintained schools (England)',
+      );
+      cy.contains('2019');
+
+      cy.translate('decisions.admin.buttons.submit').then((submitButton) => {
+        cy.get('button').contains(submitButton).click();
+      });
+
+      cy.checkAccessibility();
+
+      cy.translate('decisions.show.heading').then((heading) => {
+        cy.get('body').should('contain', heading);
+      });
+
+      cy.translate('decisions.admin.submission.confirmation.heading').then(
+        (confirmationHeading) => {
+          cy.get('body').should('contain', confirmationHeading);
+        },
+      );
     });
   });
 });

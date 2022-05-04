@@ -253,7 +253,7 @@ describe('EditController', () => {
 
   describe('update', () => {
     describe('when the `action` is "publish"', () => {
-      it('saves the given dataset with the published status', async () => {
+      it('saves the given dataset as draft and redirects to the publication confirmation page', async () => {
         const editDto: EditDto = {
           routes: ['Example route'],
           countries: [['Brazil']],
@@ -330,13 +330,8 @@ describe('EditController', () => {
 
         expect(checkCanPublishDatasetSpy).toHaveBeenCalledWith(request);
 
-        expect(flashMock).toHaveBeenCalledWith(
-          translationOf('decisions.admin.publication.confirmation.heading'),
-          translationOf('decisions.admin.publication.confirmation.body'),
-        );
-
         expect(response.redirect).toHaveBeenCalledWith(
-          '/admin/decisions/example-profession-id/example-organisation-id/2016',
+          '/admin/decisions/example-profession-id/example-organisation-id/2016/publish?fromEdit=true',
         );
 
         expect(professionsService.findWithVersions).toHaveBeenCalledWith(
@@ -356,7 +351,118 @@ describe('EditController', () => {
           organisation,
           year: 2016,
           user,
-          status: DecisionDatasetStatus.Live,
+          status: DecisionDatasetStatus.Draft,
+          routes: decisionRoutes,
+        } as DecisionDataset);
+
+        expect(checkCanChangeDatasetSpy).toHaveBeenCalledWith(
+          request,
+          profession,
+          organisation,
+          2016,
+          false,
+        );
+        expect(getActingUserSpy).toHaveBeenCalledWith(request);
+        expect(parseEditDtoDecisionRoutesSpy).toHaveBeenCalledWith(editDto);
+        expect(modifyDecisionRoutesSpy).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('when the `action` is "submit"', () => {
+      it('saves the given dataset as draft and redirects to the submission confirmation page', async () => {
+        const editDto: EditDto = {
+          routes: ['Example route'],
+          countries: [['Brazil']],
+          yeses: [['1']],
+          noes: [['5']],
+          yesAfterComps: [['4']],
+          noAfterComps: [['7']],
+          action: 'submit',
+        };
+
+        const decisionRoutes: DecisionRoute[] = [
+          {
+            name: 'Example route',
+            countries: [
+              {
+                code: 'BR',
+                decisions: {
+                  yes: 1,
+                  no: 5,
+                  yesAfterComp: 5,
+                  noAfterComp: 7,
+                },
+              },
+            ],
+          },
+        ];
+
+        const profession = professionFactory.build({
+          id: 'example-profession-id',
+        });
+
+        const organisation = organisationFactory.build({
+          id: 'example-organisation-id',
+        });
+
+        const user = userFactory.build();
+
+        professionsService.findWithVersions.mockResolvedValue(profession);
+        organisationsService.find.mockResolvedValue(organisation);
+        decisionDatasetsService.find.mockResolvedValue(undefined);
+
+        const checkCanChangeDatasetSpy = jest
+          .spyOn(checkCanChangeDatasetModule, 'checkCanChangeDataset')
+          .mockImplementation();
+
+        const getActingUserSpy = jest
+          .spyOn(getActingUserModule, 'getActingUser')
+          .mockReturnValue(user);
+
+        const parseEditDtoDecisionRoutesSpy = jest
+          .spyOn(parseEditDtoDecisionRoutesModule, 'parseEditDtoDecisionRoutes')
+          .mockReturnValue(decisionRoutes);
+        const modifyDecisionRoutesSpy = jest.spyOn(
+          modifyDecisionRoutesModule,
+          'modifyDecisionRoutes',
+        );
+
+        const request = createDefaultMockRequest();
+        const response = createMock<Response>();
+        const flashMock = flashMessage as jest.Mock;
+        flashMock.mockImplementation(() => 'STUB_FLASH_MESSAGE');
+
+        await controller.update(
+          'example-profession-id',
+          'example-organisation-id',
+          2016,
+          editDto,
+          request,
+          response,
+        );
+
+        expect(response.redirect).toHaveBeenCalledWith(
+          '/admin/decisions/example-profession-id/example-organisation-id/2016/submit?fromEdit=true',
+        );
+
+        expect(professionsService.findWithVersions).toHaveBeenCalledWith(
+          'example-profession-id',
+        );
+        expect(organisationsService.find).toHaveBeenCalledWith(
+          'example-organisation-id',
+        );
+        expect(decisionDatasetsService.find).toHaveBeenCalledWith(
+          'example-profession-id',
+          'example-organisation-id',
+          2016,
+        );
+
+        expect(decisionDatasetsService.save).toHaveBeenCalledWith({
+          profession,
+          organisation,
+          year: 2016,
+          user,
+          status: DecisionDatasetStatus.Draft,
           routes: decisionRoutes,
         } as DecisionDataset);
 

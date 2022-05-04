@@ -184,6 +184,14 @@
             value: 'publish'
           }) }}
         {% endif %}
+
+        {% if 'submitDecisionData' in permissions %}
+          {{ govukButton({
+            text: "decisions.admin.buttons.submit" | t,
+            name: 'action',
+            value: 'submit'
+          }) }}
+        {% endif %}
       </div>
     </div>
   </form>
