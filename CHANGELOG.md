@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 
 - Increase timeout on invitation emails to 30 days
+- Update feedback form links from Google to MS Forms
 
 ## [release-018] - 2022-05-03
 
