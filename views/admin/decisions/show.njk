@@ -73,6 +73,13 @@
               }}
             </li>
           {% endif %}
+          {% if 'downloadDecisionData' in permissions %}
+            <li>
+              <span class="govuk-body-s">
+                <a href="/admin/decisions/{{profession.id}}/{{organisation.id}}/{{year}}/export" class="govuk-link rpr-internal__details-page-file-download-link">{{ "decisions.admin.show.download" | t({profession: profession.name}) }}</a>
+              </span>
+            </li>
+          {% endif %}
         </ul>
       </nav>
     </aside>

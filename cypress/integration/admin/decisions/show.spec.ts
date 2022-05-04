@@ -148,5 +148,34 @@ describe('Showing a decision dataset', () => {
         },
       );
     });
+
+    it('I can download a decision dataset', () => {
+      cy.get('tr')
+        .contains(
+          'Secondary School Teacher in State maintained schools (England)',
+        )
+        .parent()
+        .within(() => {
+          cy.get('a').contains('View details').click();
+        });
+
+      cy.translate('decisions.admin.show.download', {
+        profession:
+          'Secondary School Teacher in State maintained schools (England)',
+      }).then((download) => {
+        cy.checkCsvDownload(
+          download,
+          'decisions-secondary-school-teacher-in-state-maintained-schools-england-department-for-education-2019',
+          (dataset) => {
+            return (
+              dataset.profession ===
+                'Secondary School Teacher in State maintained schools (England)' &&
+              dataset.organisation === 'Department for Education' &&
+              dataset.year === 2019
+            );
+          },
+        );
+      });
+    });
   });
 });
