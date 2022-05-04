@@ -17,12 +17,15 @@ import { getOrganisationsFromProfessionByRole } from './helpers/get-organisation
 import { isUK } from '../helpers/nations.helper';
 import { NationsListPresenter } from '../nations/presenters/nations-list.presenter';
 import { organisationList } from './presenters/organisation-list';
-
+import { DecisionDatasetYearsPresenter } from './presenters/decision-dataset-years.presenter';
+import { DecisionDatasetsService } from '../decisions/decision-datasets.service';
 import { OrganisationRole } from './profession-to-organisation.entity';
+
 @Controller()
 export class ProfessionsController {
   constructor(
-    private professionVersionsService: ProfessionVersionsService,
+    private readonly professionVersionsService: ProfessionVersionsService,
+    private readonly decisionDatasetsService: DecisionDatasetsService,
     private readonly i18nService: I18nService,
   ) {}
 
@@ -36,6 +39,9 @@ export class ProfessionsController {
     const profession = await this.professionVersionsService.findLiveBySlug(
       slug,
     );
+
+    const decisionYears =
+      await this.decisionDatasetsService.allLiveYearsForProfession(profession);
 
     if (!profession) {
       throw new NotFoundException(
@@ -77,6 +83,14 @@ export class ProfessionsController {
         )
       : null;
 
+    const decisionYearsPresenter = decisionYears.length
+      ? new DecisionDatasetYearsPresenter(
+          decisionYears,
+          profession,
+          this.i18nService,
+        )
+      : null;
+
     return {
       profession,
       qualifications: qualification
@@ -91,6 +105,7 @@ export class ProfessionsController {
       industries,
       enforcementBodies: organisationList(enforcementBodies),
       organisations: tierOneOrganisations,
+      decisionYears: decisionYearsPresenter?.summaryList(),
     };
   }
 }

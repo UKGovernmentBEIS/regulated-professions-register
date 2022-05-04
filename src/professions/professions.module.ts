@@ -29,6 +29,8 @@ import { OrganisationVersion } from '../organisations/organisation-version.entit
 import { ProfessionsSearchService } from './professions-search.service';
 import { OrganisationsSearchService } from '../organisations/organisations-search.service';
 import { SearchModule } from '../search/search.module';
+import { DecisionDatasetsService } from '../decisions/decision-datasets.service';
+import { DecisionDataset } from '../decisions/decision-dataset.entity';
 
 @Module({
   imports: [
@@ -38,6 +40,7 @@ import { SearchModule } from '../search/search.module';
     TypeOrmModule.forFeature([Organisation]),
     TypeOrmModule.forFeature([OrganisationVersion]),
     TypeOrmModule.forFeature([ProfessionToOrganisation]),
+    TypeOrmModule.forFeature([DecisionDataset]),
     SearchModule.register(),
   ],
   providers: [
@@ -48,6 +51,7 @@ import { SearchModule } from '../search/search.module';
     ProfessionsSearchService,
     OrganisationsSearchService,
     ProfessionVersionsService,
+    DecisionDatasetsService,
   ],
   controllers: [
     SearchController,
