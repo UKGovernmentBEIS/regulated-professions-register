@@ -61,7 +61,7 @@ export class Auth0Service {
     const passwordChangeTicket = await client.createPasswordChangeTicket({
       result_url: `${process.env['HOST_URL']}/admin`,
       user_id: user.user_id,
-      ttl_sec: 1209600,
+      ttl_sec: 2592000,
     });
 
     return {
