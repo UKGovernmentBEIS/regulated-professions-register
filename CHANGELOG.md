@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [unreleased]
 
+### Changed
+
+- Increase timeout on invitation emails to 30 days
+
 ## [release-018] - 2022-05-03
 
 ### Added
