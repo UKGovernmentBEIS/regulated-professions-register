@@ -3,6 +3,8 @@ import { translate } from '../plugins/i18n';
 
 import puppeteer from 'puppeteer';
 import { AxeRules } from '.';
+import path from 'path';
+import { parse } from 'csv-parse/dist/esm/sync';
 
 /*
  * Get a username and password from their role
@@ -359,3 +361,78 @@ Cypress.Commands.add('expandFilters', (prefix: string) => {
     cy.get('span').contains(showFilters).click();
   });
 });
+
+Cypress.Commands.add('getDisplayedDatasets', () => {
+  return cy
+    .readFile('./seeds/test/decision-datasets.json')
+    .then((datasets: SeedDecisionDataset[]) => {
+      const result = datasets.filter((dataset) =>
+        ['live', 'draft'].includes(dataset.status),
+      );
+
+      result.sort((dataset1, dataset2) => {
+        const professionComparison = dataset1.profession.localeCompare(
+          dataset2.profession,
+        );
+
+        if (professionComparison) {
+          return professionComparison;
+        }
+
+        const organisationComparison = dataset1.organisation.localeCompare(
+          dataset2.organisation,
+        );
+
+        if (organisationComparison) {
+          return organisationComparison;
+        }
+
+        return dataset2.year - dataset1.year;
+      });
+
+      return result;
+    });
+});
+
+Cypress.Commands.add(
+  'checkCsvDownload',
+  (
+    downloadText: string,
+    filename: string,
+    filter: (dataset: SeedDecisionDataset) => boolean,
+  ) => {
+    // This is a workaround for a Cypress bug to prevent it waiting
+    // indefinitely for a new page to load after clicking the download link
+    // See https://github.com/cypress-io/cypress/issues/14857
+    cy.window()
+      .document()
+      .then(function (doc) {
+        doc.addEventListener('click', () => {
+          setTimeout(function () {
+            doc.location.reload();
+          }, 5000);
+        });
+      });
+
+    cy.get('body a').contains(downloadText).click();
+
+    const filePath = path.join(
+      Cypress.config('downloadsFolder'),
+      `${filename}.csv`,
+    );
+
+    cy.readFile(filePath).then((file) => {
+      const rows: string[][] = parse(file);
+
+      cy.getDisplayedDatasets().then((datasets) => {
+        datasets = datasets.filter(filter);
+
+        const countries = datasets
+          .flatMap((dataset) => dataset.routes)
+          .flatMap((route) => route.countries);
+
+        expect(rows).to.have.length(countries.length + 1);
+      });
+    });
+  },
+);
