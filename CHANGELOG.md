@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 
 - Public view of decision data, linked to from public profession pages
+- Add confirmation page when editing decision data
 
 ### Changed
 
