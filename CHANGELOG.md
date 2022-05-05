@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 
 - Allow organisation users to submit decision data directly from the editing page
+- Track search parameters and outbound links in Plausible
 
 ## [release-019] - 2022-05-04
 
