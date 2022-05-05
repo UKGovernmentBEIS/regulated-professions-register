@@ -122,6 +122,12 @@
         "no": "Not accepted - qualifications not recognised (route {route}, country {country})",
         "yesAfterComp": "Accepted - additional conditions met (route {route}, country {country})",
         "noAfterComp": "Not accepted - additional conditions not met (route {route}, country {country})"
+      },
+      "confirmation": {
+        "heading": "Are you sure you want to edit the following decision data?",
+        "caption": "Editing decision data",
+        "bodyUnpublish": "Editing this dataset will unpublish any existing decision data for this profession. Are you sure you want to do this?<br/>There will be no data available on this profession until the new draft is published.",
+        "bodyUnsubmit": "Editing this dataset will unsubmit any existing decision data for this profession. Are you sure you want to do this?<br/>There will be no data available on this profession until the new draft is published."
       }
     },
     "buttons": {
