@@ -6,6 +6,7 @@ import {
   ParseIntPipe,
   Render,
 } from '@nestjs/common';
+import { Request } from 'express';
 import { I18nService } from 'nestjs-i18n';
 import { BackLink } from '../common/decorators/back-link.decorator';
 import { DecisionDatasetsService } from '../decisions/decision-datasets.service';
@@ -23,7 +24,15 @@ export class DecisionsController {
 
   @Get('/decisions/:slug/:year')
   @Render('decisions/show')
-  @BackLink('/professions/:slug')
+  @BackLink((request: Request) => {
+    const fromInternalPage = request.query.fromInternalPage as string;
+    if (fromInternalPage) {
+      const [professionId, organisationId] = fromInternalPage.split(':');
+      return `/admin/decisions/${professionId}/${organisationId}/:year`;
+    } else {
+      return '/professions/:slug';
+    }
+  })
   async show(
     @Param('slug') slug: string,
     @Param('year', ParseIntPipe) year,
