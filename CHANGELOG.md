@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [unreleased]
 
+## [release-020] - 2022-05-05
+
 ### Added
 
 - Add confirmation page when publishing decision data from the editing page
@@ -364,7 +366,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fix links in error messages when adding a new profession
 - Make validation errors more human readable
 
-[unreleased]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-019...HEAD
+[unreleased]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-020...HEAD
+[release-019]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release019...release-020
 [release-019]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release018...release-019
 [release-018]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release017...release-018
 [release-017]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release016...release-017
