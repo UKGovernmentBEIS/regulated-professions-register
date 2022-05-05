@@ -39,8 +39,8 @@
       const queryParams = new URLSearchParams(location.search)
       let customUrl = url.protocol + "//" + url.hostname + url.pathname
       for (const paramName of params) {
-        const paramValue = queryParams.get(paramName)
-        if (paramValue) customUrl = customUrl + '/' + paramName + '=' + paramValue
+        const paramValues = queryParams.getAll(paramName)
+        if (paramValues && paramValues.length > 0 && paramValues[0]) customUrl = customUrl + '/' + paramName + '=' + paramValues.join("&")
       }
       return customUrl
     }
