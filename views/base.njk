@@ -25,6 +25,28 @@
 {% block head %}
   {{ encore_entry_link_tags }}
 
+  {% if environment === 'production' %}
+    <script defer data-domain="{{ site_domain }}" src="https://plausible.io/js/script.manual.js"></script>
+  {% endif %}
+
+  <!-- define the `plausible` function to manually trigger events -->
+  <script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
+
+  <!-- trigger pageview -->
+  <script>
+    function prepareUrl(params) {
+      const url = new URL(location.href)
+      const queryParams = new URLSearchParams(location.search)
+      let customUrl = url.protocol + "//" + url.hostname + url.pathname
+      for (const paramName of params) {
+        const paramValue = queryParams.get(paramName)
+        if (paramValue) customUrl = customUrl + '/' + paramName + '=' + paramValue
+      }
+      return customUrl
+    }
+    plausible('pageview', { u: prepareUrl(["keywords", "industries[]", "nations[]", "regulationTypes[]", "years[]", "statuses[]"]) })
+  </script>
+
   {# For Internet Explorer 8, you need to compile specific stylesheet #}
   {# see https://frontend.design-system.service.gov.uk/supporting-ie8/#support-internet-explorer-8 #}
   <!--[if IE 8]>
