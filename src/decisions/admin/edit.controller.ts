@@ -21,6 +21,7 @@ import { ProfessionsService } from '../../professions/professions.service';
 import { Response } from 'express';
 import { OrganisationsService } from '../../organisations/organisations.service';
 import { EditTemplate } from './interfaces/edit/edit-template.interface';
+import { NewTemplate } from './interfaces/edit/new-template.interface';
 import { DecisionRoute } from '../interfaces/decision-route.interface';
 import { EditDto } from './dto/edit.dto';
 import {
@@ -33,6 +34,7 @@ import { modifyDecisionRoutes } from './helpers/modify-decision-routes.helper';
 import { checkCanChangeDataset } from './helpers/check-can-change-dataset.helper';
 import { checkCanPublishDataset } from './helpers/check-can-publish-dataset.helper';
 import { flashMessage } from '../../common/flash-message';
+import { BackLink } from '../../common/decorators/back-link.decorator';
 
 const emptyCountry = {
   code: null,
@@ -53,6 +55,44 @@ export class EditController {
     private readonly organisationsService: OrganisationsService,
     private readonly i18nService: I18nService,
   ) {}
+
+  @Get(':professionId/:organisationId/:year/new')
+  @Permissions(
+    UserPermission.UploadDecisionData,
+    UserPermission.DownloadDecisionData,
+    UserPermission.ViewDecisionData,
+  )
+  @Render('admin/decisions/edit/new')
+  @BackLink('/admin/decisions/:professionId/:organisationId/:year')
+  async new(
+    @Param('professionId') professionId: string,
+    @Param('organisationId') organisationId: string,
+    @Param('year', ParseIntPipe) year: number,
+    @Req() request: RequestWithAppSession,
+  ): Promise<NewTemplate> {
+    const profession = await this.professionsService.findWithVersions(
+      professionId,
+    );
+
+    const organisation = await this.organisationsService.find(organisationId);
+
+    const dataset = await this.decisionDatasetsService.find(
+      professionId,
+      organisationId,
+      year,
+    );
+
+    checkCanChangeDataset(request, profession, organisation, year, !!dataset);
+
+    const datasetPublished = dataset.status === DecisionDatasetStatus.Live;
+
+    return {
+      year,
+      profession,
+      organisation,
+      datasetPublished,
+    };
+  }
 
   @Get(':professionId/:organisationId/:year/edit')
   @Permissions(
