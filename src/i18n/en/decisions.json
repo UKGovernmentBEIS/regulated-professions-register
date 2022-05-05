@@ -141,10 +141,10 @@
     "year": "Year",
     "tableHeading": {
       "country": "Country of qualification",
-      "yes": "Yes",
-      "no": "No",
-      "yesAfterComp": "Yes (after compensatory measure)",
-      "noAfterComp": "No (after compensatory measure)",
+      "yes": "Accepted - qualifications recognised",
+      "no": "Not accepted - qualifications not recognised",
+      "yesAfterComp": "Accepted - additional conditions met",
+      "noAfterComp": "Not accepted - additional conditions not met",
       "total": "Total"
     }
   },
@@ -157,10 +157,10 @@
       "route": "Route",
       "countryName": "Country of qualification",
       "countryCode": "Country code",
-      "yes": "Yes",
-      "no": "No",
-      "yesAfterComp": "Yes (after compensatory measure)",
-      "noAfterComp": "No (after compensatory measure)"
+      "yes": "Accepted - qualifications recognised",
+      "no": "Not accepted - qualifications not recognised",
+      "yesAfterComp": "Accepted - additional conditions met",
+      "noAfterComp": "Not accepted - additional conditions not met"
     },
     "status": {
       "live": "Published",
