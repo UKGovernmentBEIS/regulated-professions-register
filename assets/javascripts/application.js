@@ -1,11 +1,7 @@
 import { initAll } from 'govuk-frontend';
-import Plausible from 'plausible-tracker';
 import { regulatoryAuthoritySelect } from './regulatory-authority-select';
 
-const { enableAutoPageviews } = Plausible();
-
 initAll();
-enableAutoPageviews();
 regulatoryAuthoritySelect();
 
 const detailsHeaderElements = document.getElementsByClassName(
