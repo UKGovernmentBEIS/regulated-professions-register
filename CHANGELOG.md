@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 
 - Add confirmation page when publishing decision data from the editing page
+- Add single decision dataset download link to internal dataset pages
 
 ### Changed
 

@@ -42,17 +42,17 @@
     </div>
   </div>
 
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
-      <div class="rpr-internal-listing__file-download-link-container">
-        <div class="rpr-internal-listing__file-download-link-container-right">
-          <a class="govuk-link rpr-internal-listing__file-download-link" href="/admin/decisions/export{{('?' + filterQuery) if filterQuery else '' }}">{{"decisions.admin.dashboard.download" | t}}</a>
+  {% if 'downloadDecisionData' in permissions %}
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        <div class="rpr-internal-listing__file-download-link-container">
+          <div class="rpr-internal-listing__file-download-link-container-right">
+            <a class="govuk-link rpr-internal-listing__file-download-link" href="/admin/decisions/export{{('?' + filterQuery) if filterQuery else '' }}">{{"decisions.admin.dashboard.download" | t}}</a>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-
-  <div class="govuk-grid-row">
+  {% endif %}
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">

@@ -24,6 +24,16 @@ export interface AxeRules {
 }
 
 declare global {
+  type SeedDecisionDataset = {
+    profession: string;
+    organisation: string;
+    year: number;
+    status: string;
+    routes: {
+      countries: [];
+    }[];
+  };
+
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Cypress {
     interface Chainable {
@@ -75,6 +85,12 @@ declare global {
       visitInternalDashboard(): void;
       clickFilterButtonAndCheckAccessibility(): void;
       expandFilters(prefix: string): void;
+      getDisplayedDatasets(): Chainable<SeedDecisionDataset[]>;
+      checkCsvDownload(
+        downloadText: string,
+        filename: string,
+        filter: (dataset: SeedDecisionDataset) => boolean,
+      ): void;
     }
   }
 }
