@@ -11,6 +11,7 @@
 
 {% block content %}
   {% include "../../_messages.njk" %}
+  {% include "../../shared/_errors.njk" %}
   <form action="/admin/decisions/{{ profession.id }}/{{ organisation.id }}/{{ year }}/edit" method="post">
 
     <div class="govuk-grid-row">
@@ -58,7 +59,8 @@
                     },
                     name: "routes[" + loop.index + "]",
                     id: "routes[" + loop.index + "]",
-                    value: route.name
+                    value: route.name,
+                    errorMessage: (errors["routes" + "[" + loop.index + "]"] | tError)
                   }) }}
                 </caption>
                 <thead class="govuk-table__head">

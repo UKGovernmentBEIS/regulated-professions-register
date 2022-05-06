@@ -23,7 +23,6 @@ import { OrganisationsService } from '../../organisations/organisations.service'
 import { EditTemplate } from './interfaces/edit/edit-template.interface';
 import { NewTemplate } from './interfaces/edit/new-template.interface';
 import { DecisionRoute } from '../interfaces/decision-route.interface';
-import { EditDto } from './dto/edit.dto';
 import {
   DecisionDataset,
   DecisionDatasetStatus,
@@ -35,6 +34,9 @@ import { checkCanChangeDataset } from './helpers/check-can-change-dataset.helper
 import { checkCanPublishDataset } from './helpers/check-can-publish-dataset.helper';
 import { flashMessage } from '../../common/flash-message';
 import { BackLink } from '../../common/decorators/back-link.decorator';
+import { ValidationFailedError } from '../../common/validation/validation-failed.error';
+import { DecisionDataValidator } from '../../helpers/decision-data-validator';
+import { EditDto } from './dto/edit.dto';
 
 const emptyCountry = {
   code: null,
@@ -170,13 +172,30 @@ export class EditController {
 
     checkCanChangeDataset(request, profession, organisation, year, !!dataset);
 
-    const routes = parseEditDtoDecisionRoutes(editDto);
-
     const action = editDto.action;
+    const routes = parseEditDtoDecisionRoutes(editDto);
 
     if (action === 'publish' || action === 'save' || action === 'submit') {
       if (action === 'publish') {
         checkCanPublishDataset(request);
+      }
+
+      let errors = {};
+      const validator = DecisionDataValidator.validate(editDto);
+
+      if (!validator.valid()) {
+        errors = new ValidationFailedError(validator.errors).fullMessages();
+
+        return response.render('admin/decisions/edit', {
+          profession,
+          organisation,
+          year,
+          routes: new DecisionDatasetEditPresenter(
+            routes,
+            this.i18nService,
+          ).present(),
+          errors,
+        });
       }
 
       const newDataset: DecisionDataset = {
