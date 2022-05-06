@@ -38,15 +38,21 @@ export function parseEditDtoDecisionRoutes(editDto: EditDto): DecisionRoute[] {
     ) {
       type DecisionCountry = DecisionRoute['countries'][0];
 
+      const empty =
+        !yeses[countryIndex] &&
+        !noes[countryIndex] &&
+        !yesAfterComps[countryIndex] &&
+        !noAfterComps[countryIndex];
+
       const country: DecisionCountry = {
         code: countries[countryIndex]
           ? Country.find(countries[countryIndex]).code
           : null,
         decisions: {
-          yes: parseDecisionValue(yeses[countryIndex]),
-          no: parseDecisionValue(noes[countryIndex]),
-          yesAfterComp: parseDecisionValue(yesAfterComps[countryIndex]),
-          noAfterComp: parseDecisionValue(noAfterComps[countryIndex]),
+          yes: parseDecisionValue(yeses[countryIndex], !empty),
+          no: parseDecisionValue(noes[countryIndex], !empty),
+          yesAfterComp: parseDecisionValue(yesAfterComps[countryIndex], !empty),
+          noAfterComp: parseDecisionValue(noAfterComps[countryIndex], !empty),
         },
       };
 
