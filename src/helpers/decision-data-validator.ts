@@ -8,7 +8,10 @@ export class DecisionDataValidator {
 
   public static validate(obj: EditDto) {
     const object: EditDto = plainToClass(EditDto, obj);
-    const errors = this.validateNoEmptyRoutes(obj);
+    const errors = [
+      this.validateNoEmptyRoutes(obj),
+      this.validateNoDuplicateRoutes(obj),
+    ].flat();
 
     return new DecisionDataValidator(object, errors);
   }
@@ -31,6 +34,21 @@ export class DecisionDataValidator {
             property: `routes[${index + 1}]`,
             constraints: {
               message: 'decisions.admin.edit.errors.routes.empty',
+            },
+          };
+        }
+      })
+      .filter((n) => n);
+  }
+
+  public static validateNoDuplicateRoutes(editDto: EditDto): ValidationError[] {
+    return editDto.routes
+      .map((route, index) => {
+        if (editDto.routes.indexOf(route) !== index && route !== '') {
+          return {
+            property: `routes[${index + 1}]`,
+            constraints: {
+              message: 'decisions.admin.edit.errors.routes.duplicate',
             },
           };
         }
