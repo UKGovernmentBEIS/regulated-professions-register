@@ -1,6 +1,7 @@
 import { createMock } from '@golevelup/ts-jest';
 import * as stringifyModule from 'csv-stringify';
 import { Response } from 'express';
+import { Country } from '../../../countries/country';
 import { createMockI18nService } from '../../../testutils/create-mock-i18n-service';
 import decisionDatasetFactory from '../../../testutils/factories/decision-dataset';
 import organisation from '../../../testutils/factories/organisation';
@@ -9,9 +10,17 @@ import { translationOf } from '../../../testutils/translation-of';
 import { DecisionDatasetStatus } from '../../decision-dataset.entity';
 import { DecisionsCsvWriter } from './decisions-csv-writer.helper';
 
+jest.mock('../../../countries/country');
+
 describe('DecisionsCsvWriter', () => {
   describe('write', () => {
     it('writes a CSV file of the given datasets', () => {
+      (Country.find as jest.Mock).mockImplementation((code: string) => ({
+        code,
+        translatedName: () =>
+          translationOf(`countries.${code.toLocaleLowerCase()}`),
+      }));
+
       const stringifierMock = createMock<stringifyModule.Stringifier>();
       const stringifySpy = jest
         .spyOn(stringifyModule, 'stringify')
@@ -147,7 +156,8 @@ describe('DecisionsCsvWriter', () => {
         translationOf('decisions.csv.heading.year'),
         translationOf('decisions.csv.heading.status'),
         translationOf('decisions.csv.heading.route'),
-        translationOf('decisions.csv.heading.country'),
+        translationOf('decisions.csv.heading.countryName'),
+        translationOf('decisions.csv.heading.countryCode'),
         translationOf('decisions.csv.heading.yes'),
         translationOf('decisions.csv.heading.yesAfterComp'),
         translationOf('decisions.csv.heading.no'),
@@ -160,6 +170,7 @@ describe('DecisionsCsvWriter', () => {
         '2020',
         translationOf('decisions.csv.status.live'),
         'Example route 1',
+        translationOf('countries.cy'),
         'CY',
         '3',
         '9',
@@ -173,6 +184,7 @@ describe('DecisionsCsvWriter', () => {
         '2022',
         translationOf('decisions.csv.status.draft'),
         'Example route 2',
+        translationOf('countries.gb'),
         'GB',
         '6',
         '6',
@@ -186,6 +198,7 @@ describe('DecisionsCsvWriter', () => {
         '2022',
         translationOf('decisions.csv.status.draft'),
         'Example route 3',
+        translationOf('countries.jp'),
         'JP',
         '',
         '7',
@@ -199,6 +212,7 @@ describe('DecisionsCsvWriter', () => {
         '2021',
         translationOf('decisions.csv.status.draft'),
         'Example route 4',
+        translationOf('countries.fr'),
         'FR',
         '7',
         '3',
@@ -212,6 +226,7 @@ describe('DecisionsCsvWriter', () => {
         '2021',
         translationOf('decisions.csv.status.draft'),
         'Example route 4',
+        translationOf('countries.pl'),
         'PL',
         '7',
         '3',
@@ -222,5 +237,9 @@ describe('DecisionsCsvWriter', () => {
       expect(stringifierMock.pipe).toHaveBeenCalledWith(response);
       expect(stringifierMock.end).toHaveBeenCalled();
     });
+  });
+
+  afterEach(() => {
+    jest.resetAllMocks();
   });
 });
