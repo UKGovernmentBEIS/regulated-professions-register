@@ -313,25 +313,53 @@ Cypress.Commands.add('checkPublishNotBlocked', () => {
     });
 });
 
-Cypress.Commands.add('checkTable', (headings: string[], rows: string[][]) => {
-  headings.forEach((heading, index) => {
-    cy.translate(heading).then((translatedHeading) => {
-      cy.get('table thead tr th')
-        .eq(index)
-        .should('contain', translatedHeading);
-    });
-  });
-
-  rows.forEach((row, rowIndex) => {
-    cy.get('table tbody tr')
-      .eq(rowIndex)
-      .within(() => {
-        row.forEach((cell, cellIndex) => {
-          cy.get('td').eq(cellIndex).should('contain', cell);
-        });
+Cypress.Commands.add(
+  'checkVerticalTable',
+  (headings: string[], rows: string[][]) => {
+    headings.forEach((heading, index) => {
+      cy.translate(heading).then((translatedHeading) => {
+        cy.get('table thead tr th')
+          .eq(index)
+          .should('contain', translatedHeading);
       });
-  });
-});
+    });
+
+    rows.forEach((row, rowIndex) => {
+      cy.get('table tbody tr')
+        .eq(rowIndex)
+        .within(() => {
+          row.forEach((cell, cellIndex) => {
+            cy.get('td').eq(cellIndex).should('contain', cell);
+          });
+        });
+    });
+  },
+);
+
+Cypress.Commands.add(
+  'checkHorizontalTable',
+  (headings: string[], columns: string[][]) => {
+    headings.forEach((heading, index) => {
+      cy.translate(heading).then((translatedHeading) => {
+        cy.get('table tr')
+          .eq(index)
+          .within(() => {
+            cy.get('th').should('contain', translatedHeading);
+          });
+      });
+    });
+
+    columns.forEach((column, columnIndex) => {
+      column.forEach((cell, cellIndex) => {
+        cy.get('table tbody tr')
+          .eq(cellIndex)
+          .within(() => {
+            cy.get('td').eq(columnIndex).should('contain', cell);
+          });
+      });
+    });
+  },
+);
 
 Cypress.Commands.add('visitAndCheckAccessibility', (url: string) => {
   cy.visit(url);
