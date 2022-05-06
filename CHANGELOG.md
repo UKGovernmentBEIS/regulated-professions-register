@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 
 - Exported CSV files now include both the country name and the country code
+- When editing decision data, any partially completed rows will have blank rows set to zero
 
 ## [release-020] - 2022-05-05
 
