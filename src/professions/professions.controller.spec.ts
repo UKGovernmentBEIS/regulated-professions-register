@@ -22,19 +22,35 @@ import { Nation } from '../nations/nation';
 import { ShowTemplate } from './interfaces/show-template.interface';
 import { OrganisationRole } from './profession-to-organisation.entity';
 import { organisationList } from './presenters/organisation-list';
+import { DecisionDatasetYearsPresenter } from './presenters/decision-dataset-years.presenter';
+import { SummaryList } from '../common/interfaces/summary-list';
+import { DecisionDatasetsService } from '../decisions/decision-datasets.service';
 
 jest.mock('../organisations/organisation.entity');
 jest.mock('../nations/presenters/nations-list.presenter');
+jest.mock('./presenters/decision-dataset-years.presenter');
 
 const mockNationsHtml = '<ul><li>Mock nations html</li></ul>';
+const mockDecisionYearsSummaryList = {
+  rows: [
+    {
+      key: { text: 'Year' },
+      value: {
+        text: '2024',
+      },
+    },
+  ],
+} as SummaryList;
 
 describe('ProfessionsController', () => {
   let controller: ProfessionsController;
   let professionVersionsService: DeepMocked<ProfessionVersionsService>;
+  let decisionDatasetsService: DeepMocked<DecisionDatasetsService>;
   let i18nService: DeepMocked<I18nService>;
 
   beforeEach(async () => {
     professionVersionsService = createMock<ProfessionVersionsService>();
+    decisionDatasetsService = createMock<DecisionDatasetsService>();
     i18nService = createMockI18nService();
 
     const module: TestingModule = await Test.createTestingModule({
@@ -42,6 +58,10 @@ describe('ProfessionsController', () => {
         {
           provide: ProfessionVersionsService,
           useValue: professionVersionsService,
+        },
+        {
+          provide: DecisionDatasetsService,
+          useValue: decisionDatasetsService,
         },
         { provide: I18nService, useValue: i18nService },
       ],
@@ -69,7 +89,12 @@ describe('ProfessionsController', () => {
         industries: [industry],
       });
 
+      const decisionYears = [2025, 2024, 2023];
+
       professionVersionsService.findLiveBySlug.mockResolvedValue(profession);
+      decisionDatasetsService.allLiveYearsForProfession.mockResolvedValue(
+        decisionYears,
+      );
 
       const expectedOrganisations = {} as GroupedTierOneOrganisations;
       const getGroupedTierOneOrganisationsFromProfessionSpy = jest
@@ -101,6 +126,10 @@ describe('ProfessionsController', () => {
         mockNationsHtml,
       );
 
+      (
+        DecisionDatasetYearsPresenter.prototype.summaryList as jest.Mock
+      ).mockReturnValue(mockDecisionYearsSummaryList);
+
       const result = await controller.show('example-slug');
 
       expect(result).toEqual({
@@ -114,15 +143,29 @@ describe('ProfessionsController', () => {
         industries: [translationOf('industries.example')],
         enforcementBodies: organisationList(expectedEnforcementBodies),
         organisations: expectedOrganisations,
+        decisionYears: mockDecisionYearsSummaryList,
       } as ShowTemplate);
 
-      expect(professionVersionsService.findLiveBySlug).toBeCalledWith(
+      expect(professionVersionsService.findLiveBySlug).toHaveBeenCalledWith(
         'example-slug',
       );
-      expect(NationsListPresenter).toBeCalledWith(
+      expect(
+        decisionDatasetsService.allLiveYearsForProfession,
+      ).toHaveBeenCalledWith(profession);
+
+      expect(NationsListPresenter).toHaveBeenCalledWith(
         [Nation.find('GB-ENG')],
         i18nService,
       );
+      expect(DecisionDatasetYearsPresenter).toHaveBeenCalledWith(
+        decisionYears,
+        profession,
+        i18nService,
+      );
+      expect(
+        DecisionDatasetYearsPresenter.prototype.summaryList,
+      ).toHaveBeenCalled();
+
       expect(
         getGroupedTierOneOrganisationsFromProfessionSpy,
       ).toHaveBeenCalledWith(profession, 'latestLiveVersion');

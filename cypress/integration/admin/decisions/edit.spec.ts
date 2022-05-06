@@ -169,7 +169,7 @@ describe('Editing a decision dataset', () => {
         .parent()
         .parent()
         .within(() => {
-          cy.checkTable(
+          cy.checkVerticalTable(
             [
               'decisions.show.tableHeading.country',
               'decisions.show.tableHeading.yes',
@@ -189,7 +189,7 @@ describe('Editing a decision dataset', () => {
         .parent()
         .parent()
         .within(() => {
-          cy.checkTable(
+          cy.checkVerticalTable(
             [
               'decisions.show.tableHeading.country',
               'decisions.show.tableHeading.yes',

@@ -30,12 +30,14 @@
           <span class="govuk-body" data-cy="changed-by-user-email">{{ changedBy.email | email }}</span>
         </h2>
       {% endif %}
-      <h2 class="govuk-heading-s" data-cy="currently-published-version-text">
-        {{ "decisions.admin.publicFacingLink.heading" | t }}<br>
-        <span class="govuk-body" data-cy="currently-published-version">
-          <a href="">{{ "decisions.admin.publicFacingLink.label" | t }}</a>
-        </span>
-      </h2>
+      {% if datasetStatus === 'live' %}
+        <h2 class="govuk-heading-s" data-cy="currently-published-version-text">
+          {{ "decisions.admin.publicFacingLink.heading" | t }}<br>
+          <span class="govuk-body" data-cy="currently-published-version">
+            <a class="govuk-link" href="/decisions/{{profession.slug}}/{{year}}/?fromInternalPage={{profession.id}}:{{organisation.id}}">{{ "decisions.admin.publicFacingLink.label" | t }}</a>
+          </span>
+        </h2>
+      {% endif %}
 
       <nav role="navigation" data-cy="actions">
         <ul class="govuk-list">

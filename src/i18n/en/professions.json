@@ -249,6 +249,10 @@
       "link": "Website link to legislation",
       "secondNationalLegislation": "Title of other act or charter",
       "secondLink": "Website link to other legislation"
+    },
+    "decisions": {
+      "heading": "Recognition decision data",
+      "year": "Year"
     }
   },
   "admin": {

@@ -8,10 +8,10 @@ describe('Showing a profession', () => {
       cy.get('body').should('contain', backLink);
     });
 
-    cy.get('body').should('contain', 'Registered Trademark Attorney');
+    cy.get('h1').should('contain', 'Registered Trademark Attorney');
 
     cy.translate('professions.show.bodies.heading').then((heading) => {
-      cy.get('body').should('contain', heading);
+      cy.get('h2').should('contain', heading);
     });
 
     cy.translate('app.unitedKingdom').then((uk) => {
@@ -201,7 +201,7 @@ describe('Showing a profession', () => {
     });
 
     cy.translate('professions.show.registration.heading').then((heading) => {
-      cy.get('body').should('contain', heading);
+      cy.get('h2').should('contain', heading);
     });
     cy.checkSummaryListRowValue(
       'professions.show.registration.registrationRequirements',
@@ -213,25 +213,41 @@ describe('Showing a profession', () => {
     );
 
     cy.translate('professions.show.legislation.heading').then((heading) => {
-      cy.get('body').should('contain', heading);
+      cy.get('h2').should('contain', heading);
     });
     cy.checkSummaryListRowValue(
       'professions.show.legislation.nationalLegislation',
       'The Trade Marks Act 1994',
     );
+
+    cy.translate('professions.show.decisions.heading').then((heading) => {
+      cy.get('h2').should('contain', heading);
+      cy.get('h2')
+        .contains(heading)
+        .next()
+        .within(() => {
+          cy.translate('decisions.show.year').then((year) => {
+            cy.get('dt').eq(0).should('contain', year);
+            cy.get('dd').eq(0).should('contain', '2021');
+
+            cy.get('dt').eq(1).should('contain', year);
+            cy.get('dd').eq(1).should('contain', '2020');
+          });
+        });
+    });
   });
 
   it('I can view a profession with the bare minimum fields', () => {
     cy.visitAndCheckAccessibility('/professions/no-optional-fields');
 
-    cy.get('body').should('contain', 'Profession with no optional fields');
+    cy.get('h1').should('contain', 'Profession with no optional fields');
 
     cy.translate('professions.show.bodies.heading').then((heading) => {
-      cy.get('body').should('contain', heading);
+      cy.get('h2').should('contain', heading);
     });
 
     cy.translate('professions.show.bodies.heading').then((heading) => {
-      cy.get('body').should('contain', heading);
+      cy.get('h2').should('contain', heading);
     });
 
     cy.translate('nations.england').then((england) => {
@@ -425,15 +441,19 @@ describe('Showing a profession', () => {
     });
 
     cy.translate('professions.show.registration.heading').then((heading) => {
-      cy.get('body').should('not.contain', heading);
+      cy.get('h2').should('not.contain', heading);
     });
 
     cy.translate('professions.show.legislation.heading').then((heading) => {
-      cy.get('body').should('contain', heading);
+      cy.get('h2').should('contain', heading);
     });
     cy.checkSummaryListRowValue(
       'professions.show.legislation.nationalLegislation',
       "The Education (School Teachers' Qualifications) (England) Regulations 2003/1662 (as amended)",
     );
+
+    cy.translate('professions.show.decisions.heading').then((heading) => {
+      cy.get('h2').should('not.contain', heading);
+    });
   });
 });

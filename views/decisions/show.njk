@@ -1,0 +1,60 @@
+{% set bodyClasses = "rpr-details__page" %}
+{% extends "base.njk" %}
+
+{% set title = profession.name %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+
+    <div class="govuk-grid-column-full">
+
+      <h1 class="govuk-heading-xl">
+        {{ "decisions.public.heading" | t }}
+        <span class="govuk-caption-l">{{ profession }} - {{ nations }}</span>
+      </h1>
+
+      <h2 class="govuk-heading-l">{{ year }}</h2>
+
+      {% for organisation in organisations %}
+        <h3 class="govuk-heading-m">{{ organisation.organisation }}</h3>
+
+        {% for route in organisation.routes %}
+            <table class="govuk-table rpr-decision-data__public-table-container">
+                <caption class="govuk-table__caption govuk-table__caption--m">{{ route.route }}</caption>
+                <tbody class="govuk-table__head">
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header">{{ "decisions.public.tableHeading.yes" | t }}</th>
+                    <td class="govuk-table__cell">{{ route.yes }}</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header">{{ "decisions.public.tableHeading.yesAfterComp" | t }}</th>
+                    <td class="govuk-table__cell">{{ route.yesAfterComp }}</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header">{{ "decisions.public.tableHeading.no" | t }}</th>
+                    <td class="govuk-table__cell">{{ route.no }}</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header">{{ "decisions.public.tableHeading.noAfterComp" | t }}</th>
+                    <td class="govuk-table__cell">{{ route.noAfterComp }}</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header">{{ "decisions.public.tableHeading.total" | t }}</th>
+                    <td class="govuk-table__cell"><strong>{{ route.total }}</strong></td>
+                </tr>
+                </tbody>
+            </table>
+        {% endfor %}
+
+        {% if not loop.last %}
+            <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+        {% endif %}
+
+      {% endfor %}
+
+    </div>
+  </div>
+
+
+{% endblock %}

@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, SelectQueryBuilder } from 'typeorm';
 import { FilterInput } from '../common/interfaces/filter-input.interface';
 import { Organisation } from '../organisations/organisation.entity';
+import { Profession } from '../professions/profession.entity';
 import {
   DecisionDataset,
   DecisionDatasetStatus,
@@ -73,6 +74,37 @@ export class DecisionDatasetsService {
         year: 'DESC',
       })
       .getMany();
+  }
+
+  async allLiveForProfessionAndYear(
+    profession: Profession,
+    year: number,
+  ): Promise<DecisionDataset[]> {
+    return this.datasetsWithJoins()
+      .where({
+        profession: { id: profession.id },
+        year,
+        status: DecisionDatasetStatus.Live,
+      })
+      .orderBy({
+        'organisation.name': 'ASC',
+      })
+      .getMany();
+  }
+
+  async allLiveYearsForProfession(profession: Profession): Promise<number[]> {
+    return (
+      await this.repository.find({
+        where: {
+          profession: { id: profession.id },
+          status: DecisionDatasetStatus.Live,
+        },
+        order: {
+          year: 'DESC',
+        },
+        select: ['year'],
+      })
+    ).map((dataset) => dataset.year);
   }
 
   async save(dataset: DecisionDataset): Promise<DecisionDataset> {

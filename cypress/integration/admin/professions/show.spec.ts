@@ -227,6 +227,10 @@ describe('Showing a profession', () => {
       cy.translate('professions.show.legislation.secondLink').then((label) => {
         cy.get('body').should('contain', label);
       });
+
+      cy.translate('professions.show.decisions.heading').then((heading) => {
+        cy.get('h2').should('not.contain', heading);
+      });
     });
 
     it('I can view a profession with the bare minimum fields', () => {
@@ -448,6 +452,10 @@ describe('Showing a profession', () => {
       });
       cy.translate('professions.show.legislation.secondLink').then((label) => {
         cy.get('body').should('contain', label);
+      });
+
+      cy.translate('professions.show.decisions.heading').then((heading) => {
+        cy.get('h2').should('not.contain', heading);
       });
     });
   });

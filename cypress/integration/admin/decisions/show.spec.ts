@@ -41,7 +41,7 @@ describe('Showing a decision dataset', () => {
         .parent()
         .parent()
         .within(() => {
-          cy.checkTable(
+          cy.checkVerticalTable(
             [
               'decisions.show.tableHeading.country',
               'decisions.show.tableHeading.yes',
@@ -63,7 +63,7 @@ describe('Showing a decision dataset', () => {
         .parent()
         .parent()
         .within(() => {
-          cy.checkTable(
+          cy.checkVerticalTable(
             [
               'decisions.show.tableHeading.country',
               'decisions.show.tableHeading.yes',
@@ -105,6 +105,12 @@ describe('Showing a decision dataset', () => {
         .should('contain', 'beis-rpr+orgadmin@dxw.com');
 
       cy.get('nav').find('ul').should('have.length', 2);
+
+      cy.translate('decisions.admin.publicFacingLink.label').then(
+        (publicFacingLinkButtonText) => {
+          cy.get('body').should('not.contain', publicFacingLinkButtonText);
+        },
+      );
     });
 
     it('I can edit the data by clicking the edit button', () => {
@@ -124,12 +130,14 @@ describe('Showing a decision dataset', () => {
     });
 
     it('I can view the "Currently published version" by clicking the link button', () => {
-      cy.get('tr')
-        .contains('Registered Trademark Attorney')
-        .parent()
-        .within(() => {
-          cy.get('a').contains('View details').click();
-        });
+      cy.translate('app.status.live').then((live) => {
+        cy.get('tr')
+          .contains(new RegExp(`Registered Trademark Attorney.*2021.*${live}`))
+          .within(() => {
+            cy.get('a').contains('View details').click();
+          });
+      });
+
       cy.translate('decisions.admin.publicFacingLink.label').then(
         (publicFacingLinkButtonText) => {
           cy.get('[data-cy="currently-published-version-text"]').contains(
@@ -137,16 +145,30 @@ describe('Showing a decision dataset', () => {
           );
         },
       );
-      cy.translate('decisions.admin.publicFacingLink.heading').then(
-        (publicFacingLinkButtonText) => {
-          cy.get('[data-cy="currently-published-version-text"]')
-            .contains(publicFacingLinkButtonText)
-            .contains('a')
+
+      cy.url().then((internalUrl) => {
+        cy.translate('decisions.admin.publicFacingLink.heading').then(
+          (publicFacingLinkButtonText) => {
+            cy.get('[data-cy="currently-published-version-text"]')
+              .contains(publicFacingLinkButtonText)
+              .contains('a')
+              .click()
+              .url()
+              .should(
+                'contain',
+                '/decisions/registered-trademark-attorney/2021',
+              );
+          },
+        );
+
+        cy.translate('app.back').then((back) => {
+          cy.get('a')
+            .contains(back)
             .click()
             .url()
-            .should('contain', '');
-        },
-      );
+            .should('contain', internalUrl);
+        });
+      });
     });
 
     it('I can download a decision dataset', () => {

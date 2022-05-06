@@ -15,4 +15,5 @@ export interface ShowTemplate {
   industries: string[];
   organisations: GroupedTierOneOrganisations;
   enforcementBodies: string;
+  decisionYears?: SummaryList;
 }

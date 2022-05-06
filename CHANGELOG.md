@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [unreleased]
 
+### Added
+
+- Public view of decision data, linked to from public profession pages
+
 ### Changed
 
 - Exported CSV files now include both the country name and the country code
@@ -16,6 +20,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 - Add confirmation page when publishing decision data from the editing page
 - Add single decision dataset download link to internal dataset pages
+- Public view of decision data, linked to from public profession pages
 
 ### Changed
 

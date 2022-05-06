@@ -97,6 +97,21 @@ $small-screen: 768px;
   &__table-container {
     overflow-x: auto;
   }
+
+  &__public-table-container {
+    overflow-x: auto;
+    table-layout: fixed;
+
+    th,
+    td {
+      border: 1px solid govuk-colour('mid-grey');
+      padding: 0.4em;
+    }
+
+    td:nth-child(2) {
+      width: 20%;
+    }
+  }
 }
 
 .rpr-internal {

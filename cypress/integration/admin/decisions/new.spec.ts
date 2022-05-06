@@ -78,7 +78,7 @@ describe('Creating a decision dataset', () => {
 
       cy.get('caption').should('contain', 'New route');
 
-      cy.checkTable(
+      cy.checkVerticalTable(
         [
           'decisions.show.tableHeading.country',
           'decisions.show.tableHeading.yes',
@@ -168,7 +168,7 @@ describe('Creating a decision dataset', () => {
 
       cy.get('caption').should('contain', 'New route');
 
-      cy.checkTable(
+      cy.checkVerticalTable(
         [
           'decisions.show.tableHeading.country',
           'decisions.show.tableHeading.yes',
