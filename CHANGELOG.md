@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [unreleased]
 
+### Changed
+
+- Exported CSV files now include both the country name and the country code
+
 ## [release-020] - 2022-05-05
 
 ### Added

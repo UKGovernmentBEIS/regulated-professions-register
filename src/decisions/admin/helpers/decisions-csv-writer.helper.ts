@@ -1,6 +1,7 @@
 import { Stringifier, stringify } from 'csv-stringify';
 import { Response } from 'express';
 import { I18nService } from 'nestjs-i18n';
+import { Country } from '../../../countries/country';
 import { DecisionDataset } from '../../decision-dataset.entity';
 import { DecisionRoute } from '../../interfaces/decision-route.interface';
 import { decisionValueToString } from './decision-value-to-string.helper';
@@ -48,6 +49,9 @@ export class DecisionsCsvWriter {
           `decisions.csv.status.${dataset.status}`,
         ),
         route.name,
+        country.code
+          ? Country.find(country.code).translatedName(this.i18nService)
+          : '',
         country.code || '',
         decisionValueToString(country.decisions.yes),
         decisionValueToString(country.decisions.yesAfterComp),
@@ -65,7 +69,8 @@ export class DecisionsCsvWriter {
         'decisions.csv.heading.year',
         'decisions.csv.heading.status',
         'decisions.csv.heading.route',
-        'decisions.csv.heading.country',
+        'decisions.csv.heading.countryName',
+        'decisions.csv.heading.countryCode',
         'decisions.csv.heading.yes',
         'decisions.csv.heading.yesAfterComp',
         'decisions.csv.heading.no',
