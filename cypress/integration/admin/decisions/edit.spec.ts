@@ -2,7 +2,13 @@ describe('Editing a decision dataset', () => {
   context('When I am logged in as editor', () => {
     beforeEach(() => {
       cy.loginAuth0('editor');
-      cy.visitAndCheckAccessibility('/admin/decisions');
+      cy.visitInternalDashboard();
+      cy.translate(
+        'app.pages.admin.dashboard.editDecisionDataCentralAdmin',
+      ).then((link) => {
+        cy.get('a').contains(link).click();
+        cy.checkAccessibility();
+      });
     });
 
     it('I can edit a decision dataset', () => {
@@ -328,7 +334,13 @@ describe('Editing a decision dataset', () => {
   context('When I am logged in as an org user', () => {
     beforeEach(() => {
       cy.loginAuth0('orgadmin');
-      cy.visitAndCheckAccessibility('/admin/decisions');
+      cy.visitInternalDashboard();
+      cy.translate('app.pages.admin.dashboard.editDecisionDataRegulators').then(
+        (link) => {
+          cy.get('a').contains(link).click();
+          cy.checkAccessibility();
+        },
+      );
     });
 
     it('I cannot publish decision data', () => {
