@@ -87,6 +87,12 @@ $small-screen: 768px;
 }
 
 .rpr-decision-data {
+  &__table-page {
+    .govuk-width-container {
+      max-width: 1200px;
+    }
+  }
+
   &__overview {
     .govuk-summary-list__key,
     .govuk-summary-list__value {
