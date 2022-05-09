@@ -51,7 +51,7 @@ export class DecisionDatasetPresenter {
 
     return this.dataset.routes.map((route) => {
       const table: Table = {
-        classes: 'rpr-decision-data__table-container',
+        classes: 'rpr-decision-data__show-table',
         captionClasses: 'govuk-table__caption--l',
         caption: route.name,
         head,

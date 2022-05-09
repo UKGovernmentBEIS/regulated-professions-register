@@ -3,7 +3,8 @@
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
-{% set bodyClasses = "rpr-internal__page rpr-details__page" %}
+{% set bodyClasses = "rpr-internal__page rpr-decision-data__table-page" %}
+
 {% extends "admin/base.njk" %}
 
 {% set title = ("decisions.show.heading" | t) %}
@@ -48,7 +49,7 @@
           {% for route in routes %}
             {% set outerLoop = loop %}
             <div>
-              <table class="govuk-table">
+              <table class="govuk-table rpr-decision-data__edit-table">
                 <caption class="govuk-table__caption govuk-table__caption--m">
                   {{ govukInput({
                     label: {

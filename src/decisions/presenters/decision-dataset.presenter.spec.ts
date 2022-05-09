@@ -96,7 +96,7 @@ describe('DecisionDatasetPresenter', () => {
       const expected: Table[] = [
         {
           caption: 'Example route 1',
-          classes: 'rpr-decision-data__table-container',
+          classes: 'rpr-decision-data__show-table',
           captionClasses: 'govuk-table__caption--l',
           head: expectedHead,
           rows: [
@@ -144,7 +144,7 @@ describe('DecisionDatasetPresenter', () => {
         },
         {
           caption: 'Example route 2',
-          classes: 'rpr-decision-data__table-container',
+          classes: 'rpr-decision-data__show-table',
           captionClasses: 'govuk-table__caption--l',
           head: expectedHead,
           rows: [

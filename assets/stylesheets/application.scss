@@ -87,6 +87,12 @@ $small-screen: 768px;
 }
 
 .rpr-decision-data {
+  &__table-page {
+    .govuk-width-container {
+      max-width: 1200px;
+    }
+  }
+
   &__overview {
     .govuk-summary-list__key,
     .govuk-summary-list__value {
@@ -94,11 +100,32 @@ $small-screen: 768px;
     }
   }
 
-  &__table-container {
+  &__show-table {
     overflow-x: auto;
+    table-layout: fixed;
+
+    th,
+    td {
+      width: calc(100% / 6);
+    }
   }
 
-  &__public-table-container {
+  &__edit-table {
+    overflow-x: auto;
+    table-layout: fixed;
+
+    th,
+    td {
+      width: calc(100% / 7);
+    }
+
+    th:first-child,
+    td:first-child {
+      width: calc(200% / 7);
+    }
+  }
+
+  &__public-table {
     overflow-x: auto;
     table-layout: fixed;
 
