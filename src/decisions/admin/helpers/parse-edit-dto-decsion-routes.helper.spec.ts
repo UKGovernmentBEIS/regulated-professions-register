@@ -26,26 +26,31 @@ describe('parseEditDtoDecisionRoutes', () => {
       const spotCheckValue = '2';
 
       const editDto: EditDto = {
-        routes: ['Example route 1', 'Example route 2'],
+        routes: ['Example route 1', 'Example route 2', 'Empty route'],
         countries: [
           ['JP', 'CA'],
           [spotCheckCountryCode, 'FR'],
+          ['AT', 'ES'],
         ],
         yeses: [
           ['9', '6'],
           ['1', '1'],
+          ['', ''],
         ],
         noes: [
           ['', '7'],
           ['3', '4'],
+          ['', ''],
         ],
         yesAfterComps: [
           ['5', '9'],
-          ['3', '5'],
+          ['3', ''],
+          ['', ''],
         ],
         noAfterComps: [
           [spotCheckValue, '3'],
           ['4', '8'],
+          ['', ''],
         ],
         action: undefined,
       };
@@ -58,7 +63,7 @@ describe('parseEditDtoDecisionRoutes', () => {
               code: 'JP',
               decisions: {
                 yes: 9,
-                no: null,
+                no: 0,
                 yesAfterComp: 5,
                 noAfterComp: 2,
               },
@@ -91,8 +96,31 @@ describe('parseEditDtoDecisionRoutes', () => {
               decisions: {
                 yes: 1,
                 no: 4,
-                yesAfterComp: 5,
+                yesAfterComp: 0,
                 noAfterComp: 8,
+              },
+            },
+          ],
+        },
+        {
+          name: 'Empty route',
+          countries: [
+            {
+              code: 'AT',
+              decisions: {
+                yes: null,
+                no: null,
+                yesAfterComp: null,
+                noAfterComp: null,
+              },
+            },
+            {
+              code: 'ES',
+              decisions: {
+                yes: null,
+                no: null,
+                yesAfterComp: null,
+                noAfterComp: null,
               },
             },
           ],
@@ -101,11 +129,15 @@ describe('parseEditDtoDecisionRoutes', () => {
 
       expect(parseEditDtoDecisionRoutes(editDto)).toEqual(expected);
 
-      expect(Country.find).toHaveBeenCalledTimes(4);
+      expect(Country.find).toHaveBeenCalledTimes(6);
       expect(Country.find).toHaveBeenNthCalledWith(3, spotCheckCountryCode);
 
-      expect(parseDecisionValueSpy).toHaveBeenCalledTimes(16);
-      expect(parseDecisionValueSpy).toHaveBeenNthCalledWith(4, spotCheckValue);
+      expect(parseDecisionValueSpy).toHaveBeenCalledTimes(24);
+      expect(parseDecisionValueSpy).toHaveBeenNthCalledWith(
+        4,
+        spotCheckValue,
+        true,
+      );
     });
   });
 
