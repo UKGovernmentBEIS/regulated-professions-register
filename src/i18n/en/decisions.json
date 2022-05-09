@@ -4,7 +4,7 @@
       "heading": "Recognition decision data",
       "addButtonLabel": "Add decision data",
       "manageHeading": "Manage existing decision data",
-      "showFilters": "Use the filters to choose the datasets to see and download",
+      "showFilters": "Filter data",
       "viewDetails": "View details <span class='govuk-visually-hidden'>about {year} {organisaition} {profession} decision data</span>",
       "filter": {
         "keywords": {
@@ -20,7 +20,7 @@
           "hint": "Select all that apply"
         },
         "statuses": {
-          "label": "Statuses",
+          "label": "Published status",
           "hint": "Select all that apply"
         }
       },
@@ -28,7 +28,7 @@
         "keywords": "Keywords:",
         "organisations": "Regulators:",
         "years": "Years:",
-        "statuses": "Statuses:"
+        "statuses": "Published status:"
       },
       "tableHeading": {
         "profession": "Profession",
