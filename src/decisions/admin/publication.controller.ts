@@ -19,7 +19,7 @@ import { OrganisationsService } from '../../organisations/organisations.service'
 import { ProfessionsService } from '../../professions/professions.service';
 import { UserPermission } from '../../users/user-permission';
 import { DecisionDatasetsService } from '../decision-datasets.service';
-import { PublicationTemplate } from './interfaces/publication-template.interface';
+import { DatasetDetailsTemplate } from './interfaces/dataset-details-template.interface';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/decisions')
@@ -43,7 +43,7 @@ export class PublicationController {
     @Param('professionId') professionId: string,
     @Param('organisationId') organisationId: string,
     @Param('year', ParseIntPipe) year: number,
-  ): Promise<PublicationTemplate> {
+  ): Promise<DatasetDetailsTemplate> {
     const profession = await this.professionsService.findWithVersions(
       professionId,
     );

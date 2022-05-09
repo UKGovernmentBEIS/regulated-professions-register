@@ -21,7 +21,7 @@ import { ProfessionsService } from '../../professions/professions.service';
 import { UserPermission } from '../../users/user-permission';
 import { DecisionDatasetsService } from '../decision-datasets.service';
 import { checkCanChangeDataset } from './helpers/check-can-change-dataset.helper';
-import { PublicationTemplate } from './interfaces/publication-template.interface';
+import { DatasetDetailsTemplate } from './interfaces/dataset-details-template.interface';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/decisions')
@@ -46,7 +46,7 @@ export class SubmissionController {
     @Param('organisationId') organisationId: string,
     @Param('year', ParseIntPipe) year: number,
     @Req() request: RequestWithAppSession,
-  ): Promise<PublicationTemplate> {
+  ): Promise<DatasetDetailsTemplate> {
     const profession = await this.professionsService.findWithVersions(
       professionId,
     );
