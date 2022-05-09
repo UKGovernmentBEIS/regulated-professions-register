@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - When editing decision data, any partially completed rows will have blank rows set to zero
 - Fix width of table columns when displaying and editing decision data
 - Fix column headings when editing decision data
+- Small revisions to text on decisions dashboard
 
 ## [release-020] - 2022-05-05
 
