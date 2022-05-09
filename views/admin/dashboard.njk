@@ -34,6 +34,16 @@
         </li>
       {% endif %}
 
+      {% if 'viewDecisionData' in permissions %}
+        <li>
+          {% if (user.serviceOwner) %}
+            <a class="govuk-link" href="/admin/decisions">{{ "app.pages.admin.dashboard.editDecisionDataCentralAdmin" | t }}</a>
+          {% else %}
+            <a class="govuk-link" href="/admin/decisions">{{ "app.pages.admin.dashboard.editDecisionDataRegulators" | t }}</a>
+          {% endif %}
+        </li>
+      {% endif %}
+
       {% if 'editUser' in permissions %}
         <li>
           {% if (user.serviceOwner) %}

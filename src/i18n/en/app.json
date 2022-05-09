@@ -78,6 +78,8 @@
         "editProfessionsRegulators": "Edit information about the professions you regulate",
         "editRegulatorsCentralAdmin": "Edit information about regulators",
         "editRegulatorsRegulators": "Edit information about your regulator",
+        "editDecisionDataCentralAdmin": "Review and publish decision data",
+        "editDecisionDataRegulators": "Submit recognition decision data for professions you regulate",
         "manageAccessCentralAdmin": "Manage who uses this service",
         "manageAccessRegulators": "Manage who uses this service",
         "guidance": "Read how to use this service"
