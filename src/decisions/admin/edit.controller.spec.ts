@@ -20,7 +20,8 @@ import { DecisionRoute } from '../interfaces/decision-route.interface';
 import { EditDto } from './dto/edit.dto';
 import * as parseEditDtoDecisionRoutesModule from './helpers/parse-edit-dto-decision-routes.helper';
 import * as modifyDecisionRoutesModule from './helpers/modify-decision-routes.helper';
-import { EditTemplate } from './interfaces/edit-template.interface';
+import { EditTemplate } from './interfaces/edit/edit-template.interface';
+import { NewTemplate } from './interfaces/edit/new-template.interface';
 import { RouteTemplate } from './interfaces/route-template.interface';
 import { DecisionDatasetEditPresenter } from './presenters/decision-dataset-edit.presenter';
 import * as checkCanChangeDatasetModule from './helpers/check-can-change-dataset.helper';
@@ -86,6 +87,129 @@ describe('EditController', () => {
     }).compile();
 
     controller = module.get<EditController>(EditController);
+  });
+
+  describe('new', () => {
+    it('sets datasetPublished to true when the dataset has a status of "Live"', async () => {
+      const profession = professionFactory.build({
+        id: 'example-profession-id',
+      });
+
+      const organisation = organisationFactory.build({
+        id: 'example-organisation-id',
+      });
+
+      const dataset = decisionDatasetFactory.build({
+        profession,
+        organisation,
+        year: 2016,
+        status: DecisionDatasetStatus.Live,
+      });
+
+      professionsService.findWithVersions.mockResolvedValue(profession);
+      organisationsService.find.mockResolvedValue(organisation);
+      decisionDatasetsService.find.mockResolvedValue(dataset);
+
+      const request = createDefaultMockRequest();
+
+      const checkCanChangeDatasetSpy = jest
+        .spyOn(checkCanChangeDatasetModule, 'checkCanChangeDataset')
+        .mockImplementation();
+
+      const expected: NewTemplate = {
+        profession,
+        organisation,
+        year: 2016,
+        datasetPublished: true,
+      };
+
+      const result = await controller.new(
+        'example-profession-id',
+        'example-organisation-id',
+        2016,
+        request,
+      );
+      expect(result).toEqual(expected);
+      expect(professionsService.findWithVersions).toHaveBeenCalledWith(
+        'example-profession-id',
+      );
+      expect(organisationsService.find).toHaveBeenCalledWith(
+        'example-organisation-id',
+      );
+      expect(decisionDatasetsService.find).toHaveBeenCalledWith(
+        'example-profession-id',
+        'example-organisation-id',
+        2016,
+      );
+      expect(checkCanChangeDatasetSpy).toHaveBeenCalledWith(
+        request,
+        profession,
+        organisation,
+        2016,
+        true,
+      );
+    });
+
+    it('sets datasetPublished to false when the dataset has a status of "Draft"', async () => {
+      const profession = professionFactory.build({
+        id: 'example-profession-id',
+      });
+
+      const organisation = organisationFactory.build({
+        id: 'example-organisation-id',
+      });
+
+      const dataset = decisionDatasetFactory.build({
+        profession,
+        organisation,
+        year: 2016,
+        status: DecisionDatasetStatus.Draft,
+      });
+
+      professionsService.findWithVersions.mockResolvedValue(profession);
+      organisationsService.find.mockResolvedValue(organisation);
+      decisionDatasetsService.find.mockResolvedValue(dataset);
+
+      const request = createDefaultMockRequest();
+
+      const checkCanChangeDatasetSpy = jest
+        .spyOn(checkCanChangeDatasetModule, 'checkCanChangeDataset')
+        .mockImplementation();
+
+      const expected: NewTemplate = {
+        profession,
+        organisation,
+        year: 2016,
+        datasetPublished: false,
+      };
+
+      const result = await controller.new(
+        'example-profession-id',
+        'example-organisation-id',
+        2016,
+        request,
+      );
+
+      expect(result).toEqual(expected);
+      expect(professionsService.findWithVersions).toHaveBeenCalledWith(
+        'example-profession-id',
+      );
+      expect(organisationsService.find).toHaveBeenCalledWith(
+        'example-organisation-id',
+      );
+      expect(decisionDatasetsService.find).toHaveBeenCalledWith(
+        'example-profession-id',
+        'example-organisation-id',
+        2016,
+      );
+      expect(checkCanChangeDatasetSpy).toHaveBeenCalledWith(
+        request,
+        profession,
+        organisation,
+        2016,
+        true,
+      );
+    });
   });
 
   describe('edit', () => {

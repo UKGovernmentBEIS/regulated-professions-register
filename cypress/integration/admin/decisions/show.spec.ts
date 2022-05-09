@@ -125,7 +125,7 @@ describe('Showing a decision dataset', () => {
           .contains(editButtonText)
           .click()
           .url()
-          .should('contain', 'edit');
+          .should('contain', 'new');
       });
     });
 

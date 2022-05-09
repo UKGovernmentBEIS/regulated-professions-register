@@ -18,8 +18,30 @@ describe('Editing a decision dataset', () => {
       cy.checkAccessibility();
 
       cy.translate('decisions.admin.buttons.edit').then((edit) => {
+        cy.get('a').contains(edit).click().url().should('contain', 'new');
+      });
+
+      cy.get('a').contains('Back').click().url().should('not.contain', 'new');
+
+      cy.translate('decisions.admin.buttons.edit').then((edit) => {
         cy.get('a').contains(edit).click();
       });
+
+      cy.translate('decisions.admin.edit.confirmation.heading').then(
+        (heading) => {
+          cy.get('h1').contains(heading);
+        },
+      );
+      cy.contains(
+        'Secondary School Teacher in State maintained schools (England)',
+      );
+      cy.contains('Department for Education');
+      cy.contains('2019');
+
+      cy.translate('decisions.admin.buttons.edit').then((buttonText) => {
+        cy.get('a').contains(buttonText).click();
+      });
+
       cy.checkAccessibility();
 
       withinEditTableDiv('International Route', () => {
@@ -226,6 +248,12 @@ describe('Editing a decision dataset', () => {
 
       cy.checkAccessibility();
 
+      cy.translate('decisions.admin.buttons.edit').then((edit) => {
+        cy.get('a').contains(edit).click();
+      });
+
+      cy.checkAccessibility();
+
       cy.translate('decisions.admin.buttons.publish').then((publish) => {
         cy.get('button').contains(publish).click();
       });
@@ -350,6 +378,10 @@ describe('Editing a decision dataset', () => {
 
       cy.translate('decisions.admin.buttons.edit').then((edit) => {
         cy.get('a').contains(edit).click();
+      });
+
+      cy.translate('decisions.admin.buttons.edit').then((editButton) => {
+        cy.get('a').contains(editButton).click();
       });
 
       cy.checkAccessibility();

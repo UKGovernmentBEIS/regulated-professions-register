@@ -1,0 +1,33 @@
+{% extends "admin/base.njk" %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+
+      <span class="govuk-caption-l">{{ ("decisions.admin.edit.confirmation.caption" | t)  }}</span>
+      <h1 class="govuk-heading-l">{{ ('decisions.admin.edit.confirmation.heading' | t )}}</h1>
+
+      <p class="govuk-body">
+        {% if datasetPublished %}
+          {{ ('decisions.admin.edit.confirmation.bodyUnpublish' | t | safe ) }}
+        {% else %}
+          {{ ('decisions.admin.edit.confirmation.bodyUnsubmit' | t | safe ) }}
+        {% endif %}
+      </p>
+      {% include "../_dataset-details.njk" %}
+
+      {{
+          govukButton({
+            text: "decisions.admin.buttons.edit" | t,
+            classes: "govuk-button",
+            id: 'publish-button',
+            href: "/admin/decisions/" + profession.id + "/" + organisation.id + "/" + year + "/edit"
+          })
+        }}
+    </div>
+  </div>
+
+{% endblock %}
