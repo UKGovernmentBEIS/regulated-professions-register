@@ -111,17 +111,17 @@
       "route": "Route",
       "tableHeading": {
         "country": "Country of qualification",
-        "yes": "Yes",
-        "no": "No",
-        "yesAfterComp": "Yes (after compensatory measure)",
-        "noAfterComp": "No (after compensatory measure)"
+        "yes": "Accepted - qualifications recognised",
+        "no": "Not accepted - qualifications not recognised",
+        "yesAfterComp": "Accepted - additional conditions met",
+        "noAfterComp": "Not accepted - additional conditions not met"
       },
       "labels": {
         "country": "Country of qualification (route {route}, country {country})",
-        "yes": "Yes (route {route}, country {country})",
-        "no": "No (route {route}, country {country})",
-        "yesAfterComp": "Yes (after compensatory measure) (route {route}, country {country})",
-        "noAfterComp": "No (after compensatory measure) (route {route}, country {country})"
+        "yes": "Accepted - qualifications recognised (route {route}, country {country})",
+        "no": "Not accepted - qualifications not recognised (route {route}, country {country})",
+        "yesAfterComp": "Accepted - additional conditions met (route {route}, country {country})",
+        "noAfterComp": "Not accepted - additional conditions not met (route {route}, country {country})"
       }
     },
     "buttons": {
