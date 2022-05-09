@@ -4,7 +4,13 @@ describe('Showing a decision dataset', () => {
   context('When I am logged in as editor', () => {
     beforeEach(() => {
       cy.loginAuth0('editor');
-      cy.visitAndCheckAccessibility('/admin/decisions');
+      cy.visitInternalDashboard();
+      cy.translate(
+        'app.pages.admin.dashboard.editDecisionDataCentralAdmin',
+      ).then((link) => {
+        cy.get('a').contains(link).click();
+        cy.checkAccessibility();
+      });
     });
 
     it('I can view a decision dataset', () => {

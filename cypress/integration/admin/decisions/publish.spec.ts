@@ -2,7 +2,13 @@ describe('Publishing a decision dataset', () => {
   context('When I am logged in as an admin', () => {
     beforeEach(() => {
       cy.loginAuth0('admin');
-      cy.visitAndCheckAccessibility('/admin/decisions');
+      cy.visitInternalDashboard();
+      cy.translate(
+        'app.pages.admin.dashboard.editDecisionDataCentralAdmin',
+      ).then((link) => {
+        cy.get('a').contains(link).click();
+        cy.checkAccessibility();
+      });
     });
 
     it('I can publish a draft decision dataset', () => {

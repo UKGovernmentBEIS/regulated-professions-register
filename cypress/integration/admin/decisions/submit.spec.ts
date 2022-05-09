@@ -2,7 +2,13 @@ describe('Submiting a decision dataset', () => {
   context('When I am logged in as an organisation-level user', () => {
     beforeEach(() => {
       cy.loginAuth0('orgeditor');
-      cy.visitAndCheckAccessibility('/admin/decisions');
+      cy.visitInternalDashboard();
+      cy.translate('app.pages.admin.dashboard.editDecisionDataRegulators').then(
+        (link) => {
+          cy.get('a').contains(link).click();
+          cy.checkAccessibility();
+        },
+      );
     });
 
     it('I can submit a draft decision dataset', () => {
@@ -80,7 +86,13 @@ describe('Submiting a decision dataset', () => {
   context('When I am logged in as a central admin user', () => {
     beforeEach(() => {
       cy.loginAuth0('editor');
-      cy.visitAndCheckAccessibility('/admin/decisions');
+      cy.visitInternalDashboard();
+      cy.translate(
+        'app.pages.admin.dashboard.editDecisionDataCentralAdmin',
+      ).then((link) => {
+        cy.get('a').contains(link).click();
+        cy.checkAccessibility();
+      });
     });
 
     it('I cannot submit a draft decision dataset', () => {

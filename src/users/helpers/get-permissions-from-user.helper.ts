@@ -57,7 +57,6 @@ const permissions = {
       UserPermission.PublishProfession,
       UserPermission.UploadDecisionData,
       UserPermission.DownloadDecisionData,
-      UserPermission.ViewDecisionData,
       UserPermission.UploadDecisionData,
       UserPermission.SubmitDecisionData,
       UserPermission.DownloadDecisionData,
