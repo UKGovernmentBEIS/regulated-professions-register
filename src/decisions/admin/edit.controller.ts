@@ -20,7 +20,7 @@ import { DecisionDatasetsService } from '../decision-datasets.service';
 import { ProfessionsService } from '../../professions/professions.service';
 import { Response } from 'express';
 import { OrganisationsService } from '../../organisations/organisations.service';
-import { EditTemplate } from './interfaces/edit-template.interface';
+import { EditTemplate } from './interfaces/edit/edit-template.interface';
 import { DecisionRoute } from '../interfaces/decision-route.interface';
 import { EditDto } from './dto/edit.dto';
 import {

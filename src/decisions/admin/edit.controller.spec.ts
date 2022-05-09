@@ -20,7 +20,7 @@ import { DecisionRoute } from '../interfaces/decision-route.interface';
 import { EditDto } from './dto/edit.dto';
 import * as parseEditDtoDecisionRoutesModule from './helpers/parse-edit-dto-decision-routes.helper';
 import * as modifyDecisionRoutesModule from './helpers/modify-decision-routes.helper';
-import { EditTemplate } from './interfaces/edit-template.interface';
+import { EditTemplate } from './interfaces/edit/edit-template.interface';
 import { RouteTemplate } from './interfaces/route-template.interface';
 import { DecisionDatasetEditPresenter } from './presenters/decision-dataset-edit.presenter';
 import * as checkCanChangeDatasetModule from './helpers/check-can-change-dataset.helper';
