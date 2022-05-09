@@ -101,6 +101,103 @@ describe('Creating a decision dataset', () => {
           });
         });
     });
+
+    it('displays validation errors when entering invalid data', () => {
+      cy.get('tbody').should(
+        'not.contain',
+        'Profession with no optional fields',
+      );
+
+      cy.translate('decisions.admin.dashboard.addButtonLabel').then((add) => {
+        cy.get('a').contains(add).click();
+      });
+
+      cy.checkAccessibility();
+
+      cy.translate('decisions.admin.new.labels.profession').then(
+        (profession) => {
+          cy.get('label')
+            .contains(profession)
+            .parent()
+            .within(() => {
+              cy.get('select').select('Profession with no optional fields');
+            });
+        },
+      );
+
+      cy.translate('decisions.admin.new.labels.organisation').then(
+        (profession) => {
+          cy.get('label')
+            .contains(profession)
+            .parent()
+            .within(() => {
+              cy.get('select').select('Organisation with no optional fields');
+            });
+        },
+      );
+
+      cy.translate('decisions.admin.new.labels.year').then((profession) => {
+        cy.get('label')
+          .contains(profession)
+          .parent()
+          .within(() => {
+            cy.get('select').select('2021');
+          });
+      });
+
+      cy.translate('app.continue').then((continueLabel) => {
+        cy.get('button').contains(continueLabel).click();
+      });
+
+      cy.get('h1').should('contain', 'Profession with no optional fields');
+
+      cy.checkSummaryListRowValue(
+        'decisions.admin.edit.regulator',
+        'Organisation with no optional fields',
+      );
+      cy.checkSummaryListRowValue('decisions.admin.edit.year', '2021');
+
+      cy.get('input[name="routes[1]"]').type('Duplicate Route');
+      cy.get('select[name="countries[1][1]"]').select('Japan');
+      cy.get('input[name="yeses[1][1]"]').type('3');
+      cy.get('input[name="noes[1][1]"]').type('9');
+      cy.get('input[name="yesAfterComps[1][1]"]').type('8');
+      cy.get('input[name="noAfterComps[1][1]"]').type('4');
+
+      cy.translate('decisions.admin.buttons.addRoute').then((addRoute) => {
+        cy.get('button').contains(addRoute).click();
+      });
+
+      cy.get('input[name="routes[2]"]').type('Duplicate Route');
+      cy.get('select[name="countries[2][1]"]').select('Japan');
+      cy.get('input[name="yeses[2][1]"]').type('3');
+      cy.get('input[name="noes[2][1]"]').type('9');
+      cy.get('input[name="yesAfterComps[2][1]"]').type('8');
+      cy.get('input[name="noAfterComps[2][1]"]').type('4');
+
+      cy.translate('decisions.admin.buttons.addRoute').then((addRoute) => {
+        cy.get('button').contains(addRoute).click();
+      });
+
+      cy.get('select[name="countries[3][1]"]').select('Japan');
+      cy.get('input[name="yeses[3][1]"]').type('3');
+      cy.get('input[name="noes[3][1]"]').type('9');
+      cy.get('input[name="yesAfterComps[3][1]"]').type('8');
+      cy.get('input[name="noAfterComps[3][1]"]').type('4');
+
+      cy.translate('decisions.admin.buttons.saveAsDraft').then((save) => {
+        cy.get('button').contains(save).click();
+      });
+
+      cy.translate('decisions.admin.edit.errors.routes.duplicate').then(
+        (error) => {
+          cy.get('body').should('contain', error);
+        },
+      );
+      cy.translate('decisions.admin.edit.errors.routes.empty').then((error) => {
+        cy.get('body').should('contain', error);
+      });
+    });
   });
 
   context('When I am logged in as an organisation editor', () => {

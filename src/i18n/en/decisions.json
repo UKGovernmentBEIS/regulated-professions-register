@@ -128,6 +128,12 @@
         "caption": "Editing decision data",
         "bodyUnpublish": "Editing this dataset will unpublish any existing decision data for this profession. Are you sure you want to do this?<br/>There will be no data available on this profession until the new draft is published.",
         "bodyUnsubmit": "Editing this dataset will unsubmit any existing decision data for this profession. Are you sure you want to do this?<br/>There will be no data available on this profession until the new draft is published."
+      },
+      "errors": {
+        "routes": {
+          "empty": "Enter a route",
+          "duplicate": "It looks like you've already added a route with that name - enter a different one"
+        }
       }
     },
     "buttons": {

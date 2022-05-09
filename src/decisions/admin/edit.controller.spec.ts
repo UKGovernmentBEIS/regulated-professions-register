@@ -376,458 +376,594 @@ describe('EditController', () => {
   });
 
   describe('update', () => {
-    describe('when the `action` is "publish"', () => {
-      it('saves the given dataset as draft and redirects to the publication confirmation page', async () => {
-        const editDto: EditDto = {
-          routes: ['Example route'],
-          countries: [['Brazil']],
-          yeses: [['1']],
-          noes: [['5']],
-          yesAfterComps: [['4']],
-          noAfterComps: [['7']],
-          action: 'publish',
-        };
+    describe('when submitting valid data', () => {
+      describe('when the `action` is "publish"', () => {
+        it('saves the given dataset as draft and redirects to the publication confirmation page', async () => {
+          const editDto: EditDto = {
+            routes: ['Example route'],
+            countries: [['Brazil']],
+            yeses: [['1']],
+            noes: [['5']],
+            yesAfterComps: [['4']],
+            noAfterComps: [['7']],
+            action: 'publish',
+          };
 
-        const decisionRoutes: DecisionRoute[] = [
-          {
-            name: 'Example route',
-            countries: [
-              {
-                code: 'BR',
-                decisions: {
-                  yes: 1,
-                  no: 5,
-                  yesAfterComp: 5,
-                  noAfterComp: 7,
+          const decisionRoutes: DecisionRoute[] = [
+            {
+              name: 'Example route',
+              countries: [
+                {
+                  code: 'BR',
+                  decisions: {
+                    yes: 1,
+                    no: 5,
+                    yesAfterComp: 5,
+                    noAfterComp: 7,
+                  },
                 },
-              },
-            ],
-          },
-        ];
+              ],
+            },
+          ];
 
-        const profession = professionFactory.build({
-          id: 'example-profession-id',
+          const profession = professionFactory.build({
+            id: 'example-profession-id',
+          });
+
+          const organisation = organisationFactory.build({
+            id: 'example-organisation-id',
+          });
+
+          const user = userFactory.build();
+
+          professionsService.findWithVersions.mockResolvedValue(profession);
+          organisationsService.find.mockResolvedValue(organisation);
+          decisionDatasetsService.find.mockResolvedValue(undefined);
+
+          const checkCanChangeDatasetSpy = jest
+            .spyOn(checkCanChangeDatasetModule, 'checkCanChangeDataset')
+            .mockImplementation();
+
+          const getActingUserSpy = jest
+            .spyOn(getActingUserModule, 'getActingUser')
+            .mockReturnValue(user);
+
+          const parseEditDtoDecisionRoutesSpy = jest
+            .spyOn(
+              parseEditDtoDecisionRoutesModule,
+              'parseEditDtoDecisionRoutes',
+            )
+            .mockReturnValue(decisionRoutes);
+          const modifyDecisionRoutesSpy = jest.spyOn(
+            modifyDecisionRoutesModule,
+            'modifyDecisionRoutes',
+          );
+          const checkCanPublishDatasetSpy = jest
+            .spyOn(checkCanPublishDatasetModule, 'checkCanPublishDataset')
+            .mockReturnValue(undefined);
+
+          const request = createDefaultMockRequest();
+          const response = createMock<Response>();
+          const flashMock = flashMessage as jest.Mock;
+          flashMock.mockImplementation(() => 'STUB_FLASH_MESSAGE');
+
+          await controller.update(
+            'example-profession-id',
+            'example-organisation-id',
+            2016,
+            editDto,
+            request,
+            response,
+          );
+
+          expect(checkCanPublishDatasetSpy).toHaveBeenCalledWith(request);
+
+          expect(response.redirect).toHaveBeenCalledWith(
+            '/admin/decisions/example-profession-id/example-organisation-id/2016/publish?fromEdit=true',
+          );
+
+          expect(professionsService.findWithVersions).toHaveBeenCalledWith(
+            'example-profession-id',
+          );
+          expect(organisationsService.find).toHaveBeenCalledWith(
+            'example-organisation-id',
+          );
+          expect(decisionDatasetsService.find).toHaveBeenCalledWith(
+            'example-profession-id',
+            'example-organisation-id',
+            2016,
+          );
+
+          expect(decisionDatasetsService.save).toHaveBeenCalledWith({
+            profession,
+            organisation,
+            year: 2016,
+            user,
+            status: DecisionDatasetStatus.Draft,
+            routes: decisionRoutes,
+          } as DecisionDataset);
+
+          expect(checkCanChangeDatasetSpy).toHaveBeenCalledWith(
+            request,
+            profession,
+            organisation,
+            2016,
+            false,
+          );
+          expect(getActingUserSpy).toHaveBeenCalledWith(request);
+          expect(parseEditDtoDecisionRoutesSpy).toHaveBeenCalledWith(editDto);
+          expect(modifyDecisionRoutesSpy).not.toHaveBeenCalled();
         });
+      });
 
-        const organisation = organisationFactory.build({
-          id: 'example-organisation-id',
+      describe('when the `action` is "submit"', () => {
+        it('saves the given dataset as draft and redirects to the submission confirmation page', async () => {
+          const editDto: EditDto = {
+            routes: ['Example route'],
+            countries: [['Brazil']],
+            yeses: [['1']],
+            noes: [['5']],
+            yesAfterComps: [['4']],
+            noAfterComps: [['7']],
+            action: 'submit',
+          };
+
+          const decisionRoutes: DecisionRoute[] = [
+            {
+              name: 'Example route',
+              countries: [
+                {
+                  code: 'BR',
+                  decisions: {
+                    yes: 1,
+                    no: 5,
+                    yesAfterComp: 5,
+                    noAfterComp: 7,
+                  },
+                },
+              ],
+            },
+          ];
+
+          const profession = professionFactory.build({
+            id: 'example-profession-id',
+          });
+
+          const organisation = organisationFactory.build({
+            id: 'example-organisation-id',
+          });
+
+          const user = userFactory.build();
+
+          professionsService.findWithVersions.mockResolvedValue(profession);
+          organisationsService.find.mockResolvedValue(organisation);
+          decisionDatasetsService.find.mockResolvedValue(undefined);
+
+          const checkCanChangeDatasetSpy = jest
+            .spyOn(checkCanChangeDatasetModule, 'checkCanChangeDataset')
+            .mockImplementation();
+
+          const getActingUserSpy = jest
+            .spyOn(getActingUserModule, 'getActingUser')
+            .mockReturnValue(user);
+
+          const parseEditDtoDecisionRoutesSpy = jest
+            .spyOn(
+              parseEditDtoDecisionRoutesModule,
+              'parseEditDtoDecisionRoutes',
+            )
+            .mockReturnValue(decisionRoutes);
+          const modifyDecisionRoutesSpy = jest.spyOn(
+            modifyDecisionRoutesModule,
+            'modifyDecisionRoutes',
+          );
+
+          const request = createDefaultMockRequest();
+          const response = createMock<Response>();
+          const flashMock = flashMessage as jest.Mock;
+          flashMock.mockImplementation(() => 'STUB_FLASH_MESSAGE');
+
+          await controller.update(
+            'example-profession-id',
+            'example-organisation-id',
+            2016,
+            editDto,
+            request,
+            response,
+          );
+
+          expect(response.redirect).toHaveBeenCalledWith(
+            '/admin/decisions/example-profession-id/example-organisation-id/2016/submit?fromEdit=true',
+          );
+
+          expect(professionsService.findWithVersions).toHaveBeenCalledWith(
+            'example-profession-id',
+          );
+          expect(organisationsService.find).toHaveBeenCalledWith(
+            'example-organisation-id',
+          );
+          expect(decisionDatasetsService.find).toHaveBeenCalledWith(
+            'example-profession-id',
+            'example-organisation-id',
+            2016,
+          );
+
+          expect(decisionDatasetsService.save).toHaveBeenCalledWith({
+            profession,
+            organisation,
+            year: 2016,
+            user,
+            status: DecisionDatasetStatus.Draft,
+            routes: decisionRoutes,
+          } as DecisionDataset);
+
+          expect(checkCanChangeDatasetSpy).toHaveBeenCalledWith(
+            request,
+            profession,
+            organisation,
+            2016,
+            false,
+          );
+          expect(getActingUserSpy).toHaveBeenCalledWith(request);
+          expect(parseEditDtoDecisionRoutesSpy).toHaveBeenCalledWith(editDto);
+          expect(modifyDecisionRoutesSpy).not.toHaveBeenCalled();
         });
+      });
 
-        const user = userFactory.build();
+      describe('when the `action` is "save"', () => {
+        it('saves the given dataset with the draft status', async () => {
+          const editDto: EditDto = {
+            routes: ['Example route'],
+            countries: [['Germany']],
+            yeses: [['1']],
+            noes: [['8']],
+            yesAfterComps: [['1']],
+            noAfterComps: [['2']],
+            action: 'save',
+          };
 
-        professionsService.findWithVersions.mockResolvedValue(profession);
-        organisationsService.find.mockResolvedValue(organisation);
-        decisionDatasetsService.find.mockResolvedValue(undefined);
+          const decisionRoutes: DecisionRoute[] = [
+            {
+              name: 'Example route',
+              countries: [
+                {
+                  code: 'DE',
+                  decisions: {
+                    yes: 1,
+                    no: 8,
+                    yesAfterComp: 1,
+                    noAfterComp: 2,
+                  },
+                },
+              ],
+            },
+          ];
 
-        const checkCanChangeDatasetSpy = jest
-          .spyOn(checkCanChangeDatasetModule, 'checkCanChangeDataset')
-          .mockImplementation();
+          const profession = professionFactory.build({
+            id: 'example-profession-id',
+          });
 
-        const getActingUserSpy = jest
-          .spyOn(getActingUserModule, 'getActingUser')
-          .mockReturnValue(user);
+          const organisation = organisationFactory.build({
+            id: 'example-organisation-id',
+          });
 
-        const parseEditDtoDecisionRoutesSpy = jest
-          .spyOn(parseEditDtoDecisionRoutesModule, 'parseEditDtoDecisionRoutes')
-          .mockReturnValue(decisionRoutes);
-        const modifyDecisionRoutesSpy = jest.spyOn(
-          modifyDecisionRoutesModule,
-          'modifyDecisionRoutes',
-        );
-        const checkCanPublishDatasetSpy = jest
-          .spyOn(checkCanPublishDatasetModule, 'checkCanPublishDataset')
-          .mockReturnValue(undefined);
+          const user = userFactory.build();
 
-        const request = createDefaultMockRequest();
-        const response = createMock<Response>();
-        const flashMock = flashMessage as jest.Mock;
-        flashMock.mockImplementation(() => 'STUB_FLASH_MESSAGE');
+          professionsService.findWithVersions.mockResolvedValue(profession);
+          organisationsService.find.mockResolvedValue(organisation);
+          decisionDatasetsService.find.mockResolvedValue(undefined);
 
-        await controller.update(
-          'example-profession-id',
-          'example-organisation-id',
-          2016,
-          editDto,
-          request,
-          response,
-        );
+          const checkCanChangeDatasetSpy = jest
+            .spyOn(checkCanChangeDatasetModule, 'checkCanChangeDataset')
+            .mockImplementation();
 
-        expect(checkCanPublishDatasetSpy).toHaveBeenCalledWith(request);
+          const getActingUserSpy = jest
+            .spyOn(getActingUserModule, 'getActingUser')
+            .mockReturnValue(user);
 
-        expect(response.redirect).toHaveBeenCalledWith(
-          '/admin/decisions/example-profession-id/example-organisation-id/2016/publish?fromEdit=true',
-        );
+          const parseEditDtoDecisionRoutesSpy = jest
+            .spyOn(
+              parseEditDtoDecisionRoutesModule,
+              'parseEditDtoDecisionRoutes',
+            )
+            .mockReturnValue(decisionRoutes);
+          const modifyDecisionRoutesSpy = jest.spyOn(
+            modifyDecisionRoutesModule,
+            'modifyDecisionRoutes',
+          );
 
-        expect(professionsService.findWithVersions).toHaveBeenCalledWith(
-          'example-profession-id',
-        );
-        expect(organisationsService.find).toHaveBeenCalledWith(
-          'example-organisation-id',
-        );
-        expect(decisionDatasetsService.find).toHaveBeenCalledWith(
-          'example-profession-id',
-          'example-organisation-id',
-          2016,
-        );
+          const request = createDefaultMockRequest();
+          const response = createMock<Response>();
 
-        expect(decisionDatasetsService.save).toHaveBeenCalledWith({
-          profession,
-          organisation,
-          year: 2016,
-          user,
-          status: DecisionDatasetStatus.Draft,
-          routes: decisionRoutes,
-        } as DecisionDataset);
+          const flashMock = flashMessage as jest.Mock;
+          flashMock.mockImplementation(() => 'STUB_FLASH_MESSAGE');
 
-        expect(checkCanChangeDatasetSpy).toHaveBeenCalledWith(
-          request,
-          profession,
-          organisation,
-          2016,
-          false,
-        );
-        expect(getActingUserSpy).toHaveBeenCalledWith(request);
-        expect(parseEditDtoDecisionRoutesSpy).toHaveBeenCalledWith(editDto);
-        expect(modifyDecisionRoutesSpy).not.toHaveBeenCalled();
+          await controller.update(
+            'example-profession-id',
+            'example-organisation-id',
+            2016,
+            editDto,
+            request,
+            response,
+          );
+
+          expect(flashMock).toHaveBeenCalledWith(
+            translationOf('decisions.admin.saveAsDraft.confirmation.heading'),
+            translationOf('decisions.admin.saveAsDraft.confirmation.body'),
+          );
+
+          expect(response.redirect).toHaveBeenCalledWith(
+            '/admin/decisions/example-profession-id/example-organisation-id/2016',
+          );
+
+          expect(professionsService.findWithVersions).toHaveBeenCalledWith(
+            'example-profession-id',
+          );
+          expect(organisationsService.find).toHaveBeenCalledWith(
+            'example-organisation-id',
+          );
+          expect(decisionDatasetsService.find).toHaveBeenCalledWith(
+            'example-profession-id',
+            'example-organisation-id',
+            2016,
+          );
+
+          expect(decisionDatasetsService.save).toHaveBeenCalledWith({
+            profession,
+            organisation,
+            year: 2016,
+            user,
+            status: DecisionDatasetStatus.Draft,
+            routes: decisionRoutes,
+          } as DecisionDataset);
+
+          expect(checkCanChangeDatasetSpy).toHaveBeenCalledWith(
+            request,
+            profession,
+            organisation,
+            2016,
+            false,
+          );
+          expect(getActingUserSpy).toHaveBeenCalledWith(request);
+          expect(parseEditDtoDecisionRoutesSpy).toHaveBeenCalledWith(editDto);
+          expect(modifyDecisionRoutesSpy).not.toHaveBeenCalled();
+        });
+      });
+
+      describe('when the `action` is a modification command', () => {
+        it('does not validate the data, but modifies the dataset', async () => {
+          const editDto: EditDto = {
+            routes: ['Example route'],
+            countries: [['Japan']],
+            yeses: [['4']],
+            noes: [['5']],
+            yesAfterComps: [['']],
+            noAfterComps: [['9']],
+            action: 'addCountry:1',
+          };
+
+          const decisionRoutes: DecisionRoute[] = [
+            {
+              name: 'Example route',
+              countries: [
+                {
+                  code: 'JP',
+                  decisions: {
+                    yes: 4,
+                    no: 5,
+                    yesAfterComp: null,
+                    noAfterComp: 9,
+                  },
+                },
+              ],
+            },
+          ];
+
+          const profession = professionFactory.build({
+            id: 'example-profession-id',
+          });
+
+          const organisation = organisationFactory.build({
+            id: 'example-organisation-id',
+          });
+
+          professionsService.findWithVersions.mockResolvedValue(profession);
+          organisationsService.find.mockResolvedValue(organisation);
+          decisionDatasetsService.find.mockResolvedValue(undefined);
+
+          (
+            DecisionDatasetEditPresenter.prototype.present as jest.Mock
+          ).mockReturnValue(mockRouteTemplates);
+
+          const checkCanChangeDatasetSpy = jest
+            .spyOn(checkCanChangeDatasetModule, 'checkCanChangeDataset')
+            .mockImplementation();
+
+          const parseEditDtoDecisionRoutesSpy = jest
+            .spyOn(
+              parseEditDtoDecisionRoutesModule,
+              'parseEditDtoDecisionRoutes',
+            )
+            .mockReturnValue(decisionRoutes);
+          const modifyDecisionRoutesSpy = jest
+            .spyOn(modifyDecisionRoutesModule, 'modifyDecisionRoutes')
+            .mockImplementation();
+
+          const request = createDefaultMockRequest();
+          const response = createMock<Response>();
+
+          await controller.update(
+            'example-profession-id',
+            'example-organisation-id',
+            2017,
+            editDto,
+            request,
+            response,
+          );
+
+          expect(response.render).toHaveBeenCalledWith('admin/decisions/edit', {
+            profession,
+            organisation,
+            year: 2017,
+            routes: mockRouteTemplates,
+          } as EditTemplate);
+
+          expect(professionsService.findWithVersions).toHaveBeenCalledWith(
+            'example-profession-id',
+          );
+          expect(organisationsService.find).toHaveBeenCalledWith(
+            'example-organisation-id',
+          );
+          expect(decisionDatasetsService.find).toHaveBeenCalledWith(
+            'example-profession-id',
+            'example-organisation-id',
+            2017,
+          );
+
+          expect(DecisionDatasetEditPresenter).toHaveBeenCalledWith(
+            decisionRoutes,
+            i18nService,
+          );
+          expect(
+            DecisionDatasetEditPresenter.prototype.present,
+          ).toHaveBeenCalled();
+
+          expect(checkCanChangeDatasetSpy).toHaveBeenCalledWith(
+            request,
+            profession,
+            organisation,
+            2017,
+            false,
+          );
+          expect(parseEditDtoDecisionRoutesSpy).toHaveBeenCalledWith(editDto);
+          expect(modifyDecisionRoutesSpy).toHaveBeenCalledWith(
+            decisionRoutes,
+            'addCountry:1',
+          );
+        });
       });
     });
 
-    describe('when the `action` is "submit"', () => {
-      it('saves the given dataset as draft and redirects to the submission confirmation page', async () => {
-        const editDto: EditDto = {
-          routes: ['Example route'],
-          countries: [['Brazil']],
-          yeses: [['1']],
-          noes: [['5']],
-          yesAfterComps: [['4']],
-          noAfterComps: [['7']],
-          action: 'submit',
-        };
+    describe('when submitting invalid data', () => {
+      describe.each(['publish', 'save', 'submit'])(
+        'when the action is %s',
+        (action) => {
+          it('re-renders the view with errors, not saving the entry', async () => {
+            const editDtoWithEmptyRoutes: EditDto = {
+              routes: ['', 'Route 2', ''],
+              countries: [['CA'], ['AR'], ['JP']],
+              yeses: [['1'], ['1'], ['1']],
+              yesAfterComps: [['1'], ['1'], ['1']],
+              noes: [['1'], ['1'], ['1']],
+              noAfterComps: [['1'], ['1'], ['1']],
+              action,
+            };
 
-        const decisionRoutes: DecisionRoute[] = [
-          {
-            name: 'Example route',
-            countries: [
+            const decisionRoutes: DecisionRoute[] = [
               {
-                code: 'BR',
-                decisions: {
-                  yes: 1,
-                  no: 5,
-                  yesAfterComp: 5,
-                  noAfterComp: 7,
-                },
+                name: 'Example route',
+                countries: [
+                  {
+                    code: 'JP',
+                    decisions: {
+                      yes: 4,
+                      no: 5,
+                      yesAfterComp: null,
+                      noAfterComp: 9,
+                    },
+                  },
+                ],
               },
-            ],
-          },
-        ];
+            ];
 
-        const profession = professionFactory.build({
-          id: 'example-profession-id',
-        });
+            const profession = professionFactory.build({
+              id: 'example-profession-id',
+            });
 
-        const organisation = organisationFactory.build({
-          id: 'example-organisation-id',
-        });
+            const organisation = organisationFactory.build({
+              id: 'example-organisation-id',
+            });
 
-        const user = userFactory.build();
+            professionsService.findWithVersions.mockResolvedValue(profession);
+            organisationsService.find.mockResolvedValue(organisation);
+            decisionDatasetsService.find.mockResolvedValue(undefined);
 
-        professionsService.findWithVersions.mockResolvedValue(profession);
-        organisationsService.find.mockResolvedValue(organisation);
-        decisionDatasetsService.find.mockResolvedValue(undefined);
+            (
+              DecisionDatasetEditPresenter.prototype.present as jest.Mock
+            ).mockReturnValue(mockRouteTemplates);
 
-        const checkCanChangeDatasetSpy = jest
-          .spyOn(checkCanChangeDatasetModule, 'checkCanChangeDataset')
-          .mockImplementation();
+            const checkCanChangeDatasetSpy = jest
+              .spyOn(checkCanChangeDatasetModule, 'checkCanChangeDataset')
+              .mockImplementation();
 
-        const getActingUserSpy = jest
-          .spyOn(getActingUserModule, 'getActingUser')
-          .mockReturnValue(user);
+            const parseEditDtoDecisionRoutesSpy = jest
+              .spyOn(
+                parseEditDtoDecisionRoutesModule,
+                'parseEditDtoDecisionRoutes',
+              )
+              .mockReturnValue(decisionRoutes);
 
-        const parseEditDtoDecisionRoutesSpy = jest
-          .spyOn(parseEditDtoDecisionRoutesModule, 'parseEditDtoDecisionRoutes')
-          .mockReturnValue(decisionRoutes);
-        const modifyDecisionRoutesSpy = jest.spyOn(
-          modifyDecisionRoutesModule,
-          'modifyDecisionRoutes',
-        );
+            jest
+              .spyOn(checkCanPublishDatasetModule, 'checkCanPublishDataset')
+              .mockReturnValue(undefined);
 
-        const request = createDefaultMockRequest();
-        const response = createMock<Response>();
-        const flashMock = flashMessage as jest.Mock;
-        flashMock.mockImplementation(() => 'STUB_FLASH_MESSAGE');
+            const request = createDefaultMockRequest();
+            const response = createMock<Response>();
 
-        await controller.update(
-          'example-profession-id',
-          'example-organisation-id',
-          2016,
-          editDto,
-          request,
-          response,
-        );
+            await controller.update(
+              'example-profession-id',
+              'example-organisation-id',
+              2017,
+              editDtoWithEmptyRoutes,
+              request,
+              response,
+            );
 
-        expect(response.redirect).toHaveBeenCalledWith(
-          '/admin/decisions/example-profession-id/example-organisation-id/2016/submit?fromEdit=true',
-        );
-
-        expect(professionsService.findWithVersions).toHaveBeenCalledWith(
-          'example-profession-id',
-        );
-        expect(organisationsService.find).toHaveBeenCalledWith(
-          'example-organisation-id',
-        );
-        expect(decisionDatasetsService.find).toHaveBeenCalledWith(
-          'example-profession-id',
-          'example-organisation-id',
-          2016,
-        );
-
-        expect(decisionDatasetsService.save).toHaveBeenCalledWith({
-          profession,
-          organisation,
-          year: 2016,
-          user,
-          status: DecisionDatasetStatus.Draft,
-          routes: decisionRoutes,
-        } as DecisionDataset);
-
-        expect(checkCanChangeDatasetSpy).toHaveBeenCalledWith(
-          request,
-          profession,
-          organisation,
-          2016,
-          false,
-        );
-        expect(getActingUserSpy).toHaveBeenCalledWith(request);
-        expect(parseEditDtoDecisionRoutesSpy).toHaveBeenCalledWith(editDto);
-        expect(modifyDecisionRoutesSpy).not.toHaveBeenCalled();
-      });
-    });
-
-    describe('when the `action` is "save"', () => {
-      it('saves the given dataset with the draft status', async () => {
-        const editDto: EditDto = {
-          routes: ['Example route'],
-          countries: [['Germany']],
-          yeses: [['1']],
-          noes: [['8']],
-          yesAfterComps: [['1']],
-          noAfterComps: [['2']],
-          action: 'save',
-        };
-
-        const decisionRoutes: DecisionRoute[] = [
-          {
-            name: 'Example route',
-            countries: [
+            expect(response.render).toHaveBeenCalledWith(
+              'admin/decisions/edit',
               {
-                code: 'DE',
-                decisions: {
-                  yes: 1,
-                  no: 8,
-                  yesAfterComp: 1,
-                  noAfterComp: 2,
+                profession,
+                organisation,
+                year: 2017,
+                routes: mockRouteTemplates,
+                errors: {
+                  'routes[1]': {
+                    text: 'decisions.admin.edit.errors.routes.empty',
+                  },
+                  'routes[3]': {
+                    text: 'decisions.admin.edit.errors.routes.empty',
+                  },
                 },
-              },
-            ],
-          },
-        ];
+              } as EditTemplate,
+            );
 
-        const profession = professionFactory.build({
-          id: 'example-profession-id',
-        });
+            expect(professionsService.findWithVersions).toHaveBeenCalledWith(
+              'example-profession-id',
+            );
+            expect(organisationsService.find).toHaveBeenCalledWith(
+              'example-organisation-id',
+            );
+            expect(decisionDatasetsService.find).toHaveBeenCalledWith(
+              'example-profession-id',
+              'example-organisation-id',
+              2017,
+            );
 
-        const organisation = organisationFactory.build({
-          id: 'example-organisation-id',
-        });
+            expect(checkCanChangeDatasetSpy).toHaveBeenCalledWith(
+              request,
+              profession,
+              organisation,
+              2017,
+              false,
+            );
+            expect(parseEditDtoDecisionRoutesSpy).toHaveBeenCalledWith(
+              editDtoWithEmptyRoutes,
+            );
 
-        const user = userFactory.build();
-
-        professionsService.findWithVersions.mockResolvedValue(profession);
-        organisationsService.find.mockResolvedValue(organisation);
-        decisionDatasetsService.find.mockResolvedValue(undefined);
-
-        const checkCanChangeDatasetSpy = jest
-          .spyOn(checkCanChangeDatasetModule, 'checkCanChangeDataset')
-          .mockImplementation();
-
-        const getActingUserSpy = jest
-          .spyOn(getActingUserModule, 'getActingUser')
-          .mockReturnValue(user);
-
-        const parseEditDtoDecisionRoutesSpy = jest
-          .spyOn(parseEditDtoDecisionRoutesModule, 'parseEditDtoDecisionRoutes')
-          .mockReturnValue(decisionRoutes);
-        const modifyDecisionRoutesSpy = jest.spyOn(
-          modifyDecisionRoutesModule,
-          'modifyDecisionRoutes',
-        );
-
-        const request = createDefaultMockRequest();
-        const response = createMock<Response>();
-
-        const flashMock = flashMessage as jest.Mock;
-        flashMock.mockImplementation(() => 'STUB_FLASH_MESSAGE');
-
-        await controller.update(
-          'example-profession-id',
-          'example-organisation-id',
-          2016,
-          editDto,
-          request,
-          response,
-        );
-
-        expect(flashMock).toHaveBeenCalledWith(
-          translationOf('decisions.admin.saveAsDraft.confirmation.heading'),
-          translationOf('decisions.admin.saveAsDraft.confirmation.body'),
-        );
-
-        expect(response.redirect).toHaveBeenCalledWith(
-          '/admin/decisions/example-profession-id/example-organisation-id/2016',
-        );
-
-        expect(professionsService.findWithVersions).toHaveBeenCalledWith(
-          'example-profession-id',
-        );
-        expect(organisationsService.find).toHaveBeenCalledWith(
-          'example-organisation-id',
-        );
-        expect(decisionDatasetsService.find).toHaveBeenCalledWith(
-          'example-profession-id',
-          'example-organisation-id',
-          2016,
-        );
-
-        expect(decisionDatasetsService.save).toHaveBeenCalledWith({
-          profession,
-          organisation,
-          year: 2016,
-          user,
-          status: DecisionDatasetStatus.Draft,
-          routes: decisionRoutes,
-        } as DecisionDataset);
-
-        expect(checkCanChangeDatasetSpy).toHaveBeenCalledWith(
-          request,
-          profession,
-          organisation,
-          2016,
-          false,
-        );
-        expect(getActingUserSpy).toHaveBeenCalledWith(request);
-        expect(parseEditDtoDecisionRoutesSpy).toHaveBeenCalledWith(editDto);
-        expect(modifyDecisionRoutesSpy).not.toHaveBeenCalled();
-      });
-    });
-
-    describe('when the `action` is a modification command', () => {
-      it('modifies the dataset', async () => {
-        const editDto: EditDto = {
-          routes: ['Example route'],
-          countries: [['Japan']],
-          yeses: [['4']],
-          noes: [['5']],
-          yesAfterComps: [['']],
-          noAfterComps: [['9']],
-          action: 'addCountry:1',
-        };
-
-        const decisionRoutes: DecisionRoute[] = [
-          {
-            name: 'Example route',
-            countries: [
-              {
-                code: 'JP',
-                decisions: {
-                  yes: 4,
-                  no: 5,
-                  yesAfterComp: null,
-                  noAfterComp: 9,
-                },
-              },
-            ],
-          },
-        ];
-
-        const profession = professionFactory.build({
-          id: 'example-profession-id',
-        });
-
-        const organisation = organisationFactory.build({
-          id: 'example-organisation-id',
-        });
-
-        professionsService.findWithVersions.mockResolvedValue(profession);
-        organisationsService.find.mockResolvedValue(organisation);
-        decisionDatasetsService.find.mockResolvedValue(undefined);
-
-        (
-          DecisionDatasetEditPresenter.prototype.present as jest.Mock
-        ).mockReturnValue(mockRouteTemplates);
-
-        const checkCanChangeDatasetSpy = jest
-          .spyOn(checkCanChangeDatasetModule, 'checkCanChangeDataset')
-          .mockImplementation();
-
-        const parseEditDtoDecisionRoutesSpy = jest
-          .spyOn(parseEditDtoDecisionRoutesModule, 'parseEditDtoDecisionRoutes')
-          .mockReturnValue(decisionRoutes);
-        const modifyDecisionRoutesSpy = jest
-          .spyOn(modifyDecisionRoutesModule, 'modifyDecisionRoutes')
-          .mockImplementation();
-
-        const request = createDefaultMockRequest();
-        const response = createMock<Response>();
-
-        await controller.update(
-          'example-profession-id',
-          'example-organisation-id',
-          2017,
-          editDto,
-          request,
-          response,
-        );
-
-        expect(response.render).toHaveBeenCalledWith('admin/decisions/edit', {
-          profession,
-          organisation,
-          year: 2017,
-          routes: mockRouteTemplates,
-        } as EditTemplate);
-
-        expect(professionsService.findWithVersions).toHaveBeenCalledWith(
-          'example-profession-id',
-        );
-        expect(organisationsService.find).toHaveBeenCalledWith(
-          'example-organisation-id',
-        );
-        expect(decisionDatasetsService.find).toHaveBeenCalledWith(
-          'example-profession-id',
-          'example-organisation-id',
-          2017,
-        );
-
-        expect(DecisionDatasetEditPresenter).toHaveBeenCalledWith(
-          decisionRoutes,
-          i18nService,
-        );
-        expect(
-          DecisionDatasetEditPresenter.prototype.present,
-        ).toHaveBeenCalled();
-
-        expect(checkCanChangeDatasetSpy).toHaveBeenCalledWith(
-          request,
-          profession,
-          organisation,
-          2017,
-          false,
-        );
-        expect(parseEditDtoDecisionRoutesSpy).toHaveBeenCalledWith(editDto);
-        expect(modifyDecisionRoutesSpy).toHaveBeenCalledWith(
-          decisionRoutes,
-          'addCountry:1',
-        );
-      });
+            expect(decisionDatasetsService.save).not.toHaveBeenCalled();
+          });
+        },
+      );
     });
   });
 
