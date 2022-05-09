@@ -24,6 +24,10 @@
           text: ("organisations.admin.heading" | t )
         } if 'editOrganisation' in permissions else undefined,
         {
+          href: "/admin/decisions",
+          text: ("decisions.admin.heading" | t )
+        } if 'viewDecisionData' in permissions else undefined,
+        {
           href: "/admin/users",
           text: ("users.headings.index" | t)
         } if 'editUser' in permissions else undefined,

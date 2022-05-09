@@ -1,5 +1,6 @@
 {
   "admin": {
+    "heading": "Recognition decisions",
     "dashboard": {
       "heading": "Recognition decision data",
       "addButtonLabel": "Add decision data",
