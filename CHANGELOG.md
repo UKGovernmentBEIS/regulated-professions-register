@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 - Public view of decision data, linked to from public profession pages
 - Add confirmation page when editing decision data
+- Validations to ensure no duplicate or empty routes are entered in Decision data
 
 ### Changed
 
