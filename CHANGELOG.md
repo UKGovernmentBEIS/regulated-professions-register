@@ -24,6 +24,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Improve hint text on keyword searches
 - Hide recognition decision links in production environment
 - Improve text around decision data filters
+- Improve validation copy for decision data pages
 
 ## [release-020] - 2022-05-05
 
