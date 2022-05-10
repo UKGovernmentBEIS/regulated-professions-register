@@ -13,7 +13,7 @@
     "filter": {
       "keywords": {
         "label": "Keyword",
-        "hint": "For example, technology"
+        "hint": "For example, education"
       },
       "nations": {
         "label": "Nations",

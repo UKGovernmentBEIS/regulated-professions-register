@@ -285,7 +285,7 @@
     "filter": {
       "keywords": {
         "label": "Keyword",
-        "hint": "For example, RP155, nuclear"
+        "hint": "For example, teacher"
       },
       "nations": {
         "label": "Nations",
@@ -370,7 +370,7 @@
     "filter": {
       "keywords": {
         "label": "Profession that you are looking for",
-        "hint": "For example, technology"
+        "hint": "For example, teacher"
       },
       "nations": {
         "label": "Nations",
