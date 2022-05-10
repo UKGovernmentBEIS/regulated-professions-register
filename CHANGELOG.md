@@ -23,6 +23,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Revision on text on admin start page to include details of authenticator apps
 - Improve hint text on keyword searches
 - Hide recognition decision links in production environment
+- Improve text around decision data filters
 
 ## [release-020] - 2022-05-05
 
