@@ -154,7 +154,7 @@ describe('OrganisationsService', () => {
 
   describe('setSlug', () => {
     it('sets a slug on the organisation', async () => {
-      SlugGenerator.prototype.slug = async () => 'slug';
+      (SlugGenerator.prototype.slug as jest.Mock).mockResolvedValue('slug');
 
       const organisation = organisationFactory.build();
       const repoSpy = jest.spyOn(repo, 'save').mockResolvedValue({
@@ -173,5 +173,62 @@ describe('OrganisationsService', () => {
         slug: 'slug',
       });
     });
+  });
+
+  describe('rename', () => {
+    describe('when called with an a non-exisitant organisation name', () => {
+      it('throws an exception', async () => {
+        const repoSpy = jest.spyOn(repo, 'findOne').mockResolvedValue(null);
+
+        expect(async () => {
+          await service.rename(
+            'Non-Existant Organisation Name',
+            'New Organisation Nmae',
+          );
+        }).rejects.toThrowError();
+
+        expect(repoSpy).toHaveBeenCalledWith({
+          name: 'Non-Existant Organisation Name',
+        });
+      });
+    });
+
+    describe('when called with a valid organisation name', () => {
+      it('throws an exception', async () => {
+        const organisation = organisationFactory.build();
+
+        (SlugGenerator.prototype.slug as jest.Mock).mockResolvedValue(
+          'new-organisation-slug',
+        );
+
+        const findOneRepoSpy = jest
+          .spyOn(repo, 'findOne')
+          .mockResolvedValue({ ...organisation });
+        const saveRepoSpy = jest.spyOn(repo, 'save');
+
+        await service.rename('Old Organisation Name', 'New Organisation Name');
+
+        expect(findOneRepoSpy).toHaveBeenCalledWith({
+          name: 'Old Organisation Name',
+        });
+
+        expect(SlugGenerator).toHaveBeenCalledWith(
+          service,
+          'New Organisation Name',
+        );
+        expect(SlugGenerator.prototype.slug).toHaveBeenCalled();
+
+        expect(saveRepoSpy).toHaveBeenCalledWith({
+          ...organisation,
+          name: 'New Organisation Name',
+          slug: 'new-organisation-slug',
+        });
+      });
+    });
+  });
+
+  afterEach(() => {
+    jest.resetAllMocks();
+    jest.restoreAllMocks();
   });
 });
