@@ -5,7 +5,8 @@
       "heading": "Recognition decision data",
       "addButtonLabel": "Add decision data",
       "manageHeading": "Manage existing decision data",
-      "showFilters": "Filter data",
+      "instructions": "Use the filters to choose the datasets to view and download",
+      "showFilters": "Show filters",
       "viewDetails": "View details <span class='govuk-visually-hidden'>about {year} {organisaition} {profession} decision data</span>",
       "filter": {
         "keywords": {
