@@ -53,4 +53,23 @@ export class OrganisationsService {
 
     return await this.repository.save(organisation);
   }
+
+  async rename(oldName: string, newName: string): Promise<string> {
+    const organisation = await this.repository.findOne({
+      name: oldName,
+    });
+
+    if (!organisation) {
+      throw new Error(`No organisation with name "${oldName}" found`);
+    }
+
+    const newSlug = await new SlugGenerator(this, newName).slug();
+
+    await this.repository.save({
+      ...organisation,
+      name: newName,
+      slug: newSlug,
+    });
+    return organisation.slug;
+  }
 }
