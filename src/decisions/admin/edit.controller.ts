@@ -103,6 +103,11 @@ export class EditController {
     UserPermission.ViewDecisionData,
   )
   @Render('admin/decisions/edit')
+  @BackLink((request) =>
+    request.query.fromEdit
+      ? '/admin/decisions/:professionId/:organisationId/:year/new'
+      : '/admin/decisions/new',
+  )
   async edit(
     @Param('professionId') professionId: string,
     @Param('organisationId') organisationId: string,

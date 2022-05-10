@@ -60,6 +60,45 @@ describe('Creating a decision dataset', () => {
         cy.get('button').contains(continueLabel).click();
       });
 
+      cy.get('a').contains('Back').click().url().should('not.contain', '2021');
+
+      cy.translate('decisions.admin.new.labels.profession').then(
+        (profession) => {
+          cy.get('label')
+            .contains(profession)
+            .parent()
+            .within(() => {
+              cy.get('select').select(
+                'Profession with two tier-one Organisations',
+              );
+            });
+        },
+      );
+
+      cy.translate('decisions.admin.new.labels.organisation').then(
+        (profession) => {
+          cy.get('label')
+            .contains(profession)
+            .parent()
+            .within(() => {
+              cy.get('select').select('Organisation with no optional fields');
+            });
+        },
+      );
+
+      cy.translate('decisions.admin.new.labels.year').then((profession) => {
+        cy.get('label')
+          .contains(profession)
+          .parent()
+          .within(() => {
+            cy.get('select').select('2021');
+          });
+      });
+
+      cy.translate('app.continue').then((continueLabel) => {
+        cy.get('button').contains(continueLabel).click();
+      });
+
       cy.get('h1').should(
         'contain',
         'Profession with two tier-one Organisations',

@@ -48,6 +48,12 @@ describe('Editing a decision dataset', () => {
         cy.get('a').contains(buttonText).click();
       });
 
+      cy.get('a').contains('Back').click().url().should('contain', 'new');
+
+      cy.translate('decisions.admin.buttons.edit').then((edit) => {
+        cy.get('a').contains(edit).click();
+      });
+
       cy.checkAccessibility();
 
       withinEditTableDiv('International Route', () => {

@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Add confirmation page when editing decision data
 - Validations to ensure no duplicate or empty routes are entered in Decision data
 - Link to recognition decisions dashboard from admin dashboard and navigation bar
+- Add backlink from decision data edit page to the edit confirmation page
 
 ### Changed
 
