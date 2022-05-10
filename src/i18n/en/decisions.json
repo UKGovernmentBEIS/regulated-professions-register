@@ -10,7 +10,7 @@
       "filter": {
         "keywords": {
           "label": "Keyword",
-          "hint": "For example, RP155, nuclear"
+          "hint": "For example, teacher"
         },
         "organisations": {
           "label": "Regulators",
