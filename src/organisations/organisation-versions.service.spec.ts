@@ -8,6 +8,8 @@ import {
   SelectQueryBuilder,
   Connection,
   QueryRunner,
+  Not,
+  Any,
 } from 'typeorm';
 import {
   OrganisationVersion,
@@ -542,12 +544,15 @@ describe('OrganisationVersionsService', () => {
         .mockImplementation(() => queryRunner);
     });
 
-    it('archives the draft version', async () => {
+    it('archives the given version and all other live or draft versions', async () => {
+      const inputVersion = organisationVersionFactory.build();
+
       const draftVersion = organisationVersionFactory.build({
         status: OrganisationVersionStatus.Draft,
-        organisation: organisationFactory.build({
-          professionToOrganisations: [],
-        }),
+      });
+
+      const liveVersion = organisationVersionFactory.build({
+        status: OrganisationVersionStatus.Live,
       });
 
       const archivedVersion = {
@@ -555,66 +560,42 @@ describe('OrganisationVersionsService', () => {
         status: OrganisationVersionStatus.Archived,
       };
 
-      const findSpy = jest.spyOn(repo, 'findOne');
+      const findSpy = jest
+        .spyOn(repo, 'find')
+        .mockResolvedValue([draftVersion, liveVersion]);
 
       const saveSpy = jest
         .spyOn(repo, 'save')
         .mockResolvedValue(archivedVersion);
 
-      const result = await service.archive(draftVersion);
+      const result = await service.archive(inputVersion);
 
       expect(result.status).toBe(OrganisationVersionStatus.Archived);
 
       expect(findSpy).toHaveBeenCalledWith({
-        organisation: draftVersion.organisation,
-        status: OrganisationVersionStatus.Live,
+        where: {
+          organisation: inputVersion.organisation,
+          id: Not(inputVersion.id),
+          status: Any([
+            OrganisationVersionStatus.Live,
+            OrganisationVersionStatus.Draft,
+          ]),
+        },
       });
+
+      expect(saveSpy).toHaveBeenCalledWith([
+        {
+          ...draftVersion,
+          status: OrganisationVersionStatus.Archived,
+        },
+        {
+          ...liveVersion,
+          status: OrganisationVersionStatus.Archived,
+        },
+      ]);
 
       expect(saveSpy).toHaveBeenCalledWith({
-        ...draftVersion,
-        status: OrganisationVersionStatus.Archived,
-      });
-
-      expect(queryRunner.commitTransaction).toHaveBeenCalled();
-      expect(queryRunner.release).toHaveBeenCalled();
-    });
-
-    it('archives the latest live version', async () => {
-      const liveVersion = organisationVersionFactory.build({
-        status: OrganisationVersionStatus.Live,
-      });
-
-      const organisation = organisationFactory.build({
-        versions: [liveVersion],
-        professionToOrganisations: [],
-      });
-
-      const draftVersion = organisationVersionFactory.build({
-        status: OrganisationVersionStatus.Draft,
-        organisation: organisation,
-      });
-
-      const saveSpy = jest.spyOn(repo, 'save');
-      const findSpy = jest
-        .spyOn(repo, 'findOne')
-        .mockResolvedValue(liveVersion);
-
-      const result = await service.archive(draftVersion);
-
-      expect(result.status).toBe(OrganisationVersionStatus.Archived);
-
-      expect(findSpy).toHaveBeenCalledWith({
-        organisation: organisation,
-        status: OrganisationVersionStatus.Live,
-      });
-
-      expect(saveSpy).toHaveBeenCalledWith({
-        ...liveVersion,
-        status: OrganisationVersionStatus.Archived,
-      });
-
-      expect(saveSpy).toHaveBeenCalledWith({
-        ...draftVersion,
+        ...inputVersion,
         status: OrganisationVersionStatus.Archived,
       });
 

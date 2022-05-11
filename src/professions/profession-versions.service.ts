@@ -1,4 +1,11 @@
-import { Connection, In, Repository, SelectQueryBuilder } from 'typeorm';
+import {
+  Any,
+  Connection,
+  In,
+  Not,
+  Repository,
+  SelectQueryBuilder,
+} from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
@@ -114,18 +121,26 @@ export class ProfessionVersionsService {
     const queryRunner = this.connection.createQueryRunner();
     const profession = version.profession;
 
-    const liveVersion = await this.repository.findOne({
-      profession,
-      status: ProfessionVersionStatus.Live,
-    });
-
     await queryRunner.connect();
     await queryRunner.startTransaction();
 
     try {
-      if (liveVersion) {
-        liveVersion.status = ProfessionVersionStatus.Draft;
-        await this.repository.save(liveVersion);
+      const liveAndDraftVersions = await this.repository.find({
+        where: {
+          profession,
+          id: Not(version.id),
+          status: Any([
+            ProfessionVersionStatus.Live,
+            ProfessionVersionStatus.Draft,
+          ]),
+        },
+      });
+
+      if (liveAndDraftVersions.length) {
+        liveAndDraftVersions.forEach(
+          (version) => (version.status = ProfessionVersionStatus.Archived),
+        );
+        await this.repository.save(liveAndDraftVersions);
       }
 
       version.status = ProfessionVersionStatus.Archived;

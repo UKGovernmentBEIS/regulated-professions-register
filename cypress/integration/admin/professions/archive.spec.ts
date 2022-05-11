@@ -85,6 +85,19 @@ function archiveProfession(profession: string, keyword: string): void {
   );
   cy.get('[data-cy=currently-published-version-text]').should('not.exist');
 
+  cy.translate('professions.show.bodies.regulatedAuthority').then(
+    (regulatedAuthority) => {
+      cy.get('dt')
+        .contains(regulatedAuthority)
+        .siblings('dd')
+        .within(() => {
+          cy.get('a').click();
+        });
+      cy.get('body').should('not.contain', profession);
+      cy.go('back');
+    },
+  );
+
   cy.visitAndCheckAccessibility('/admin/professions');
 
   cy.get('tr')
