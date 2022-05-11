@@ -8,6 +8,7 @@
       "instructions": "Use the filters to choose the datasets to view and download",
       "showFilters": "Show filters",
       "viewDetails": "View details <span class='govuk-visually-hidden'>about {year} {organisaition} {profession} decision data</span>",
+      "guidanceLink": "Guidance on decision outcomes and routes",
       "filter": {
         "keywords": {
           "label": "Keyword",
