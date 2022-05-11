@@ -55,6 +55,13 @@ export class AppController {
     // do nothing.
   }
 
+  @Get('/admin/decisions/guidance')
+  @Render('admin/decisions/guidance')
+  @BackLink('/admin/decisions')
+  adminDecisionGuidance(): void {
+    // do nothing
+  }
+
   @Get('/health-check')
   healthCheck() {
     return {
