@@ -22,73 +22,7 @@ describe('Archiving organisations', () => {
           cy.get('h2[data-status]').should('contain', status);
         });
 
-        cy.translate('organisations.admin.button.archive').then(
-          (archiveButton) => {
-            cy.get('a').contains(archiveButton).click();
-          },
-        );
-
-        cy.checkAccessibility();
-
-        cy.translate('organisations.admin.archive.caption').then(
-          (archiveCaption) => {
-            cy.get('body').contains(archiveCaption);
-          },
-        );
-
-        cy.translate('organisations.admin.archive.heading', {
-          organisationName: 'Draft Organisation with no professions',
-        }).then((heading) => {
-          cy.contains(heading);
-        });
-
-        cy.translate('organisations.admin.button.archive').then(
-          (buttonText) => {
-            cy.get('button').contains(buttonText).click();
-          },
-        );
-
-        cy.checkAccessibility();
-
-        cy.translate('organisations.admin.archive.confirmation.heading').then(
-          (confirmation) => {
-            cy.get('html').should('contain', confirmation);
-          },
-        );
-
-        cy.get('[data-cy=actions]').should('not.exist');
-
-        cy.translate('app.status.archived').then((status) => {
-          cy.get('h2[data-status]').should('contain', status);
-        });
-        cy.get('[data-cy=changed-by-user-name]').should('contain', 'Registrar');
-        cy.get('[data-cy=changed-by-user-email]').should(
-          'contain',
-          'beis-rpr+registrar@dxw.com',
-        );
-        cy.get('[data-cy=last-modified]').should(
-          'contain',
-          format(new Date(), 'd MMM yyyy'),
-        );
-
-        cy.visitAndCheckAccessibility('/admin/organisations');
-
-        cy.get('tr')
-          .contains('Draft Organisation with no professions')
-          .then(($header) => {
-            const $row = $header.parent();
-
-            cy.translate(`app.status.archived`).then((status) => {
-              cy.wrap($row).should('contain', status);
-            });
-          });
-
-        cy.visitAndCheckAccessibility('/regulatory-authorities/search');
-
-        cy.get('body').should(
-          'not.contain',
-          'Draft Organisation with no professions',
-        );
+        archiveOrganisation('Draft Organisation with no professions');
       });
 
       it('Shows blocking error when trying to archive a draft organisation with associated professions', () => {
@@ -148,6 +82,7 @@ describe('Archiving organisations', () => {
         cy.checkAccessibility();
       });
     });
+
     describe('Live organisations', () => {
       it('Allows me to archive a live organisation with no associated professions', () => {
         cy.get('a').contains('Regulatory authorities').click();
@@ -183,63 +118,9 @@ describe('Archiving organisations', () => {
         );
         cy.go('back');
 
-        cy.translate('organisations.admin.button.archive').then(
-          (archiveButton) => {
-            cy.get('a').contains(archiveButton).click();
-          },
-        );
-
-        cy.translate('organisations.admin.button.archive').then(
-          (buttonText) => {
-            cy.get('button').contains(buttonText).click();
-          },
-        );
-
-        cy.translate('organisations.admin.archive.confirmation.heading').then(
-          (confirmation) => {
-            cy.get('html').should('contain', confirmation);
-          },
-        );
-
-        cy.get('[data-cy=actions]').should('not.exist');
-
-        cy.translate('app.status.archived').then((status) => {
-          cy.get('h2[data-status]').should('contain', status);
-        });
-        cy.get('[data-cy=changed-by-user-name]').should('contain', 'Registrar');
-        cy.get('[data-cy=changed-by-user-email]').should(
-          'contain',
-          'beis-rpr+registrar@dxw.com',
-        );
-        cy.get('[data-cy=last-modified]').should(
-          'contain',
-          format(new Date(), 'd MMM yyyy'),
-        );
-        cy.get('[data-cy=currently-published-version-text]').should(
-          'not.exist',
-        );
-
-        cy.visit('/admin/organisations');
-
-        cy.get('tr')
-          .contains('Organisation with no professions')
-          .then(($header) => {
-            const $row = $header.parent();
-
-            cy.translate(`app.status.archived`).then((status) => {
-              cy.wrap($row).should('contain', status);
-            });
-          });
-
-        cy.visit('/regulatory-authorities/search');
-
-        cy.get('body').should(
-          'not.contain',
-          'Organisation with no professions',
-        );
-
-        cy.visit('/admin/professions');
+        archiveOrganisation('Published organisation with no professions');
       });
+
       it('Shows blocking error when trying to archive a live organisation with associated professions', () => {
         cy.get('a').contains('Regulatory authorities').click();
 
@@ -290,3 +171,66 @@ describe('Archiving organisations', () => {
     });
   });
 });
+
+function archiveOrganisation(organisation: string): void {
+  cy.translate('organisations.admin.button.archive').then((archiveButton) => {
+    cy.get('a').contains(archiveButton).click();
+  });
+
+  cy.checkAccessibility();
+
+  cy.translate('organisations.admin.archive.caption').then((archiveCaption) => {
+    cy.get('body').should('contain', archiveCaption);
+  });
+
+  cy.translate('organisations.admin.archive.heading', {
+    organisationName: organisation,
+  }).then((heading) => {
+    cy.get('body').should('contain', heading);
+  });
+
+  cy.translate('organisations.admin.button.archive').then((buttonText) => {
+    cy.get('button').contains(buttonText).click();
+  });
+
+  cy.checkAccessibility();
+
+  cy.translate('organisations.admin.archive.confirmation.heading').then(
+    (confirmation) => {
+      cy.get('html').should('contain', confirmation);
+    },
+  );
+
+  cy.get('[data-cy=actions]').should('not.exist');
+
+  cy.translate('app.status.archived').then((status) => {
+    cy.get('h2[data-status]').should('contain', status);
+  });
+  cy.get('[data-cy=changed-by-user-name]').should('contain', 'Registrar');
+  cy.get('[data-cy=changed-by-user-email]').should(
+    'contain',
+    'beis-rpr+registrar@dxw.com',
+  );
+  cy.get('[data-cy=last-modified]').should(
+    'contain',
+    format(new Date(), 'd MMM yyyy'),
+  );
+
+  cy.get('[data-cy=currently-published-version-text]').should('not.exist');
+
+  cy.visitAndCheckAccessibility('/admin/organisations');
+
+  cy.get('tr')
+    .contains(organisation)
+    .then(($header) => {
+      const $row = $header.parent();
+
+      cy.translate(`app.status.archived`).then((status) => {
+        cy.wrap($row).should('contain', status);
+      });
+    });
+
+  cy.visit('/regulatory-authorities/search');
+
+  cy.get('body').should('not.contain', organisation);
+}
