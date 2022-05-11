@@ -10,6 +10,7 @@
     <div class="govuk-grid-column-two-thirds">
       <span class="govuk-caption-l">{{ title }}</span>
       <h1 class="govuk-heading-l">{{ ('decisions.admin.publication.heading' | t )}}</h1>
+      <p class="govuk-body">{{ ('decisions.admin.publication.body' | t)}}</p>
       {% include "../_dataset-details.njk" %}
       <form action="/admin/decisions/{{profession.id}}/{{organisation.id}}/{{year}}/publish?_method=PUT" method="post">
         {{

@@ -65,6 +65,7 @@
     "publication": {
       "caption": "Publishing decision data",
       "heading": "Are you sure you want to publish the following decision data?",
+      "body": "Publishing this data will overwrite any existing decision data for this profession. Are you sure you want to do this?",
       "confirmation": {
         "heading": "This recognition decision dataset has been published.",
         "body": "<a href='/admin/decisions' class='govuk-link'>Back to recognition decision data listing page</a>."
@@ -73,7 +74,7 @@
     "saveAsDraft": {
       "confirmation": {
         "heading": "This recognition decision dataset has been saved.",
-        "body": "<p class='govuk-body-m'>The changes have not been published yet.</p><a href='/admin/decisions' class='govuk-link'>Back to recognition decision data listing page</a>."
+        "body": "<p class='govuk-body-m'>Saving a new draft will unpublish any existing decision data for this profession. Are you sure you want to do this?</p><p class='govuk-body-m'>Data will only be visible for this profession when the new draft is published.</p>"
       }
     },
     "submission": {
@@ -81,7 +82,7 @@
       "heading": "Are you sure you want to submit the following decision data to be reviewed before publication?",
       "confirmation": {
         "heading": "This recognition decision dataset has been submitted to central administrators before publication.",
-        "body": "<p class='govuk-body-m'>It has not been published yet.</p><a href='/admin/decisions' class='govuk-link'>Back to recognition decision data listing page</a>."
+        "body": "<p class='govuk-body-m'>You've submitted data to be reviewed. You should contact the reviewer to let them know - they will not be notified automatically.</p><p class='govuk-body-m'>Email <a class='govuk-link' href='mailto:RPR@beis.gov.uk'>RPR@beis.gov.uk</a> if you do not know who to contact.</p>"
       }
     },
     "new": {
@@ -94,14 +95,14 @@
       },
       "errors": {
         "profession": {
-          "empty": "You must select a profession to enter decision data for"
+          "empty": "Select the profession you wish to enter decision data for"
         },
         "organisation": {
-          "empty": "You must select a regulatory authority",
-          "notValidForProfession": "You must select a regulator that regulates the selected profession"
+          "empty": "Select a regulatory authority",
+          "notValidForProfession": "Select a regulatory authority that regulates this profession"
         },
         "year": {
-          "empty": "You must select a year to enter decision data for",
+          "empty": "Select the year you wish to enter decision data for",
           "exists": "Decision data already exists for this year"
         }
       }
