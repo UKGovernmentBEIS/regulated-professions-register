@@ -640,17 +640,21 @@ describe('OrganisationVersionsService', () => {
   });
 
   describe('searchLive', () => {
-    const versions = organisationVersionFactory.buildList(5);
-    const queryBuilder = createMock<SelectQueryBuilder<OrganisationVersion>>({
-      leftJoinAndSelect: () => queryBuilder,
-      distinctOn: () => queryBuilder,
-      where: () => queryBuilder,
-      orderBy: () => queryBuilder,
-      andWhere: () => queryBuilder,
-      getMany: async () => versions,
-    });
+    let versions: OrganisationVersion[];
+    let queryBuilder: SelectQueryBuilder<OrganisationVersion>;
 
     beforeEach(() => {
+      versions = organisationVersionFactory.buildList(5);
+
+      queryBuilder = createMock<SelectQueryBuilder<OrganisationVersion>>({
+        leftJoinAndSelect: () => queryBuilder,
+        distinctOn: () => queryBuilder,
+        where: () => queryBuilder,
+        orderBy: () => queryBuilder,
+        andWhere: () => queryBuilder,
+        getMany: async () => versions,
+      });
+
       jest
         .spyOn(repo, 'createQueryBuilder')
         .mockImplementation(() => queryBuilder);
@@ -767,17 +771,20 @@ describe('OrganisationVersionsService', () => {
   });
 
   describe('searchWithLatestVersion', () => {
-    const versions = organisationVersionFactory.buildList(5);
-    const queryBuilder = createMock<SelectQueryBuilder<OrganisationVersion>>({
-      leftJoinAndSelect: () => queryBuilder,
-      where: () => queryBuilder,
-      distinctOn: () => queryBuilder,
-      andWhere: () => queryBuilder,
-      orderBy: () => queryBuilder,
-      getMany: async () => versions,
-    });
+    let versions: OrganisationVersion[];
+    let queryBuilder: SelectQueryBuilder<OrganisationVersion>;
 
     beforeEach(() => {
+      versions = organisationVersionFactory.buildList(5);
+      queryBuilder = createMock<SelectQueryBuilder<OrganisationVersion>>({
+        leftJoinAndSelect: () => queryBuilder,
+        where: () => queryBuilder,
+        distinctOn: () => queryBuilder,
+        andWhere: () => queryBuilder,
+        orderBy: () => queryBuilder,
+        getMany: async () => versions,
+      });
+  
       jest
         .spyOn(repo, 'createQueryBuilder')
         .mockImplementation(() => queryBuilder);
@@ -960,10 +967,6 @@ describe('OrganisationVersionsService', () => {
     });
   });
 
-  afterEach(() => {
-    jest.restoreAllMocks();
-  });
-
   const expectJoinsToHaveBeenApplied = (queryBuilder: any) => {
     expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
       'organisationVersion.organisation',
@@ -995,4 +998,9 @@ describe('OrganisationVersionsService', () => {
       'industries',
     );
   };
+
+  afterEach(() => {
+    jest.resetAllMocks();
+    jest.restoreAllMocks();
+  });
 });
