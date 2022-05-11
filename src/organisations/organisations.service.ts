@@ -70,6 +70,6 @@ export class OrganisationsService {
       name: newName,
       slug: newSlug,
     });
-    return organisation.slug;
+    return newSlug;
   }
 }
