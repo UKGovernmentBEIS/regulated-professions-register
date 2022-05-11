@@ -206,7 +206,11 @@ describe('OrganisationsService', () => {
           .mockResolvedValue({ ...organisation });
         const saveRepoSpy = jest.spyOn(repo, 'save');
 
-        await service.rename('Old Organisation Name', 'New Organisation Name');
+        const result = await service.rename(
+          'Old Organisation Name',
+          'New Organisation Name',
+        );
+        expect(result).toEqual('new-organisation-slug');
 
         expect(findOneRepoSpy).toHaveBeenCalledWith({
           name: 'Old Organisation Name',
