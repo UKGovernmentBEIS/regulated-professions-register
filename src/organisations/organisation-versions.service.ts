@@ -100,26 +100,22 @@ export class OrganisationVersionsService {
   }
 
   async searchWithLatestVersion(filter: FilterInput): Promise<Organisation[]> {
-    const query = this.versionsWithJoins()
+    const query = this.versionsWithJoins([
+      ProfessionVersionStatus.Live,
+      ProfessionVersionStatus.Draft,
+    ])
       .distinctOn([
         'organisationVersion.organisation',
         'organisation.name',
         'profession.id',
       ])
-      .where(
-        '(organisationVersion.status IN(:...organisationStatus)) AND (professionVersions.status IN(:...professionStatus) OR professionVersions.status IS NULL)',
-        {
-          organisationStatus: [
-            OrganisationVersionStatus.Live,
-            OrganisationVersionStatus.Draft,
-            OrganisationVersionStatus.Archived,
-          ],
-          professionStatus: [
-            ProfessionVersionStatus.Live,
-            ProfessionVersionStatus.Draft,
-          ],
-        },
-      )
+      .where('organisationVersion.status IN(:...organisationStatus)', {
+        organisationStatus: [
+          OrganisationVersionStatus.Live,
+          OrganisationVersionStatus.Draft,
+          OrganisationVersionStatus.Archived,
+        ],
+      })
       .orderBy(
         'organisation.name, organisationVersion.organisation, profession.id, professionVersions.created_at, organisationVersion.created_at',
         'DESC',
@@ -129,26 +125,22 @@ export class OrganisationVersionsService {
   }
 
   async allWithLatestVersion(): Promise<Organisation[]> {
-    const versions = await this.versionsWithJoins()
+    const versions = await this.versionsWithJoins([
+      ProfessionVersionStatus.Live,
+      ProfessionVersionStatus.Draft,
+    ])
       .distinctOn([
         'organisationVersion.organisation',
         'organisation.name',
         'profession.id',
       ])
-      .where(
-        '(organisationVersion.status IN(:...organisationStatus)) AND (professionVersions.status IN(:...professionStatus) OR professionVersions.status IS NULL)',
-        {
-          organisationStatus: [
-            OrganisationVersionStatus.Live,
-            OrganisationVersionStatus.Draft,
-            OrganisationVersionStatus.Archived,
-          ],
-          professionStatus: [
-            ProfessionVersionStatus.Live,
-            ProfessionVersionStatus.Draft,
-          ],
-        },
-      )
+      .where('organisationVersion.status IN(:...organisationStatus)', {
+        organisationStatus: [
+          OrganisationVersionStatus.Live,
+          OrganisationVersionStatus.Draft,
+          OrganisationVersionStatus.Archived,
+        ],
+      })
       .orderBy(
         'organisation.name, organisationVersion.organisation, profession.id, professionVersions.created_at, organisationVersion.created_at',
         'DESC',
@@ -262,7 +254,15 @@ export class OrganisationVersionsService {
     return version;
   }
 
-  private versionsWithJoins(): SelectQueryBuilder<OrganisationVersion> {
+  private versionsWithJoins(
+    professionVersionStatuses: ProfessionVersionStatus[] = undefined,
+  ): SelectQueryBuilder<OrganisationVersion> {
+    const professionVersionCondition = professionVersionStatuses
+      ? professionVersionStatuses
+          .map((status) => `professionVersions.status = '${status}'`)
+          .join(' OR ')
+      : undefined;
+
     return this.repository
       .createQueryBuilder('organisationVersion')
       .leftJoinAndSelect('organisationVersion.organisation', 'organisation')
@@ -272,7 +272,11 @@ export class OrganisationVersionsService {
         'professionToOrganisation',
       )
       .leftJoinAndSelect('professionToOrganisation.profession', 'profession')
-      .leftJoinAndSelect('profession.versions', 'professionVersions')
+      .leftJoinAndSelect(
+        'profession.versions',
+        'professionVersions',
+        professionVersionCondition,
+      )
       .leftJoinAndSelect('professionVersions.industries', 'industries');
   }
 

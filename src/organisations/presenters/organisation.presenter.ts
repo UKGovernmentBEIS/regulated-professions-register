@@ -210,11 +210,10 @@ export class OrganisationPresenter {
 
   private professions(): Profession[] {
     return this.organisation.professionToOrganisations
-      .filter((e) => e.profession)
-      .map((professionToOrganisation) =>
-        Profession.withLatestLiveOrDraftVersion(
-          professionToOrganisation.profession,
-        ),
-      );
+      .filter((relation) => relation.profession)
+      .map((relation) =>
+        Profession.withLatestLiveOrDraftVersion(relation.profession),
+      )
+      .filter((profession) => !!profession);
   }
 }

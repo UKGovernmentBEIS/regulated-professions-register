@@ -291,7 +291,10 @@ describe('OrganisationVersionsService', () => {
 
       expect(result).toEqual(expectedOrganisations);
 
-      expectJoinsToHaveBeenApplied(queryBuilder);
+      expectJoinsToHaveBeenApplied(
+        queryBuilder,
+        "professionVersions.status = 'live' OR professionVersions.status = 'draft'",
+      );
 
       expect(queryBuilder.distinctOn).toHaveBeenCalledWith([
         'organisationVersion.organisation',
@@ -300,16 +303,12 @@ describe('OrganisationVersionsService', () => {
       ]);
 
       expect(queryBuilder.where).toHaveBeenCalledWith(
-        '(organisationVersion.status IN(:...organisationStatus)) AND (professionVersions.status IN(:...professionStatus) OR professionVersions.status IS NULL)',
+        'organisationVersion.status IN(:...organisationStatus)',
         {
           organisationStatus: [
             OrganisationVersionStatus.Live,
             OrganisationVersionStatus.Draft,
             OrganisationVersionStatus.Archived,
-          ],
-          professionStatus: [
-            ProfessionVersionStatus.Live,
-            ProfessionVersionStatus.Draft,
           ],
         },
       );
@@ -784,7 +783,7 @@ describe('OrganisationVersionsService', () => {
         orderBy: () => queryBuilder,
         getMany: async () => versions,
       });
-  
+
       jest
         .spyOn(repo, 'createQueryBuilder')
         .mockImplementation(() => queryBuilder);
@@ -805,7 +804,10 @@ describe('OrganisationVersionsService', () => {
 
       expect(result).toEqual(expectedOrgs);
 
-      expectJoinsToHaveBeenApplied(queryBuilder);
+      expectJoinsToHaveBeenApplied(
+        queryBuilder,
+        "professionVersions.status = 'live' OR professionVersions.status = 'draft'",
+      );
 
       expect(queryBuilder.distinctOn).toHaveBeenCalledWith([
         'organisationVersion.organisation',
@@ -814,16 +816,12 @@ describe('OrganisationVersionsService', () => {
       ]);
 
       expect(queryBuilder.where).toHaveBeenCalledWith(
-        '(organisationVersion.status IN(:...organisationStatus)) AND (professionVersions.status IN(:...professionStatus) OR professionVersions.status IS NULL)',
+        'organisationVersion.status IN(:...organisationStatus)',
         {
           organisationStatus: [
             OrganisationVersionStatus.Live,
             OrganisationVersionStatus.Draft,
             OrganisationVersionStatus.Archived,
-          ],
-          professionStatus: [
-            ProfessionVersionStatus.Live,
-            ProfessionVersionStatus.Draft,
           ],
         },
       );
@@ -967,7 +965,10 @@ describe('OrganisationVersionsService', () => {
     });
   });
 
-  const expectJoinsToHaveBeenApplied = (queryBuilder: any) => {
+  const expectJoinsToHaveBeenApplied = (
+    queryBuilder: any,
+    professionVersionsCondition: string = undefined,
+  ) => {
     expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
       'organisationVersion.organisation',
       'organisation',
@@ -991,6 +992,7 @@ describe('OrganisationVersionsService', () => {
     expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
       'profession.versions',
       'professionVersions',
+      professionVersionsCondition,
     );
 
     expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
