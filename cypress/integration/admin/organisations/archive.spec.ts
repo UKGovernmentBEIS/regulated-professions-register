@@ -121,6 +121,24 @@ describe('Archiving organisations', () => {
         archiveOrganisation('Published organisation with no professions');
       });
 
+      it('Allows me to archive a live organisation with  only an archived professions', () => {
+        cy.get('a').contains('Regulatory authorities').click();
+
+        cy.contains('Published organisation with only an archived profession')
+          .parent('tr')
+          .within(() => {
+            cy.get('a').contains('View details').click();
+          });
+
+        cy.translate('app.status.live').then((status) => {
+          cy.get('h2[data-status]').should('contain', status);
+        });
+
+        archiveOrganisation(
+          'Published organisation with only an archived profession',
+        );
+      });
+
       it('Shows blocking error when trying to archive a live organisation with associated professions', () => {
         cy.get('a').contains('Regulatory authorities').click();
 
