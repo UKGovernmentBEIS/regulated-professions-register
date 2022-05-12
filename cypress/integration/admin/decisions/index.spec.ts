@@ -197,6 +197,20 @@ describe('Listing decision datasets', () => {
 
       checkCsvDownload(() => true);
     });
+
+    it('Shows link to guidance on outcomes and routes', () => {
+      cy.translate('decisions.admin.dashboard.guidanceLink').then(
+        (guidanceLink) => {
+          cy.get('a').contains(guidanceLink).click();
+        },
+      );
+      cy.get('h1').contains('Guidance on decision outcomes and routes');
+      cy.get('a')
+        .contains('Back')
+        .click()
+        .url()
+        .should('contain', 'admin/decisions');
+    });
   });
 
   context('When I am logged in as organisation editor', () => {
