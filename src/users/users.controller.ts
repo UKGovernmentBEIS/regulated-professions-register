@@ -60,7 +60,7 @@ export class UsersController {
 
     const organisation = getUserOrganisation(actingUser);
 
-    const usersPresenter = new UsersPresenter(users);
+    const usersPresenter = new UsersPresenter(users, this.i18nService);
 
     return {
       organisation,

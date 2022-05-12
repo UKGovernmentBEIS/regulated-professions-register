@@ -80,7 +80,8 @@
       "name": "Name",
       "email": "Email",
       "actions": "Actions"
-    }
+    },
+    "viewDetails": "View details <span class='govuk-visually-hidden'>about {name}</span>"
   },
   "roles": {
     "administrator": "Administrator",
