@@ -58,16 +58,6 @@ describe('UsersService', () => {
     repo = module.get<Repository<User>>(getRepositoryToken(User));
   });
 
-  describe('all', () => {
-    it('should return all users', async () => {
-      const repoSpy = jest.spyOn(repo, 'find');
-      const posts = await service.all();
-
-      expect(posts).toEqual(userArray);
-      expect(repoSpy).toHaveBeenCalled();
-    });
-  });
-
   describe('allConfirmed', () => {
     it('should return all confirmed users', async () => {
       const users = userFactory.buildList(2);
@@ -156,33 +146,6 @@ describe('UsersService', () => {
       await service.save(user);
 
       expect(repoSpy).toHaveBeenCalledWith(user);
-    });
-  });
-
-  describe('delete', () => {
-    it('should delete a user', async () => {
-      await service.delete('some-uuid');
-
-      jest.spyOn(queryBuilder.delete(), 'from');
-      jest.spyOn(queryBuilder.delete().from(expect.anything()), 'where');
-      jest.spyOn(
-        queryBuilder
-          .delete()
-          .from(User)
-          .where(expect.anything(), expect.anything()),
-        'execute',
-      );
-
-      expect(queryBuilder.delete().from).toHaveBeenCalledWith(User);
-      expect(
-        queryBuilder.delete().from(expect.anything()).where,
-      ).toHaveBeenCalledWith('id = :id', { id: 'some-uuid' });
-      expect(
-        queryBuilder
-          .delete()
-          .from(expect.anything())
-          .where(expect.anything(), expect.anything()).execute,
-      ).toHaveBeenCalledTimes(1);
     });
   });
 

@@ -1,4 +1,4 @@
-import { Connection, Repository, DeleteResult } from 'typeorm';
+import { Connection, Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
@@ -12,10 +12,6 @@ export class UsersService {
     private repository: Repository<User>,
     private connection: Connection,
   ) {}
-
-  all(): Promise<User[]> {
-    return this.repository.find();
-  }
 
   async allConfirmed(): Promise<User[]> {
     return this.repository
@@ -49,15 +45,6 @@ export class UsersService {
 
   async save(user: User): Promise<User> {
     return await this.repository.save(user);
-  }
-
-  async delete(id: string): Promise<DeleteResult> {
-    return this.repository
-      .createQueryBuilder()
-      .delete()
-      .from(User)
-      .where('id = :id', { id: id })
-      .execute();
   }
 
   findByExternalIdentifier(externalIdentifier: string): Promise<User> {
