@@ -75,7 +75,7 @@
     "date-fns": "^2.28.0",
     "express-basic-auth": "^1.2.1",
     "express-openid-connect": "^2.7.2",
-    "express-session": "^1.17.2",
+    "express-session": "^1.17.3",
     "file-loader": "^6.2.0",
     "google-libphonenumber": "^3.2.27",
     "govuk-frontend": "^4.0.1",
