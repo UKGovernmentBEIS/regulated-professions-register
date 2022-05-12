@@ -13,7 +13,11 @@ describe('Editing a user', () => {
 
     it('I can edit a user', () => {
       cy.visitAndCheckAccessibility('/admin/users');
-      cy.contains('View Editor').click();
+      cy.get('td')
+        .contains('beis-rpr+editor@dxw.com')
+        .siblings()
+        .contains('View details')
+        .click();
 
       cy.checkAccessibility();
 

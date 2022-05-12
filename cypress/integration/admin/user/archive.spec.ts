@@ -43,7 +43,7 @@ describe('Archiving a user', () => {
 
     it('I can delete a user', () => {
       cy.visitAndCheckAccessibility('/admin/users');
-      cy.contains(`View ${name}`).click();
+      cy.get('td').contains(email).siblings().contains('View details').click();
 
       cy.translate('users.form.button.archive').then((archiveButton) => {
         cy.contains(archiveButton).click();

@@ -17,6 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Archived professions no longer prevent an organisation from being archived
 - Consistent styling on links across service
 - Improve text on internal links to public pages
+- Change "View" buttons to "View details" links on user listing page
 
 ## [release-021] - 2022-05-11
 
