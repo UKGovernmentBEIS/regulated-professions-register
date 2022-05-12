@@ -44,6 +44,10 @@ describe('Searching an organisation', () => {
       .should('contain', 'United Kingdom');
 
     cy.get('.rpr-listing__ra-container')
+      .contains('div', 'Department for Education')
+      .should('contain', 'England');
+
+    cy.get('.rpr-listing__ra-container')
       .contains('div', 'Law Society of England and Wales')
       .should('contain', 'England');
   });
@@ -100,7 +104,8 @@ describe('Searching an organisation', () => {
         (version) =>
           version.occupationLocations &&
           (version.occupationLocations.includes('GB-SCT') ||
-            version.occupationLocations.includes('GB-WLS')),
+            version.occupationLocations.includes('GB-WLS')) &&
+          version.status === 'live',
       ),
     ).then((liveOrganisations) => {
       cy.get('input[name="nations[]"][value="GB-SCT"]').check();
