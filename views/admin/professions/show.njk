@@ -33,7 +33,7 @@
         {% if hasLiveVersion %}
           <h2 class="govuk-heading-s" data-cy="currently-published-version-text">
             {{ "professions.admin.publicFacingLink.heading" | t }}<br>
-            <span class="govuk-body" data-cy="currently-published-version"><a href="/professions/{{ profession.slug }}">{{ "professions.admin.publicFacingLink.label" | t }}</a></span>
+            <span class="govuk-body" data-cy="currently-published-version"><a class="govuk-link" href="/professions/{{ profession.slug }}">{{ "professions.admin.publicFacingLink.label" | t }}</a></span>
           </h2>
         {% endif %}
 
