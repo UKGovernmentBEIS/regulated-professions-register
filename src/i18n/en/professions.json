@@ -349,7 +349,7 @@
     "viewDetails": "View details <span class='govuk-visually-hidden'>about {name}</span>",
     "publicFacingLink": {
       "heading": "Currently published version",
-      "label": "Public facing link"
+      "label": "Public profession page"
     }
   },
   "search": {
