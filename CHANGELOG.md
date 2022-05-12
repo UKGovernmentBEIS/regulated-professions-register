@@ -15,6 +15,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Update disclaimer text
 - Archiving a profession no longer creates a draft
 - Archived professions no longer prevent an organisation from being archived
+- Consistent styling on links across service
+- Improve text on internal links to public pages
 
 ## [release-021] - 2022-05-11
 
