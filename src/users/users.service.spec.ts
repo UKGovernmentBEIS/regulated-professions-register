@@ -75,9 +75,10 @@ describe('UsersService', () => {
 
       await service.allConfirmed();
 
-      expect(queryBuilder.where).toHaveBeenCalledWith(
-        'user.confirmed = true AND user.archived = false',
-      );
+      expect(queryBuilder.where).toHaveBeenCalledWith({
+        confirmed: true,
+        archived: false,
+      });
       expect(queryBuilder.orderBy).toHaveBeenCalledWith('LOWER(user.name)');
       expect(queryBuilder.getMany).toHaveBeenCalled();
     });
@@ -102,9 +103,10 @@ describe('UsersService', () => {
 
       await service.allConfirmedForOrganisation(organisation);
 
-      expect(queryBuilder.where).toHaveBeenCalledWith(
-        'user.confirmed = true AND user.archived = false',
-      );
+      expect(queryBuilder.where).toHaveBeenCalledWith({
+        confirmed: true,
+        archived: false,
+      });
       expect(queryBuilder.andWhere).toHaveBeenCalledWith(
         'organisation.id = :organisationId',
         {
@@ -135,7 +137,11 @@ describe('UsersService', () => {
 
       expect(post).toEqual(user);
       expect(repoSpy).toHaveBeenCalledWith({
-        where: { externalIdentifier: 'external-identifier' },
+        where: {
+          externalIdentifier: 'external-identifier',
+          confirmed: true,
+          archived: false,
+        },
       });
     });
   });
@@ -177,6 +183,8 @@ describe('UsersService', () => {
 
         expect(findSpy).toHaveBeenCalledWith(User, {
           externalIdentifier: user.externalIdentifier,
+          confirmed: true,
+          archived: false,
         });
         expect(saveSpy).toHaveBeenCalledWith(User, user);
 
@@ -200,6 +208,8 @@ describe('UsersService', () => {
 
         expect(findSpy).toHaveBeenCalledWith(User, {
           externalIdentifier: user.externalIdentifier,
+          confirmed: true,
+          archived: false,
         });
         expect(saveSpy).not.toBeCalled();
 
@@ -222,6 +232,8 @@ describe('UsersService', () => {
 
       expect(findSpy).toHaveBeenCalledWith(User, {
         externalIdentifier: user.externalIdentifier,
+        confirmed: true,
+        archived: false,
       });
       expect(saveSpy).not.toBeCalled();
 
