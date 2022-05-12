@@ -35,7 +35,7 @@
         {% if hasLiveVersion %}
           <h2 class="govuk-heading-s" data-cy="currently-published-version-text">
             {{ "organisations.admin.publicFacingLink.heading" | t }}<br>
-            <span class="govuk-body" data-cy="currently-published-version"><a href="/regulatory-authorities/{{ organisation.slug }}">{{ "organisations.admin.publicFacingLink.label" | t }}</a></span>
+            <span class="govuk-body" data-cy="currently-published-version"><a class="govuk-link" href="/regulatory-authorities/{{ organisation.slug }}">{{ "organisations.admin.publicFacingLink.label" | t }}</a></span>
           </h2>
         {% endif %}
 
