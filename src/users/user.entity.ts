@@ -25,7 +25,11 @@ export class User {
   @Column()
   name: string;
 
-  @Index({ unique: true, where: '"externalIdentifier" IS NOT NULL' })
+  @Index({
+    unique: true,
+    where:
+      '"externalIdentifier" IS NOT NULL AND "archived" = false AND "confirmed" = true',
+  })
   @Column({ nullable: true })
   externalIdentifier: string;
 
