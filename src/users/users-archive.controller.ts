@@ -46,11 +46,14 @@ export class UsersArchiveController {
       'users.archive.confirmation.body',
     );
     const user = await this.usersService.find(id);
-    user.archived = true;
 
     await this.auth0Service.deleteUser(user.externalIdentifier).performLater();
 
-    await this.usersService.save(user);
+    await this.usersService.save({
+      ...user,
+      archived: true,
+      externalIdentifier: null,
+    });
 
     const successMessage = flashMessage(messageTitle);
 

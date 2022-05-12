@@ -70,12 +70,14 @@ describe('UsersArchiveController', () => {
   });
 
   describe('delete', () => {
-    it('should add an archived flag to a user', async () => {
+    it('should add an archived flag to a user and remove their externalIdentifier', async () => {
       const flashMock = flashMessage as jest.Mock;
 
       flashMock.mockImplementation(() => 'Stub Archive Message');
 
-      const user = userFactory.build();
+      const user = userFactory.build({
+        externalIdentifier: 'external-identifier',
+      });
 
       auth0Service.deleteUser.mockReturnValue({
         performNow: async () => {
@@ -104,6 +106,7 @@ describe('UsersArchiveController', () => {
 
       expect(usersService.save).toHaveBeenCalledWith({
         ...user,
+        externalIdentifier: null,
         archived: true,
       });
     });
