@@ -199,12 +199,27 @@
       },
       {
         "name": "Department for Education",
-        "role": "additionalRegulator"
+        "role": "primaryRegulator"
       }
     ],
     "versions": [
       {
         "status": "draft"
+      }
+    ]
+  },
+  {
+    "name": "Archived Profession",
+    "slug": "archived-profession",
+    "organisations": [
+      {
+        "name": "Published organisation with only an archived profession",
+        "role": "primaryRegulator"
+      }
+    ],
+    "versions": [
+      {
+        "status": "archived"
       }
     ]
   }

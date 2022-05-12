@@ -8,6 +8,8 @@ import {
   SelectQueryBuilder,
   Connection,
   QueryRunner,
+  Not,
+  Any,
 } from 'typeorm';
 import {
   OrganisationVersion,
@@ -291,7 +293,10 @@ describe('OrganisationVersionsService', () => {
 
       expect(result).toEqual(expectedOrganisations);
 
-      expectJoinsToHaveBeenApplied(queryBuilder);
+      expectJoinsToHaveBeenApplied(
+        queryBuilder,
+        "professionVersions.status = 'live' OR professionVersions.status = 'draft'",
+      );
 
       expect(queryBuilder.distinctOn).toHaveBeenCalledWith([
         'organisationVersion.organisation',
@@ -300,16 +305,12 @@ describe('OrganisationVersionsService', () => {
       ]);
 
       expect(queryBuilder.where).toHaveBeenCalledWith(
-        '(organisationVersion.status IN(:...organisationStatus)) AND (professionVersions.status IN(:...professionStatus) OR professionVersions.status IS NULL)',
+        'organisationVersion.status IN(:...organisationStatus)',
         {
           organisationStatus: [
             OrganisationVersionStatus.Live,
             OrganisationVersionStatus.Draft,
             OrganisationVersionStatus.Archived,
-          ],
-          professionStatus: [
-            ProfessionVersionStatus.Live,
-            ProfessionVersionStatus.Draft,
           ],
         },
       );
@@ -543,12 +544,15 @@ describe('OrganisationVersionsService', () => {
         .mockImplementation(() => queryRunner);
     });
 
-    it('archives the draft version', async () => {
+    it('archives the given version and all other live or draft versions', async () => {
+      const inputVersion = organisationVersionFactory.build();
+
       const draftVersion = organisationVersionFactory.build({
         status: OrganisationVersionStatus.Draft,
-        organisation: organisationFactory.build({
-          professionToOrganisations: [],
-        }),
+      });
+
+      const liveVersion = organisationVersionFactory.build({
+        status: OrganisationVersionStatus.Live,
       });
 
       const archivedVersion = {
@@ -556,66 +560,42 @@ describe('OrganisationVersionsService', () => {
         status: OrganisationVersionStatus.Archived,
       };
 
-      const findSpy = jest.spyOn(repo, 'findOne');
+      const findSpy = jest
+        .spyOn(repo, 'find')
+        .mockResolvedValue([draftVersion, liveVersion]);
 
       const saveSpy = jest
         .spyOn(repo, 'save')
         .mockResolvedValue(archivedVersion);
 
-      const result = await service.archive(draftVersion);
+      const result = await service.archive(inputVersion);
 
       expect(result.status).toBe(OrganisationVersionStatus.Archived);
 
       expect(findSpy).toHaveBeenCalledWith({
-        organisation: draftVersion.organisation,
-        status: OrganisationVersionStatus.Live,
+        where: {
+          organisation: inputVersion.organisation,
+          id: Not(inputVersion.id),
+          status: Any([
+            OrganisationVersionStatus.Live,
+            OrganisationVersionStatus.Draft,
+          ]),
+        },
       });
+
+      expect(saveSpy).toHaveBeenCalledWith([
+        {
+          ...draftVersion,
+          status: OrganisationVersionStatus.Archived,
+        },
+        {
+          ...liveVersion,
+          status: OrganisationVersionStatus.Archived,
+        },
+      ]);
 
       expect(saveSpy).toHaveBeenCalledWith({
-        ...draftVersion,
-        status: OrganisationVersionStatus.Archived,
-      });
-
-      expect(queryRunner.commitTransaction).toHaveBeenCalled();
-      expect(queryRunner.release).toHaveBeenCalled();
-    });
-
-    it('archives the latest live version', async () => {
-      const liveVersion = organisationVersionFactory.build({
-        status: OrganisationVersionStatus.Live,
-      });
-
-      const organisation = organisationFactory.build({
-        versions: [liveVersion],
-        professionToOrganisations: [],
-      });
-
-      const draftVersion = organisationVersionFactory.build({
-        status: OrganisationVersionStatus.Draft,
-        organisation: organisation,
-      });
-
-      const saveSpy = jest.spyOn(repo, 'save');
-      const findSpy = jest
-        .spyOn(repo, 'findOne')
-        .mockResolvedValue(liveVersion);
-
-      const result = await service.archive(draftVersion);
-
-      expect(result.status).toBe(OrganisationVersionStatus.Archived);
-
-      expect(findSpy).toHaveBeenCalledWith({
-        organisation: organisation,
-        status: OrganisationVersionStatus.Live,
-      });
-
-      expect(saveSpy).toHaveBeenCalledWith({
-        ...liveVersion,
-        status: OrganisationVersionStatus.Archived,
-      });
-
-      expect(saveSpy).toHaveBeenCalledWith({
-        ...draftVersion,
+        ...inputVersion,
         status: OrganisationVersionStatus.Archived,
       });
 
@@ -640,17 +620,21 @@ describe('OrganisationVersionsService', () => {
   });
 
   describe('searchLive', () => {
-    const versions = organisationVersionFactory.buildList(5);
-    const queryBuilder = createMock<SelectQueryBuilder<OrganisationVersion>>({
-      leftJoinAndSelect: () => queryBuilder,
-      distinctOn: () => queryBuilder,
-      where: () => queryBuilder,
-      orderBy: () => queryBuilder,
-      andWhere: () => queryBuilder,
-      getMany: async () => versions,
-    });
+    let versions: OrganisationVersion[];
+    let queryBuilder: SelectQueryBuilder<OrganisationVersion>;
 
     beforeEach(() => {
+      versions = organisationVersionFactory.buildList(5);
+
+      queryBuilder = createMock<SelectQueryBuilder<OrganisationVersion>>({
+        leftJoinAndSelect: () => queryBuilder,
+        distinctOn: () => queryBuilder,
+        where: () => queryBuilder,
+        orderBy: () => queryBuilder,
+        andWhere: () => queryBuilder,
+        getMany: async () => versions,
+      });
+
       jest
         .spyOn(repo, 'createQueryBuilder')
         .mockImplementation(() => queryBuilder);
@@ -767,17 +751,20 @@ describe('OrganisationVersionsService', () => {
   });
 
   describe('searchWithLatestVersion', () => {
-    const versions = organisationVersionFactory.buildList(5);
-    const queryBuilder = createMock<SelectQueryBuilder<OrganisationVersion>>({
-      leftJoinAndSelect: () => queryBuilder,
-      where: () => queryBuilder,
-      distinctOn: () => queryBuilder,
-      andWhere: () => queryBuilder,
-      orderBy: () => queryBuilder,
-      getMany: async () => versions,
-    });
+    let versions: OrganisationVersion[];
+    let queryBuilder: SelectQueryBuilder<OrganisationVersion>;
 
     beforeEach(() => {
+      versions = organisationVersionFactory.buildList(5);
+      queryBuilder = createMock<SelectQueryBuilder<OrganisationVersion>>({
+        leftJoinAndSelect: () => queryBuilder,
+        where: () => queryBuilder,
+        distinctOn: () => queryBuilder,
+        andWhere: () => queryBuilder,
+        orderBy: () => queryBuilder,
+        getMany: async () => versions,
+      });
+
       jest
         .spyOn(repo, 'createQueryBuilder')
         .mockImplementation(() => queryBuilder);
@@ -798,7 +785,10 @@ describe('OrganisationVersionsService', () => {
 
       expect(result).toEqual(expectedOrgs);
 
-      expectJoinsToHaveBeenApplied(queryBuilder);
+      expectJoinsToHaveBeenApplied(
+        queryBuilder,
+        "professionVersions.status = 'live' OR professionVersions.status = 'draft'",
+      );
 
       expect(queryBuilder.distinctOn).toHaveBeenCalledWith([
         'organisationVersion.organisation',
@@ -807,16 +797,12 @@ describe('OrganisationVersionsService', () => {
       ]);
 
       expect(queryBuilder.where).toHaveBeenCalledWith(
-        '(organisationVersion.status IN(:...organisationStatus)) AND (professionVersions.status IN(:...professionStatus) OR professionVersions.status IS NULL)',
+        'organisationVersion.status IN(:...organisationStatus)',
         {
           organisationStatus: [
             OrganisationVersionStatus.Live,
             OrganisationVersionStatus.Draft,
             OrganisationVersionStatus.Archived,
-          ],
-          professionStatus: [
-            ProfessionVersionStatus.Live,
-            ProfessionVersionStatus.Draft,
           ],
         },
       );
@@ -960,11 +946,10 @@ describe('OrganisationVersionsService', () => {
     });
   });
 
-  afterEach(() => {
-    jest.restoreAllMocks();
-  });
-
-  const expectJoinsToHaveBeenApplied = (queryBuilder: any) => {
+  const expectJoinsToHaveBeenApplied = (
+    queryBuilder: any,
+    professionVersionsCondition: string = undefined,
+  ) => {
     expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
       'organisationVersion.organisation',
       'organisation',
@@ -988,6 +973,7 @@ describe('OrganisationVersionsService', () => {
     expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
       'profession.versions',
       'professionVersions',
+      professionVersionsCondition,
     );
 
     expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
@@ -995,4 +981,9 @@ describe('OrganisationVersionsService', () => {
       'industries',
     );
   };
+
+  afterEach(() => {
+    jest.resetAllMocks();
+    jest.restoreAllMocks();
+  });
 });

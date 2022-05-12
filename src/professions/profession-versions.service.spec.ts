@@ -3,8 +3,10 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { createMock, DeepMocked } from '@golevelup/ts-jest';
 
 import {
+  Any,
   Connection,
   In,
+  Not,
   QueryRunner,
   Repository,
   SelectQueryBuilder,
@@ -305,67 +307,58 @@ describe('ProfessionVersionsService', () => {
         .mockImplementation(() => queryRunner);
     });
 
-    it('archives the draft version', async () => {
-      const version = professionVersionFactory.build({
+    it('archives the given version and all other live or draft versions', async () => {
+      const inputVersion = professionVersionFactory.build();
+
+      const draftVersion = professionVersionFactory.build({
         status: ProfessionVersionStatus.Draft,
       });
 
-      const findSpy = jest.spyOn(repo, 'findOne');
-      const saveSpy = jest.spyOn(repo, 'save').mockResolvedValue(version);
-
-      const result = await service.archive(version);
-
-      expect(result.status).toBe(ProfessionVersionStatus.Archived);
-
-      expect(findSpy).toHaveBeenCalledWith({
-        profession: version.profession,
-        status: ProfessionVersionStatus.Live,
-      });
-
-      expect(saveSpy).toHaveBeenCalledWith({
-        ...version,
-        status: ProfessionVersionStatus.Archived,
-      });
-
-      expect(queryRunner.commitTransaction).toHaveBeenCalled();
-      expect(queryRunner.release).toHaveBeenCalled();
-    });
-
-    it('demotes the latest live version', async () => {
       const liveVersion = professionVersionFactory.build({
         status: ProfessionVersionStatus.Live,
       });
 
-      const profession = professionFactory.build({
-        versions: [liveVersion],
-      });
+      const archivedVersion = {
+        ...draftVersion,
+        status: ProfessionVersionStatus.Archived,
+      };
 
-      const draftVersion = professionVersionFactory.build({
-        status: ProfessionVersionStatus.Draft,
-        profession,
-      });
-
-      const saveSpy = jest.spyOn(repo, 'save');
       const findSpy = jest
-        .spyOn(repo, 'findOne')
-        .mockResolvedValue(liveVersion);
+        .spyOn(repo, 'find')
+        .mockResolvedValue([draftVersion, liveVersion]);
 
-      const result = await service.archive(draftVersion);
+      const saveSpy = jest
+        .spyOn(repo, 'save')
+        .mockResolvedValue(archivedVersion);
+
+      const result = await service.archive(inputVersion);
 
       expect(result.status).toBe(ProfessionVersionStatus.Archived);
 
       expect(findSpy).toHaveBeenCalledWith({
-        profession,
-        status: ProfessionVersionStatus.Live,
+        where: {
+          profession: inputVersion.profession,
+          id: Not(inputVersion.id),
+          status: Any([
+            ProfessionVersionStatus.Live,
+            ProfessionVersionStatus.Draft,
+          ]),
+        },
       });
 
-      expect(saveSpy).toHaveBeenCalledWith({
-        ...liveVersion,
-        status: ProfessionVersionStatus.Draft,
-      });
+      expect(saveSpy).toHaveBeenCalledWith([
+        {
+          ...draftVersion,
+          status: ProfessionVersionStatus.Archived,
+        },
+        {
+          ...liveVersion,
+          status: ProfessionVersionStatus.Archived,
+        },
+      ]);
 
       expect(saveSpy).toHaveBeenCalledWith({
-        ...draftVersion,
+        ...inputVersion,
         status: ProfessionVersionStatus.Archived,
       });
 

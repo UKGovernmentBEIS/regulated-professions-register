@@ -18,6 +18,7 @@ import { escape } from '../../helpers/escape.helper';
 import { checkCanViewOrganisation } from '../../users/helpers/check-can-view-organisation';
 import { getActingUser } from '../../users/helpers/get-acting-user.helper';
 import { UserPermission } from '../../users/user-permission';
+import { getLiveAndDraftProfessionsFromOrganisation } from '../helpers/get-live-and-draft-professions-from-organisation.helper';
 import { OrganisationVersionsService } from '../organisation-versions.service';
 import { Organisation } from '../organisation.entity';
 
@@ -48,9 +49,7 @@ export class OrganisationArchiveController {
       version,
     );
 
-    const professions = organisation.professionToOrganisations.map(
-      (professionToOrganisation) => professionToOrganisation.profession,
-    );
+    const professions = getLiveAndDraftProfessionsFromOrganisation(version);
 
     checkCanViewOrganisation(req, organisation);
 
@@ -71,11 +70,9 @@ export class OrganisationArchiveController {
         versionId,
       );
 
-    const professions = version.organisation.professionToOrganisations?.find(
-      (professionToOrganisation) => !!professionToOrganisation.profession,
-    );
-
-    if (professions) throw new BadRequestException();
+    if (getLiveAndDraftProfessionsFromOrganisation(version).length) {
+      throw new BadRequestException();
+    }
 
     checkCanViewOrganisation(req, version.organisation);
 

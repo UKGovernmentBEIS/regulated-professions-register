@@ -4,12 +4,13 @@
     "slug": "department-for-education",
     "versions": [
       {
-        "alternateName": "",
+        "alternateName": "DFE",
         "address": "123 Example Street\nLondon\nEC1 1AB",
         "url": "https://www.gov.uk/guidance/early-years-qualifications-finder#overseas-qualifications",
         "email": "dfe@example.com",
         "telephone": "+44 0123 456789",
-        "status": "live"
+        "status": "live",
+        "created_at": "2022-01-01"
       },
       {
         "alternateName": "",
@@ -17,7 +18,8 @@
         "url": "https://www.gov.uk/guidance/early-years-qualifications-finder#overseas-qualifications",
         "email": "old@example.com",
         "telephone": "+44 0123 456789",
-        "status": "draft"
+        "status": "draft",
+        "created_at": "2022-01-02"
       }
     ]
   },
@@ -26,7 +28,7 @@
     "slug": "council-of-registered-gas-installers",
     "versions": [
       {
-        "alternateName": "",
+        "alternateName": "CORGI",
         "address": "123 Fake Street\nLondon\nEC1 1AB",
         "url": "www.corgi-gas-safety.com",
         "email": "gas@example.com",
@@ -40,7 +42,7 @@
     "slug": "law-society-of-england-and-wales",
     "versions": [
       {
-        "alternateName": "",
+        "alternateName": "LSEW",
         "address": "456 Example Street\nLondon\nEC1 1AB",
         "url": "www.lawsociety.org.uk",
         "email": "law@example.com",
@@ -68,7 +70,7 @@
     "slug": "general-medical-council",
     "versions": [
       {
-        "alternateName": "",
+        "alternateName": "GMC",
         "address": "456 Fake Street\nLondon\nEC1 1AB",
         "url": "www.gmc.com",
         "email": "gmc@example.com",
@@ -120,7 +122,8 @@
         "url": "www.gmc.com",
         "email": "gmc@example.com",
         "telephone": "+44 0123 456789",
-        "status": "draft"
+        "status": "draft",
+        "created_at": "2022-01-01"
       }
     ]
   },
@@ -134,7 +137,23 @@
         "url": "www.gmc.com",
         "email": "gmc@example.com",
         "telephone": "+44 0123 456789",
-        "status": "live"
+        "status": "live",
+        "created_at": "2022-01-01"
+      }
+    ]
+  },
+  {
+    "name": "Published organisation with only an archived profession",
+    "slug": "Published organisation-archived-profs",
+    "versions": [
+      {
+        "alternateName": "",
+        "address": "789 Fake Street\nLondon\nEC1 1AB",
+        "url": "www.example.com",
+        "email": "archived@example.com",
+        "telephone": "+44 0123 456789",
+        "status": "live",
+        "created_at": "2022-01-01"
       }
     ]
   }

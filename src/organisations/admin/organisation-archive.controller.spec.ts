@@ -4,7 +4,7 @@ import { BadRequestException } from '@nestjs/common';
 import { Response } from 'express';
 import { I18nService } from 'nestjs-i18n';
 import { flashMessage } from '../../common/flash-message';
-import { escape } from '../../helpers/escape.helper';
+import * as escapeModule from '../../helpers/escape.helper';
 import { ProfessionToOrganisation } from '../../professions/profession-to-organisation.entity';
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 import { createDefaultMockRequest } from '../../testutils/factories/create-default-mock-request';
@@ -13,16 +13,14 @@ import organisationVersionFactory from '../../testutils/factories/organisation-v
 import professionFactory from '../../testutils/factories/profession';
 import userFactory from '../../testutils/factories/user';
 import { translationOf } from '../../testutils/translation-of';
-import { checkCanViewOrganisation } from '../../users/helpers/check-can-view-organisation';
-import { getActingUser } from '../../users/helpers/get-acting-user.helper';
+import * as checkCanViewOrganisationModule from '../../users/helpers/check-can-view-organisation';
+import * as getActingUserModule from '../../users/helpers/get-acting-user.helper';
 import { OrganisationVersionsService } from '../organisation-versions.service';
 import { Organisation } from '../organisation.entity';
 import { OrganisationArchiveController } from './organisation-archive.controller';
+import * as getLiveAndDraftProfessionsFromOrganisationModule from '../helpers/get-live-and-draft-professions-from-organisation.helper';
 
 jest.mock('../../common/flash-message');
-jest.mock('../../users/helpers/get-acting-user.helper');
-jest.mock('../../helpers/escape.helper');
-jest.mock('../../users/helpers/check-can-view-organisation');
 
 describe('OrganisationArchiveController', () => {
   let controller: OrganisationArchiveController;
@@ -75,15 +73,30 @@ describe('OrganisationArchiveController', () => {
         user: userFactory.build(),
       });
 
+      jest
+        .spyOn(checkCanViewOrganisationModule, 'checkCanViewOrganisation')
+        .mockImplementation();
+      const getLiveAndDraftProfessionsFromOrganisation = jest
+        .spyOn(
+          getLiveAndDraftProfessionsFromOrganisationModule,
+          'getLiveAndDraftProfessionsFromOrganisation',
+        )
+        .mockReturnValue([profession1, profession2]);
+
       const result = await controller.new(organisation.id, version.id, request);
 
-      expect(
-        organisationVersionsService.findByIdWithOrganisation,
-      ).toHaveBeenCalledWith(organisation.id, version.id);
       expect(result).toEqual({
         organisation: Organisation.withVersion(organisation, version),
         professions: [profession1, profession2],
       });
+
+      expect(
+        organisationVersionsService.findByIdWithOrganisation,
+      ).toHaveBeenCalledWith(organisation.id, version.id);
+
+      expect(getLiveAndDraftProfessionsFromOrganisation).toHaveBeenCalledWith(
+        version,
+      );
     });
 
     it('checks the acting user has permission to archive the Organisation', async () => {
@@ -105,9 +118,13 @@ describe('OrganisationArchiveController', () => {
         user: userFactory.build(),
       });
 
+      const checkCanViewOrganisationSpy = jest
+        .spyOn(checkCanViewOrganisationModule, 'checkCanViewOrganisation')
+        .mockImplementation();
+
       await controller.new(organisation.id, version.id, request);
 
-      expect(checkCanViewOrganisation).toHaveBeenCalledWith(
+      expect(checkCanViewOrganisationSpy).toHaveBeenCalledWith(
         request,
         Organisation.withVersion(organisation, version),
       );
@@ -125,7 +142,18 @@ describe('OrganisationArchiveController', () => {
       const req = createDefaultMockRequest({
         user: userFactory.build(),
       });
-      (getActingUser as jest.Mock).mockReturnValue(user);
+
+      jest.spyOn(getActingUserModule, 'getActingUser').mockReturnValue(user);
+      jest
+        .spyOn(checkCanViewOrganisationModule, 'checkCanViewOrganisation')
+        .mockImplementation();
+      const escapeSpy = jest.spyOn(escapeModule, 'escape');
+      const getLiveAndDraftProfessionsFromOrganisation = jest
+        .spyOn(
+          getLiveAndDraftProfessionsFromOrganisationModule,
+          'getLiveAndDraftProfessionsFromOrganisation',
+        )
+        .mockReturnValue([]);
 
       const res = createMock<Response>({});
 
@@ -149,6 +177,10 @@ describe('OrganisationArchiveController', () => {
         organisationVersionsService.findByIdWithOrganisation,
       ).toHaveBeenCalledWith(organisation.id, version.id);
 
+      expect(getLiveAndDraftProfessionsFromOrganisation).toHaveBeenCalledWith(
+        version,
+      );
+
       expect(organisationVersionsService.create).toHaveBeenCalledWith(
         version,
         user,
@@ -163,7 +195,7 @@ describe('OrganisationArchiveController', () => {
         translationOf('organisations.admin.archive.confirmation.body'),
       );
 
-      expect(escape).toHaveBeenCalledWith(organisation.name);
+      expect(escapeSpy).toHaveBeenCalledWith(organisation.name);
 
       expect(req.flash).toHaveBeenCalledWith('success', 'STUB_FLASH_MESSAGE');
 
@@ -182,7 +214,17 @@ describe('OrganisationArchiveController', () => {
       const req = createDefaultMockRequest({
         user: userFactory.build(),
       });
-      (getActingUser as jest.Mock).mockReturnValue(user);
+
+      jest.spyOn(getActingUserModule, 'getActingUser').mockReturnValue(user);
+      jest
+        .spyOn(
+          getLiveAndDraftProfessionsFromOrganisationModule,
+          'getLiveAndDraftProfessionsFromOrganisation',
+        )
+        .mockReturnValue([]);
+      const checkCanViewOrganisationSpy = jest
+        .spyOn(checkCanViewOrganisationModule, 'checkCanViewOrganisation')
+        .mockImplementation();
 
       const res = createMock<Response>({});
 
@@ -192,7 +234,10 @@ describe('OrganisationArchiveController', () => {
 
       await controller.delete(req, res, organisation.id, version.id);
 
-      expect(checkCanViewOrganisation).toHaveBeenCalledWith(req, organisation);
+      expect(checkCanViewOrganisationSpy).toHaveBeenCalledWith(
+        req,
+        organisation,
+      );
     });
 
     it('throws BadRequestException when request is made to archive organisation with professions', async () => {
@@ -214,6 +259,13 @@ describe('OrganisationArchiveController', () => {
 
       const res = createMock<Response>({});
 
+      const getLiveAndDraftProfessionsFromOrganisationSpy = jest
+        .spyOn(
+          getLiveAndDraftProfessionsFromOrganisationModule,
+          'getLiveAndDraftProfessionsFromOrganisation',
+        )
+        .mockReturnValue([profession]);
+
       organisationVersionsService.findByIdWithOrganisation.mockResolvedValue(
         version,
       );
@@ -221,6 +273,14 @@ describe('OrganisationArchiveController', () => {
       await expect(
         controller.delete(req, res, profession.id, version.id),
       ).rejects.toThrowError(BadRequestException);
+
+      expect(
+        getLiveAndDraftProfessionsFromOrganisationSpy,
+      ).toHaveBeenCalledWith(version);
     });
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
   });
 });
