@@ -10,6 +10,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 - Link from Decisions Dashboard to guidance on decision outcomes and route
 
+### Changed
+
+- Update disclaimer text
+
 ## [release-021] - 2022-05-11
 
 ### Added
