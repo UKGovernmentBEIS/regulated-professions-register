@@ -18,6 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Consistent styling on links across service
 - Improve text on internal links to public pages
 - Change "View" buttons to "View details" links on user listing page
+- Prevent organisation's nation from erroneously being shown as 'N/A'
 
 ## [release-021] - 2022-05-11
 
