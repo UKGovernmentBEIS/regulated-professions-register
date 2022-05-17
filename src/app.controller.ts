@@ -1,4 +1,5 @@
 import { Controller, Get, Render, Req, UseGuards } from '@nestjs/common';
+import { Request } from 'express';
 import { AuthenticationGuard } from './common/authentication.guard';
 import { BackLink } from './common/decorators/back-link.decorator';
 import { RequestWithAppSession } from './common/interfaces/request-with-app-session.interface';
@@ -66,6 +67,10 @@ export class AppController {
 
   @Get('/regulation-types')
   @Render('pages/regulation-types')
+  @BackLink(
+    (request: Request) => request.session.searchResultUrl,
+    'app.backToSearch',
+  )
   regulationTypes() {
     // do nothing.
   }
