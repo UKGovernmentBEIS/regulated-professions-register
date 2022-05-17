@@ -655,7 +655,10 @@ describe('OrganisationVersionsService', () => {
 
       expect(result).toEqual(expectedOrgs);
 
-      expectJoinsToHaveBeenApplied(queryBuilder);
+      expectJoinsToHaveBeenApplied(
+        queryBuilder,
+        `professionVersions.status = '${ProfessionVersionStatus.Live}'`,
+      );
 
       expect(queryBuilder.distinctOn).toHaveBeenCalledWith([
         'organisation.name',
