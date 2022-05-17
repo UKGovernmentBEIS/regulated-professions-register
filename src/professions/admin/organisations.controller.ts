@@ -37,6 +37,7 @@ import {
   OrganisationRole,
 } from '../profession-to-organisation.entity';
 import { sortOrganisationsByRole } from '../helpers/sort-organisations-by-role';
+import { ProfessionVersionStatus } from '../profession-version.entity';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
@@ -149,8 +150,9 @@ export class OrganisationsController {
     change: boolean,
     errors: object | undefined = undefined,
   ): Promise<void> {
-    const regulatedAuthorities =
-      await this.organisationVersionsService.allLive();
+    const organisations = await (this.hasLiveVersion(profession)
+      ? this.organisationVersionsService.allLive()
+      : this.organisationVersionsService.allLiveOrDraft());
 
     const selectArgsArray = await Promise.all(
       Array.from({
@@ -158,7 +160,7 @@ export class OrganisationsController {
         length: 25,
       }).map(async (professionToOrganisation) => {
         const presenter = new RegulatedAuthoritiesSelectPresenter(
-          regulatedAuthorities,
+          organisations,
           professionToOrganisation?.organisation,
           professionToOrganisation?.role,
           this.i18nService,
@@ -202,5 +204,11 @@ export class OrganisationsController {
           submittedValue.role as OrganisationRole,
         )
       : null;
+  }
+
+  private hasLiveVersion(profession: Profession): boolean {
+    return profession.versions.some(
+      (version) => version.status === ProfessionVersionStatus.Live,
+    );
   }
 }
