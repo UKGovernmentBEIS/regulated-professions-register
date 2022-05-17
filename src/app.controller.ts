@@ -25,10 +25,19 @@ export class AppController {
   }
 
   @Get('/admin/guidance')
+  @UseGuards(AuthenticationGuard)
   @Render('admin/pages/guidance')
   @BackLink('/admin/dashboard')
   adminGuidance(): void {
     // do nothing.
+  }
+
+  @Get('/admin/decisions/guidance')
+  @UseGuards(AuthenticationGuard)
+  @Render('admin/decisions/guidance')
+  @BackLink('/admin/decisions')
+  adminDecisionGuidance(): void {
+    // do nothing
   }
 
   @Get('/cookies')
@@ -53,13 +62,6 @@ export class AppController {
   @Render('pages/data-disclaimer')
   dataDisclaimer() {
     // do nothing.
-  }
-
-  @Get('/admin/decisions/guidance')
-  @Render('admin/decisions/guidance')
-  @BackLink('/admin/decisions')
-  adminDecisionGuidance(): void {
-    // do nothing
   }
 
   @Get('/health-check')
