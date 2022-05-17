@@ -1,0 +1,35 @@
+{% extends "base.njk" %}
+
+{% set title = "Regulation types within the Regulated Professions Register" %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      <h1 class="govuk-heading-xl">
+        {{ title }}
+      </h1>
+      <p class="govuk-body">
+        You may filter professions and regulators by their associated regulation type.
+      </p>
+      <h2 class="govuk-heading-m">
+        {{ "professions.regulationTypes.licensing.name" | t }}
+      </h2>
+      <p class="govuk-body">
+        {{ "professions.regulationTypes.licensing.hint" | t }}
+      </p>
+      <h2 class="govuk-heading-m">
+        {{ "professions.regulationTypes.certification.name" | t }}
+      </h2>
+      <p class="govuk-body">
+        {{ "professions.regulationTypes.certification.hint" | t }}
+      </p>
+      <h2 class="govuk-heading-m">
+        {{ "professions.regulationTypes.accreditation.name" | t }}
+      </h2>
+      <p class="govuk-body">
+        {{ "professions.regulationTypes.accreditation.hint" | t }}
+      </p>
+    </div>
+  </div>
+{% endblock %}

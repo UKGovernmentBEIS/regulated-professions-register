@@ -64,6 +64,12 @@ export class AppController {
     // do nothing.
   }
 
+  @Get('/regulation-types')
+  @Render('pages/regulation-types')
+  regulationTypes() {
+    // do nothing.
+  }
+
   @Get('/health-check')
   healthCheck() {
     return {
