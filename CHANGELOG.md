@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [unreleased]
 
+## [release-022] - 2022-05-17
+
 ### Added
 
 - Link from Decisions Dashboard to guidance on decision outcomes and route
@@ -406,7 +408,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fix links in error messages when adding a new profession
 - Make validation errors more human readable
 
-[unreleased]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-021...HEAD
+[unreleased]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-022...HEAD
+[release-022]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release021...release-022
 [release-021]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release020...release-021
 [release-020]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release019...release-020
 [release-019]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release018...release-019
