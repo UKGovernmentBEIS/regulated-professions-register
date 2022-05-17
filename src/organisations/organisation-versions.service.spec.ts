@@ -270,6 +270,52 @@ describe('OrganisationVersionsService', () => {
     });
   });
 
+  describe('allLiveOrDraft', () => {
+    it('fetches all currently live or draft organisations', async () => {
+      const versions = organisationVersionFactory.buildList(5);
+      const queryBuilder = createMock<SelectQueryBuilder<OrganisationVersion>>({
+        leftJoinAndSelect: () => queryBuilder,
+        where: () => queryBuilder,
+        distinctOn: () => queryBuilder,
+        orderBy: () => queryBuilder,
+        getMany: async () => versions,
+      });
+
+      jest
+        .spyOn(repo, 'createQueryBuilder')
+        .mockImplementation(() => queryBuilder);
+
+      const result = await service.allLiveOrDraft();
+
+      const expectedOrganisations = versions.map((version) =>
+        Organisation.withVersion(version.organisation, version),
+      );
+
+      expect(result).toEqual(expectedOrganisations);
+
+      expectJoinsToHaveBeenApplied(queryBuilder);
+
+      expect(queryBuilder.where).toHaveBeenCalledWith(
+        'organisationVersion.status IN(:...status)',
+        {
+          status: [
+            OrganisationVersionStatus.Live,
+            OrganisationVersionStatus.Draft,
+          ],
+        },
+      );
+
+      expect(queryBuilder.distinctOn).toHaveBeenCalledWith([
+        'organisation.name',
+        'organisation',
+      ]);
+
+      expect(queryBuilder.orderBy).toHaveBeenCalledWith(
+        'organisation.name, organisation',
+      );
+    });
+  });
+
   describe('allWithLatestVersion', () => {
     it('gets all organisations and their latest draft or live version with draft or live Professions', async () => {
       const versions = organisationVersionFactory.buildList(5);
