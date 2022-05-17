@@ -280,6 +280,7 @@ describe('UsersController', () => {
         const res = createMock<Response>();
 
         usersService.find.mockResolvedValue(user);
+        usersService.attemptAdd.mockResolvedValue('user-created');
         auth0Service.createUser.mockResolvedValue({
           result: 'user-created',
           externalIdentifier: 'extid|1234567',
@@ -293,7 +294,7 @@ describe('UsersController', () => {
         await controller.complete(res, user.id, request);
 
         expect(auth0Service.createUser).toBeCalledWith(user.email);
-        expect(usersService.save).toBeCalledWith(
+        expect(usersService.attemptAdd).toBeCalledWith(
           expect.objectContaining({
             name: user.name,
             email: user.email,
@@ -384,7 +385,7 @@ describe('UsersController', () => {
         (getActionTypeFromUser as jest.Mock).mockReturnValue('edit');
       });
 
-      it('should not attempt to create a user in auth0', async () => {
+      it('should not attempt to save the user or create a user in auth0', async () => {
         const user = userFactory.build();
         const res = createMock<Response>();
 
@@ -396,18 +397,10 @@ describe('UsersController', () => {
 
         await controller.complete(res, user.id, request);
 
-        expect(auth0Service.createUser).not.toBeCalled();
-        expect(userMailer.confirmation).not.toBeCalled();
+        expect(auth0Service.createUser).not.toHaveBeenCalled();
+        expect(userMailer.confirmation).not.toHaveBeenCalled();
 
-        expect(usersService.save).toBeCalledWith(
-          expect.objectContaining({
-            name: user.name,
-            email: user.email,
-            externalIdentifier: user.externalIdentifier,
-            role: user.role,
-            confirmed: true,
-          }),
-        );
+        expect(usersService.save).not.toHaveBeenCalled();
 
         expect(res.render).toBeCalledWith('admin/users/complete', {
           ...user,

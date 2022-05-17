@@ -19,6 +19,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Improve text on internal links to public pages
 - Change "View" buttons to "View details" links on user listing page
 - Prevent organisation's nation from erroneously being shown as 'N/A'
+- A new user with the same email address as a previously archived user can be created
+- Archived users can no longer login to the service if Auth0 account deletion fails
 
 ## [release-021] - 2022-05-11
 

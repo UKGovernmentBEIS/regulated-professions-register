@@ -1,4 +1,4 @@
-import { Connection, Repository, DeleteResult } from 'typeorm';
+import { Connection, Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
@@ -13,14 +13,10 @@ export class UsersService {
     private connection: Connection,
   ) {}
 
-  all(): Promise<User[]> {
-    return this.repository.find();
-  }
-
   async allConfirmed(): Promise<User[]> {
     return this.repository
       .createQueryBuilder('user')
-      .where('user.confirmed = true AND user.archived = false')
+      .where({ confirmed: true, archived: false })
       .orderBy('LOWER(user.name)')
       .getMany();
   }
@@ -28,7 +24,7 @@ export class UsersService {
   allConfirmedForOrganisation(organisation: Organisation): Promise<User[]> {
     return this.repository
       .createQueryBuilder('user')
-      .where('user.confirmed = true AND user.archived = false')
+      .where({ confirmed: true, archived: false })
       .leftJoinAndSelect('user.organisation', 'organisation')
       .andWhere('organisation.id = :organisationId', {
         organisationId: organisation.id,
@@ -43,7 +39,7 @@ export class UsersService {
 
   findByEmail(email: string): Promise<User> {
     return this.repository.findOne({
-      where: { email },
+      where: { email, confirmed: true, archived: false },
     });
   }
 
@@ -51,18 +47,9 @@ export class UsersService {
     return await this.repository.save(user);
   }
 
-  async delete(id: string): Promise<DeleteResult> {
-    return this.repository
-      .createQueryBuilder()
-      .delete()
-      .from(User)
-      .where('id = :id', { id: id })
-      .execute();
-  }
-
   findByExternalIdentifier(externalIdentifier: string): Promise<User> {
     return this.repository.findOne({
-      where: { externalIdentifier },
+      where: { externalIdentifier, confirmed: true, archived: false },
     });
   }
 
@@ -78,6 +65,8 @@ export class UsersService {
     try {
       const foundUser = await queryRunner.manager.findOne(User, {
         externalIdentifier: user.externalIdentifier,
+        confirmed: true,
+        archived: false,
       });
 
       if (!foundUser) {

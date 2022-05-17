@@ -151,11 +151,6 @@ export class UsersController {
       }
     }
 
-    await this.usersService.save({
-      ...user,
-      confirmed: true,
-    });
-
     res.render('admin/users/complete', {
       ...user,
       action,
@@ -166,17 +161,16 @@ export class UsersController {
     const externalResult = await this.auth0Service.createUser(user.email);
 
     user.externalIdentifier = externalResult.externalIdentifier;
+    user.confirmed = true;
 
-    if (externalResult.result === 'user-exists') {
-      const internalResult = await this.usersService.attemptAdd({
-        ...user,
-        confirmed: true,
-      });
+    const internalResult = await this.usersService.attemptAdd(user);
 
-      if (internalResult === 'user-exists') {
-        throw new UserAlreadyExistsError();
-      }
-    } else {
+    if (
+      externalResult.result === 'user-exists' &&
+      internalResult === 'user-exists'
+    ) {
+      throw new UserAlreadyExistsError();
+    } else if (externalResult.result === 'user-created') {
       await this.userMailer.confirmation(
         user,
         externalResult.passwordResetLink,

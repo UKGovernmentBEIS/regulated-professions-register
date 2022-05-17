@@ -58,16 +58,6 @@ describe('UsersService', () => {
     repo = module.get<Repository<User>>(getRepositoryToken(User));
   });
 
-  describe('all', () => {
-    it('should return all users', async () => {
-      const repoSpy = jest.spyOn(repo, 'find');
-      const posts = await service.all();
-
-      expect(posts).toEqual(userArray);
-      expect(repoSpy).toHaveBeenCalled();
-    });
-  });
-
   describe('allConfirmed', () => {
     it('should return all confirmed users', async () => {
       const users = userFactory.buildList(2);
@@ -85,9 +75,10 @@ describe('UsersService', () => {
 
       await service.allConfirmed();
 
-      expect(queryBuilder.where).toHaveBeenCalledWith(
-        'user.confirmed = true AND user.archived = false',
-      );
+      expect(queryBuilder.where).toHaveBeenCalledWith({
+        confirmed: true,
+        archived: false,
+      });
       expect(queryBuilder.orderBy).toHaveBeenCalledWith('LOWER(user.name)');
       expect(queryBuilder.getMany).toHaveBeenCalled();
     });
@@ -112,9 +103,10 @@ describe('UsersService', () => {
 
       await service.allConfirmedForOrganisation(organisation);
 
-      expect(queryBuilder.where).toHaveBeenCalledWith(
-        'user.confirmed = true AND user.archived = false',
-      );
+      expect(queryBuilder.where).toHaveBeenCalledWith({
+        confirmed: true,
+        archived: false,
+      });
       expect(queryBuilder.andWhere).toHaveBeenCalledWith(
         'organisation.id = :organisationId',
         {
@@ -145,7 +137,11 @@ describe('UsersService', () => {
 
       expect(post).toEqual(user);
       expect(repoSpy).toHaveBeenCalledWith({
-        where: { externalIdentifier: 'external-identifier' },
+        where: {
+          externalIdentifier: 'external-identifier',
+          confirmed: true,
+          archived: false,
+        },
       });
     });
   });
@@ -156,33 +152,6 @@ describe('UsersService', () => {
       await service.save(user);
 
       expect(repoSpy).toHaveBeenCalledWith(user);
-    });
-  });
-
-  describe('delete', () => {
-    it('should delete a user', async () => {
-      await service.delete('some-uuid');
-
-      jest.spyOn(queryBuilder.delete(), 'from');
-      jest.spyOn(queryBuilder.delete().from(expect.anything()), 'where');
-      jest.spyOn(
-        queryBuilder
-          .delete()
-          .from(User)
-          .where(expect.anything(), expect.anything()),
-        'execute',
-      );
-
-      expect(queryBuilder.delete().from).toHaveBeenCalledWith(User);
-      expect(
-        queryBuilder.delete().from(expect.anything()).where,
-      ).toHaveBeenCalledWith('id = :id', { id: 'some-uuid' });
-      expect(
-        queryBuilder
-          .delete()
-          .from(expect.anything())
-          .where(expect.anything(), expect.anything()).execute,
-      ).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -214,6 +183,8 @@ describe('UsersService', () => {
 
         expect(findSpy).toHaveBeenCalledWith(User, {
           externalIdentifier: user.externalIdentifier,
+          confirmed: true,
+          archived: false,
         });
         expect(saveSpy).toHaveBeenCalledWith(User, user);
 
@@ -237,6 +208,8 @@ describe('UsersService', () => {
 
         expect(findSpy).toHaveBeenCalledWith(User, {
           externalIdentifier: user.externalIdentifier,
+          confirmed: true,
+          archived: false,
         });
         expect(saveSpy).not.toBeCalled();
 
@@ -259,6 +232,8 @@ describe('UsersService', () => {
 
       expect(findSpy).toHaveBeenCalledWith(User, {
         externalIdentifier: user.externalIdentifier,
+        confirmed: true,
+        archived: false,
       });
       expect(saveSpy).not.toBeCalled();
 
