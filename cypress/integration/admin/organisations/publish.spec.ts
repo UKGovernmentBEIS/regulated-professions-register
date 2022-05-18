@@ -72,6 +72,12 @@ describe('Publishing organisations', () => {
         },
       );
 
+      cy.translate('organisations.admin.publish.confirmation.body', {
+        name: 'Draft Organisation',
+      }).then((confirmationBody) => {
+        cy.get('html').should('contain.html', confirmationBody);
+      });
+
       cy.translate('organisations.admin.button.edit.live').then(
         (editButton) => {
           cy.get('html').should('contain', editButton);
@@ -207,6 +213,12 @@ describe('Publishing organisations', () => {
         },
       );
 
+      cy.translate('organisations.admin.publish.confirmation.body', {
+        name: 'Draft Organisation',
+      }).then((confirmationBody) => {
+        cy.get('html').should('contain.html', confirmationBody);
+      });
+
       cy.translate('organisations.admin.button.edit.live').then(
         (editButton) => {
           cy.get('html').should('contain', editButton);
@@ -329,7 +341,7 @@ describe('Publishing organisations', () => {
           },
         );
 
-        cy.translate('organisations.admin.publish.confirmation.body', {
+        cy.translate('organisations.admin.publish.confirmation.bodyNew', {
           name: 'New Organisation',
         }).then((confirmationBody) => {
           cy.get('html').should('contain.html', confirmationBody);

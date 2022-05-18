@@ -162,7 +162,7 @@ describe('OrganisationPublicationController', () => {
 
         expect(flashMock).toHaveBeenCalledWith(
           translationOf('organisations.admin.publish.confirmation.heading'),
-          translationOf('organisations.admin.publish.confirmation.body'),
+          translationOf('organisations.admin.publish.confirmation.bodyNew'),
         );
 
         expect(escape).toHaveBeenCalledWith(brandNewOrganisation.name);
