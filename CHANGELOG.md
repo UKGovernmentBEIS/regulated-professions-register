@@ -6,9 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [unreleased]
 
+### Added
+
+- Add page explaining regulation types, with a link from the regulation types filter in the public searches
+
 ### Changed
 
 - Allow draft professions to be assigned to draft regulatory authorities
+- Internal guidance pages require user to be logged in to view
 
 ## [release-022] - 2022-05-17
 

@@ -1,4 +1,5 @@
 import { Controller, Get, Render, Req, UseGuards } from '@nestjs/common';
+import { Request } from 'express';
 import { AuthenticationGuard } from './common/authentication.guard';
 import { BackLink } from './common/decorators/back-link.decorator';
 import { RequestWithAppSession } from './common/interfaces/request-with-app-session.interface';
@@ -25,10 +26,19 @@ export class AppController {
   }
 
   @Get('/admin/guidance')
+  @UseGuards(AuthenticationGuard)
   @Render('admin/pages/guidance')
   @BackLink('/admin/dashboard')
   adminGuidance(): void {
     // do nothing.
+  }
+
+  @Get('/admin/decisions/guidance')
+  @UseGuards(AuthenticationGuard)
+  @Render('admin/decisions/guidance')
+  @BackLink('/admin/decisions')
+  adminDecisionGuidance(): void {
+    // do nothing
   }
 
   @Get('/cookies')
@@ -55,11 +65,14 @@ export class AppController {
     // do nothing.
   }
 
-  @Get('/admin/decisions/guidance')
-  @Render('admin/decisions/guidance')
-  @BackLink('/admin/decisions')
-  adminDecisionGuidance(): void {
-    // do nothing
+  @Get('/regulation-types')
+  @Render('pages/regulation-types')
+  @BackLink(
+    (request: Request) => request.session.searchResultUrl,
+    'app.backToSearch',
+  )
+  regulationTypes() {
+    // do nothing.
   }
 
   @Get('/health-check')

@@ -94,6 +94,11 @@
           items: regulationTypesCheckboxItems
         }) }}
       </div>
+      {% if showRegulationTypesHint %}
+        <p class="govuk-body-m">
+          <a class="govuk-link" href="/regulation-types">{{ (filterTextPrefix + ".regulationTypesHint") | t }}</a>
+        </p>
+      {% endif %}
     {% endif %}
 
     {% if yearsCheckboxItems %}
