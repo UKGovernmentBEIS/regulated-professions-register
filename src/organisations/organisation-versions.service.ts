@@ -114,7 +114,8 @@ export class OrganisationVersionsService {
 
   async searchLive(filter: FilterInput): Promise<Organisation[]> {
     const query = this.versionsWithJoins([ProfessionVersionStatus.Live])
-      .orderBy('organisation.name, organisation')
+      .distinctOn(['organisation.name, organisation, profession'])
+      .orderBy('organisation.name, organisation, profession')
       .where('organisationVersion.status = :status', {
         status: OrganisationVersionStatus.Live,
       });
