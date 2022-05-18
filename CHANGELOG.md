@@ -15,6 +15,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Allow draft professions to be assigned to draft regulatory authorities
 - Internal guidance pages require user to be logged in to view
 - Move public search result count further up screen for screen readers
+- Use production session store
 
 ## [release-022] - 2022-05-17
 

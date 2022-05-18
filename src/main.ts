@@ -16,6 +16,10 @@ import { globalLocals } from './common/global-locals';
 import { ValidationFailedError } from './common/validation/validation-failed.error';
 import { GlobalExceptionFilter } from './common/global-exception.filter';
 import { redirectToCanonicalHostname } from './middleware/redirect-to-canonical-hostname';
+import { getDomain } from './helpers/get-domain.helper';
+import connectRedis from 'connect-redis';
+import Redis from 'ioredis';
+import redisConfig from './config/redis.config';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -50,11 +54,21 @@ async function bootstrap() {
     }),
   );
 
+  const redisClient = new Redis(redisConfig().redis);
+  const RedisStore = connectRedis(session);
+
   app.use(
     session({
+      store: new RedisStore({ client: redisClient }),
       secret: process.env.APP_SECRET,
       resave: false,
       saveUninitialized: false,
+      cookie: {
+        secure: process.env['NODE_ENV'] === 'production',
+        httpOnly: true,
+        maxAge: 30 * 24 * 60 * 60 * 1000,
+        domain: getDomain(process.env['HOST_URL']),
+      },
     }),
   );
 
