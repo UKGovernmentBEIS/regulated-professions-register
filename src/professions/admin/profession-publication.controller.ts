@@ -83,7 +83,9 @@ export class ProfessionPublicationController {
       getActingUser(req),
     );
 
-    if (!isConfirmed(profession)) {
+    const confirmed = isConfirmed(profession);
+
+    if (!confirmed) {
       await this.professionsService.setSlug(profession);
     }
 
@@ -94,7 +96,9 @@ export class ProfessionPublicationController {
     );
 
     const messageBody = await this.i18nService.translate(
-      'professions.admin.publish.confirmation.body',
+      confirmed
+        ? 'professions.admin.publish.confirmation.body'
+        : 'professions.admin.publish.confirmation.bodyNew',
       { args: { name: escape(version.profession.name) } },
     );
 
