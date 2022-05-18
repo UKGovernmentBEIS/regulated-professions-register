@@ -10,6 +10,7 @@ import { formatEmail } from '../helpers/format-email.helper';
 import { pad } from '../helpers/pad.helper';
 import { formatStatus } from '../helpers/format-status.helper';
 import { formatTelephone } from '../helpers/format-telephone.helper';
+import { getDomain } from '../helpers/get-domain.helper';
 
 export const nunjucksConfig = async (
   app: NestExpressApplication,
@@ -32,10 +33,7 @@ export const nunjucksConfig = async (
     await assetsHelper.entryScriptTags(),
   );
   env.addGlobal('environment', process.env['NODE_ENV']);
-  env.addGlobal(
-    'site_domain',
-    process.env['HOST_URL'].replace(/https?:\/\//, '').split('/')[0],
-  );
+  env.addGlobal('site_domain', getDomain(process.env['HOST_URL']));
   env.addFilter(
     't',
     async (...args) => {

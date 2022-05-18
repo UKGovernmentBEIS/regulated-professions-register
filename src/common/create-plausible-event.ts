@@ -1,12 +1,11 @@
 import axios from 'axios';
+import { getDomain } from '../helpers/get-domain.helper';
 
 export async function createPlausibleEvent(
   name: string,
   path: string,
 ): Promise<void> {
-  const domain = process.env['HOST_URL']
-    .replace(/https?:\/\//, '')
-    .split('/')[0];
+  const domain = getDomain(process.env['HOST_URL']);
   const url = [process.env['HOST_URL'], path].join('');
 
   await axios.post(
