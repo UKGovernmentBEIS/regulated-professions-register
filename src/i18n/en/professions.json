@@ -393,7 +393,8 @@
       "relatedWords": "use related words like nurse instead of nursing",
       "removeFilters": "remove any filters you’ve used",
       "sectorOnly": "leave the profession blank and search by sector only"
-    }
+    },
+    "regulationTypesHint": "What are regulation types?"
   },
   "regulationTypes": {
     "licensing": {

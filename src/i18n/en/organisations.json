@@ -157,7 +157,8 @@
         "hint": "Select all that apply"
       },
       "button": "Filter results"
-    }
+    },
+    "regulationTypesHint": "What are regulation types?"
   },
   "headings": {
     "professions": "Regulated professions",
