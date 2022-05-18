@@ -706,11 +706,6 @@ describe('OrganisationVersionsService', () => {
         `professionVersions.status = '${ProfessionVersionStatus.Live}'`,
       );
 
-      expect(queryBuilder.distinctOn).toHaveBeenCalledWith([
-        'organisation.name',
-        'organisation',
-      ]);
-
       expect(queryBuilder.where).toHaveBeenCalledWith(
         'organisationVersion.status = :status',
         {
