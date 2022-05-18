@@ -71,14 +71,35 @@ $small-screen: 768px;
     padding: 2px 0;
   }
 
-  &__results-found--mobile {
-    display: none;
+  &__results-found--top {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    clip: rect(0 0 0 0) !important;
+    -webkit-clip-path: inset(50%) !important;
+    clip-path: inset(50%) !important;
+    border: 0 !important;
+    white-space: nowrap !important;
+
     @media screen and (max-width: $small-screen) {
-      display: block;
+      position: relative !important;
+      width: auto !important;
+      height: auto !important;
+      margin: auto !important;
+      padding: auto !important;
+      overflow: visible !important;
+      clip: auto !important;
+      -webkit-clip-path: none !important;
+      clip-path: none !important;
+      border: none !important;
+      white-space: none !important;
     }
   }
 
-  &__results-found--desktop {
+  &__results-found--right-column {
     display: block;
     @media screen and (max-width: $small-screen) {
       display: none;

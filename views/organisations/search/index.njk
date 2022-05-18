@@ -11,7 +11,7 @@
 
     <div class="govuk-grid-column-one-third">
 
-      <p class="govuk-body-m rpr-listing__results-found--mobile">
+      <p class="govuk-body-m rpr-listing__results-found--top">
         {% if (organisations.length === 1) %}
           {{ ("organisations.search.foundSingular" | t({ count: "<span class='govuk-!-font-size-36 govuk-!-font-weight-bold'>" + organisations.length + "</span>" }) | safe) }}
         {% else %}
@@ -31,7 +31,7 @@
       {% set filterCriteriaTextPrefix = "organisations.search" %}
       {% include "../../shared/_filter-criteria.njk" %}
 
-      <p class="govuk-body-m rpr-listing__results-found--desktop">
+      <p class="govuk-body-m rpr-listing__results-found--right-column">
         {% if (organisations.length === 1) %}
           {{ ("organisations.search.foundSingular" | t({ count: "<span class='govuk-!-font-size-36 govuk-!-font-weight-bold'>" + organisations.length + "</span>" }) | safe) }}
         {% else %}
