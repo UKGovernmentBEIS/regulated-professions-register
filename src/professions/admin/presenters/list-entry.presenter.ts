@@ -91,9 +91,24 @@ export class ListEntryPresenter {
       { args: { name: escape(this.profession.name) } },
     )}</a>`;
 
-    const organisations = getOrganisationsFromProfession(this.profession)
-      .map((organisation) => organisation.name)
-      .join(', ');
+    const organisationsList = () => {
+      const organisations = getOrganisationsFromProfession(this.profession);
+
+      if (organisations.length > 1) {
+        return `<ul class="govuk-list">
+        ${organisations
+          .map(
+            (organisation, i) =>
+              `<li>
+              ${organisation.name}${i < organisations.length - 1 ? ',' : ''}
+            </li>`,
+          )
+          .join('')}
+          </ul>`;
+      } else {
+        return organisations[0].name;
+      }
+    };
 
     const entries: { [K in Field]: TableCell } = {
       profession: { text: this.profession.name },
@@ -101,7 +116,7 @@ export class ListEntryPresenter {
       lastModified: { text: presenter.lastModified },
       changedBy: { text: presenter.changedBy?.name },
       organisation: {
-        text: organisations,
+        html: organisationsList(),
       },
       industry: { text: industries },
       status: { html: await presenter.status },

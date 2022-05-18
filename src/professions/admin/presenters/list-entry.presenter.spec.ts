@@ -62,7 +62,15 @@ describe('ListEntryPresenter', () => {
 
         const expected: TableRow = [
           { text: 'Example Profession' },
-          { text: 'Example Organisation, Additional Example Organisation' },
+          {
+            html: `<ul class="govuk-list">
+        <li>
+              Example Organisation,
+            </li><li>
+              Additional Example Organisation
+            </li>
+          </ul>`,
+          },
           {
             text: `${translationOf('nations.scotland')}, ${translationOf(
               'nations.northernIreland',
