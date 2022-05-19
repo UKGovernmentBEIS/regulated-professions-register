@@ -91,11 +91,8 @@ export class ListEntryPresenter {
       { args: { name: escape(this.profession.name) } },
     )}</a>`;
 
-    const organisationsList = () => {
-      const organisations = getOrganisationsFromProfession(this.profession);
-
-      if (organisations.length > 1) {
-        return `<ul class="govuk-list">
+    const organisations = getOrganisationsFromProfession(this.profession);
+    const organisationsHtml = `<ul class="govuk-list">
         ${organisations
           .map(
             (organisation, i) =>
@@ -105,10 +102,6 @@ export class ListEntryPresenter {
           )
           .join('')}
           </ul>`;
-      } else {
-        return organisations[0].name;
-      }
-    };
 
     const entries: { [K in Field]: TableCell } = {
       profession: { text: this.profession.name },
@@ -116,7 +109,7 @@ export class ListEntryPresenter {
       lastModified: { text: presenter.lastModified },
       changedBy: { text: presenter.changedBy?.name },
       organisation: {
-        html: organisationsList(),
+        html: organisationsHtml,
       },
       industry: { text: industries },
       status: { html: await presenter.status },
