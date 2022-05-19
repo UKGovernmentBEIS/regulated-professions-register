@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [unreleased]
 
+## [release-023] - 2022-05-19
+
 ### Added
 
 - Add page explaining regulation types, with a link from the regulation types filter in the public searches
@@ -422,7 +424,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fix links in error messages when adding a new profession
 - Make validation errors more human readable
 
-[unreleased]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-022...HEAD
+[unreleased]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-023...HEAD
+[release-023]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release022...release-023
 [release-022]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release021...release-022
 [release-021]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release020...release-021
 [release-020]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release019...release-020
