@@ -1,13 +1,17 @@
 import { ForbiddenException } from '@nestjs/common';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { RequestHandler } from 'express';
-import { auth } from 'express-openid-connect';
+import { auth, SessionStore } from 'express-openid-connect';
 import { createPlausibleEvent } from '../common/create-plausible-event';
 
 import jwt_decode from 'jwt-decode';
 
 import { UsersModule } from '../users/users.module';
 import { UsersService } from '../users/users.service';
+import redisConfig from '../config/redis.config';
+import connectRedis from 'connect-redis';
+import Redis from 'ioredis';
+import session from 'express-session';
 
 const baseURL =
   process.env['HOST_URL'] ||
@@ -36,6 +40,9 @@ export class AuthenticationMidleware {
    * @returns {RequestHandler} - The authentication middleware
    */
   public auth(): RequestHandler {
+    const redisClient = new Redis(redisConfig().redis);
+    const RedisStore = connectRedis(session);
+
     return auth({
       issuerBaseURL: process.env['AUTH0_DOMAIN'],
       baseURL: baseURL,
@@ -47,6 +54,9 @@ export class AuthenticationMidleware {
       authorizationParams: {
         response_type: 'code',
         scope: 'openid profile email',
+      },
+      session: {
+        store: new RedisStore({ client: redisClient }) as any as SessionStore,
       },
       afterCallback: async (_req, _res, session) => {
         return await this.afterCallback(session);
