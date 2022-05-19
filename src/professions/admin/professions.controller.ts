@@ -78,14 +78,7 @@ export class ProfessionsController {
   @BackLink('/admin/dashboard')
   async index(
     @Req() request: RequestWithAppSession,
-    @Query() query: FilterDto = null,
-  ): Promise<IndexTemplate> {
-    return this.createListEntries(query || new FilterDto(), request);
-  }
-
-  private async createListEntries(
-    filter: FilterDto,
-    request: RequestWithAppSession,
+    @Query() filterDto: FilterDto = new FilterDto(),
   ): Promise<IndexTemplate> {
     const allNations = Nation.all();
     const allOrganisations =
@@ -109,7 +102,7 @@ export class ProfessionsController {
         ));
 
     const filterInput = createFilterInput({
-      ...filter,
+      ...filterDto,
       allNations,
       allOrganisations,
       allIndustries,
