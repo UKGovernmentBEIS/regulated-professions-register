@@ -64,7 +64,6 @@ async function bootstrap() {
       resave: false,
       saveUninitialized: false,
       cookie: {
-        secure: process.env['NODE_ENV'] === 'production',
         httpOnly: true,
         maxAge: 30 * 24 * 60 * 60 * 1000,
         domain: getDomain(process.env['HOST_URL']),
