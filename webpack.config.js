@@ -33,6 +33,13 @@ Encore.setOutputPath('public/')
       includePaths: ['node_modules/govuk-frontend/'],
       outputStyle: 'compressed',
     };
+  })
+  .addRule({
+    test: /\.mjs$/,
+    type: 'javascript/auto',
+    resolve: {
+      fullySpecified: false,
+    },
   });
 
 // uncomment if you use TypeScript
