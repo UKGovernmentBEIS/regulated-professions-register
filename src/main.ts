@@ -57,16 +57,24 @@ async function bootstrap() {
   const redisClient = new Redis(redisConfig().redis);
   const RedisStore = connectRedis(session);
 
+  const production = process.env['NODE_ENV'] === 'production';
+
+  if (production) {
+    app.set('trust proxy', 1);
+  }
+
   app.use(
     session({
       store: new RedisStore({ client: redisClient }),
       secret: process.env['APP_SECRET'],
       resave: false,
       saveUninitialized: false,
+      proxy: production,
       cookie: {
         httpOnly: true,
         maxAge: 30 * 24 * 60 * 60 * 1000,
         domain: getDomain(process.env['HOST_URL']),
+        secure: production,
       },
     }),
   );
