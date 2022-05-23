@@ -66,6 +66,12 @@ describe('Publishing professions', () => {
         },
       );
 
+      cy.translate('professions.admin.publish.confirmation.body', {
+        name: 'Gas Safe Engineer',
+      }).then((confirmation) => {
+        cy.get('html').should('contain.html', confirmation);
+      });
+
       cy.translate('professions.admin.button.edit.live').then((buttonText) => {
         cy.get('html').should('contain', buttonText);
       });
@@ -209,6 +215,12 @@ describe('Publishing professions', () => {
           cy.get('html').should('contain', confirmation);
         },
       );
+
+      cy.translate('professions.admin.publish.confirmation.body', {
+        name: 'Orthodontic Therapist',
+      }).then((confirmation) => {
+        cy.get('html').should('contain.html', confirmation);
+      });
 
       cy.translate('professions.admin.button.edit.live').then((buttonText) => {
         cy.get('html').should('contain', buttonText);
@@ -571,6 +583,12 @@ describe('Publishing professions', () => {
           cy.get('html').should('contain', confirmation);
         },
       );
+
+      cy.translate('professions.admin.publish.confirmation.bodyNew', {
+        name: 'Example Profession',
+      }).then((confirmation) => {
+        cy.get('html').should('contain.html', confirmation);
+      });
 
       cy.get('[data-cy=changed-by-user-name]').should('contain', 'Registrar');
       cy.get('[data-cy=changed-by-user-email]').should(

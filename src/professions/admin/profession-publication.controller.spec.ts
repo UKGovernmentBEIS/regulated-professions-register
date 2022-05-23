@@ -166,7 +166,7 @@ describe('ProfessionPublicationController', () => {
 
         expect(flashMock).toHaveBeenCalledWith(
           translationOf('professions.admin.publish.confirmation.heading'),
-          translationOf('professions.admin.publish.confirmation.body'),
+          translationOf('professions.admin.publish.confirmation.bodyNew'),
         );
 
         expect(escape).toHaveBeenCalledWith(brandNewProfession.name);

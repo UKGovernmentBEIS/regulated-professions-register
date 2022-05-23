@@ -74,7 +74,9 @@ export class OrganisationPublicationController {
       getActingUser(req),
     );
 
-    if (!isConfirmed(organisation)) {
+    const confirmed = isConfirmed(organisation);
+
+    if (!confirmed) {
       await this.organisationsService.setSlug(organisation);
     }
 
@@ -85,7 +87,9 @@ export class OrganisationPublicationController {
     );
 
     const messageBody = await this.i18nService.translate(
-      'organisations.admin.publish.confirmation.body',
+      confirmed
+        ? 'organisations.admin.publish.confirmation.body'
+        : 'organisations.admin.publish.confirmation.bodyNew',
       { args: { name: escape(version.organisation.name) } },
     );
 
