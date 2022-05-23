@@ -1,17 +1,23 @@
 {% if filters.keywords %}
-  <p class="govuk-body-m rpr-listing__search-criteria-container"><span class="govuk-!-font-weight-bold">{{ (filterCriteriaTextPrefix + ".labels.keywords") | t }}</span> <strong class="govuk-tag">{{ filters.keywords }}</strong></p>
+  <p class="govuk-body-m rpr-listing__search-criteria-container">
+    <span class="govuk-!-font-weight-bold">{{ (filterCriteriaTextPrefix + ".labels.keywords") | t }}</span>
+    <strong class="govuk-tag">{{ filters.keywords }}</strong>
+  </p>
 {% endif %}
 
 {% if filters.nations | length %}
-  <p class="govuk-body-m rpr-listing__search-criteria-container"><span class="govuk-!-font-weight-bold">{{ (filterCriteriaTextPrefix + ".labels.nations") | t }}</span>
+  <p class="govuk-body-m rpr-listing__search-criteria-container">
+    <span class="govuk-!-font-weight-bold">{{ (filterCriteriaTextPrefix + ".labels.nations") | t }}</span>
     {% for nation in filters.nations %}
       <strong class="govuk-tag">{{ nation | t }}</strong>
     {% endfor %}
   </p>
 {% endif %}
 
-{% if (filters.organisations | length) and not hideOrganisationTags %}
-  <p class="govuk-body-m rpr-listing__search-criteria-container"><span class="govuk-!-font-weight-bold">{{ (filterCriteriaTextPrefix + ".labels.organisations") | t }}</span>
+{% if (filters.organisations | length) 
+  and not hideOrganisationTags %}
+  <p class="govuk-body-m rpr-listing__search-criteria-container">
+    <span class="govuk-!-font-weight-bold">{{ (filterCriteriaTextPrefix + ".labels.organisations") | t }}</span>
     {% for organisation in filters.organisations %}
       <strong class="govuk-tag">{{ organisation }}</strong>
     {% endfor %}
@@ -19,7 +25,8 @@
 {% endif %}
 
 {% if filters.industries | length %}
-  <p class="govuk-body-m rpr-listing__search-criteria-container"><span class="govuk-!-font-weight-bold">{{ (filterCriteriaTextPrefix + ".labels.industries") | t }}</span>
+  <p class="govuk-body-m rpr-listing__search-criteria-container">
+    <span class="govuk-!-font-weight-bold">{{ (filterCriteriaTextPrefix + ".labels.industries") | t }}</span>
     {% for industry in filters.industries %}
       <strong class="govuk-tag">{{ industry | t }}</strong>
     {% endfor %}
@@ -27,7 +34,8 @@
 {% endif %}
 
 {% if filters.regulationTypes | length %}
-  <p class="govuk-body-m rpr-listing__search-criteria-container"><span class="govuk-!-font-weight-bold">{{ (filterCriteriaTextPrefix + ".labels.regulationTypes") | t }}</span>
+  <p class="govuk-body-m rpr-listing__search-criteria-container">
+    <span class="govuk-!-font-weight-bold">{{ (filterCriteriaTextPrefix + ".labels.regulationTypes") | t }}</span>
     {% for regulationType in filters.regulationTypes %}
       <strong class="govuk-tag">{{ ('professions.regulationTypes.' + regulationType + '.name') | t }}</strong>
     {% endfor %}
@@ -35,7 +43,8 @@
 {% endif %}
 
 {% if filters.years | length %}
-  <p class="govuk-body-m rpr-listing__search-criteria-container"><span class="govuk-!-font-weight-bold">{{ (filterCriteriaTextPrefix + ".labels.years") | t }}</span>
+  <p class="govuk-body-m rpr-listing__search-criteria-container">
+    <span class="govuk-!-font-weight-bold">{{ (filterCriteriaTextPrefix + ".labels.years") | t }}</span>
     {% for year in filters.years %}
       <strong class="govuk-tag">{{ year }}</strong>
     {% endfor %}
@@ -43,9 +52,19 @@
 {% endif %}
 
 {% if filters.statuses | length %}
-  <p class="govuk-body-m rpr-listing__search-criteria-container"><span class="govuk-!-font-weight-bold">{{ (filterCriteriaTextPrefix + ".labels.statuses") | t }}</span>
+  <p class="govuk-body-m rpr-listing__search-criteria-container">
+    <span class="govuk-!-font-weight-bold">{{ (filterCriteriaTextPrefix + ".labels.statuses") | t }}</span>
     {% for status in filters.statuses %}
       <strong class="govuk-tag">{{ ('app.status.' + status) | t }}</strong>
+    {% endfor %}
+  </p>
+{% endif %}
+
+{% if filters.professions | length %}
+  <p class="govuk-body-m rpr-listing__search-criteria-container">
+    <span class="govuk-!-font-weight-bold">{{ (filterCriteriaTextPrefix + ".labels.professions") | t }}</span>
+    {% for profession in filters.professions %}
+      <strong class="govuk-tag">{{ profession.name }}</strong>
     {% endfor %}
   </p>
 {% endif %}

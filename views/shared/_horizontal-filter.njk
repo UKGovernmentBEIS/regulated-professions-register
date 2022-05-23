@@ -22,6 +22,9 @@
 {% if statusesCheckboxItems %}
   {% set filterColumns = filterColumns + 1 %}
 {% endif %}
+{% if professionsCheckboxItems %}
+  {% set filterColumns = filterColumns + 1 %}
+{% endif %}
 
 {% if ((filterColumns / 4) | round(0, "ceil")) < ((filterColumns / 3) | round(0, "ceil")) %}
   {% set filterColumnClass = 'govuk-grid-column-one-quarter' %}
