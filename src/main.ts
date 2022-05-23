@@ -60,7 +60,7 @@ async function bootstrap() {
   app.use(
     session({
       store: new RedisStore({ client: redisClient }),
-      secret: process.env.APP_SECRET,
+      secret: process.env['APP_SECRET'],
       resave: false,
       saveUninitialized: false,
       cookie: {
@@ -81,6 +81,6 @@ async function bootstrap() {
     app.use(redirectToCanonicalHostname);
   }
 
-  await app.listen(process.env.PORT || 3000);
+  await app.listen(process.env['PORT'] || 3000);
 }
 bootstrap();
