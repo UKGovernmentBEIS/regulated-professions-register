@@ -51,6 +51,25 @@
       {% endif %}
       {% include "../../shared/_filter-criteria.njk" %}
 
+      {% if view === 'overview' %}
+        <div class="rpr-internal-listing__sort-container">
+          <div class="rpr-internal-listing__sort-container-right govuk-body">
+            <span class="govuk-!-font-weight-bold">{{ "professions.admin.sortBy" | t }}</span>
+            <ul class="rpr-internal-listing__sort-component">
+              <li class="rpr-internal-listing__sort-component-list-item">
+                <a class="govuk-link" href="?sortBy=name">{{ "professions.admin.sort.name" | t }}</a>
+              </li>
+              <li class="rpr-internal-listing__sort-component-list-item">
+                <a class="govuk-link" href="?sortBy=last-updated">{{ "professions.admin.sort.lastUpdated" | t }}</a>
+              </li>
+              <li class="rpr-internal-listing__sort-component-list-item">
+                <a class="govuk-link" href="?sortBy=status">{{ "professions.admin.sort.status" | t }}</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      {% endif %}
+
       <div class='rpr-internal__table-container'>
         {{ govukTable(professionsTable) }}
       </div>

@@ -260,6 +260,7 @@
     "addButtonLabel": "Add a new profession",
     "manageHeading": "Manage existing professions",
     "showFilters": "Show filters",
+    "sortBy": "Sort by:",
     "button": {
       "edit": {
         "draft": "Edit this draft",
@@ -303,6 +304,11 @@
         "label": "Regulation types",
         "hint": "Select all that apply"
       }
+    },
+    "sort": {
+      "name": "Name",
+      "status": "Published status",
+      "lastUpdated": "Last updated"
     },
     "tableHeading": {
       "profession": "Profession",

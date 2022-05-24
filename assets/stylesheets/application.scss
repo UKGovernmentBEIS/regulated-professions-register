@@ -298,6 +298,40 @@ $small-screen: 768px;
       min-height: 2.5em;
       padding: 0 0 0 50px;
     }
+
+    &__sort-container {
+      margin: 1em 0;
+    }
+
+    &__sort-container-right {
+      text-align: right;
+      padding-top: 9px;
+    }
+
+    &__sort-component {
+      display: inline-block;
+      margin: 0 0 0 0.5em;
+      padding: 0;
+    }
+
+    &__sort-component-list-item {
+      display: inline-block;
+    }
+
+    &__sort-component-list-item:after {
+      border-right: 1px solid $govuk-border-colour;
+      content: '';
+      display: inline-block;
+      height: 1.2em;
+      margin-left: 0.5em;
+      margin-right: 0.5em;
+      position: relative;
+      top: 0.2em;
+    }
+
+    &__sort-component-list-item:last-child:after {
+      border-right: 0;
+    }
   }
 
   &__details-page {
