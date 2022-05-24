@@ -17,6 +17,7 @@ import {
   RegulationType,
 } from './profession-version.entity';
 import { ProfessionToOrganisation } from './profession-to-organisation.entity';
+import { sortProfessionVersionsByLastUpdated } from './helpers/sort-profession-versions-by-last-updated.helper';
 
 @Entity({ name: 'professions' })
 export class Profession {
@@ -106,9 +107,11 @@ export class Profession {
   public static withLatestLiveVersion(
     profession: Profession,
   ): Profession | null {
-    const liveVersions = profession.versions
-      .filter((v) => v.status === ProfessionVersionStatus.Live)
-      .sort((a, b) => b.updated_at.getTime() - a.updated_at.getTime());
+    const liveVersions = sortProfessionVersionsByLastUpdated(
+      profession.versions.filter(
+        (v) => v.status === ProfessionVersionStatus.Live,
+      ),
+    );
 
     const latestVersion = liveVersions[0];
 
@@ -122,13 +125,13 @@ export class Profession {
   public static withLatestLiveOrDraftVersion(
     profession: Profession,
   ): Profession | null {
-    const draftAndLiveVersions = profession.versions
-      .filter(
+    const draftAndLiveVersions = sortProfessionVersionsByLastUpdated(
+      profession.versions.filter(
         (v) =>
           v.status === ProfessionVersionStatus.Live ||
           v.status === ProfessionVersionStatus.Draft,
-      )
-      .sort((a, b) => b.updated_at.getTime() - a.updated_at.getTime());
+      ),
+    );
 
     const latestVersion = draftAndLiveVersions[0];
 
