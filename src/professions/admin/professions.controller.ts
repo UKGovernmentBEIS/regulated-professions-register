@@ -96,7 +96,9 @@ export class ProfessionsController {
     const userOrganisation = showAllOrgs ? null : actingUser.organisation;
 
     const allProfessions = await (showAllOrgs
-      ? this.professionVersionsService.allWithLatestVersion()
+      ? this.professionVersionsService.allWithLatestVersion(
+          filterDto.sortBy || 'name',
+        )
       : this.professionVersionsService.allWithLatestVersionForOrganisation(
           userOrganisation,
         ));

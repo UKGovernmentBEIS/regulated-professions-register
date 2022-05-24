@@ -224,6 +224,77 @@ describe('ProfessionsController', () => {
         ).present('overview');
 
         expect(result).toEqual(expected);
+
+        expect(
+          professionVersionsService.allWithLatestVersion,
+        ).toHaveBeenCalledWith('name');
+        expect(
+          professionVersionsService.allWithLatestVersionForOrganisation,
+        ).not.toHaveBeenCalled();
+      });
+
+      it('returns sorted professions when sorting by last updated', async () => {
+        const result = await controller.index(request, {
+          keywords: '',
+          nations: [],
+          organisations: [],
+          industries: [],
+          regulationTypes: [],
+          sortBy: 'last-updated',
+        });
+
+        const expected = await createPresenter(
+          {
+            keywords: '',
+            nations: [],
+            organisations: [],
+            industries: [],
+            regulationTypes: [],
+          },
+          null,
+          [profession1, profession2, profession3],
+        ).present('overview');
+
+        expect(result).toEqual(expected);
+
+        expect(
+          professionVersionsService.allWithLatestVersion,
+        ).toHaveBeenCalledWith('last-updated');
+        expect(
+          professionVersionsService.allWithLatestVersionForOrganisation,
+        ).not.toHaveBeenCalled();
+      });
+
+      it('returns sorted professions when sorting by last status', async () => {
+        const result = await controller.index(request, {
+          keywords: '',
+          nations: [],
+          organisations: [],
+          industries: [],
+          regulationTypes: [],
+          sortBy: 'status',
+        });
+
+        const expected = await createPresenter(
+          {
+            keywords: '',
+            nations: [],
+            organisations: [],
+            industries: [],
+            regulationTypes: [],
+          },
+          null,
+          [profession1, profession2, profession3],
+        ).present('overview');
+
+        expect(result).toEqual(expected);
+
+        expect(
+          professionVersionsService.allWithLatestVersion,
+        ).toHaveBeenCalledWith('status');
+        expect(
+          professionVersionsService.allWithLatestVersionForOrganisation,
+        ).not.toHaveBeenCalled();
       });
 
       it('returns filtered professions when searching by keyword', async () => {
@@ -249,10 +320,12 @@ describe('ProfessionsController', () => {
 
         expect(result).toEqual(expected);
 
-        expect(professionVersionsService.allWithLatestVersion).toBeCalled();
+        expect(
+          professionVersionsService.allWithLatestVersion,
+        ).toHaveBeenCalledWith('name');
         expect(
           professionVersionsService.allWithLatestVersionForOrganisation,
-        ).not.toBeCalled();
+        ).not.toHaveBeenCalled();
       });
 
       it('returns filtered professions when searching by nation', async () => {
@@ -278,10 +351,12 @@ describe('ProfessionsController', () => {
 
         expect(result).toEqual(expected);
 
-        expect(professionVersionsService.allWithLatestVersion).toBeCalled();
+        expect(
+          professionVersionsService.allWithLatestVersion,
+        ).toHaveBeenCalledWith('name');
         expect(
           professionVersionsService.allWithLatestVersionForOrganisation,
-        ).not.toBeCalled();
+        ).not.toHaveBeenCalled();
       });
 
       it('returns filtered professions when searching by organisation', async () => {
@@ -307,10 +382,12 @@ describe('ProfessionsController', () => {
 
         expect(result).toEqual(expected);
 
-        expect(professionVersionsService.allWithLatestVersion).toBeCalled();
+        expect(
+          professionVersionsService.allWithLatestVersion,
+        ).toHaveBeenCalledWith('name');
         expect(
           professionVersionsService.allWithLatestVersionForOrganisation,
-        ).not.toBeCalled();
+        ).not.toHaveBeenCalled();
       });
 
       it('returns filtered professions when searching by industry', async () => {
@@ -336,10 +413,12 @@ describe('ProfessionsController', () => {
 
         expect(result).toEqual(expected);
 
-        expect(professionVersionsService.allWithLatestVersion).toBeCalled();
+        expect(
+          professionVersionsService.allWithLatestVersion,
+        ).toHaveBeenCalledWith('name');
         expect(
           professionVersionsService.allWithLatestVersionForOrganisation,
-        ).not.toBeCalled();
+        ).not.toHaveBeenCalled();
       });
 
       it('returns filtered professions when searching by regulation type', async () => {
@@ -364,6 +443,13 @@ describe('ProfessionsController', () => {
         ).present('overview');
 
         expect(result).toEqual(expected);
+
+        expect(
+          professionVersionsService.allWithLatestVersion,
+        ).toHaveBeenCalledWith('name');
+        expect(
+          professionVersionsService.allWithLatestVersionForOrganisation,
+        ).not.toHaveBeenCalled();
       });
     });
 
@@ -394,8 +480,10 @@ describe('ProfessionsController', () => {
 
         expect(
           professionVersionsService.allWithLatestVersionForOrganisation,
-        ).toBeCalledWith(organisation1);
-        expect(professionVersionsService.allWithLatestVersion).not.toBeCalled();
+        ).toHaveBeenCalledWith(organisation1);
+        expect(
+          professionVersionsService.allWithLatestVersion,
+        ).not.toHaveBeenCalled();
       });
 
       it('returns filtered professions when searching by keyword', async () => {
@@ -418,8 +506,10 @@ describe('ProfessionsController', () => {
 
         expect(
           professionVersionsService.allWithLatestVersionForOrganisation,
-        ).toBeCalledWith(organisation1);
-        expect(professionVersionsService.allWithLatestVersion).not.toBeCalled();
+        ).toHaveBeenCalledWith(organisation1);
+        expect(
+          professionVersionsService.allWithLatestVersion,
+        ).not.toHaveBeenCalled();
       });
 
       it('returns filtered professions when searching by nation', async () => {
@@ -442,8 +532,10 @@ describe('ProfessionsController', () => {
 
         expect(
           professionVersionsService.allWithLatestVersionForOrganisation,
-        ).toBeCalledWith(organisation1);
-        expect(professionVersionsService.allWithLatestVersion).not.toBeCalled();
+        ).toHaveBeenCalledWith(organisation1);
+        expect(
+          professionVersionsService.allWithLatestVersion,
+        ).not.toHaveBeenCalled();
       });
     });
   });
