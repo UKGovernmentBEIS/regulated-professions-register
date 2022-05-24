@@ -1,6 +1,7 @@
 import { CheckboxItems } from 'src/common/interfaces/checkbox-items.interface';
 import { Table } from '../../../common/interfaces/table';
 import { RegulationType } from '../../profession-version.entity';
+import { ProfessionSortMethod } from '../../profession-versions.service';
 import { ProfessionsPresenterView } from '../presenters/professions.presenter';
 
 export interface IndexTemplate {
@@ -22,4 +23,7 @@ export interface IndexTemplate {
   organisationsCheckboxItems: CheckboxItems[];
   industriesCheckboxItems: CheckboxItems[];
   regulationTypesCheckboxItems: CheckboxItems[];
+
+  sortMethod: ProfessionSortMethod;
+  filterQuery: string;
 }

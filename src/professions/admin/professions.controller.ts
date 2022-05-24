@@ -31,6 +31,8 @@ import { UserPermission } from '../../users/user-permission';
 import { Permissions } from '../../common/permissions.decorator';
 import { getActingUser } from '../../users/helpers/get-acting-user.helper';
 import { OrganisationVersionsService } from '../../organisations/organisation-versions.service';
+import { removeFromQueryString } from '../../helpers/remove-from-query-string.helper';
+import { getQueryString } from '../../helpers/get-query-string.helper';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
@@ -114,14 +116,18 @@ export class ProfessionsController {
       allProfessions,
     ).filter(filterInput);
 
-    return new ProfessionsPresenter(
-      filterInput,
-      userOrganisation,
-      allNations,
-      allOrganisations,
-      allIndustries,
-      filteredProfessions,
-      this.i18nService,
-    ).present(view);
+    return {
+      ...(await new ProfessionsPresenter(
+        filterInput,
+        userOrganisation,
+        allNations,
+        allOrganisations,
+        allIndustries,
+        filteredProfessions,
+        this.i18nService,
+      ).present(view)),
+      sortMethod: view === 'overview' ? filterDto.sortBy || 'name' : null,
+      filterQuery: removeFromQueryString(getQueryString(request), 'sortBy'),
+    };
   }
 }
