@@ -72,6 +72,7 @@ export class UsersController {
   @Get('/admin/users/:id')
   @Permissions(UserPermission.EditUser, UserPermission.DeleteUser)
   @Render('admin/users/show')
+  @BackLink('/admin/users')
   async show(
     @Param('id') id,
     @Req() request: RequestWithAppSession,
