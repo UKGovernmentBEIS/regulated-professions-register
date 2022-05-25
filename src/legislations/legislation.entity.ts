@@ -19,6 +19,11 @@ export class Legislation {
   @Column()
   url: string;
 
+  @Column({
+    default: 0,
+  })
+  index: number;
+
   @ManyToOne(
     () => ProfessionVersion,
     (professionVersion) => professionVersion.legislations,
