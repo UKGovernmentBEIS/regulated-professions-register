@@ -14,6 +14,7 @@ import { ProfessionVersionsService } from '../profession-versions.service';
 import { ProfessionsService } from '../professions.service';
 import LegislationDto from './dto/legislation.dto';
 import { LegislationController } from './legislation.controller';
+import * as sortLegislationsByIndexModule from '../helpers/sort-legislations-by-index.helper';
 
 jest.mock('../../users/helpers/check-can-change-profession');
 
@@ -64,6 +65,9 @@ describe(LegislationController, () => {
 
         professionsService.findWithVersions.mockResolvedValue(profession);
         professionVersionsService.findWithProfession.mockResolvedValue(version);
+        const sortLegislationsByIndexSpy = jest
+          .spyOn(sortLegislationsByIndexModule, 'sortLegislationsByIndex')
+          .mockImplementation((legislations) => legislations);
 
         const request = createDefaultMockRequest({
           user: userFactory.build(),
@@ -78,14 +82,24 @@ describe(LegislationController, () => {
             captionText: translationOf('professions.form.captions.edit'),
           }),
         );
+        expect(sortLegislationsByIndexSpy).toHaveBeenCalledWith(
+          version.legislations,
+        );
       });
 
       it('checks the user has permission to view the Profession', async () => {
         const profession = professionFactory.build({
           id: 'profession-id',
         });
+        const version = professionVersionFactory.build({
+          id: 'version-id',
+        });
 
         professionsService.findWithVersions.mockResolvedValue(profession);
+        professionVersionsService.findWithProfession.mockResolvedValue(version);
+        const sortLegislationsByIndexSpy = jest
+          .spyOn(sortLegislationsByIndexModule, 'sortLegislationsByIndex')
+          .mockImplementation((legislations) => legislations);
 
         const request = createDefaultMockRequest({
           user: userFactory.build(),
@@ -96,6 +110,9 @@ describe(LegislationController, () => {
         expect(checkCanChangeProfession).toHaveBeenCalledWith(
           request,
           profession,
+        );
+        expect(sortLegislationsByIndexSpy).toHaveBeenCalledWith(
+          version.legislations,
         );
       });
     });
@@ -123,6 +140,9 @@ describe(LegislationController, () => {
 
         professionsService.findWithVersions.mockResolvedValue(profession);
         professionVersionsService.findWithProfession.mockResolvedValue(version);
+        const sortLegislationsByIndexSpy = jest
+          .spyOn(sortLegislationsByIndexModule, 'sortLegislationsByIndex')
+          .mockImplementation((legislations) => legislations);
 
         const request = createDefaultMockRequest({
           user: userFactory.build(),
@@ -137,6 +157,9 @@ describe(LegislationController, () => {
             secondLegislation: legislation2,
             captionText: translationOf('professions.form.captions.edit'),
           }),
+        );
+        expect(sortLegislationsByIndexSpy).toHaveBeenCalledWith(
+          version.legislations,
         );
       });
     });
@@ -389,8 +412,12 @@ describe(LegislationController, () => {
       const profession = professionFactory.build({
         id: 'profession-id',
       });
+      const version = professionVersionFactory.build({
+        id: 'version-id',
+      });
 
       professionsService.findWithVersions.mockResolvedValue(profession);
+      professionVersionsService.findWithProfession.mockResolvedValue(version);
 
       const request = createDefaultMockRequest({
         user: userFactory.build(),
@@ -414,9 +441,58 @@ describe(LegislationController, () => {
         profession,
       );
     });
+
+    it('sorts any exiting legislation', async () => {
+      const legislation1 = legislationFactory.build({
+        url: 'www.gas-legislation.com',
+        name: 'Gas Safety Legislation',
+      });
+
+      const legislation2 = legislationFactory.build({
+        url: 'www.another-gas-legislation.com',
+        name: 'Another Gas Safety Legislation',
+      });
+
+      const profession = professionFactory.build({
+        id: 'profession-id',
+      });
+      const version = professionVersionFactory.build({
+        id: 'version-id',
+        legislations: [legislation1, legislation2],
+      });
+
+      professionsService.findWithVersions.mockResolvedValue(profession);
+      professionVersionsService.findWithProfession.mockResolvedValue(version);
+      const sortLegislationsByIndexSpy = jest
+        .spyOn(sortLegislationsByIndexModule, 'sortLegislationsByIndex')
+        .mockImplementation((legislations) => legislations);
+
+      const request = createDefaultMockRequest({
+        user: userFactory.build(),
+      });
+
+      const dto: LegislationDto = {
+        link: 'www.legal-legislation.com',
+        nationalLegislation: 'Legal Services Act 2008',
+      };
+
+      await controller.update(
+        response,
+        'profession-id',
+        'version-id',
+        dto,
+        request,
+      );
+
+      expect(sortLegislationsByIndexSpy).toHaveBeenCalledWith([
+        legislation1,
+        legislation2,
+      ]);
+    });
   });
 
   afterEach(() => {
     jest.resetAllMocks();
+    jest.restoreAllMocks();
   });
 });

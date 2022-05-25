@@ -25,6 +25,7 @@ import { I18nService } from 'nestjs-i18n';
 import { Profession } from '../profession.entity';
 import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
 import { checkCanChangeProfession } from '../../users/helpers/check-can-change-profession';
+import { sortLegislationsByIndex } from '../helpers/sort-legislations-by-index.helper';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
@@ -56,12 +57,11 @@ export class LegislationController {
       versionId,
     );
 
-    return this.renderForm(
-      res,
-      version.legislations[0],
-      version.legislations[1],
-      profession,
-    );
+    const legislations = version.legislations
+      ? sortLegislationsByIndex(version.legislations)
+      : [];
+
+    return this.renderForm(res, legislations[0], legislations[1], profession);
   }
 
   @Post('/:professionId/versions/:versionId/legislation')
@@ -89,8 +89,12 @@ export class LegislationController {
       versionId,
     );
 
+    const legislations = version.legislations
+      ? sortLegislationsByIndex(version.legislations)
+      : [];
+
     const updatedLegislation: Legislation = {
-      ...version.legislations[0],
+      ...legislations[0],
       ...{
         name: submittedValues.nationalLegislation,
         url: submittedValues.link,
@@ -98,7 +102,7 @@ export class LegislationController {
     };
 
     const updatedSecondLegislation: Legislation = {
-      ...version.legislations[1],
+      ...legislations[1],
       ...{
         name: submittedValues.secondNationalLegislation,
         url: submittedValues.secondLink,

@@ -22,6 +22,7 @@ import { Profession } from '../profession.entity';
 import { CheckYourAnswersController } from './check-your-answers.controller';
 import { ProfessionToOrganisation } from '../profession-to-organisation.entity';
 import { ProfessionToOrganisationsPresenter } from './presenters/profession-to-organisations.presenter';
+import * as sortLegislationsByIndexModule from '../helpers/sort-legislations-by-index.helper';
 
 jest.mock('../../users/helpers/check-can-change-profession');
 jest.mock('../../nations/presenters/nations-list.presenter');
@@ -106,6 +107,10 @@ describe('CheckYourAnswersController', () => {
         const getPublicationBlockersSpy = jest
           .spyOn(getPublicationBlockersModule, 'getPublicationBlockers')
           .mockReturnValue([]);
+        const sortLegislationsByIndexSpy = jest
+          .spyOn(sortLegislationsByIndexModule, 'sortLegislationsByIndex')
+          .mockImplementation((legislations) => legislations);
+
         const user = userFactory.build();
 
         const expectedSummaryList =
@@ -179,6 +184,9 @@ describe('CheckYourAnswersController', () => {
           professionVersionsService.findByIdWithProfession,
         ).toHaveBeenCalledWith('profession-id', 'version-id');
         expect(getPublicationBlockersSpy).toHaveBeenCalledWith(version);
+        expect(sortLegislationsByIndexSpy).toHaveBeenCalledWith(
+          version.legislations,
+        );
         expect(NationsListPresenter).toHaveBeenCalledWith(
           [Nation.find('GB-ENG')],
           i18nService,
@@ -220,6 +228,9 @@ describe('CheckYourAnswersController', () => {
               section: 'legislation',
             },
           ]);
+        const sortLegislationsByIndexSpy = jest
+          .spyOn(sortLegislationsByIndexModule, 'sortLegislationsByIndex')
+          .mockImplementation((legislations) => legislations);
 
         (
           NationsListPresenter.prototype.htmlList as jest.Mock
@@ -275,6 +286,9 @@ describe('CheckYourAnswersController', () => {
           professionVersionsService.findByIdWithProfession,
         ).toHaveBeenCalledWith('profession-id', 'version-id');
         expect(getPublicationBlockersSpy).toHaveBeenCalledWith(version);
+        expect(sortLegislationsByIndexSpy).toHaveBeenCalledWith(
+          version.legislations,
+        );
         expect(NationsListPresenter).toHaveBeenCalledWith([], i18nService);
       });
     });
