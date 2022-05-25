@@ -99,6 +99,7 @@ export class LegislationController {
         name: submittedValues.nationalLegislation,
         url: submittedValues.link,
       },
+      index: 0,
     };
 
     const updatedSecondLegislation: Legislation = {
@@ -107,6 +108,7 @@ export class LegislationController {
         name: submittedValues.secondNationalLegislation,
         url: submittedValues.secondLink,
       },
+      index: 1,
     };
 
     if (!validator.valid()) {

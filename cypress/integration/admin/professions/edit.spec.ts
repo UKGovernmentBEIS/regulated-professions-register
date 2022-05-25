@@ -769,7 +769,7 @@ describe('Editing an existing profession', () => {
       cy.translate('professions.form.captions.edit', {
         professionName: 'Profession with two tier-one Organisation',
       }).then((editCaption) => {
-        cy.get('body').contains(editCaption);
+        cy.get('body').should('contain', editCaption);
       });
       cy.get('textarea[name="regulationSummary"]')
         .clear()
@@ -780,6 +780,33 @@ describe('Editing an existing profession', () => {
       cy.checkSummaryListRowValue(
         'professions.form.label.regulatedActivities.regulationSummary',
         'Updated regulation summary',
+      );
+
+      cy.clickSummaryListRowChangeLink(
+        'professions.form.label.legislation.nationalLegislation',
+      );
+      cy.checkAccessibility();
+      cy.translate('professions.form.captions.edit', {
+        professionName: 'Profession with two tier-one Organisation',
+      }).then((editCaption) => {
+        cy.get('body').should('contain', editCaption);
+      });
+      cy.get('textarea[name="secondNationalLegislation"]').clear();
+      cy.translate('app.continue').then((buttonText) => {
+        cy.get('button').contains(buttonText).click();
+      });
+      cy.clickSummaryListRowChangeLink(
+        'professions.form.label.legislation.nationalLegislation',
+      );
+      cy.get('textarea[name="secondNationalLegislation"]').type(
+        'Secondary legislation',
+      );
+      cy.translate('app.continue').then((buttonText) => {
+        cy.get('button').contains(buttonText).click();
+      });
+      cy.checkSummaryListRowValue(
+        'professions.form.label.legislation.secondNationalLegislation',
+        'Secondary legislation',
       );
 
       cy.translate('professions.form.button.saveAsDraft').then((buttonText) => {

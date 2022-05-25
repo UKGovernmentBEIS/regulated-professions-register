@@ -200,6 +200,7 @@ describe(LegislationController, () => {
               expect.objectContaining({
                 url: 'http://www.legal-legislation.com',
                 name: 'Legal Services Act 2008',
+                index: 0,
               }),
             ],
             profession: profession,
@@ -248,10 +249,12 @@ describe(LegislationController, () => {
               expect.objectContaining({
                 url: 'http://www.legal-legislation.com',
                 name: 'Legal Services Act 2008',
+                index: 0,
               }),
               expect.objectContaining({
                 url: 'http://www.another-legal-legislation.com',
                 name: 'Another Legal Services Act 2008',
+                index: 1,
               }),
             ],
             profession: profession,
