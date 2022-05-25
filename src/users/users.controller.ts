@@ -32,6 +32,8 @@ import { getUserOrganisation } from './helpers/get-user-organisation';
 import { checkCanViewUser } from './helpers/check-can-view-user';
 import { getReferrer } from '../common/utils';
 
+export type UserEditSource = 'confirm' | 'show' | null;
+
 class UserAlreadyExistsError extends Error {}
 
 @Controller()

@@ -176,7 +176,7 @@ describe('Creating a new user', () => {
       });
       cy.checkAccessibility();
 
-      cy.get('a[href*="personal-details/edit?change=true"]:first').click();
+      cy.get('a[href*="personal-details/edit?source=confirm"]:first').click();
 
       cy.get('input[name="email"]').clear().type('name3@example.com');
       cy.translate('app.continue').then((continueLabel) => {
@@ -186,7 +186,7 @@ describe('Creating a new user', () => {
 
       cy.get('body').should('contain', 'name3@example.com');
 
-      cy.get('a[href*="role/edit?change=true"]').first().click();
+      cy.get('a[href*="role/edit?source=confirm"]').first().click();
 
       cy.get('input[name="role"][value="administrator"]').check();
 
