@@ -24,12 +24,13 @@ import { getActionTypeFromUser } from './helpers/get-action-type-from-user';
 
 import { UserMailer } from './user.mailer';
 import { BackLink } from '../common/decorators/back-link.decorator';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { RequestWithAppSession } from '../common/interfaces/request-with-app-session.interface';
 import { getActingUser } from './helpers/get-acting-user.helper';
 import { CompleteTemplate } from './interfaces/complete-template';
 import { getUserOrganisation } from './helpers/get-user-organisation';
 import { checkCanViewUser } from './helpers/check-can-view-user';
+import { getReferrer } from '../common/utils';
 
 class UserAlreadyExistsError extends Error {}
 
@@ -108,7 +109,7 @@ export class UsersController {
   @Get('/admin/users/:id/confirm')
   @Permissions(UserPermission.CreateUser, UserPermission.EditUser)
   @Render('admin/users/confirm')
-  @BackLink('/admin/users/:id/permissions/edit')
+  @BackLink((request: Request) => getReferrer(request))
   async confirm(
     @Req() request: RequestWithAppSession,
     @Param('id') id,
