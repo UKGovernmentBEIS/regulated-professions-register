@@ -1,4 +1,5 @@
 import { RegulationType } from '../../profession-version.entity';
+import { ProfessionSortMethod } from '../../profession-versions.service';
 
 export class FilterDto {
   keywords = '';
@@ -6,4 +7,5 @@ export class FilterDto {
   organisations?: string[] = [];
   industries?: string[] = [];
   regulationTypes?: RegulationType[] = [];
+  sortBy?: ProfessionSortMethod = null;
 }

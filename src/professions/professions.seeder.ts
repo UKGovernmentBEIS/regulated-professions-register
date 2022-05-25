@@ -56,6 +56,7 @@ type SeedVersion = {
   socCode: number;
   keywords: string;
   status: ProfessionVersionStatus;
+  updated_at: string;
 };
 
 @Injectable()
@@ -214,6 +215,7 @@ export class ProfessionsSeeder implements Seeder {
           profession: savedProfession,
           socCode: version.socCode,
           keywords: version.keywords,
+          updated_at: version.updated_at && new Date(version.updated_at),
         } as ProfessionVersion;
 
         return { ...existingVersion, ...newVersion };

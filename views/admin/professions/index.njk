@@ -36,7 +36,7 @@
         {% set regulationTypesCheckboxItems = false %}
       {% endif %}
       {% set filterTextPrefix = "professions.admin" %}
-      {% set emptyFiltersHref = "/admin/professions" %}
+      {% set emptyFiltersHref = "/admin/professions" + ('?sortBy=' + sortMethod) if sortMethod else '' %}
       {% include "../../shared/_horizontal-filter.njk" %}
     </div>
   </div>
@@ -50,6 +50,27 @@
         {% set hideOrganisationTags = true %}
       {% endif %}
       {% include "../../shared/_filter-criteria.njk" %}
+
+      {% if view === 'overview' %}
+        {% set sortLink = ('?' + filterQuery + '&sortBy=') if filterQuery else '?sortBy=' %}
+
+        <div class="rpr-internal-listing__sort-container">
+          <div class="rpr-internal-listing__sort-container-right govuk-body">
+            <span class="govuk-!-font-weight-bold">{{ "professions.admin.sortBy" | t }}</span>
+            <ul class="rpr-internal-listing__sort-component">
+              <li class="rpr-internal-listing__sort-component-list-item">
+                {% if sortMethod !== 'name' %}<a class="govuk-link" href="{{ sortLink + 'name' }}">{% endif %}{{ "professions.admin.sort.name" | t }}{% if sortMethod !==  'name' %}</a>{% endif %}
+              </li>
+              <li class="rpr-internal-listing__sort-component-list-item">
+                {% if sortMethod !==  'last-updated' %}<a class="govuk-link" href="{{ sortLink + 'last-updated' }}">{% endif %}{{ "professions.admin.sort.lastUpdated" | t }}{% if sortMethod !== 'last-updated' %}</a>{% endif %}
+              </li>
+              <li class="rpr-internal-listing__sort-component-list-item">
+                {% if sortMethod !==  'status' %}<a class="govuk-link" href="{{ sortLink + 'status' }}">{% endif %}{{ "professions.admin.sort.status" | t }}{% if sortMethod !==  'status' %}</a>{% endif %}
+              </li>
+            </ul>
+          </div>
+        </div>
+      {% endif %}
 
       <div class='rpr-internal__table-container'>
         {{ govukTable(professionsTable) }}

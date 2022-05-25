@@ -1,3 +1,5 @@
+import { parse } from 'date-fns';
+
 describe('Listing professions', () => {
   context('When I am logged in as editor', () => {
     beforeEach(() => {
@@ -47,6 +49,55 @@ describe('Listing professions', () => {
           'deep.equal',
           [...names].sort((a: string, b: string) => a.localeCompare(b)),
         );
+      });
+    });
+
+    it('I can sort professions by last updated', () => {
+      cy.translate('professions.admin.sort.lastUpdated').then((lastUpdated) => {
+        cy.get('a').contains(lastUpdated).click();
+        cy.checkAccessibility();
+      });
+
+      cy.get('tbody tr td:nth-child(5)').then((elements) => {
+        const dates = elements
+          .map((_, element) =>
+            parse(element.innerText, 'd MMM yyyy', new Date()),
+          )
+          .toArray();
+
+        cy.wrap(dates).should(
+          'deep.equal',
+          [...dates].sort((a: Date, b: Date) => b.getTime() - a.getTime()),
+        );
+      });
+    });
+
+    it('I can sort professions by status', () => {
+      cy.translate('professions.admin.sort.status').then((status) => {
+        cy.get('a').contains(status).click();
+        cy.checkAccessibility();
+      });
+
+      cy.get('tbody tr td:nth-child(6)').then((elements) => {
+        const statuses = elements
+          .map((_, element) => element.innerText)
+          .toArray();
+
+        cy.translate('app.status.live').then((live) => {
+          cy.translate('app.status.draft').then((draft) => {
+            cy.translate('app.status.archived').then((archived) => {
+              const statusOrder = [draft, live, archived];
+
+              cy.wrap(statuses).should(
+                'deep.equal',
+                [...statuses].sort(
+                  (a: string, b: string) =>
+                    statusOrder.indexOf(a) - statusOrder.indexOf(b),
+                ),
+              );
+            });
+          });
+        });
       });
     });
 
@@ -189,6 +240,74 @@ describe('Listing professions', () => {
             .should('be.checked');
         },
       );
+
+      cy.get('body').should('contain', 'Registered Trademark Attorney');
+      cy.get('body').should(
+        'not.contain',
+        'Secondary School Teacher in State maintained schools (England)',
+      );
+    });
+
+    it('I can filter then sort the results', () => {
+      cy.expandFilters('professions.admin');
+
+      cy.get('input[name="keywords"]').type('Attorney');
+
+      cy.clickFilterButtonAndCheckAccessibility();
+
+      cy.translate('professions.admin.sort.lastUpdated').then((lastUpdated) => {
+        cy.get('a').contains(lastUpdated).click();
+        cy.checkAccessibility();
+      });
+
+      cy.get('tbody tr td:nth-child(5)').then((elements) => {
+        const dates = elements
+          .map((_, element) =>
+            parse(element.innerText, 'd MMM yyyy', new Date()),
+          )
+          .toArray();
+
+        cy.wrap(dates).should(
+          'deep.equal',
+          [...dates].sort((a: Date, b: Date) => b.getTime() - a.getTime()),
+        );
+      });
+
+      cy.get('input[name="keywords"]').should('have.value', 'Attorney');
+
+      cy.get('body').should('contain', 'Registered Trademark Attorney');
+      cy.get('body').should(
+        'not.contain',
+        'Secondary School Teacher in State maintained schools (England)',
+      );
+    });
+
+    it('I can sort then filter the results', () => {
+      cy.translate('professions.admin.sort.lastUpdated').then((lastUpdated) => {
+        cy.get('a').contains(lastUpdated).click();
+        cy.checkAccessibility();
+      });
+
+      cy.expandFilters('professions.admin');
+
+      cy.get('input[name="keywords"]').type('Attorney');
+
+      cy.clickFilterButtonAndCheckAccessibility();
+
+      cy.get('tbody tr td:nth-child(5)').then((elements) => {
+        const dates = elements
+          .map((_, element) =>
+            parse(element.innerText, 'd MMM yyyy', new Date()),
+          )
+          .toArray();
+
+        cy.wrap(dates).should(
+          'deep.equal',
+          [...dates].sort((a: Date, b: Date) => b.getTime() - a.getTime()),
+        );
+      });
+
+      cy.get('input[name="keywords"]').should('have.value', 'Attorney');
 
       cy.get('body').should('contain', 'Registered Trademark Attorney');
       cy.get('body').should(

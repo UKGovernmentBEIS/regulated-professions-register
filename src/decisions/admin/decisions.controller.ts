@@ -26,8 +26,8 @@ import { getDecisionsYearsRange } from './helpers/get-decisions-years-range';
 import { DecisionsCsvWriter } from './helpers/decisions-csv-writer.helper';
 import { Response } from 'express';
 import { OrganisationVersionsService } from '../../organisations/organisation-versions.service';
-import { getQueryString } from './helpers/get-query-string.helper';
 import { getExportTimestamp } from './helpers/get-export-timestamp.helper';
+import { getQueryString } from '../../helpers/get-query-string.helper';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/decisions')

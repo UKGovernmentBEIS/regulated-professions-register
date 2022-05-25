@@ -101,7 +101,7 @@ describe('ProfessionsPresenter', () => {
 
       const nations = Nation.all();
 
-      const expected: IndexTemplate = {
+      const expected: Omit<IndexTemplate, 'filterQuery' | 'sortMethod'> = {
         view: 'overview',
         organisation: translationOf('app.beis'),
         professionsTable: {
@@ -154,7 +154,7 @@ describe('ProfessionsPresenter', () => {
 
       const nations = Nation.all();
 
-      const expected: IndexTemplate = {
+      const expected: Omit<IndexTemplate, 'filterQuery' | 'sortMethod'> = {
         view: 'single-organisation',
         organisation: 'Example Organisation 1',
         professionsTable: {

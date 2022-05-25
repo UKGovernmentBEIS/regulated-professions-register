@@ -152,4 +152,8 @@
       }) }}
     </div>
   </div>
+
+  {% if sortMethod %}
+    <input type="hidden" name="sortBy" value="{{ sortMethod }}" />
+  {% endif %}
 </form>
