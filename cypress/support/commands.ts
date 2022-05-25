@@ -464,3 +464,17 @@ Cypress.Commands.add(
     });
   },
 );
+
+Cypress.Commands.add('clickContinueAndCheckBackLink', () => {
+  cy.url().then((url) => {
+    cy.translate('app.continue').then((continueLabel) => {
+      cy.get('button').contains(continueLabel).click();
+      cy.translate('app.back').then((back) => {
+        cy.get('a').contains(back).click();
+        cy.url().should('equal', url);
+        cy.get('button').contains(continueLabel).click();
+      });
+    });
+  });
+  cy.checkAccessibility();
+});
