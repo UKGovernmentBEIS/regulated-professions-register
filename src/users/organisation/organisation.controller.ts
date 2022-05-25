@@ -32,6 +32,8 @@ import {
 import { getActingUser } from '../helpers/get-acting-user.helper';
 import { checkUserIsServiceOwner } from '../helpers/check-user-is-service-owner.helper';
 import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
+import { getUserEditStepBackLink } from '../helpers/get-user-edit-step-back-link.helper';
+import { UserEditSource } from '../users.controller';
 
 @Controller('/admin/users')
 @UseGuards(AuthenticationGuard)
@@ -45,15 +47,13 @@ export class OrganisationController {
   @Get(':id/organisation/edit')
   @Permissions(UserPermission.CreateUser, UserPermission.EditUser)
   @BackLink((request: Request) =>
-    request.query.change === 'true'
-      ? '/admin/users/:id/confirm'
-      : '/admin/users',
+    getUserEditStepBackLink(request.query, '/admin/users'),
   )
   async edit(
     @Req() req: RequestWithAppSession,
     @Res() res: Response,
     @Param('id') id,
-    @Query('change') change: boolean,
+    @Query('source') source: UserEditSource,
   ): Promise<void> {
     checkUserIsServiceOwner(getActingUser(req));
 
@@ -64,7 +64,7 @@ export class OrganisationController {
       user.organisation,
       user.serviceOwner,
       user.name,
-      change,
+      source,
       getActionTypeFromUser(user),
     );
   }
@@ -72,9 +72,7 @@ export class OrganisationController {
   @Post(':id/organisation')
   @Permissions(UserPermission.CreateUser, UserPermission.EditUser)
   @BackLink((request: Request) =>
-    request.body.change === 'true'
-      ? '/admin/users/:id/confirm'
-      : '/admin/users',
+    getUserEditStepBackLink(request.body, '/admin/users'),
   )
   async update(
     @Req() req: RequestWithAppSession,
@@ -110,7 +108,7 @@ export class OrganisationController {
         organisation,
         serviceOwner,
         user.name,
-        submittedValues.change,
+        submittedValues.source,
         getActionTypeFromUser(user),
         errors,
       );
@@ -124,7 +122,7 @@ export class OrganisationController {
 
     await this.usersService.save(updatedUser);
 
-    if (submittedValues.change) {
+    if (submittedValues.source) {
       return res.redirect(`/admin/users/${id}/confirm`);
     }
 
@@ -136,7 +134,7 @@ export class OrganisationController {
     organisation: Organisation | null,
     serviceOwner: boolean | null,
     name: string,
-    change: boolean,
+    source: UserEditSource,
     action: ActionType,
     errors: object | undefined = undefined,
   ): Promise<void> {
@@ -159,7 +157,7 @@ export class OrganisationController {
       organisationsSelectArgs,
       serviceOwnerRadioButtonArgs,
       name,
-      change,
+      source,
       errors,
       action,
     };
