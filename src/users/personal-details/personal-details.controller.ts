@@ -29,6 +29,8 @@ import {
 import { getActingUser } from '../helpers/get-acting-user.helper';
 import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
 import { checkCanViewUser } from '../helpers/check-can-view-user';
+import { getUserEditStepBackLink } from '../helpers/get-user-edit-step-back-link.helper';
+import { UserEditSource } from '../users.controller';
 
 @Controller('/admin/users')
 @UseGuards(AuthenticationGuard)
@@ -43,7 +45,7 @@ export class PersonalDetailsController {
   )
   async edit(
     @Param('id') id,
-    @Query('change') change: boolean,
+    @Query('source') source: UserEditSource,
     @Req() request: RequestWithAppSession,
   ): Promise<EditTemplate> {
     const user = await this.usersService.find(id);
@@ -54,7 +56,7 @@ export class PersonalDetailsController {
     return {
       ...user,
       action,
-      change,
+      source,
     };
   }
 
@@ -110,7 +112,7 @@ export class PersonalDetailsController {
 
     await this.usersService.save(updatedUser);
 
-    if (submittedValues.change) {
+    if (submittedValues.source) {
       res.redirect(`/admin/users/${id}/confirm`);
     } else {
       res.redirect(`/admin/users/${id}/role/edit`);
@@ -136,12 +138,10 @@ function getBackLink(
   request: RequestWithAppSession,
   values: Record<string, any>,
 ): string {
-  const change = values.change;
   const serviceOwner = getActingUser(request).serviceOwner;
 
-  if (change) {
-    return '/admin/users/:id/confirm';
-  } else {
-    return serviceOwner ? '/admin/users/:id/organisation/edit' : '/admin/users';
-  }
+  return getUserEditStepBackLink(
+    values,
+    serviceOwner ? '/admin/users/:id/organisation/edit' : '/admin/users',
+  );
 }

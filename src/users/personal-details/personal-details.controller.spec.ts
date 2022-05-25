@@ -61,28 +61,28 @@ describe('PersonalDetailsController', () => {
 
       const request = createDefaultMockRequest({ user: userFactory.build() });
 
-      const result = await controller.edit('user-uuid', false, request);
+      const result = await controller.edit('user-uuid', null, request);
 
       expect(result).toEqual({
         ...user,
         action: 'edit',
-        change: false,
+        source: null,
       });
 
       expect(checkCanViewUser).toHaveBeenCalledWith(request, user.organisation);
     });
 
-    it('should set change to true', async () => {
+    it('should set source to the given value', async () => {
       (getActionTypeFromUser as jest.Mock).mockReturnValue('edit');
 
       const request = createDefaultMockRequest({ user: userFactory.build() });
 
-      const result = await controller.edit('user-uuid', true, request);
+      const result = await controller.edit('user-uuid', 'show', request);
 
       expect(result).toEqual({
         ...user,
         action: 'edit',
-        change: true,
+        source: 'show',
       });
     });
 
@@ -90,7 +90,7 @@ describe('PersonalDetailsController', () => {
       (getActionTypeFromUser as jest.Mock).mockReturnValue('edit');
       const request = createDefaultMockRequest({ user: userFactory.build() });
 
-      await controller.edit('user-uuid', true, request);
+      await controller.edit('user-uuid', null, request);
 
       expect(checkCanViewUser).toHaveBeenCalledWith(request, user.organisation);
     });
