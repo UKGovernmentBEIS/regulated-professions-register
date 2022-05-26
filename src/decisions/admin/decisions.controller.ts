@@ -26,8 +26,10 @@ import { getDecisionsYearsRange } from './helpers/get-decisions-years-range';
 import { DecisionsCsvWriter } from './helpers/decisions-csv-writer.helper';
 import { Response } from 'express';
 import { OrganisationVersionsService } from '../../organisations/organisation-versions.service';
+import { ProfessionVersionsService } from '../../professions/profession-versions.service';
 import { getExportTimestamp } from './helpers/get-export-timestamp.helper';
 import { getQueryString } from '../../helpers/get-query-string.helper';
+import { Profession } from '../../professions/profession.entity';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/decisions')
@@ -35,6 +37,7 @@ export class DecisionsController {
   constructor(
     private readonly decisionDatasetsService: DecisionDatasetsService,
     private readonly organisationVersionsService: OrganisationVersionsService,
+    private readonly professionVersionsService: ProfessionVersionsService,
     private readonly i18nService: I18nService,
   ) {}
 
@@ -62,9 +65,16 @@ export class DecisionsController {
 
     const allOrganisations = await this.organisationVersionsService.allLive();
 
+    const allProfessions: Profession[] = userOrganisation
+      ? await this.professionVersionsService.allWithLatestVersionForOrganisation(
+          actingUser.organisation,
+        )
+      : [];
+
     const filterInput = createFilterInput({
       ...filter,
       allOrganisations,
+      allProfessions,
     });
 
     const allDecisionDatasets = await (showAllOrgs
@@ -84,6 +94,7 @@ export class DecisionsController {
         startYear,
         endYear,
         allDecisionDatasets,
+        allProfessions,
         this.i18nService,
       ).present(view),
       filterQuery: getQueryString(request),
@@ -103,10 +114,19 @@ export class DecisionsController {
 
     const userOrganisation = showAllOrgs ? null : actingUser.organisation;
     const allOrganisations = await this.organisationVersionsService.allLive();
+    let allProfessions: Profession[] = [];
+
+    if (userOrganisation) {
+      allProfessions =
+        await this.professionVersionsService.allWithLatestVersionForOrganisation(
+          userOrganisation,
+        );
+    }
 
     const filterInput = createFilterInput({
       ...filter,
       allOrganisations,
+      allProfessions,
     });
 
     const allDecisionDatasets = await (showAllOrgs

@@ -1,5 +1,6 @@
 import { CheckboxItems } from '../../../common/interfaces/checkbox-items.interface';
 import { Table } from '../../../common/interfaces/table';
+import { Profession } from '../../../professions/profession.entity';
 import { DecisionDatasetsPresenterView } from '../presenters/decision-datasets.presenter';
 
 export interface IndexTemplate {
@@ -14,11 +15,12 @@ export interface IndexTemplate {
     organisations: string[];
     years: number[];
     statuses: string[];
+    professions: Profession[];
   };
 
   organisationsCheckboxItems: CheckboxItems[];
   yearsCheckboxItems: CheckboxItems[];
   statusesCheckboxItems: CheckboxItems[];
-
+  professionsCheckboxItems: CheckboxItems[];
   filterQuery: string;
 }
