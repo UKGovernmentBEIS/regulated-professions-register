@@ -17,6 +17,12 @@ import { ProfessionsService } from '../professions.service';
 import { translationOf } from '../../testutils/translation-of';
 import { createDefaultMockRequest } from '../../testutils/factories/create-default-mock-request';
 import { checkCanChangeProfession } from '../../users/helpers/check-can-change-profession';
+import { RegistrationDto } from './dto/registration.dto';
+import {
+  MAX_MULTI_LINE_LENGTH,
+  MAX_URL_LENGTH,
+} from '../../helpers/input-limits';
+import { stringOfLength } from '../../testutils/string-of-length';
 
 jest.mock('../../users/helpers/check-can-change-profession');
 
@@ -216,9 +222,9 @@ describe(RegistrationController, () => {
     });
 
     describe('when required parameters are not entered', () => {
-      it('does not update the profession, and re-renders the regulatory body form page with errors', async () => {
-        const registrationDtoWithInvalidURL = {
-          mandatoryRegistration: undefined,
+      it('does not update the Profession, and re-renders the regulatory body form page with errors', async () => {
+        const registrationDtoWithInvalidURL: RegistrationDto = {
+          registrationRequirements: '',
           registrationUrl: 'not a url',
         };
         const request = createDefaultMockRequest({
@@ -241,6 +247,44 @@ describe(RegistrationController, () => {
             errors: {
               registrationUrl: {
                 text: 'professions.form.errors.registrationUrl.invalid',
+              },
+            },
+          }),
+        );
+      });
+    });
+
+    describe('when the entries are too long', () => {
+      it('does not update the Profession, and re-renders the regulatory body form page with errors', async () => {
+        const registrationDto: RegistrationDto = {
+          registrationRequirements: stringOfLength(MAX_MULTI_LINE_LENGTH + 1),
+          registrationUrl: `http://example.com/?data=${stringOfLength(
+            MAX_URL_LENGTH + 1,
+          )}`,
+        };
+        const request = createDefaultMockRequest({
+          user: userFactory.build(),
+        });
+
+        await controller.update(
+          response,
+          'profession-id',
+          'version-id',
+          registrationDto,
+          request,
+        );
+
+        expect(professionVersionsService.save).not.toHaveBeenCalled();
+
+        expect(response.render).toHaveBeenCalledWith(
+          'admin/professions/registration',
+          expect.objectContaining({
+            errors: {
+              registrationRequirements: {
+                text: 'professions.form.errors.registrationRequirements.long',
+              },
+              registrationUrl: {
+                text: 'professions.form.errors.registrationUrl.long',
               },
             },
           }),

@@ -15,6 +15,11 @@ import { ProfessionsService } from '../professions.service';
 import LegislationDto from './dto/legislation.dto';
 import { LegislationController } from './legislation.controller';
 import * as sortLegislationsByIndexModule from '../helpers/sort-legislations-by-index.helper';
+import { stringOfLength } from '../../testutils/string-of-length';
+import {
+  MAX_MULTI_LINE_LENGTH,
+  MAX_URL_LENGTH,
+} from '../../helpers/input-limits';
 
 jest.mock('../../users/helpers/check-can-change-profession');
 
@@ -329,8 +334,8 @@ describe(LegislationController, () => {
           });
 
           const dto: LegislationDto = {
-            link: undefined,
-            nationalLegislation: undefined,
+            link: '',
+            nationalLegislation: '',
           };
 
           professionsService.findWithVersions.mockResolvedValue(profession);
@@ -403,6 +408,56 @@ describe(LegislationController, () => {
               errors: {
                 link: {
                   text: 'professions.form.errors.legislation.link.invalid',
+                },
+              },
+            }),
+          );
+        });
+      });
+
+      describe('when the entries are too long', () => {
+        it('renders the edit page with errors and does not update the Profession', async () => {
+          const profession = professionFactory.build({ id: 'profession-id' });
+          const version = professionVersionFactory.build({
+            id: 'version-id',
+            profession: profession,
+          });
+
+          const dto: LegislationDto = {
+            link: `http://example.com/?data=${stringOfLength(
+              MAX_URL_LENGTH + 1,
+            )}`,
+            nationalLegislation: stringOfLength(MAX_MULTI_LINE_LENGTH + 1),
+          };
+
+          professionsService.findWithVersions.mockResolvedValue(profession);
+          professionVersionsService.findWithProfession.mockResolvedValue(
+            version,
+          );
+
+          const request = createDefaultMockRequest({
+            user: userFactory.build(),
+          });
+
+          await controller.update(
+            response,
+            'profession-id',
+            'version-id',
+            dto,
+            request,
+          );
+
+          expect(professionVersionsService.save).not.toHaveBeenCalled();
+
+          expect(response.render).toHaveBeenCalledWith(
+            'admin/professions/legislation',
+            expect.objectContaining({
+              errors: {
+                nationalLegislation: {
+                  text: 'professions.form.errors.legislation.nationalLegislation.long',
+                },
+                link: {
+                  text: 'professions.form.errors.legislation.link.long',
                 },
               },
             }),
