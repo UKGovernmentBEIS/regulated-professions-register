@@ -179,10 +179,12 @@ export class ProfessionsSeeder implements Seeder {
           );
         }
 
+        // We use the index -1 to get a legislation seeded by our legislation
+        // seeder that is unattached to a profession version
         let legislations: Legislation[] =
           version.legislations &&
           (await this.legislationsRepository.find({
-            where: { name: In(version.legislations) },
+            where: { name: In(version.legislations), index: -1 },
           }));
 
         if (legislations && legislations.length > 0) {
@@ -191,7 +193,7 @@ export class ProfessionsSeeder implements Seeder {
           // each time. We need to fix this, but in the interests of getting
           // seed data in, we'll just create a new entry each time
           const newLegislations = legislations.map(
-            (leg) => new Legislation(leg.name, leg.url),
+            (leg, index) => new Legislation(leg.name, leg.url, index),
           );
           legislations = await this.legislationsRepository.save(
             newLegislations,

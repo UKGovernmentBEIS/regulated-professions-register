@@ -24,7 +24,7 @@ export class LegislationsSeeder implements Seeder {
 
   async seed(): Promise<any> {
     const legislations = this.data.map((legislation) => {
-      return new Legislation(legislation.name, legislation.url);
+      return new Legislation(legislation.name, legislation.url, -1);
     });
 
     return this.legislationsRepository.save(legislations);

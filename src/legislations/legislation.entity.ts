@@ -43,8 +43,9 @@ export class Legislation {
   })
   updated_at: Date;
 
-  constructor(name?: string, url?: string) {
+  constructor(name?: string, url?: string, index?: number) {
     this.name = name || '';
     this.url = url || '';
+    this.index = index || 0;
   }
 }
