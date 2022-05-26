@@ -28,6 +28,8 @@ import qualificationFactory from '../testutils/factories/qualification';
 import industryFactory from '../testutils/factories/industry';
 import organisationFactory from '../testutils/factories/organisation';
 import { FilterInput } from '../common/interfaces/filter-input.interface';
+import * as sortProfessionVersionsByLastUpdatedModule from './helpers/sort-profession-versions-by-last-updated.helper';
+import * as sortProfessionVersionsByStatusModule from './helpers/sort-profession-versions-by-status.helper';
 
 describe('ProfessionVersionsService', () => {
   let service: ProfessionVersionsService;
@@ -534,59 +536,193 @@ describe('ProfessionVersionsService', () => {
   });
 
   describe('allWithLatestVersion', () => {
-    it('gets all Professions and their latest draft or live version', async () => {
-      const versions = professionVersionFactory.buildList(5);
-      const queryBuilder = createMock<SelectQueryBuilder<ProfessionVersion>>({
-        leftJoinAndSelect: () => queryBuilder,
-        where: () => queryBuilder,
-        distinctOn: () => queryBuilder,
-        orderBy: () => queryBuilder,
-        getMany: async () => versions,
+    describe('when called with "name"', () => {
+      it('gets all Professions and their latest draft or live version sorted by name', async () => {
+        const versions = professionVersionFactory.buildList(5);
+        const queryBuilder = createMock<SelectQueryBuilder<ProfessionVersion>>({
+          leftJoinAndSelect: () => queryBuilder,
+          where: () => queryBuilder,
+          distinctOn: () => queryBuilder,
+          orderBy: () => queryBuilder,
+          getMany: async () => versions,
+        });
+
+        jest
+          .spyOn(repo, 'createQueryBuilder')
+          .mockImplementation(() => queryBuilder);
+
+        const result = await service.allWithLatestVersion('name');
+
+        const expectedProfessions = versions.map((version) =>
+          Profession.withVersion(version.profession, version),
+        );
+
+        expect(result).toEqual(expectedProfessions);
+
+        expect(queryBuilder.distinctOn).toHaveBeenCalledWith([
+          'professionVersion.profession',
+          'organisation.name',
+          'profession.name',
+        ]);
+
+        expect(queryBuilder).toHaveJoined([
+          'professionVersion.profession',
+          'profession.professionToOrganisations',
+          'professionToOrganisations.organisation',
+          'professionVersion.industries',
+          'professionVersion.user',
+          'professionVersion.qualification',
+          'professionVersion.legislations',
+        ]);
+
+        expect(queryBuilder.where).toHaveBeenCalledWith(
+          'professionVersion.status IN(:...status)',
+          {
+            status: [
+              ProfessionVersionStatus.Live,
+              ProfessionVersionStatus.Draft,
+              ProfessionVersionStatus.Archived,
+            ],
+          },
+        );
+
+        expect(queryBuilder.orderBy).toHaveBeenCalledWith(
+          'profession.name, organisation.name, professionVersion.profession, professionVersion.created_at',
+          'DESC',
+        );
       });
+    });
 
-      jest
-        .spyOn(repo, 'createQueryBuilder')
-        .mockImplementation(() => queryBuilder);
+    describe('when called with "last-updated"', () => {
+      it('gets all Professions and their latest draft or live version sorted by their last updated time', async () => {
+        const versions = professionVersionFactory.buildList(5);
+        const queryBuilder = createMock<SelectQueryBuilder<ProfessionVersion>>({
+          leftJoinAndSelect: () => queryBuilder,
+          where: () => queryBuilder,
+          distinctOn: () => queryBuilder,
+          orderBy: () => queryBuilder,
+          getMany: async () => versions,
+        });
 
-      const result = await service.allWithLatestVersion();
+        jest
+          .spyOn(repo, 'createQueryBuilder')
+          .mockImplementation(() => queryBuilder);
 
-      const expectedProfessions = versions.map((version) =>
-        Profession.withVersion(version.profession, version),
-      );
+        const sortSpy = jest
+          .spyOn(
+            sortProfessionVersionsByLastUpdatedModule,
+            'sortProfessionVersionsByLastUpdated',
+          )
+          .mockReturnValue(versions);
 
-      expect(result).toEqual(expectedProfessions);
+        const result = await service.allWithLatestVersion('last-updated');
 
-      expect(queryBuilder.distinctOn).toHaveBeenCalledWith([
-        'professionVersion.profession',
-        'organisation.name',
-        'profession.name',
-      ]);
+        const expectedProfessions = versions.map((version) =>
+          Profession.withVersion(version.profession, version),
+        );
 
-      expect(queryBuilder).toHaveJoined([
-        'professionVersion.profession',
-        'profession.professionToOrganisations',
-        'professionToOrganisations.organisation',
-        'professionVersion.industries',
-        'professionVersion.user',
-        'professionVersion.qualification',
-        'professionVersion.legislations',
-      ]);
+        expect(result).toEqual(expectedProfessions);
 
-      expect(queryBuilder.where).toHaveBeenCalledWith(
-        'professionVersion.status IN(:...status)',
-        {
-          status: [
-            ProfessionVersionStatus.Live,
-            ProfessionVersionStatus.Draft,
-            ProfessionVersionStatus.Archived,
-          ],
-        },
-      );
+        expect(queryBuilder.distinctOn).toHaveBeenCalledWith([
+          'professionVersion.profession',
+          'organisation.name',
+          'profession.name',
+        ]);
 
-      expect(queryBuilder.orderBy).toHaveBeenCalledWith(
-        'profession.name, organisation.name, professionVersion.profession, professionVersion.created_at',
-        'DESC',
-      );
+        expect(queryBuilder).toHaveJoined([
+          'professionVersion.profession',
+          'profession.professionToOrganisations',
+          'professionToOrganisations.organisation',
+          'professionVersion.industries',
+          'professionVersion.user',
+          'professionVersion.qualification',
+          'professionVersion.legislations',
+        ]);
+
+        expect(queryBuilder.where).toHaveBeenCalledWith(
+          'professionVersion.status IN(:...status)',
+          {
+            status: [
+              ProfessionVersionStatus.Live,
+              ProfessionVersionStatus.Draft,
+              ProfessionVersionStatus.Archived,
+            ],
+          },
+        );
+
+        expect(queryBuilder.orderBy).toHaveBeenCalledWith(
+          'profession.name, organisation.name, professionVersion.profession, professionVersion.created_at',
+          'DESC',
+        );
+
+        expect(sortSpy).toHaveBeenCalledWith(versions);
+      });
+    });
+
+    describe('when called with "status"', () => {
+      it('gets all Professions and their latest draft or live version sorted by their status', async () => {
+        const versions = professionVersionFactory.buildList(5);
+        const queryBuilder = createMock<SelectQueryBuilder<ProfessionVersion>>({
+          leftJoinAndSelect: () => queryBuilder,
+          where: () => queryBuilder,
+          distinctOn: () => queryBuilder,
+          orderBy: () => queryBuilder,
+          getMany: async () => versions,
+        });
+
+        jest
+          .spyOn(repo, 'createQueryBuilder')
+          .mockImplementation(() => queryBuilder);
+
+        const sortSpy = jest
+          .spyOn(
+            sortProfessionVersionsByStatusModule,
+            'sortProfessionVersionsByStatus',
+          )
+          .mockReturnValue(versions);
+
+        const result = await service.allWithLatestVersion('status');
+
+        const expectedProfessions = versions.map((version) =>
+          Profession.withVersion(version.profession, version),
+        );
+
+        expect(result).toEqual(expectedProfessions);
+
+        expect(queryBuilder.distinctOn).toHaveBeenCalledWith([
+          'professionVersion.profession',
+          'organisation.name',
+          'profession.name',
+        ]);
+
+        expect(queryBuilder).toHaveJoined([
+          'professionVersion.profession',
+          'profession.professionToOrganisations',
+          'professionToOrganisations.organisation',
+          'professionVersion.industries',
+          'professionVersion.user',
+          'professionVersion.qualification',
+          'professionVersion.legislations',
+        ]);
+
+        expect(queryBuilder.where).toHaveBeenCalledWith(
+          'professionVersion.status IN(:...status)',
+          {
+            status: [
+              ProfessionVersionStatus.Live,
+              ProfessionVersionStatus.Draft,
+              ProfessionVersionStatus.Archived,
+            ],
+          },
+        );
+
+        expect(queryBuilder.orderBy).toHaveBeenCalledWith(
+          'profession.name, organisation.name, professionVersion.profession, professionVersion.created_at',
+          'DESC',
+        );
+
+        expect(sortSpy).toHaveBeenCalledWith(versions);
+      });
     });
   });
 

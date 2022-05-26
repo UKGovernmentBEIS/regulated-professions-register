@@ -6,6 +6,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [unreleased]
 
+### Added
+
+- Central users can sort the professions listing
+
+### Changed
+
+- Fix already-published professions and regulatory authorities being referred to as "new" when an updated version is published
+- When showing a list of reasons why a profession cannot be published, show any not-published associated regulators first
+- Fix back links around creating and editing users
+- Correct text on error pages
+- Fix legislations on professions with multiple legislations sometimes being displayed out of order
+
 ## [release-023] - 2022-05-19
 
 ### Added
@@ -21,7 +33,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Use production session store
 - Regulators for professions now show on new lines if there is more than one in the admin professions view
 - In public search, show drop shadows within scrollable filter selections to indicate further content
-- Fix already-published professions and regulatory authorities being referred to as "new" when an updated version is published
 
 ## [release-022] - 2022-05-17
 

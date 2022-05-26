@@ -22,6 +22,9 @@ import { getActingUser } from '../../users/helpers/get-acting-user.helper';
 import { createDefaultMockRequest } from '../../testutils/factories/create-default-mock-request';
 import { OrganisationVersionsService } from '../../organisations/organisation-versions.service';
 import { RegulationType } from '../profession-version.entity';
+import * as removeFromQueryStringModule from '../../helpers/remove-from-query-string.helper';
+import * as getQueryStringModule from '../../helpers/get-query-string.helper';
+import { IndexTemplate } from './interfaces/index-template.interface';
 
 jest.mock('../../users/helpers/get-acting-user.helper');
 
@@ -209,24 +212,135 @@ describe('ProfessionsController', () => {
       });
 
       it('returns template params poulated to show an overview of professions', async () => {
+        jest
+          .spyOn(getQueryStringModule, 'getQueryString')
+          .mockReturnValue('mock-query-string');
+        jest
+          .spyOn(removeFromQueryStringModule, 'removeFromQueryString')
+          .mockReturnValue('mock-query-string-with-removal');
+
         const result = await controller.index(request);
 
-        const expected = await createPresenter(
-          {
-            keywords: '',
-            nations: [],
-            organisations: [],
-            industries: [],
-            regulationTypes: [],
-          },
-          null,
-          [profession1, profession2, profession3],
-        ).present('overview');
+        const expected: IndexTemplate = {
+          ...(await createPresenter(
+            {
+              keywords: '',
+              nations: [],
+              organisations: [],
+              industries: [],
+              regulationTypes: [],
+            },
+            null,
+            [profession1, profession2, profession3],
+          ).present('overview')),
+          sortMethod: 'name',
+          filterQuery: 'mock-query-string-with-removal',
+        };
 
         expect(result).toEqual(expected);
+
+        expect(
+          professionVersionsService.allWithLatestVersion,
+        ).toHaveBeenCalledWith('name');
+        expect(
+          professionVersionsService.allWithLatestVersionForOrganisation,
+        ).not.toHaveBeenCalled();
+      });
+
+      it('returns sorted professions when sorting by last updated', async () => {
+        jest
+          .spyOn(getQueryStringModule, 'getQueryString')
+          .mockReturnValue('mock-query-string');
+        jest
+          .spyOn(removeFromQueryStringModule, 'removeFromQueryString')
+          .mockReturnValue('mock-query-string-with-removal');
+
+        const result = await controller.index(request, {
+          keywords: '',
+          nations: [],
+          organisations: [],
+          industries: [],
+          regulationTypes: [],
+          sortBy: 'last-updated',
+        });
+
+        const expected: IndexTemplate = {
+          ...(await createPresenter(
+            {
+              keywords: '',
+              nations: [],
+              organisations: [],
+              industries: [],
+              regulationTypes: [],
+            },
+            null,
+            [profession1, profession2, profession3],
+          ).present('overview')),
+          sortMethod: 'last-updated',
+          filterQuery: 'mock-query-string-with-removal',
+        };
+
+        expect(result).toEqual(expected);
+
+        expect(
+          professionVersionsService.allWithLatestVersion,
+        ).toHaveBeenCalledWith('last-updated');
+        expect(
+          professionVersionsService.allWithLatestVersionForOrganisation,
+        ).not.toHaveBeenCalled();
+      });
+
+      it('returns sorted professions when sorting by status', async () => {
+        jest
+          .spyOn(getQueryStringModule, 'getQueryString')
+          .mockReturnValue('mock-query-string');
+        jest
+          .spyOn(removeFromQueryStringModule, 'removeFromQueryString')
+          .mockReturnValue('mock-query-string-with-removal');
+
+        const result = await controller.index(request, {
+          keywords: '',
+          nations: [],
+          organisations: [],
+          industries: [],
+          regulationTypes: [],
+          sortBy: 'status',
+        });
+
+        const expected: IndexTemplate = {
+          ...(await createPresenter(
+            {
+              keywords: '',
+              nations: [],
+              organisations: [],
+              industries: [],
+              regulationTypes: [],
+            },
+            null,
+            [profession1, profession2, profession3],
+          ).present('overview')),
+          sortMethod: 'status',
+          filterQuery: 'mock-query-string-with-removal',
+        };
+
+        expect(result).toEqual(expected);
+
+        expect(
+          professionVersionsService.allWithLatestVersion,
+        ).toHaveBeenCalledWith('status');
+        expect(
+          professionVersionsService.allWithLatestVersionForOrganisation,
+        ).not.toHaveBeenCalled();
       });
 
       it('returns filtered professions when searching by keyword', async () => {
+        jest
+          .spyOn(getQueryStringModule, 'getQueryString')
+          .mockReturnValue('mock-query-string');
+        jest
+          .spyOn(removeFromQueryStringModule, 'removeFromQueryString')
+          .mockReturnValue('mock-query-string-with-removal');
+
         const result = await controller.index(request, {
           keywords: 'MARK',
           nations: [],
@@ -235,27 +349,40 @@ describe('ProfessionsController', () => {
           regulationTypes: [],
         });
 
-        const expected = await createPresenter(
-          {
-            keywords: 'MARK',
-            nations: [],
-            organisations: [],
-            industries: [],
-            regulationTypes: [],
-          },
-          null,
-          [profession3],
-        ).present('overview');
+        const expected: IndexTemplate = {
+          ...(await createPresenter(
+            {
+              keywords: 'MARK',
+              nations: [],
+              organisations: [],
+              industries: [],
+              regulationTypes: [],
+            },
+            null,
+            [profession3],
+          ).present('overview')),
+          sortMethod: 'name',
+          filterQuery: 'mock-query-string-with-removal',
+        };
 
         expect(result).toEqual(expected);
 
-        expect(professionVersionsService.allWithLatestVersion).toBeCalled();
+        expect(
+          professionVersionsService.allWithLatestVersion,
+        ).toHaveBeenCalledWith('name');
         expect(
           professionVersionsService.allWithLatestVersionForOrganisation,
-        ).not.toBeCalled();
+        ).not.toHaveBeenCalled();
       });
 
       it('returns filtered professions when searching by nation', async () => {
+        jest
+          .spyOn(getQueryStringModule, 'getQueryString')
+          .mockReturnValue('mock-query-string');
+        jest
+          .spyOn(removeFromQueryStringModule, 'removeFromQueryString')
+          .mockReturnValue('mock-query-string-with-removal');
+
         const result = await controller.index(request, {
           keywords: '',
           nations: ['GB-ENG'],
@@ -264,27 +391,40 @@ describe('ProfessionsController', () => {
           regulationTypes: [],
         });
 
-        const expected = await createPresenter(
-          {
-            keywords: '',
-            nations: [Nation.find('GB-ENG')],
-            organisations: [],
-            industries: [],
-            regulationTypes: [],
-          },
-          null,
-          [profession1],
-        ).present('overview');
+        const expected: IndexTemplate = {
+          ...(await createPresenter(
+            {
+              keywords: '',
+              nations: [Nation.find('GB-ENG')],
+              organisations: [],
+              industries: [],
+              regulationTypes: [],
+            },
+            null,
+            [profession1],
+          ).present('overview')),
+          sortMethod: 'name',
+          filterQuery: 'mock-query-string-with-removal',
+        };
 
         expect(result).toEqual(expected);
 
-        expect(professionVersionsService.allWithLatestVersion).toBeCalled();
+        expect(
+          professionVersionsService.allWithLatestVersion,
+        ).toHaveBeenCalledWith('name');
         expect(
           professionVersionsService.allWithLatestVersionForOrganisation,
-        ).not.toBeCalled();
+        ).not.toHaveBeenCalled();
       });
 
       it('returns filtered professions when searching by organisation', async () => {
+        jest
+          .spyOn(getQueryStringModule, 'getQueryString')
+          .mockReturnValue('mock-query-string');
+        jest
+          .spyOn(removeFromQueryStringModule, 'removeFromQueryString')
+          .mockReturnValue('mock-query-string-with-removal');
+
         const result = await controller.index(request, {
           keywords: '',
           nations: [],
@@ -293,27 +433,40 @@ describe('ProfessionsController', () => {
           regulationTypes: [],
         });
 
-        const expected = await createPresenter(
-          {
-            keywords: '',
-            nations: [],
-            organisations: [organisation2],
-            industries: [],
-            regulationTypes: [],
-          },
-          null,
-          [profession3],
-        ).present('overview');
+        const expected: IndexTemplate = {
+          ...(await createPresenter(
+            {
+              keywords: '',
+              nations: [],
+              organisations: [organisation2],
+              industries: [],
+              regulationTypes: [],
+            },
+            null,
+            [profession3],
+          ).present('overview')),
+          sortMethod: 'name',
+          filterQuery: 'mock-query-string-with-removal',
+        };
 
         expect(result).toEqual(expected);
 
-        expect(professionVersionsService.allWithLatestVersion).toBeCalled();
+        expect(
+          professionVersionsService.allWithLatestVersion,
+        ).toHaveBeenCalledWith('name');
         expect(
           professionVersionsService.allWithLatestVersionForOrganisation,
-        ).not.toBeCalled();
+        ).not.toHaveBeenCalled();
       });
 
       it('returns filtered professions when searching by industry', async () => {
+        jest
+          .spyOn(getQueryStringModule, 'getQueryString')
+          .mockReturnValue('mock-query-string');
+        jest
+          .spyOn(removeFromQueryStringModule, 'removeFromQueryString')
+          .mockReturnValue('mock-query-string-with-removal');
+
         const result = await controller.index(request, {
           keywords: '',
           nations: [],
@@ -322,27 +475,40 @@ describe('ProfessionsController', () => {
           regulationTypes: [],
         });
 
-        const expected = await createPresenter(
-          {
-            keywords: '',
-            nations: [],
-            organisations: [],
-            industries: [industry2],
-            regulationTypes: [],
-          },
-          null,
-          [profession3],
-        ).present('overview');
+        const expected: IndexTemplate = {
+          ...(await createPresenter(
+            {
+              keywords: '',
+              nations: [],
+              organisations: [],
+              industries: [industry2],
+              regulationTypes: [],
+            },
+            null,
+            [profession3],
+          ).present('overview')),
+          sortMethod: 'name',
+          filterQuery: 'mock-query-string-with-removal',
+        };
 
         expect(result).toEqual(expected);
 
-        expect(professionVersionsService.allWithLatestVersion).toBeCalled();
+        expect(
+          professionVersionsService.allWithLatestVersion,
+        ).toHaveBeenCalledWith('name');
         expect(
           professionVersionsService.allWithLatestVersionForOrganisation,
-        ).not.toBeCalled();
+        ).not.toHaveBeenCalled();
       });
 
       it('returns filtered professions when searching by regulation type', async () => {
+        jest
+          .spyOn(getQueryStringModule, 'getQueryString')
+          .mockReturnValue('mock-query-string');
+        jest
+          .spyOn(removeFromQueryStringModule, 'removeFromQueryString')
+          .mockReturnValue('mock-query-string-with-removal');
+
         const result = await controller.index(request, {
           keywords: '',
           nations: [],
@@ -351,19 +517,30 @@ describe('ProfessionsController', () => {
           regulationTypes: [RegulationType.Accreditation],
         });
 
-        const expected = await createPresenter(
-          {
-            keywords: '',
-            nations: [],
-            organisations: [],
-            industries: [],
-            regulationTypes: [RegulationType.Accreditation],
-          },
-          null,
-          [profession1],
-        ).present('overview');
+        const expected: IndexTemplate = {
+          ...(await createPresenter(
+            {
+              keywords: '',
+              nations: [],
+              organisations: [],
+              industries: [],
+              regulationTypes: [RegulationType.Accreditation],
+            },
+            null,
+            [profession1],
+          ).present('overview')),
+          sortMethod: 'name',
+          filterQuery: 'mock-query-string-with-removal',
+        };
 
         expect(result).toEqual(expected);
+
+        expect(
+          professionVersionsService.allWithLatestVersion,
+        ).toHaveBeenCalledWith('name');
+        expect(
+          professionVersionsService.allWithLatestVersionForOrganisation,
+        ).not.toHaveBeenCalled();
       });
     });
 
@@ -378,74 +555,118 @@ describe('ProfessionsController', () => {
       });
 
       it('returns template params poulated to show professions for a single organisation', async () => {
+        jest
+          .spyOn(getQueryStringModule, 'getQueryString')
+          .mockReturnValue('mock-query-string');
+        jest
+          .spyOn(removeFromQueryStringModule, 'removeFromQueryString')
+          .mockReturnValue('mock-query-string-with-removal');
+
         const result = await controller.index(request);
 
-        const expected = await createPresenter(
-          {
-            keywords: '',
-            nations: [],
-            organisations: [],
-          },
-          organisation1,
-          [profession1, profession2],
-        ).present('single-organisation');
+        const expected: IndexTemplate = {
+          ...(await createPresenter(
+            {
+              keywords: '',
+              nations: [],
+              organisations: [],
+            },
+            organisation1,
+            [profession1, profession2],
+          ).present('single-organisation')),
+          sortMethod: null,
+          filterQuery: 'mock-query-string-with-removal',
+        };
 
         expect(result).toEqual(expected);
 
         expect(
           professionVersionsService.allWithLatestVersionForOrganisation,
-        ).toBeCalledWith(organisation1);
-        expect(professionVersionsService.allWithLatestVersion).not.toBeCalled();
+        ).toHaveBeenCalledWith(organisation1);
+        expect(
+          professionVersionsService.allWithLatestVersion,
+        ).not.toHaveBeenCalled();
       });
 
       it('returns filtered professions when searching by keyword', async () => {
+        jest
+          .spyOn(getQueryStringModule, 'getQueryString')
+          .mockReturnValue('mock-query-string');
+        jest
+          .spyOn(removeFromQueryStringModule, 'removeFromQueryString')
+          .mockReturnValue('mock-query-string-with-removal');
+
         const result = await controller.index(request, {
           keywords: 'primary',
           nations: [],
         });
 
-        const expected = await createPresenter(
-          {
-            keywords: 'primary',
-            nations: [],
-            organisations: [],
-          },
-          organisation1,
-          [profession1],
-        ).present('single-organisation');
+        const expected: IndexTemplate = {
+          ...(await createPresenter(
+            {
+              keywords: 'primary',
+              nations: [],
+              organisations: [],
+            },
+            organisation1,
+            [profession1],
+          ).present('single-organisation')),
+          sortMethod: null,
+          filterQuery: 'mock-query-string-with-removal',
+        };
 
         expect(result).toEqual(expected);
 
         expect(
           professionVersionsService.allWithLatestVersionForOrganisation,
-        ).toBeCalledWith(organisation1);
-        expect(professionVersionsService.allWithLatestVersion).not.toBeCalled();
+        ).toHaveBeenCalledWith(organisation1);
+        expect(
+          professionVersionsService.allWithLatestVersion,
+        ).not.toHaveBeenCalled();
       });
 
       it('returns filtered professions when searching by nation', async () => {
+        jest
+          .spyOn(getQueryStringModule, 'getQueryString')
+          .mockReturnValue('mock-query-string');
+        jest
+          .spyOn(removeFromQueryStringModule, 'removeFromQueryString')
+          .mockReturnValue('mock-query-string-with-removal');
+
         const result = await controller.index(request, {
           keywords: '',
           nations: ['GB-NIR'],
         });
 
-        const expected = await createPresenter(
-          {
-            keywords: '',
-            nations: [Nation.find('GB-NIR')],
-            organisations: [],
-          },
-          organisation1,
-          [profession2],
-        ).present('single-organisation');
+        const expected: IndexTemplate = {
+          ...(await createPresenter(
+            {
+              keywords: '',
+              nations: [Nation.find('GB-NIR')],
+              organisations: [],
+            },
+            organisation1,
+            [profession2],
+          ).present('single-organisation')),
+          sortMethod: null,
+          filterQuery: 'mock-query-string-with-removal',
+        };
 
         expect(result).toEqual(expected);
 
         expect(
           professionVersionsService.allWithLatestVersionForOrganisation,
-        ).toBeCalledWith(organisation1);
-        expect(professionVersionsService.allWithLatestVersion).not.toBeCalled();
+        ).toHaveBeenCalledWith(organisation1);
+        expect(
+          professionVersionsService.allWithLatestVersion,
+        ).not.toHaveBeenCalled();
       });
     });
+  });
+
+  afterEach(() => {
+    jest.resetAllMocks();
+    jest.restoreAllMocks();
   });
 });
 

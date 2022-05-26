@@ -75,7 +75,7 @@ describe('OrganisationController', () => {
         const response = createMock<Response>();
 
         await expect(
-          controller.edit(request, response, 'user-id', false),
+          controller.edit(request, response, 'user-id', null),
         ).rejects.toThrowError(UnauthorizedException);
 
         expect(checkUserIsServiceOwner).toBeCalledWith(request);
@@ -130,7 +130,7 @@ describe('OrganisationController', () => {
 
         const response = createMock<Response>();
 
-        await controller.edit(request, response, user.id, false);
+        await controller.edit(request, response, user.id, null);
 
         expect(checkUserIsServiceOwner).toBeCalledWith(request);
 
@@ -212,7 +212,7 @@ describe('OrganisationController', () => {
         const organisationDto: OrganisationDto = {
           serviceOwner: '0',
           organisation: organisation.id,
-          change: false,
+          source: null,
         };
 
         usersService.find.mockResolvedValue(user);
@@ -277,7 +277,7 @@ describe('OrganisationController', () => {
         const organisationDto: OrganisationDto = {
           serviceOwner: '0',
           organisation: undefined,
-          change: false,
+          source: null,
         };
 
         usersService.find.mockResolvedValue(user);
@@ -340,7 +340,7 @@ describe('OrganisationController', () => {
         const organisationDto: OrganisationDto = {
           serviceOwner: '1',
           organisation: undefined,
-          change: false,
+          source: null,
         };
 
         usersService.find.mockResolvedValue(user);

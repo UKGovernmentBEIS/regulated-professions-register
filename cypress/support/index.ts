@@ -92,6 +92,7 @@ declare global {
         filename: string,
         filter: (dataset: SeedDecisionDataset) => boolean,
       ): void;
+      clickContinueAndCheckBackLink();
     }
   }
 }

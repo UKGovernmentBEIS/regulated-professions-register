@@ -43,10 +43,7 @@ describe('Creating a new user', () => {
 
       cy.get('input[name="serviceOwner"][value="1"]').check();
 
-      cy.translate('app.continue').then((continueLabel) => {
-        cy.get('button').contains(continueLabel).click();
-      });
-      cy.checkAccessibility();
+      cy.clickContinueAndCheckBackLink();
 
       cy.translate('users.form.label.email').then((emailLabel) => {
         cy.get('body').should('contain', emailLabel);
@@ -54,10 +51,7 @@ describe('Creating a new user', () => {
 
       cy.get('input[name="name"]').type('Example Name');
       cy.get('input[name="email"]').type('name@example.com');
-      cy.translate('app.continue').then((continueLabel) => {
-        cy.get('button').contains(continueLabel).click();
-      });
-      cy.checkAccessibility();
+      cy.clickContinueAndCheckBackLink();
 
       cy.translate('users.form.headings.new', { name: '- Example Name' }).then(
         (heading) => {
@@ -79,10 +73,7 @@ describe('Creating a new user', () => {
 
       cy.get('input[name="role"][value="registrar"]').check();
 
-      cy.translate('app.continue').then((continueLabel) => {
-        cy.get('button').contains(continueLabel).click();
-      });
-      cy.checkAccessibility();
+      cy.clickContinueAndCheckBackLink();
 
       cy.get('body').should('contain', 'Example Name');
       cy.get('body').should('contain', 'name@example.com');
@@ -129,9 +120,7 @@ describe('Creating a new user', () => {
       cy.get('input[name="serviceOwner"][value="0"]').check();
       cy.get('select[name="organisation"]').select('Department for Education');
 
-      cy.translate('app.continue').then((continueLabel) => {
-        cy.get('button').contains(continueLabel).click();
-      });
+      cy.clickContinueAndCheckBackLink();
 
       cy.get('input[name="name"]').type('Example Name');
       cy.get('input[name="email"]').type('beis-rpr@dxw.com');
@@ -158,42 +147,28 @@ describe('Creating a new user', () => {
       cy.get('input[name="serviceOwner"][value="0"]').check();
       cy.get('select[name="organisation"]').select('Department for Education');
 
-      cy.translate('app.continue').then((continueLabel) => {
-        cy.get('button').contains(continueLabel).click();
-      });
+      cy.clickContinueAndCheckBackLink();
 
       cy.get('input[name="name"]').type('Example Name');
       cy.get('input[name="email"]').type('name2@example.com');
-      cy.translate('app.continue').then((continueLabel) => {
-        cy.get('button').contains(continueLabel).click();
-      });
-      cy.checkAccessibility();
+      cy.clickContinueAndCheckBackLink();
 
       cy.get('input[name="role"][value="editor"]').check();
 
-      cy.translate('app.continue').then((continueLabel) => {
-        cy.get('button').contains(continueLabel).click();
-      });
-      cy.checkAccessibility();
+      cy.clickContinueAndCheckBackLink();
 
-      cy.get('a[href*="personal-details/edit?change=true"]:first').click();
+      cy.get('a[href*="personal-details/edit?source=confirm"]:first').click();
 
       cy.get('input[name="email"]').clear().type('name3@example.com');
-      cy.translate('app.continue').then((continueLabel) => {
-        cy.get('button').contains(continueLabel).click();
-      });
-      cy.checkAccessibility();
+      cy.clickContinueAndCheckBackLink();
 
       cy.get('body').should('contain', 'name3@example.com');
 
-      cy.get('a[href*="role/edit?change=true"]').first().click();
+      cy.get('a[href*="role/edit?source=confirm"]').first().click();
 
       cy.get('input[name="role"][value="administrator"]').check();
 
-      cy.translate('app.continue').then((continueLabel) => {
-        cy.get('button').contains(continueLabel).click();
-      });
-      cy.checkAccessibility();
+      cy.clickContinueAndCheckBackLink();
 
       cy.translate('users.roles.editor').then((label) => {
         cy.get('body').should('not.contain', label);
@@ -240,10 +215,7 @@ describe('Creating a new user', () => {
 
       cy.get('input[name="name"]').type('Example Name');
       cy.get('input[name="email"]').type('organisation@example.com');
-      cy.translate('app.continue').then((continueLabel) => {
-        cy.get('button').contains(continueLabel).click();
-      });
-      cy.checkAccessibility();
+      cy.clickContinueAndCheckBackLink();
 
       cy.translate('users.form.headings.new', { name: '- Example Name' }).then(
         (heading) => {
@@ -271,10 +243,7 @@ describe('Creating a new user', () => {
 
       cy.get('input[name="role"][value="editor"]').check();
 
-      cy.translate('app.continue').then((continueLabel) => {
-        cy.get('button').contains(continueLabel).click();
-      });
-      cy.checkAccessibility();
+      cy.clickContinueAndCheckBackLink();
 
       cy.get('body').should('contain', 'Example Name');
       cy.get('body').should('contain', 'organisation@example.com');

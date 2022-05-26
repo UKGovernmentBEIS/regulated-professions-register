@@ -19,7 +19,7 @@ import { OrganisationVersionsService } from '../../organisations/organisation-ve
 import { FilterDto } from './dto/filter.dto';
 import * as createFilterInputModule from '../../helpers/create-filter-input.helper';
 import * as getDecisionsYearsRangeModule from './helpers/get-decisions-years-range';
-import * as getQueryStringModule from './helpers/get-query-string.helper';
+import * as getQueryStringModule from '../../helpers/get-query-string.helper';
 import * as getExportTimestampModule from './helpers/get-export-timestamp.helper';
 
 jest.mock('./presenters/decision-datasets.presenter');

@@ -19,6 +19,10 @@ import { Qualification } from '../qualifications/qualification.entity';
 import { User } from '../users/user.entity';
 import { FilterInput } from '../common/interfaces/filter-input.interface';
 import { Organisation } from '../organisations/organisation.entity';
+import { sortProfessionVersionsByStatus } from './helpers/sort-profession-versions-by-status.helper';
+import { sortProfessionVersionsByLastUpdated } from './helpers/sort-profession-versions-by-last-updated.helper';
+
+export type ProfessionSortMethod = 'name' | 'last-updated' | 'status';
 
 @Injectable()
 export class ProfessionVersionsService {
@@ -252,7 +256,9 @@ export class ProfessionVersionsService {
       .getMany();
   }
 
-  async allWithLatestVersion(): Promise<Profession[]> {
+  async allWithLatestVersion(
+    sortMethod: ProfessionSortMethod,
+  ): Promise<Profession[]> {
     const versions = await this.versionsWithJoins()
       .distinctOn([
         'professionVersion.profession',
@@ -272,7 +278,14 @@ export class ProfessionVersionsService {
       )
       .getMany();
 
-    return versions.map((version) =>
+    const sortedVersions =
+      sortMethod === 'name'
+        ? versions
+        : sortMethod === 'status'
+        ? sortProfessionVersionsByStatus(versions)
+        : sortProfessionVersionsByLastUpdated(versions);
+
+    return sortedVersions.map((version) =>
       Profession.withVersion(version.profession, version),
     );
   }

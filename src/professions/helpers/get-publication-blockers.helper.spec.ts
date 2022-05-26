@@ -55,6 +55,10 @@ describe('getPublicationBlockers', () => {
 
       expect(getPublicationBlockers(version)).toEqual([
         {
+          type: 'organisation-not-live',
+          organisation: organisation,
+        },
+        {
           type: 'incomplete-section',
           section: 'scope',
         },
@@ -69,10 +73,6 @@ describe('getPublicationBlockers', () => {
         {
           type: 'incomplete-section',
           section: 'legislation',
-        },
-        {
-          type: 'organisation-not-live',
-          organisation: organisation,
         },
       ] as PublicationBlocker[]);
     });

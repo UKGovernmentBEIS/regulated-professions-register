@@ -260,7 +260,7 @@
 
 <h2 class="govuk-heading-l">{{ "professions.show.legislation.heading" | t}}</h2>
 
-{% for legislation in ((profession.legislations | pad(2)) if showEmptyProfessionDetails else profession.legislations) %}
+{% for legislation in ((profession.legislations | sortLegislations | pad(2)) if showEmptyProfessionDetails else profession.legislations) %}
   {% set legislationLocalisationId = "professions.show.legislation.secondNationalLegislation" if (showEmptyProfessionDetails and loop.index > 1) else "professions.show.legislation.nationalLegislation" %}
   {% set legislationLinkLocalisationId = "professions.show.legislation.secondLink" if (showEmptyProfessionDetails and loop.index > 1) else "professions.show.legislation.link" %}
 

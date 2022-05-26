@@ -25,7 +25,9 @@ export class ProfessionsPresenter {
     private readonly i18nService: I18nService,
   ) {}
 
-  async present(view: ProfessionsPresenterView): Promise<IndexTemplate> {
+  async present(
+    view: ProfessionsPresenterView,
+  ): Promise<Omit<IndexTemplate, 'filterQuery' | 'sortMethod'>> {
     const organisation =
       view === 'overview'
         ? await this.i18nService.translate('app.beis')

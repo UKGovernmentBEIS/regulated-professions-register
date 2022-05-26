@@ -260,6 +260,7 @@
     "addButtonLabel": "Add a new profession",
     "manageHeading": "Manage existing professions",
     "showFilters": "Show filters",
+    "sortBy": "Sort by:",
     "button": {
       "edit": {
         "draft": "Edit this draft",
@@ -304,6 +305,11 @@
         "hint": "Select all that apply"
       }
     },
+    "sort": {
+      "name": "Name",
+      "status": "Published status",
+      "lastUpdated": "Last updated"
+    },
     "tableHeading": {
       "profession": "Profession",
       "nations": "Nations",
@@ -337,7 +343,7 @@
       "blocked": {
         "heading": "This page is not ready to publish. Before you can publish, check:",
         "incompleteSection": "{section} is complete",
-        "organisationNotLive": "{organisation} is published"
+        "organisationNotLive": "{organisation}'s page is published"
       }
     },
     "status": {

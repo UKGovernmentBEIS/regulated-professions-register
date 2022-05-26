@@ -31,6 +31,8 @@ import { UserPermission } from '../../users/user-permission';
 import { Permissions } from '../../common/permissions.decorator';
 import { getActingUser } from '../../users/helpers/get-acting-user.helper';
 import { OrganisationVersionsService } from '../../organisations/organisation-versions.service';
+import { removeFromQueryString } from '../../helpers/remove-from-query-string.helper';
+import { getQueryString } from '../../helpers/get-query-string.helper';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
@@ -78,14 +80,7 @@ export class ProfessionsController {
   @BackLink('/admin/dashboard')
   async index(
     @Req() request: RequestWithAppSession,
-    @Query() query: FilterDto = null,
-  ): Promise<IndexTemplate> {
-    return this.createListEntries(query || new FilterDto(), request);
-  }
-
-  private async createListEntries(
-    filter: FilterDto,
-    request: RequestWithAppSession,
+    @Query() filterDto: FilterDto = new FilterDto(),
   ): Promise<IndexTemplate> {
     const allNations = Nation.all();
     const allOrganisations =
@@ -103,13 +98,15 @@ export class ProfessionsController {
     const userOrganisation = showAllOrgs ? null : actingUser.organisation;
 
     const allProfessions = await (showAllOrgs
-      ? this.professionVersionsService.allWithLatestVersion()
+      ? this.professionVersionsService.allWithLatestVersion(
+          filterDto.sortBy || 'name',
+        )
       : this.professionVersionsService.allWithLatestVersionForOrganisation(
           userOrganisation,
         ));
 
     const filterInput = createFilterInput({
-      ...filter,
+      ...filterDto,
       allNations,
       allOrganisations,
       allIndustries,
@@ -119,14 +116,18 @@ export class ProfessionsController {
       allProfessions,
     ).filter(filterInput);
 
-    return new ProfessionsPresenter(
-      filterInput,
-      userOrganisation,
-      allNations,
-      allOrganisations,
-      allIndustries,
-      filteredProfessions,
-      this.i18nService,
-    ).present(view);
+    return {
+      ...(await new ProfessionsPresenter(
+        filterInput,
+        userOrganisation,
+        allNations,
+        allOrganisations,
+        allIndustries,
+        filteredProfessions,
+        this.i18nService,
+      ).present(view)),
+      sortMethod: view === 'overview' ? filterDto.sortBy || 'name' : null,
+      filterQuery: removeFromQueryString(getQueryString(request), 'sortBy'),
+    };
   }
 }
