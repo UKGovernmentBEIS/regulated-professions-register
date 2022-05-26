@@ -216,7 +216,7 @@
         text: "professions.show.registration.registrationRequirements" | t
       },
       value: {
-        text: profession.registrationRequirements
+        html: profession.registrationRequirements | multiline
       }
     } if (profession.registrationRequirements or showEmptyProfessionDetails) else undefined,
     {

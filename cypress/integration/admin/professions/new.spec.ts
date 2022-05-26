@@ -132,7 +132,7 @@ describe('Adding a new profession', () => {
       }).then((addCaption) => {
         cy.get('body').contains(addCaption);
       });
-      cy.get('input[name="registrationRequirements"]').type('Requirements');
+      cy.get('textarea[name="registrationRequirements"]').type('Requirements');
       cy.get('input[name="registrationUrl"]').type('this is not a url');
 
       cy.translate('app.continue').then((buttonText) => {
