@@ -68,14 +68,14 @@ describe('RoleController', () => {
 
       const request = createDefaultMockRequest({ user: userFactory.build() });
 
-      await controller.edit(res, user.id, false, request);
+      await controller.edit(res, user.id, null, request);
 
       expect(res.render).toBeCalledWith(
         'admin/users/role/edit',
         expect.objectContaining({
           action: 'edit',
           roleRadioButtonArgs,
-          change: false,
+          source: null,
           name: user.name,
         }),
       );
@@ -91,7 +91,7 @@ describe('RoleController', () => {
       expect(RoleRadioButtonsPresenter.prototype.radioButtonArgs).toBeCalled();
     });
 
-    it('should set change to true', async () => {
+    it('should set source to the given value', async () => {
       const res = createMock<Response>();
 
       const user = userFactory.build();
@@ -100,12 +100,12 @@ describe('RoleController', () => {
 
       const request = createDefaultMockRequest({ user: userFactory.build() });
 
-      await controller.edit(res, user.id, true, request);
+      await controller.edit(res, user.id, 'confirm', request);
 
       expect(res.render).toBeCalledWith(
         'admin/users/role/edit',
         expect.objectContaining({
-          change: true,
+          source: 'confirm',
         }),
       );
     });
@@ -119,7 +119,7 @@ describe('RoleController', () => {
 
       const request = createDefaultMockRequest({ user: userFactory.build() });
 
-      await controller.edit(res, user.id, false, request);
+      await controller.edit(res, user.id, null, request);
 
       expect(RoleRadioButtonsPresenter).toBeCalledWith(
         [Role.Administrator, Role.Editor],
@@ -138,7 +138,7 @@ describe('RoleController', () => {
 
       const request = createDefaultMockRequest({ user: userFactory.build() });
 
-      await controller.edit(res, user.id, false, request);
+      await controller.edit(res, user.id, null, request);
 
       expect(RoleRadioButtonsPresenter).toBeCalledWith(
         [Role.Administrator, Role.Registrar, Role.Editor],
@@ -157,7 +157,7 @@ describe('RoleController', () => {
 
       const request = createDefaultMockRequest({ user: userFactory.build() });
 
-      await controller.edit(res, user.id, false, request);
+      await controller.edit(res, user.id, null, request);
 
       expect(checkCanViewUser).toHaveBeenCalledWith(request, user);
     });

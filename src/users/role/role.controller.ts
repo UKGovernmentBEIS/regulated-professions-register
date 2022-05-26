@@ -31,6 +31,8 @@ import {
 } from '../helpers/get-action-type-from-user';
 import { RequestWithAppSession } from '../../common/interfaces/request-with-app-session.interface';
 import { checkCanViewUser } from '../helpers/check-can-view-user';
+import { getUserEditStepBackLink } from '../helpers/get-user-edit-step-back-link.helper';
+import { UserEditSource } from '../users.controller';
 
 @UseGuards(AuthenticationGuard)
 @Controller('/admin/users')
@@ -43,14 +45,15 @@ export class RoleController {
   @Get(':id/role/edit')
   @Permissions(UserPermission.CreateUser, UserPermission.EditUser)
   @BackLink((request: Request) =>
-    request.query.change === 'true'
-      ? '/admin/users/:id/confirm'
-      : '/admin/users/:id/personal-details/edit',
+    getUserEditStepBackLink(
+      request.query,
+      '/admin/users/:id/personal-details/edit',
+    ),
   )
   async edit(
     @Res() res: Response,
     @Param('id') id,
-    @Query('change') change: boolean,
+    @Query('source') source: UserEditSource,
     @Req() request: RequestWithAppSession,
   ): Promise<void> {
     const user = await this.usersService.find(id);
@@ -62,18 +65,19 @@ export class RoleController {
       user.serviceOwner,
       user.role,
       user.name,
-      change,
+      source,
       getActionTypeFromUser(user),
     );
   }
 
   @Post(':id/role')
   @Permissions(UserPermission.CreateUser, UserPermission.EditUser)
-  @BackLink((request: Request) => {
-    return request.body.change === 'true'
-      ? '/admin/users/:id/confirm'
-      : '/admin/users/:id/personal-details/edit';
-  })
+  @BackLink((request: Request) =>
+    getUserEditStepBackLink(
+      request.body,
+      '/admin/users/:id/personal-details/edit',
+    ),
+  )
   async update(
     @Res() res: Response,
     @Param('id') id: string,
@@ -96,7 +100,7 @@ export class RoleController {
         user.serviceOwner,
         role,
         user.name,
-        submittedValues.change,
+        submittedValues.source,
         getActionTypeFromUser(user),
         errors,
       );
@@ -121,7 +125,7 @@ export class RoleController {
     serviceOwner: boolean,
     role: Role | null,
     name: string,
-    change: boolean,
+    source: UserEditSource,
     action: ActionType,
     errors: object | undefined = undefined,
   ): Promise<void> {
@@ -134,7 +138,7 @@ export class RoleController {
 
     const templateArgs: EditTemplate = {
       roleRadioButtonArgs,
-      change,
+      source,
       errors,
       action,
       name,
