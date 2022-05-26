@@ -283,8 +283,8 @@ $small-screen: 768px;
       margin: 0;
     }
 
-    &__file-download-link-container-right {
-      float: right;
+    &__file-download-link-container-left {
+      float: left;
       @media screen and (max-width: $small-screen) {
         float: none;
       }
