@@ -6,9 +6,11 @@
   <div class="govuk-error-summary__body">
     <ul class="govuk-list govuk-error-summary__list">
     {% for target, message in errors %}
-      <li>
-        <a href="#{{ target }}">{{ message.text | t }}</a>
-      </li>
+      {% for text in message.text.split(',') %}
+        <li>
+          <a href="#{{ target }}">{{ text | t }}</a>
+        </li>
+      {% endfor %}
     {% endfor %}
     </ul>
   </div>

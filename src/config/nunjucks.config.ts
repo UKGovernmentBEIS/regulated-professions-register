@@ -55,17 +55,23 @@ export const nunjucksConfig = async (
     'tError',
     async (...args) => {
       const callback = args.pop();
-      const error = args[0];
+      const message = args[0];
 
-      if (!error) {
+      if (!message) {
         callback(null);
         return;
       }
 
       const personalisation = args.length < 2 ? {} : args[1];
       try {
+        const texts = message.text.split(',') as string[];
+
         const result = {
-          text: await i18nHelper.translate(error.text, personalisation),
+          html: (
+            await Promise.all(
+              texts.map((text) => i18nHelper.translate(text, personalisation)),
+            )
+          ).join('<br />'),
         };
         callback(null, result);
       } catch (error) {
