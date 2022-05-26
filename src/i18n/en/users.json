@@ -25,7 +25,8 @@
     },
     "errors": {
       "name": {
-        "empty": "Enter a name"
+        "empty": "Enter a name",
+        "long": "Enter a name shorter than 500 characters"
       },
       "email": {
         "alreadyExists": "A user with this email address already exists",
