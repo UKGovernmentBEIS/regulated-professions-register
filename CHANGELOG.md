@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 
 - Fix already-published professions and regulatory authorities being referred to as "new" when an updated version is published
+- When showing a list of reasons why a profession cannot be published, show any not-published associated regulators first
 
 ## [release-023] - 2022-05-19
 

@@ -28,6 +28,19 @@ export function getPublicationBlockers(
 ): PublicationBlocker[] {
   const blockers: PublicationBlocker[] = [];
 
+  const organisations = getOrganisationsFromProfession(version.profession);
+
+  if (organisations?.length) {
+    for (const organisation of organisations) {
+      if (!hasLiveVersion(organisation)) {
+        blockers.push({
+          type: 'organisation-not-live',
+          organisation: organisation,
+        });
+      }
+    }
+  }
+
   if (!version.industries?.length || !version.occupationLocations?.length) {
     blockers.push({ type: 'incomplete-section', section: 'scope' });
   }
@@ -52,19 +65,6 @@ export function getPublicationBlockers(
 
   if (!version.legislations?.[0]?.name) {
     blockers.push({ type: 'incomplete-section', section: 'legislation' });
-  }
-
-  const organisations = getOrganisationsFromProfession(version.profession);
-
-  if (organisations?.length) {
-    for (const organisation of organisations) {
-      if (!hasLiveVersion(organisation)) {
-        blockers.push({
-          type: 'organisation-not-live',
-          organisation: organisation,
-        });
-      }
-    }
   }
 
   return blockers;

@@ -343,7 +343,7 @@
       "blocked": {
         "heading": "This page is not ready to publish. Before you can publish, check:",
         "incompleteSection": "{section} is complete",
-        "organisationNotLive": "{organisation} is published"
+        "organisationNotLive": "{organisation}'s page is published"
       }
     },
     "status": {
