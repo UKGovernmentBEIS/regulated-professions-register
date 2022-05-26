@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - When showing a list of reasons why a profession cannot be published, show any not-published associated regulators first
 - Fix back links around creating and editing users
 - Correct text on error pages
+- Fix legislations on professions with multiple legislations sometimes being displayed out of order
 
 ## [release-023] - 2022-05-19
 

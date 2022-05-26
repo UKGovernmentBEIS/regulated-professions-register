@@ -28,6 +28,7 @@ import { getPublicationBlockers } from '../helpers/get-publication-blockers.help
 import { Profession } from '../profession.entity';
 import { NationsListPresenter } from '../../nations/presenters/nations-list.presenter';
 import { getActingUser } from '../../users/helpers/get-acting-user.helper';
+import { sortLegislationsByIndex } from '../helpers/sort-legislations-by-index.helper';
 
 @UseGuards(AuthenticationGuard)
 @Controller('admin/professions')
@@ -96,7 +97,9 @@ export class CheckYourAnswersController {
       protectedTitles: version.protectedTitles,
       regulationUrl: version.regulationUrl,
       qualification,
-      legislations: version.legislations,
+      legislations: version.legislations
+        ? sortLegislationsByIndex(version.legislations)
+        : [],
       captionText: await ViewUtils.captionText(this.i18nService, profession),
       publicationBlockers: getPublicationBlockers(version),
       isUK: version.occupationLocations

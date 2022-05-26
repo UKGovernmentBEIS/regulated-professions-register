@@ -11,6 +11,7 @@ import { pad } from '../helpers/pad.helper';
 import { formatStatus } from '../helpers/format-status.helper';
 import { formatTelephone } from '../helpers/format-telephone.helper';
 import { getDomain } from '../helpers/get-domain.helper';
+import { sortLegislationsByIndex } from '../professions/helpers/sort-legislations-by-index.helper';
 
 export const nunjucksConfig = async (
   app: NestExpressApplication,
@@ -90,6 +91,10 @@ export const nunjucksConfig = async (
 
   env.addFilter('pad', (array, minimumLength) => {
     return pad(array, minimumLength);
+  });
+
+  env.addFilter('sortLegislations', (legislations) => {
+    return legislations ? sortLegislationsByIndex(legislations) : [];
   });
 
   env.addFilter(
