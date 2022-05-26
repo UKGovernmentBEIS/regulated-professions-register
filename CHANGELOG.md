@@ -19,6 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fix back links around creating and editing users
 - Correct text on error pages
 - Fix legislations on professions with multiple legislations sometimes being displayed out of order
+- Left align the decision data download button
 
 ## [release-023] - 2022-05-19
 
