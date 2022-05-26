@@ -9,6 +9,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 
 - Left align the decision data download button
+- Use a multi-line text input for profession registration requirements
+- Enforce length limits on all input fields
 
 ## [release-024] - 2022-05-30
 
