@@ -20,6 +20,7 @@ export class DecisionDatasetsPresenter {
     private readonly endYear: number,
     private readonly decisionDatasets: DecisionDataset[],
     private readonly i18nService: I18nService,
+    private readonly allProfessions?: Profession[],
   ) {}
 
   present(
@@ -44,6 +45,11 @@ export class DecisionDatasetsPresenter {
     const statusesCheckboxItems = new DecisionDatasetStatusesCheckboxPresenter(
       this.filterInput.statuses,
       this.i18nService,
+    ).checkboxItems();
+
+    const professionsCheckboxItems = new ProfessionsCheckboxPresenter(
+      this.allProfessions || [],
+      this.filterInput.professions || [],
     ).checkboxItems();
 
     return {
