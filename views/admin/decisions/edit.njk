@@ -86,7 +86,8 @@
                           },
                           name: "countries" + index,
                           id: "countries" + index,
-                          items: country.countriesSelectArgs
+                          items: country.countriesSelectArgs,
+                          errorMessage: (errors["countries" + index] | tError)
                         }) }}
                       </td>
                       <td class="govuk-table__cell">
