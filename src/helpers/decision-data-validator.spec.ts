@@ -110,4 +110,30 @@ describe('DecisionDataValidator', () => {
       ]);
     });
   });
+
+  describe('when duplicate countries are submitted', () => {
+    it('returns an array of errors, with the duplicate countries highlighted', () => {
+      const editDto: EditDto = {
+        routes: ['Route 1', 'Route 2'],
+        countries: [['CA'], ['JP', 'JP']],
+        yeses: [['1'], ['1', '1']],
+        yesAfterComps: [['1', '1'], ['1']],
+        noes: [['1'], ['1', '1']],
+        noAfterComps: [['1'], ['1', '1']],
+        action: 'save',
+      };
+
+      const validated = DecisionDataValidator.validate(editDto);
+
+      expect(validated.valid()).toEqual(false);
+      expect(validated.errors).toEqual([
+        {
+          constraints: {
+            message: 'decisions.admin.edit.errors.countries.duplicate',
+          },
+          property: 'countries[2][2]',
+        },
+      ]);
+    });
+  });
 });

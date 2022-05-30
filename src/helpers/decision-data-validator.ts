@@ -12,6 +12,7 @@ export class DecisionDataValidator {
       this.validateNoEmptyRoutes(obj),
       this.validateNoDuplicateRoutes(obj),
       this.validateNoEmptyCountries(obj),
+      this.validateNoDuplicateCountries(obj),
     ].flat();
 
     return new DecisionDataValidator(object, errors);
@@ -69,6 +70,27 @@ export class DecisionDataValidator {
                 property: `countries[${routeIndex + 1}][${countryIndex + 1}]`,
                 constraints: {
                   message: 'decisions.admin.edit.errors.countries.empty',
+                },
+              };
+            }
+          })
+          .filter((n) => n);
+      })
+      .flat();
+  }
+
+  private static validateNoDuplicateCountries(
+    editDto: EditDto,
+  ): ValidationError[] {
+    return editDto.countries
+      .map((countries, routeIndex) => {
+        return countries
+          .map((country, countryIndex) => {
+            if (countries.indexOf(country) !== countryIndex && country) {
+              return {
+                property: `countries[${routeIndex + 1}][${countryIndex + 1}]`,
+                constraints: {
+                  message: 'decisions.admin.edit.errors.countries.duplicate',
                 },
               };
             }

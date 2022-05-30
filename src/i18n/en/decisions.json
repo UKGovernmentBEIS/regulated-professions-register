@@ -139,7 +139,8 @@
           "duplicate": "It looks like you've already added a route with that name - enter a different one"
         },
         "countries": {
-          "empty": "Enter a country"
+          "empty": "Enter a country",
+          "duplicate": "It looks like you've already entered data for that country - enter data for a different one"
         }
       }
     },
