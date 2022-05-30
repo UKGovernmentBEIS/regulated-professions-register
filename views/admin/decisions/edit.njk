@@ -12,7 +12,7 @@
 {% block content %}
   {% include "../../_messages.njk" %}
   {% include "../../shared/_errors.njk" %}
-  <form action="/admin/decisions/{{ profession.id }}/{{ organisation.id }}/{{ year }}/edit" method="post">
+  <form action="/admin/decisions/{{ profession.id }}/{{ organisation.id }}/{{ year }}/edit" method="post" novalidate>
 
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-three-quarters">
@@ -86,7 +86,8 @@
                           },
                           name: "countries" + index,
                           id: "countries" + index,
-                          items: country.countriesSelectArgs
+                          items: country.countriesSelectArgs,
+                          errorMessage: (errors["countries" + index] | tError)
                         }) }}
                       </td>
                       <td class="govuk-table__cell">
@@ -97,7 +98,10 @@
                           },
                           name: "yeses" + index,
                           id: "yeses" + index,
-                          value: country.decisions.yes
+                          value: country.decisions.yes,
+                          inputmode: "numeric",
+                          pattern: "[0-9]*",
+                          spellcheck: false
                         }) }}
                       </td>
                       <td class="govuk-table__cell">
@@ -108,7 +112,10 @@
                           },
                           name: "yesAfterComps" + index,
                           id: "yesAfterComps" + index,
-                          value: country.decisions.yesAfterComp
+                          value: country.decisions.yesAfterComp,
+                          inputmode: "numeric",
+                          pattern: "[0-9]*",
+                          spellcheck: false
                         }) }}
                       </td>
                       <td class="govuk-table__cell">
@@ -119,7 +126,10 @@
                           },
                           name: "noes" + index,
                           id: "noes" + index,
-                          value: country.decisions.no
+                          value: country.decisions.no,
+                          inputmode: "numeric",
+                          pattern: "[0-9]*",
+                          spellcheck: false
                         }) }}
                       </td>
                       <td class="govuk-table__cell">
@@ -130,7 +140,10 @@
                           },
                           name: "noAfterComps" + index,
                           id: "noAfterComps" + index,
-                          value: country.decisions.noAfterComp
+                          value: country.decisions.noAfterComp,
+                          inputmode: "numeric",
+                          pattern: "[0-9]*",
+                          spellcheck: false
                         }) }}
                       </td>
                       <td class="govuk-table__cell">

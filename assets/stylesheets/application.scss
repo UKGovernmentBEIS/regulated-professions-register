@@ -171,6 +171,7 @@ $small-screen: 768px;
     th,
     td {
       width: calc(100% / 7);
+      vertical-align: bottom;
     }
 
     th:first-child,
