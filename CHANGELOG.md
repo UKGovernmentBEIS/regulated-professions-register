@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [unreleased]
 
+## [release-024] - 2022-05-30
+
 ### Added
 
 - Central users can sort the professions listing
@@ -436,7 +438,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fix links in error messages when adding a new profession
 - Make validation errors more human readable
 
-[unreleased]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-023...HEAD
+[unreleased]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-024...HEAD
+[release-024]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release023...release-024
 [release-023]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release022...release-023
 [release-022]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release021...release-022
 [release-021]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release020...release-021
