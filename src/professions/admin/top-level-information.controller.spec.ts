@@ -12,6 +12,9 @@ import { OrganisationVersionsService } from '../../organisations/organisation-ve
 import { createDefaultMockRequest } from '../../testutils/factories/create-default-mock-request';
 import userFactory from '../../testutils/factories/user';
 import { checkCanChangeProfession } from '../../users/helpers/check-can-change-profession';
+import { TopLevelDetailsDto } from './dto/top-level-details.dto';
+import { stringOfLength } from '../../testutils/string-of-length';
+import { MAX_SINGLE_LINE_LENGTH } from '../../helpers/input-limits';
 
 jest.mock('../../users/helpers/check-can-change-profession');
 
@@ -155,9 +158,10 @@ describe('TopLevelInformationController', () => {
     });
 
     describe('when required parameters are not entered', () => {
-      it('does not create a profession, and re-renders the top level information view and an error', async () => {
-        const topLevelDetailsDtoWithNoAnswers = {
+      it('does not create a Profession, and re-renders the top level information view and an error', async () => {
+        const topLevelDetailsDtoWithNoAnswers: TopLevelDetailsDto = {
           name: '',
+          change: false,
         };
 
         const request = createDefaultMockRequest({
@@ -178,6 +182,40 @@ describe('TopLevelInformationController', () => {
             errors: {
               name: {
                 text: 'professions.form.errors.name.empty',
+              },
+            },
+          }),
+        );
+
+        expect(professionsService.save).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('when the entries are too long', () => {
+      it('does not create a Profession, and re-renders the top level information view and an error', async () => {
+        const topLevelDetailsDto: TopLevelDetailsDto = {
+          name: stringOfLength(MAX_SINGLE_LINE_LENGTH + 1),
+          change: false,
+        };
+
+        const request = createDefaultMockRequest({
+          user: userFactory.build(),
+        });
+
+        await controller.update(
+          topLevelDetailsDto,
+          response,
+          'profession-id',
+          'version-id',
+          request,
+        );
+
+        expect(response.render).toHaveBeenCalledWith(
+          'admin/professions/top-level-information',
+          expect.objectContaining({
+            errors: {
+              name: {
+                text: 'professions.form.errors.name.long',
               },
             },
           }),

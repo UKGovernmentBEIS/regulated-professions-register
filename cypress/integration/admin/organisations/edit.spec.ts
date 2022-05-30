@@ -103,6 +103,38 @@ describe('Editing organisations', () => {
       );
     });
 
+    it('Shows errors when I input data that is too long', () => {
+      cy.get('input[name="alternateName"]').invoke('val', 'a'.repeat(501));
+      cy.get('input[name="url"]').invoke(
+        'val',
+        `http://example.com?data=${'a'.repeat(1001)}`,
+      );
+      cy.get('textarea[name="address"]').invoke('val', 'a'.repeat(501));
+
+      cy.get('input[name="email"]').type('foo@example.com');
+      cy.get('input[name="telephone"]').type('020 7215 5000');
+
+      cy.translate('app.continue').then((buttonText) => {
+        cy.get('button').contains(buttonText).click();
+      });
+
+      cy.translate('organisations.admin.form.errors.alternateName.long').then(
+        (error) => {
+          cy.get('body').should('contain', error);
+        },
+      );
+
+      cy.translate('organisations.admin.form.errors.url.long').then((error) => {
+        cy.get('body').should('contain', error);
+      });
+
+      cy.translate('organisations.admin.form.errors.address.long').then(
+        (error) => {
+          cy.get('body').should('contain', error);
+        },
+      );
+    });
+
     it('Corrects mis-formatted data', () => {
       cy.get('input[name="url"]')
         .invoke('val', '')

@@ -126,7 +126,8 @@
     },
     "errors": {
       "name": {
-        "empty": "Enter the name of the regulated profession"
+        "empty": "Enter the name of the regulated profession",
+        "long": "Enter a name shorter than 500 characters"
       },
       "nations": {
         "empty": "Select at least one nation"
@@ -143,49 +144,73 @@
         "missingAuthority": "One of your selections is missing a regulatory authority"
       },
       "regulationSummary": {
-        "empty": "Enter a regulation summary"
+        "empty": "Enter a regulation summary",
+        "long": "Enter a regulation summary shorter than 2500 characters"
       },
       "regulationType": {
         "empty": "Select a regulation type"
       },
       "reservedActivities": {
-        "empty": "Enter reserved activities"
+        "empty": "Enter reserved activities",
+        "long": "Enter reserved activities shorter than 2500 characters"
+      },
+      "protectedTitles": {
+        "long": "Enter protected titles shorter than 2500 characters"
       },
       "regulationUrl": {
-        "invalid": "Enter a valid website address"
+        "invalid": "Enter a valid website address",
+        "long": "Enter a website address shorter than 1000 characters"
+      },
+      "registrationRequirements": {
+        "long": "Enter registration requirements shorter than 2500 characters"
       },
       "registrationUrl": {
-        "invalid": "Enter a valid website address"
+        "invalid": "Enter a valid website address",
+        "long": "Enter a website address shorter than 1000 characters"
       },
       "qualification": {
         "routesToObtain": {
-          "empty": "Enter routes to obtain the qualification"
+          "empty": "Enter routes to obtain the qualification",
+          "long": "Enter routes to obtain shorter than 2500 characters"
         },
         "moreInformationUrl": {
-          "invalid": "Enter a valid website address"
+          "invalid": "Enter a valid website address",
+          "long": "Enter a website address shorter than 1000 characters"
+        },
+        "ukRecognition": {
+          "long": "Enter routes to recognition within the UK shorter than 2500 characters"
         },
         "ukRecognitionUrl": {
-          "invalid": "Enter a valid website address"
+          "invalid": "Enter a valid website address",
+          "long": "Enter a website address shorter than 1000 characters"
         },
         "otherCountriesRecognitionRoutes": {
           "empty": "Select which recognition routes exist for professionals qualified in another country"
         },
+        "otherCountriesRecognitionSummary": {
+          "long": "Enter routes to recognition outside the UK shorter than 2500 characters"
+        },
         "otherCountriesRecognitionUrl": {
-          "invalid": "Enter a valid website address"
+          "invalid": "Enter a valid website address",
+          "long": "Enter a website address shorter than 1000 characters"
         }
       },
       "legislation": {
         "nationalLegislation": {
-          "empty": "Enter the act or charter"
+          "empty": "Enter the act or charter",
+          "long": "Enter the act or charter shorter than 2500 characters"
         },
         "link": {
-          "invalid": "Enter a valid link to the legislation"
+          "invalid": "Enter a valid link to the legislation",
+          "long": "Enter a link to the legislation shorter than 1000 characters"
         },
         "secondNationalLegislation": {
-          "empty": "Enter a second act or charter, or remove the second legislation link"
+          "empty": "Enter a second act or charter, or remove the second legislation link",
+          "long": "Enter a second act or charter shorter than 2500 characters"
         },
         "secondLink": {
-          "invalid": "Enter a valid link to the legislation"
+          "invalid": "Enter a valid link to the legislation",
+          "long": "Enter a link to the legislation shorter than 1000 characters"
         }
       }
     }

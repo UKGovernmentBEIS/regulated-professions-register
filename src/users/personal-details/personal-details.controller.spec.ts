@@ -9,6 +9,9 @@ import { getActionTypeFromUser } from '../helpers/get-action-type-from-user';
 import { createDefaultMockRequest } from '../../testutils/factories/create-default-mock-request';
 import userFactory from '../../testutils/factories/user';
 import { checkCanViewUser } from '../helpers/check-can-view-user';
+import { PersonalDetailsDto } from './dto/personal-details.dto';
+import { stringOfLength } from '../../testutils/string-of-length';
+import { MAX_SINGLE_LINE_LENGTH } from '../../helpers/input-limits';
 
 const name = 'Example Name';
 const email = 'name@example.com';
@@ -192,6 +195,34 @@ describe('PersonalDetailsController', () => {
             },
           },
         },
+      );
+    });
+
+    it('should render errors if the personal details are too long', async () => {
+      (getActionTypeFromUser as jest.Mock).mockReturnValue('edit');
+
+      const request = createDefaultMockRequest({ user: userFactory.build() });
+
+      const personalDetailsDto: PersonalDetailsDto = {
+        name: stringOfLength(MAX_SINGLE_LINE_LENGTH + 1),
+        email: `${stringOfLength(MAX_SINGLE_LINE_LENGTH)}@example.com`,
+        source: 'show',
+      };
+
+      await controller.update(personalDetailsDto, res, 'user-uuid', request);
+
+      expect(res.render).toHaveBeenCalledWith(
+        'admin/users/personal-details/edit',
+        expect.objectContaining({
+          errors: {
+            name: {
+              text: 'users.form.errors.name.long',
+            },
+            email: {
+              text: 'users.form.errors.email.invalid',
+            },
+          },
+        }),
       );
     });
 

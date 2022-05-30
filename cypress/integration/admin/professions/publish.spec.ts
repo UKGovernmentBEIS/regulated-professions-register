@@ -446,7 +446,7 @@ describe('Publishing professions', () => {
       }).then((addCaption) => {
         cy.get('body').contains(addCaption);
       });
-      cy.get('input[name="registrationRequirements"]').type('Requirements');
+      cy.get('textarea[name="registrationRequirements"]').type('Requirements');
 
       cy.get('input[name="registrationUrl"]')
         .invoke('val', '')

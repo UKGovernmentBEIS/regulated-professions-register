@@ -3,6 +3,7 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
 
 {% set heading = ("professions.form.headings.registration" | t) %}
 {% set title =  captionText + " | " + heading %}
@@ -18,7 +19,7 @@
 
       <form method="post" action="./">
         {{
-          govukInput({
+          govukTextarea({
             id: "registrationRequirements",
             name: "registrationRequirements",
             label: {
@@ -29,7 +30,9 @@
             hint: {
               text: ("professions.form.hint.registration.registrationRequirements" | t)
             },
-            value: registrationRequirements
+            rows: "7",
+            value: registrationRequirements,
+            errorMessage: errors.registrationRequirements | tError
           })
         }}
 
