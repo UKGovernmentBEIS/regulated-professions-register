@@ -5,4 +5,5 @@ export class FilterDto {
   organisations?: string[] = [];
   years: string[] = [];
   statuses: DecisionDatasetStatus[] = [];
+  professions?: string[] = [];
 }

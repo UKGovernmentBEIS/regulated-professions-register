@@ -4,6 +4,7 @@ import { Nation } from '../nations/nation';
 import { RegulationType } from '../professions/profession-version.entity';
 import industryFactory from '../testutils/factories/industry';
 import organisationFactory from '../testutils/factories/organisation';
+import professionFactory from '../testutils/factories/profession';
 import { createFilterInput } from './create-filter-input.helper';
 
 describe('createFilterInput', () => {
@@ -121,11 +122,29 @@ describe('createFilterInput', () => {
     });
   });
 
-  describe('when given a mixture of keywords, nation codes, organisation IDs, industry IDs, regulation types, years, and decision dataset statuses', () => {
-    it('returns `FilterInput` for those keywords, nations, organisations, industries, regulation types, years, and decision dataset statuses', () => {
+  describe('when given professions', () => {
+    it('returns `FilterInput` with the given professions', () => {
+      const professions = professionFactory.buildList(3);
+      const result = createFilterInput({
+        keywords: '',
+        professions: [professions[0].id, professions[2].id],
+        allProfessions: professions,
+      });
+      const expected: FilterInput = {
+        keywords: '',
+        professions: [professions[0], professions[2]],
+      };
+
+      expect(result).toEqual(expected);
+    });
+  });
+
+  describe('when given a mixture of keywords, nation codes, organisation IDs, industry IDs, regulation types, years, decision dataset statuses and professions', () => {
+    it('returns `FilterInput` for those keywords, nations, organisations, industries, regulation types, years, decision dataset statuses and professions', () => {
       const nations = Nation.all();
       const organsiations = organisationFactory.buildList(3);
       const industries = industryFactory.buildList(3);
+      const professions = professionFactory.buildList(3);
 
       const result = createFilterInput({
         keywords: 'example keywords',
@@ -142,6 +161,8 @@ describe('createFilterInput', () => {
         regulationTypes: [RegulationType.Licensing],
         years: ['2021', '2022'],
         statuses: [DecisionDatasetStatus.Draft],
+        allProfessions: professions,
+        professions: [professions[1].id],
       });
 
       const expected: FilterInput = {
@@ -152,6 +173,7 @@ describe('createFilterInput', () => {
         regulationTypes: [RegulationType.Licensing],
         years: [2021, 2022],
         statuses: [DecisionDatasetStatus.Draft],
+        professions: [professions[1]],
       };
 
       expect(result).toEqual(expected);
