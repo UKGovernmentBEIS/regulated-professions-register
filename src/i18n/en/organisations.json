@@ -98,10 +98,15 @@
       },
       "errors": {
         "name": {
-          "empty": "Enter the name of the regulatory authority"
+          "empty": "Enter the name of the regulatory authority",
+          "long": "Enter a name shorter than 500 characters"
+        },
+        "alternateName": {
+          "long": "Enter an alternate name shorter than 500 characters"
         },
         "address": {
-          "empty": "Enter the address for the regulatory authority"
+          "empty": "Enter the address for the regulatory authority",
+          "long": "Enter an address shorter than 500 characters"
         },
         "phone": {
           "empty": "Enter the UK telephone number for the regulatory authority",
@@ -111,7 +116,8 @@
           "invalid": "Enter a valid email address"
         },
         "url": {
-          "invalid": "Enter a valid website address"
+          "invalid": "Enter a valid website address",
+          "long": "Enter a website address shorter than 1000 characters"
         }
       }
     },

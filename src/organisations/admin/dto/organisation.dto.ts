@@ -3,6 +3,7 @@ import {
   IsEmail,
   IsNotEmpty,
   IsUrl,
+  MaxLength,
   Validate,
   ValidateIf,
 } from 'class-validator';
@@ -18,6 +19,11 @@ import {
 } from 'class-validator';
 import { validateTelephone } from '../../../helpers/validate-telephone.helper';
 import { preprocessTelephone } from '../../../helpers/preprocess-telephone.helper';
+import {
+  MAX_ADDRESS_LENGTH,
+  MAX_SINGLE_LINE_LENGTH,
+  MAX_URL_LENGTH,
+} from '../../../helpers/input-limits';
 
 @ValidatorConstraint()
 export class IsTelephoneConstraint implements ValidatorConstraintInterface {
@@ -30,14 +36,24 @@ export class OrganisationDto {
   @IsNotEmpty({
     message: 'organisations.admin.form.errors.name.empty',
   })
+  @MaxLength(MAX_SINGLE_LINE_LENGTH, {
+    message: 'organisations.admin.form.errors.name.long',
+  })
   name: string;
 
+  @MaxLength(MAX_SINGLE_LINE_LENGTH, {
+    message: 'organisations.admin.form.errors.alternateName.long',
+  })
   alternateName: string;
 
-  @IsNotEmpty({
-    message: 'organisations.admin.form.errors.address.empty',
+  @IsUrl(urlOptions, {
+    message: 'organisations.admin.form.errors.url.invalid',
   })
-  address: string;
+  @MaxLength(MAX_URL_LENGTH, {
+    message: 'organisations.admin.form.errors.url.long',
+  })
+  @Transform(({ value }) => preprocessUrl(value))
+  url: string;
 
   @IsEmail(
     {},
@@ -49,12 +65,6 @@ export class OrganisationDto {
   @ValidateIf((e) => e.email)
   email: string;
 
-  @IsUrl(urlOptions, {
-    message: 'organisations.admin.form.errors.url.invalid',
-  })
-  @Transform(({ value }) => preprocessUrl(value))
-  url: string;
-
   @IsNotEmpty({
     message: 'organisations.admin.form.errors.phone.empty',
   })
@@ -63,6 +73,14 @@ export class OrganisationDto {
   })
   @Transform(({ value }) => preprocessTelephone(value))
   telephone: string;
+
+  @IsNotEmpty({
+    message: 'organisations.admin.form.errors.address.empty',
+  })
+  @MaxLength(MAX_ADDRESS_LENGTH, {
+    message: 'organisations.admin.form.errors.address.long',
+  })
+  address: string;
 
   confirm?: boolean;
 }
