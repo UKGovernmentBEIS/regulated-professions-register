@@ -137,6 +137,9 @@
         "routes": {
           "empty": "Enter a route",
           "duplicate": "It looks like you've already added a route with that name - enter a different one"
+        },
+        "countries": {
+          "empty": "Enter a country"
         }
       }
     },

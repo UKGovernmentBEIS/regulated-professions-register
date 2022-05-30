@@ -78,4 +78,36 @@ describe('DecisionDataValidator', () => {
       ]);
     });
   });
+
+  describe('when empty countries are submitted', () => {
+    it('returns an array of errors, with the empty countries highlighted', () => {
+      const editDto: EditDto = {
+        routes: ['Route 1', 'Route 2'],
+        countries: [[''], ['', 'JP']],
+        yeses: [['1'], ['1', '1']],
+        yesAfterComps: [['1', '1'], ['1']],
+        noes: [['1'], ['1', '1']],
+        noAfterComps: [['1'], ['1', '1']],
+        action: 'save',
+      };
+
+      const validated = DecisionDataValidator.validate(editDto);
+
+      expect(validated.valid()).toEqual(false);
+      expect(validated.errors).toEqual([
+        {
+          constraints: {
+            message: 'decisions.admin.edit.errors.countries.empty',
+          },
+          property: 'countries[1][1]',
+        },
+        {
+          constraints: {
+            message: 'decisions.admin.edit.errors.countries.empty',
+          },
+          property: 'countries[2][1]',
+        },
+      ]);
+    });
+  });
 });

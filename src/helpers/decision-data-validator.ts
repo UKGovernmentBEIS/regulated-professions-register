@@ -11,6 +11,7 @@ export class DecisionDataValidator {
     const errors = [
       this.validateNoEmptyRoutes(obj),
       this.validateNoDuplicateRoutes(obj),
+      this.validateNoEmptyCountries(obj),
     ].flat();
 
     return new DecisionDataValidator(object, errors);
@@ -25,7 +26,7 @@ export class DecisionDataValidator {
     return this.errors.length == 0;
   }
 
-  public static validateNoEmptyRoutes(editDto: EditDto): ValidationError[] {
+  private static validateNoEmptyRoutes(editDto: EditDto): ValidationError[] {
     return editDto.routes
       .map((route, index) => {
         if (route.trim() === '') {
@@ -41,7 +42,9 @@ export class DecisionDataValidator {
       .filter((n) => n);
   }
 
-  public static validateNoDuplicateRoutes(editDto: EditDto): ValidationError[] {
+  private static validateNoDuplicateRoutes(
+    editDto: EditDto,
+  ): ValidationError[] {
     return editDto.routes
       .map((route, index) => {
         if (editDto.routes.indexOf(route) !== index && route !== '') {
@@ -54,5 +57,24 @@ export class DecisionDataValidator {
         }
       })
       .filter((n) => n);
+  }
+
+  private static validateNoEmptyCountries(editDto: EditDto): ValidationError[] {
+    return editDto.countries
+      .map((countries, routeIndex) => {
+        return countries
+          .map((country, countryIndex) => {
+            if (!country) {
+              return {
+                property: `countries[${routeIndex + 1}][${countryIndex + 1}]`,
+                constraints: {
+                  message: 'decisions.admin.edit.errors.countries.empty',
+                },
+              };
+            }
+          })
+          .filter((n) => n);
+      })
+      .flat();
   }
 }
