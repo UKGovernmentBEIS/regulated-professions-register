@@ -32,11 +32,10 @@ export class SearchPresenter {
       this.i18nService,
     ).checkboxItems();
 
-    const regulationTypesCheckboxItems =
-      await new RegulationTypesCheckboxPresenter(
-        this.filterInput.regulationTypes,
-        this.i18nService,
-      ).checkboxItems();
+    const regulationTypesCheckboxItems = new RegulationTypesCheckboxPresenter(
+      this.filterInput.regulationTypes,
+      this.i18nService,
+    ).checkboxItems();
 
     const displayOrganisations = await Promise.all(
       this.filteredOrganisations.map(async (organisation) => {

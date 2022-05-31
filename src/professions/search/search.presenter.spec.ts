@@ -92,11 +92,10 @@ describe('SearchPresenter', () => {
         i18nService,
       ).checkboxItems();
 
-      const regulationTypesCheckboxItems =
-        await new RegulationTypesCheckboxPresenter(
-          [RegulationType.Certification, RegulationType.Licensing],
-          i18nService,
-        ).checkboxItems();
+      const regulationTypesCheckboxItems = new RegulationTypesCheckboxPresenter(
+        [RegulationType.Certification, RegulationType.Licensing],
+        i18nService,
+      ).checkboxItems();
 
       const expected: IndexTemplate = {
         filters: {

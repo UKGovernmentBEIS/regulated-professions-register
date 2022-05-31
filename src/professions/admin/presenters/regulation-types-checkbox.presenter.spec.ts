@@ -6,13 +6,13 @@ import { RegulationTypesCheckboxPresenter } from './regulation-types-checkbox.pr
 describe('RegulationTypesCheckboxPresenter', () => {
   describe('checkboxItems', () => {
     describe('when called with an empty list of regulation types', () => {
-      it('should return unchecked checkbox arguments', async () => {
+      it('should return unchecked checkbox arguments', () => {
         const presenter = new RegulationTypesCheckboxPresenter(
           [],
           createMockI18nService(),
         );
 
-        await expect(presenter.checkboxItems()).resolves.toEqual([
+        expect(presenter.checkboxItems()).toEqual([
           {
             text: translationOf(
               `professions.regulationTypes.${RegulationType.Licensing}.name`,
@@ -39,13 +39,13 @@ describe('RegulationTypesCheckboxPresenter', () => {
     });
 
     describe('when called with a non-empty list of regulation types', () => {
-      it('should return some checked checkbox arguments', async () => {
+      it('should return some checked checkbox arguments', () => {
         const presenter = new RegulationTypesCheckboxPresenter(
           [RegulationType.Accreditation, RegulationType.Certification],
           createMockI18nService(),
         );
 
-        await expect(presenter.checkboxItems()).resolves.toEqual([
+        expect(presenter.checkboxItems()).toEqual([
           {
             text: translationOf(
               `professions.regulationTypes.${RegulationType.Licensing}.name`,

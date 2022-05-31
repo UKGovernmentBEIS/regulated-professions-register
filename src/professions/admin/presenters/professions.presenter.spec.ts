@@ -139,11 +139,10 @@ describe('ProfessionsPresenter', () => {
           [transportIndustry],
           i18nService,
         ).checkboxItems(),
-        regulationTypesCheckboxItems:
-          await new RegulationTypesCheckboxPresenter(
-            [RegulationType.Certification],
-            i18nService,
-          ).checkboxItems(),
+        regulationTypesCheckboxItems: new RegulationTypesCheckboxPresenter(
+          [RegulationType.Certification],
+          i18nService,
+        ).checkboxItems(),
       };
 
       expect(result).toEqual(expected);
@@ -194,11 +193,10 @@ describe('ProfessionsPresenter', () => {
           [transportIndustry],
           i18nService,
         ).checkboxItems(),
-        regulationTypesCheckboxItems:
-          await new RegulationTypesCheckboxPresenter(
-            [RegulationType.Certification],
-            i18nService,
-          ).checkboxItems(),
+        regulationTypesCheckboxItems: new RegulationTypesCheckboxPresenter(
+          [RegulationType.Certification],
+          i18nService,
+        ).checkboxItems(),
       };
 
       expect(result).toEqual(expected);
