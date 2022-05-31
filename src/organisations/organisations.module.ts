@@ -15,6 +15,7 @@ import { SearchController } from './search/search.controller';
 import { OrganisationsController } from './organisations.controller';
 import { OrganisationPublicationController } from './admin/organisation-publication.controller';
 import { OrganisationArchiveController } from './admin/organisation-archive.controller';
+import { OrganisationUnarchiveController } from './admin/organisation-unarchive.controller';
 import { ProfessionVersionsService } from '../professions/profession-versions.service';
 import { ProfessionsSearchService } from '../professions/professions-search.service';
 import { SearchModule } from '../search/search.module';
@@ -35,6 +36,7 @@ import { SearchModule } from '../search/search.module';
     OrganisationsController,
     OrganisationPublicationController,
     OrganisationArchiveController,
+    OrganisationUnarchiveController,
   ],
   imports: [
     TypeOrmModule.forFeature([Organisation]),
