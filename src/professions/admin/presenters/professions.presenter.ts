@@ -25,12 +25,12 @@ export class ProfessionsPresenter {
     private readonly i18nService: I18nService,
   ) {}
 
-  async present(
+  present(
     view: ProfessionsPresenterView,
-  ): Promise<Omit<IndexTemplate, 'filterQuery' | 'sortMethod'>> {
+  ): Omit<IndexTemplate, 'filterQuery' | 'sortMethod'> {
     const organisation =
       view === 'overview'
-        ? await this.i18nService.translate('app.beis')
+        ? this.i18nService.translate<string>('app.beis')
         : this.userOrganisation.name;
 
     const nationsCheckboxItems = new NationsCheckboxPresenter(
@@ -58,7 +58,7 @@ export class ProfessionsPresenter {
     return {
       view,
       organisation,
-      professionsTable: await this.table(view),
+      professionsTable: this.table(view),
       nationsCheckboxItems,
       organisationsCheckboxItems,
       industriesCheckboxItems,
@@ -77,7 +77,7 @@ export class ProfessionsPresenter {
     };
   }
 
-  private async table(view: ProfessionsPresenterView): Promise<Table> {
+  private table(view: ProfessionsPresenterView): Table {
     const headings = ListEntryPresenter.headings(this.i18nService, view);
 
     const rows = this.filteredProfessions.map((profession) =>
@@ -88,10 +88,13 @@ export class ProfessionsPresenter {
 
     const caption =
       numberOfResults === 1
-        ? await this.i18nService.translate('professions.search.foundSingular', {
-            args: { count: numberOfResults },
-          })
-        : await this.i18nService.translate('professions.search.foundPlural', {
+        ? this.i18nService.translate<string>(
+            'professions.search.foundSingular',
+            {
+              args: { count: numberOfResults },
+            },
+          )
+        : this.i18nService.translate<string>('professions.search.foundPlural', {
             args: { count: numberOfResults },
           });
 

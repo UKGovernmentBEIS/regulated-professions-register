@@ -117,7 +117,7 @@ export class ProfessionsController {
     ).filter(filterInput);
 
     return {
-      ...(await new ProfessionsPresenter(
+      ...new ProfessionsPresenter(
         filterInput,
         userOrganisation,
         allNations,
@@ -125,7 +125,7 @@ export class ProfessionsController {
         allIndustries,
         filteredProfessions,
         this.i18nService,
-      ).present(view)),
+      ).present(view),
       sortMethod: view === 'overview' ? filterDto.sortBy || 'name' : null,
       filterQuery: removeFromQueryString(getQueryString(request), 'sortBy'),
     };

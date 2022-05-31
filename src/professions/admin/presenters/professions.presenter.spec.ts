@@ -96,8 +96,8 @@ describe('ProfessionsPresenter', () => {
   });
 
   describe('present', () => {
-    it('returns template params when called with `overview`', async () => {
-      const result = await professionsPresenter.present('overview');
+    it('returns template params when called with `overview`', () => {
+      const result = professionsPresenter.present('overview');
 
       const nations = Nation.all();
 
@@ -146,8 +146,8 @@ describe('ProfessionsPresenter', () => {
       expect(result).toEqual(expected);
     });
 
-    it('returns template params when called with `single-organisation`', async () => {
-      const result = await professionsPresenter.present('single-organisation');
+    it('returns template params when called with `single-organisation`', () => {
+      const result = professionsPresenter.present('single-organisation');
 
       const nations = Nation.all();
 
@@ -197,7 +197,7 @@ describe('ProfessionsPresenter', () => {
 
     describe('captions', () => {
       describe('when only one profession is found', () => {
-        it('returns the singular professions found text', async () => {
+        it('returns the singular professions found text', () => {
           const i18nService = createMockI18nService();
           const industries = industryFactory.buildList(3);
           const filterInput: FilterInput = {};
@@ -221,7 +221,7 @@ describe('ProfessionsPresenter', () => {
             i18nService,
           );
 
-          const result = await presenter.present('overview');
+          const result = presenter.present('overview');
 
           expect(result.professionsTable.caption).toEqual(
             `${translationOf('professions.search.foundSingular')}`,
@@ -230,7 +230,7 @@ describe('ProfessionsPresenter', () => {
       });
 
       describe('when more than one profession is found', () => {
-        it('returns the singular professions found text', async () => {
+        it('returns the singular professions found text', () => {
           const i18nService = createMockI18nService();
           const industries = industryFactory.buildList(3);
           const filterInput: FilterInput = {};
@@ -254,7 +254,7 @@ describe('ProfessionsPresenter', () => {
             i18nService,
           );
 
-          const result = await presenter.present('overview');
+          const result = presenter.present('overview');
 
           expect(result.professionsTable.caption).toEqual(
             `${translationOf('professions.search.foundPlural')}`,
