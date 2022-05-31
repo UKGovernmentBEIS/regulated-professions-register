@@ -121,7 +121,7 @@ describe('OrganisationsController', () => {
 
           (
             OrganisationsPresenter.prototype as DeepMocked<OrganisationsPresenter>
-          ).present.mockResolvedValue(templateParams);
+          ).present.mockReturnValue(templateParams);
 
           expect(await controller.index(request)).toEqual(templateParams);
 
@@ -189,7 +189,7 @@ describe('OrganisationsController', () => {
 
           (
             OrganisationsPresenter.prototype as DeepMocked<OrganisationsPresenter>
-          ).present.mockResolvedValue(templateParams);
+          ).present.mockReturnValue(templateParams);
 
           expect(
             await controller.index(request, {
@@ -270,7 +270,7 @@ describe('OrganisationsController', () => {
 
         (
           OrganisationsPresenter.prototype as DeepMocked<OrganisationsPresenter>
-        ).present.mockResolvedValue(templateParams);
+        ).present.mockReturnValue(templateParams);
 
         expect(await controller.index(request)).toEqual(templateParams);
 
