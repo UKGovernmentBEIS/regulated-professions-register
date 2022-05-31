@@ -78,14 +78,8 @@ export class OrganisationsPresenter {
   }
 
   private async table(firstCellIsHeader = true): Promise<Table> {
-    const rows = await Promise.all(
-      this.filteredOrganisations.map(
-        async (organisation) =>
-          await new OrganisationPresenter(
-            organisation,
-            this.i18nService,
-          ).tableRow(),
-      ),
+    const rows = this.filteredOrganisations.map((organisation) =>
+      new OrganisationPresenter(organisation, this.i18nService).tableRow(),
     );
 
     const numberOfResults = rows.length;

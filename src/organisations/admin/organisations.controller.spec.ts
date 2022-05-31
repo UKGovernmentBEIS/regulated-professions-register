@@ -389,7 +389,7 @@ describe('OrganisationsController', () => {
 
           (
             OrganisationPresenter.prototype as DeepMocked<OrganisationPresenter>
-          ).summaryList.mockResolvedValue(summaryList);
+          ).summaryList.mockReturnValue(summaryList);
 
           const organisationId = 'some-uuid';
           const versionId = 'some-other-uuid';

@@ -208,7 +208,7 @@ export class OrganisationsController {
 
       return this.showReviewPage(res, version, {
         ...updatedOrganisation,
-        summaryList: await organisationPresenter.summaryList({
+        summaryList: organisationPresenter.summaryList({
           classes: 'govuk-summary-list',
           removeBlank: false,
           includeName: true,

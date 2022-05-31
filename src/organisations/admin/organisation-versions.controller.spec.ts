@@ -169,7 +169,7 @@ describe('OrganisationVersionsController', () => {
 
       (
         OrganisationSummaryPresenter.prototype as DeepMocked<OrganisationSummaryPresenter>
-      ).present.mockResolvedValue(showTemplate);
+      ).present.mockReturnValue(showTemplate);
 
       expect(
         await controller.show('org-uuid', 'version-uuid', request),

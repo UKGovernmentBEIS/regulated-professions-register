@@ -40,7 +40,7 @@ describe('OrganisationPresenter', () => {
   describe('tableRow', () => {
     describe('when all relations are present', () => {
       describe('when the professions share one industry', () => {
-        it('returns the table row data', async () => {
+        it('returns the table row data', () => {
           const industries = [industryFactory.build({ name: 'Industry 1' })];
 
           const professionToOrganisations = professionFactory
@@ -81,7 +81,7 @@ describe('OrganisationPresenter', () => {
             organisation,
             i18nService,
           );
-          const tableRow = await presenter.tableRow();
+          const tableRow = presenter.tableRow();
 
           expect(tableRow[0]).toEqual({ text: organisation.name });
           expect(tableRow[1]).toEqual({
@@ -131,7 +131,7 @@ describe('OrganisationPresenter', () => {
       });
 
       describe('when the professions share multiple industries', () => {
-        it('returns the table row data', async () => {
+        it('returns the table row data', () => {
           const industries = [
             industryFactory.build({ name: 'industry.1' }),
             industryFactory.build({ name: 'industry.2' }),
@@ -186,7 +186,7 @@ describe('OrganisationPresenter', () => {
             organisation,
             i18nService,
           );
-          const tableRow = await presenter.tableRow();
+          const tableRow = presenter.tableRow();
 
           expect(tableRow[0]).toEqual({ text: organisation.name });
           expect(tableRow[1]).toEqual({
@@ -229,7 +229,7 @@ describe('OrganisationPresenter', () => {
       });
 
       describe('when there are no professionToOrganisations on the regulator', () => {
-        it('returns empty text for industries', async () => {
+        it('returns empty text for industries', () => {
           const professionToOrganisations = [];
 
           const organisation = organisationFactory.build({
@@ -249,7 +249,7 @@ describe('OrganisationPresenter', () => {
             organisation,
             i18nService,
           );
-          const tableRow = await presenter.tableRow();
+          const tableRow = presenter.tableRow();
 
           expect(tableRow[2]).toEqual({ text: '' });
         });
@@ -259,7 +259,7 @@ describe('OrganisationPresenter', () => {
 
   describe('summaryList', () => {
     describe('when all fields are present', () => {
-      it('should return all fields', async () => {
+      it('should return all fields', () => {
         const i18nService = createMockI18nService();
         (escape as jest.Mock).mockImplementation(escapeOf);
 
@@ -267,7 +267,7 @@ describe('OrganisationPresenter', () => {
 
         const presenter = new OrganisationPresenter(organisation, i18nService);
 
-        expect(await presenter.summaryList()).toEqual({
+        expect(presenter.summaryList()).toEqual({
           classes: 'govuk-summary-list--no-border',
           rows: [
             {
@@ -317,7 +317,7 @@ describe('OrganisationPresenter', () => {
 
     describe('when a field is missing', () => {
       describe('when removeBlank is true', () => {
-        it('should filter out empty fields', async () => {
+        it('should filter out empty fields', () => {
           const i18nService = createMockI18nService();
           (escape as jest.Mock).mockImplementation(escapeOf);
           (formatMultilineString as jest.Mock).mockImplementation(multilineOf);
@@ -333,7 +333,7 @@ describe('OrganisationPresenter', () => {
             organisation,
             i18nService,
           );
-          const list = await presenter.summaryList({ removeBlank: true });
+          const list = presenter.summaryList({ removeBlank: true });
 
           expect(list.rows.length).toEqual(4);
           expect(
@@ -347,7 +347,7 @@ describe('OrganisationPresenter', () => {
       });
 
       describe('when removeBlank is false', () => {
-        it('keeps empty rows intact', async () => {
+        it('keeps empty rows intact', () => {
           const i18nService = createMockI18nService();
           (escape as jest.Mock).mockImplementation(escapeOf);
 
@@ -359,7 +359,7 @@ describe('OrganisationPresenter', () => {
             organisation,
             i18nService,
           );
-          const list = await presenter.summaryList({ removeBlank: false });
+          const list = presenter.summaryList({ removeBlank: false });
 
           expect(list.rows.length).toEqual(5);
 
@@ -376,7 +376,7 @@ describe('OrganisationPresenter', () => {
     });
 
     describe('when includeName is true', () => {
-      it('should include the name of the organisation', async () => {
+      it('should include the name of the organisation', () => {
         const i18nService = createMockI18nService();
         (escape as jest.Mock).mockImplementation(escapeOf);
 
@@ -385,7 +385,7 @@ describe('OrganisationPresenter', () => {
           .build({ name: 'My Organisation' });
 
         const presenter = new OrganisationPresenter(organisation, i18nService);
-        const list = await presenter.summaryList({ includeName: true });
+        const list = presenter.summaryList({ includeName: true });
 
         expect(list.rows.length).toEqual(6);
 
@@ -401,7 +401,7 @@ describe('OrganisationPresenter', () => {
     });
 
     describe('when includeActions is true', () => {
-      it('should include an actions column', async () => {
+      it('should include an actions column', () => {
         const i18nService = createMockI18nService();
         (escape as jest.Mock).mockImplementation(escapeOf);
 
@@ -412,7 +412,7 @@ describe('OrganisationPresenter', () => {
           .build({ name: 'My Organisation' });
 
         const presenter = new OrganisationPresenter(organisation, i18nService);
-        const list = await presenter.summaryList({ includeActions: true });
+        const list = presenter.summaryList({ includeActions: true });
 
         for (const row of list.rows) {
           const visuallyHiddenText =
@@ -432,14 +432,14 @@ describe('OrganisationPresenter', () => {
     });
 
     describe('when classes are specified', () => {
-      it('should return the specified class', async () => {
+      it('should return the specified class', () => {
         const i18nService = createMockI18nService();
         (escape as jest.Mock).mockImplementation(escapeOf);
 
         const organisation = organisationFactory.build();
 
         const presenter = new OrganisationPresenter(organisation, i18nService);
-        const list = await presenter.summaryList({ classes: 'foo' });
+        const list = presenter.summaryList({ classes: 'foo' });
 
         expect(list.classes).toEqual('foo');
       });

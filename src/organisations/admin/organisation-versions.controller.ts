@@ -104,7 +104,7 @@ export class OrganisationVersionsController {
     );
 
     return {
-      ...(await organisationSummaryPresenter.present(true)),
+      ...organisationSummaryPresenter.present(true),
       hasLiveVersion,
     };
   }
