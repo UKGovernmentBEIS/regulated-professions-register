@@ -73,6 +73,14 @@
       },
       "forbidden": "This organisation cannot be archived yet. Before you can archive, remove the regulator from the following professions:"
     },
+    "unarchive": {
+      "heading": "Are you sure you want to unarchive {organisationName}?",
+      "caption": "Unarchiving an organisation",
+      "confirmation": {
+        "heading": "Regulatory authority unarchived",
+        "body": "The regulator <strong>{name}</strong> has been unarchived."
+      }
+    },
     "tableHeading": {
       "name": "Name",
       "nations": "Nations",
@@ -127,6 +135,7 @@
         "live": "Edit this regulatory authority"
       },
       "archive": "Archive this regulatory authority",
+      "unarchive": "Unarchive this regulatory authority",
       "saveAsDraft": "Save as draft",
       "publish": "Publish to register",
       "backToRegulator": "Back to regulator"
