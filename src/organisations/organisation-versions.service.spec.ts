@@ -665,6 +665,25 @@ describe('OrganisationVersionsService', () => {
     });
   });
 
+  describe('unarchive', () => {
+    it('changes the status of the version from `archived` to `live`', () => {
+      const inputVersion = organisationVersionFactory.build({
+        status: OrganisationVersionStatus.Archived,
+      });
+      const unarchivedVersion = {
+        ...inputVersion,
+        status: OrganisationVersionStatus.Draft,
+      };
+
+      const saveSpy = jest
+        .spyOn(repo, 'save')
+        .mockResolvedValue(unarchivedVersion);
+
+      service.unarchive(inputVersion);
+      expect(saveSpy).toHaveBeenCalledWith(unarchivedVersion);
+    });
+  });
+
   describe('searchLive', () => {
     let versions: OrganisationVersion[];
     let queryBuilder: SelectQueryBuilder<OrganisationVersion>;

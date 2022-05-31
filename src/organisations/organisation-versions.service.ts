@@ -286,6 +286,11 @@ export class OrganisationVersionsService {
     return version;
   }
 
+  async unarchive(version: OrganisationVersion): Promise<OrganisationVersion> {
+    version.status = OrganisationVersionStatus.Draft;
+    return await this.repository.save(version);
+  }
+
   private versionsWithJoins(
     professionVersionStatuses: ProfessionVersionStatus[] = undefined,
   ): SelectQueryBuilder<OrganisationVersion> {
