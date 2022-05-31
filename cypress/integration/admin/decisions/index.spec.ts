@@ -265,6 +265,36 @@ describe('Listing decision datasets', () => {
       );
     });
 
+    it('I can filter by professions', () => {
+      cy.expandFilters('decisions.admin.dashboard');
+
+      cy.get('label')
+        .contains(
+          'Secondary School Teacher in State maintained schools (England)',
+        )
+        .parent()
+        .find('input')
+        .check();
+
+      cy.clickFilterButtonAndCheckAccessibility();
+
+      cy.get('tbody tr').each(($tr) => {
+        cy.wrap($tr).should('contain', 'Secondary School');
+      });
+
+      cy.get('tbody tr').each(($tr) => {
+        cy.wrap($tr).should('not.contain', 'Primary School');
+      });
+
+      cy.get('tbody tr').should('have.length.at.least', 2);
+
+      checkCsvDownload(
+        (dataset) =>
+          dataset.profession.includes('Secondary School') &&
+          !dataset.profession.includes('Primary School'),
+      );
+    });
+
     it('Contains the expected columns and filters', () => {
       cy.translate('decisions.admin.dashboard.tableHeading.profession').then(
         (profession) => {
@@ -300,13 +330,18 @@ describe('Listing decision datasets', () => {
 
       cy.translate('decisions.admin.dashboard.filter.keywords.label').then(
         (keywords) => {
-          cy.get('label').should('contain', keywords);
+          cy.get('label').should('not.contain', keywords);
         },
       );
 
       cy.translate('decisions.admin.dashboard.filter.organisations.label').then(
         (organisations) => {
           cy.get('legend').should('not.contain', organisations);
+        },
+      );
+      cy.translate('decisions.admin.dashboard.filter.professions.label').then(
+        (professions) => {
+          cy.get('legend').should('contain', professions);
         },
       );
 

@@ -175,6 +175,14 @@ export class DecisionDatasetsService {
       });
     }
 
+    if (filter.professions?.length) {
+      const professions = filter.professions.map((profession) => profession.id);
+
+      query = query.andWhere('profession.id IN(:...professions)', {
+        professions,
+      });
+    }
+
     return query;
   }
 

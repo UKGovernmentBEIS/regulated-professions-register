@@ -2,9 +2,11 @@ import { createMock, DeepMocked } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { I18nService } from 'nestjs-i18n';
 import { ProfessionsService } from '../../professions/professions.service';
+import { ProfessionVersionsService } from '../../professions/profession-versions.service';
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 import { createDefaultMockRequest } from '../../testutils/factories/create-default-mock-request';
 import decisionDatasetFactory from '../../testutils/factories/decision-dataset';
+import professionFactory from '../../testutils/factories/profession';
 import organisationFactory from '../../testutils/factories/organisation';
 import userFactory from '../../testutils/factories/user';
 import * as getActingUserModule from '../../users/helpers/get-acting-user.helper';
@@ -37,10 +39,12 @@ const mockIndexTemplate: Omit<IndexTemplate, 'filterQuery'> = {
     organisations: ['Organisation 1', 'Organisation 2'],
     years: [2020, 2021],
     statuses: [DecisionDatasetStatus.Live],
+    professions: [],
   },
   organisationsCheckboxItems: [],
   yearsCheckboxItems: [],
   statusesCheckboxItems: [],
+  professionsCheckboxItems: [],
 };
 
 describe('DecisionsController', () => {
@@ -48,12 +52,14 @@ describe('DecisionsController', () => {
 
   let decisionDatasetsService: DeepMocked<DecisionDatasetsService>;
   let professionsService: DeepMocked<ProfessionsService>;
+  let professionVersionsService: DeepMocked<ProfessionVersionsService>;
   let organisationVersionsService: DeepMocked<OrganisationVersionsService>;
   let i18nService: DeepMocked<I18nService>;
 
   beforeEach(async () => {
     decisionDatasetsService = createMock<DecisionDatasetsService>();
     professionsService = createMock<ProfessionsService>();
+    professionVersionsService = createMock<ProfessionVersionsService>();
     organisationVersionsService = createMock<OrganisationVersionsService>();
     i18nService = createMockI18nService();
 
@@ -67,6 +73,10 @@ describe('DecisionsController', () => {
         {
           provide: ProfessionsService,
           useValue: professionsService,
+        },
+        {
+          provide: ProfessionVersionsService,
+          useValue: professionVersionsService,
         },
         {
           provide: OrganisationVersionsService,
@@ -128,6 +138,7 @@ describe('DecisionsController', () => {
           organisations: [],
           years: [],
           statuses: [],
+          professions: [],
         };
 
         const result = await controller.index(request, filter);
@@ -141,6 +152,7 @@ describe('DecisionsController', () => {
         expect(createFilterInputSpy).toHaveBeenCalledWith({
           ...filter,
           allOrganisations,
+          allProfessions: [],
         });
         expect(getDecisionsYearsRangeSpy).toHaveBeenCalled();
         expect(getQueryStringSpy).toHaveBeenCalledWith(request);
@@ -155,6 +167,7 @@ describe('DecisionsController', () => {
           2024,
           datasets,
           i18nService,
+          [],
         );
         expect(
           DecisionDatasetsPresenter.prototype.present,
@@ -166,6 +179,9 @@ describe('DecisionsController', () => {
         expect(
           decisionDatasetsService.allForOrganisation,
         ).not.toHaveBeenCalled();
+        expect(
+          professionVersionsService.allWithLatestVersionForOrganisation,
+        ).not.toHaveBeenCalled();
       });
     });
 
@@ -174,6 +190,10 @@ describe('DecisionsController', () => {
         const request = createDefaultMockRequest();
 
         const userOrganisation = organisationFactory.build();
+
+        const profession = professionFactory.build({
+          name: 'Filtered Profession',
+        });
 
         const getActingUserSpy = jest
           .spyOn(getActingUserModule, 'getActingUser')
@@ -188,6 +208,7 @@ describe('DecisionsController', () => {
           .spyOn(createFilterInputModule, 'createFilterInput')
           .mockReturnValue({
             keywords: 'example keywords',
+            professions: [profession],
           });
 
         const getDecisionsYearsRangeSpy = jest
@@ -203,9 +224,13 @@ describe('DecisionsController', () => {
 
         const datasets = decisionDatasetFactory.buildList(3);
         const allOrganisations = organisationFactory.buildList(3);
+        const allProfessions = professionFactory.buildList(3);
 
         decisionDatasetsService.allForOrganisation.mockResolvedValue(datasets);
         organisationVersionsService.allLive.mockResolvedValue(allOrganisations);
+        professionVersionsService.allWithLatestVersionForOrganisation.mockResolvedValue(
+          allProfessions,
+        );
 
         (
           DecisionDatasetsPresenter.prototype.present as jest.Mock
@@ -216,6 +241,7 @@ describe('DecisionsController', () => {
           organisations: [],
           years: [],
           statuses: [],
+          professions: [],
         };
 
         const result = await controller.index(request, filter);
@@ -229,6 +255,7 @@ describe('DecisionsController', () => {
         expect(createFilterInputSpy).toHaveBeenCalledWith({
           ...filter,
           allOrganisations,
+          allProfessions,
         });
         expect(getDecisionsYearsRangeSpy).toHaveBeenCalled();
         expect(getQueryStringSpy).toHaveBeenCalledWith(request);
@@ -236,6 +263,7 @@ describe('DecisionsController', () => {
         expect(DecisionDatasetsPresenter).toHaveBeenCalledWith(
           {
             keywords: 'example keywords',
+            professions: [profession],
           },
           userOrganisation,
           allOrganisations,
@@ -243,6 +271,7 @@ describe('DecisionsController', () => {
           2024,
           datasets,
           i18nService,
+          allProfessions,
         );
         expect(
           DecisionDatasetsPresenter.prototype.present,
@@ -252,9 +281,13 @@ describe('DecisionsController', () => {
           userOrganisation,
           {
             keywords: 'example keywords',
+            professions: [profession],
           },
         );
         expect(decisionDatasetsService.all).not.toHaveBeenCalled();
+        expect(
+          professionVersionsService.allWithLatestVersionForOrganisation,
+        ).toHaveBeenCalledWith(userOrganisation);
       });
     });
   });
@@ -295,6 +328,7 @@ describe('DecisionsController', () => {
           organisations: [],
           years: [],
           statuses: [],
+          professions: [],
         };
 
         await controller.export(request, response, filter);
@@ -303,6 +337,7 @@ describe('DecisionsController', () => {
         expect(createFilterInputSpy).toHaveBeenCalledWith({
           ...filter,
           allOrganisations,
+          allProfessions: [],
         });
         expect(getExportTimestampSpy).toHaveBeenCalled();
 
@@ -319,6 +354,9 @@ describe('DecisionsController', () => {
         });
         expect(
           decisionDatasetsService.allForOrganisation,
+        ).not.toHaveBeenCalled();
+        expect(
+          professionVersionsService.allWithLatestVersionForOrganisation,
         ).not.toHaveBeenCalled();
       });
     });
@@ -351,6 +389,7 @@ describe('DecisionsController', () => {
 
         const datasets = decisionDatasetFactory.buildList(3);
         const allOrganisations = organisationFactory.buildList(3);
+        const allProfessions = professionFactory.buildList(3);
 
         decisionDatasetsService.allForOrganisation.mockResolvedValue(datasets);
         organisationVersionsService.allLive.mockResolvedValue(allOrganisations);
@@ -360,6 +399,7 @@ describe('DecisionsController', () => {
           organisations: [],
           years: [],
           statuses: [],
+          professions: [],
         };
 
         await controller.export(request, response, filter);
@@ -368,6 +408,7 @@ describe('DecisionsController', () => {
         expect(createFilterInputSpy).toHaveBeenCalledWith({
           ...filter,
           allOrganisations,
+          allProfessions,
         });
         expect(getExportTimestampSpy).toHaveBeenCalled();
 
@@ -386,6 +427,9 @@ describe('DecisionsController', () => {
           },
         );
         expect(decisionDatasetsService.all).not.toHaveBeenCalled();
+        expect(
+          professionVersionsService.allWithLatestVersionForOrganisation,
+        ).toHaveBeenCalledWith(userOrganisation);
       });
     });
   });

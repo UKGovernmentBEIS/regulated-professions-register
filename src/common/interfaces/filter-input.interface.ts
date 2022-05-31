@@ -3,6 +3,7 @@ import { Industry } from '../../industries/industry.entity';
 import { Nation } from '../../nations/nation';
 import { Organisation } from '../../organisations/organisation.entity';
 import { RegulationType } from '../../professions/profession-version.entity';
+import { Profession } from '../../professions/profession.entity';
 
 export interface FilterInput {
   keywords?: string;
@@ -12,4 +13,5 @@ export interface FilterInput {
   regulationTypes?: RegulationType[];
   years?: number[];
   statuses?: DecisionDatasetStatus[];
+  professions?: Profession[];
 }

@@ -3,6 +3,7 @@ import { DecisionDatasetStatus } from '../decisions/decision-dataset.entity';
 import { Industry } from '../industries/industry.entity';
 import { Nation } from '../nations/nation';
 import { Organisation } from '../organisations/organisation.entity';
+import { Profession } from '../professions/profession.entity';
 import { RegulationType } from '../professions/profession-version.entity';
 
 type AllOrNone<T> = T | { [K in keyof T]?: never };
@@ -13,6 +14,7 @@ export function createFilterInput(
     allNations: Nation[];
   }> &
     AllOrNone<{ organisations?: string[]; allOrganisations: Organisation[] }> &
+    AllOrNone<{ professions?: string[]; allProfessions: Profession[] }> &
     AllOrNone<{ industries?: string[]; allIndustries: Industry[] }> & {
       regulationTypes?: RegulationType[];
       years?: string[];
@@ -26,6 +28,12 @@ export function createFilterInput(
   const organisations = filter.allOrganisations
     ? filter.allOrganisations.filter((organisation) =>
         (filter.organisations || []).includes(organisation.id),
+      )
+    : undefined;
+
+  const professions = filter.allProfessions
+    ? filter.allProfessions.filter((profession) =>
+        (filter.professions || []).includes(profession.id),
       )
     : undefined;
 
@@ -47,5 +55,6 @@ export function createFilterInput(
     regulationTypes: filter.regulationTypes,
     years,
     statuses: filter.statuses,
+    professions,
   };
 }

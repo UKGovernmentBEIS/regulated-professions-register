@@ -182,5 +182,30 @@
         ]
       }
     ]
+  },
+  {
+    "profession": "Primary School Teacher in State maintained schools (England)",
+    "organisation": "Department for Education",
+    "year": 2018,
+    "status": "live",
+    "user": {
+      "email": "beis-rpr+orgeditor@dxw.com"
+    },
+    "routes": [
+      {
+        "name": "Other qualification",
+        "countries": [
+          {
+            "code": "CA",
+            "decisions": {
+              "yes": 4,
+              "no": 5,
+              "yesAfterComp": 7,
+              "noAfterComp": 8
+            }
+          }
+        ]
+      }
+    ]
   }
 ]

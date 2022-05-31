@@ -10,6 +10,10 @@
       "viewDetails": "View details <span class='govuk-visually-hidden'>about {year} {organisaition} {profession} decision data</span>",
       "guidanceLink": "Guidance on decision outcomes and routes",
       "filter": {
+        "professions": {
+          "label": "Professions",
+          "hint": "Select all that apply"
+        },
         "keywords": {
           "label": "Keyword",
           "hint": "For example, teacher"
@@ -31,7 +35,8 @@
         "keywords": "Keywords:",
         "organisations": "Regulators:",
         "years": "Years:",
-        "statuses": "Published status:"
+        "statuses": "Published status:",
+        "professions": "Professions:"
       },
       "tableHeading": {
         "profession": "Profession",

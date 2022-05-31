@@ -34,6 +34,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 - Add page explaining regulation types, with a link from the regulation types filter in the public searches
 - Add link for technical feedback on the start page
+- Allow regulators to filter decicion datasets by profession
 
 ### Changed
 

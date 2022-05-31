@@ -42,7 +42,9 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <p class="govuk-body">{{"decisions.admin.dashboard.instructions" | t}}</p>
-      {% if view !== 'overview' %}
+      {% if view === 'overview' %}
+        {% set professionsCheckboxItems = false %}
+      {% else %}
         {% set organisationsCheckboxItems = false %}
       {% endif %}
       {% set filterTextPrefix = "decisions.admin.dashboard" %}

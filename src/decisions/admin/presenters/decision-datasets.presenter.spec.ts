@@ -5,18 +5,21 @@ import { OrganisationsCheckboxPresenter } from '../../../organisations/organisat
 import { createMockI18nService } from '../../../testutils/create-mock-i18n-service';
 import decisionDatasetFactory from '../../../testutils/factories/decision-dataset';
 import organisationFactory from '../../../testutils/factories/organisation';
+import professionFactory from '../../../testutils/factories/profession';
 import { translationOf } from '../../../testutils/translation-of';
 import { DecisionDatasetStatus } from '../../decision-dataset.entity';
 import { IndexTemplate } from '../interfaces/index-template.interface';
 import { DecisionDatasetStatusesCheckboxPresenter } from './decision-dataset-statuses-checkbox.presenter';
 import { DecisionDatasetsPresenter } from './decision-datasets.presenter';
 import { ListEntryPresenter } from './list-entry.presenter';
+import { ProfessionsCheckboxPresenter } from './professions-checkbox.presenter';
 import { YearsCheckboxPresenter } from './years-checkbox.presenter';
 
 jest.mock('./list-entry.presenter');
 jest.mock('./years-checkbox.presenter');
 jest.mock('../../../organisations/organisations-checkbox-presenter');
 jest.mock('./decision-dataset-statuses-checkbox.presenter');
+jest.mock('./professions-checkbox.presenter');
 
 const mockTableRow: TableRow = [
   {
@@ -54,6 +57,10 @@ const mockStatusesCheckboxItems: CheckboxItems[] = [
   },
 ];
 
+const mockProfessionCheckboxItems: CheckboxItems[] = [
+  { text: 'Mock profession', value: 'mock-profession', checked: false },
+];
+
 describe('DecisionDatasetsPresenter', () => {
   describe('present', () => {
     describe('when called with `single-organisation`', () => {
@@ -69,6 +76,7 @@ describe('DecisionDatasetsPresenter', () => {
         const userOrganisation = organisationFactory.build();
         const datasets = decisionDatasetFactory.buildList(3);
         const allOrganisations = organisationFactory.buildList(3);
+        const professions = professionFactory.buildList(3);
 
         const presenter = new DecisionDatasetsPresenter(
           filterInput,
@@ -77,6 +85,7 @@ describe('DecisionDatasetsPresenter', () => {
           2020,
           2023,
           datasets,
+          professions,
           i18nService,
         );
 
@@ -100,6 +109,10 @@ describe('DecisionDatasetsPresenter', () => {
             .checkboxItems as jest.Mock
         ).mockReturnValue(mockStatusesCheckboxItems);
 
+        (
+          ProfessionsCheckboxPresenter.prototype.checkboxItems as jest.Mock
+        ).mockReturnValue(mockProfessionCheckboxItems);
+
         const expected: Omit<IndexTemplate, 'filterQuery'> = {
           view: 'single-organisation',
           organisation: 'Example Organisation',
@@ -117,10 +130,12 @@ describe('DecisionDatasetsPresenter', () => {
             organisations: [],
             years: [2020, 2021],
             statuses: [DecisionDatasetStatus.Draft],
+            professions: [],
           },
           organisationsCheckboxItems: mockOrganisationsCheckboxItems,
           yearsCheckboxItems: mockYearsCheckboxItems,
           statusesCheckboxItems: mockStatusesCheckboxItems,
+          professionsCheckboxItems: mockProfessionCheckboxItems,
         };
 
         const result = presenter.present('single-organisation');
@@ -162,18 +177,23 @@ describe('DecisionDatasetsPresenter', () => {
         const filterOrganisation = organisationFactory.build({
           name: 'Filtered Organisation',
         });
+        const profession = professionFactory.build({
+          name: 'Filtered Profession',
+        });
 
         const filterInput: FilterInput = {
           keywords: 'Attorny',
           organisations: [filterOrganisation],
           years: [2021, 2022],
           statuses: [DecisionDatasetStatus.Draft, DecisionDatasetStatus.Live],
+          professions: [profession],
         };
 
         const i18nService = createMockI18nService();
 
         const datasets = decisionDatasetFactory.buildList(3);
         const allOrganisations = organisationFactory.buildList(3);
+        const professions = professionFactory.buildList(3);
 
         const presenter = new DecisionDatasetsPresenter(
           filterInput,
@@ -182,6 +202,7 @@ describe('DecisionDatasetsPresenter', () => {
           2020,
           2023,
           datasets,
+          professions,
           i18nService,
         );
 
@@ -205,6 +226,10 @@ describe('DecisionDatasetsPresenter', () => {
             .checkboxItems as jest.Mock
         ).mockReturnValue(mockStatusesCheckboxItems);
 
+        (
+          ProfessionsCheckboxPresenter.prototype.checkboxItems as jest.Mock
+        ).mockReturnValue(mockProfessionCheckboxItems);
+
         const expected: Omit<IndexTemplate, 'filterQuery'> = {
           view: 'overview',
           organisation: translationOf('app.beis'),
@@ -222,10 +247,12 @@ describe('DecisionDatasetsPresenter', () => {
             organisations: ['Filtered Organisation'],
             years: [2021, 2022],
             statuses: [DecisionDatasetStatus.Draft, DecisionDatasetStatus.Live],
+            professions: [profession],
           },
           organisationsCheckboxItems: mockOrganisationsCheckboxItems,
           yearsCheckboxItems: mockYearsCheckboxItems,
           statusesCheckboxItems: mockStatusesCheckboxItems,
+          professionsCheckboxItems: mockProfessionCheckboxItems,
         };
 
         const result = presenter.present('overview');
@@ -259,6 +286,10 @@ describe('DecisionDatasetsPresenter', () => {
         expect(
           DecisionDatasetStatusesCheckboxPresenter.prototype.checkboxItems,
         ).toHaveBeenCalled();
+
+        expect(ProfessionsCheckboxPresenter).toHaveBeenCalledWith(professions, [
+          profession,
+        ]);
       });
     });
   });

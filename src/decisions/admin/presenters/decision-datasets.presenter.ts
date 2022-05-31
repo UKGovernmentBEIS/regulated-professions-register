@@ -8,6 +8,8 @@ import { FilterInput } from '../../../common/interfaces/filter-input.interface';
 import { OrganisationsCheckboxPresenter } from '../../../organisations/organisations-checkbox-presenter';
 import { YearsCheckboxPresenter } from './years-checkbox.presenter';
 import { DecisionDatasetStatusesCheckboxPresenter } from './decision-dataset-statuses-checkbox.presenter';
+import { Profession } from '../../../professions/profession.entity';
+import { ProfessionsCheckboxPresenter } from './professions-checkbox.presenter';
 
 export type DecisionDatasetsPresenterView = 'overview' | 'single-organisation';
 
@@ -19,6 +21,7 @@ export class DecisionDatasetsPresenter {
     private readonly startYear: number,
     private readonly endYear: number,
     private readonly decisionDatasets: DecisionDataset[],
+    private readonly allProfessions: Profession[],
     private readonly i18nService: I18nService,
   ) {}
 
@@ -46,6 +49,11 @@ export class DecisionDatasetsPresenter {
       this.i18nService,
     ).checkboxItems();
 
+    const professionsCheckboxItems = new ProfessionsCheckboxPresenter(
+      this.allProfessions || [],
+      this.filterInput.professions || [],
+    ).checkboxItems();
+
     return {
       view,
       organisation,
@@ -57,10 +65,12 @@ export class DecisionDatasetsPresenter {
         ),
         years: this.filterInput.years || [],
         statuses: this.filterInput.statuses || [],
+        professions: this.filterInput.professions || [],
       },
       organisationsCheckboxItems,
       yearsCheckboxItems,
       statusesCheckboxItems,
+      professionsCheckboxItems,
     };
   }
 

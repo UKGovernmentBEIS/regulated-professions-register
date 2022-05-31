@@ -4,8 +4,27 @@
 
 <form action="" method="get" class="form">
   <div class="{{ filterRowClass }}">
-    <div class="{{ filterColumnClass }}">
-      {{ govukInput({
+
+    {% if professionsCheckboxItems %}
+      <div class="{{ filterColumnClass }}">
+        {{ govukCheckboxes({
+          name: "professions[]",
+          classes: filterCheckboxClasses,
+          fieldset: {
+            legend: {
+            text: (filterTextPrefix + ".filter.professions.label") | t,
+            classes: "govuk-fieldset__legend--s"
+            }
+          },
+          hint: {
+            text: (filterTextPrefix + ".filter.professions.hint") | t
+          },
+          items: professionsCheckboxItems
+        }) }}
+      </div>
+    {% else %}
+      <div class="{{ filterColumnClass }}">
+        {{ govukInput({
         label: {
           text: (filterTextPrefix + ".filter.keywords.label") | t,
           classes: "govuk-label--s"
@@ -18,7 +37,8 @@
         name: "keywords",
         value: filters.keywords
       }) }}
-    </div>
+      </div>
+    {% endif %}
 
     {% if industriesCheckboxItems %}
       <div class="{{ filterColumnClass }}">
