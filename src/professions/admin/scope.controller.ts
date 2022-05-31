@@ -151,7 +151,7 @@ export class ScopeController {
   ): Promise<void> {
     const industries = await this.industriesService.all();
 
-    const industriesCheckboxItems = await new IndustriesCheckboxPresenter(
+    const industriesCheckboxItems = new IndustriesCheckboxPresenter(
       industries,
       selectedIndustries,
       this.i18nService,

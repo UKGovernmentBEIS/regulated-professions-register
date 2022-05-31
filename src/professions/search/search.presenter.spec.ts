@@ -86,7 +86,7 @@ describe('SearchPresenter', () => {
         i18nService,
       ).checkboxItems();
 
-      const industriesCheckboxItems = await new IndustriesCheckboxPresenter(
+      const industriesCheckboxItems = new IndustriesCheckboxPresenter(
         industries,
         [industry2],
         i18nService,

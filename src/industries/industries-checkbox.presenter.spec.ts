@@ -5,7 +5,7 @@ import { IndustriesCheckboxPresenter } from './industries-checkbox.presenter';
 
 describe('IndustriesCheckboxPresenter', () => {
   describe('checkboxItems', () => {
-    it('should return unchecked checkbox arguments when called with an empty list of checked Industries', async () => {
+    it('should return unchecked checkbox arguments when called with an empty list of checked Industries', () => {
       const exampleIndustry1 = industry.build({
         name: 'industries.example1',
         id: 'example-industry-1',
@@ -27,7 +27,7 @@ describe('IndustriesCheckboxPresenter', () => {
         createMockI18nService(),
       );
 
-      await expect(presenter.checkboxItems()).resolves.toEqual([
+      expect(presenter.checkboxItems()).toEqual([
         {
           text: translationOf('industries.example1'),
           value: 'example-industry-1',
@@ -46,7 +46,7 @@ describe('IndustriesCheckboxPresenter', () => {
       ]);
     });
 
-    it('should return some checked checkbox arguments when called with a non-empty list of checked Industries', async () => {
+    it('should return some checked checkbox arguments when called with a non-empty list of checked Industries', () => {
       const exampleIndustry1 = industry.build({
         name: 'industries.example1',
         id: 'example-industry-1',
@@ -68,7 +68,7 @@ describe('IndustriesCheckboxPresenter', () => {
         createMockI18nService(),
       );
 
-      await expect(presenter.checkboxItems()).resolves.toEqual([
+      expect(presenter.checkboxItems()).toEqual([
         {
           text: translationOf('industries.example1'),
           value: 'example-industry-1',
@@ -88,7 +88,7 @@ describe('IndustriesCheckboxPresenter', () => {
     });
 
     describe('if there is an  "other" industry', () => {
-      it('should be placed at the end of the list', async () => {
+      it('should be placed at the end of the list', () => {
         const exampleIndustry1 = industry.build({
           name: 'industries.example1',
           id: 'example-industry-1',
@@ -110,7 +110,7 @@ describe('IndustriesCheckboxPresenter', () => {
           createMockI18nService(),
         );
 
-        await expect(presenter.checkboxItems()).resolves.toEqual([
+        expect(presenter.checkboxItems()).toEqual([
           {
             text: translationOf('industries.example1'),
             value: 'example-industry-1',

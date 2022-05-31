@@ -134,7 +134,7 @@ describe('ProfessionsPresenter', () => {
           organisations,
           [organisation1],
         ).checkboxItems(),
-        industriesCheckboxItems: await new IndustriesCheckboxPresenter(
+        industriesCheckboxItems: new IndustriesCheckboxPresenter(
           industries,
           [transportIndustry],
           i18nService,
@@ -189,7 +189,7 @@ describe('ProfessionsPresenter', () => {
           organisations,
           [organisation1],
         ).checkboxItems(),
-        industriesCheckboxItems: await new IndustriesCheckboxPresenter(
+        industriesCheckboxItems: new IndustriesCheckboxPresenter(
           industries,
           [transportIndustry],
           i18nService,

@@ -26,7 +26,7 @@ export class SearchPresenter {
       this.i18nService,
     ).checkboxItems();
 
-    const industriesCheckboxItems = await new IndustriesCheckboxPresenter(
+    const industriesCheckboxItems = new IndustriesCheckboxPresenter(
       this.allIndustries,
       this.filterInput.industries,
       this.i18nService,

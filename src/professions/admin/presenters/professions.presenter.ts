@@ -44,7 +44,7 @@ export class ProfessionsPresenter {
       this.filterInput.organisations || [],
     ).checkboxItems();
 
-    const industriesCheckboxItems = await new IndustriesCheckboxPresenter(
+    const industriesCheckboxItems = new IndustriesCheckboxPresenter(
       this.allIndustries,
       this.filterInput.industries || [],
       this.i18nService,
