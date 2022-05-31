@@ -42,7 +42,7 @@ export class OrganisationsPresenter {
   ) {}
 
   async present(view: OrganisationsPresenterView): Promise<IndexTemplate> {
-    const nationsCheckboxItems = await new NationsCheckboxPresenter(
+    const nationsCheckboxItems = new NationsCheckboxPresenter(
       this.allNations,
       this.filterInput.nations || [],
       this.i18nService,

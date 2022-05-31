@@ -80,7 +80,7 @@ describe('SearchPresenter', () => {
       (hasSelectedFilters as jest.Mock).mockReturnValue(true);
       const result = await presenter.present();
 
-      const nationsCheckboxItems = await new NationsCheckboxPresenter(
+      const nationsCheckboxItems = new NationsCheckboxPresenter(
         Nation.all(),
         [Nation.find('GB-ENG')],
         i18nService,

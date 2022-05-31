@@ -125,7 +125,7 @@ describe('ProfessionsPresenter', () => {
           regulationTypes: [RegulationType.Certification],
         },
 
-        nationsCheckboxItems: await new NationsCheckboxPresenter(
+        nationsCheckboxItems: new NationsCheckboxPresenter(
           nations,
           [Nation.find('GB-ENG')],
           i18nService,
@@ -180,7 +180,7 @@ describe('ProfessionsPresenter', () => {
           industries: ['industries.transport'],
           regulationTypes: [RegulationType.Certification],
         },
-        nationsCheckboxItems: await new NationsCheckboxPresenter(
+        nationsCheckboxItems: new NationsCheckboxPresenter(
           nations,
           [Nation.find('GB-ENG')],
           i18nService,

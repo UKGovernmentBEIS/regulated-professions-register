@@ -20,7 +20,7 @@ export class SearchPresenter {
   ) {}
 
   async present(): Promise<IndexTemplate> {
-    const nationsCheckboxItems = await new NationsCheckboxPresenter(
+    const nationsCheckboxItems = new NationsCheckboxPresenter(
       this.allNations,
       this.filterInput.nations,
       this.i18nService,

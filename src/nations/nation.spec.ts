@@ -33,11 +33,11 @@ describe(Nation, () => {
   });
 
   describe('translatedName', () => {
-    it('calls the translation service to return a translated version of the name', async () => {
+    it('calls the translation service to return a translated version of the name', () => {
       const nation = new Nation('nations.england', 'GB-ENG');
       const i18nService = createMockI18nService();
 
-      await expect(nation.translatedName(i18nService)).resolves.toEqual(
+      expect(nation.translatedName(i18nService)).toEqual(
         translationOf('nations.england'),
       );
       expect(i18nService.translate).toHaveBeenCalledWith('nations.england');

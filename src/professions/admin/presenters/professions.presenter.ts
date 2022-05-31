@@ -33,7 +33,7 @@ export class ProfessionsPresenter {
         ? await this.i18nService.translate('app.beis')
         : this.userOrganisation.name;
 
-    const nationsCheckboxItems = await new NationsCheckboxPresenter(
+    const nationsCheckboxItems = new NationsCheckboxPresenter(
       this.allNations,
       this.filterInput.nations || [],
       this.i18nService,
