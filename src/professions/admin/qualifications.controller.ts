@@ -141,7 +141,7 @@ export class QualificationsController {
       ukRecognition: qualification?.ukRecognition,
       ukRecognitionUrl: qualification?.ukRecognitionUrl,
       otherCountriesRecognitionRoutesRadioButtonArgs:
-        await new OtherCountriesRecognitionRoutesRadioButtonsPresenter(
+        new OtherCountriesRecognitionRoutesRadioButtonsPresenter(
           qualification?.otherCountriesRecognitionRoutes,
           this.i18nService,
         ).radioButtonArgs(),

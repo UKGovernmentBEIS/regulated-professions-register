@@ -8,15 +8,13 @@ export class OtherCountriesRecognitionRoutesRadioButtonsPresenter {
     private readonly i18nService: I18nService,
   ) {}
 
-  async radioButtonArgs(): Promise<RadioButtonArgs[]> {
-    return Promise.all(
-      Object.values(OtherCountriesRecognitionRoutes).map(async (route) => ({
-        text: await this.i18nService.translate(
-          `professions.form.label.qualifications.otherCountriesRecognition.routes.${route}`,
-        ),
-        value: route,
-        checked: this.selectedRecognitionRoute === route,
-      })),
-    );
+  radioButtonArgs(): RadioButtonArgs[] {
+    return Object.values(OtherCountriesRecognitionRoutes).map((route) => ({
+      text: this.i18nService.translate<string>(
+        `professions.form.label.qualifications.otherCountriesRecognition.routes.${route}`,
+      ),
+      value: route,
+      checked: this.selectedRecognitionRoute === route,
+    }));
   }
 }
