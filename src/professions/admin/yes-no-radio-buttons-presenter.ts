@@ -7,16 +7,16 @@ export class YesNoRadioButtonArgsPresenter {
     private readonly i18nService: I18nService,
   ) {}
 
-  async radioButtonArgs(): Promise<RadioButtonArgs[]> {
+  radioButtonArgs(): RadioButtonArgs[] {
     return [
       {
         value: '1',
-        text: await this.i18nService.translate('app.yes'),
+        text: this.i18nService.translate<string>('app.yes'),
         checked: this.yesOrNoValue === true,
       },
       {
         value: '0',
-        text: await this.i18nService.translate('app.no'),
+        text: this.i18nService.translate<string>('app.no'),
         checked: this.yesOrNoValue === false,
       },
     ];
