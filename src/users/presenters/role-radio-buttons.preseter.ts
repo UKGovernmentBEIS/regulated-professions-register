@@ -37,43 +37,35 @@ export class RoleRadioButtonsPresenter {
     private readonly i18nService: I18nService,
   ) {}
 
-  async radioButtonArgs(): Promise<RadioButtonArgs[]> {
-    return Promise.all(
-      this.allRoles.map(async (role) => ({
-        text: await this.i18nService.translate(`users.roles.${role}`),
-        value: role,
-        checked: this.selectedRole === role,
-        hint: { html: await this.getHintHtml(role, this.serviceOwner) },
-      })),
-    );
+  radioButtonArgs(): RadioButtonArgs[] {
+    return this.allRoles.map((role) => ({
+      text: this.i18nService.translate<string>(`users.roles.${role}`),
+      value: role,
+      checked: this.selectedRole === role,
+      hint: { html: this.getHintHtml(role, this.serviceOwner) },
+    }));
   }
 
-  private async getHintHtml(
-    role: Role,
-    serviceOwner: boolean,
-  ): Promise<string> {
+  private getHintHtml(role: Role, serviceOwner: boolean): string {
     const permissions = getPermissionsFromUser({
       ...new User(),
       role,
       serviceOwner,
     });
 
-    const lines = await Promise.all(
-      descriptions
-        .filter((description) =>
-          description.permissions.every((permission) =>
-            permissions.includes(permission),
-          ),
-        )
-        .map(
-          (description) =>
-            this.i18nService.translate(
-              serviceOwner
-                ? description.serviceOwnerText
-                : description.nonServiceOwnerText,
-            ) as Promise<string>,
+    const lines = descriptions
+      .filter((description) =>
+        description.permissions.every((permission) =>
+          permissions.includes(permission),
         ),
-    );
+      )
+      .map((description) =>
+        this.i18nService.translate<string>(
+          serviceOwner
+            ? description.serviceOwnerText
+            : description.nonServiceOwnerText,
+        ),
+      );
 
     return lines.join('<br />');
   }
