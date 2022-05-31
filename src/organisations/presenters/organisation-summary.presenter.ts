@@ -31,17 +31,15 @@ export class OrganisationSummaryPresenter {
       summaryList: await organisationPresenter.summaryList({
         removeBlank: !showEmptyFields,
       }),
-      professions: await Promise.all(
-        professionPresenters.map(async (presenter) => {
-          return {
-            name: presenter.profession.name,
-            slug: presenter.profession.slug,
-            id: presenter.profession.id,
-            versionId: presenter.profession.versionId,
-            summaryList: await presenter.summaryList(),
-          };
-        }),
-      ),
+      professions: professionPresenters.map((presenter) => {
+        return {
+          name: presenter.profession.name,
+          slug: presenter.profession.slug,
+          id: presenter.profession.id,
+          versionId: presenter.profession.versionId,
+          summaryList: presenter.summaryList(),
+        };
+      }),
     };
   }
 }

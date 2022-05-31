@@ -22,14 +22,14 @@ describe('ProfessionPresenter', () => {
   let profession: Profession;
 
   describe('summaryList', () => {
-    it('should return a summary list', async () => {
+    it('should return a summary list', () => {
       const i18nService = createMockI18nService();
 
       profession = professionFactory.build();
 
       const presenter = new ProfessionPresenter(profession, i18nService);
 
-      expect(await presenter.summaryList()).toEqual({
+      expect(presenter.summaryList()).toEqual({
         classes: 'govuk-summary-list--no-border',
         rows: [
           {
@@ -45,7 +45,7 @@ describe('ProfessionPresenter', () => {
               text: translationOf('professions.show.overview.industry'),
             },
             value: {
-              text: await presenter.industries(),
+              text: presenter.industries(),
             },
           },
         ],
@@ -171,7 +171,7 @@ describe('ProfessionPresenter', () => {
   });
 
   describe('industries', () => {
-    it('should return a comma-separated list of industry names', async () => {
+    it('should return a comma-separated list of industry names', () => {
       const i18nService = createMockI18nService();
 
       profession = professionFactory.build({
@@ -183,7 +183,7 @@ describe('ProfessionPresenter', () => {
 
       const presenter = new ProfessionPresenter(profession, i18nService);
 
-      expect(await presenter.industries()).toEqual(
+      expect(presenter.industries()).toEqual(
         `${translationOf('foo')}, ${translationOf('bar')}`,
       );
     });
