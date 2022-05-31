@@ -100,7 +100,7 @@ export class CheckYourAnswersController {
       legislations: version.legislations
         ? sortLegislationsByIndex(version.legislations)
         : [],
-      captionText: await ViewUtils.captionText(this.i18nService, profession),
+      captionText: ViewUtils.captionText(this.i18nService, profession),
       publicationBlockers: getPublicationBlockers(version),
       isUK: version.occupationLocations
         ? isUK(version.occupationLocations)

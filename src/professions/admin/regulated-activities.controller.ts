@@ -133,7 +133,7 @@ export class RegulatedActivitiesController {
     );
   }
 
-  private async renderForm(
+  private renderForm(
     res: Response,
     regulationSummary: string | null,
     regulationType: RegulationType | null,
@@ -142,7 +142,7 @@ export class RegulatedActivitiesController {
     regulationUrl: string | null,
     profession: Profession,
     errors: object | undefined = undefined,
-  ): Promise<void> {
+  ): void {
     const regulationTypePresenter = new RegulationTypeRadioButtonsPresenter(
       regulationType,
       this.i18nService,
@@ -157,7 +157,7 @@ export class RegulatedActivitiesController {
       reservedActivities,
       protectedTitles,
       regulationUrl,
-      captionText: await ViewUtils.captionText(this.i18nService, profession),
+      captionText: ViewUtils.captionText(this.i18nService, profession),
       errors,
     };
 

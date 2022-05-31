@@ -171,7 +171,7 @@ export class OrganisationsController {
 
     const templateArgs: OrganisationsTemplate = {
       selectArgsArray,
-      captionText: await ViewUtils.captionText(this.i18nService, profession),
+      captionText: ViewUtils.captionText(this.i18nService, profession),
       change,
       errors,
     };

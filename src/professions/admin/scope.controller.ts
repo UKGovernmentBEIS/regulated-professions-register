@@ -173,7 +173,7 @@ export class ScopeController {
       coversUK,
       industriesCheckboxItems,
       nationsCheckboxArgs,
-      captionText: await ViewUtils.captionText(this.i18nService, profession),
+      captionText: ViewUtils.captionText(this.i18nService, profession),
       errors,
     };
 
