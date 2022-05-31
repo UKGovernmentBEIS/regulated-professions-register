@@ -134,7 +134,7 @@ describe('ProfessionsController', () => {
 
       expect(result).toEqual({
         profession: profession,
-        qualifications: await new QualificationPresenter(
+        qualifications: new QualificationPresenter(
           profession.qualification,
           createMockI18nService(),
           expectedAwardingBodies,

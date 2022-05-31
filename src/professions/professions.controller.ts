@@ -94,7 +94,7 @@ export class ProfessionsController {
     return {
       profession,
       qualifications: qualification
-        ? await qualification.summaryList(
+        ? qualification.summaryList(
             false,
             profession.occupationLocations
               ? !isUK(profession.occupationLocations)

@@ -106,7 +106,7 @@ export class ProfessionVersionsController {
       profession,
       presenter,
       hasLiveVersion,
-      qualifications: await qualification.summaryList(
+      qualifications: qualification.summaryList(
         true,
         profession.occupationLocations
           ? !isUK(profession.occupationLocations)

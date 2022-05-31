@@ -196,7 +196,7 @@ describe('ProfessionVersionsController', () => {
           profession: professionWithVersion,
           presenter: {},
           hasLiveVersion: true,
-          qualifications: await new QualificationPresenter(
+          qualifications: new QualificationPresenter(
             professionWithVersion.qualification,
             createMockI18nService(),
             expectedAwardingBodies,
@@ -285,7 +285,7 @@ describe('ProfessionVersionsController', () => {
           profession: professionWithVersion,
           presenter: {},
           hasLiveVersion: true,
-          qualifications: await new QualificationPresenter(
+          qualifications: new QualificationPresenter(
             professionWithVersion.qualification,
             createMockI18nService(),
             [],
@@ -369,7 +369,7 @@ describe('ProfessionVersionsController', () => {
           profession: professionWithVersion,
           presenter: {},
           hasLiveVersion: true,
-          qualifications: await new QualificationPresenter(
+          qualifications: new QualificationPresenter(
             undefined,
             createMockI18nService(),
             [],
