@@ -11,7 +11,7 @@ import { OrganisationSearchResultPresenter } from './organisation-search-result.
 
 describe('OrganisationSearchResultPresenter', () => {
   describe('present', () => {
-    it('Returns a OrganisationSearchResultTemplate', async () => {
+    it('Returns a OrganisationSearchResultTemplate', () => {
       const i18nService = createMockI18nService();
 
       const professionToOrganisations = [
@@ -35,13 +35,13 @@ describe('OrganisationSearchResultPresenter', () => {
 
       const getNationsFromProfessionsSpy = jest
         .spyOn(nationsHelperModule, 'getNationsFromProfessions')
-        .mockResolvedValue(
+        .mockReturnValue(
           `${translationOf('nations.england')}, ${translationOf(
             'nations.wales',
           )}`,
         );
 
-      const result = await new OrganisationSearchResultPresenter(
+      const result = new OrganisationSearchResultPresenter(
         organisation,
         i18nService,
       ).present();

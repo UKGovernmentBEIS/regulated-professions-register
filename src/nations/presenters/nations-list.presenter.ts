@@ -7,9 +7,9 @@ export class NationsListPresenter {
     private readonly i18nService: I18nService,
   ) {}
 
-  async htmlList(): Promise<string> {
+  htmlList(): string {
     if (this.all()) {
-      return this.i18nService.translate('app.unitedKingdom');
+      return this.i18nService.translate<string>('app.unitedKingdom');
     } else {
       const translatedNations = this.translatedNations();
 
@@ -21,9 +21,9 @@ export class NationsListPresenter {
     }
   }
 
-  async textList(): Promise<string> {
+  textList(): string {
     if (this.all()) {
-      return this.i18nService.translate('app.unitedKingdom');
+      return this.i18nService.translate<string>('app.unitedKingdom');
     } else {
       return this.translatedNations().join(', ');
     }

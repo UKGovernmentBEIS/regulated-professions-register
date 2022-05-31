@@ -11,7 +11,7 @@ jest.mock('../../nations/presenters/nations-list.presenter');
 
 describe('DecisionDatasetsPresenter', () => {
   describe('present', () => {
-    it('returns a ShowTemplate for the given Profession, year, and DecisionDatasets', async () => {
+    it('returns a ShowTemplate for the given Profession, year, and DecisionDatasets', () => {
       const profession = professionFactory.build({
         name: 'Example Profession',
         occupationLocations: ['GB-ENG', 'GB-SCT'],
@@ -122,7 +122,7 @@ describe('DecisionDatasetsPresenter', () => {
         [dataset1, dataset2],
         i18nService,
       );
-      const result = await presenter.present();
+      const result = presenter.present();
 
       expect(result).toEqual({
         profession: 'Example Profession',

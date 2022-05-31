@@ -182,9 +182,9 @@ describe('ProfessionVersionsController', () => {
               : expectedEnforcementBodies,
           );
 
-        (
-          NationsListPresenter.prototype.htmlList as jest.Mock
-        ).mockResolvedValue(mockNationsHtml);
+        (NationsListPresenter.prototype.htmlList as jest.Mock).mockReturnValue(
+          mockNationsHtml,
+        );
 
         const getPublicationBlockersSpy = jest
           .spyOn(getPublicationBlockersModule, 'getPublicationBlockers')
@@ -266,9 +266,9 @@ describe('ProfessionVersionsController', () => {
           )
           .mockReturnValue(expectedOrganisations);
 
-        (
-          NationsListPresenter.prototype.htmlList as jest.Mock
-        ).mockResolvedValue(mockNationsHtml);
+        (NationsListPresenter.prototype.htmlList as jest.Mock).mockReturnValue(
+          mockNationsHtml,
+        );
 
         const getPublicationBlockersSpy = jest
           .spyOn(getPublicationBlockersModule, 'getPublicationBlockers')
@@ -346,9 +346,9 @@ describe('ProfessionVersionsController', () => {
           )
           .mockReturnValue(expectedOrganisations);
 
-        (
-          NationsListPresenter.prototype.htmlList as jest.Mock
-        ).mockResolvedValue(mockNationsHtml);
+        (NationsListPresenter.prototype.htmlList as jest.Mock).mockReturnValue(
+          mockNationsHtml,
+        );
 
         const getPublicationBlockersSpy = jest
           .spyOn(getPublicationBlockersModule, 'getPublicationBlockers')

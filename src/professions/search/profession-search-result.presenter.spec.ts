@@ -16,7 +16,7 @@ describe('ProfessionSearchResultPresenter', () => {
   });
 
   describe('present', () => {
-    it('Returns a ProfessionSearchResultTemplate', async () => {
+    it('Returns a ProfessionSearchResultTemplate', () => {
       const organisations = [
         organisationFactory.build({
           name: 'Example Organisation',
@@ -44,7 +44,7 @@ describe('ProfessionSearchResultPresenter', () => {
         'getOrganisationsFromProfession',
       );
 
-      const result = await new ProfessionSearchResultPresenter(
+      const result = new ProfessionSearchResultPresenter(
         exampleProfession,
         i18nService,
       ).present();
@@ -68,7 +68,7 @@ describe('ProfessionSearchResultPresenter', () => {
     });
 
     describe('when the Profession is missing some fields', () => {
-      it('returns empty values', async () => {
+      it('returns empty values', () => {
         const exampleProfession = professionFactory.build({
           occupationLocations: undefined,
           industries: undefined,
@@ -79,7 +79,7 @@ describe('ProfessionSearchResultPresenter', () => {
           'getOrganisationsFromProfession',
         );
 
-        const result = await new ProfessionSearchResultPresenter(
+        const result = new ProfessionSearchResultPresenter(
           exampleProfession,
           i18nService,
         ).present();

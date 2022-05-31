@@ -5,35 +5,35 @@ import { NationsListPresenter } from './nations-list.presenter';
 
 describe('NationsListPresenter', () => {
   describe('textList', () => {
-    it('outputs an empty string when given an empty list of nations', async () => {
+    it('outputs an empty string when given an empty list of nations', () => {
       const i18nService = createMockI18nService();
       const nationsListPresenter = new NationsListPresenter([], i18nService);
 
-      await expect(nationsListPresenter.textList()).resolves.toEqual('');
+      expect(nationsListPresenter.textList()).toEqual('');
     });
 
-    it('translates a single nation', async () => {
+    it('translates a single nation', () => {
       const i18nService = createMockI18nService();
       const nationsListPresenter = new NationsListPresenter(
         [Nation.find('GB-SCT')],
         i18nService,
       );
 
-      await expect(nationsListPresenter.textList()).resolves.toEqual(
+      expect(nationsListPresenter.textList()).toEqual(
         translationOf('nations.scotland'),
       );
 
       expect(i18nService.translate).toHaveBeenCalledWith('nations.scotland');
     });
 
-    it('concatenates multiple nations into a comma separated list', async () => {
+    it('concatenates multiple nations into a comma separated list', () => {
       const i18nService = createMockI18nService();
       const nationsListPresenter = new NationsListPresenter(
         [Nation.find('GB-ENG'), Nation.find('GB-WLS')],
         i18nService,
       );
 
-      await expect(nationsListPresenter.textList()).resolves.toEqual(
+      expect(nationsListPresenter.textList()).toEqual(
         `${translationOf('nations.england')}, ${translationOf(
           'nations.wales',
         )}`,
@@ -43,14 +43,14 @@ describe('NationsListPresenter', () => {
       expect(i18nService.translate).toHaveBeenCalledWith('nations.wales');
     });
 
-    it('collapses multiple nations to "United Kingdom"', async () => {
+    it('collapses multiple nations to "United Kingdom"', () => {
       const i18nService = createMockI18nService();
       const nationsListPresenter = new NationsListPresenter(
         Nation.all(),
         i18nService,
       );
 
-      await expect(nationsListPresenter.textList()).resolves.toEqual(
+      expect(nationsListPresenter.textList()).toEqual(
         translationOf('app.unitedKingdom'),
       );
 
@@ -60,21 +60,21 @@ describe('NationsListPresenter', () => {
   });
 
   describe('htmlList', () => {
-    it('outputs an empty string when given an empty list of nations', async () => {
+    it('outputs an empty string when given an empty list of nations', () => {
       const i18nService = createMockI18nService();
       const nationsListPresenter = new NationsListPresenter([], i18nService);
 
-      await expect(nationsListPresenter.htmlList()).resolves.toEqual('');
+      expect(nationsListPresenter.htmlList()).toEqual('');
     });
 
-    it('translates a single nation', async () => {
+    it('translates a single nation', () => {
       const i18nService = createMockI18nService();
       const nationsListPresenter = new NationsListPresenter(
         [Nation.find('GB-SCT')],
         i18nService,
       );
 
-      await expect(nationsListPresenter.htmlList()).resolves.toEqual(
+      expect(nationsListPresenter.htmlList()).toEqual(
         `<ul class="govuk-list"><li>${translationOf(
           'nations.scotland',
         )}</li></ul>`,
@@ -83,14 +83,14 @@ describe('NationsListPresenter', () => {
       expect(i18nService.translate).toHaveBeenCalledWith('nations.scotland');
     });
 
-    it('concatenates multiple nations a HTML list', async () => {
+    it('concatenates multiple nations a HTML list', () => {
       const i18nService = createMockI18nService();
       const nationsListPresenter = new NationsListPresenter(
         [Nation.find('GB-ENG'), Nation.find('GB-WLS')],
         i18nService,
       );
 
-      await expect(nationsListPresenter.htmlList()).resolves.toEqual(
+      expect(nationsListPresenter.htmlList()).toEqual(
         `<ul class="govuk-list"><li>${translationOf(
           'nations.england',
         )}</li><li>${translationOf('nations.wales')}</li></ul>`,
@@ -100,14 +100,14 @@ describe('NationsListPresenter', () => {
       expect(i18nService.translate).toHaveBeenCalledWith('nations.wales');
     });
 
-    it('collapses multiple nations to "United Kingdom"', async () => {
+    it('collapses multiple nations to "United Kingdom"', () => {
       const i18nService = createMockI18nService();
       const nationsListPresenter = new NationsListPresenter(
         Nation.all(),
         i18nService,
       );
 
-      await expect(nationsListPresenter.htmlList()).resolves.toEqual(
+      expect(nationsListPresenter.htmlList()).toEqual(
         translationOf('app.unitedKingdom'),
       );
 

@@ -68,7 +68,7 @@ export class ListEntryPresenter {
       this.i18nService,
     );
 
-    const nations = await new NationsListPresenter(
+    const nations = new NationsListPresenter(
       (this.profession.occupationLocations || []).map((code) =>
         Nation.find(code),
       ),

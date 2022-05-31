@@ -37,7 +37,7 @@ describe('ProfessionPresenter', () => {
               text: translationOf('professions.show.overview.nations'),
             },
             value: {
-              text: await presenter.occupationLocations(),
+              text: presenter.occupationLocations(),
             },
           },
           {
@@ -135,7 +135,7 @@ describe('ProfessionPresenter', () => {
 
   describe('occupationLocations', () => {
     describe('when occupationLocations is defined', () => {
-      it('should pass the locations to NationsListPresenter', async () => {
+      it('should pass the locations to NationsListPresenter', () => {
         const i18nService = createMockI18nService();
 
         profession = professionFactory.build({
@@ -147,14 +147,14 @@ describe('ProfessionPresenter', () => {
           Nation.find(code),
         );
 
-        await presenter.occupationLocations();
+        presenter.occupationLocations();
 
         expect(NationsListPresenter).toHaveBeenCalledWith(nations, i18nService);
       });
     });
 
     describe('when occupationLocations is undefined', () => {
-      it('should pass an empty array to NationsListPresenter', async () => {
+      it('should pass an empty array to NationsListPresenter', () => {
         const i18nService = createMockI18nService();
 
         profession = professionFactory.build({
@@ -163,7 +163,7 @@ describe('ProfessionPresenter', () => {
 
         const presenter = new ProfessionPresenter(profession, i18nService);
 
-        await presenter.occupationLocations();
+        presenter.occupationLocations();
 
         expect(NationsListPresenter).toHaveBeenCalledWith([], i18nService);
       });

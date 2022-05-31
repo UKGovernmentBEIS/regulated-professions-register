@@ -19,7 +19,7 @@ export class SearchPresenter {
     private readonly i18nService: I18nService,
   ) {}
 
-  async present(): Promise<IndexTemplate> {
+  present(): IndexTemplate {
     const nationsCheckboxItems = new NationsCheckboxPresenter(
       this.allNations,
       this.filterInput.nations,
@@ -37,13 +37,13 @@ export class SearchPresenter {
       this.i18nService,
     ).checkboxItems();
 
-    const displayOrganisations = await Promise.all(
-      this.filteredOrganisations.map(async (organisation) => {
+    const displayOrganisations = this.filteredOrganisations.map(
+      (organisation) => {
         return new OrganisationSearchResultPresenter(
           organisation,
           this.i18nService,
         ).present();
-      }),
+      },
     );
 
     return {

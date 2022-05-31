@@ -58,7 +58,7 @@ describe('SearchPresenter', () => {
   });
 
   describe('present', () => {
-    it('should return a IndexTemplate', async () => {
+    it('should return a IndexTemplate', () => {
       const filterInput: FilterInput = {
         keywords: 'Example Keywords',
         nations: [nations[0]],
@@ -78,7 +78,7 @@ describe('SearchPresenter', () => {
       );
 
       (hasSelectedFilters as jest.Mock).mockReturnValue(true);
-      const result = await presenter.present();
+      const result = presenter.present();
 
       const nationsCheckboxItems = new NationsCheckboxPresenter(
         Nation.all(),
@@ -111,15 +111,15 @@ describe('SearchPresenter', () => {
         industriesCheckboxItems,
         regulationTypesCheckboxItems,
         professions: [
-          await new ProfessionSearchResultPresenter(
+          new ProfessionSearchResultPresenter(
             profession1,
             i18nService,
           ).present(),
-          await new ProfessionSearchResultPresenter(
+          new ProfessionSearchResultPresenter(
             profession2,
             i18nService,
           ).present(),
-          await new ProfessionSearchResultPresenter(
+          new ProfessionSearchResultPresenter(
             profession3,
             i18nService,
           ).present(),

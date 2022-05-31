@@ -14,7 +14,7 @@ export class DecisionDatasetsPresenter {
     private readonly i18nService: I18nService,
   ) {}
 
-  async present(): Promise<ShowTemplate> {
+  present(): ShowTemplate {
     const nations = new NationsListPresenter(
       (this.profession.occupationLocations || []).map((code) =>
         Nation.find(code),
@@ -24,7 +24,7 @@ export class DecisionDatasetsPresenter {
 
     return {
       profession: this.profession.name,
-      nations: await nations.textList(),
+      nations: nations.textList(),
       year: this.year,
       organisations: this.datasets.map((dataset) => ({
         organisation: dataset.organisation.name,

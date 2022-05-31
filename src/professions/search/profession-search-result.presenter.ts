@@ -11,8 +11,8 @@ export class ProfessionSearchResultPresenter {
     private readonly i18nService: I18nService,
   ) {}
 
-  async present(): Promise<ProfessionSearchResultTemplate> {
-    const nations = await new NationsListPresenter(
+  present(): ProfessionSearchResultTemplate {
+    const nations = new NationsListPresenter(
       (this.profession.occupationLocations || []).map((code) =>
         Nation.find(code),
       ),

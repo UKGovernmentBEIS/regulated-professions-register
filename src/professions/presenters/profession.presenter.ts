@@ -23,7 +23,7 @@ export class ProfessionPresenter {
             ),
           },
           value: {
-            text: await this.occupationLocations(),
+            text: this.occupationLocations(),
           },
         },
         {
@@ -59,8 +59,8 @@ export class ProfessionPresenter {
     return formatStatus(this.profession.status, this.i18nService);
   }
 
-  public async occupationLocations(): Promise<string> {
-    return await new NationsListPresenter(
+  public occupationLocations(): string {
+    return new NationsListPresenter(
       (this.profession.occupationLocations || []).map((code) =>
         Nation.find(code),
       ),

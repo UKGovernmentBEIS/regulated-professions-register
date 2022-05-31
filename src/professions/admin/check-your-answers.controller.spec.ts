@@ -125,9 +125,9 @@ describe('CheckYourAnswersController', () => {
           ProfessionToOrganisationsPresenter.prototype as DeepMocked<ProfessionToOrganisationsPresenter>
         ).summaryLists.mockResolvedValue(expectedSummaryList);
 
-        (
-          NationsListPresenter.prototype.htmlList as jest.Mock
-        ).mockResolvedValue(mockNationsHtml);
+        (NationsListPresenter.prototype.htmlList as jest.Mock).mockReturnValue(
+          mockNationsHtml,
+        );
 
         const request = createDefaultMockRequest({
           user: user,
@@ -232,9 +232,9 @@ describe('CheckYourAnswersController', () => {
           .spyOn(sortLegislationsByIndexModule, 'sortLegislationsByIndex')
           .mockImplementation((legislations) => legislations);
 
-        (
-          NationsListPresenter.prototype.htmlList as jest.Mock
-        ).mockResolvedValue(mockNationsHtml);
+        (NationsListPresenter.prototype.htmlList as jest.Mock).mockReturnValue(
+          mockNationsHtml,
+        );
         const user = userFactory.build();
 
         const expectedSummaryList =

@@ -31,10 +31,7 @@ export class OrganisationPresenter {
         text: this.organisation.name,
       },
       {
-        text: await getNationsFromProfessions(
-          this.professions(),
-          this.i18nService,
-        ),
+        text: getNationsFromProfessions(this.professions(), this.i18nService),
       },
       {
         text: await this.industries(),

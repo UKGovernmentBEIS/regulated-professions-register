@@ -101,7 +101,7 @@ export class ProfessionsController {
               : true,
           )
         : null,
-      nations: await nations.htmlList(),
+      nations: nations.htmlList(),
       industries,
       enforcementBodies: organisationList(enforcementBodies),
       organisations: tierOneOrganisations,

@@ -69,7 +69,7 @@ describe('OrganisationPresenter', () => {
 
           const getNationsFromProfessionsSpy = jest
             .spyOn(nationsHelperModule, 'getNationsFromProfessions')
-            .mockResolvedValue(
+            .mockReturnValue(
               `${translationOf('nations.england')}, ${translationOf(
                 'nations.wales',
               )}`,
@@ -174,7 +174,7 @@ describe('OrganisationPresenter', () => {
 
           const getNationsFromProfessionsSpy = jest
             .spyOn(nationsHelperModule, 'getNationsFromProfessions')
-            .mockResolvedValue(
+            .mockReturnValue(
               `${translationOf('nations.wales')}, ${translationOf(
                 'nations.scotland',
               )}`,

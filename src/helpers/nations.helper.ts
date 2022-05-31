@@ -16,10 +16,10 @@ export function isUK(nationCodes: string[]) {
   );
 }
 
-export async function getNationsFromProfessions(
+export function getNationsFromProfessions(
   professions: Profession[],
   i18nService: I18nService,
-): Promise<string> {
+): string {
   const nationCodes = professions
     .map((profession) => profession.occupationLocations || [])
     .flat();

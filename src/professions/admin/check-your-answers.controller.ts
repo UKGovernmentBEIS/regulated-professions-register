@@ -86,7 +86,7 @@ export class CheckYourAnswersController {
       professionId,
       versionId,
       name: profession.name,
-      nations: await nations.htmlList(),
+      nations: nations.htmlList(),
       industries: industryNames,
       organisations: organisations,
       registrationRequirements: version.registrationRequirements,

@@ -77,7 +77,7 @@ describe('SearchController', () => {
           request,
         );
 
-        const expected = await new SearchPresenter(
+        const expected = new SearchPresenter(
           {
             keywords: '',
             nations: [],
@@ -139,7 +139,7 @@ describe('SearchController', () => {
         request,
       );
 
-      const expected = await new SearchPresenter(
+      const expected = new SearchPresenter(
         {
           keywords: 'example search',
           nations: [Nation.find('GB-SCT')],
