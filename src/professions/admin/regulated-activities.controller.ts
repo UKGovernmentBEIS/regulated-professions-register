@@ -149,7 +149,7 @@ export class RegulatedActivitiesController {
     );
 
     const regulationTypeRadioButtonArgs =
-      await regulationTypePresenter.radioButtonArgs();
+      regulationTypePresenter.radioButtonArgs();
 
     const templateArgs: RegulatedActivitiesTemplate = {
       regulationSummary,
