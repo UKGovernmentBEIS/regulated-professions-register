@@ -163,7 +163,7 @@ export class ScopeController {
       this.i18nService,
     );
 
-    const nationsCheckboxArgs = await nationsCheckboxPresenter.checkboxArgs(
+    const nationsCheckboxArgs = nationsCheckboxPresenter.checkboxArgs(
       'nations',
       'nations[]',
       'professions.form.hint.scope.certainNations',

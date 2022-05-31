@@ -30,7 +30,9 @@ export class NationsListPresenter {
   }
 
   private translatedNations(): string[] {
-    return this.nations.map((nation) => nation.translatedName(this.i18nService));
+    return this.nations.map((nation) =>
+      nation.translatedName(this.i18nService),
+    );
   }
 
   private all(): boolean {

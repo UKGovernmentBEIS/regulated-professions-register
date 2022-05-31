@@ -83,14 +83,14 @@ describe('NationsCheckboxPresenter', () => {
   });
 
   describe('checkboxArgs', () => {
-    it('should return arguments for a group of checkboxes', async () => {
+    it('should return arguments for a group of checkboxes', () => {
       const presenter = new NationsCheckboxPresenter(
         Nation.all(),
         [],
         i18nService,
       );
 
-      expect(await presenter.checkboxArgs('foo', 'foo[]', 'abc.123')).toEqual({
+      expect(presenter.checkboxArgs('foo', 'foo[]', 'abc.123')).toEqual({
         name: 'foo[]',
         hint: {
           text: translationOf('abc.123'),
