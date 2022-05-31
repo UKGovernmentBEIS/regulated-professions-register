@@ -35,7 +35,7 @@ export function formatStatus(
     return '';
   }
 
-  const text = i18nSerice.translate(`app.status.${status}`);
+  const text = i18nSerice.translate<string>(`app.status.${status}`);
 
   return `<strong class="govuk-tag ${colourClass}">${text}</strong>`;
 }

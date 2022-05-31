@@ -78,12 +78,10 @@ export class ProfessionsPresenter {
   }
 
   private async table(view: ProfessionsPresenterView): Promise<Table> {
-    const headings = await ListEntryPresenter.headings(this.i18nService, view);
+    const headings = ListEntryPresenter.headings(this.i18nService, view);
 
-    const rows = await Promise.all(
-      this.filteredProfessions.map(async (profession) =>
-        new ListEntryPresenter(profession, this.i18nService).tableRow(view),
-      ),
+    const rows = this.filteredProfessions.map((profession) =>
+      new ListEntryPresenter(profession, this.i18nService).tableRow(view),
     );
 
     const numberOfResults = rows.length;

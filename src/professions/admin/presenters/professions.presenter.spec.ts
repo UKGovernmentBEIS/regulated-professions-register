@@ -108,12 +108,10 @@ describe('ProfessionsPresenter', () => {
           caption: `${translationOf('professions.search.foundPlural')}`,
           captionClasses: 'govuk-table__caption--m',
           firstCellIsHeader: true,
-          head: await ListEntryPresenter.headings(i18nService, 'overview'),
-          rows: await Promise.all(
-            [profession1, profession2, profession3].map((profession) =>
-              new ListEntryPresenter(profession, i18nService).tableRow(
-                'overview',
-              ),
+          head: ListEntryPresenter.headings(i18nService, 'overview'),
+          rows: [profession1, profession2, profession3].map((profession) =>
+            new ListEntryPresenter(profession, i18nService).tableRow(
+              'overview',
             ),
           ),
         },
@@ -160,15 +158,10 @@ describe('ProfessionsPresenter', () => {
           caption: `${translationOf('professions.search.foundPlural')}`,
           captionClasses: 'govuk-table__caption--m',
           firstCellIsHeader: true,
-          head: await ListEntryPresenter.headings(
-            i18nService,
-            'single-organisation',
-          ),
-          rows: await Promise.all(
-            [profession1, profession2, profession3].map((profession) =>
-              new ListEntryPresenter(profession, i18nService).tableRow(
-                'single-organisation',
-              ),
+          head: ListEntryPresenter.headings(i18nService, 'single-organisation'),
+          rows: [profession1, profession2, profession3].map((profession) =>
+            new ListEntryPresenter(profession, i18nService).tableRow(
+              'single-organisation',
             ),
           ),
         },
