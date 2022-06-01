@@ -119,7 +119,7 @@ export class ProfessionsController {
     return {
       ...new ProfessionsPresenter(
         filterInput,
-        userOrganisation,
+        actingUser,
         allNations,
         allOrganisations,
         allIndustries,

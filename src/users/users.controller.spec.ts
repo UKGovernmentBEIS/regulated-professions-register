@@ -18,6 +18,7 @@ import organisationFactory from '../testutils/factories/organisation';
 import { getActingUser } from './helpers/get-acting-user.helper';
 import { createDefaultMockRequest } from '../testutils/factories/create-default-mock-request';
 import { checkCanViewUser } from './helpers/check-can-view-user';
+import { translationOf } from '../testutils/translation-of';
 
 jest.mock('./presenters/users.presenter');
 jest.mock('./presenters/user.presenter');
@@ -93,7 +94,7 @@ describe('UsersController', () => {
         usersService.allConfirmed.mockResolvedValue([user]);
 
         expect(await controller.index(request)).toEqual({
-          organisation: 'app.beis',
+          organisation: translationOf('app.beis'),
           ...[user],
           rows: tableRows,
         });

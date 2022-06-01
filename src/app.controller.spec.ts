@@ -1,9 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { I18nService } from 'nestjs-i18n';
 
 import { AppController } from './app.controller';
+import { createMockI18nService } from './testutils/create-mock-i18n-service';
 import { createMockRequest } from './testutils/create-mock-request';
 import organisationFactory from './testutils/factories/organisation';
 import userFactory from './testutils/factories/user';
+import { translationOf } from './testutils/translation-of';
 import { getActingUser } from './users/helpers/get-acting-user.helper';
 
 jest.mock('./users/helpers/get-acting-user.helper');
@@ -12,8 +15,16 @@ describe('AppController', () => {
   let appController: AppController;
 
   beforeEach(async () => {
+    const i18nService = createMockI18nService();
+
     const app: TestingModule = await Test.createTestingModule({
       controllers: [AppController],
+      providers: [
+        {
+          provide: I18nService,
+          useValue: i18nService,
+        },
+      ],
     }).compile();
 
     appController = app.get<AppController>(AppController);
@@ -33,7 +44,7 @@ describe('AppController', () => {
         (getActingUser as jest.Mock).mockReturnValue(user);
 
         expect(appController.adminDashboard(request)).toEqual({
-          organisation: 'app.beis',
+          organisation: translationOf('app.beis'),
         });
       });
     });

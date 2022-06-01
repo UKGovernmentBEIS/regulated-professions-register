@@ -61,7 +61,7 @@ export class UsersController {
       ? this.usersService.allConfirmed()
       : this.usersService.allConfirmedForOrganisation(actingUser.organisation));
 
-    const organisation = getUserOrganisation(actingUser);
+    const organisation = getUserOrganisation(actingUser, this.i18nService);
 
     const usersPresenter = new UsersPresenter(users, this.i18nService);
 

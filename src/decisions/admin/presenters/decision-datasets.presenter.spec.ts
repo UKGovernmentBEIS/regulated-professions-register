@@ -6,7 +6,9 @@ import { createMockI18nService } from '../../../testutils/create-mock-i18n-servi
 import decisionDatasetFactory from '../../../testutils/factories/decision-dataset';
 import organisationFactory from '../../../testutils/factories/organisation';
 import professionFactory from '../../../testutils/factories/profession';
+import userFactory from '../../../testutils/factories/user';
 import { translationOf } from '../../../testutils/translation-of';
+import * as getUserOrganisationModule from '../../../users/helpers/get-user-organisation';
 import { DecisionDatasetStatus } from '../../decision-dataset.entity';
 import { IndexTemplate } from '../interfaces/index-template.interface';
 import { DecisionDatasetStatusesCheckboxPresenter } from './decision-dataset-statuses-checkbox.presenter';
@@ -73,14 +75,14 @@ describe('DecisionDatasetsPresenter', () => {
 
         const i18nService = createMockI18nService();
 
-        const userOrganisation = organisationFactory.build();
+        const user = userFactory.build();
         const datasets = decisionDatasetFactory.buildList(3);
         const allOrganisations = organisationFactory.buildList(3);
         const professions = professionFactory.buildList(3);
 
         const presenter = new DecisionDatasetsPresenter(
           filterInput,
-          userOrganisation,
+          user,
           allOrganisations,
           2020,
           2023,
@@ -88,6 +90,10 @@ describe('DecisionDatasetsPresenter', () => {
           professions,
           i18nService,
         );
+
+        const getUserOrganisationSpy = jest
+          .spyOn(getUserOrganisationModule, 'getUserOrganisation')
+          .mockReturnValue('Example Organisation');
 
         (ListEntryPresenter.headings as jest.Mock).mockReturnValue(
           mockTableHeadingRow,
@@ -142,6 +148,8 @@ describe('DecisionDatasetsPresenter', () => {
 
         expect(result).toEqual(expected);
 
+        expect(getUserOrganisationSpy).toHaveBeenCalledWith(user, i18nService);
+
         expect(ListEntryPresenter.headings).toBeCalledWith(false, i18nService);
         expect(ListEntryPresenter.prototype.tableRow).toBeCalledTimes(3);
 
@@ -191,13 +199,14 @@ describe('DecisionDatasetsPresenter', () => {
 
         const i18nService = createMockI18nService();
 
+        const user = userFactory.build();
         const datasets = decisionDatasetFactory.buildList(3);
         const allOrganisations = organisationFactory.buildList(3);
         const professions = professionFactory.buildList(3);
 
         const presenter = new DecisionDatasetsPresenter(
           filterInput,
-          null,
+          user,
           allOrganisations,
           2020,
           2023,
@@ -205,6 +214,10 @@ describe('DecisionDatasetsPresenter', () => {
           professions,
           i18nService,
         );
+
+        const getUserOrganisationSpy = jest
+          .spyOn(getUserOrganisationModule, 'getUserOrganisation')
+          .mockReturnValue('Example Organisation');
 
         (ListEntryPresenter.headings as jest.Mock).mockReturnValue(
           mockTableHeadingRow,
@@ -232,7 +245,7 @@ describe('DecisionDatasetsPresenter', () => {
 
         const expected: Omit<IndexTemplate, 'filterQuery'> = {
           view: 'overview',
-          organisation: translationOf('app.beis'),
+          organisation: 'Example Organisation',
           decisionDatasetsTable: {
             caption: translationOf(
               'decisions.admin.dashboard.search.foundPlural',
@@ -258,6 +271,8 @@ describe('DecisionDatasetsPresenter', () => {
         const result = presenter.present('overview');
 
         expect(result).toEqual(expected);
+
+        expect(getUserOrganisationSpy).toHaveBeenCalledWith(user, i18nService);
 
         expect(ListEntryPresenter.headings).toBeCalledWith(true, i18nService);
         expect(ListEntryPresenter.prototype.tableRow).toBeCalledTimes(3);
@@ -296,5 +311,6 @@ describe('DecisionDatasetsPresenter', () => {
 
   afterEach(() => {
     jest.resetAllMocks();
+    jest.restoreAllMocks();
   });
 });

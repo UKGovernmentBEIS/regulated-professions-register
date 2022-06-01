@@ -1,5 +1,6 @@
 import { Controller, Get, Render, Req, UseGuards } from '@nestjs/common';
 import { Request } from 'express';
+import { I18nService } from 'nestjs-i18n';
 import { AuthenticationGuard } from './common/authentication.guard';
 import { BackLink } from './common/decorators/back-link.decorator';
 import { RequestWithAppSession } from './common/interfaces/request-with-app-session.interface';
@@ -8,6 +9,8 @@ import { getUserOrganisation } from './users/helpers/get-user-organisation';
 
 @Controller()
 export class AppController {
+  constructor(private readonly i18nService: I18nService) {}
+
   @Get('/admin/dashboard')
   @UseGuards(AuthenticationGuard)
   @Render('admin/dashboard')
@@ -15,7 +18,7 @@ export class AppController {
     const actingUser = getActingUser(request);
 
     return {
-      organisation: getUserOrganisation(actingUser),
+      organisation: getUserOrganisation(actingUser, this.i18nService),
     };
   }
 

@@ -11,13 +11,15 @@ import { Organisation } from '../../../organisations/organisation.entity';
 import { OrganisationsCheckboxPresenter } from '../../../organisations/organisations-checkbox-presenter';
 import { Table } from '../../../common/interfaces/table';
 import { RegulationTypesCheckboxPresenter } from './regulation-types-checkbox.presenter';
+import { User } from '../../../users/user.entity';
+import { getUserOrganisation } from '../../../users/helpers/get-user-organisation';
 
 export type ProfessionsPresenterView = 'overview' | 'single-organisation';
 
 export class ProfessionsPresenter {
   constructor(
     private readonly filterInput: FilterInput,
-    private readonly userOrganisation: Organisation | null,
+    private readonly user: User,
     private readonly allNations: Nation[],
     private readonly allOrganisations: Organisation[],
     private readonly allIndustries: Industry[],
@@ -28,10 +30,7 @@ export class ProfessionsPresenter {
   present(
     view: ProfessionsPresenterView,
   ): Omit<IndexTemplate, 'filterQuery' | 'sortMethod'> {
-    const organisation =
-      view === 'overview'
-        ? this.i18nService.translate<string>('app.beis')
-        : this.userOrganisation.name;
+    const organisation = getUserOrganisation(this.user, this.i18nService);
 
     const nationsCheckboxItems = new NationsCheckboxPresenter(
       this.allNations,

@@ -46,6 +46,7 @@ import { getActingUser } from '../../users/helpers/get-acting-user.helper';
 import { escape } from '../../helpers/escape.helper';
 import { Nation } from '../../nations/nation';
 import { checkCanViewOrganisation } from '../../users/helpers/check-can-view-organisation';
+import { getUserOrganisation } from '../../users/helpers/get-user-organisation';
 
 @UseGuards(AuthenticationGuard)
 @Controller('/admin/organisations')
@@ -98,9 +99,7 @@ export class OrganisationsController {
         filterInput,
       );
 
-    const userOrganisation = showAllOrgs
-      ? this.i18nService.translate<string>('app.beis')
-      : actingUser.organisation.name;
+    const userOrganisation = getUserOrganisation(actingUser, this.i18nService);
 
     const presenter = new OrganisationsPresenter(
       userOrganisation,

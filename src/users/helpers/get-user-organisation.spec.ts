@@ -1,13 +1,20 @@
+import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 import organisationFactory from '../../testutils/factories/organisation';
 import userFactory from '../../testutils/factories/user';
+import { translationOf } from '../../testutils/translation-of';
 import { getUserOrganisation } from './get-user-organisation';
 
 describe('getUserOrganisation', () => {
   describe('when the user is a service owner', () => {
-    it('returns the BEIS team translation string', () => {
+    it('returns the BEIS team translated string', () => {
       const user = userFactory.build({ serviceOwner: true });
 
-      expect(getUserOrganisation(user)).toEqual('app.beis');
+      const i18nService = createMockI18nService();
+
+      expect(getUserOrganisation(user, i18nService)).toEqual(
+        translationOf('app.beis'),
+      );
+      expect(i18nService.translate).toHaveBeenCalledWith('app.beis');
     });
   });
 
@@ -20,7 +27,12 @@ describe('getUserOrganisation', () => {
         }),
       });
 
-      expect(getUserOrganisation(user)).toEqual('Department for Education');
+      const i18nService = createMockI18nService();
+
+      expect(getUserOrganisation(user, i18nService)).toEqual(
+        'Department for Education',
+      );
+      expect(i18nService.translate).not.toHaveBeenCalled();
     });
   });
 });

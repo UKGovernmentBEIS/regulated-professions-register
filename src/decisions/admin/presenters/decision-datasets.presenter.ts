@@ -10,13 +10,15 @@ import { YearsCheckboxPresenter } from './years-checkbox.presenter';
 import { DecisionDatasetStatusesCheckboxPresenter } from './decision-dataset-statuses-checkbox.presenter';
 import { Profession } from '../../../professions/profession.entity';
 import { ProfessionsCheckboxPresenter } from './professions-checkbox.presenter';
+import { getUserOrganisation } from '../../../users/helpers/get-user-organisation';
+import { User } from '../../../users/user.entity';
 
 export type DecisionDatasetsPresenterView = 'overview' | 'single-organisation';
 
 export class DecisionDatasetsPresenter {
   constructor(
     private readonly filterInput: FilterInput,
-    private readonly userOrganisation: Organisation | null,
+    private readonly user: User,
     private readonly allOrganisations: Organisation[],
     private readonly startYear: number,
     private readonly endYear: number,
@@ -28,10 +30,7 @@ export class DecisionDatasetsPresenter {
   present(
     view: DecisionDatasetsPresenterView,
   ): Omit<IndexTemplate, 'filterQuery'> {
-    const organisation =
-      view === 'overview'
-        ? this.i18nService.translate<string>('app.beis')
-        : this.userOrganisation.name;
+    const organisation = getUserOrganisation(this.user, this.i18nService);
 
     const organisationsCheckboxItems = new OrganisationsCheckboxPresenter(
       this.allOrganisations,
