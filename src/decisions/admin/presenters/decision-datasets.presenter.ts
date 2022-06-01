@@ -30,7 +30,7 @@ export class DecisionDatasetsPresenter {
   ): Omit<IndexTemplate, 'filterQuery'> {
     const organisation =
       view === 'overview'
-        ? this.i18nService.translate('app.beis')
+        ? this.i18nService.translate<string>('app.beis')
         : this.userOrganisation.name;
 
     const organisationsCheckboxItems = new OrganisationsCheckboxPresenter(
