@@ -136,6 +136,9 @@ export class ProfessionsSeeder implements Seeder {
         }
       }),
     );
+
+    await this.qualificationsRepository.delete({ created_at: new Date(0) });
+    await this.legislationsRepository.delete({ created_at: new Date(0) });
   }
 
   private async seedVersions(
@@ -157,17 +160,18 @@ export class ProfessionsSeeder implements Seeder {
             where: { name: In(version.industries || []) },
           }));
 
+        // We use the created_at value to get a qualification seeded by our
+        // qualification seeder that is unattached to a profession version
         let qualification: Qualification =
           version.qualification &&
           (await this.qualificationsRepository.findOne({
-            where: { routesToObtain: version.qualification },
+            where: {
+              routesToObtain: version.qualification,
+              created_at: new Date(0),
+            },
           }));
 
         if (qualification) {
-          // Currently the Qualification relation has a unique constraint
-          // on the QualificationID, so we need to create a new Qualification
-          // each time. We need to fix this, but in the interests of getting
-          // seed data in, we'll just create a new entry each time
           qualification = await this.qualificationsRepository.save(
             new Qualification(
               qualification.routesToObtain,
@@ -179,19 +183,15 @@ export class ProfessionsSeeder implements Seeder {
           );
         }
 
-        // We use the index -1 to get a legislation seeded by our legislation
-        // seeder that is unattached to a profession version
+        // We use the created_at value to get a legislation seeded by our
+        // legislation seeder that is unattached to a profession version
         let legislations: Legislation[] =
           version.legislations &&
           (await this.legislationsRepository.find({
-            where: { name: In(version.legislations), index: -1 },
+            where: { name: In(version.legislations), created_at: new Date(0) },
           }));
 
         if (legislations && legislations.length > 0) {
-          // Currently the Legislation relation has a unique constraint
-          // on the legislationID, so we need to create a new Legislation
-          // each time. We need to fix this, but in the interests of getting
-          // seed data in, we'll just create a new entry each time
           const newLegislations = legislations.map(
             (leg, index) => new Legislation(leg.name, leg.url, index),
           );
