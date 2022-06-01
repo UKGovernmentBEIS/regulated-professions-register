@@ -37,7 +37,12 @@ export class QualificationsSeeder implements Seeder {
       );
     });
 
-    return this.qualificationsRepository.save(qualifications);
+    return this.qualificationsRepository.save(
+      qualifications.map((qualification) => ({
+        ...qualification,
+        created_at: new Date(0),
+      })),
+    );
   }
 
   async drop(): Promise<any> {

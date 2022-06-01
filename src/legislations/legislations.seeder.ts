@@ -24,10 +24,15 @@ export class LegislationsSeeder implements Seeder {
 
   async seed(): Promise<any> {
     const legislations = this.data.map((legislation) => {
-      return new Legislation(legislation.name, legislation.url, -1);
+      return new Legislation(legislation.name, legislation.url);
     });
 
-    return this.legislationsRepository.save(legislations);
+    return this.legislationsRepository.save(
+      legislations.map((legislation) => ({
+        ...legislation,
+        created_at: new Date(0),
+      })),
+    );
   }
 
   async drop(): Promise<any> {
