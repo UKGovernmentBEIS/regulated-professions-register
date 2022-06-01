@@ -1,6 +1,5 @@
 import { I18nService } from 'nestjs-i18n';
 import { Organisation } from '../../organisation.entity';
-import { OrganisationPresenter } from '../../presenters/organisation.presenter';
 import { TableRow } from '../../../common/interfaces/table-row';
 import { Table } from '../../../common/interfaces/table';
 import { Industry } from '../../../industries/industry.entity';
@@ -10,6 +9,7 @@ import { IndustriesCheckboxPresenter } from '../../../industries/industries-chec
 import { Nation } from '../../../nations/nation';
 import { NationsCheckboxPresenter } from '../../../nations/nations-checkbox.presenter';
 import { RegulationTypesCheckboxPresenter } from '../../../professions/admin/presenters/regulation-types-checkbox.presenter';
+import { OrganisationTableRowPresenter } from './organisation-table-row.presenter';
 
 type Field =
   | 'name'
@@ -79,7 +79,10 @@ export class OrganisationsPresenter {
 
   private table(firstCellIsHeader = true): Table {
     const rows = this.filteredOrganisations.map((organisation) =>
-      new OrganisationPresenter(organisation, this.i18nService).tableRow(),
+      new OrganisationTableRowPresenter(
+        organisation,
+        this.i18nService,
+      ).tableRow(),
     );
 
     const numberOfResults = rows.length;
