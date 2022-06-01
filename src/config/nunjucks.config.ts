@@ -35,51 +35,23 @@ export const nunjucksConfig = async (
   );
   env.addGlobal('environment', process.env['NODE_ENV']);
   env.addGlobal('site_domain', getDomain(process.env['HOST_URL']));
-  env.addFilter(
-    't',
-    async (...args) => {
-      const callback = args.pop();
-      const text = args[0];
-      const personalisation = args.length < 2 ? {} : args[1];
-      try {
-        const result = await i18nHelper.translate(text, personalisation);
-        callback(null, result);
-      } catch (error) {
-        callback(error);
-      }
-    },
-    true,
-  );
+  env.addFilter('t', (text, personalisation) => {
+    return i18nHelper.translate(text, personalisation || {});
+  });
 
-  env.addFilter(
-    'tError',
-    async (...args) => {
-      const callback = args.pop();
-      const message = args[0];
+  env.addFilter('tError', (message, personalisation) => {
+    if (!message) {
+      return null;
+    }
 
-      if (!message) {
-        callback(null);
-        return;
-      }
+    const texts = message.text.split(',') as string[];
 
-      const personalisation = args.length < 2 ? {} : args[1];
-      try {
-        const texts = message.text.split(',') as string[];
-
-        const result = {
-          html: (
-            await Promise.all(
-              texts.map((text) => i18nHelper.translate(text, personalisation)),
-            )
-          ).join('<br />'),
-        };
-        callback(null, result);
-      } catch (error) {
-        callback(error);
-      }
-    },
-    true,
-  );
+    return {
+      html: texts
+        .map((text) => i18nHelper.translate(text, personalisation || {}))
+        .join('<br />'),
+    };
+  });
 
   env.addFilter('multiline', (text, classes) => {
     return new nunjucks.runtime.SafeString(
