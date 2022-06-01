@@ -97,11 +97,11 @@ export class SubmissionController {
 
     await this.decisionDatasetsService.submit(dataset);
 
-    const messageTitle = await this.i18nService.translate(
+    const messageTitle = this.i18nService.translate<string>(
       'decisions.admin.submission.confirmation.heading',
     );
 
-    const messageBody = await this.i18nService.translate(
+    const messageBody = this.i18nService.translate<string>(
       'decisions.admin.submission.confirmation.body',
     );
 

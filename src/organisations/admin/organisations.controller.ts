@@ -99,7 +99,7 @@ export class OrganisationsController {
       );
 
     const userOrganisation = showAllOrgs
-      ? await this.i18nService.translate('app.beis')
+      ? this.i18nService.translate<string>('app.beis')
       : actingUser.organisation.name;
 
     const presenter = new OrganisationsPresenter(
@@ -234,11 +234,11 @@ export class OrganisationsController {
 
     await this.organisationVersionsService.confirm(version);
 
-    const messageTitle = await this.i18nService.translate(
+    const messageTitle = this.i18nService.translate<string>(
       `organisations.admin.${action}.confirmation.heading`,
     );
 
-    const messageBody = await this.i18nService.translate(
+    const messageBody = this.i18nService.translate<string>(
       `organisations.admin.${action}.confirmation.body`,
       { args: { name: escape(version.organisation.name) } },
     );
