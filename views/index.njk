@@ -4,7 +4,11 @@
 {% set feedbackFormUrl = "https://forms.office.com/Pages/ResponsePage.aspx?id=BXCsy8EC60O0l-ZJLRst2Hs7TwXbV7BKiF_b_DtnqB1UNFQxV0gxNEhMMzhVNDJVTVpLNzIzWlk5UCQlQCN0PWcu" %}
 
 {% block content %}
-<div class="govuk-grid-row">
+  {% if environment === 'test'%}
+    <div data-cy="environment-marker" class="govuk-visually-hidden">test environment</div>
+  {% endif %}
+
+  <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
 
       <h1 class="govuk-heading-xl">

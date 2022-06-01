@@ -103,6 +103,10 @@ import './commands';
 // Purge the Opensearch index and seed the database
 // before running the specs
 before(() => {
+  cy.visit('')
+    .get('[data-cy=environment-marker]')
+    .should('contain', 'test environment');
+
   cy.exec('npm run opensearch:test:purge');
   cy.exec('npm run seed:test');
 });
