@@ -89,7 +89,7 @@ export class DecisionsController {
     return {
       ...new DecisionDatasetsPresenter(
         filterInput,
-        userOrganisation,
+        actingUser,
         allOrganisations,
         startYear,
         endYear,

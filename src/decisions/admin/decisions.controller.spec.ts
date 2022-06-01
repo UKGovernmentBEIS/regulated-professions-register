@@ -97,14 +97,14 @@ describe('DecisionsController', () => {
       it('presents all decision datasets', async () => {
         const request = createDefaultMockRequest();
 
+        const user = userFactory.build({
+          serviceOwner: true,
+          organisation: null,
+        });
+
         const getActingUserSpy = jest
           .spyOn(getActingUserModule, 'getActingUser')
-          .mockReturnValue(
-            userFactory.build({
-              serviceOwner: true,
-              organisation: null,
-            }),
-          );
+          .mockReturnValue(user);
 
         const createFilterInputSpy = jest
           .spyOn(createFilterInputModule, 'createFilterInput')
@@ -161,7 +161,7 @@ describe('DecisionsController', () => {
           {
             keywords: 'example keywords',
           },
-          null,
+          user,
           allOrganisations,
           2020,
           2024,
@@ -195,14 +195,14 @@ describe('DecisionsController', () => {
           name: 'Filtered Profession',
         });
 
+        const user = userFactory.build({
+          serviceOwner: false,
+          organisation: userOrganisation,
+        });
+
         const getActingUserSpy = jest
           .spyOn(getActingUserModule, 'getActingUser')
-          .mockReturnValue(
-            userFactory.build({
-              serviceOwner: false,
-              organisation: userOrganisation,
-            }),
-          );
+          .mockReturnValue(user);
 
         const createFilterInputSpy = jest
           .spyOn(createFilterInputModule, 'createFilterInput')
@@ -265,7 +265,7 @@ describe('DecisionsController', () => {
             keywords: 'example keywords',
             professions: [profession],
           },
-          userOrganisation,
+          user,
           allOrganisations,
           2020,
           2024,
