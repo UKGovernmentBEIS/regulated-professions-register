@@ -75,7 +75,7 @@ export class CheckYourAnswersController {
       this.i18nService,
     );
 
-    const organisations = await new ProfessionToOrganisationsPresenter(
+    const organisations = new ProfessionToOrganisationsPresenter(
       profession,
       version,
       this.i18nService,

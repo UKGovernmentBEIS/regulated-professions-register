@@ -123,7 +123,7 @@ describe('CheckYourAnswersController', () => {
 
         (
           ProfessionToOrganisationsPresenter.prototype as DeepMocked<ProfessionToOrganisationsPresenter>
-        ).summaryLists.mockResolvedValue(expectedSummaryList);
+        ).summaryLists.mockReturnValue(expectedSummaryList);
 
         (NationsListPresenter.prototype.htmlList as jest.Mock).mockReturnValue(
           mockNationsHtml,
@@ -247,7 +247,7 @@ describe('CheckYourAnswersController', () => {
 
         (
           ProfessionToOrganisationsPresenter.prototype as DeepMocked<ProfessionToOrganisationsPresenter>
-        ).summaryLists.mockResolvedValue(expectedSummaryList);
+        ).summaryLists.mockReturnValue(expectedSummaryList);
 
         const request = createDefaultMockRequest({
           user: user,
