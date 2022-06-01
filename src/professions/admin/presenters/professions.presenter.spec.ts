@@ -15,6 +15,8 @@ import professionFactory from '../../../testutils/factories/profession';
 import { translationOf } from '../../../testutils/translation-of';
 import { RegulationType } from '../../profession-version.entity';
 import { RegulationTypesCheckboxPresenter } from './regulation-types-checkbox.presenter';
+import userFactory from '../../../testutils/factories/user';
+import * as getUserOrganisationModule from '../../../users/helpers/get-user-organisation';
 
 const transportIndustry = industryFactory.build({
   id: 'transport',
@@ -70,6 +72,8 @@ const profession3 = professionFactory.build(
   { transient: { organisations: [organisation2] } },
 );
 
+const user = userFactory.build();
+
 describe('ProfessionsPresenter', () => {
   let professionsPresenter: ProfessionsPresenter;
   let i18nService: DeepMocked<I18nService>;
@@ -86,7 +90,7 @@ describe('ProfessionsPresenter', () => {
 
     professionsPresenter = new ProfessionsPresenter(
       filterInput,
-      organisation1,
+      user,
       Nation.all(),
       organisations,
       industries,
@@ -97,13 +101,17 @@ describe('ProfessionsPresenter', () => {
 
   describe('present', () => {
     it('returns template params when called with `overview`', () => {
+      const getUserOrganisationSpy = jest
+        .spyOn(getUserOrganisationModule, 'getUserOrganisation')
+        .mockReturnValue('Example Organisation');
+
       const result = professionsPresenter.present('overview');
 
       const nations = Nation.all();
 
       const expected: Omit<IndexTemplate, 'filterQuery' | 'sortMethod'> = {
         view: 'overview',
-        organisation: translationOf('app.beis'),
+        organisation: 'Example Organisation',
         professionsTable: {
           caption: `${translationOf('professions.search.foundPlural')}`,
           captionClasses: 'govuk-table__caption--m',
@@ -144,16 +152,21 @@ describe('ProfessionsPresenter', () => {
       };
 
       expect(result).toEqual(expected);
+      expect(getUserOrganisationSpy).toHaveBeenCalledWith(user, i18nService);
     });
 
     it('returns template params when called with `single-organisation`', () => {
+      const getUserOrganisationSpy = jest
+        .spyOn(getUserOrganisationModule, 'getUserOrganisation')
+        .mockReturnValue('Example Organisation');
+
       const result = professionsPresenter.present('single-organisation');
 
       const nations = Nation.all();
 
       const expected: Omit<IndexTemplate, 'filterQuery' | 'sortMethod'> = {
         view: 'single-organisation',
-        organisation: 'Example Organisation 1',
+        organisation: 'Example Organisation',
         professionsTable: {
           caption: `${translationOf('professions.search.foundPlural')}`,
           captionClasses: 'govuk-table__caption--m',
@@ -193,6 +206,7 @@ describe('ProfessionsPresenter', () => {
       };
 
       expect(result).toEqual(expected);
+      expect(getUserOrganisationSpy).toHaveBeenCalledWith(user, i18nService);
     });
 
     describe('captions', () => {
@@ -202,18 +216,13 @@ describe('ProfessionsPresenter', () => {
           const industries = industryFactory.buildList(3);
           const filterInput: FilterInput = {};
 
-          const organisation = organisationFactory.build({
-            id: 'example-organisation',
-            name: 'Example Organisation',
-          });
-
-          const organisations = [organisation, organisationFactory.build()];
+          const organisations = organisationFactory.buildList(2);
 
           const foundProfessions = professionFactory.buildList(1);
 
           const presenter = new ProfessionsPresenter(
             filterInput,
-            organisation,
+            user,
             Nation.all(),
             organisations,
             industries,
@@ -221,8 +230,16 @@ describe('ProfessionsPresenter', () => {
             i18nService,
           );
 
+          const getUserOrganisationSpy = jest
+            .spyOn(getUserOrganisationModule, 'getUserOrganisation')
+            .mockReturnValue('Example Organisation');
+
           const result = presenter.present('overview');
 
+          expect(getUserOrganisationSpy).toHaveBeenCalledWith(
+            user,
+            i18nService,
+          );
           expect(result.professionsTable.caption).toEqual(
             `${translationOf('professions.search.foundSingular')}`,
           );
@@ -235,18 +252,13 @@ describe('ProfessionsPresenter', () => {
           const industries = industryFactory.buildList(3);
           const filterInput: FilterInput = {};
 
-          const organisation = organisationFactory.build({
-            id: 'example-organisation',
-            name: 'Example Organisation',
-          });
-
-          const organisations = [organisation, organisationFactory.build()];
+          const organisations = organisationFactory.buildList(2);
 
           const foundProfessions = professionFactory.buildList(3);
 
           const presenter = new ProfessionsPresenter(
             filterInput,
-            organisation,
+            user,
             Nation.all(),
             organisations,
             industries,
@@ -254,13 +266,25 @@ describe('ProfessionsPresenter', () => {
             i18nService,
           );
 
+          const getUserOrganisationSpy = jest
+            .spyOn(getUserOrganisationModule, 'getUserOrganisation')
+            .mockReturnValue('Example Organisation');
+
           const result = presenter.present('overview');
 
+          expect(getUserOrganisationSpy).toHaveBeenCalledWith(
+            user,
+            i18nService,
+          );
           expect(result.professionsTable.caption).toEqual(
             `${translationOf('professions.search.foundPlural')}`,
           );
         });
       });
     });
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
   });
 });

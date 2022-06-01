@@ -5,7 +5,6 @@ import { I18nService } from 'nestjs-i18n';
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 import { IndustriesService } from '../../industries/industries.service';
 import { Nation } from '../../nations/nation';
-import { Organisation } from '../../organisations/organisation.entity';
 import { FilterInput } from '../../common/interfaces/filter-input.interface';
 import { Profession } from '../profession.entity';
 import { ProfessionsService } from '../professions.service';
@@ -25,6 +24,7 @@ import { RegulationType } from '../profession-version.entity';
 import * as removeFromQueryStringModule from '../../helpers/remove-from-query-string.helper';
 import * as getQueryStringModule from '../../helpers/get-query-string.helper';
 import { IndexTemplate } from './interfaces/index-template.interface';
+import { User } from '../../users/user.entity';
 
 jest.mock('../../users/helpers/get-acting-user.helper');
 
@@ -205,10 +205,11 @@ describe('ProfessionsController', () => {
 
   describe('index', () => {
     describe('when the user is a service owner', () => {
+      let user: User;
+
       beforeEach(() => {
-        (getActingUser as jest.Mock).mockReturnValue(
-          userFactory.build({ serviceOwner: true }),
-        );
+        user = userFactory.build({ serviceOwner: true });
+        (getActingUser as jest.Mock).mockReturnValue(user);
       });
 
       it('returns template params poulated to show an overview of professions', async () => {
@@ -230,7 +231,7 @@ describe('ProfessionsController', () => {
               industries: [],
               regulationTypes: [],
             },
-            null,
+            user,
             [profession1, profession2, profession3],
           ).present('overview'),
           sortMethod: 'name',
@@ -273,7 +274,7 @@ describe('ProfessionsController', () => {
               industries: [],
               regulationTypes: [],
             },
-            null,
+            user,
             [profession1, profession2, profession3],
           ).present('overview'),
           sortMethod: 'last-updated',
@@ -316,7 +317,7 @@ describe('ProfessionsController', () => {
               industries: [],
               regulationTypes: [],
             },
-            null,
+            user,
             [profession1, profession2, profession3],
           ).present('overview'),
           sortMethod: 'status',
@@ -358,7 +359,7 @@ describe('ProfessionsController', () => {
               industries: [],
               regulationTypes: [],
             },
-            null,
+            user,
             [profession3],
           ).present('overview'),
           sortMethod: 'name',
@@ -400,7 +401,7 @@ describe('ProfessionsController', () => {
               industries: [],
               regulationTypes: [],
             },
-            null,
+            user,
             [profession1],
           ).present('overview'),
           sortMethod: 'name',
@@ -442,7 +443,7 @@ describe('ProfessionsController', () => {
               industries: [],
               regulationTypes: [],
             },
-            null,
+            user,
             [profession3],
           ).present('overview'),
           sortMethod: 'name',
@@ -484,7 +485,7 @@ describe('ProfessionsController', () => {
               industries: [industry2],
               regulationTypes: [],
             },
-            null,
+            user,
             [profession3],
           ).present('overview'),
           sortMethod: 'name',
@@ -526,7 +527,7 @@ describe('ProfessionsController', () => {
               industries: [],
               regulationTypes: [RegulationType.Accreditation],
             },
-            null,
+            user,
             [profession1],
           ).present('overview'),
           sortMethod: 'name',
@@ -545,13 +546,14 @@ describe('ProfessionsController', () => {
     });
 
     describe('when the user is not a service owner', () => {
+      let user: User;
+
       beforeEach(() => {
-        (getActingUser as jest.Mock).mockReturnValue(
-          userFactory.build({
-            serviceOwner: false,
-            organisation: organisation1,
-          }),
-        );
+        user = userFactory.build({
+          serviceOwner: false,
+          organisation: organisation1,
+        });
+        (getActingUser as jest.Mock).mockReturnValue(user);
       });
 
       it('returns template params poulated to show professions for a single organisation', async () => {
@@ -571,7 +573,7 @@ describe('ProfessionsController', () => {
               nations: [],
               organisations: [],
             },
-            organisation1,
+            user,
             [profession1, profession2],
           ).present('single-organisation'),
           sortMethod: null,
@@ -608,7 +610,7 @@ describe('ProfessionsController', () => {
               nations: [],
               organisations: [],
             },
-            organisation1,
+            user,
             [profession1],
           ).present('single-organisation'),
           sortMethod: null,
@@ -645,7 +647,7 @@ describe('ProfessionsController', () => {
               nations: [Nation.find('GB-NIR')],
               organisations: [],
             },
-            organisation1,
+            user,
             [profession2],
           ).present('single-organisation'),
           sortMethod: null,
@@ -672,12 +674,12 @@ describe('ProfessionsController', () => {
 
 function createPresenter(
   filterInput: FilterInput,
-  userOrganisation: Organisation | null,
+  user: User,
   professions: Profession[],
 ): ProfessionsPresenter {
   return new ProfessionsPresenter(
     filterInput,
-    userOrganisation,
+    user,
     Nation.all(),
     organisations,
     industries,
