@@ -55,7 +55,7 @@ describe('SearchPresenter', () => {
   });
 
   describe('present', () => {
-    it('should return a IndexTemplate', async () => {
+    it('should return a IndexTemplate', () => {
       const filterInput: FilterInput = {
         keywords: 'Example Keywords',
         nations: [nations[0]],
@@ -72,25 +72,24 @@ describe('SearchPresenter', () => {
       );
 
       (hasSelectedFilters as jest.Mock).mockReturnValue(true);
-      const result = await presenter.present();
+      const result = presenter.present();
 
-      const nationsCheckboxItems = await new NationsCheckboxPresenter(
+      const nationsCheckboxItems = new NationsCheckboxPresenter(
         Nation.all(),
         [Nation.find('GB-ENG')],
         i18nService,
       ).checkboxItems();
 
-      const industriesCheckboxItems = await new IndustriesCheckboxPresenter(
+      const industriesCheckboxItems = new IndustriesCheckboxPresenter(
         industries,
         [industry2],
         i18nService,
       ).checkboxItems();
 
-      const regulationTypesCheckboxItems =
-        await new RegulationTypesCheckboxPresenter(
-          [RegulationType.Accreditation],
-          i18nService,
-        ).checkboxItems();
+      const regulationTypesCheckboxItems = new RegulationTypesCheckboxPresenter(
+        [RegulationType.Accreditation],
+        i18nService,
+      ).checkboxItems();
 
       const expected: IndexTemplate = {
         filters: {
@@ -103,15 +102,15 @@ describe('SearchPresenter', () => {
         industriesCheckboxItems,
         regulationTypesCheckboxItems,
         organisations: [
-          await new OrganisationSearchResultPresenter(
+          new OrganisationSearchResultPresenter(
             organisation1,
             i18nService,
           ).present(),
-          await new OrganisationSearchResultPresenter(
+          new OrganisationSearchResultPresenter(
             organisation2,
             i18nService,
           ).present(),
-          await new OrganisationSearchResultPresenter(
+          new OrganisationSearchResultPresenter(
             organisation3,
             i18nService,
           ).present(),

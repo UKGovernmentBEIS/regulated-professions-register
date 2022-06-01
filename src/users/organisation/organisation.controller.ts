@@ -148,7 +148,7 @@ export class OrganisationController {
     ).selectArgs();
 
     const serviceOwnerRadioButtonArgs =
-      await new ServiceOwnerRadioButtonArgsPresenter(
+      new ServiceOwnerRadioButtonArgsPresenter(
         serviceOwner,
         this.i18nService,
       ).radioButtonArgs();

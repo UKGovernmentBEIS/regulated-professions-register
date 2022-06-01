@@ -120,7 +120,7 @@ export class RoleController {
     res.redirect(`/admin/users/${id}/confirm`);
   }
 
-  private async renderForm(
+  private renderForm(
     res: Response,
     serviceOwner: boolean,
     role: Role | null,
@@ -128,8 +128,8 @@ export class RoleController {
     source: UserEditSource,
     action: ActionType,
     errors: object | undefined = undefined,
-  ): Promise<void> {
-    const roleRadioButtonArgs = await new RoleRadioButtonsPresenter(
+  ): void {
+    const roleRadioButtonArgs = new RoleRadioButtonsPresenter(
       this.getAllowedRoles(serviceOwner),
       serviceOwner,
       role,

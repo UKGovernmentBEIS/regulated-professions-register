@@ -41,24 +41,23 @@ export class OrganisationsPresenter {
     private readonly i18nService: I18nService,
   ) {}
 
-  async present(view: OrganisationsPresenterView): Promise<IndexTemplate> {
-    const nationsCheckboxItems = await new NationsCheckboxPresenter(
+  present(view: OrganisationsPresenterView): IndexTemplate {
+    const nationsCheckboxItems = new NationsCheckboxPresenter(
       this.allNations,
       this.filterInput.nations || [],
       this.i18nService,
     ).checkboxItems();
 
-    const industriesCheckboxItems = await new IndustriesCheckboxPresenter(
+    const industriesCheckboxItems = new IndustriesCheckboxPresenter(
       this.allIndustries,
       this.filterInput.industries || [],
       this.i18nService,
     ).checkboxItems();
 
-    const regulationTypesCheckboxItems =
-      await new RegulationTypesCheckboxPresenter(
-        this.filterInput.regulationTypes || [],
-        this.i18nService,
-      ).checkboxItems();
+    const regulationTypesCheckboxItems = new RegulationTypesCheckboxPresenter(
+      this.filterInput.regulationTypes || [],
+      this.i18nService,
+    ).checkboxItems();
 
     return {
       view,
@@ -66,7 +65,7 @@ export class OrganisationsPresenter {
       nationsCheckboxItems,
       industriesCheckboxItems,
       regulationTypesCheckboxItems,
-      organisationsTable: await this.table(),
+      organisationsTable: this.table(),
       filters: {
         keywords: this.filterInput.keywords || '',
         nations: (this.filterInput.nations || []).map((nation) => nation.name),
@@ -78,48 +77,42 @@ export class OrganisationsPresenter {
     };
   }
 
-  private async table(firstCellIsHeader = true): Promise<Table> {
-    const rows = await Promise.all(
-      this.filteredOrganisations.map(
-        async (organisation) =>
-          await new OrganisationPresenter(
-            organisation,
-            this.i18nService,
-          ).tableRow(),
-      ),
+  private table(firstCellIsHeader = true): Table {
+    const rows = this.filteredOrganisations.map((organisation) =>
+      new OrganisationPresenter(organisation, this.i18nService).tableRow(),
     );
 
     const numberOfResults = rows.length;
 
     const caption =
       numberOfResults === 1
-        ? await this.i18nService.translate(
+        ? this.i18nService.translate<string>(
             'organisations.search.foundSingular',
             { args: { count: numberOfResults } },
           )
-        : await this.i18nService.translate('organisations.search.foundPlural', {
-            args: { count: numberOfResults },
-          });
+        : this.i18nService.translate<string>(
+            'organisations.search.foundPlural',
+            {
+              args: { count: numberOfResults },
+            },
+          );
 
     return {
       caption,
       captionClasses: 'govuk-table__caption--m',
       firstCellIsHeader: firstCellIsHeader,
-      head: await this.headers(),
+      head: this.headers(),
       rows: rows,
     };
   }
 
-  private async headers(): Promise<TableRow> {
-    return (
-      await Promise.all(
-        fields.map(
-          (field) =>
-            this.i18nService.translate(
-              `organisations.admin.tableHeading.${field}`,
-            ) as Promise<string>,
+  private headers(): TableRow {
+    return fields
+      .map((field) =>
+        this.i18nService.translate<string>(
+          `organisations.admin.tableHeading.${field}`,
         ),
       )
-    ).map((text) => ({ text }));
+      .map((text) => ({ text }));
   }
 }

@@ -116,15 +116,15 @@ export class RegistrationController {
     );
   }
 
-  private async renderForm(
+  private renderForm(
     res: Response,
     submittedValues: ProfessionVersion | RegistrationDto,
     profession: Profession,
     errors: object | undefined = undefined,
-  ): Promise<void> {
+  ): void {
     const templateArgs: RegistrationTemplate = {
       ...submittedValues,
-      captionText: await ViewUtils.captionText(this.i18nService, profession),
+      captionText: ViewUtils.captionText(this.i18nService, profession),
       errors,
     };
 

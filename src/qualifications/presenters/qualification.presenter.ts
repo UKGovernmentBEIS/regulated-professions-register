@@ -42,14 +42,14 @@ export default class QualificationPresenter {
     this.qualification && this.qualification.otherCountriesRecognitionUrl,
   );
 
-  async summaryList(
+  summaryList(
     showEmptyFields: boolean,
     showUKRecognitionFields: boolean,
-  ): Promise<{
+  ): {
     overviewSummaryList: SummaryList;
     ukSummaryList: SummaryList;
     otherCountriesSummaryList: SummaryList;
-  }> {
+  } {
     const overviewSummaryList: SummaryList = {
       classes: 'govuk-summary-list--no-border',
       rows: [],
@@ -66,7 +66,7 @@ export default class QualificationPresenter {
     };
 
     if (showEmptyFields || this.routesToObtain) {
-      await this.addHtmlRow(
+      this.addHtmlRow(
         overviewSummaryList,
         'professions.show.qualification.routesToObtain',
         this.routesToObtain,
@@ -74,7 +74,7 @@ export default class QualificationPresenter {
     }
 
     if (showEmptyFields || this.moreInformationUrl) {
-      await this.addHtmlRow(
+      this.addHtmlRow(
         overviewSummaryList,
         'professions.show.qualification.moreInformationUrl',
         this.moreInformationUrl,
@@ -82,7 +82,7 @@ export default class QualificationPresenter {
     }
 
     if (this.awardingBodies?.length) {
-      await this.addHtmlRow(
+      this.addHtmlRow(
         overviewSummaryList,
         'professions.show.qualification.awardingBodies',
         this.listAwardingBodies(),
@@ -91,7 +91,7 @@ export default class QualificationPresenter {
 
     if (showUKRecognitionFields) {
       if (showEmptyFields || this.ukRecognition) {
-        await this.addHtmlRow(
+        this.addHtmlRow(
           ukSummaryList,
           'professions.show.qualification.ukRecognition',
           this.ukRecognition,
@@ -99,7 +99,7 @@ export default class QualificationPresenter {
       }
 
       if (showEmptyFields || this.ukRecognitionUrl) {
-        await this.addHtmlRow(
+        this.addHtmlRow(
           ukSummaryList,
           'professions.show.qualification.ukRecognitionUrl',
           this.ukRecognitionUrl,
@@ -108,18 +108,18 @@ export default class QualificationPresenter {
     }
 
     if (showEmptyFields || this.publicOtherCountriesRecognitionRoutes) {
-      await this.addTextRow(
+      this.addTextRow(
         otherCountriesSummaryList,
         'professions.show.qualification.otherCountriesRecognition.routes.label',
         this.publicOtherCountriesRecognitionRoutes &&
-          (await this.i18nService.translate(
+          this.i18nService.translate<string>(
             `professions.show.qualification.otherCountriesRecognition.routes.${this.publicOtherCountriesRecognitionRoutes}`,
-          )),
+          ),
       );
     }
 
     if (showEmptyFields || this.otherCountriesRecognitionSummary) {
-      await this.addHtmlRow(
+      this.addHtmlRow(
         otherCountriesSummaryList,
         'professions.show.qualification.otherCountriesRecognition.summary',
         this.otherCountriesRecognitionSummary,
@@ -127,7 +127,7 @@ export default class QualificationPresenter {
     }
 
     if (showEmptyFields || this.otherCountriesRecognitionUrl) {
-      await this.addHtmlRow(
+      this.addHtmlRow(
         otherCountriesSummaryList,
         'professions.show.qualification.otherCountriesRecognition.url',
         this.otherCountriesRecognitionUrl,
@@ -151,24 +151,24 @@ export default class QualificationPresenter {
     };
   }
 
-  private async addTextRow(
+  private addTextRow(
     summaryList: SummaryList,
     key: string,
     value: string,
-  ): Promise<void> {
+  ): void {
     summaryList.rows.push({
-      key: { text: await this.i18nService.translate(key) },
+      key: { text: this.i18nService.translate<string>(key) },
       value: { text: value },
     });
   }
 
-  private async addHtmlRow(
+  private addHtmlRow(
     summaryList: SummaryList,
     key: string,
     value: string,
-  ): Promise<void> {
+  ): void {
     summaryList.rows.push({
-      key: { text: await this.i18nService.translate(key) },
+      key: { text: this.i18nService.translate<string>(key) },
       value: { html: value },
     });
   }

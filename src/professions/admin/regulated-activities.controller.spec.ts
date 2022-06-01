@@ -86,7 +86,7 @@ describe(RegulatedActivitiesController, () => {
 
       const regulationTypeRadioButtonArgsSpy = jest
         .spyOn(RegulationTypeRadioButtonsPresenter.prototype, 'radioButtonArgs')
-        .mockResolvedValue(mockRegulationTypeRadioButtonArgs);
+        .mockReturnValue(mockRegulationTypeRadioButtonArgs);
 
       const request = createDefaultMockRequest({
         user: userFactory.build(),

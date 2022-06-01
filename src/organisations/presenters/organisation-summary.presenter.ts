@@ -13,7 +13,7 @@ export class OrganisationSummaryPresenter {
     private readonly i18nService: I18nService,
   ) {}
 
-  async present(showEmptyFields: boolean): Promise<ShowTemplate> {
+  present(showEmptyFields: boolean): ShowTemplate {
     const organisationPresenter = new OrganisationPresenter(
       this.organisation,
       this.i18nService,
@@ -28,20 +28,18 @@ export class OrganisationSummaryPresenter {
     return {
       organisation: this.organisation,
       presenter: organisationPresenter,
-      summaryList: await organisationPresenter.summaryList({
+      summaryList: organisationPresenter.summaryList({
         removeBlank: !showEmptyFields,
       }),
-      professions: await Promise.all(
-        professionPresenters.map(async (presenter) => {
-          return {
-            name: presenter.profession.name,
-            slug: presenter.profession.slug,
-            id: presenter.profession.id,
-            versionId: presenter.profession.versionId,
-            summaryList: await presenter.summaryList(),
-          };
-        }),
-      ),
+      professions: professionPresenters.map((presenter) => {
+        return {
+          name: presenter.profession.name,
+          slug: presenter.profession.slug,
+          id: presenter.profession.id,
+          versionId: presenter.profession.versionId,
+          summaryList: presenter.summaryList(),
+        };
+      }),
     };
   }
 }

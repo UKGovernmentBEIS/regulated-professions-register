@@ -122,7 +122,7 @@ describe('ProfessionsController', () => {
         (organisation) => organisation,
       );
 
-      (NationsListPresenter.prototype.htmlList as jest.Mock).mockResolvedValue(
+      (NationsListPresenter.prototype.htmlList as jest.Mock).mockReturnValue(
         mockNationsHtml,
       );
 
@@ -134,7 +134,7 @@ describe('ProfessionsController', () => {
 
       expect(result).toEqual({
         profession: profession,
-        qualifications: await new QualificationPresenter(
+        qualifications: new QualificationPresenter(
           profession.qualification,
           createMockI18nService(),
           expectedAwardingBodies,
@@ -249,7 +249,7 @@ describe('ProfessionsController', () => {
 
           (
             NationsListPresenter.prototype.htmlList as jest.Mock
-          ).mockResolvedValue(mockNationsHtml);
+          ).mockReturnValue(mockNationsHtml);
 
           const result = await controller.show('example-slug');
 

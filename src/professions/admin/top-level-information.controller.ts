@@ -118,16 +118,16 @@ export class TopLevelInformationController {
     );
   }
 
-  private async renderForm(
+  private renderForm(
     res: Response,
     name: string,
     profession: Profession,
     change: boolean,
     errors: object | undefined = undefined,
-  ): Promise<void> {
+  ): void {
     const templateArgs: TopLevelDetailsTemplate = {
       name,
-      captionText: await ViewUtils.captionText(this.i18nService, profession),
+      captionText: ViewUtils.captionText(this.i18nService, profession),
       change,
       errors,
     };

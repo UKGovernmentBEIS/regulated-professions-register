@@ -4,13 +4,13 @@ import { ServiceOwnerRadioButtonArgsPresenter } from './service-owner-radio-butt
 
 describe('ServiceOwnerRadioButtonsPresenter', () => {
   describe('radioButtonArgs', () => {
-    it('returns an array of `RadioButtonArg`s', async () => {
+    it('returns an array of `RadioButtonArg`s', () => {
       const presenter = new ServiceOwnerRadioButtonArgsPresenter(
         true,
         createMockI18nService(),
       );
 
-      const result = await presenter.radioButtonArgs();
+      const result = presenter.radioButtonArgs();
 
       expect(result).toMatchObject([
         {

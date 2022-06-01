@@ -18,14 +18,14 @@ describe('NationsCheckboxPresenter', () => {
   });
 
   describe('checkboxItems', () => {
-    it('should return unchecked checkbox arguments when called with an empty list of Nations', async () => {
+    it('should return unchecked checkbox arguments when called with an empty list of Nations', () => {
       const presenter = new NationsCheckboxPresenter(
         Nation.all(),
         [],
         i18nService,
       );
 
-      await expect(presenter.checkboxItems()).resolves.toEqual([
+      expect(presenter.checkboxItems()).toEqual([
         {
           text: 'England',
           value: 'GB-ENG',
@@ -49,7 +49,7 @@ describe('NationsCheckboxPresenter', () => {
       ]);
     });
 
-    it('should return some checked checkbox arguments when called with a non-empty list of Nations', async () => {
+    it('should return some checked checkbox arguments when called with a non-empty list of Nations', () => {
       const nations = Nation.all();
       const presenter = new NationsCheckboxPresenter(
         nations,
@@ -57,7 +57,7 @@ describe('NationsCheckboxPresenter', () => {
         i18nService,
       );
 
-      await expect(presenter.checkboxItems()).resolves.toEqual([
+      expect(presenter.checkboxItems()).toEqual([
         {
           text: 'England',
           value: 'GB-ENG',
@@ -83,14 +83,14 @@ describe('NationsCheckboxPresenter', () => {
   });
 
   describe('checkboxArgs', () => {
-    it('should return arguments for a group of checkboxes', async () => {
+    it('should return arguments for a group of checkboxes', () => {
       const presenter = new NationsCheckboxPresenter(
         Nation.all(),
         [],
         i18nService,
       );
 
-      expect(await presenter.checkboxArgs('foo', 'foo[]', 'abc.123')).toEqual({
+      expect(presenter.checkboxArgs('foo', 'foo[]', 'abc.123')).toEqual({
         name: 'foo[]',
         hint: {
           text: translationOf('abc.123'),

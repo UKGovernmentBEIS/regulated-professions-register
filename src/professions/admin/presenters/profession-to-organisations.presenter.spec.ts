@@ -22,7 +22,7 @@ jest.mock('../../../users/helpers/get-permissions-from-user.helper');
 
 describe('ProfessionToOrganisationsPresenter', () => {
   describe('summaryLists', () => {
-    it('should return an array of summary list objects', async () => {
+    it('should return an array of summary list objects', () => {
       const organisation1 = organisationFactory.build({
         name: 'Organisation 1',
       });
@@ -59,7 +59,7 @@ describe('ProfessionToOrganisationsPresenter', () => {
           user,
         );
 
-      expect(await professionToOrganisationsPresenter.summaryLists()).toEqual([
+      expect(professionToOrganisationsPresenter.summaryLists()).toEqual([
         {
           attributes: {
             'data-cy': `profession-to-organisation-1`,
@@ -151,7 +151,7 @@ describe('ProfessionToOrganisationsPresenter', () => {
       ]);
     });
 
-    it("should not include the edit links if a user cannot edit a profession's organisation", async () => {
+    it("should not include the edit links if a user cannot edit a profession's organisation", () => {
       const organisation1 = organisationFactory.build({
         name: 'Organisation 1',
       });
@@ -188,7 +188,7 @@ describe('ProfessionToOrganisationsPresenter', () => {
           user,
         );
 
-      expect(await professionToOrganisationsPresenter.summaryLists()).toEqual([
+      expect(professionToOrganisationsPresenter.summaryLists()).toEqual([
         {
           attributes: {
             'data-cy': `profession-to-organisation-1`,
@@ -245,7 +245,7 @@ describe('ProfessionToOrganisationsPresenter', () => {
     });
 
     describe('when there are no profession to organisation relations', () => {
-      it('should return an array with one empty summary list object', async () => {
+      it('should return an array with one empty summary list object', () => {
         const profession = professionFactory.build({
           professionToOrganisations: [],
         });
@@ -261,32 +261,30 @@ describe('ProfessionToOrganisationsPresenter', () => {
             user,
           );
 
-        expect(await professionToOrganisationsPresenter.summaryLists()).toEqual(
-          [
-            {
-              rows: [
-                {
-                  key: {
-                    text: translationOf(
-                      'professions.form.label.organisations.name',
-                    ),
-                  },
-                  value: { text: '' },
+        expect(professionToOrganisationsPresenter.summaryLists()).toEqual([
+          {
+            rows: [
+              {
+                key: {
+                  text: translationOf(
+                    'professions.form.label.organisations.name',
+                  ),
                 },
-                {
-                  key: {
-                    text: translationOf(
-                      'professions.form.label.organisations.role',
-                    ),
-                  },
-                  value: {
-                    text: '',
-                  },
+                value: { text: '' },
+              },
+              {
+                key: {
+                  text: translationOf(
+                    'professions.form.label.organisations.role',
+                  ),
                 },
-              ],
-            },
-          ],
-        );
+                value: {
+                  text: '',
+                },
+              },
+            ],
+          },
+        ]);
       });
     });
   });

@@ -25,19 +25,16 @@ export class OrganisationPresenter {
     private readonly i18nService: I18nService,
   ) {}
 
-  public async tableRow(): Promise<TableRow> {
+  public tableRow(): TableRow {
     return [
       {
         text: this.organisation.name,
       },
       {
-        text: await getNationsFromProfessions(
-          this.professions(),
-          this.i18nService,
-        ),
+        text: getNationsFromProfessions(this.professions(), this.i18nService),
       },
       {
-        text: await this.industries(),
+        text: this.industries(),
       },
       {
         text: this.lastModified,
@@ -56,7 +53,7 @@ export class OrganisationPresenter {
           this.organisation.id
         }/versions/${
           this.organisation.versionId
-        }">${await this.i18nService.translate(
+        }">${this.i18nService.translate<string>(
           'organisations.admin.viewDetails',
           { args: { name: escape(this.organisation.name) } },
         )}
@@ -65,9 +62,9 @@ export class OrganisationPresenter {
     ];
   }
 
-  public async summaryList(
+  public summaryList(
     options: OrganisationSummaryListOptions = {},
-  ): Promise<SummaryList> {
+  ): SummaryList {
     const classes = options.classes || 'govuk-summary-list--no-border';
     const removeBlank = options.removeBlank || false;
     const includeName = options.includeName || false;
@@ -76,7 +73,7 @@ export class OrganisationPresenter {
     let rows = [
       {
         key: {
-          text: await this.i18nService.translate(
+          text: this.i18nService.translate<string>(
             'organisations.label.alternateName',
           ),
         },
@@ -86,7 +83,7 @@ export class OrganisationPresenter {
       },
       {
         key: {
-          text: await this.i18nService.translate('organisations.label.url'),
+          text: this.i18nService.translate<string>('organisations.label.url'),
         },
         value: {
           html: this.url(),
@@ -94,7 +91,9 @@ export class OrganisationPresenter {
       },
       {
         key: {
-          text: await this.i18nService.translate('organisations.label.address'),
+          text: this.i18nService.translate<string>(
+            'organisations.label.address',
+          ),
         },
         value: {
           html: this.address(),
@@ -102,7 +101,7 @@ export class OrganisationPresenter {
       },
       {
         key: {
-          text: await this.i18nService.translate('organisations.label.email'),
+          text: this.i18nService.translate<string>('organisations.label.email'),
         },
         value: {
           html: this.email(),
@@ -110,7 +109,7 @@ export class OrganisationPresenter {
       },
       {
         key: {
-          text: await this.i18nService.translate(
+          text: this.i18nService.translate<string>(
             'organisations.label.telephone',
           ),
         },
@@ -129,7 +128,7 @@ export class OrganisationPresenter {
     if (includeName) {
       rows.unshift({
         key: {
-          text: await this.i18nService.translate('organisations.label.name'),
+          text: this.i18nService.translate<string>('organisations.label.name'),
         },
         value: {
           text: this.organisation.name,
@@ -138,22 +137,20 @@ export class OrganisationPresenter {
     }
 
     if (includeActions) {
-      rows = await Promise.all(
-        rows.map(async (row) => {
-          return {
-            ...row,
-            actions: {
-              items: [
-                {
-                  href: `/admin/organisations/${this.organisation.id}/versions/${this.organisation.versionId}/edit`,
-                  text: await this.i18nService.translate('app.change'),
-                  visuallyHiddenText: row.key.text,
-                },
-              ],
-            },
-          };
-        }),
-      );
+      rows = rows.map((row) => {
+        return {
+          ...row,
+          actions: {
+            items: [
+              {
+                href: `/admin/organisations/${this.organisation.id}/versions/${this.organisation.versionId}/edit`,
+                text: this.i18nService.translate<string>('app.change'),
+                visuallyHiddenText: row.key.text,
+              },
+            ],
+          },
+        };
+      });
     }
 
     return {
@@ -193,16 +190,13 @@ export class OrganisationPresenter {
     return formatLink(this.organisation.url);
   }
 
-  private async industries(): Promise<string> {
+  private industries(): string {
     const industries = this.professions()
       .map((profession) => profession.industries)
       .flat();
 
-    const industryNames = await Promise.all(
-      industries.map(
-        (industry) =>
-          this.i18nService.translate(industry.name) as Promise<string>,
-      ),
+    const industryNames = industries.map((industry) =>
+      this.i18nService.translate<string>(industry.name),
     );
 
     return [...new Set(industryNames)].join(', ');

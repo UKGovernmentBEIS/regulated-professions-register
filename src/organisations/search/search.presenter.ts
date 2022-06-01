@@ -19,32 +19,31 @@ export class SearchPresenter {
     private readonly i18nService: I18nService,
   ) {}
 
-  async present(): Promise<IndexTemplate> {
-    const nationsCheckboxItems = await new NationsCheckboxPresenter(
+  present(): IndexTemplate {
+    const nationsCheckboxItems = new NationsCheckboxPresenter(
       this.allNations,
       this.filterInput.nations,
       this.i18nService,
     ).checkboxItems();
 
-    const industriesCheckboxItems = await new IndustriesCheckboxPresenter(
+    const industriesCheckboxItems = new IndustriesCheckboxPresenter(
       this.allIndustries,
       this.filterInput.industries,
       this.i18nService,
     ).checkboxItems();
 
-    const regulationTypesCheckboxItems =
-      await new RegulationTypesCheckboxPresenter(
-        this.filterInput.regulationTypes,
-        this.i18nService,
-      ).checkboxItems();
+    const regulationTypesCheckboxItems = new RegulationTypesCheckboxPresenter(
+      this.filterInput.regulationTypes,
+      this.i18nService,
+    ).checkboxItems();
 
-    const displayOrganisations = await Promise.all(
-      this.filteredOrganisations.map(async (organisation) => {
+    const displayOrganisations = this.filteredOrganisations.map(
+      (organisation) => {
         return new OrganisationSearchResultPresenter(
           organisation,
           this.i18nService,
         ).present();
-      }),
+      },
     );
 
     return {

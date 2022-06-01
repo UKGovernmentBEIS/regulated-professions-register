@@ -25,10 +25,7 @@ export class I18nHelper {
    * @param {any} - Any personalisations that need to be passed tho the translation
    * @returns {string} - The translated string (e.g `Hello world!`)
    */
-  public async translate(
-    text: string,
-    personalisation: any = {},
-  ): Promise<string> {
-    return await this.i18nService.translate(text, { args: personalisation });
+  public translate(text: string, personalisation: any = {}): string {
+    return this.i18nService.translate(text, { args: personalisation });
   }
 }

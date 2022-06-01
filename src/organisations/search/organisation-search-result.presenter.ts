@@ -11,7 +11,7 @@ export class OrganisationSearchResultPresenter {
     private readonly i18nService: I18nService,
   ) {}
 
-  async present(): Promise<OrganisationSearchResultTemplate> {
+  present(): OrganisationSearchResultTemplate {
     const professions = getProfessionsFromOrganisation(this.organisation)
       .map((profession) => Profession.withLatestLiveVersion(profession))
       .filter((n) => n);
@@ -19,7 +19,7 @@ export class OrganisationSearchResultPresenter {
     return {
       name: this.organisation.name,
       slug: this.organisation.slug,
-      nations: await getNationsFromProfessions(professions, this.i18nService),
+      nations: getNationsFromProfessions(professions, this.i18nService),
     };
   }
 }

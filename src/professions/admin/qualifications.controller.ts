@@ -127,21 +127,21 @@ export class QualificationsController {
     );
   }
 
-  private async renderForm(
+  private renderForm(
     res: Response,
     qualification: Qualification | null,
     version: ProfessionVersion | null,
     profession: Profession,
     errors: object | undefined = undefined,
-  ) {
+  ): void {
     const templateArgs: QualificationsTemplate = {
       routesToObtain: qualification?.routesToObtain,
       moreInformationUrl: qualification?.url,
-      captionText: await ViewUtils.captionText(this.i18nService, profession),
+      captionText: ViewUtils.captionText(this.i18nService, profession),
       ukRecognition: qualification?.ukRecognition,
       ukRecognitionUrl: qualification?.ukRecognitionUrl,
       otherCountriesRecognitionRoutesRadioButtonArgs:
-        await new OtherCountriesRecognitionRoutesRadioButtonsPresenter(
+        new OtherCountriesRecognitionRoutesRadioButtonsPresenter(
           qualification?.otherCountriesRecognitionRoutes,
           this.i18nService,
         ).radioButtonArgs(),

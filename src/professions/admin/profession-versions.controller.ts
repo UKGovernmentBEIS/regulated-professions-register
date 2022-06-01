@@ -106,13 +106,13 @@ export class ProfessionVersionsController {
       profession,
       presenter,
       hasLiveVersion,
-      qualifications: await qualification.summaryList(
+      qualifications: qualification.summaryList(
         true,
         profession.occupationLocations
           ? !isUK(profession.occupationLocations)
           : true,
       ),
-      nations: await nations.htmlList(),
+      nations: nations.htmlList(),
       industries,
       enforcementBodies: organisationList(enforcementBodies),
       organisations: tierOneOrganisations,

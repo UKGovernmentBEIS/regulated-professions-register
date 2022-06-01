@@ -7,11 +7,11 @@ export class NationsListPresenter {
     private readonly i18nService: I18nService,
   ) {}
 
-  async htmlList(): Promise<string> {
+  htmlList(): string {
     if (this.all()) {
-      return this.i18nService.translate('app.unitedKingdom');
+      return this.i18nService.translate<string>('app.unitedKingdom');
     } else {
-      const translatedNations = await this.translatedNations();
+      const translatedNations = this.translatedNations();
 
       return translatedNations.length > 0
         ? `<ul class="govuk-list"><li>${translatedNations.join(
@@ -21,17 +21,17 @@ export class NationsListPresenter {
     }
   }
 
-  async textList(): Promise<string> {
+  textList(): string {
     if (this.all()) {
-      return this.i18nService.translate('app.unitedKingdom');
+      return this.i18nService.translate<string>('app.unitedKingdom');
     } else {
-      return (await this.translatedNations()).join(', ');
+      return this.translatedNations().join(', ');
     }
   }
 
-  private async translatedNations(): Promise<string[]> {
-    return Promise.all(
-      this.nations.map((nation) => nation.translatedName(this.i18nService)),
+  private translatedNations(): string[] {
+    return this.nations.map((nation) =>
+      nation.translatedName(this.i18nService),
     );
   }
 

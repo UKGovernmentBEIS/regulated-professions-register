@@ -8,20 +8,18 @@ export class RegulationTypeRadioButtonsPresenter {
     private readonly i18nService: I18nService,
   ) {}
 
-  async radioButtonArgs(): Promise<RadioButtonArgs[]> {
-    return Promise.all(
-      Object.values(RegulationType).map(async (regulationType) => ({
-        text: await this.i18nService.translate(
-          `professions.regulationTypes.${regulationType}.name`,
+  radioButtonArgs(): RadioButtonArgs[] {
+    return Object.values(RegulationType).map((regulationType) => ({
+      text: this.i18nService.translate<string>(
+        `professions.regulationTypes.${regulationType}.name`,
+      ),
+      value: regulationType,
+      checked: this.selectedRegulationType === regulationType,
+      hint: {
+        text: this.i18nService.translate<string>(
+          `professions.regulationTypes.${regulationType}.hint`,
         ),
-        value: regulationType,
-        checked: this.selectedRegulationType === regulationType,
-        hint: {
-          text: await this.i18nService.translate(
-            `professions.regulationTypes.${regulationType}.hint`,
-          ),
-        },
-      })),
-    );
+      },
+    }));
   }
 }

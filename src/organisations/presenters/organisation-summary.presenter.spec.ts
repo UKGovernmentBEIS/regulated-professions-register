@@ -45,7 +45,7 @@ describe('OrganisationSummaryPresenter', () => {
   describe('present', () => {
     describe('when all relations are present on the organisation', () => {
       describe('when `showEmptyFields` is true', () => {
-        it("should return template variables contraining an organisation's summary, with blank fields preserved", async () => {
+        it("should return template variables contraining an organisation's summary, with blank fields preserved", () => {
           const organisation = organisationFactory.build();
 
           const professions = [
@@ -71,7 +71,7 @@ describe('OrganisationSummaryPresenter', () => {
             i18nService,
           );
 
-          expect(await presenter.present(true)).toEqual({
+          expect(presenter.present(true)).toEqual({
             organisation: organisation,
             presenter: organisationPresenter,
             summaryList: mockSummaryList(),
@@ -114,7 +114,7 @@ describe('OrganisationSummaryPresenter', () => {
       });
 
       describe('when `showEmptyFields` is false', () => {
-        it("should return template variables contraining an organisation's summary, with blank fields removed", async () => {
+        it("should return template variables contraining an organisation's summary, with blank fields removed", () => {
           const organisation = organisationFactory.build({});
 
           const professions = [
@@ -140,7 +140,7 @@ describe('OrganisationSummaryPresenter', () => {
             i18nService,
           );
 
-          expect(await presenter.present(false)).toEqual({
+          expect(presenter.present(false)).toEqual({
             organisation: organisation,
             presenter: organisationPresenter,
             summaryList: mockSummaryList(),

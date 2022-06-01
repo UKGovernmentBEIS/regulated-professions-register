@@ -107,7 +107,7 @@ describe('OrganisationController', () => {
         ).selectArgs.mockReturnValue(organisationsSelectArgs);
         (
           ServiceOwnerRadioButtonArgsPresenter.prototype as DeepMocked<ServiceOwnerRadioButtonArgsPresenter>
-        ).radioButtonArgs.mockResolvedValue(serviceOwnerRadioButtonArgs);
+        ).radioButtonArgs.mockReturnValue(serviceOwnerRadioButtonArgs);
 
         const serviceOwnerUser = userFactory.build({ serviceOwner: true });
 
@@ -257,7 +257,7 @@ describe('OrganisationController', () => {
         ).selectArgs.mockReturnValue(organisationsSelectArgs);
         (
           ServiceOwnerRadioButtonArgsPresenter.prototype as DeepMocked<ServiceOwnerRadioButtonArgsPresenter>
-        ).radioButtonArgs.mockResolvedValue(serviceOwnerRadioButtonArgs);
+        ).radioButtonArgs.mockReturnValue(serviceOwnerRadioButtonArgs);
 
         const user = userFactory.build();
 

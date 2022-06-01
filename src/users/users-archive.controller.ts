@@ -42,7 +42,7 @@ export class UsersArchiveController {
   @Permissions(UserPermission.DeleteUser)
   @Redirect('/admin/users')
   async delete(@Req() req, @Param('id') id): Promise<void> {
-    const messageTitle = await this.i18nService.translate(
+    const messageTitle = this.i18nService.translate<string>(
       'users.archive.confirmation.body',
     );
     const user = await this.usersService.find(id);

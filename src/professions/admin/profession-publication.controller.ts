@@ -91,11 +91,11 @@ export class ProfessionPublicationController {
 
     await this.professionVersionsService.publish(newVersion);
 
-    const messageTitle = await this.i18nService.translate(
+    const messageTitle = this.i18nService.translate<string>(
       'professions.admin.publish.confirmation.heading',
     );
 
-    const messageBody = await this.i18nService.translate(
+    const messageBody = this.i18nService.translate<string>(
       confirmed
         ? 'professions.admin.publish.confirmation.body'
         : 'professions.admin.publish.confirmation.bodyNew',

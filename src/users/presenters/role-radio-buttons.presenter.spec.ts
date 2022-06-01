@@ -10,7 +10,7 @@ jest.mock('../helpers/get-permissions-from-user.helper');
 describe('RoleRadioButtonsPresenter', () => {
   describe('radioButtonArgs', () => {
     describe('when we we are presenting roles for a service owner', () => {
-      it('returns an array of `RadioButtonArg`s with correct hints and checked values', async () => {
+      it('returns an array of `RadioButtonArg`s with correct hints and checked values', () => {
         (getPermissionsFromUser as jest.Mock).mockReturnValue([
           UserPermission.CreateOrganisation,
           UserPermission.CreateProfession,
@@ -24,7 +24,7 @@ describe('RoleRadioButtonsPresenter', () => {
           createMockI18nService(),
         );
 
-        const result = await presenter.radioButtonArgs();
+        const result = presenter.radioButtonArgs();
 
         const registrarHint = `${translationOf(
           'users.roleDescriptions.manageProfessionsAndOrganisations',
@@ -59,7 +59,7 @@ describe('RoleRadioButtonsPresenter', () => {
     });
 
     describe('when we we are presenting roles for a non-service owner', () => {
-      it('returns an array of `RadioButtonArg`s with correct hints and checked values', async () => {
+      it('returns an array of `RadioButtonArg`s with correct hints and checked values', () => {
         (getPermissionsFromUser as jest.Mock).mockReturnValue([
           UserPermission.CreateUser,
           UserPermission.EditProfession,
@@ -72,7 +72,7 @@ describe('RoleRadioButtonsPresenter', () => {
           createMockI18nService(),
         );
 
-        const result = await presenter.radioButtonArgs();
+        const result = presenter.radioButtonArgs();
 
         const administratorHint = `${translationOf(
           'users.roleDescriptions.manageUsers',

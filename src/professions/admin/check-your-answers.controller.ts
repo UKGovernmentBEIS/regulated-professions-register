@@ -75,7 +75,7 @@ export class CheckYourAnswersController {
       this.i18nService,
     );
 
-    const organisations = await new ProfessionToOrganisationsPresenter(
+    const organisations = new ProfessionToOrganisationsPresenter(
       profession,
       version,
       this.i18nService,
@@ -86,7 +86,7 @@ export class CheckYourAnswersController {
       professionId,
       versionId,
       name: profession.name,
-      nations: await nations.htmlList(),
+      nations: nations.htmlList(),
       industries: industryNames,
       organisations: organisations,
       registrationRequirements: version.registrationRequirements,
@@ -100,7 +100,7 @@ export class CheckYourAnswersController {
       legislations: version.legislations
         ? sortLegislationsByIndex(version.legislations)
         : [],
-      captionText: await ViewUtils.captionText(this.i18nService, profession),
+      captionText: ViewUtils.captionText(this.i18nService, profession),
       publicationBlockers: getPublicationBlockers(version),
       isUK: version.occupationLocations
         ? isUK(version.occupationLocations)

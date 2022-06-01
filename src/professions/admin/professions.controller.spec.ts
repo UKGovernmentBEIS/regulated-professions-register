@@ -222,7 +222,7 @@ describe('ProfessionsController', () => {
         const result = await controller.index(request);
 
         const expected: IndexTemplate = {
-          ...(await createPresenter(
+          ...createPresenter(
             {
               keywords: '',
               nations: [],
@@ -232,7 +232,7 @@ describe('ProfessionsController', () => {
             },
             null,
             [profession1, profession2, profession3],
-          ).present('overview')),
+          ).present('overview'),
           sortMethod: 'name',
           filterQuery: 'mock-query-string-with-removal',
         };
@@ -265,7 +265,7 @@ describe('ProfessionsController', () => {
         });
 
         const expected: IndexTemplate = {
-          ...(await createPresenter(
+          ...createPresenter(
             {
               keywords: '',
               nations: [],
@@ -275,7 +275,7 @@ describe('ProfessionsController', () => {
             },
             null,
             [profession1, profession2, profession3],
-          ).present('overview')),
+          ).present('overview'),
           sortMethod: 'last-updated',
           filterQuery: 'mock-query-string-with-removal',
         };
@@ -308,7 +308,7 @@ describe('ProfessionsController', () => {
         });
 
         const expected: IndexTemplate = {
-          ...(await createPresenter(
+          ...createPresenter(
             {
               keywords: '',
               nations: [],
@@ -318,7 +318,7 @@ describe('ProfessionsController', () => {
             },
             null,
             [profession1, profession2, profession3],
-          ).present('overview')),
+          ).present('overview'),
           sortMethod: 'status',
           filterQuery: 'mock-query-string-with-removal',
         };
@@ -350,7 +350,7 @@ describe('ProfessionsController', () => {
         });
 
         const expected: IndexTemplate = {
-          ...(await createPresenter(
+          ...createPresenter(
             {
               keywords: 'MARK',
               nations: [],
@@ -360,7 +360,7 @@ describe('ProfessionsController', () => {
             },
             null,
             [profession3],
-          ).present('overview')),
+          ).present('overview'),
           sortMethod: 'name',
           filterQuery: 'mock-query-string-with-removal',
         };
@@ -392,7 +392,7 @@ describe('ProfessionsController', () => {
         });
 
         const expected: IndexTemplate = {
-          ...(await createPresenter(
+          ...createPresenter(
             {
               keywords: '',
               nations: [Nation.find('GB-ENG')],
@@ -402,7 +402,7 @@ describe('ProfessionsController', () => {
             },
             null,
             [profession1],
-          ).present('overview')),
+          ).present('overview'),
           sortMethod: 'name',
           filterQuery: 'mock-query-string-with-removal',
         };
@@ -434,7 +434,7 @@ describe('ProfessionsController', () => {
         });
 
         const expected: IndexTemplate = {
-          ...(await createPresenter(
+          ...createPresenter(
             {
               keywords: '',
               nations: [],
@@ -444,7 +444,7 @@ describe('ProfessionsController', () => {
             },
             null,
             [profession3],
-          ).present('overview')),
+          ).present('overview'),
           sortMethod: 'name',
           filterQuery: 'mock-query-string-with-removal',
         };
@@ -476,7 +476,7 @@ describe('ProfessionsController', () => {
         });
 
         const expected: IndexTemplate = {
-          ...(await createPresenter(
+          ...createPresenter(
             {
               keywords: '',
               nations: [],
@@ -486,7 +486,7 @@ describe('ProfessionsController', () => {
             },
             null,
             [profession3],
-          ).present('overview')),
+          ).present('overview'),
           sortMethod: 'name',
           filterQuery: 'mock-query-string-with-removal',
         };
@@ -518,7 +518,7 @@ describe('ProfessionsController', () => {
         });
 
         const expected: IndexTemplate = {
-          ...(await createPresenter(
+          ...createPresenter(
             {
               keywords: '',
               nations: [],
@@ -528,7 +528,7 @@ describe('ProfessionsController', () => {
             },
             null,
             [profession1],
-          ).present('overview')),
+          ).present('overview'),
           sortMethod: 'name',
           filterQuery: 'mock-query-string-with-removal',
         };
@@ -565,7 +565,7 @@ describe('ProfessionsController', () => {
         const result = await controller.index(request);
 
         const expected: IndexTemplate = {
-          ...(await createPresenter(
+          ...createPresenter(
             {
               keywords: '',
               nations: [],
@@ -573,7 +573,7 @@ describe('ProfessionsController', () => {
             },
             organisation1,
             [profession1, profession2],
-          ).present('single-organisation')),
+          ).present('single-organisation'),
           sortMethod: null,
           filterQuery: 'mock-query-string-with-removal',
         };
@@ -602,7 +602,7 @@ describe('ProfessionsController', () => {
         });
 
         const expected: IndexTemplate = {
-          ...(await createPresenter(
+          ...createPresenter(
             {
               keywords: 'primary',
               nations: [],
@@ -610,7 +610,7 @@ describe('ProfessionsController', () => {
             },
             organisation1,
             [profession1],
-          ).present('single-organisation')),
+          ).present('single-organisation'),
           sortMethod: null,
           filterQuery: 'mock-query-string-with-removal',
         };
@@ -639,7 +639,7 @@ describe('ProfessionsController', () => {
         });
 
         const expected: IndexTemplate = {
-          ...(await createPresenter(
+          ...createPresenter(
             {
               keywords: '',
               nations: [Nation.find('GB-NIR')],
@@ -647,7 +647,7 @@ describe('ProfessionsController', () => {
             },
             organisation1,
             [profession2],
-          ).present('single-organisation')),
+          ).present('single-organisation'),
           sortMethod: null,
           filterQuery: 'mock-query-string-with-removal',
         };

@@ -14,10 +14,10 @@ describe(YesNoRadioButtonArgsPresenter, () => {
   });
 
   describe('radioButtonArgs', () => {
-    it('should return translated values with unchecked radio buttons when called with a null Yes or No value', async () => {
+    it('should return translated values with unchecked radio buttons when called with a null Yes or No value', () => {
       const presenter = new YesNoRadioButtonArgsPresenter(null, i18nService);
 
-      await expect(presenter.radioButtonArgs()).resolves.toEqual([
+      expect(presenter.radioButtonArgs()).toEqual([
         {
           text: 'Yes',
           value: '1',
@@ -31,7 +31,7 @@ describe(YesNoRadioButtonArgsPresenter, () => {
       ]);
     });
 
-    it('should pre-check the relevant radio button for the relevant boolean value', async () => {
+    it('should pre-check the relevant radio button for the relevant boolean value', () => {
       const truePresenter = new YesNoRadioButtonArgsPresenter(
         true,
         i18nService,
@@ -42,7 +42,7 @@ describe(YesNoRadioButtonArgsPresenter, () => {
         i18nService,
       );
 
-      await expect(truePresenter.radioButtonArgs()).resolves.toEqual([
+      expect(truePresenter.radioButtonArgs()).toEqual([
         {
           text: 'Yes',
           value: '1',
@@ -55,7 +55,7 @@ describe(YesNoRadioButtonArgsPresenter, () => {
         },
       ]);
 
-      await expect(falsePresenter.radioButtonArgs()).resolves.toEqual([
+      expect(falsePresenter.radioButtonArgs()).toEqual([
         {
           text: 'Yes',
           value: '1',

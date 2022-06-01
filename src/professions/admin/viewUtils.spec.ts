@@ -10,42 +10,42 @@ describe(ViewUtils, () => {
   const mockI18nService = createMockI18nService();
   describe('captionText', () => {
     describe('when passed a profession that has been confirmed', () => {
-      it("returns the 'edit' text, including the Profession's name", async () => {
+      it("returns the 'edit' text, including the Profession's name", () => {
         const profession = professionFactory.build();
 
         (isConfirmed as jest.Mock).mockReturnValue(true);
 
-        expect(
-          await ViewUtils.captionText(mockI18nService, profession),
-        ).toEqual(translationOf('professions.form.captions.edit'));
+        expect(ViewUtils.captionText(mockI18nService, profession)).toEqual(
+          translationOf('professions.form.captions.edit'),
+        );
       });
     });
 
     describe('when passed a profession that has not yet been confirmed', () => {
       describe('when the profession has a name set', () => {
-        it("returns the 'add' text with the Profession's name", async () => {
+        it("returns the 'add' text with the Profession's name", () => {
           const profession = professionFactory.build({
             name: 'Example profession',
           });
 
           (isConfirmed as jest.Mock).mockReturnValue(false);
 
-          expect(
-            await ViewUtils.captionText(mockI18nService, profession),
-          ).toEqual(translationOf('professions.form.captions.addWithName'));
+          expect(ViewUtils.captionText(mockI18nService, profession)).toEqual(
+            translationOf('professions.form.captions.addWithName'),
+          );
         });
 
         describe('when the profession has no name set', () => {
-          it("returns the 'add' text", async () => {
+          it("returns the 'add' text", () => {
             const profession = professionFactory.build({
               name: null,
             });
 
             (isConfirmed as jest.Mock).mockReturnValue(false);
 
-            expect(
-              await ViewUtils.captionText(mockI18nService, profession),
-            ).toEqual(translationOf('professions.form.captions.add'));
+            expect(ViewUtils.captionText(mockI18nService, profession)).toEqual(
+              translationOf('professions.form.captions.add'),
+            );
           });
         });
       });

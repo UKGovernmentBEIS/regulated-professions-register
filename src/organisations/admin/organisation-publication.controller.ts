@@ -82,11 +82,11 @@ export class OrganisationPublicationController {
 
     await this.organisationVersionsService.publish(newVersion);
 
-    const messageTitle = await this.i18nService.translate(
+    const messageTitle = this.i18nService.translate<string>(
       'organisations.admin.publish.confirmation.heading',
     );
 
-    const messageBody = await this.i18nService.translate(
+    const messageBody = this.i18nService.translate<string>(
       confirmed
         ? 'organisations.admin.publish.confirmation.body'
         : 'organisations.admin.publish.confirmation.bodyNew',

@@ -8,15 +8,13 @@ export class RegulationTypesCheckboxPresenter {
     private readonly i18nService: I18nService,
   ) {}
 
-  async checkboxItems(): Promise<CheckboxItems[]> {
-    return Promise.all(
-      Object.values(RegulationType).map(async (regulationType) => ({
-        text: await this.i18nService.translate(
-          `professions.regulationTypes.${regulationType}.name`,
-        ),
-        value: regulationType,
-        checked: this.checkedRegulationTypes.includes(regulationType),
-      })),
-    );
+  checkboxItems(): CheckboxItems[] {
+    return Object.values(RegulationType).map((regulationType) => ({
+      text: this.i18nService.translate<string>(
+        `professions.regulationTypes.${regulationType}.name`,
+      ),
+      value: regulationType,
+      checked: this.checkedRegulationTypes.includes(regulationType),
+    }));
   }
 }

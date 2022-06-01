@@ -16,14 +16,14 @@ describe('AssetsHelper', () => {
     helper = new I18nHelper(app);
   });
 
-  it('returns a translated string', async () => {
-    await helper.translate('hello world');
+  it('returns a translated string', () => {
+    helper.translate('hello world');
 
     expect(service.translate).toHaveBeenCalledWith('hello world', { args: {} });
   });
 
-  it('accepts optional personalisation options', async () => {
-    await helper.translate('hello world', { foo: 'bar' });
+  it('accepts optional personalisation options', () => {
+    helper.translate('hello world', { foo: 'bar' });
     expect(service.translate).toHaveBeenCalledWith('hello world', {
       args: { foo: 'bar' },
     });

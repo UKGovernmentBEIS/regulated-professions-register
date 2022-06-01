@@ -138,17 +138,17 @@ export class LegislationController {
     );
   }
 
-  private async renderForm(
+  private renderForm(
     res: Response,
     legislation: Legislation,
     secondLegislation: Legislation,
     profession: Profession,
     errors: object | undefined = undefined,
-  ): Promise<void> {
+  ): void {
     const templateArgs: LegislationTemplate = {
       legislation,
       secondLegislation,
-      captionText: await ViewUtils.captionText(this.i18nService, profession),
+      captionText: ViewUtils.captionText(this.i18nService, profession),
       errors,
     };
 

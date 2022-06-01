@@ -41,20 +41,17 @@ const fields = {
 } as { [K in ProfessionsPresenterView]: Field[] };
 
 export class ListEntryPresenter {
-  static async headings(
+  static headings(
     i18nService: I18nService,
     contents: ProfessionsPresenterView,
-  ): Promise<TableRow> {
-    return (
-      await Promise.all(
-        fields[contents].map(
-          (field) =>
-            i18nService.translate(
-              `professions.admin.tableHeading.${field}`,
-            ) as Promise<string>,
+  ): TableRow {
+    return fields[contents]
+      .map((field) =>
+        i18nService.translate<string>(
+          `professions.admin.tableHeading.${field}`,
         ),
       )
-    ).map((text) => ({ text }));
+      .map((text) => ({ text }));
   }
 
   constructor(
@@ -62,34 +59,30 @@ export class ListEntryPresenter {
     private readonly i18nService: I18nService,
   ) {}
 
-  async tableRow(contents: ProfessionsPresenterView): Promise<TableRow> {
+  tableRow(contents: ProfessionsPresenterView): TableRow {
     const presenter = new ProfessionPresenter(
       this.profession,
       this.i18nService,
     );
 
-    const nations = await new NationsListPresenter(
+    const nations = new NationsListPresenter(
       (this.profession.occupationLocations || []).map((code) =>
         Nation.find(code),
       ),
       this.i18nService,
     ).textList();
 
-    const industries = (
-      await Promise.all(
-        this.profession.industries.map(
-          (industry) =>
-            this.i18nService.translate(industry.name) as Promise<string>,
-        ),
-      )
-    ).join(', ');
+    const industries = this.profession.industries
+      .map((industry) => this.i18nService.translate<string>(industry.name))
+      .join(', ');
 
     const viewDetails = `<a class="govuk-link" href="/admin/professions/${
       this.profession.id
-    }/versions/${this.profession.versionId}">${await this.i18nService.translate(
-      'professions.admin.viewDetails',
-      { args: { name: escape(this.profession.name) } },
-    )}</a>`;
+    }/versions/${
+      this.profession.versionId
+    }">${this.i18nService.translate<string>('professions.admin.viewDetails', {
+      args: { name: escape(this.profession.name) },
+    })}</a>`;
 
     const organisations = getOrganisationsFromProfession(this.profession);
     const organisationsHtml = `<ul class="govuk-list">
@@ -112,7 +105,7 @@ export class ListEntryPresenter {
         html: organisationsHtml,
       },
       industry: { text: industries },
-      status: { html: await presenter.status },
+      status: { html: presenter.status },
       actions: { html: viewDetails },
     };
 

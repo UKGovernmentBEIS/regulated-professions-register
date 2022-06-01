@@ -151,7 +151,7 @@ export class ScopeController {
   ): Promise<void> {
     const industries = await this.industriesService.all();
 
-    const industriesCheckboxItems = await new IndustriesCheckboxPresenter(
+    const industriesCheckboxItems = new IndustriesCheckboxPresenter(
       industries,
       selectedIndustries,
       this.i18nService,
@@ -163,7 +163,7 @@ export class ScopeController {
       this.i18nService,
     );
 
-    const nationsCheckboxArgs = await nationsCheckboxPresenter.checkboxArgs(
+    const nationsCheckboxArgs = nationsCheckboxPresenter.checkboxArgs(
       'nations',
       'nations[]',
       'professions.form.hint.scope.certainNations',
@@ -173,7 +173,7 @@ export class ScopeController {
       coversUK,
       industriesCheckboxItems,
       nationsCheckboxArgs,
-      captionText: await ViewUtils.captionText(this.i18nService, profession),
+      captionText: ViewUtils.captionText(this.i18nService, profession),
       errors,
     };
 

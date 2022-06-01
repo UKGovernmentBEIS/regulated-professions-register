@@ -25,15 +25,15 @@ export class ProfessionsPresenter {
     private readonly i18nService: I18nService,
   ) {}
 
-  async present(
+  present(
     view: ProfessionsPresenterView,
-  ): Promise<Omit<IndexTemplate, 'filterQuery' | 'sortMethod'>> {
+  ): Omit<IndexTemplate, 'filterQuery' | 'sortMethod'> {
     const organisation =
       view === 'overview'
-        ? await this.i18nService.translate('app.beis')
+        ? this.i18nService.translate<string>('app.beis')
         : this.userOrganisation.name;
 
-    const nationsCheckboxItems = await new NationsCheckboxPresenter(
+    const nationsCheckboxItems = new NationsCheckboxPresenter(
       this.allNations,
       this.filterInput.nations || [],
       this.i18nService,
@@ -44,22 +44,21 @@ export class ProfessionsPresenter {
       this.filterInput.organisations || [],
     ).checkboxItems();
 
-    const industriesCheckboxItems = await new IndustriesCheckboxPresenter(
+    const industriesCheckboxItems = new IndustriesCheckboxPresenter(
       this.allIndustries,
       this.filterInput.industries || [],
       this.i18nService,
     ).checkboxItems();
 
-    const regulationTypesCheckboxItems =
-      await new RegulationTypesCheckboxPresenter(
-        this.filterInput.regulationTypes || [],
-        this.i18nService,
-      ).checkboxItems();
+    const regulationTypesCheckboxItems = new RegulationTypesCheckboxPresenter(
+      this.filterInput.regulationTypes || [],
+      this.i18nService,
+    ).checkboxItems();
 
     return {
       view,
       organisation,
-      professionsTable: await this.table(view),
+      professionsTable: this.table(view),
       nationsCheckboxItems,
       organisationsCheckboxItems,
       industriesCheckboxItems,
@@ -78,23 +77,24 @@ export class ProfessionsPresenter {
     };
   }
 
-  private async table(view: ProfessionsPresenterView): Promise<Table> {
-    const headings = await ListEntryPresenter.headings(this.i18nService, view);
+  private table(view: ProfessionsPresenterView): Table {
+    const headings = ListEntryPresenter.headings(this.i18nService, view);
 
-    const rows = await Promise.all(
-      this.filteredProfessions.map(async (profession) =>
-        new ListEntryPresenter(profession, this.i18nService).tableRow(view),
-      ),
+    const rows = this.filteredProfessions.map((profession) =>
+      new ListEntryPresenter(profession, this.i18nService).tableRow(view),
     );
 
     const numberOfResults = rows.length;
 
     const caption =
       numberOfResults === 1
-        ? await this.i18nService.translate('professions.search.foundSingular', {
-            args: { count: numberOfResults },
-          })
-        : await this.i18nService.translate('professions.search.foundPlural', {
+        ? this.i18nService.translate<string>(
+            'professions.search.foundSingular',
+            {
+              args: { count: numberOfResults },
+            },
+          )
+        : this.i18nService.translate<string>('professions.search.foundPlural', {
             args: { count: numberOfResults },
           });
 

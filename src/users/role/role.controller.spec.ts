@@ -58,7 +58,7 @@ describe('RoleController', () => {
 
       (
         RoleRadioButtonsPresenter.prototype as DeepMocked<RoleRadioButtonsPresenter>
-      ).radioButtonArgs.mockResolvedValue(roleRadioButtonArgs);
+      ).radioButtonArgs.mockReturnValue(roleRadioButtonArgs);
 
       const res = createMock<Response>();
 
@@ -205,7 +205,7 @@ describe('RoleController', () => {
 
       (
         RoleRadioButtonsPresenter.prototype as DeepMocked<RoleRadioButtonsPresenter>
-      ).radioButtonArgs.mockResolvedValue(roleRadioButtonArgs);
+      ).radioButtonArgs.mockReturnValue(roleRadioButtonArgs);
 
       const res = createMock<Response>();
 

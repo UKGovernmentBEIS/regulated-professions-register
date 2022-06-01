@@ -11,30 +11,28 @@ export class NationsCheckboxPresenter {
     private readonly i18nService: I18nService,
   ) {}
 
-  async checkboxItems(): Promise<CheckboxItems[]> {
-    return Promise.all(
-      this.allNations.map(async (nation) => ({
-        text: await nation.translatedName(this.i18nService),
-        value: nation.code,
-        checked: !!this.checkedNations.find(
-          (checkedNation) => checkedNation.code === nation.code,
-        ),
-      })),
-    );
+  checkboxItems(): CheckboxItems[] {
+    return this.allNations.map((nation) => ({
+      text: nation.translatedName(this.i18nService),
+      value: nation.code,
+      checked: !!this.checkedNations.find(
+        (checkedNation) => checkedNation.code === nation.code,
+      ),
+    }));
   }
 
-  async checkboxArgs(
+  checkboxArgs(
     idPrefix: string,
     name: string,
     hintTranslation: string,
-  ): Promise<CheckboxArgs> {
+  ): CheckboxArgs {
     return {
       idPrefix: idPrefix,
       name: name,
       hint: {
-        text: await this.i18nService.translate(hintTranslation),
+        text: this.i18nService.translate<string>(hintTranslation),
       },
-      items: await this.checkboxItems(),
+      items: this.checkboxItems(),
     };
   }
 }

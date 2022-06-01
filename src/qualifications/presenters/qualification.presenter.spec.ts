@@ -148,7 +148,7 @@ describe(QualificationPresenter, () => {
     describe('summaryList', () => {
       describe('when a Qualification has all fields', () => {
         describe('when the Qualifications are from a UK profession', () => {
-          it('returns a summary list of all relevant Qualification fields', async () => {
+          it('returns a summary list of all relevant Qualification fields', () => {
             (formatMultilineString as jest.Mock).mockImplementation(
               multilineOf,
             );
@@ -163,7 +163,7 @@ describe(QualificationPresenter, () => {
               createMockI18nService(),
             );
 
-            await expect(presenter.summaryList(true, false)).resolves.toEqual({
+            expect(presenter.summaryList(true, false)).toEqual({
               overviewSummaryList: {
                 classes: 'govuk-summary-list--no-border',
                 rows: [
@@ -231,7 +231,7 @@ describe(QualificationPresenter, () => {
           });
         });
         describe('when the Qualifications are from a non-UK profession', () => {
-          it('returns a summary list of all relevant Qualification fields', async () => {
+          it('returns a summary list of all relevant Qualification fields', () => {
             (formatMultilineString as jest.Mock).mockImplementation(
               multilineOf,
             );
@@ -249,7 +249,7 @@ describe(QualificationPresenter, () => {
               createMockI18nService(),
             );
 
-            await expect(presenter.summaryList(true, true)).resolves.toEqual({
+            expect(presenter.summaryList(true, true)).toEqual({
               overviewSummaryList: {
                 classes: 'govuk-summary-list--no-border',
                 rows: [
@@ -344,7 +344,7 @@ describe(QualificationPresenter, () => {
 
       describe('when a Qualification is missing fields', () => {
         describe('when `showEmptyFields` is true', () => {
-          it('returns summary lists of all Qualification fields', async () => {
+          it('returns summary lists of all Qualification fields', () => {
             (formatMultilineString as jest.Mock).mockImplementation(
               multilineOf,
             );
@@ -362,7 +362,7 @@ describe(QualificationPresenter, () => {
               createMockI18nService(),
             );
 
-            await expect(presenter.summaryList(true, false)).resolves.toEqual({
+            expect(presenter.summaryList(true, false)).toEqual({
               overviewSummaryList: {
                 classes: 'govuk-summary-list--no-border',
                 rows: [
@@ -428,7 +428,7 @@ describe(QualificationPresenter, () => {
           });
         });
         describe('when `showEmptyFields` is false', () => {
-          it('returns summary lists of all non-empty Qualification fields', async () => {
+          it('returns summary lists of all non-empty Qualification fields', () => {
             (formatMultilineString as jest.Mock).mockImplementation(
               multilineOf,
             );
@@ -446,7 +446,7 @@ describe(QualificationPresenter, () => {
               createMockI18nService(),
             );
 
-            await expect(presenter.summaryList(false, false)).resolves.toEqual({
+            expect(presenter.summaryList(false, false)).toEqual({
               overviewSummaryList: {
                 classes: 'govuk-summary-list--no-border',
                 rows: [
@@ -483,7 +483,7 @@ describe(QualificationPresenter, () => {
             organisations,
           );
 
-          const summaryList = await presenter.summaryList(true, false);
+          const summaryList = presenter.summaryList(true, false);
           const awardingBodyRole = summaryList.overviewSummaryList.rows.find(
             (r) =>
               r.key['text'] ===

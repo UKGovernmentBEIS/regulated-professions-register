@@ -7,7 +7,7 @@ import { OtherCountriesRecognitionRoutesRadioButtonsPresenter } from './other-co
 describe('OtherCountriesRecognitionRoutesRadioButtonsPresenter', () => {
   describe('radioButtonArgs', () => {
     describe('when the current route is empty', () => {
-      it('returns an array of `RadioButtonArgs`, with no option checked', async () => {
+      it('returns an array of `RadioButtonArgs`, with no option checked', () => {
         const i18nService = createMockI18nService();
 
         const presenter =
@@ -40,12 +40,12 @@ describe('OtherCountriesRecognitionRoutesRadioButtonsPresenter', () => {
           },
         ];
 
-        await expect(presenter.radioButtonArgs()).resolves.toEqual(expected);
+        expect(presenter.radioButtonArgs()).toEqual(expected);
       });
     });
 
     describe('when the route is non-empty', () => {
-      it('returns an array of `RadioButtonArgs`, with the route type checked', async () => {
+      it('returns an array of `RadioButtonArgs`, with the route type checked', () => {
         const i18nService = createMockI18nService();
 
         const presenter =
@@ -78,7 +78,7 @@ describe('OtherCountriesRecognitionRoutesRadioButtonsPresenter', () => {
           },
         ];
 
-        await expect(presenter.radioButtonArgs()).resolves.toEqual(expected);
+        expect(presenter.radioButtonArgs()).toEqual(expected);
       });
     });
   });

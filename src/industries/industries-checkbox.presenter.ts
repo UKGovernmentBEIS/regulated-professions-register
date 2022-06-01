@@ -8,7 +8,7 @@ export class IndustriesCheckboxPresenter {
     private readonly checkedIndustries: Industry[],
     private readonly i18nService: I18nService,
   ) {}
-  async checkboxItems(): Promise<CheckboxItems[]> {
+  checkboxItems(): CheckboxItems[] {
     let industries: Industry[];
 
     const other = this.allIndustries.find(
@@ -25,14 +25,12 @@ export class IndustriesCheckboxPresenter {
       industries = standardIndustries;
     }
 
-    return Promise.all(
-      industries.map(async (industry) => ({
-        text: await this.i18nService.translate(industry.name),
-        value: industry.id,
-        checked: !!this.checkedIndustries.find(
-          (checkedIndustry) => checkedIndustry.id === industry.id,
-        ),
-      })),
-    );
+    return industries.map((industry) => ({
+      text: this.i18nService.translate<string>(industry.name),
+      value: industry.id,
+      checked: !!this.checkedIndustries.find(
+        (checkedIndustry) => checkedIndustry.id === industry.id,
+      ),
+    }));
   }
 }

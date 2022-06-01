@@ -32,7 +32,7 @@ describe('nations.helper', () => {
   });
 
   describe('getNationsFromProfession', () => {
-    it('joins the nations on the given professions', async () => {
+    it('joins the nations on the given professions', () => {
       const i18nService = createMockI18nService();
       const profession1NationCodes = ['GB-ENG', 'GB-WLS'];
       const profession2NationCodes = ['GB-SCT'];
@@ -52,11 +52,11 @@ describe('nations.helper', () => {
         }),
       ];
 
-      (NationsListPresenter.prototype.textList as jest.Mock).mockResolvedValue(
+      (NationsListPresenter.prototype.textList as jest.Mock).mockReturnValue(
         'England, Wales',
       );
 
-      expect(await getNationsFromProfessions(professions, i18nService)).toEqual(
+      expect(getNationsFromProfessions(professions, i18nService)).toEqual(
         'England, Wales',
       );
 
@@ -66,7 +66,7 @@ describe('nations.helper', () => {
       );
     });
 
-    it('removes duplicate nations', async () => {
+    it('removes duplicate nations', () => {
       const i18nService = createMockI18nService();
       const profession1NationCodes = ['GB-ENG', 'GB-WLS'];
       const profession2NationCodes = ['GB-SCT', 'GB-ENG'];
@@ -86,11 +86,11 @@ describe('nations.helper', () => {
         }),
       ];
 
-      (NationsListPresenter.prototype.textList as jest.Mock).mockResolvedValue(
+      (NationsListPresenter.prototype.textList as jest.Mock).mockReturnValue(
         'England, Wales',
       );
 
-      expect(await getNationsFromProfessions(professions, i18nService)).toEqual(
+      expect(getNationsFromProfessions(professions, i18nService)).toEqual(
         'England, Wales',
       );
 

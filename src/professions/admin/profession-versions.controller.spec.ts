@@ -182,9 +182,9 @@ describe('ProfessionVersionsController', () => {
               : expectedEnforcementBodies,
           );
 
-        (
-          NationsListPresenter.prototype.htmlList as jest.Mock
-        ).mockResolvedValue(mockNationsHtml);
+        (NationsListPresenter.prototype.htmlList as jest.Mock).mockReturnValue(
+          mockNationsHtml,
+        );
 
         const getPublicationBlockersSpy = jest
           .spyOn(getPublicationBlockersModule, 'getPublicationBlockers')
@@ -196,7 +196,7 @@ describe('ProfessionVersionsController', () => {
           profession: professionWithVersion,
           presenter: {},
           hasLiveVersion: true,
-          qualifications: await new QualificationPresenter(
+          qualifications: new QualificationPresenter(
             professionWithVersion.qualification,
             createMockI18nService(),
             expectedAwardingBodies,
@@ -266,9 +266,9 @@ describe('ProfessionVersionsController', () => {
           )
           .mockReturnValue(expectedOrganisations);
 
-        (
-          NationsListPresenter.prototype.htmlList as jest.Mock
-        ).mockResolvedValue(mockNationsHtml);
+        (NationsListPresenter.prototype.htmlList as jest.Mock).mockReturnValue(
+          mockNationsHtml,
+        );
 
         const getPublicationBlockersSpy = jest
           .spyOn(getPublicationBlockersModule, 'getPublicationBlockers')
@@ -285,7 +285,7 @@ describe('ProfessionVersionsController', () => {
           profession: professionWithVersion,
           presenter: {},
           hasLiveVersion: true,
-          qualifications: await new QualificationPresenter(
+          qualifications: new QualificationPresenter(
             professionWithVersion.qualification,
             createMockI18nService(),
             [],
@@ -346,9 +346,9 @@ describe('ProfessionVersionsController', () => {
           )
           .mockReturnValue(expectedOrganisations);
 
-        (
-          NationsListPresenter.prototype.htmlList as jest.Mock
-        ).mockResolvedValue(mockNationsHtml);
+        (NationsListPresenter.prototype.htmlList as jest.Mock).mockReturnValue(
+          mockNationsHtml,
+        );
 
         const getPublicationBlockersSpy = jest
           .spyOn(getPublicationBlockersModule, 'getPublicationBlockers')
@@ -369,7 +369,7 @@ describe('ProfessionVersionsController', () => {
           profession: professionWithVersion,
           presenter: {},
           hasLiveVersion: true,
-          qualifications: await new QualificationPresenter(
+          qualifications: new QualificationPresenter(
             undefined,
             createMockI18nService(),
             [],

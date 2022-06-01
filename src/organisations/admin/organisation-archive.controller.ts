@@ -85,11 +85,11 @@ export class OrganisationArchiveController {
 
     await this.organisationVersionsService.archive(versionToArchive);
 
-    const messageTitle = await this.i18nService.translate(
+    const messageTitle = this.i18nService.translate<string>(
       'organisations.admin.archive.confirmation.heading',
     );
 
-    const messageBody = await this.i18nService.translate(
+    const messageBody = this.i18nService.translate<string>(
       'organisations.admin.archive.confirmation.body',
       { args: { name: escape(version.organisation.name) } },
     );

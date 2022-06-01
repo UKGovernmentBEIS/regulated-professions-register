@@ -9,8 +9,8 @@ export class Nation {
     this.code = code;
   }
 
-  async translatedName(i18nService: I18nService): Promise<string> {
-    return i18nService.translate(this.name);
+  translatedName(i18nService: I18nService): string {
+    return i18nService.translate<string>(this.name);
   }
 
   static all(): Nation[] {

@@ -7,7 +7,7 @@ import { RegulationTypeRadioButtonsPresenter } from './regulation-type-radio-but
 describe('RegulationTypeRadioButtonsPresenter', () => {
   describe('radioButtonArgs', () => {
     describe('when the current regulation type is empty', () => {
-      it('returns an array of `RadioButtonArgs`, with no option checked', async () => {
+      it('returns an array of `RadioButtonArgs`, with no option checked', () => {
         const i18nService = createMockI18nService();
 
         const presenter = new RegulationTypeRadioButtonsPresenter(
@@ -50,12 +50,12 @@ describe('RegulationTypeRadioButtonsPresenter', () => {
           },
         ];
 
-        await expect(presenter.radioButtonArgs()).resolves.toEqual(expected);
+        expect(presenter.radioButtonArgs()).toEqual(expected);
       });
     });
 
     describe('when the current regulation type is non-empty', () => {
-      it('returns an array of `RadioButtonArgs`, with the current regulation type checked', async () => {
+      it('returns an array of `RadioButtonArgs`, with the current regulation type checked', () => {
         const i18nService = createMockI18nService();
 
         const presenter = new RegulationTypeRadioButtonsPresenter(
@@ -98,7 +98,7 @@ describe('RegulationTypeRadioButtonsPresenter', () => {
           },
         ];
 
-        await expect(presenter.radioButtonArgs()).resolves.toEqual(expected);
+        expect(presenter.radioButtonArgs()).toEqual(expected);
       });
     });
   });

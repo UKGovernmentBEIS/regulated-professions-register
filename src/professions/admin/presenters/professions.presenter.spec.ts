@@ -96,8 +96,8 @@ describe('ProfessionsPresenter', () => {
   });
 
   describe('present', () => {
-    it('returns template params when called with `overview`', async () => {
-      const result = await professionsPresenter.present('overview');
+    it('returns template params when called with `overview`', () => {
+      const result = professionsPresenter.present('overview');
 
       const nations = Nation.all();
 
@@ -108,12 +108,10 @@ describe('ProfessionsPresenter', () => {
           caption: `${translationOf('professions.search.foundPlural')}`,
           captionClasses: 'govuk-table__caption--m',
           firstCellIsHeader: true,
-          head: await ListEntryPresenter.headings(i18nService, 'overview'),
-          rows: await Promise.all(
-            [profession1, profession2, profession3].map((profession) =>
-              new ListEntryPresenter(profession, i18nService).tableRow(
-                'overview',
-              ),
+          head: ListEntryPresenter.headings(i18nService, 'overview'),
+          rows: [profession1, profession2, profession3].map((profession) =>
+            new ListEntryPresenter(profession, i18nService).tableRow(
+              'overview',
             ),
           ),
         },
@@ -125,7 +123,7 @@ describe('ProfessionsPresenter', () => {
           regulationTypes: [RegulationType.Certification],
         },
 
-        nationsCheckboxItems: await new NationsCheckboxPresenter(
+        nationsCheckboxItems: new NationsCheckboxPresenter(
           nations,
           [Nation.find('GB-ENG')],
           i18nService,
@@ -134,23 +132,22 @@ describe('ProfessionsPresenter', () => {
           organisations,
           [organisation1],
         ).checkboxItems(),
-        industriesCheckboxItems: await new IndustriesCheckboxPresenter(
+        industriesCheckboxItems: new IndustriesCheckboxPresenter(
           industries,
           [transportIndustry],
           i18nService,
         ).checkboxItems(),
-        regulationTypesCheckboxItems:
-          await new RegulationTypesCheckboxPresenter(
-            [RegulationType.Certification],
-            i18nService,
-          ).checkboxItems(),
+        regulationTypesCheckboxItems: new RegulationTypesCheckboxPresenter(
+          [RegulationType.Certification],
+          i18nService,
+        ).checkboxItems(),
       };
 
       expect(result).toEqual(expected);
     });
 
-    it('returns template params when called with `single-organisation`', async () => {
-      const result = await professionsPresenter.present('single-organisation');
+    it('returns template params when called with `single-organisation`', () => {
+      const result = professionsPresenter.present('single-organisation');
 
       const nations = Nation.all();
 
@@ -161,15 +158,10 @@ describe('ProfessionsPresenter', () => {
           caption: `${translationOf('professions.search.foundPlural')}`,
           captionClasses: 'govuk-table__caption--m',
           firstCellIsHeader: true,
-          head: await ListEntryPresenter.headings(
-            i18nService,
-            'single-organisation',
-          ),
-          rows: await Promise.all(
-            [profession1, profession2, profession3].map((profession) =>
-              new ListEntryPresenter(profession, i18nService).tableRow(
-                'single-organisation',
-              ),
+          head: ListEntryPresenter.headings(i18nService, 'single-organisation'),
+          rows: [profession1, profession2, profession3].map((profession) =>
+            new ListEntryPresenter(profession, i18nService).tableRow(
+              'single-organisation',
             ),
           ),
         },
@@ -180,7 +172,7 @@ describe('ProfessionsPresenter', () => {
           industries: ['industries.transport'],
           regulationTypes: [RegulationType.Certification],
         },
-        nationsCheckboxItems: await new NationsCheckboxPresenter(
+        nationsCheckboxItems: new NationsCheckboxPresenter(
           nations,
           [Nation.find('GB-ENG')],
           i18nService,
@@ -189,16 +181,15 @@ describe('ProfessionsPresenter', () => {
           organisations,
           [organisation1],
         ).checkboxItems(),
-        industriesCheckboxItems: await new IndustriesCheckboxPresenter(
+        industriesCheckboxItems: new IndustriesCheckboxPresenter(
           industries,
           [transportIndustry],
           i18nService,
         ).checkboxItems(),
-        regulationTypesCheckboxItems:
-          await new RegulationTypesCheckboxPresenter(
-            [RegulationType.Certification],
-            i18nService,
-          ).checkboxItems(),
+        regulationTypesCheckboxItems: new RegulationTypesCheckboxPresenter(
+          [RegulationType.Certification],
+          i18nService,
+        ).checkboxItems(),
       };
 
       expect(result).toEqual(expected);
@@ -206,7 +197,7 @@ describe('ProfessionsPresenter', () => {
 
     describe('captions', () => {
       describe('when only one profession is found', () => {
-        it('returns the singular professions found text', async () => {
+        it('returns the singular professions found text', () => {
           const i18nService = createMockI18nService();
           const industries = industryFactory.buildList(3);
           const filterInput: FilterInput = {};
@@ -230,7 +221,7 @@ describe('ProfessionsPresenter', () => {
             i18nService,
           );
 
-          const result = await presenter.present('overview');
+          const result = presenter.present('overview');
 
           expect(result.professionsTable.caption).toEqual(
             `${translationOf('professions.search.foundSingular')}`,
@@ -239,7 +230,7 @@ describe('ProfessionsPresenter', () => {
       });
 
       describe('when more than one profession is found', () => {
-        it('returns the singular professions found text', async () => {
+        it('returns the singular professions found text', () => {
           const i18nService = createMockI18nService();
           const industries = industryFactory.buildList(3);
           const filterInput: FilterInput = {};
@@ -263,7 +254,7 @@ describe('ProfessionsPresenter', () => {
             i18nService,
           );
 
-          const result = await presenter.present('overview');
+          const result = presenter.present('overview');
 
           expect(result.professionsTable.caption).toEqual(
             `${translationOf('professions.search.foundPlural')}`,

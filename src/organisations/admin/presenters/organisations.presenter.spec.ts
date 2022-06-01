@@ -46,7 +46,7 @@ jest.mock('../../../nations/nations-checkbox.presenter', () => {
 describe('OrganisationsPresenter', () => {
   describe('present', () => {
     describe('when called with empty `FilterInput`', () => {
-      it('returns `IndexTemplate` template data', async () => {
+      it('returns `IndexTemplate` template data', () => {
         mockTableRow.mockReturnValue([
           {
             text: 'Some text',
@@ -77,7 +77,7 @@ describe('OrganisationsPresenter', () => {
           organisations,
           i18nService,
         );
-        const result = await presenter.present('overview');
+        const result = presenter.present('overview');
 
         expect(OrganisationPresenter).toHaveBeenCalledTimes(5);
         expect(OrganisationPresenter).toHaveBeenLastCalledWith(
@@ -121,7 +121,7 @@ describe('OrganisationsPresenter', () => {
         expect(result.industriesCheckboxItems).toEqual(mockCheckboxItems());
       });
 
-      it('returns empty filter data', async () => {
+      it('returns empty filter data', () => {
         mockTableRow.mockReturnValue([]);
         mockCheckboxItems.mockReturnValue([]);
 
@@ -142,7 +142,7 @@ describe('OrganisationsPresenter', () => {
           i18nService,
         );
 
-        const result = await presenter.present('overview');
+        const result = presenter.present('overview');
 
         expect(NationsCheckboxPresenter).toBeCalledWith(
           nations,
@@ -167,7 +167,7 @@ describe('OrganisationsPresenter', () => {
 
     describe('when called with populated `FilterInput`', () => {
       describe('when called with `overview`', () => {
-        it('returns populated filter data', async () => {
+        it('returns populated filter data', () => {
           mockTableRow.mockReturnValue([]);
           mockCheckboxItems.mockReturnValue([]);
 
@@ -196,7 +196,7 @@ describe('OrganisationsPresenter', () => {
             i18nService,
           );
 
-          const result = await presenter.present('overview');
+          const result = presenter.present('overview');
 
           expect(NationsCheckboxPresenter).toBeCalledWith(
             nations,
@@ -224,7 +224,7 @@ describe('OrganisationsPresenter', () => {
       });
 
       describe('when called with `single-organisation`', () => {
-        it('returns populated filter data', async () => {
+        it('returns populated filter data', () => {
           mockTableRow.mockReturnValue([]);
           mockCheckboxItems.mockReturnValue([]);
 
@@ -253,7 +253,7 @@ describe('OrganisationsPresenter', () => {
             i18nService,
           );
 
-          const result = await presenter.present('single-organisation');
+          const result = presenter.present('single-organisation');
 
           expect(NationsCheckboxPresenter).toBeCalledWith(
             nations,
@@ -283,7 +283,7 @@ describe('OrganisationsPresenter', () => {
 
     describe('caption', () => {
       describe('when only one organisation is found', () => {
-        it('uses the singular text for a caption', async () => {
+        it('uses the singular text for a caption', () => {
           mockTableRow.mockReturnValue([
             {
               text: 'Some text',
@@ -314,7 +314,7 @@ describe('OrganisationsPresenter', () => {
             foundOrganisations,
             i18nService,
           );
-          const result = await presenter.present('overview');
+          const result = presenter.present('overview');
 
           expect(result.organisationsTable.caption).toEqual(
             `${translationOf('organisations.search.foundSingular')}`,
@@ -323,7 +323,7 @@ describe('OrganisationsPresenter', () => {
       });
 
       describe('when more than one profession is found', () => {
-        it('uses the plural text', async () => {
+        it('uses the plural text', () => {
           mockTableRow.mockReturnValue([
             {
               text: 'Some text',
@@ -354,7 +354,7 @@ describe('OrganisationsPresenter', () => {
             foundOrganisations,
             i18nService,
           );
-          const result = await presenter.present('overview');
+          const result = presenter.present('overview');
 
           expect(result.organisationsTable.caption).toEqual(
             `${translationOf('organisations.search.foundPlural')}`,

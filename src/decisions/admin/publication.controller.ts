@@ -84,11 +84,11 @@ export class PublicationController {
 
     await this.decisionDatasetsService.publish(dataset);
 
-    const messageTitle = await this.i18nService.translate(
+    const messageTitle = this.i18nService.translate<string>(
       'decisions.admin.publication.confirmation.heading',
     );
 
-    const messageBody = await this.i18nService.translate(
+    const messageBody = this.i18nService.translate<string>(
       'decisions.admin.publication.confirmation.body',
     );
 

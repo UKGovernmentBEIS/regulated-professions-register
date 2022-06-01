@@ -12,28 +12,28 @@ export class ProfessionPresenter {
     private readonly i18nService: I18nService,
   ) {}
 
-  public async summaryList(): Promise<SummaryList> {
+  public summaryList(): SummaryList {
     return {
       classes: 'govuk-summary-list--no-border',
       rows: [
         {
           key: {
-            text: await this.i18nService.translate(
+            text: this.i18nService.translate<string>(
               'professions.show.overview.nations',
             ),
           },
           value: {
-            text: await this.occupationLocations(),
+            text: this.occupationLocations(),
           },
         },
         {
           key: {
-            text: await this.i18nService.translate(
+            text: this.i18nService.translate<string>(
               'professions.show.overview.industry',
             ),
           },
           value: {
-            text: await this.industries(),
+            text: this.industries(),
           },
         },
       ],
@@ -59,8 +59,8 @@ export class ProfessionPresenter {
     return formatStatus(this.profession.status, this.i18nService);
   }
 
-  public async occupationLocations(): Promise<string> {
-    return await new NationsListPresenter(
+  public occupationLocations(): string {
+    return new NationsListPresenter(
       (this.profession.occupationLocations || []).map((code) =>
         Nation.find(code),
       ),
@@ -68,11 +68,9 @@ export class ProfessionPresenter {
     ).textList();
   }
 
-  public async industries(): Promise<string> {
-    const industries = await Promise.all(
-      this.profession.industries.map(
-        async (industry) => await this.i18nService.translate(industry.name),
-      ),
+  public industries(): string {
+    const industries = this.profession.industries.map((industry) =>
+      this.i18nService.translate<string>(industry.name),
     );
 
     return industries.join(', ');

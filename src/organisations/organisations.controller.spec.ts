@@ -78,7 +78,7 @@ describe('OrganisationsController', () => {
         (profession) => profession,
       );
 
-      const expected = await new OrganisationSummaryPresenter(
+      const expected = new OrganisationSummaryPresenter(
         organisation,
         professions,
         i18nService,

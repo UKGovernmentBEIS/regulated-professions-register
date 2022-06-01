@@ -21,40 +21,38 @@ export class ProfessionToOrganisationsPresenter {
     private readonly user: User,
   ) {}
 
-  public async summaryLists(): Promise<SummaryList[]> {
+  public summaryLists(): SummaryList[] {
     if (this.profession.professionToOrganisations.length) {
-      return await Promise.all(
-        this.profession.professionToOrganisations.map(
-          async (professionToOrganisation, index) =>
-            this.summaryList(professionToOrganisation, index),
-        ),
+      return this.profession.professionToOrganisations.map(
+        (professionToOrganisation, index) =>
+          this.summaryList(professionToOrganisation, index),
       );
     } else {
-      return [await this.emptySummaryList()];
+      return [this.emptySummaryList()];
     }
   }
 
-  private async summaryList(
+  private summaryList(
     professionToOrganisation: ProfessionToOrganisation,
     index: number,
-  ): Promise<SummaryList> {
+  ): SummaryList {
     return {
       attributes: {
         'data-cy': `profession-to-organisation-${index + 1}`,
       },
       rows: [
-        await this.summaryListItem(
-          await this.i18nService.translate(
+        this.summaryListItem(
+          this.i18nService.translate<string>(
             'professions.form.label.organisations.name',
           ),
           escape(professionToOrganisation.organisation.name),
           escape(professionToOrganisation.organisation.name),
         ),
-        await this.summaryListItem(
-          await this.i18nService.translate(
+        this.summaryListItem(
+          this.i18nService.translate<string>(
             'professions.form.label.organisations.role',
           ),
-          await this.i18nService.translate(
+          this.i18nService.translate<string>(
             `organisations.label.roles.${professionToOrganisation.role}`,
           ),
           escape(professionToOrganisation.organisation.name),
@@ -63,21 +61,36 @@ export class ProfessionToOrganisationsPresenter {
     };
   }
 
-  private async actionsColumn(
-    visuallyHiddenText: string,
-  ): Promise<SummaryListActionItem> {
+  private emptySummaryList(): SummaryList {
     return {
-      href: `/admin/professions/${this.profession.id}/versions/${this.professionVersion.id}/organisations/edit?change=true`,
-      text: await this.i18nService.translate('app.change'),
-      visuallyHiddenText: visuallyHiddenText,
+      rows: [
+        this.summaryListItem(
+          this.i18nService.translate<string>(
+            'professions.form.label.organisations.name',
+          ),
+          '',
+          this.i18nService.translate<string>(
+            'professions.form.label.topLevelInformation.regulatedAuthorities',
+          ),
+        ),
+        this.summaryListItem(
+          this.i18nService.translate<string>(
+            'professions.form.label.organisations.role',
+          ),
+          '',
+          this.i18nService.translate<string>(
+            'professions.form.label.topLevelInformation.regulatedAuthorities',
+          ),
+        ),
+      ],
     };
   }
 
-  private async summaryListItem(
+  private summaryListItem(
     key: string,
     value: string,
     visuallyHiddenText: string,
-  ): Promise<SummaryListItem> {
+  ): SummaryListItem {
     const item = {
       key: {
         text: key,
@@ -89,35 +102,18 @@ export class ProfessionToOrganisationsPresenter {
 
     if (this.userCanChangeOrganisations()) {
       item['actions'] = {
-        items: [await this.actionsColumn(visuallyHiddenText)],
+        items: [this.actionsColumn(visuallyHiddenText)],
       };
     }
 
     return item;
   }
 
-  private async emptySummaryList(): Promise<SummaryList> {
+  private actionsColumn(visuallyHiddenText: string): SummaryListActionItem {
     return {
-      rows: [
-        await this.summaryListItem(
-          await this.i18nService.translate(
-            'professions.form.label.organisations.name',
-          ),
-          '',
-          await this.i18nService.translate(
-            'professions.form.label.topLevelInformation.regulatedAuthorities',
-          ),
-        ),
-        await this.summaryListItem(
-          await this.i18nService.translate(
-            'professions.form.label.organisations.role',
-          ),
-          '',
-          await this.i18nService.translate(
-            'professions.form.label.topLevelInformation.regulatedAuthorities',
-          ),
-        ),
-      ],
+      href: `/admin/professions/${this.profession.id}/versions/${this.professionVersion.id}/organisations/edit?change=true`,
+      text: this.i18nService.translate<string>('app.change'),
+      visuallyHiddenText: visuallyHiddenText,
     };
   }
 
