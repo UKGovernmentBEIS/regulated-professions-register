@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [unreleased]
 
+### Added
+
+- Allow admins to unarchive an archived organisation
+
 ### Changed
 
 - Left align the decision data download button

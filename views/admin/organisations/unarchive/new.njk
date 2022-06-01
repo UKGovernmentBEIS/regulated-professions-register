@@ -1,0 +1,27 @@
+{% extends "admin/base.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set title = ("organisations.admin.archive.heading" | t) %}
+
+{% block title %}
+    {{ "organisations.admin.unarchive.heading" | t }}
+{% endblock %}
+
+{% block content %}
+    <span class="govuk-caption-l">{{ 'organisations.admin.unarchive.caption' | t }}</span>
+    <h1 class="govuk-heading-l">{{ ('organisations.admin.unarchive.heading' | t({organisationName: organisation.name})) }}</h1>
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            <form action="/admin/organisations/{{ organisation.id }}/versions/{{ organisation.versionId }}/unarchive?_method=PUT" method="post">
+                {{
+            govukButton({
+              text: ("organisations.admin.button.unarchive" | t)
+            })
+          }}
+            </form>
+        </div>
+
+    </div>
+
+{% endblock %}

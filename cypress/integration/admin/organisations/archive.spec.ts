@@ -219,7 +219,9 @@ function archiveOrganisation(organisation: string): void {
     },
   );
 
-  cy.get('[data-cy=actions]').should('not.exist');
+  cy.translate('organisations.admin.button.unarchive').then((buttonText) => {
+    cy.get('a').contains(buttonText);
+  });
 
   cy.translate('app.status.archived').then((status) => {
     cy.get('h2[data-status]').should('contain', status);

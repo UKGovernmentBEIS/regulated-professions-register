@@ -35,15 +35,15 @@
         {% if hasLiveVersion %}
           <h2 class="govuk-heading-s" data-cy="currently-published-version-text">
             {{ "organisations.admin.publicFacingLink.heading" | t }}<br>
-            <span class="govuk-body" data-cy="currently-published-version"><a class="govuk-link" href="/regulatory-authorities/{{ organisation.slug }}">{{ "organisations.admin.publicFacingLink.label" | t }}</a></span>
+            <span class="govuk-body" data-cy="currently-published-version">
+              <a class="govuk-link" href="/regulatory-authorities/{{ organisation.slug }}">{{ "organisations.admin.publicFacingLink.label" | t }}</a>
+            </span>
           </h2>
         {% endif %}
 
-        {% if organisation.status !== 'archived' %}
-
-          <nav role="navigation" data-cy="actions">
-            <ul class="govuk-list">
-              {% if 'editOrganisation' in permissions %}
+        <nav role="navigation" data-cy="actions">
+          <ul class="govuk-list">
+            {% if organisation.status !== 'archived' and 'editOrganisation' in permissions %}
               <li>
                 <form method="post" action="/admin/organisations/{{ organisation.id }}/versions">
                   {{ govukButton({
@@ -54,8 +54,8 @@
                   }) }}
                 </form>
               </li>
-              {% endif %}
-              {% if organisation.status === 'draft' and 'publishOrganisation' in permissions %}
+            {% endif %}
+            {% if organisation.status === 'draft' and 'publishOrganisation' in permissions %}
               <li>
                 {{
                   govukButton({
@@ -68,8 +68,8 @@
                   })
                 }}
               </li>
-              {% endif %}
-              {% if 'deleteOrganisation' in permissions %}
+            {% endif %}
+            {% if organisation.status !== 'archived' and 'deleteOrganisation' in permissions %}
               <li>
                 {{
                   govukButton({
@@ -79,13 +79,23 @@
                   })
                 }}
               </li>
-              {% endif %}
+            {% endif %}
+            {% if organisation.status === 'archived' and 'createOrganisation' in permissions %}
+              <li>
+                {{
+                  govukButton({
+                    text: ("organisations.admin.button.unarchive" | t),
+                    href: "/admin/organisations/" + organisation.id + "/versions/" + organisation.versionId + "/unarchive",
+                    classes: "govuk-button--secondary"
+                  })
+                }}
+              </li>
+              {% endif%}
             </ul>
           </nav>
 
-        {% endif %}
-      </aside>
+        </aside>
+      </div>
     </div>
-  </div>
 
-{% endblock %}
+  {% endblock %}
