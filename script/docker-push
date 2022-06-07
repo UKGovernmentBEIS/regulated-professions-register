@@ -1,7 +1,5 @@
 #!/bin/bash
 
-echo "$GITHUB_TOKEN" | docker login ghcr.io -u "$GITHUB_USERNAME" --password-stdin
-
 docker build --target web \
          --build-arg current_sha="$GITHUB_SHA" \
          --build-arg time_of_build="$(date -u +'%Y-%m-%dT%H:%M:%SZ')" \
