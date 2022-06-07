@@ -66,14 +66,8 @@ describe('OrganisationSummaryPresenter', () => {
             i18nService,
           );
 
-          const organisationPresenter = new OrganisationPresenter(
-            organisation,
-            i18nService,
-          );
-
           expect(presenter.present(true)).toEqual({
             organisation: organisation,
-            presenter: organisationPresenter,
             summaryList: mockSummaryList(),
             professions: [
               {
@@ -95,8 +89,7 @@ describe('OrganisationSummaryPresenter', () => {
 
           expect(mockSummaryList).toHaveBeenCalledWith({ removeBlank: false });
 
-          expect(OrganisationPresenter).toHaveBeenNthCalledWith(
-            2,
+          expect(OrganisationPresenter).toHaveBeenCalledWith(
             organisation,
             i18nService,
           );
@@ -135,14 +128,8 @@ describe('OrganisationSummaryPresenter', () => {
             i18nService,
           );
 
-          const organisationPresenter = new OrganisationPresenter(
-            organisation,
-            i18nService,
-          );
-
           expect(presenter.present(false)).toEqual({
             organisation: organisation,
-            presenter: organisationPresenter,
             summaryList: mockSummaryList(),
             professions: [
               {
@@ -164,8 +151,7 @@ describe('OrganisationSummaryPresenter', () => {
 
           expect(mockSummaryList).toHaveBeenCalledWith({ removeBlank: true });
 
-          expect(OrganisationPresenter).toHaveBeenNthCalledWith(
-            2,
+          expect(OrganisationPresenter).toHaveBeenCalledWith(
             organisation,
             i18nService,
           );

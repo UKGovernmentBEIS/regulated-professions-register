@@ -19,14 +19,14 @@
 
         <h2 class="govuk-heading-s" data-cy="last-modified-text">
           {{ "professions.admin.changed.on" | t }}<br>
-          <span class="govuk-body" data-cy="last-modified">{{ presenter.lastModified }}</span>
+          <span class="govuk-body" data-cy="last-modified">{{ log.lastModified }}</span>
         </h2>
 
-        {% if presenter.changedBy %}
+        {% if log.changedBy %}
           <h2 class="govuk-heading-s" data-cy="changed-by-text">
             {{ "professions.admin.changed.by" | t }}<br>
-            <span class="govuk-body" data-cy="changed-by-user-name">{{ presenter.changedBy.name }}</span><br>
-            <span class="govuk-body" data-cy="changed-by-user-email">{{ presenter.changedBy.email | email }}</span>
+            <span class="govuk-body" data-cy="changed-by-user-name">{{ log.changedBy.name }}</span><br>
+            <span class="govuk-body" data-cy="changed-by-user-email">{{ log.changedBy.email | email }}</span>
           </h2>
         {% endif %}
 
