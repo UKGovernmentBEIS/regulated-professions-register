@@ -61,7 +61,7 @@ export class OrganisationVersionsController {
     );
 
     return res.redirect(
-      `/admin/organisations/${newVersion.organisation.id}/versions/${newVersion.id}/edit`,
+      `/admin/organisations/${newVersion.organisation.id}/versions/${newVersion.id}/edit?source=page`,
     );
   }
 
