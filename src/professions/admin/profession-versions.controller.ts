@@ -104,7 +104,7 @@ export class ProfessionVersionsController {
 
     return {
       profession,
-      presenter,
+      log: presenter,
       hasLiveVersion,
       qualifications: qualification.summaryList(
         true,

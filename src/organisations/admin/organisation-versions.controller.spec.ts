@@ -21,18 +21,16 @@ import professionFactory from '../../testutils/factories/profession';
 
 import { createMockI18nService } from '../../testutils/create-mock-i18n-service';
 
-import { OrganisationPresenter } from '../presenters/organisation.presenter';
-
 import { getActingUser } from '../../users/helpers/get-acting-user.helper';
 import { createDefaultMockRequest } from '../../testutils/factories/create-default-mock-request';
 import { checkCanViewOrganisation } from '../../users/helpers/check-can-view-organisation';
 import * as getProfessionsFromOrganisationModule from './../helpers/get-professions-from-organisation.helper';
+import { OrganisationLogPresenter } from './presenters/organisation-log.presenter';
 
 jest.mock('../presenters/organisation-summary.presenter');
-jest.mock('../presenters/organisation.presenter');
+jest.mock('./presenters/organisation-log.presenter');
 jest.mock('../../users/helpers/get-acting-user.helper');
 jest.mock('../../users/helpers/check-can-view-organisation');
-jest.mock('../presenters/organisation-summary.presenter');
 jest.mock('../../professions/profession.entity');
 
 describe('OrganisationVersionsController', () => {
@@ -141,6 +139,10 @@ describe('OrganisationVersionsController', () => {
       );
       organisationVersionsService.hasLiveVersion.mockResolvedValue(true);
 
+      (OrganisationLogPresenter.prototype.present as jest.Mock).mockReturnValue(
+        {},
+      );
+
       const getProfessionsFromOrganisationSpy = jest.spyOn(
         getProfessionsFromOrganisationModule,
         'getProfessionsFromOrganisation',
@@ -154,7 +156,7 @@ describe('OrganisationVersionsController', () => {
 
       const showTemplate: ShowTemplate = {
         organisation,
-        presenter: {} as OrganisationPresenter,
+        log: {} as ShowTemplate['log'],
         hasLiveVersion: true,
         summaryList: {
           classes: 'govuk-summary-list--no-border',

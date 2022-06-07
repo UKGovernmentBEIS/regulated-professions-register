@@ -194,7 +194,7 @@ describe('ProfessionVersionsController', () => {
 
         expect(result).toEqual({
           profession: professionWithVersion,
-          presenter: {},
+          log: {},
           hasLiveVersion: true,
           qualifications: new QualificationPresenter(
             professionWithVersion.qualification,
@@ -283,7 +283,7 @@ describe('ProfessionVersionsController', () => {
 
         expect(result).toEqual({
           profession: professionWithVersion,
-          presenter: {},
+          log: {},
           hasLiveVersion: true,
           qualifications: new QualificationPresenter(
             professionWithVersion.qualification,
@@ -367,7 +367,7 @@ describe('ProfessionVersionsController', () => {
 
         expect(result).toEqual({
           profession: professionWithVersion,
-          presenter: {},
+          log: {},
           hasLiveVersion: true,
           qualifications: new QualificationPresenter(
             undefined,

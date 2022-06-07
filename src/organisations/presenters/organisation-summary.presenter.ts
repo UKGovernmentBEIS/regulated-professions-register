@@ -27,7 +27,6 @@ export class OrganisationSummaryPresenter {
 
     return {
       organisation: this.organisation,
-      presenter: organisationPresenter,
       summaryList: organisationPresenter.summaryList({
         removeBlank: !showEmptyFields,
       }),
