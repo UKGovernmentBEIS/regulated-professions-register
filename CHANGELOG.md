@@ -17,6 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Enforce length limits on all input fields
 - Add validation to prevent empty and duplicate countries when entering decision data
 - Prevent Plausible from making requests on 404 pages
+- Fix incorrect back link destination on regulatory authority editing page
 
 ## [release-024] - 2022-05-30
 

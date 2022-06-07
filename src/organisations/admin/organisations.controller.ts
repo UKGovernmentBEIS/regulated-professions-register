@@ -140,7 +140,11 @@ export class OrganisationsController {
     UserPermission.EditOrganisation,
   )
   @Render('admin/organisations/edit')
-  @BackLink('/admin/organisations/:organisationId/versions/:versionId')
+  @BackLink((request) =>
+    request.query.source === 'page'
+      ? '/admin/organisations/:organisationId/versions/:versionId'
+      : '/admin/organisations/',
+  )
   async edit(
     @Param('organisationId') organisationId: string,
     @Param('versionId') versionId: string,

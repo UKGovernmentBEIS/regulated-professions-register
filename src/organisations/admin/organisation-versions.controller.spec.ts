@@ -90,7 +90,7 @@ describe('OrganisationVersionsController', () => {
       );
 
       expect(response.redirect).toHaveBeenCalledWith(
-        `/admin/organisations/${newOrganisationVersion.organisation.id}/versions/${newOrganisationVersion.id}/edit`,
+        `/admin/organisations/${newOrganisationVersion.organisation.id}/versions/${newOrganisationVersion.id}/edit?source=page`,
       );
     });
 
