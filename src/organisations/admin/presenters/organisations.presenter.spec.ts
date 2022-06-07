@@ -5,17 +5,17 @@ import { translationOf } from '../../../testutils/translation-of';
 import industryFactory from '../../../testutils/factories/industry';
 import { FilterInput } from '../../../common/interfaces/filter-input.interface';
 import { IndustriesCheckboxPresenter } from '../../../industries/industries-checkbox.presenter';
-import { OrganisationPresenter } from '../../presenters/organisation.presenter';
 import { Nation } from '../../../nations/nation';
 import { NationsCheckboxPresenter } from '../../../nations/nations-checkbox.presenter';
 import { RegulationType } from '../../../professions/profession-version.entity';
+import { OrganisationTableRowPresenter } from './organisation-table-row.presenter';
 
 const mockTableRow = jest.fn();
 const mockCheckboxItems = jest.fn();
 
-jest.mock('../../presenters/organisation.presenter', () => {
+jest.mock('./organisation-table-row.presenter', () => {
   return {
-    OrganisationPresenter: jest.fn().mockImplementation(() => {
+    OrganisationTableRowPresenter: jest.fn().mockImplementation(() => {
       return {
         tableRow: mockTableRow,
       };
@@ -79,8 +79,8 @@ describe('OrganisationsPresenter', () => {
         );
         const result = presenter.present('overview');
 
-        expect(OrganisationPresenter).toHaveBeenCalledTimes(5);
-        expect(OrganisationPresenter).toHaveBeenLastCalledWith(
+        expect(OrganisationTableRowPresenter).toHaveBeenCalledTimes(5);
+        expect(OrganisationTableRowPresenter).toHaveBeenLastCalledWith(
           organisations[4],
           i18nService,
         );

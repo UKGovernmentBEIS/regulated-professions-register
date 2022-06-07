@@ -25,9 +25,10 @@ import { getActingUser } from '../../users/helpers/get-acting-user.helper';
 import { createDefaultMockRequest } from '../../testutils/factories/create-default-mock-request';
 import { checkCanViewOrganisation } from '../../users/helpers/check-can-view-organisation';
 import * as getProfessionsFromOrganisationModule from './../helpers/get-professions-from-organisation.helper';
+import { OrganisationLogPresenter } from './presenters/organisation-log.presenter';
 
 jest.mock('../presenters/organisation-summary.presenter');
-jest.mock('../presenters/organisation.presenter');
+jest.mock('./presenters/organisation-log.presenter');
 jest.mock('../../users/helpers/get-acting-user.helper');
 jest.mock('../../users/helpers/check-can-view-organisation');
 jest.mock('../../professions/profession.entity');
@@ -137,6 +138,10 @@ describe('OrganisationVersionsController', () => {
         version,
       );
       organisationVersionsService.hasLiveVersion.mockResolvedValue(true);
+
+      (OrganisationLogPresenter.prototype.present as jest.Mock).mockReturnValue(
+        {},
+      );
 
       const getProfessionsFromOrganisationSpy = jest.spyOn(
         getProfessionsFromOrganisationModule,

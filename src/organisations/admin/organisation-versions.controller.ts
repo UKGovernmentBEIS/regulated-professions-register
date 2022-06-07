@@ -31,7 +31,7 @@ import { UserPermission } from '../../users/user-permission';
 import { getActingUser } from '../../users/helpers/get-acting-user.helper';
 import { getProfessionsFromOrganisation } from '../helpers/get-professions-from-organisation.helper';
 import { checkCanViewOrganisation } from '../../users/helpers/check-can-view-organisation';
-import { OrganisationPresenter } from '../presenters/organisation.presenter';
+import { OrganisationLogPresenter } from './presenters/organisation-log.presenter';
 
 @UseGuards(AuthenticationGuard)
 @Controller('/admin/organisations')
@@ -106,7 +106,7 @@ export class OrganisationVersionsController {
 
     return {
       ...organisationSummaryPresenter.present(true),
-      log: new OrganisationPresenter(organisation),
+      log: new OrganisationLogPresenter(organisation).present(),
       hasLiveVersion,
     };
   }
