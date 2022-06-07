@@ -23,6 +23,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Set Docker tag environment variable
+        run: echo "GITHUB_USERNAME=${{ github.actor }}" >> $GITHUB_ENV
+      - name: Set Docker tag environment variable
         run: echo "DOCKER_TAG=${GITHUB_RUN_ID}-${GITHUB_SHA}" >> $GITHUB_ENV
       - name: Tag and Push Docker Container
         run: script/docker-push
