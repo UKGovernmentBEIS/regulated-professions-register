@@ -6,7 +6,7 @@ resource "cloudfoundry_app" "beis-rpr-app" {
   instances    = 2
   disk_quota   = 3072
   timeout      = 300
-  docker_image = "thedxw/beis-rpr:${var.docker_tag}"
+  docker_image = "ghcr.io/ukgovernmentbeis/regulated-professions-register:${var.docker_tag}"
   docker_credentials = {
     username = var.docker_username
     password = var.docker_password
