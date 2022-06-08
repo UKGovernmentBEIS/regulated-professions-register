@@ -7,10 +7,6 @@ resource "cloudfoundry_app" "beis-rpr-app" {
   disk_quota   = 3072
   timeout      = 300
   docker_image = "ghcr.io/ukgovernmentbeis/regulated-professions-register:${var.docker_tag}"
-  docker_credentials = {
-    username = var.docker_username
-    password = var.docker_password
-  }
   strategy                   = "blue-green-v2"
   health_check_http_endpoint = "/"
   service_binding { service_instance = cloudfoundry_service_instance.beis-rpr-postgres.id }
