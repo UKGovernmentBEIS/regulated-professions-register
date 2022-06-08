@@ -33,16 +33,6 @@ variable "docker_tag" {
   description = "The Docker tag to be pushed"
 }
 
-variable "docker_password" {
-  type        = string
-  description = "The Docker Hub user password"
-}
-
-variable "docker_username" {
-  type        = string
-  description = "The Docker Hub username"
-}
-
 variable "papertrail_destination" {
   type        = string
   description = "Where to send logs hostname:port"
