@@ -96,7 +96,7 @@
     "sass": "^1.54.2",
     "sass-loader": "^12.6.0",
     "slugify": "^1.6.5",
-    "ts-node": "^10.8.1",
+    "ts-node": "^10.9.1",
     "typeorm": "^0.2.45"
   },
   "devDependencies": {
