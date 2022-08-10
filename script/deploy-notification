@@ -12,8 +12,3 @@ do
   fi
   sleep 10
 done
-
-echo "Sending Slack notification!"
-
-curl -s -X POST --data-urlencode "payload={\"text\": \"<!here> :badgerbadger: The latest release of the Regulated Professions Register has been deployed to production :badgerbadger:\"}" "$SLACK_WEBHOOK_URL"
-
