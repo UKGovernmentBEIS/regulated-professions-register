@@ -23,7 +23,8 @@ jobs:
         uses: aquasecurity/trivy-action@0.7.1
         with:
           image-ref: ghcr.io/ukgovernmentbeis/regulated-professions-register:${{ github.sha }}
-          format: 'template'
-          template: '@/contrib/sarif.tpl'
-          output: 'trivy-results.sarif'
-          severity: 'HIGH'
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
