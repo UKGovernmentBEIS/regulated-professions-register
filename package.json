@@ -66,7 +66,7 @@
     "@types/express-session": "^1.17.4",
     "@types/google-libphonenumber": "^7.4.23",
     "auth0": "^2.42.0",
-    "bull": "^4.8.3",
+    "bull": "^4.10.0",
     "bull-repl": "^0.27.2",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
