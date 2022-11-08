@@ -1,6 +1,5 @@
 name: "Container Scanning"
 on:
-  pull_request:
   push:
   schedule:
     - cron: "0 0 * * *"  
