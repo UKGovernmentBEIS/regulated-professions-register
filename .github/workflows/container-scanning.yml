@@ -1,8 +1,8 @@
-name: "Container Scanning"
+name: 'Container Scanning'
 on:
   push:
   schedule:
-    - cron: "0 0 * * *"  
+    - cron: '0 0 * * *'
 
 jobs:
   build:
