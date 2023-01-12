@@ -27,7 +27,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Set Docker tag environment variable
-        run: echo "DOCKER_TAG=${GITHUB_RUN_ID}-${GITHUB_SHA}" >> $GITHUB_ENV
+        run: echo "DOCKER_TAG=${GITHUB_SHA}" >> $GITHUB_ENV
       - name: Tag and Push Docker Container
         run: script/docker-push
       - name: Set Docker tag as an output
