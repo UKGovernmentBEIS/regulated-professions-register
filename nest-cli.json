@@ -2,6 +2,10 @@
   "collection": "@nestjs/schematics",
   "sourceRoot": "src",
   "compilerOptions": {
-    "assets": ["i18n/**/*", "config/nations.json", "config/countries.json"]
+    "assets": [
+      { "include": "i18n/**/*", "watchAssets": true },
+      { "include": "config/nations.json", "watchAssets": true },
+      { "include": "config/countries.json", "watchAssets": true }
+    ]
   }
 }

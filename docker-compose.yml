@@ -16,7 +16,7 @@ services:
     environment:
       DATABASE_URL: postgres://postgres:password@db:5432/regulated-professions-register-development
       REDIS_HOST: redis
-      OPENSEARCH_NODE: http://admin:admin@localhost:9200
+      OPENSEARCH_NODE: http://admin:admin@opensearch:9200
     volumes:
       - .:/srv/app
     tty: true
@@ -26,6 +26,8 @@ services:
 
   db:
     image: postgres
+    ports:
+      - '15432:5432'
     volumes:
       - db-data:/var/lib/postgresql/data
       - ./sql/create-database.sql:/docker-entrypoint-initdb.d/create-database.sql
