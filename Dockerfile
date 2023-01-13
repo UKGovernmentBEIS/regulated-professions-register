@@ -65,7 +65,7 @@ FROM base AS test
 RUN mkdir -p ${TEST_HOME}
 WORKDIR ${TEST_HOME}
 
-RUN apt-get update && apt-get install -y --fix-missing --no-install-recommends \
+RUN apk add --update-cache \
   libgtk2.0-0 \
   libgtk-3-0 \
   libgbm-dev \
