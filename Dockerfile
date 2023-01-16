@@ -1,7 +1,19 @@
 # ------------------------------------------------------------------------------
 # Base
 # ------------------------------------------------------------------------------
-FROM node:16 as base
+FROM node:16-alpine as base
+
+ENV APP_HOME /srv/app
+ENV DEPS_HOME /deps
+ENV TEST_HOME /srv/test
+
+ARG NODE_ENV
+ENV NODE_ENV ${NODE_ENV:-production}
+
+# ------------------------------------------------------------------------------
+# Base
+# ------------------------------------------------------------------------------
+FROM node:16 as full
 
 ENV APP_HOME /srv/app
 ENV DEPS_HOME /deps
@@ -60,7 +72,7 @@ CMD ["node", "dist/main"]
 # ------------------------------------------------------------------------------
 # Test
 # ------------------------------------------------------------------------------
-FROM base AS test
+FROM full AS test
 
 RUN mkdir -p ${TEST_HOME}
 WORKDIR ${TEST_HOME}

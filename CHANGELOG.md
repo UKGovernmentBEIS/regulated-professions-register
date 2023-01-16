@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [unreleased]
 
+### Added
+
+### Changed
+
+- Change node image to alpine variant
+
 ## [release-025] - 2022-06-08
 
 ### Added
