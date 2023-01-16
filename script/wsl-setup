@@ -49,4 +49,4 @@ echo "Building app"
 npm run build --quiet
 
 echo "Starting containers..."
-docker compose up -d
+docker compose up -d --build
