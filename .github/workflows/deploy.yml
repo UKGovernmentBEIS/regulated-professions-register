@@ -52,6 +52,7 @@ jobs:
       TF_VAR_basic_auth_username: ${{ secrets.PROD_BASIC_AUTH_USERNAME }}
       TF_VAR_basic_auth_password: ${{ secrets.PROD_BASIC_AUTH_PASSWORD }}
       TF_VAR_custom_domain: ${{ vars.CUSTOM_DOMAIN }}
+      TF_VAR_redirect_domain: ${{ vars.REDIRECT_DOMAIN }}
       TF_VAR_custom_hostname: www
     steps:
       - name: Custom domain
@@ -78,6 +79,7 @@ jobs:
       TF_VAR_basic_auth_username: ${{ secrets.STAGING_BASIC_AUTH_USERNAME }}
       TF_VAR_basic_auth_password: ${{ secrets.STAGING_BASIC_AUTH_PASSWORD }}
       TF_VAR_custom_domain: ${{ vars.CUSTOM_DOMAIN }}
+      TF_VAR_redirect_domain: ${{ vars.REDIRECT_DOMAIN }}
       TF_VAR_custom_hostname: staging
     steps:
       - name: Custom domain
