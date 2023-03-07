@@ -95,5 +95,5 @@ jobs:
       - name: Notifying the team of a successful deploy
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-          HEALTH_CHECK_URL: https://${{ secrets.PROD_BASIC_AUTH_USERNAME }}:${{ secrets.PROD_BASIC_AUTH_PASSWORD }}@www.regulated-professions.beis.gov.uk/health-check
+          HEALTH_CHECK_URL: https://${{ secrets.PROD_BASIC_AUTH_USERNAME }}:${{ secrets.PROD_BASIC_AUTH_PASSWORD }}@www.regulated-professions.service.gov.uk/health-check
         run: script/deploy-notification
