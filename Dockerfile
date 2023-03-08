@@ -96,3 +96,17 @@ COPY --from=dependencies ${DEPS_HOME}/node_modules ${TEST_HOME}/node_modules
 COPY --from=dependencies /root/.cache/Cypress /root/.cache/Cypress
 
 COPY --from=web ${APP_HOME} ${TEST_HOME}
+
+# ------------------------------------------------------------------------------
+# nginx Redirect
+# ------------------------------------------------------------------------------
+
+FROM nginx:1.23.3-alpine-slim AS redirect
+
+COPY script/redirect /usr/local/bin/
+
+RUN chmod +x /usr/local/bin/redirect
+
+EXPOSE 80
+
+CMD ["redirect"]
