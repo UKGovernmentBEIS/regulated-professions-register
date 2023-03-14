@@ -12,6 +12,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 - Change node image to alpine variant
 - Update deployment to take custom domain from repository variable
+- Update disclaimer text to use "Department for Business and Trade"
+- Add disclaimer snippet to search pages
 
 ## [release-025] - 2022-06-08
 
