@@ -85,6 +85,10 @@
         "manageAccessRegulators": "Manage who uses this service",
         "guidance": "Read how to use this service"
       }
+    },
+    "data-disclaimer":{
+      "heading": "Disclaimer about data on the Regulated Professions Register",
+      "body": "The information contained on this website has been provided to us by the relevant regulators and professional bodies listed. Information held on this website is intended for general information, and as such should only be treated as a guide. The Department for Business, Energy and Industrial Strategy does not represent that the information is accurate or appropriate for any particular circumstances; and furnishes the information on the basis that individuals will not rely on any such representations. BEIS does not accept any liability for loss suffered in reliance on the contents of the database."
     }
   },
   "beis": "Department for Business, Energy & Industrial Strategy",
