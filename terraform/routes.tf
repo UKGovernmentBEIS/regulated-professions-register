@@ -19,5 +19,5 @@ resource "cloudfoundry_route" "beis-rpr-custom-domain-route" {
 resource "cloudfoundry_route" "beis-rpr-redirect-route" {
   domain   = data.cloudfoundry_domain.redirect.id
   space    = cloudfoundry_space.space.id
-  hostname = join("", [var.custom_hostname, "_redirect"])
+  hostname = var.custom_hostname
 }
