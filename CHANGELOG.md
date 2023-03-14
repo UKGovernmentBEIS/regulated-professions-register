@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 - Change node image to alpine variant
 - Update deployment to take custom domain from repository variable
+- Re-enable decision data for service owner roles in production
 
 ## [release-025] - 2022-06-08
 
