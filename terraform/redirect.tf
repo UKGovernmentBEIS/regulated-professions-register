@@ -11,11 +11,7 @@ resource "cloudfoundry_app" "beis-rpr-redirect" {
   strategy                   = "blue-green-v2"
   health_check_http_endpoint = "/"
   environment = {
-    "REDIRECT_TARGET"            = "https://${var.custom_hostname}.${var.custom_domain}/"
-  }
-  # routes need to be declared with the app for blue green deployments to work
-  routes {
-    route = cloudfoundry_route.beis-rpr-route.id
+    "REDIRECT_TARGET"            = "https://${var.custom_hostname}.${var.custom_domain}"
   }
   routes {
     route = cloudfoundry_route.beis-rpr-redirect-route.id
