@@ -86,9 +86,10 @@
         "guidance": "Read how to use this service"
       }
     },
-    "data-disclaimer":{
+    "data-disclaimer": {
       "heading": "Disclaimer about data on the Regulated Professions Register",
-      "body": "The information contained on this website has been provided to us by the relevant regulators and professional bodies listed. Information held on this website is intended for general information, and as such should only be treated as a guide. The Department for Business and Trade does not represent that the information is accurate or appropriate for any particular circumstances; and furnishes the information on the basis that individuals will not rely on any such representations. Department for Business and Trade does not accept any liability for loss suffered in reliance on the contents of the database"
+      "body": "The information contained on this website has been provided to us by the relevant regulators and professional bodies listed. Information held on this website is intended for general information, and as such should only be treated as a guide. The Department for Business and Trade does not represent that the information is accurate or appropriate for any particular circumstances; and furnishes the information on the basis that individuals will not rely on any such representations. Department for Business and Trade does not accept any liability for loss suffered in reliance on the contents of the database",
+      "snippet": "The information contained on this website has been provided to us by the relevant regulators and professional bodies listed. <br/> For further details please see the <a href='/disclaimer'>disclaimer</a>."
     }
   },
   "beis": "Department for Business, Energy & Industrial Strategy",
