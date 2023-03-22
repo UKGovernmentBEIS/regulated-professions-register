@@ -10,7 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 
-- Change node image to alpine variant
+- Change node image to alpine variant TESTING STATUS CHECKS
 - Update deployment to take custom domain from repository variable
 - Update deployment to create redirection app to redirect traffic from beis.gov.uk to service.gov.uk
 
