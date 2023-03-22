@@ -5,6 +5,7 @@ provider "registry.terraform.io/cloudfoundry-community/cloudfoundry" {
   version     = "0.15.0"
   constraints = "0.15.0"
   hashes = [
+    "h1:+7+07H0AKGhixBpyY5HmuYcGA1z/3YOCH4ZGucbOC80=",
     "h1:QgYJEWmQ+k3cH20D8K2WFMUdAxfcF1BiSu1wocz/9kg=",
     "zh:143c1624ee5c2813c32126467fb9c56053bbfcae275d6ce61c7b59c259c4b8e0",
     "zh:18a5cb24695a1521cb8ee1e488234c337228af1b471b30a284db41c4362c6149",
