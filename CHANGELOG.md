@@ -8,11 +8,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
+- Add link to regulation types page
+- Add disclaimer snippet to search pages
+
 ### Changed
 
 - Change node image to alpine variant
 - Update deployment to take custom domain from repository variable
 - Re-enable decision data for service owner roles in production
+- Update disclaimer text to use "Department for Business and Trade"
 - Update deployment to create redirection app to redirect traffic from beis.gov.uk to service.gov.uk
 
 ## [release-025] - 2022-06-08
