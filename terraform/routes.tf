@@ -13,3 +13,11 @@ resource "cloudfoundry_route" "beis-rpr-custom-domain-route" {
   space    = cloudfoundry_space.space.id
   hostname = var.custom_hostname
 }
+
+# Create a route for the app using the redirect domain
+# and useful hostname provided from tfvars (which allows us to easily set www for prod)
+resource "cloudfoundry_route" "beis-rpr-redirect-route" {
+  domain   = data.cloudfoundry_domain.redirect.id
+  space    = cloudfoundry_space.space.id
+  hostname = var.custom_hostname
+}

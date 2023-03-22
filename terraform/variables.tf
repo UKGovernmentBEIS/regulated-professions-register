@@ -68,6 +68,11 @@ variable "custom_domain" {
   description = "Name of custom domain created in the cf org"
 }
 
+variable "redirect_domain" {
+  type        = string
+  description = "The domain from which you want to redirect traffic"
+}
+
 variable "custom_hostname" {
   type        = string
   description = "Custom hostname (prepended to custom_domain for the app and cdn-route)"
