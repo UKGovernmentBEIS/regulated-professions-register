@@ -134,7 +134,9 @@
     {% if profession.regulationType or showEmptyProfessionDetails %}
       <div>
         <h3 class="govuk-heading-s">{{ "professions.show.regulatedActivities.regulationType" | t }}</h3>
-        <p class="govuk-body">{{ (("professions.regulationTypes." + profession.regulationType + ".name") | t) if profession.regulationType else "" }}</p>
+        {% if profession.regulationType %}
+          <p class="govuk-body"><a class="govuk-link" href="/regulation-types">{{ (("professions.regulationTypes." + profession.regulationType + ".name") | t) }}</a></p>
+        {% endif %}
       </div>
     {% endif %}
 

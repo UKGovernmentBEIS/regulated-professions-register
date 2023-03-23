@@ -1,0 +1,52 @@
+#!/bin/bash
+set -e
+NODE_VERSION_FILE=".node-version"
+if [ ! -f "$NODE_VERSION_FILE" ]; then
+    echo "$NODE_VERSION_FILE does not exist."
+    echo "Ensure this script is run from the root of the project."
+    exit 1
+fi
+
+NODE_VERSION=`cat $NODE_VERSION_FILE`
+
+if ! command -v nvm &> /dev/null
+then
+  echo "Installing nvm..."
+  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+
+  export NVM_DIR="$HOME/.nvm"
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+fi
+
+echo "Installing version $NODE_VERSION of NodeJS..."
+nvm install $NODE_VERSION
+
+echo "Prompting for sudo..."
+sudo echo
+
+echo "Installing dependencies..."
+sudo apt-get update && sudo apt-get -q install -y --fix-missing --no-install-recommends \
+  libgtk2.0-0 \
+  libgtk-3-0 \
+  libgbm-dev \
+  libnotify-dev \
+  libgconf-2-4 \
+  libnss3 \
+  libxss1 \
+  libasound2 \
+  libxtst6 \
+  xauth \
+  xvfb
+
+echo "Running npm install..."
+npm install --quiet
+
+echo "Building assets"
+npm run build:assets --quiet
+
+echo "Building app"
+npm run build --quiet
+
+echo "Starting containers..."
+docker compose up -d --build

@@ -7,3 +7,7 @@ data "cloudfoundry_domain" "default" {
 data "cloudfoundry_domain" "custom" {
   name = "${var.custom_domain}"
 }
+
+data "cloudfoundry_domain" "redirect" {
+  name = "${var.redirect_domain}"
+}
