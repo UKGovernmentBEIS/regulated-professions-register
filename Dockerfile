@@ -1,7 +1,33 @@
 # ------------------------------------------------------------------------------
+# nginx Redirect
+# ------------------------------------------------------------------------------
+
+FROM nginx:1.23.3-alpine-slim AS redirect
+
+COPY script/redirect /usr/local/bin/
+
+RUN chmod +x /usr/local/bin/redirect
+
+EXPOSE 80
+
+CMD ["redirect"]
+
+# ------------------------------------------------------------------------------
 # Base
 # ------------------------------------------------------------------------------
-FROM node:16 as base
+FROM node:16-alpine as base
+
+ENV APP_HOME /srv/app
+ENV DEPS_HOME /deps
+ENV TEST_HOME /srv/test
+
+ARG NODE_ENV
+ENV NODE_ENV ${NODE_ENV:-production}
+
+# ------------------------------------------------------------------------------
+# Base
+# ------------------------------------------------------------------------------
+FROM node:16 as full
 
 ENV APP_HOME /srv/app
 ENV DEPS_HOME /deps
@@ -60,7 +86,7 @@ CMD ["node", "dist/main"]
 # ------------------------------------------------------------------------------
 # Test
 # ------------------------------------------------------------------------------
-FROM base AS test
+FROM full AS test
 
 RUN mkdir -p ${TEST_HOME}
 WORKDIR ${TEST_HOME}

@@ -1,4 +1,5 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 
 {% extends "base.njk" %}
 
@@ -6,6 +7,11 @@
 
 {% block content %}
   <h1 class="govuk-heading-xl">{{ title }}</h1>
+
+{{ govukInsetText({
+  text: "app.pages.data-disclaimer.snippet" | t | safe 
+  }) 
+}}
 
   <div class="govuk-grid-row">
 
