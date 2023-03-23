@@ -27,7 +27,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Set Docker tag environment variable
-        run: echo "DOCKER_TAG=${GITHUB_RUN_ID}-${GITHUB_SHA}" >> $GITHUB_ENV
+        run: echo "DOCKER_TAG=${GITHUB_SHA}" >> $GITHUB_ENV
       - name: Tag and Push Docker Container
         run: script/docker-push
       - name: Set Docker tag as an output
@@ -51,9 +51,12 @@ jobs:
       TF_VAR_rollbar_token: ${{ secrets.PROD_ROLLBAR_TOKEN }}
       TF_VAR_basic_auth_username: ${{ secrets.PROD_BASIC_AUTH_USERNAME }}
       TF_VAR_basic_auth_password: ${{ secrets.PROD_BASIC_AUTH_PASSWORD }}
-      TF_VAR_custom_domain: regulated-professions.beis.gov.uk
+      TF_VAR_custom_domain: ${{ vars.CUSTOM_DOMAIN }}
+      TF_VAR_redirect_domain: ${{ vars.REDIRECT_DOMAIN }}
       TF_VAR_custom_hostname: www
     steps:
+      - name: Custom domain
+        run: echo "::TF_VAR_custom_domain::$TF_VAR_custom_domain"
       - uses: actions/checkout@v2
       - name: Deploy latest code to Production
         run: script/deploy-terraform
@@ -75,9 +78,12 @@ jobs:
       TF_VAR_rollbar_token: ${{ secrets.STAGING_ROLLBAR_TOKEN }}
       TF_VAR_basic_auth_username: ${{ secrets.STAGING_BASIC_AUTH_USERNAME }}
       TF_VAR_basic_auth_password: ${{ secrets.STAGING_BASIC_AUTH_PASSWORD }}
-      TF_VAR_custom_domain: regulated-professions.beis.gov.uk
+      TF_VAR_custom_domain: ${{ vars.CUSTOM_DOMAIN }}
+      TF_VAR_redirect_domain: ${{ vars.REDIRECT_DOMAIN }}
       TF_VAR_custom_hostname: staging
     steps:
+      - name: Custom domain
+        run: echo "::TF_VAR_custom_domain::$TF_VAR_custom_domain"
       - uses: actions/checkout@v2
       - name: Deploy latest code to Staging
         run: script/deploy-terraform
@@ -91,5 +97,5 @@ jobs:
       - name: Notifying the team of a successful deploy
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-          HEALTH_CHECK_URL: https://${{ secrets.PROD_BASIC_AUTH_USERNAME }}:${{ secrets.PROD_BASIC_AUTH_PASSWORD }}@www.regulated-professions.beis.gov.uk/health-check
+          HEALTH_CHECK_URL: https://${{ secrets.PROD_BASIC_AUTH_USERNAME }}:${{ secrets.PROD_BASIC_AUTH_PASSWORD }}@www.regulated-professions.service.gov.uk/health-check
         run: script/deploy-notification
