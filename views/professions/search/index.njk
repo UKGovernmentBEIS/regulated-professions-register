@@ -1,9 +1,17 @@
 {% extends "base.njk" %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+
 {% set title = ("professions.search.heading" | t) %}
 
 {% block content %}
 <h1 class="govuk-heading-xl">{{ title }}</h1>
+
+
+{{ govukInsetText({
+  text: "app.pages.data-disclaimer.snippet" | t | safe 
+  }) 
+}}
 
   <div class="govuk-grid-row">
 
