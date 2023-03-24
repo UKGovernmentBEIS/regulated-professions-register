@@ -52,7 +52,7 @@
   },
   "dependencies": {
     "@nestjs/bull": "^0.5.5",
-    "@nestjs/cli": "^8.2.6",
+    "@nestjs/cli": "^9.3.0",
     "@nestjs/common": "^8.4.6",
     "@nestjs/config": "^2.1.0",
     "@nestjs/core": "^8.4.6",
