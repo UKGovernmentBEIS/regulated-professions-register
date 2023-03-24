@@ -105,9 +105,9 @@ describe('OrganisationPresenter', () => {
           expect(
             list.rows.filter(
               (item) =>
-              'text' in item.key &&
-              item.key.text ===
-                'Translation of `organisations.label.alternateName`',
+                'text' in item.key &&
+                item.key.text ===
+                  'Translation of `organisations.label.alternateName`',
             ).length,
           ).toEqual(0);
         });
