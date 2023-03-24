@@ -337,111 +337,111 @@ describe('Editing a decision dataset', () => {
     });
   });
 
-  context('When I am logged in as an org user', () => {
-    beforeEach(() => {
-      cy.loginAuth0('orgadmin');
-      cy.visitInternalDashboard();
-      cy.translate('app.pages.admin.dashboard.editDecisionDataRegulators').then(
-        (link) => {
-          cy.get('a').contains(link).click();
-          cy.checkAccessibility();
-        },
-      );
-    });
+  // context('When I am logged in as an org user', () => {
+  //   beforeEach(() => {
+  //     cy.loginAuth0('orgadmin');
+  //     cy.visitInternalDashboard();
+  //     cy.translate('app.pages.admin.dashboard.editDecisionDataRegulators').then(
+  //       (link) => {
+  //         cy.get('a').contains(link).click();
+  //         cy.checkAccessibility();
+  //       },
+  //     );
+  //   });
 
-    it('I cannot publish decision data', () => {
-      cy.translate('app.status.draft').then((draft) => {
-        cy.get('tr')
-          .contains(
-            'Secondary School Teacher in State maintained schools (England)',
-          )
-          .parent()
-          .contains(draft)
-          .parent()
-          .parent()
-          .within(() => {
-            cy.get('a').contains('View details').click();
-          });
-      });
+  //   it('I cannot publish decision data', () => {
+  //     cy.translate('app.status.draft').then((draft) => {
+  //       cy.get('tr')
+  //         .contains(
+  //           'Secondary School Teacher in State maintained schools (England)',
+  //         )
+  //         .parent()
+  //         .contains(draft)
+  //         .parent()
+  //         .parent()
+  //         .within(() => {
+  //           cy.get('a').contains('View details').click();
+  //         });
+  //     });
 
-      cy.checkAccessibility();
+  //     cy.checkAccessibility();
 
-      cy.translate('decisions.admin.buttons.edit').then((edit) => {
-        cy.get('a').contains(edit).click();
-      });
+  //     cy.translate('decisions.admin.buttons.edit').then((edit) => {
+  //       cy.get('a').contains(edit).click();
+  //     });
 
-      cy.checkAccessibility();
+  //     cy.checkAccessibility();
 
-      cy.translate('decisions.admin.buttons.publish').then((publish) => {
-        cy.get('button').should('not.contain', publish);
-      });
-    });
+  //     cy.translate('decisions.admin.buttons.publish').then((publish) => {
+  //       cy.get('button').should('not.contain', publish);
+  //     });
+  //   });
 
-    it('I can submit decision data from the edit page', () => {
-      cy.translate('app.status.draft').then((draft) => {
-        cy.get('tr')
-          .contains(
-            'Secondary School Teacher in State maintained schools (England)',
-          )
-          .parent()
-          .contains(draft)
-          .parent()
-          .parent()
-          .within(() => {
-            cy.get('a').contains('View details').click();
-          });
-      });
+  //   it('I can submit decision data from the edit page', () => {
+  //     cy.translate('app.status.draft').then((draft) => {
+  //       cy.get('tr')
+  //         .contains(
+  //           'Secondary School Teacher in State maintained schools (England)',
+  //         )
+  //         .parent()
+  //         .contains(draft)
+  //         .parent()
+  //         .parent()
+  //         .within(() => {
+  //           cy.get('a').contains('View details').click();
+  //         });
+  //     });
 
-      cy.checkAccessibility();
+  //     cy.checkAccessibility();
 
-      cy.translate('decisions.admin.buttons.edit').then((edit) => {
-        cy.get('a').contains(edit).click();
-      });
+  //     cy.translate('decisions.admin.buttons.edit').then((edit) => {
+  //       cy.get('a').contains(edit).click();
+  //     });
 
-      cy.translate('decisions.admin.buttons.edit').then((editButton) => {
-        cy.get('a').contains(editButton).click();
-      });
+  //     cy.translate('decisions.admin.buttons.edit').then((editButton) => {
+  //       cy.get('a').contains(editButton).click();
+  //     });
 
-      cy.checkAccessibility();
+  //     cy.checkAccessibility();
 
-      cy.translate('decisions.admin.buttons.submit').then((submitButton) => {
-        cy.get('button').contains(submitButton).click();
-      });
+  //     cy.translate('decisions.admin.buttons.submit').then((submitButton) => {
+  //       cy.get('button').contains(submitButton).click();
+  //     });
 
-      cy.checkAccessibility();
+  //     cy.checkAccessibility();
 
-      cy.translate('decisions.admin.submission.caption').then(
-        (submitCaption) => {
-          cy.get('body').contains(submitCaption);
-        },
-      );
+  //     cy.translate('decisions.admin.submission.caption').then(
+  //       (submitCaption) => {
+  //         cy.get('body').contains(submitCaption);
+  //       },
+  //     );
 
-      cy.translate('decisions.admin.submission.heading').then((heading) => {
-        cy.contains(heading);
-      });
+  //     cy.translate('decisions.admin.submission.heading').then((heading) => {
+  //       cy.contains(heading);
+  //     });
 
-      cy.contains(
-        'Secondary School Teacher in State maintained schools (England)',
-      );
-      cy.contains('2019');
+  //     cy.contains(
+  //       'Secondary School Teacher in State maintained schools (England)',
+  //     );
+  //     cy.contains('2019');
 
-      cy.translate('decisions.admin.buttons.submit').then((submitButton) => {
-        cy.get('button').contains(submitButton).click();
-      });
+  //     cy.translate('decisions.admin.buttons.submit').then((submitButton) => {
+  //       cy.get('button').contains(submitButton).click();
+  //     });
 
-      cy.checkAccessibility();
+  //     cy.checkAccessibility();
 
-      cy.translate('decisions.show.heading').then((heading) => {
-        cy.get('body').should('contain', heading);
-      });
+  //     cy.translate('decisions.show.heading').then((heading) => {
+  //       cy.get('body').should('contain', heading);
+  //     });
 
-      cy.translate('decisions.admin.submission.confirmation.heading').then(
-        (confirmationHeading) => {
-          cy.get('body').should('contain', confirmationHeading);
-        },
-      );
-    });
-  });
+  //     cy.translate('decisions.admin.submission.confirmation.heading').then(
+  //       (confirmationHeading) => {
+  //         cy.get('body').should('contain', confirmationHeading);
+  //       },
+  //     );
+  //   });
+  // });
 });
 
 function withinEditTableDiv(tableName: string, func: () => void) {

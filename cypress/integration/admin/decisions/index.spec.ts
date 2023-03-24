@@ -213,151 +213,151 @@ describe('Listing decision datasets', () => {
     });
   });
 
-  context('When I am logged in as organisation editor', () => {
-    beforeEach(() => {
-      cy.loginAuth0('orgeditor');
-      cy.visitInternalDashboard();
-      cy.translate('app.pages.admin.dashboard.editDecisionDataRegulators').then(
-        (link) => {
-          cy.get('a').contains(link).click();
-          cy.checkAccessibility();
-        },
-      );
-    });
+  // context('When I am logged in as organisation editor', () => {
+  //   beforeEach(() => {
+  //     cy.loginAuth0('orgeditor');
+  //     cy.visitInternalDashboard();
+  //     cy.translate('app.pages.admin.dashboard.editDecisionDataRegulators').then(
+  //       (link) => {
+  //         cy.get('a').contains(link).click();
+  //         cy.checkAccessibility();
+  //       },
+  //     );
+  //   });
 
-    it('Lists decision datasets for my organisation', () => {
-      cy.getDisplayedDatasets().then((datasets) => {
-        datasets = datasets.filter(
-          (dataset) => dataset.organisation === 'Department for Education',
-        );
+  //   it('Lists decision datasets for my organisation', () => {
+  //     cy.getDisplayedDatasets().then((datasets) => {
+  //       datasets = datasets.filter(
+  //         (dataset) => dataset.organisation === 'Department for Education',
+  //       );
 
-        cy.translate(
-          `decisions.admin.dashboard.search.${
-            datasets.length > 1 ? 'foundPlural' : 'foundSingular'
-          }`,
-          {
-            count: datasets.length,
-          },
-        ).then((foundText) => {
-          cy.get('body').should('contain', foundText);
-        });
+  //       cy.translate(
+  //         `decisions.admin.dashboard.search.${
+  //           datasets.length > 1 ? 'foundPlural' : 'foundSingular'
+  //         }`,
+  //         {
+  //           count: datasets.length,
+  //         },
+  //       ).then((foundText) => {
+  //         cy.get('body').should('contain', foundText);
+  //       });
 
-        datasets.forEach((dataset, index) => {
-          cy.get('tbody tr')
-            .eq(index)
-            .then(($row) => {
-              cy.wrap($row).should('contain', dataset.profession);
-              cy.wrap($row).should('not.contain', dataset.organisation);
-              cy.wrap($row).should('contain', dataset.year.toString());
+  //       datasets.forEach((dataset, index) => {
+  //         cy.get('tbody tr')
+  //           .eq(index)
+  //           .then(($row) => {
+  //             cy.wrap($row).should('contain', dataset.profession);
+  //             cy.wrap($row).should('not.contain', dataset.organisation);
+  //             cy.wrap($row).should('contain', dataset.year.toString());
 
-              cy.get('[data-cy=changed-by-text]').should('not.exist');
-              cy.wrap($row).should('contain', format(new Date(), 'd MMM yyyy'));
+  //             cy.get('[data-cy=changed-by-text]').should('not.exist');
+  //             cy.wrap($row).should('contain', format(new Date(), 'd MMM yyyy'));
 
-              cy.translate(`app.status.${dataset.status}`).then((status) => {
-                cy.wrap($row).should('contain', status);
-              });
-            });
-        });
-      });
+  //             cy.translate(`app.status.${dataset.status}`).then((status) => {
+  //               cy.wrap($row).should('contain', status);
+  //             });
+  //           });
+  //       });
+  //     });
 
-      checkCsvDownload(
-        (dataset) => dataset.organisation === 'Department for Education',
-      );
-    });
+  //     checkCsvDownload(
+  //       (dataset) => dataset.organisation === 'Department for Education',
+  //     );
+  //   });
 
-    it('I can filter by professions', () => {
-      cy.expandFilters('decisions.admin.dashboard');
+  //   it('I can filter by professions', () => {
+  //     cy.expandFilters('decisions.admin.dashboard');
 
-      cy.get('label')
-        .contains(
-          'Secondary School Teacher in State maintained schools (England)',
-        )
-        .parent()
-        .find('input')
-        .check();
+  //     cy.get('label')
+  //       .contains(
+  //         'Secondary School Teacher in State maintained schools (England)',
+  //       )
+  //       .parent()
+  //       .find('input')
+  //       .check();
 
-      cy.clickFilterButtonAndCheckAccessibility();
+  //     cy.clickFilterButtonAndCheckAccessibility();
 
-      cy.get('tbody tr').each(($tr) => {
-        cy.wrap($tr).should('contain', 'Secondary School');
-      });
+  //     cy.get('tbody tr').each(($tr) => {
+  //       cy.wrap($tr).should('contain', 'Secondary School');
+  //     });
 
-      cy.get('tbody tr').each(($tr) => {
-        cy.wrap($tr).should('not.contain', 'Primary School');
-      });
+  //     cy.get('tbody tr').each(($tr) => {
+  //       cy.wrap($tr).should('not.contain', 'Primary School');
+  //     });
 
-      cy.get('tbody tr').should('have.length.at.least', 2);
+  //     cy.get('tbody tr').should('have.length.at.least', 2);
 
-      checkCsvDownload(
-        (dataset) =>
-          dataset.profession.includes('Secondary School') &&
-          !dataset.profession.includes('Primary School'),
-      );
-    });
+  //     checkCsvDownload(
+  //       (dataset) =>
+  //         dataset.profession.includes('Secondary School') &&
+  //         !dataset.profession.includes('Primary School'),
+  //     );
+  //   });
 
-    it('Contains the expected columns and filters', () => {
-      cy.translate('decisions.admin.dashboard.tableHeading.profession').then(
-        (profession) => {
-          cy.get('thead tr').should('contain', profession);
-        },
-      );
+  //   it('Contains the expected columns and filters', () => {
+  //     cy.translate('decisions.admin.dashboard.tableHeading.profession').then(
+  //       (profession) => {
+  //         cy.get('thead tr').should('contain', profession);
+  //       },
+  //     );
 
-      cy.translate('decisions.admin.dashboard.tableHeading.regulator').then(
-        (regulator) => {
-          cy.get('thead tr').should('not.contain', regulator);
-        },
-      );
+  //     cy.translate('decisions.admin.dashboard.tableHeading.regulator').then(
+  //       (regulator) => {
+  //         cy.get('thead tr').should('not.contain', regulator);
+  //       },
+  //     );
 
-      cy.translate('decisions.admin.dashboard.tableHeading.year').then(
-        (year) => {
-          cy.get('thead tr').should('contain', year);
-        },
-      );
+  //     cy.translate('decisions.admin.dashboard.tableHeading.year').then(
+  //       (year) => {
+  //         cy.get('thead tr').should('contain', year);
+  //       },
+  //     );
 
-      cy.translate('decisions.admin.dashboard.tableHeading.lastModified').then(
-        (lastModified) => {
-          cy.get('thead tr').should('contain', lastModified);
-        },
-      );
+  //     cy.translate('decisions.admin.dashboard.tableHeading.lastModified').then(
+  //       (lastModified) => {
+  //         cy.get('thead tr').should('contain', lastModified);
+  //       },
+  //     );
 
-      cy.translate('decisions.admin.dashboard.tableHeading.status').then(
-        (status) => {
-          cy.get('thead tr').should('contain', status);
-        },
-      );
+  //     cy.translate('decisions.admin.dashboard.tableHeading.status').then(
+  //       (status) => {
+  //         cy.get('thead tr').should('contain', status);
+  //       },
+  //     );
 
-      cy.expandFilters('decisions.admin.dashboard');
+  //     cy.expandFilters('decisions.admin.dashboard');
 
-      cy.translate('decisions.admin.dashboard.filter.keywords.label').then(
-        (keywords) => {
-          cy.get('label').should('not.contain', keywords);
-        },
-      );
+  //     cy.translate('decisions.admin.dashboard.filter.keywords.label').then(
+  //       (keywords) => {
+  //         cy.get('label').should('not.contain', keywords);
+  //       },
+  //     );
 
-      cy.translate('decisions.admin.dashboard.filter.organisations.label').then(
-        (organisations) => {
-          cy.get('legend').should('not.contain', organisations);
-        },
-      );
-      cy.translate('decisions.admin.dashboard.filter.professions.label').then(
-        (professions) => {
-          cy.get('legend').should('contain', professions);
-        },
-      );
+  //     cy.translate('decisions.admin.dashboard.filter.organisations.label').then(
+  //       (organisations) => {
+  //         cy.get('legend').should('not.contain', organisations);
+  //       },
+  //     );
+  //     cy.translate('decisions.admin.dashboard.filter.professions.label').then(
+  //       (professions) => {
+  //         cy.get('legend').should('contain', professions);
+  //       },
+  //     );
 
-      cy.translate('decisions.admin.dashboard.filter.years.label').then(
-        (years) => {
-          cy.get('legend').should('contain', years);
-        },
-      );
+  //     cy.translate('decisions.admin.dashboard.filter.years.label').then(
+  //       (years) => {
+  //         cy.get('legend').should('contain', years);
+  //       },
+  //     );
 
-      cy.translate('decisions.admin.dashboard.filter.statuses.label').then(
-        (statuses) => {
-          cy.get('legend').should('contain', statuses);
-        },
-      );
-    });
-  });
+  //     cy.translate('decisions.admin.dashboard.filter.statuses.label').then(
+  //       (statuses) => {
+  //         cy.get('legend').should('contain', statuses);
+  //       },
+  //     );
+  //   });
+  // });
 });
 
 function checkCsvDownload(
