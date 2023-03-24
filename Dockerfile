@@ -15,7 +15,7 @@ CMD ["redirect"]
 # ------------------------------------------------------------------------------
 # Base
 # ------------------------------------------------------------------------------
-FROM node:16-alpine as base
+FROM node:18-alpine as base
 
 ENV APP_HOME /srv/app
 ENV DEPS_HOME /deps
@@ -27,7 +27,7 @@ ENV NODE_ENV ${NODE_ENV:-production}
 # ------------------------------------------------------------------------------
 # Base
 # ------------------------------------------------------------------------------
-FROM node:16 as full
+FROM node:18 as full
 
 ENV APP_HOME /srv/app
 ENV DEPS_HOME /deps
