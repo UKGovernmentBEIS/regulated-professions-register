@@ -52,12 +52,12 @@ export class ConfirmationController {
 
     const messageTitle = this.i18nService.translate<string>(
       `professions.admin.${action}.confirmation.heading`,
-    );
+    ) as string;
 
     const messageBody = this.i18nService.translate<string>(
       `professions.admin.${action}.confirmation.body`,
       { args: { name: escape(profession.name) } },
-    );
+    ) as string;
 
     req.flash(bannerType, flashMessage(messageTitle, messageBody));
 

@@ -20,32 +20,32 @@ export class DecisionDatasetPresenter {
       {
         text: this.i18nService.translate<string>(
           'decisions.show.tableHeading.country',
-        ),
+        ) as string,
       },
       {
         text: this.i18nService.translate<string>(
           'decisions.show.tableHeading.yes',
-        ),
+        ) as string,
       },
       {
         text: this.i18nService.translate<string>(
           'decisions.show.tableHeading.yesAfterComp',
-        ),
+        ) as string,
       },
       {
         text: this.i18nService.translate<string>(
           'decisions.show.tableHeading.no',
-        ),
+        ) as string,
       },
       {
         text: this.i18nService.translate<string>(
           'decisions.show.tableHeading.noAfterComp',
-        ),
+        ) as string,
       },
       {
         text: this.i18nService.translate<string>(
           'decisions.show.tableHeading.total',
-        ),
+        ) as string,
       },
     ];
 

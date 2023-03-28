@@ -12,7 +12,7 @@ export class ProfessionsSelectPresenter {
   selectArgs(): SelectItemArgs[] {
     const options = [
       {
-        text: this.i18nService.translate<string>('app.pleaseSelect'),
+        text: this.i18nService.translate<string>('app.pleaseSelect') as string,
         value: '',
         selected: null,
       },

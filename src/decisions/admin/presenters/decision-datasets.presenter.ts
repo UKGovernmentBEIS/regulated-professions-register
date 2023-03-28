@@ -84,18 +84,18 @@ export class DecisionDatasetsPresenter {
 
     const caption =
       numberOfResults === 1
-        ? this.i18nService.translate<string>(
+        ? (this.i18nService.translate<string>(
             'decisions.admin.dashboard.search.foundSingular',
             {
               args: { count: numberOfResults },
             },
-          )
-        : this.i18nService.translate<string>(
+          ) as string)
+        : (this.i18nService.translate<string>(
             'decisions.admin.dashboard.search.foundPlural',
             {
               args: { count: numberOfResults },
             },
-          );
+          ) as string);
 
     return {
       caption,

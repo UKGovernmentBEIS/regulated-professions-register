@@ -7,7 +7,7 @@ export default class ViewUtils {
     if (isConfirmed(profession)) {
       return i18nService.translate<string>('professions.form.captions.edit', {
         args: { professionName: profession.name },
-      });
+      }) as string;
     }
 
     if (profession.name) {
@@ -16,9 +16,11 @@ export default class ViewUtils {
         {
           args: { professionName: profession.name },
         },
-      );
+      ) as string;
     }
 
-    return i18nService.translate<string>('professions.form.captions.add');
+    return i18nService.translate<string>(
+      'professions.form.captions.add',
+    ) as string;
   }
 }

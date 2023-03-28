@@ -12,7 +12,7 @@ export class CountriesSelectPresenter {
   selectArgs(): SelectItemArgs[] {
     return [
       {
-        text: this.i18nService.translate<string>('app.pleaseSelect'),
+        text: this.i18nService.translate<string>('app.pleaseSelect') as string,
         value: '',
         selected: null,
       },
@@ -24,7 +24,7 @@ export class CountriesSelectPresenter {
 
   private countryToSelectItemArgs(country: Country): SelectItemArgs {
     return {
-      text: this.i18nService.translate<string>(country.name),
+      text: this.i18nService.translate<string>(country.name) as string,
       value: country.code,
       selected: this.selectedCountry
         ? this.selectedCountry.code === country.code

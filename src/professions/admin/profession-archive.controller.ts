@@ -72,12 +72,12 @@ export class ProfessionArchiveController {
 
     const messageTitle = this.i18nService.translate<string>(
       'professions.admin.archive.confirmation.heading',
-    );
+    ) as string;
 
     const messageBody = this.i18nService.translate<string>(
       'professions.admin.archive.confirmation.body',
       { args: { name: escape(version.profession.name) } },
-    );
+    ) as string;
 
     req.flash('success', flashMessage(messageTitle, messageBody));
 

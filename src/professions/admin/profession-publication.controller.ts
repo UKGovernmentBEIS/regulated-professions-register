@@ -93,14 +93,14 @@ export class ProfessionPublicationController {
 
     const messageTitle = this.i18nService.translate<string>(
       'professions.admin.publish.confirmation.heading',
-    );
+    ) as string;
 
     const messageBody = this.i18nService.translate<string>(
       confirmed
         ? 'professions.admin.publish.confirmation.body'
         : 'professions.admin.publish.confirmation.bodyNew',
       { args: { name: escape(version.profession.name) } },
-    );
+    ) as string;
 
     req.flash('success', flashMessage(messageTitle, messageBody));
 

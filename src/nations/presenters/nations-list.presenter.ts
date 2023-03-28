@@ -9,7 +9,7 @@ export class NationsListPresenter {
 
   htmlList(): string {
     if (this.all()) {
-      return this.i18nService.translate<string>('app.unitedKingdom');
+      return this.i18nService.translate<string>('app.unitedKingdom') as string;
     } else {
       const translatedNations = this.translatedNations();
 
@@ -23,7 +23,7 @@ export class NationsListPresenter {
 
   textList(): string {
     if (this.all()) {
-      return this.i18nService.translate<string>('app.unitedKingdom');
+      return this.i18nService.translate<string>('app.unitedKingdom') as string;
     } else {
       return this.translatedNations().join(', ');
     }
