@@ -13,7 +13,7 @@ export class DecisionDatasetYearsPresenter {
     const key = {
       text: this.i18nService.translate<string>(
         'professions.show.decisions.year',
-      ),
+      ) as string,
     };
 
     return {

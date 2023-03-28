@@ -61,8 +61,8 @@ export class CheckYourAnswersController {
 
     checkCanChangeProfession(request, profession);
 
-    const industryNames = version.industries.map((industry) =>
-      this.i18nService.translate<string>(industry.name),
+    const industryNames = version.industries.map(
+      (industry) => this.i18nService.translate<string>(industry.name) as string,
     );
 
     const nations = new NationsListPresenter(

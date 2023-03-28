@@ -230,11 +230,11 @@ export class EditController {
 
       const messageTitle = this.i18nService.translate<string>(
         `decisions.admin.saveAsDraft.confirmation.heading`,
-      );
+      ) as string;
 
       const messageBody = this.i18nService.translate<string>(
         `decisions.admin.saveAsDraft.confirmation.body`,
-      );
+      ) as string;
 
       request.flash('info', flashMessage(messageTitle, messageBody));
 

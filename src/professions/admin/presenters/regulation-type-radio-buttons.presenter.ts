@@ -12,13 +12,13 @@ export class RegulationTypeRadioButtonsPresenter {
     return Object.values(RegulationType).map((regulationType) => ({
       text: this.i18nService.translate<string>(
         `professions.regulationTypes.${regulationType}.name`,
-      ),
+      ) as string,
       value: regulationType,
       checked: this.selectedRegulationType === regulationType,
       hint: {
         text: this.i18nService.translate<string>(
           `professions.regulationTypes.${regulationType}.hint`,
-        ),
+        ) as string,
       },
     }));
   }

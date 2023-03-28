@@ -13,7 +13,7 @@ export class Country {
   }
 
   translatedName(i18nService: I18nService): string {
-    return i18nService.translate<string>(this.name);
+    return i18nService.translate<string>(this.name) as string;
   }
 
   static all(): readonly Country[] {

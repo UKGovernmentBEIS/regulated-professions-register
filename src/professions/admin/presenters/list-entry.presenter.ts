@@ -46,10 +46,11 @@ export class ListEntryPresenter {
     contents: ProfessionsPresenterView,
   ): TableRow {
     return fields[contents]
-      .map((field) =>
-        i18nService.translate<string>(
-          `professions.admin.tableHeading.${field}`,
-        ),
+      .map(
+        (field) =>
+          i18nService.translate<string>(
+            `professions.admin.tableHeading.${field}`,
+          ) as string,
       )
       .map((text) => ({ text }));
   }

@@ -112,9 +112,9 @@ export default class QualificationPresenter {
         otherCountriesSummaryList,
         'professions.show.qualification.otherCountriesRecognition.routes.label',
         this.publicOtherCountriesRecognitionRoutes &&
-          this.i18nService.translate<string>(
+          (this.i18nService.translate<string>(
             `professions.show.qualification.otherCountriesRecognition.routes.${this.publicOtherCountriesRecognitionRoutes}`,
-          ),
+          ) as string),
       );
     }
 
@@ -157,7 +157,7 @@ export default class QualificationPresenter {
     value: string,
   ): void {
     summaryList.rows.push({
-      key: { text: this.i18nService.translate<string>(key) },
+      key: { text: this.i18nService.translate<string>(key) as string },
       value: { text: value },
     });
   }
@@ -168,7 +168,7 @@ export default class QualificationPresenter {
     value: string,
   ): void {
     summaryList.rows.push({
-      key: { text: this.i18nService.translate<string>(key) },
+      key: { text: this.i18nService.translate<string>(key) as string },
       value: { html: value },
     });
   }

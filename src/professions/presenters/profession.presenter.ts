@@ -20,7 +20,7 @@ export class ProfessionPresenter {
           key: {
             text: this.i18nService.translate<string>(
               'professions.show.overview.nations',
-            ),
+            ) as string,
           },
           value: {
             text: this.occupationLocations(),
@@ -30,7 +30,7 @@ export class ProfessionPresenter {
           key: {
             text: this.i18nService.translate<string>(
               'professions.show.overview.industry',
-            ),
+            ) as string,
           },
           value: {
             text: this.industries(),

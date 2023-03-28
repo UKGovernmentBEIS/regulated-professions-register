@@ -44,17 +44,17 @@ export class ProfessionToOrganisationsPresenter {
         this.summaryListItem(
           this.i18nService.translate<string>(
             'professions.form.label.organisations.name',
-          ),
+          ) as string,
           escape(professionToOrganisation.organisation.name),
           escape(professionToOrganisation.organisation.name),
         ),
         this.summaryListItem(
           this.i18nService.translate<string>(
             'professions.form.label.organisations.role',
-          ),
+          ) as string,
           this.i18nService.translate<string>(
             `organisations.label.roles.${professionToOrganisation.role}`,
-          ),
+          ) as string,
           escape(professionToOrganisation.organisation.name),
         ),
       ],
@@ -67,20 +67,20 @@ export class ProfessionToOrganisationsPresenter {
         this.summaryListItem(
           this.i18nService.translate<string>(
             'professions.form.label.organisations.name',
-          ),
+          ) as string,
           '',
           this.i18nService.translate<string>(
             'professions.form.label.topLevelInformation.regulatedAuthorities',
-          ),
+          ) as string,
         ),
         this.summaryListItem(
           this.i18nService.translate<string>(
             'professions.form.label.organisations.role',
-          ),
+          ) as string,
           '',
           this.i18nService.translate<string>(
             'professions.form.label.topLevelInformation.regulatedAuthorities',
-          ),
+          ) as string,
         ),
       ],
     };
@@ -112,7 +112,7 @@ export class ProfessionToOrganisationsPresenter {
   private actionsColumn(visuallyHiddenText: string): SummaryListActionItem {
     return {
       href: `/admin/professions/${this.profession.id}/versions/${this.professionVersion.id}/organisations/edit?change=true`,
-      text: this.i18nService.translate<string>('app.change'),
+      text: this.i18nService.translate<string>('app.change') as string,
       visuallyHiddenText: visuallyHiddenText,
     };
   }

@@ -12,7 +12,9 @@ export class DecisionDatasetStatusesCheckboxPresenter {
     return Object.values(DecisionDatasetStatus)
       .filter((status) => status !== DecisionDatasetStatus.Unconfirmed)
       .map((status) => ({
-        text: this.i18nService.translate<string>(`app.status.${status}`),
+        text: this.i18nService.translate<string>(
+          `app.status.${status}`,
+        ) as string,
         value: status,
         checked: this.checkedStatuses.includes(status),
       }));

@@ -99,11 +99,11 @@ export class SubmissionController {
 
     const messageTitle = this.i18nService.translate<string>(
       'decisions.admin.submission.confirmation.heading',
-    );
+    ) as string;
 
     const messageBody = this.i18nService.translate<string>(
       'decisions.admin.submission.confirmation.body',
-    );
+    ) as string;
 
     request.flash('success', flashMessage(messageTitle, messageBody));
 

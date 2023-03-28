@@ -8,6 +8,6 @@ export function getUserOrganisation(
   const isBEISUser = user.serviceOwner;
 
   return isBEISUser
-    ? i18nService.translate<string>('app.beis')
+    ? (i18nService.translate<string>('app.beis') as string)
     : user.organisation.name;
 }

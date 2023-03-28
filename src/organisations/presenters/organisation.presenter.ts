@@ -32,7 +32,7 @@ export class OrganisationPresenter {
         key: {
           text: this.i18nService.translate<string>(
             'organisations.label.alternateName',
-          ),
+          ) as string,
         },
         value: {
           text: this.organisation.alternateName,
@@ -40,7 +40,9 @@ export class OrganisationPresenter {
       },
       {
         key: {
-          text: this.i18nService.translate<string>('organisations.label.url'),
+          text: this.i18nService.translate<string>(
+            'organisations.label.url',
+          ) as string,
         },
         value: {
           html: this.url(),
@@ -50,7 +52,7 @@ export class OrganisationPresenter {
         key: {
           text: this.i18nService.translate<string>(
             'organisations.label.address',
-          ),
+          ) as string,
         },
         value: {
           html: this.address(),
@@ -58,7 +60,9 @@ export class OrganisationPresenter {
       },
       {
         key: {
-          text: this.i18nService.translate<string>('organisations.label.email'),
+          text: this.i18nService.translate<string>(
+            'organisations.label.email',
+          ) as string,
         },
         value: {
           html: this.email(),
@@ -68,7 +72,7 @@ export class OrganisationPresenter {
         key: {
           text: this.i18nService.translate<string>(
             'organisations.label.telephone',
-          ),
+          ) as string,
         },
         value: {
           text: this.telephone(),
@@ -85,7 +89,9 @@ export class OrganisationPresenter {
     if (includeName) {
       rows.unshift({
         key: {
-          text: this.i18nService.translate<string>('organisations.label.name'),
+          text: this.i18nService.translate<string>(
+            'organisations.label.name',
+          ) as string,
         },
         value: {
           text: this.organisation.name,
@@ -101,7 +107,9 @@ export class OrganisationPresenter {
             items: [
               {
                 href: `/admin/organisations/${this.organisation.id}/versions/${this.organisation.versionId}/edit`,
-                text: this.i18nService.translate<string>('app.change'),
+                text: this.i18nService.translate<string>(
+                  'app.change',
+                ) as string,
                 visuallyHiddenText: row.key.text,
               },
             ],

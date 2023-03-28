@@ -12,7 +12,7 @@ export class RegulationTypesCheckboxPresenter {
     return Object.values(RegulationType).map((regulationType) => ({
       text: this.i18nService.translate<string>(
         `professions.regulationTypes.${regulationType}.name`,
-      ),
+      ) as string,
       value: regulationType,
       checked: this.checkedRegulationTypes.includes(regulationType),
     }));

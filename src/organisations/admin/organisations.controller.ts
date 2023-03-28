@@ -239,12 +239,12 @@ export class OrganisationsController {
 
     const messageTitle = this.i18nService.translate<string>(
       `organisations.admin.${action}.confirmation.heading`,
-    );
+    ) as string;
 
     const messageBody = this.i18nService.translate<string>(
       `organisations.admin.${action}.confirmation.body`,
       { args: { name: escape(version.organisation.name) } },
-    );
+    ) as string;
 
     req.flash('info', flashMessage(messageTitle, messageBody));
 

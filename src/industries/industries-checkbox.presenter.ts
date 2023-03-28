@@ -26,7 +26,7 @@ export class IndustriesCheckboxPresenter {
     }
 
     return industries.map((industry) => ({
-      text: this.i18nService.translate<string>(industry.name),
+      text: this.i18nService.translate<string>(industry.name) as string,
       value: industry.id,
       checked: !!this.checkedIndustries.find(
         (checkedIndustry) => checkedIndustry.id === industry.id,

@@ -84,14 +84,14 @@ export class OrganisationPublicationController {
 
     const messageTitle = this.i18nService.translate<string>(
       'organisations.admin.publish.confirmation.heading',
-    );
+    ) as string;
 
     const messageBody = this.i18nService.translate<string>(
       confirmed
         ? 'organisations.admin.publish.confirmation.body'
         : 'organisations.admin.publish.confirmation.bodyNew',
       { args: { name: escape(version.organisation.name) } },
-    );
+    ) as string;
 
     req.flash('success', flashMessage(messageTitle, messageBody));
 
