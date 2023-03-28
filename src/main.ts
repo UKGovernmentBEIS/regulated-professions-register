@@ -51,6 +51,7 @@ async function bootstrap() {
         return new ValidationFailedError(validationErrors);
       },
       skipUndefinedProperties: true,
+      forbidUnknownValues: false,
     }),
   );
 
