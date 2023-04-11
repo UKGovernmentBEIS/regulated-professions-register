@@ -10,7 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 
-## [release-026] - 2023-xx-xx
+## [release-026] - 2023-04-11
 
 ### Added
 
