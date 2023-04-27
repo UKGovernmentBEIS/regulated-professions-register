@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
+- Add route resource to redirect root domain
+
 ### Changed
 
 ## [release-026] - 2023-04-11
