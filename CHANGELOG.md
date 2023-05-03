@@ -4,7 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [unreleased]
+## [unreleased] - TBD
+
+### Added
+
+### Changed
+
+## [release-027] - 2023-05-03
 
 ### Added
 
@@ -475,7 +481,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fix links in error messages when adding a new profession
 - Make validation errors more human readable
 
-[unreleased]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-026...HEAD
+[unreleased]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-027...HEAD
+[release-027]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-026...release-027
 [release-026]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-025...release-026
 [release-025]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-024...release-025
 [release-024]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release023...release-024
