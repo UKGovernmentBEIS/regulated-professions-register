@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 
 - Changed "Alternate name" to "Alternative name"
+- New CDN route resource added to deployment
 
 ## [release-027] - 2023-05-03
 
