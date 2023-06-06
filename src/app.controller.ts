@@ -50,7 +50,7 @@ export class AppController {
     // do nothing.
   }
 
-  @Get('/privacy-policy')
+  @Get('/privacy-notice')
   @Render('pages/privacy-policy')
   privacyPolicy() {
     // do nothing.
