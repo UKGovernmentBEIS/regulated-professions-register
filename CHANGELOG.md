@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 
+- Update references to BEIS to DBT in confirmation, accessibility, and i18n
 - Update privacy notice
 
 ## [release-028] - 2023-05-11
