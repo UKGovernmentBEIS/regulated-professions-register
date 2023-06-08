@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 - Update references to BEIS to DBT in confirmation, accessibility, and i18n
 - Update privacy notice
+- Re-enable decision data for non-service owner roles in production
 
 ## [release-028] - 2023-05-11
 
