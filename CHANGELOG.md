@@ -8,11 +8,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
+- Add link to Licence Finder to home page
+
 ### Changed
 
 - Update references to BEIS to DBT in confirmation, accessibility, and i18n
 - Update privacy notice
 - Re-enable decision data for non-service owner roles in production
+- Change licence finder text wording
 
 ## [release-028] - 2023-05-11
 
