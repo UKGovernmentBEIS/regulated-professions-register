@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Update privacy notice
 - Re-enable decision data for non-service owner roles in production
 - Change licence finder text wording
+- Change link wording on home page
 
 ## [release-028] - 2023-05-11
 
