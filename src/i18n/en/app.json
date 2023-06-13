@@ -49,11 +49,11 @@
       "useThisService": {
         "heading": "You can use the Regulated Professions Register (RPR) service to: ",
         "checkProfessions": {
-          "text": "search a list of regulated professions and find out what qualifications or experience you may need to work",
+          "text": "search a list of regulated professions and find out what qualifications or experience you may need to work in the UK",
           "link": "/professions/search"
         },
         "findContactDetails": {
-          "text": "find contact details for the regulators of regulated profession in the UK",
+          "text": "find contact details for the regulators of regulated professions in the UK",
           "link": "/regulatory-authorities/search"
         }
       },
