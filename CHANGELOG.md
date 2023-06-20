@@ -10,6 +10,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 
+- Update reference to BEIS in subject line of invite email
+
 ## [release-029] - 2023-06-13
 
 ### Added
