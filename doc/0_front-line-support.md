@@ -8,6 +8,8 @@ The following links provide information on how to perform common tasks that migh
 - [How to access a live console](./accessing-a-live-console.md)
 - [How to generate migrations](./generate-migrations.md)
 - [How to create a new user](./creating-users.md)
+- [How to connect to the databse](./connect-to-database.md)
+- [How to add / remove basic auth](./add-remove-basic-auth.md)
 
 ## Other common development tasks
 
