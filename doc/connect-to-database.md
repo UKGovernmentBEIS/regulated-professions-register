@@ -24,12 +24,14 @@ You must have the `conduit` cloudfoundry plugin installed. To install this, run 
 
 2. Use conduit to connect to desired database service
 
-   The below will connect to the production dabase in a read only capacity.    
+   The below will connect to the production dabase in a read only capacity.
+
    ```bash
    $ cf conduit beis-rpr-prod-postgres -c '{"read_only": true}' -- psql
    ```
 
    In order to connect in a write capacity, remove the `-c` flag:
+
    ```bash
    $ cf conduit beis-rpr-prod-postgres -- psql
    ```

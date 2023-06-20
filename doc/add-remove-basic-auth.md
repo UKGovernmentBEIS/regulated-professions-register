@@ -3,6 +3,7 @@
 The staging environment is currently locked behind basic authentiation. This is for if you wish to remove, or re-add this.
 
 ## Prerequisites
+
 You must have an account that has been invited to the Government Platform as a Service (GPaaS) account. Developers from the product team should be able to invite you.
 
 You must have have been given 'Space developer' access to the intended space, for example "prod".
@@ -44,8 +45,9 @@ You must have a GitHub login with rights to modify the [action secrets](https://
 ## Apply credentials
 
 There are two ways to apply credentials:
-* As part of a release
-* Using the `cf` CLI - **NOTE: This will require a short outage**
+
+- As part of a release
+- Using the `cf` CLI - **NOTE: This will require a short outage**
 
 There is one step required for both methods
 
