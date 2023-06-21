@@ -1,6 +1,7 @@
 {
   "name": "Regulated Professions Register",
   "superadmin": "You are a superadmin",
+  "govuk-url": "https://www.gov.uk/",
   "back": "Back",
   "backToSearch": "Back to search results",
   "continue": "Continue",

@@ -12,7 +12,7 @@
 {% block header %}
   {{
     govukHeader({
-      homepageUrl: "/",
+      homepageUrl: ("app.govuk-url" | t),
       serviceName: ("app.name" | t),
       serviceUrl: "/"
     })
