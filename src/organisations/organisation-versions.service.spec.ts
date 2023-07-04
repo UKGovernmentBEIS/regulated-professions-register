@@ -197,6 +197,7 @@ describe('OrganisationVersionsService', () => {
         user: user,
         created_at: undefined,
         updated_at: undefined,
+        status: undefined,
         organisation: version.organisation,
       });
     });
