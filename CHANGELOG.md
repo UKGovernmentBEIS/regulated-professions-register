@@ -10,6 +10,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 
+- Prevent duplication of live versions of organisation when editing
+
 ## [release-030] - 22/06/2023
 
 ### Added
