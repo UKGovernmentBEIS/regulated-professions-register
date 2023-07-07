@@ -23,6 +23,7 @@ export default Factory.define<DecisionDataset>(({ sequence }) => ({
             no: 2,
             yesAfterComp: 3,
             noAfterComp: 4,
+            noOtherConditions: 5,
           },
         },
       ],

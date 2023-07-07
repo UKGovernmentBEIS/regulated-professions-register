@@ -123,14 +123,16 @@
         "yes": "Accepted - qualifications recognised",
         "no": "Not accepted - qualifications not recognised",
         "yesAfterComp": "Accepted - additional conditions met",
-        "noAfterComp": "Not accepted - additional conditions not met"
+        "noAfterComp": "Not accepted - additional conditions not met",
+        "noOtherConditions": "Not accepted - other conditions not met"
       },
       "labels": {
         "country": "Country of qualification (route {route}, country {country})",
         "yes": "Accepted - qualifications recognised (route {route}, country {country})",
         "no": "Not accepted - qualifications not recognised (route {route}, country {country})",
         "yesAfterComp": "Accepted - additional conditions met (route {route}, country {country})",
-        "noAfterComp": "Not accepted - additional conditions not met (route {route}, country {country})"
+        "noAfterComp": "Not accepted - additional conditions not met (route {route}, country {country})",
+        "noOtherConditions": "Not accepted - other conditions not met (route {route}, country {country})"
       },
       "confirmation": {
         "heading": "Are you sure you want to edit the following decision data?",
@@ -170,6 +172,7 @@
       "no": "Not accepted - qualifications not recognised",
       "yesAfterComp": "Accepted - additional conditions met",
       "noAfterComp": "Not accepted - additional conditions not met",
+      "noOtherConditions": "Not accepted - other conditions not met",
       "total": "Total"
     }
   },
@@ -180,6 +183,7 @@
       "no": "Not accepted - qualifications not recognised",
       "yesAfterComp": "Accepted - additional conditions met",
       "noAfterComp": "Not accepted - additional conditions not met",
+      "noOtherConditions": "Not accepted - other conditions not met",
       "total": "Total"
     }
   },
@@ -195,7 +199,8 @@
       "yes": "Accepted - qualifications recognised",
       "no": "Not accepted - qualifications not recognised",
       "yesAfterComp": "Accepted - additional conditions met",
-      "noAfterComp": "Not accepted - additional conditions not met"
+      "noAfterComp": "Not accepted - additional conditions not met",
+      "noOtherConditions": "Not accepted - other conditions not met"
     },
     "status": {
       "live": "Published",
