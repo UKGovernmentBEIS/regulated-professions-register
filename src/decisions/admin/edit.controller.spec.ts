@@ -44,6 +44,7 @@ const mockRouteTemplates: RouteTemplate[] = [
           no: '8',
           yesAfterComp: '11',
           noAfterComp: '2',
+          noOtherConditions: '1',
         },
       },
     ],
@@ -353,6 +354,7 @@ describe('EditController', () => {
                     no: null,
                     yesAfterComp: null,
                     noAfterComp: null,
+                    noOtherConditions: null,
                   },
                 },
               ],
@@ -386,6 +388,7 @@ describe('EditController', () => {
             noes: [['5']],
             yesAfterComps: [['4']],
             noAfterComps: [['7']],
+            noOtherConditions: [['2']],
             action: 'publish',
           };
 
@@ -400,6 +403,7 @@ describe('EditController', () => {
                     no: 5,
                     yesAfterComp: 5,
                     noAfterComp: 7,
+                    noOtherConditions: 3,
                   },
                 },
               ],
@@ -505,6 +509,7 @@ describe('EditController', () => {
             noes: [['5']],
             yesAfterComps: [['4']],
             noAfterComps: [['7']],
+            noOtherConditions: [['2']],
             action: 'submit',
           };
 
@@ -519,6 +524,7 @@ describe('EditController', () => {
                     no: 5,
                     yesAfterComp: 5,
                     noAfterComp: 7,
+                    noOtherConditions: 3,
                   },
                 },
               ],
@@ -619,6 +625,7 @@ describe('EditController', () => {
             noes: [['8']],
             yesAfterComps: [['1']],
             noAfterComps: [['2']],
+            noOtherConditions: [['4']],
             action: 'save',
           };
 
@@ -633,6 +640,7 @@ describe('EditController', () => {
                     no: 8,
                     yesAfterComp: 1,
                     noAfterComp: 2,
+                    noOtherConditions: 3,
                   },
                 },
               ],
@@ -739,6 +747,7 @@ describe('EditController', () => {
             noes: [['5']],
             yesAfterComps: [['']],
             noAfterComps: [['9']],
+            noOtherConditions: [['2']],
             action: 'addCountry:1',
           };
 
@@ -753,6 +762,7 @@ describe('EditController', () => {
                     no: 5,
                     yesAfterComp: null,
                     noAfterComp: 9,
+                    noOtherConditions: 3,
                   },
                 },
               ],
@@ -856,6 +866,7 @@ describe('EditController', () => {
               yesAfterComps: [['1'], ['1'], ['1']],
               noes: [['1'], ['1'], ['1']],
               noAfterComps: [['1'], ['1'], ['1']],
+              noOtherConditions: [['1'], ['1'], ['1']],
               action,
             };
 
@@ -870,6 +881,7 @@ describe('EditController', () => {
                       no: 5,
                       yesAfterComp: null,
                       noAfterComp: 9,
+                      noOtherConditions: 9,
                     },
                   },
                 ],

@@ -57,6 +57,7 @@ export class DecisionsCsvWriter {
         decisionValueToString(country.decisions.yesAfterComp),
         decisionValueToString(country.decisions.no),
         decisionValueToString(country.decisions.noAfterComp),
+        decisionValueToString(country.decisions.noOtherConditions),
       ]);
     });
   }
@@ -75,6 +76,7 @@ export class DecisionsCsvWriter {
         'decisions.csv.heading.yesAfterComp',
         'decisions.csv.heading.no',
         'decisions.csv.heading.noAfterComp',
+        'decisions.csv.heading.noOtherConditions',
       ].map((id) => this.i18nService.translate<string>(id)),
     );
   }

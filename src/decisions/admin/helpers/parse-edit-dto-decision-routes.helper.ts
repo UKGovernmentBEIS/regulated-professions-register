@@ -28,6 +28,7 @@ export function parseEditDtoDecisionRoutes(editDto: EditDto): DecisionRoute[] {
     const noes = editDto.noes?.[routeIndex] || [];
     const yesAfterComps = editDto.yesAfterComps?.[routeIndex] || [];
     const noAfterComps = editDto.noAfterComps?.[routeIndex] || [];
+    const noOtherConditions = editDto.noOtherConditions?.[routeIndex] || [];
 
     const countriesCount = countries.length;
 
@@ -42,7 +43,8 @@ export function parseEditDtoDecisionRoutes(editDto: EditDto): DecisionRoute[] {
         !yeses[countryIndex] &&
         !noes[countryIndex] &&
         !yesAfterComps[countryIndex] &&
-        !noAfterComps[countryIndex];
+        !noAfterComps[countryIndex] &&
+        !noOtherConditions[countryIndex];
 
       const country: DecisionCountry = {
         code: countries[countryIndex]
@@ -53,6 +55,10 @@ export function parseEditDtoDecisionRoutes(editDto: EditDto): DecisionRoute[] {
           no: parseDecisionValue(noes[countryIndex], !empty),
           yesAfterComp: parseDecisionValue(yesAfterComps[countryIndex], !empty),
           noAfterComp: parseDecisionValue(noAfterComps[countryIndex], !empty),
+          noOtherConditions: parseDecisionValue(
+            noOtherConditions[countryIndex],
+            !empty,
+          ),
         },
       };
 
