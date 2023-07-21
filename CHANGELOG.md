@@ -532,7 +532,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 [unreleased]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-032...HEAD
 [release-032]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-031...release-032
-[release-031]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-030...031
+[release-031]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-030...release-031
 [release-030]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-029...release-030
 [release-029]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-028...release-029
 [release-028]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-027...release-028
