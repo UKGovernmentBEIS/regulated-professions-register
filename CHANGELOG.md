@@ -10,6 +10,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 
+- Update decision data guidance page
+
 ## [release-032] - 25/07/2023
 
 ### Added
