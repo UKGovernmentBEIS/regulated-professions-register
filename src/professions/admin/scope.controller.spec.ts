@@ -92,13 +92,13 @@ describe('ScopeController', () => {
             coversUK: null,
             industriesCheckboxItems: [
               {
-                text: translationOf('industries.health'),
-                value: 'health-uuid',
+                text: translationOf('industries.constructionAndEngineering'),
+                value: 'construction-uuid',
                 checked: false,
               },
               {
-                text: translationOf('industries.constructionAndEngineering'),
-                value: 'construction-uuid',
+                text: translationOf('industries.health'),
+                value: 'health-uuid',
                 checked: false,
               },
             ],
@@ -117,6 +117,11 @@ describe('ScopeController', () => {
                   checked: false,
                 },
                 {
+                  text: translationOf('nations.northernIreland'),
+                  value: 'GB-NIR',
+                  checked: false,
+                },
+                {
                   text: translationOf('nations.scotland'),
                   value: 'GB-SCT',
                   checked: false,
@@ -124,11 +129,6 @@ describe('ScopeController', () => {
                 {
                   text: translationOf('nations.wales'),
                   value: 'GB-WLS',
-                  checked: false,
-                },
-                {
-                  text: translationOf('nations.northernIreland'),
-                  value: 'GB-NIR',
                   checked: false,
                 },
               ],
@@ -179,14 +179,14 @@ describe('ScopeController', () => {
             coversUK: false,
             industriesCheckboxItems: [
               {
-                text: translationOf('industries.health'),
-                value: 'health-uuid',
-                checked: true,
-              },
-              {
                 text: translationOf('industries.constructionAndEngineering'),
                 value: 'construction-uuid',
                 checked: false,
+              },
+              {
+                text: translationOf('industries.health'),
+                value: 'health-uuid',
+                checked: true,
               },
             ],
             nationsCheckboxArgs: {
@@ -204,6 +204,11 @@ describe('ScopeController', () => {
                   checked: true,
                 },
                 {
+                  text: translationOf('nations.northernIreland'),
+                  value: 'GB-NIR',
+                  checked: false,
+                },
+                {
                   text: translationOf('nations.scotland'),
                   value: 'GB-SCT',
                   checked: true,
@@ -211,11 +216,6 @@ describe('ScopeController', () => {
                 {
                   text: translationOf('nations.wales'),
                   value: 'GB-WLS',
-                  checked: false,
-                },
-                {
-                  text: translationOf('nations.northernIreland'),
-                  value: 'GB-NIR',
                   checked: false,
                 },
               ],

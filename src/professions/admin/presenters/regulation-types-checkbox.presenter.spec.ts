@@ -15,9 +15,9 @@ describe('RegulationTypesCheckboxPresenter', () => {
         expect(presenter.checkboxItems()).toEqual([
           {
             text: translationOf(
-              `professions.regulationTypes.${RegulationType.Licensing}.name`,
+              `professions.regulationTypes.${RegulationType.Accreditation}.name`,
             ),
-            value: RegulationType.Licensing,
+            value: RegulationType.Accreditation,
             checked: false,
           },
           {
@@ -29,9 +29,9 @@ describe('RegulationTypesCheckboxPresenter', () => {
           },
           {
             text: translationOf(
-              `professions.regulationTypes.${RegulationType.Accreditation}.name`,
+              `professions.regulationTypes.${RegulationType.Licensing}.name`,
             ),
-            value: RegulationType.Accreditation,
+            value: RegulationType.Licensing,
             checked: false,
           },
         ]);
@@ -48,10 +48,10 @@ describe('RegulationTypesCheckboxPresenter', () => {
         expect(presenter.checkboxItems()).toEqual([
           {
             text: translationOf(
-              `professions.regulationTypes.${RegulationType.Licensing}.name`,
+              `professions.regulationTypes.${RegulationType.Accreditation}.name`,
             ),
-            value: RegulationType.Licensing,
-            checked: false,
+            value: RegulationType.Accreditation,
+            checked: true,
           },
           {
             text: translationOf(
@@ -62,10 +62,10 @@ describe('RegulationTypesCheckboxPresenter', () => {
           },
           {
             text: translationOf(
-              `professions.regulationTypes.${RegulationType.Accreditation}.name`,
+              `professions.regulationTypes.${RegulationType.Licensing}.name`,
             ),
-            value: RegulationType.Accreditation,
-            checked: true,
+            value: RegulationType.Licensing,
+            checked: false,
           },
         ]);
       });
