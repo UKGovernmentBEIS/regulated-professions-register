@@ -11,6 +11,7 @@ describe('DecisionDataValidator', () => {
         yesAfterComps: [['1'], ['1']],
         noes: [['1'], ['1']],
         noAfterComps: [['1'], ['1']],
+        noOtherConditions: [['1'], ['1']],
         action: 'save',
       };
 
@@ -30,6 +31,7 @@ describe('DecisionDataValidator', () => {
         yesAfterComps: [['1'], ['1'], ['1']],
         noes: [['1'], ['1'], ['1']],
         noAfterComps: [['1'], ['1'], ['1']],
+        noOtherConditions: [['1'], ['1', '1']],
         action: 'save',
       };
 
@@ -62,6 +64,7 @@ describe('DecisionDataValidator', () => {
         yesAfterComps: [['1'], ['1'], ['1']],
         noes: [['1'], ['1'], ['1']],
         noAfterComps: [['1'], ['1'], ['1']],
+        noOtherConditions: [['1'], ['1', '1']],
         action: 'save',
       };
 
@@ -88,6 +91,7 @@ describe('DecisionDataValidator', () => {
         yesAfterComps: [['1', '1'], ['1']],
         noes: [['1'], ['1', '1']],
         noAfterComps: [['1'], ['1', '1']],
+        noOtherConditions: [['1'], ['1', '1']],
         action: 'save',
       };
 
@@ -120,6 +124,7 @@ describe('DecisionDataValidator', () => {
         yesAfterComps: [['1', '1'], ['1']],
         noes: [['1'], ['1', '1']],
         noAfterComps: [['1'], ['1', '1']],
+        noOtherConditions: [['1'], ['1', '1']],
         action: 'save',
       };
 

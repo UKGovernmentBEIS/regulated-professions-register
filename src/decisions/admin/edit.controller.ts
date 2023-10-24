@@ -45,6 +45,7 @@ const emptyCountry = {
     no: null,
     yesAfterComp: null,
     noAfterComp: null,
+    noOtherConditions: null,
   },
 };
 

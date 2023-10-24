@@ -49,6 +49,7 @@ describe('DecisionsCsvWriter', () => {
                     no: 7,
                     yesAfterComp: 9,
                     noAfterComp: 10,
+                    noOtherConditions: 1,
                   },
                 },
               ],
@@ -75,6 +76,7 @@ describe('DecisionsCsvWriter', () => {
                     no: 1,
                     yesAfterComp: 6,
                     noAfterComp: null,
+                    noOtherConditions: 1,
                   },
                 },
               ],
@@ -89,6 +91,7 @@ describe('DecisionsCsvWriter', () => {
                     no: 10,
                     yesAfterComp: 7,
                     noAfterComp: 5,
+                    noOtherConditions: 1,
                   },
                 },
               ],
@@ -115,6 +118,7 @@ describe('DecisionsCsvWriter', () => {
                     no: 7,
                     yesAfterComp: 3,
                     noAfterComp: 1,
+                    noOtherConditions: 1,
                   },
                 },
                 {
@@ -124,6 +128,7 @@ describe('DecisionsCsvWriter', () => {
                     no: null,
                     yesAfterComp: 3,
                     noAfterComp: 5,
+                    noOtherConditions: 1,
                   },
                 },
               ],
@@ -162,6 +167,7 @@ describe('DecisionsCsvWriter', () => {
         translationOf('decisions.csv.heading.yesAfterComp'),
         translationOf('decisions.csv.heading.no'),
         translationOf('decisions.csv.heading.noAfterComp'),
+        translationOf('decisions.csv.heading.noOtherConditions'),
       ]);
 
       expect(stringifierMock.write).toHaveBeenNthCalledWith(2, [
@@ -176,6 +182,7 @@ describe('DecisionsCsvWriter', () => {
         '9',
         '7',
         '10',
+        '1',
       ]);
 
       expect(stringifierMock.write).toHaveBeenNthCalledWith(3, [
@@ -190,6 +197,7 @@ describe('DecisionsCsvWriter', () => {
         '6',
         '1',
         '',
+        '1',
       ]);
 
       expect(stringifierMock.write).toHaveBeenNthCalledWith(4, [
@@ -204,6 +212,7 @@ describe('DecisionsCsvWriter', () => {
         '7',
         '10',
         '5',
+        '1',
       ]);
 
       expect(stringifierMock.write).toHaveBeenNthCalledWith(5, [
@@ -217,6 +226,7 @@ describe('DecisionsCsvWriter', () => {
         '7',
         '3',
         '7',
+        '1',
         '1',
       ]);
 
@@ -232,6 +242,7 @@ describe('DecisionsCsvWriter', () => {
         '3',
         '',
         '5',
+        '1',
       ]);
 
       expect(stringifierMock.pipe).toHaveBeenCalledWith(response);

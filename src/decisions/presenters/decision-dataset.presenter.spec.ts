@@ -35,6 +35,7 @@ describe('DecisionDatasetPresenter', () => {
                   no: 5,
                   yesAfterComp: 6,
                   noAfterComp: 7,
+                  noOtherConditions: 2,
                 },
               },
               {
@@ -44,6 +45,7 @@ describe('DecisionDatasetPresenter', () => {
                   no: spotCheckValue,
                   yesAfterComp: 0,
                   noAfterComp: 4,
+                  noOtherConditions: 1,
                 },
               },
             ],
@@ -58,6 +60,7 @@ describe('DecisionDatasetPresenter', () => {
                   no: 3,
                   yesAfterComp: 11,
                   noAfterComp: 2,
+                  noOtherConditions: 1,
                 },
               },
             ],
@@ -89,10 +92,14 @@ describe('DecisionDatasetPresenter', () => {
           text: translationOf('decisions.show.tableHeading.noAfterComp'),
         },
         {
+          text: translationOf('decisions.show.tableHeading.noOtherConditions'),
+        },
+        {
           text: translationOf('decisions.show.tableHeading.total'),
         },
       ];
 
+      // TODO: update test results below
       const expected: Table[] = [
         {
           caption: 'Example route 1',
@@ -117,7 +124,10 @@ describe('DecisionDatasetPresenter', () => {
                 text: '7',
               },
               {
-                text: '22',
+                text: '2',
+              },
+              {
+                text: '24',
               },
             ],
             [
@@ -137,7 +147,10 @@ describe('DecisionDatasetPresenter', () => {
                 text: '4',
               },
               {
-                text: '17',
+                text: '1',
+              },
+              {
+                text: '18',
               },
             ],
           ],
@@ -165,7 +178,10 @@ describe('DecisionDatasetPresenter', () => {
                 text: '2',
               },
               {
-                text: '17',
+                text: '1',
+              },
+              {
+                text: '18',
               },
             ],
           ],
@@ -179,8 +195,8 @@ describe('DecisionDatasetPresenter', () => {
       expect(Country.find).toHaveBeenCalledTimes(3);
       expect(Country.find).toHaveBeenNthCalledWith(1, spotCheckCountryCode);
 
-      expect(decisionValueToStringSpy).toHaveBeenCalledTimes(12);
-      expect(decisionValueToStringSpy).nthCalledWith(7, spotCheckValue);
+      expect(decisionValueToStringSpy).toHaveBeenCalledTimes(15);
+      expect(decisionValueToStringSpy).nthCalledWith(8, spotCheckValue);
     });
 
     describe('changedBy', () => {
