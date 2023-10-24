@@ -106,6 +106,7 @@ describe('Editing a decision dataset', () => {
             cy.get('input').eq(1).clear().type('4');
             cy.get('input').eq(2).clear().type('11');
             cy.get('input').eq(3).clear().type('9');
+            cy.get('input').eq(4).clear().type('2');
           });
         cy.get('tbody tr')
           .eq(1)
@@ -117,6 +118,7 @@ describe('Editing a decision dataset', () => {
             cy.get('input').eq(1).type('7');
             cy.get('input').eq(2).type('12');
             cy.get('input').eq(3).type('2');
+            cy.get('input').eq(4).type('4');
           });
       });
 
@@ -159,6 +161,7 @@ describe('Editing a decision dataset', () => {
             cy.get('input').eq(1).type('4');
             cy.get('input').eq(2).type('9');
             cy.get('input').eq(3).type('0');
+            cy.get('input').eq(4).type('2');
           });
 
         cy.translate('decisions.admin.buttons.addCountry').then(
@@ -181,6 +184,7 @@ describe('Editing a decision dataset', () => {
             cy.get('input').eq(1).type('1');
             cy.get('input').eq(2).type('4');
             cy.get('input').eq(3).type('9');
+            cy.get('input').eq(4).type('0');
           });
       });
 
@@ -210,10 +214,11 @@ describe('Editing a decision dataset', () => {
               'decisions.show.tableHeading.yesAfterComp',
               'decisions.show.tableHeading.no',
               'decisions.show.tableHeading.noAfterComp',
+              'decisions.show.tableHeading.noOtherConditions',
             ],
             [
-              ['Morocco', '11', '4', '11', '9'],
-              ['Japan', '5', '7', '12', '2'],
+              ['Morocco', '11', '4', '11', '9', '2'],
+              ['Japan', '5', '7', '12', '2', '4'],
             ],
           );
         });
@@ -230,10 +235,11 @@ describe('Editing a decision dataset', () => {
               'decisions.show.tableHeading.yesAfterComp',
               'decisions.show.tableHeading.no',
               'decisions.show.tableHeading.noAfterComp',
+              'decisions.show.tableHeading.noOtherConditions',
             ],
             [
-              ['Poland', '4', '4', '9', '0'],
-              ['Italy', '8', '1', '4', '9'],
+              ['Poland', '4', '4', '9', '0', '2'],
+              ['Italy', '8', '1', '4', '9', '0'],
             ],
           );
         });

@@ -5,5 +5,6 @@ export class EditDto {
   noes: string[][];
   yesAfterComps: string[][];
   noAfterComps: string[][];
+  noOtherConditions: string[][];
   action: string;
 }
