@@ -54,6 +54,7 @@ describe('DecisionDatasetEditPresenter', () => {
                 no: 5,
                 yesAfterComp: spotCheckValue,
                 noAfterComp: 7,
+                noOtherConditions: 1,
               },
             },
             {
@@ -63,6 +64,7 @@ describe('DecisionDatasetEditPresenter', () => {
                 no: 8,
                 yesAfterComp: 0,
                 noAfterComp: 4,
+                noOtherConditions: 1,
               },
             },
           ],
@@ -77,6 +79,7 @@ describe('DecisionDatasetEditPresenter', () => {
                 no: 3,
                 yesAfterComp: 11,
                 noAfterComp: 2,
+                noOtherConditions: 1,
               },
             },
           ],
@@ -94,6 +97,7 @@ describe('DecisionDatasetEditPresenter', () => {
                 no: '5',
                 yesAfterComp: '6',
                 noAfterComp: '7',
+                noOtherConditions: '1',
               },
             },
             {
@@ -103,6 +107,7 @@ describe('DecisionDatasetEditPresenter', () => {
                 no: '8',
                 yesAfterComp: '0',
                 noAfterComp: '4',
+                noOtherConditions: '1',
               },
             },
           ],
@@ -117,6 +122,7 @@ describe('DecisionDatasetEditPresenter', () => {
                 no: '3',
                 yesAfterComp: '11',
                 noAfterComp: '2',
+                noOtherConditions: '1',
               },
             },
           ],
@@ -146,7 +152,7 @@ describe('DecisionDatasetEditPresenter', () => {
       expect(Country.find).toHaveBeenCalledTimes(2);
       expect(Country.find).toHaveBeenNthCalledWith(1, spotCheckCountryCode);
 
-      expect(decisionValueToStringSpy).toHaveBeenCalledTimes(12);
+      expect(decisionValueToStringSpy).toHaveBeenCalledTimes(15);
       expect(decisionValueToStringSpy).nthCalledWith(3, spotCheckValue);
     });
   });
