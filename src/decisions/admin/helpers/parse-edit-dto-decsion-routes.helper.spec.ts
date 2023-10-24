@@ -52,6 +52,11 @@ describe('parseEditDtoDecisionRoutes', () => {
           ['4', '8'],
           ['', ''],
         ],
+        noOtherConditions: [
+          ['1', '3'],
+          ['4', '8'],
+          ['', ''],
+        ],
         action: undefined,
       };
 
@@ -66,6 +71,7 @@ describe('parseEditDtoDecisionRoutes', () => {
                 no: 0,
                 yesAfterComp: 5,
                 noAfterComp: 2,
+                noOtherConditions: 1,
               },
             },
             {
@@ -75,6 +81,7 @@ describe('parseEditDtoDecisionRoutes', () => {
                 no: 7,
                 yesAfterComp: 9,
                 noAfterComp: 3,
+                noOtherConditions: 3,
               },
             },
           ],
@@ -89,6 +96,7 @@ describe('parseEditDtoDecisionRoutes', () => {
                 no: 3,
                 yesAfterComp: 3,
                 noAfterComp: 4,
+                noOtherConditions: 4,
               },
             },
             {
@@ -98,6 +106,7 @@ describe('parseEditDtoDecisionRoutes', () => {
                 no: 4,
                 yesAfterComp: 0,
                 noAfterComp: 8,
+                noOtherConditions: 8,
               },
             },
           ],
@@ -112,6 +121,7 @@ describe('parseEditDtoDecisionRoutes', () => {
                 no: null,
                 yesAfterComp: null,
                 noAfterComp: null,
+                noOtherConditions: null,
               },
             },
             {
@@ -121,6 +131,7 @@ describe('parseEditDtoDecisionRoutes', () => {
                 no: null,
                 yesAfterComp: null,
                 noAfterComp: null,
+                noOtherConditions: null,
               },
             },
           ],
@@ -132,7 +143,7 @@ describe('parseEditDtoDecisionRoutes', () => {
       expect(Country.find).toHaveBeenCalledTimes(6);
       expect(Country.find).toHaveBeenNthCalledWith(3, spotCheckCountryCode);
 
-      expect(parseDecisionValueSpy).toHaveBeenCalledTimes(24);
+      expect(parseDecisionValueSpy).toHaveBeenCalledTimes(30);
       expect(parseDecisionValueSpy).toHaveBeenNthCalledWith(
         4,
         spotCheckValue,

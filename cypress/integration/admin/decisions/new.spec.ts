@@ -116,6 +116,7 @@ describe('Creating a decision dataset', () => {
       cy.get('input[name="noes[1][1]"]').type('9');
       cy.get('input[name="yesAfterComps[1][1]"]').type('8');
       cy.get('input[name="noAfterComps[1][1]"]').type('4');
+      cy.get('input[name="noOtherConditions[1][1]"]').type('2');
 
       cy.translate('decisions.admin.buttons.saveAsDraft').then((save) => {
         cy.get('button').contains(save).click();
@@ -130,8 +131,9 @@ describe('Creating a decision dataset', () => {
           'decisions.show.tableHeading.yesAfterComp',
           'decisions.show.tableHeading.no',
           'decisions.show.tableHeading.noAfterComp',
+          'decisions.show.tableHeading.noOtherConditions',
         ],
-        [['Japan', '3', '8', '9', '4']],
+        [['Japan', '3', '8', '9', '4', '2']],
       );
 
       cy.visitAndCheckAccessibility('/admin/decisions');
@@ -208,6 +210,7 @@ describe('Creating a decision dataset', () => {
       cy.get('input[name="noes[1][1]"]').type('9');
       cy.get('input[name="yesAfterComps[1][1]"]').type('8');
       cy.get('input[name="noAfterComps[1][1]"]').type('4');
+      cy.get('input[name="noOtherConditions[1][1]"]').type('2');
 
       cy.translate('decisions.admin.buttons.addRoute').then((addRoute) => {
         cy.get('button').contains(addRoute).click();
@@ -219,6 +222,7 @@ describe('Creating a decision dataset', () => {
       cy.get('input[name="noes[2][1]"]').type('9');
       cy.get('input[name="yesAfterComps[2][1]"]').type('8');
       cy.get('input[name="noAfterComps[2][1]"]').type('4');
+      cy.get('input[name="noOtherConditions[1][1]"]').type('2');
 
       cy.translate('decisions.admin.buttons.addRoute').then((addRoute) => {
         cy.get('button').contains(addRoute).click();
@@ -229,6 +233,7 @@ describe('Creating a decision dataset', () => {
       cy.get('input[name="noes[3][1]"]').type('9');
       cy.get('input[name="yesAfterComps[3][1]"]').type('8');
       cy.get('input[name="noAfterComps[3][1]"]').type('4');
+      cy.get('input[name="noOtherConditions[1][1]"]').type('2');
 
       cy.translate('decisions.admin.buttons.saveAsDraft').then((save) => {
         cy.get('button').contains(save).click();
@@ -309,6 +314,7 @@ describe('Creating a decision dataset', () => {
       cy.get('input[name="noes[1][1]"]').type('1');
       cy.get('input[name="yesAfterComps[1][1]"]').type('2');
       cy.get('input[name="noAfterComps[1][1]"]').type('3');
+      cy.get('input[name="noOtherConditions[1][1]"]').type('4');
 
       cy.translate('decisions.admin.buttons.saveAsDraft').then((save) => {
         cy.get('button').contains(save).click();
@@ -323,8 +329,9 @@ describe('Creating a decision dataset', () => {
           'decisions.show.tableHeading.yesAfterComp',
           'decisions.show.tableHeading.no',
           'decisions.show.tableHeading.noAfterComp',
+          'decisions.show.tableHeading.noOtherConditions',
         ],
-        [['Brazil', '8', '2', '1', '3']],
+        [['Brazil', '8', '2', '1', '3', '4']],
       );
 
       cy.visitAndCheckAccessibility('/admin/decisions');

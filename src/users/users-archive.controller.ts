@@ -44,7 +44,7 @@ export class UsersArchiveController {
   async delete(@Req() req, @Param('id') id): Promise<void> {
     const messageTitle = this.i18nService.translate<string>(
       'users.archive.confirmation.body',
-    );
+    ) as string;
     const user = await this.usersService.find(id);
 
     await this.auth0Service.deleteUser(user.externalIdentifier).performLater();

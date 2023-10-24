@@ -49,6 +49,7 @@ export class OrganisationVersionsService {
       user: user,
       created_at: undefined,
       updated_at: undefined,
+      status: undefined,
     } as OrganisationVersion;
 
     return this.save(newVersion);

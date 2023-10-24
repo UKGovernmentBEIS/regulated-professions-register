@@ -40,10 +40,11 @@ export class ListEntryPresenter {
     contents: DecisionDatasetsPresenterView,
   ): TableRow {
     return fields[contents]
-      .map((field) =>
-        i18nService.translate<string>(
-          `decisions.admin.dashboard.tableHeading.${field}`,
-        ),
+      .map(
+        (field) =>
+          i18nService.translate<string>(
+            `decisions.admin.dashboard.tableHeading.${field}`,
+          ) as string,
       )
       .map((text) => ({ text }));
   }

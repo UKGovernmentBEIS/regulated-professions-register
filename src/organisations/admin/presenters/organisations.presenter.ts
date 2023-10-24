@@ -89,16 +89,16 @@ export class OrganisationsPresenter {
 
     const caption =
       numberOfResults === 1
-        ? this.i18nService.translate<string>(
+        ? (this.i18nService.translate<string>(
             'organisations.search.foundSingular',
             { args: { count: numberOfResults } },
-          )
-        : this.i18nService.translate<string>(
+          ) as string)
+        : (this.i18nService.translate<string>(
             'organisations.search.foundPlural',
             {
               args: { count: numberOfResults },
             },
-          );
+          ) as string);
 
     return {
       caption,
@@ -111,10 +111,11 @@ export class OrganisationsPresenter {
 
   private headers(): TableRow {
     return fields
-      .map((field) =>
-        this.i18nService.translate<string>(
-          `organisations.admin.tableHeading.${field}`,
-        ),
+      .map(
+        (field) =>
+          this.i18nService.translate(
+            `organisations.admin.tableHeading.${field}`,
+          ) as string,
       )
       .map((text) => ({ text }));
   }

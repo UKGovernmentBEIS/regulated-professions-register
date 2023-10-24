@@ -34,7 +34,7 @@
         </li>
       {% endif %}
 
-      {% if 'viewDecisionData' in permissions and environment !== 'production' %}
+      {% if 'viewDecisionData' in permissions %}
         <li>
           {% if (user.serviceOwner) %}
             <a class="govuk-link" href="/admin/decisions">{{ "app.pages.admin.dashboard.editDecisionDataCentralAdmin" | t }}</a>

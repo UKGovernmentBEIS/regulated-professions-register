@@ -13,14 +13,14 @@ export class ServiceOwnerRadioButtonArgsPresenter {
         value: '1',
         text: this.i18nService.translate<string>(
           'users.form.label.serviceOwner.yes',
-        ),
+        ) as string,
         checked: this.serviceOwner === true,
       },
       {
         value: '0',
         text: this.i18nService.translate<string>(
           'users.form.label.serviceOwner.no',
-        ),
+        ) as string,
         checked: this.serviceOwner === false,
       },
     ];

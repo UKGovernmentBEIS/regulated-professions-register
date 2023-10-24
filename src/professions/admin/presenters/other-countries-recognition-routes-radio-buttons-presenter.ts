@@ -12,7 +12,7 @@ export class OtherCountriesRecognitionRoutesRadioButtonsPresenter {
     return Object.values(OtherCountriesRecognitionRoutes).map((route) => ({
       text: this.i18nService.translate<string>(
         `professions.form.label.qualifications.otherCountriesRecognition.routes.${route}`,
-      ),
+      ) as string,
       value: route,
       checked: this.selectedRecognitionRoute === route,
     }));

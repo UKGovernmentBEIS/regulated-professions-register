@@ -39,7 +39,7 @@ export class RoleRadioButtonsPresenter {
 
   radioButtonArgs(): RadioButtonArgs[] {
     return this.allRoles.map((role) => ({
-      text: this.i18nService.translate<string>(`users.roles.${role}`),
+      text: this.i18nService.translate<string>(`users.roles.${role}`) as string,
       value: role,
       checked: this.selectedRole === role,
       hint: { html: this.getHintHtml(role, this.serviceOwner) },

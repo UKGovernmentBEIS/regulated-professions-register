@@ -11,12 +11,12 @@ export class YesNoRadioButtonArgsPresenter {
     return [
       {
         value: '1',
-        text: this.i18nService.translate<string>('app.yes'),
+        text: this.i18nService.translate<string>('app.yes') as string,
         checked: this.yesOrNoValue === true,
       },
       {
         value: '0',
-        text: this.i18nService.translate<string>('app.no'),
+        text: this.i18nService.translate<string>('app.no') as string,
         checked: this.yesOrNoValue === false,
       },
     ];

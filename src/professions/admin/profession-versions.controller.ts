@@ -92,8 +92,8 @@ export class ProfessionVersionsController {
       this.i18nService,
     );
 
-    const industries = profession.industries.map((industry) =>
-      this.i18nService.translate<string>(industry.name),
+    const industries = profession.industries.map(
+      (industry) => this.i18nService.translate<string>(industry.name) as string,
     );
 
     const qualification = new QualificationPresenter(

@@ -20,32 +20,37 @@ export class DecisionDatasetPresenter {
       {
         text: this.i18nService.translate<string>(
           'decisions.show.tableHeading.country',
-        ),
+        ) as string,
       },
       {
         text: this.i18nService.translate<string>(
           'decisions.show.tableHeading.yes',
-        ),
+        ) as string,
       },
       {
         text: this.i18nService.translate<string>(
           'decisions.show.tableHeading.yesAfterComp',
-        ),
+        ) as string,
       },
       {
         text: this.i18nService.translate<string>(
           'decisions.show.tableHeading.no',
-        ),
+        ) as string,
       },
       {
         text: this.i18nService.translate<string>(
           'decisions.show.tableHeading.noAfterComp',
-        ),
+        ) as string,
+      },
+      {
+        text: this.i18nService.translate<string>(
+          'decisions.show.tableHeading.noOtherConditions',
+        ) as string,
       },
       {
         text: this.i18nService.translate<string>(
           'decisions.show.tableHeading.total',
-        ),
+        ) as string,
       },
     ];
 
@@ -73,6 +78,9 @@ export class DecisionDatasetPresenter {
             },
             {
               text: decisionValueToString(country.decisions.noAfterComp),
+            },
+            {
+              text: decisionValueToString(country.decisions.noOtherConditions),
             },
             {
               text: this.computeTotal(country.decisions).toString(),
@@ -107,6 +115,7 @@ export class DecisionDatasetPresenter {
     no: number;
     yesAfterComp: number;
     noAfterComp: number;
+    noOtherConditions: number;
   }): number {
     const yes = typeof decisions.yes === 'number' ? decisions.yes : 0;
     const no = typeof decisions.no === 'number' ? decisions.no : 0;
@@ -114,7 +123,11 @@ export class DecisionDatasetPresenter {
       typeof decisions.yesAfterComp === 'number' ? decisions.yesAfterComp : 0;
     const noAfterComp =
       typeof decisions.noAfterComp === 'number' ? decisions.noAfterComp : 0;
+    const noOtherConditions =
+      typeof decisions.noOtherConditions === 'number'
+        ? decisions.noOtherConditions
+        : 0;
 
-    return yes + no + yesAfterComp + noAfterComp;
+    return yes + no + yesAfterComp + noAfterComp + noOtherConditions;
   }
 }

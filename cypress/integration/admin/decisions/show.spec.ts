@@ -54,11 +54,12 @@ describe('Showing a decision dataset', () => {
               'decisions.show.tableHeading.yesAfterComp',
               'decisions.show.tableHeading.no',
               'decisions.show.tableHeading.noAfterComp',
+              'decisions.show.tableHeading.noOtherConditions',
               'decisions.show.tableHeading.total',
             ],
             [
-              ['Morocco', '6', '1', '4', '9', '20'],
-              ['Poland', '8', '1', '0', '7', '16'],
+              ['Morocco', '6', '1', '4', '9', '', '20'],
+              ['Poland', '8', '1', '0', '7', '', '16'],
             ],
           );
         });
@@ -76,11 +77,12 @@ describe('Showing a decision dataset', () => {
               'decisions.show.tableHeading.yesAfterComp',
               'decisions.show.tableHeading.no',
               'decisions.show.tableHeading.noAfterComp',
+              'decisions.show.tableHeading.noOtherConditions',
               'decisions.show.tableHeading.total',
             ],
             [
-              ['Germany', '1', '7', '2', '4', '14'],
-              ['Italy', '5', '1', '8', '3', '17'],
+              ['Germany', '1', '7', '2', '4', '', '14'],
+              ['Italy', '5', '1', '8', '3', '', '17'],
             ],
           );
         });

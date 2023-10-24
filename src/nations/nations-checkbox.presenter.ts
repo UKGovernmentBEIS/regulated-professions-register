@@ -30,7 +30,7 @@ export class NationsCheckboxPresenter {
       idPrefix: idPrefix,
       name: name,
       hint: {
-        text: this.i18nService.translate<string>(hintTranslation),
+        text: this.i18nService.translate<string>(hintTranslation) as string,
       },
       items: this.checkboxItems(),
     };

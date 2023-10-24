@@ -15,7 +15,7 @@ export class RegulatedAuthoritiesSelectPresenter {
   selectArgs(): SelectItemArgs[] {
     const options = [
       {
-        text: this.i18nService.translate<string>('app.pleaseSelect'),
+        text: this.i18nService.translate<string>('app.pleaseSelect') as string,
         value: '',
         selected: null,
       },
@@ -37,7 +37,7 @@ export class RegulatedAuthoritiesSelectPresenter {
   roleArgs(): SelectItemArgs[] {
     const options = [
       {
-        text: this.i18nService.translate<string>('app.pleaseSelect'),
+        text: this.i18nService.translate<string>('app.pleaseSelect') as string,
         value: '',
         selected: null,
       },
@@ -47,7 +47,7 @@ export class RegulatedAuthoritiesSelectPresenter {
       options.push({
         text: this.i18nService.translate<string>(
           `organisations.label.roles.${role}`,
-        ),
+        ) as string,
         value: role,
         selected: this.selectedRole ? this.selectedRole === role : false,
       });

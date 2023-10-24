@@ -9,6 +9,7 @@ export interface RouteTemplate {
       no: string;
       yesAfterComp: string;
       noAfterComp: string;
+      noOtherConditions: string;
     };
   }[];
 }

@@ -29,6 +29,7 @@ import {
   OrganisationsPresenterView,
 } from './presenters/organisations.presenter';
 
+import { getReferrer } from '../../common/utils';
 import { ReviewTemplate } from './interfaces/review-template.interface';
 import { BackLink } from '../../common/decorators/back-link.decorator';
 import { IndexTemplate } from './interfaces/index-template.interface';
@@ -142,7 +143,7 @@ export class OrganisationsController {
   @Render('admin/organisations/edit')
   @BackLink((request) =>
     request.query.source === 'page'
-      ? '/admin/organisations/:organisationId/versions/:versionId'
+      ? getReferrer(request)
       : '/admin/organisations/',
   )
   async edit(
@@ -239,12 +240,12 @@ export class OrganisationsController {
 
     const messageTitle = this.i18nService.translate<string>(
       `organisations.admin.${action}.confirmation.heading`,
-    );
+    ) as string;
 
     const messageBody = this.i18nService.translate<string>(
       `organisations.admin.${action}.confirmation.body`,
       { args: { name: escape(version.organisation.name) } },
-    );
+    ) as string;
 
     req.flash('info', flashMessage(messageTitle, messageBody));
 

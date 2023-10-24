@@ -86,11 +86,11 @@ export class PublicationController {
 
     const messageTitle = this.i18nService.translate<string>(
       'decisions.admin.publication.confirmation.heading',
-    );
+    ) as string;
 
     const messageBody = this.i18nService.translate<string>(
       'decisions.admin.publication.confirmation.body',
-    );
+    ) as string;
 
     request.flash('success', flashMessage(messageTitle, messageBody));
 
