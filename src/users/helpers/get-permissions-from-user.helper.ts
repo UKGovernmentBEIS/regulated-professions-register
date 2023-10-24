@@ -60,7 +60,7 @@ const permissions = {
       UserPermission.UploadDecisionData,
       UserPermission.SubmitDecisionData,
       UserPermission.DownloadDecisionData,
-      // UserPermission.ViewDecisionData,
+      UserPermission.ViewDecisionData,
     ],
     [Role.Editor]: [
       UserPermission.EditOrganisation,
@@ -70,7 +70,7 @@ const permissions = {
       UserPermission.UploadDecisionData,
       UserPermission.SubmitDecisionData,
       UserPermission.DownloadDecisionData,
-      // UserPermission.ViewDecisionData,
+      UserPermission.ViewDecisionData,
     ],
   },
 };

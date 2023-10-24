@@ -21,7 +21,7 @@ next_tag="release-$next_version"
 
 if grep -Eq "$next_tag" CHANGELOG.md; then
   echo "Are you sure you want to push the tag \`$next_tag\` to origin? This will deploy the latest code to production. (y/n)"
-  read -r
+  read -r REPLY
   if expr "$REPLY" : "^[Yy]$" > /dev/null; then
     git tag "$next_tag"
     git push origin "$next_tag"

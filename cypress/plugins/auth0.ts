@@ -32,14 +32,14 @@ const writePassword = async ({
 };
 
 const clickLogin = async ({ page }: { page: puppeteer.Page }) => {
-  await page.waitForSelector('button[type="submit"]', {
+  await page.waitForSelector('div:not([aria-hidden]) > button[type="submit"]', {
     visible: true,
     timeout: 5000,
   });
 
   const [response] = await Promise.all([
     page.waitForNavigation({ waitUntil: 'networkidle2' }),
-    page.click('button[type="submit"]'),
+    page.click('div:not([aria-hidden]) > button[type="submit"]'),
   ]);
   return response;
 };

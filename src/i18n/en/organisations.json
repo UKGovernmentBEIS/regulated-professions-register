@@ -93,7 +93,7 @@
     "form": {
       "label": {
         "name": "Name of the regulatory authority",
-        "alternateName": "Alternate name (optional)",
+        "alternateName": "Alternative name (optional)",
         "url": "Website",
         "address": "Address",
         "email": "Email",
@@ -110,7 +110,7 @@
           "long": "Enter a name shorter than 500 characters"
         },
         "alternateName": {
-          "long": "Enter an alternate name shorter than 500 characters"
+          "long": "Enter an alternative name shorter than 500 characters"
         },
         "address": {
           "empty": "Enter the address for the regulatory authority",
@@ -186,7 +186,7 @@
   },
   "label": {
     "name": "Name",
-    "alternateName": "Alternate name",
+    "alternateName": "Alternative name",
     "url": "Website",
     "address": "Address",
     "email": "Email",

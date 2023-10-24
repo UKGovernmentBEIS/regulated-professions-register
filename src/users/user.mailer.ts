@@ -14,7 +14,7 @@ export class UserMailer {
   async confirmation(user: User, link: string) {
     const email = user.email;
     const subject =
-      'Invitation to the BEIS regulated professions register service';
+      'Invitation to the DBT regulated professions register service';
     const templateID = process.env['NOTIFY_TEMPLATE_ID'];
     const body = nunjucks.render(
       path.resolve(__dirname, '../../views/mailers/confirmation.njk'),
