@@ -278,6 +278,11 @@
     "decisions": {
       "heading": "Recognition decision data",
       "year": "Year"
+    },
+    "licenceFinder": {
+      "heading": "Licence Finder",
+      "url": "https://www.gov.uk/licence-finder",
+      "body": "You may need licences and permits to carry out certain activities in the UK. These are called authorisations. Use the <a href=\"$t(professions.show.licenceFinder.url)\">licence finder</a> to find what you need."
     }
   },
   "admin": {

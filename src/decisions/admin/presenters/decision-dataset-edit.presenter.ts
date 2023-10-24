@@ -25,6 +25,9 @@ export class DecisionDatasetEditPresenter {
           no: decisionValueToString(country.decisions.no),
           yesAfterComp: decisionValueToString(country.decisions.yesAfterComp),
           noAfterComp: decisionValueToString(country.decisions.noAfterComp),
+          noOtherConditions: decisionValueToString(
+            country.decisions.noOtherConditions,
+          ),
         },
       })),
     }));
