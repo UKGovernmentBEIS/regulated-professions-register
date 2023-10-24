@@ -28,9 +28,10 @@ describe("Showing a profession's decision data", () => {
         'decisions.public.tableHeading.yesAfterComp',
         'decisions.public.tableHeading.no',
         'decisions.public.tableHeading.noAfterComp',
+        'decisions.public.tableHeading.noOtherConditions',
         'decisions.public.tableHeading.total',
       ],
-      [['15', '4', '13', '4', '36']],
+      [['15', '4', '13', '4', '4', '40']],
     );
 
     cy.translate('app.back').then((back) => {

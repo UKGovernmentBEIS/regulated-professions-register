@@ -33,7 +33,12 @@ export class DecisionDatasetsPresenter {
           const no = this.computeTotal(route, 'no');
           const yesAfterComp = this.computeTotal(route, 'yesAfterComp');
           const noAfterComp = this.computeTotal(route, 'noAfterComp');
-          const total = yes + no + yesAfterComp + noAfterComp;
+          const noOtherConditions = this.computeTotal(
+            route,
+            'noOtherConditions',
+          );
+          const total =
+            yes + no + yesAfterComp + noAfterComp + noOtherConditions;
 
           return {
             route: route.name,
@@ -41,6 +46,7 @@ export class DecisionDatasetsPresenter {
             no,
             yesAfterComp,
             noAfterComp,
+            noOtherConditions,
             total,
           };
         }),

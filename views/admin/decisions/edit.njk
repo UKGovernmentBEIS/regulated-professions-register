@@ -66,10 +66,11 @@
                 <thead class="govuk-table__head">
                   <tr class="govuk-table__row">
                     <th scope="col" class="govuk-table__header">{{ "decisions.admin.edit.tableHeading.country" | t }}</th>
-                    <th scope="col" class="govuk-table__header">{{ "decisions.admin.edit.tableHeading.yes" | t }}</th>
-                    <th scope="col" class="govuk-table__header">{{ "decisions.admin.edit.tableHeading.yesAfterComp" | t }}</th>
-                    <th scope="col" class="govuk-table__header">{{ "decisions.admin.edit.tableHeading.no" | t }}</th>
-                    <th scope="col" class="govuk-table__header">{{ "decisions.admin.edit.tableHeading.noAfterComp" | t }}</th>
+                    <th scope="col" class="govuk-table__header govuk-!-padding-right-7">{{ "decisions.admin.edit.tableHeading.yes" | t }}</th>
+                    <th scope="col" class="govuk-table__header govuk-!-padding-right-7">{{ "decisions.admin.edit.tableHeading.yesAfterComp" | t }}</th>
+                    <th scope="col" class="govuk-table__header govuk-!-padding-right-7">{{ "decisions.admin.edit.tableHeading.no" | t }}</th>
+                    <th scope="col" class="govuk-table__header govuk-!-padding-right-7">{{ "decisions.admin.edit.tableHeading.noAfterComp" | t }}</th>
+                    <th scope="col" class="govuk-table__header govuk-!-padding-right-7">{{ "decisions.admin.edit.tableHeading.noOtherConditions" | t }}</th>
                     <th scope="col" class="govuk-table__header"></th>
                   </tr>
                 </thead>
@@ -141,6 +142,20 @@
                           name: "noAfterComps" + index,
                           id: "noAfterComps" + index,
                           value: country.decisions.noAfterComp,
+                          inputmode: "numeric",
+                          pattern: "[0-9]*",
+                          spellcheck: false
+                        }) }}
+                      </td>
+                      <td class="govuk-table__cell">
+                        {{ govukInput({
+                          label: {
+                            text: "decisions.admin.edit.labels.noOtherConditions" | t({route: outerLoop.index, country: loop.index}),
+                            classes: "govuk-visually-hidden"
+                          },
+                          name: "noOtherConditions" + index,
+                          id: "noOtherConditions" + index,
+                          value: country.decisions.noOtherConditions,
                           inputmode: "numeric",
                           pattern: "[0-9]*",
                           spellcheck: false

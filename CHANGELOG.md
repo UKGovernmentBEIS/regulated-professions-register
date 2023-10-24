@@ -4,9 +4,74 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [unreleased]
+## [unreleased] - TBD
 
 ### Added
+
+### Changed
+
+## [release-033] - 03/08/2023
+
+### Added
+
+### Changed
+
+- Update decision data guidance page
+
+## [release-032] - 25/07/2023
+
+### Added
+
+- Add new decision data field for "Not accepted - other conditions not met"
+
+### Changed
+
+## [release-031] - 07/07/2023
+
+### Added
+
+### Changed
+
+- Prevent duplication of live versions of organisation when editing
+
+## [release-030] - 22/06/2023
+
+### Added
+
+### Changed
+
+- Update reference to BEIS in subject line of invite email
+
+## [release-029] - 2023-06-13
+
+### Added
+
+- Add link to Licence Finder to home page
+
+### Changed
+
+- Update references to BEIS to DBT in confirmation, accessibility, and i18n
+- Update privacy notice
+- Re-enable decision data for non-service owner roles in production
+- Change licence finder text wording
+- Change link wording on home page
+
+## [release-028] - 2023-05-11
+
+### Added
+
+- Add link to Licence Finder to professions page
+
+### Changed
+
+- Changed "Alternate name" to "Alternative name"
+- New CDN route resource added to deployment
+
+## [release-027] - 2023-05-03
+
+### Added
+
+- Add route resource to redirect root domain
 
 ### Changed
 
@@ -473,7 +538,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fix links in error messages when adding a new profession
 - Make validation errors more human readable
 
-[unreleased]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-026...HEAD
+[unreleased]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-033...HEAD
+[release-033]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-032...release-033
+[release-032]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-031...release-032
+[release-031]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-030...release-031
+[release-030]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-029...release-030
+[release-029]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-028...release-029
+[release-028]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-027...release-028
+[release-027]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-026...release-027
 [release-026]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-025...release-026
 [release-025]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-024...release-025
 [release-024]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release023...release-024

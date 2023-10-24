@@ -7,6 +7,7 @@ export interface DecisionRoute {
       no: number | null;
       yesAfterComp: number | null;
       noAfterComp: number | null;
+      noOtherConditions: number | null;
     };
   }[];
 }

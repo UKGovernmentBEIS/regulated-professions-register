@@ -51,7 +51,8 @@
               "yes": 8,
               "no": 4,
               "yesAfterComp": 1,
-              "noAfterComp": 2
+              "noAfterComp": 2,
+              "noOtherConditions": 3
             }
           },
           {
@@ -60,7 +61,8 @@
               "yes": 7,
               "no": 9,
               "yesAfterComp": 3,
-              "noAfterComp": 2
+              "noAfterComp": 2,
+              "noOtherConditions": 1
             }
           }
         ]

@@ -41,8 +41,7 @@ describe('UserMailer', () => {
       email: user.email,
       templateID: process.env['NOTIFY_TEMPLATE_ID'],
       personalisation: {
-        subject:
-          'Invitation to the BEIS regulated professions register service',
+        subject: 'Invitation to the DBT regulated professions register service',
         body: expect.stringMatching('http://example.com'),
       },
     });

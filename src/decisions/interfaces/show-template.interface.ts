@@ -10,6 +10,7 @@ export interface ShowTemplate {
       no: number;
       yesAfterComp: number;
       noAfterComp: number;
+      noOtherConditions: number;
       total: number;
     }[];
   }[];
