@@ -21,6 +21,7 @@ fi
 
 echo "Installing version $NODE_VERSION of NodeJS..."
 nvm install $NODE_VERSION
+nvm use $NODE_VERSION
 
 echo "Prompting for sudo..."
 sudo echo
