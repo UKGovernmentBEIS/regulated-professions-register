@@ -43,31 +43,36 @@ export class Auth0Service {
     // As an interaction with an external service, we're unable to wrap this in
     // a transaction with `createUser`, but at least attempt to avoid creating
     // a conflicting user
-    const users = await client.getUsersByEmail(email);
+    const users = await client.usersByEmail.getByEmail({
+      email,
+    });
 
     // Since we only support password authentication, assume we either get zero
     // or one users returned
-    if (users.length > 0) {
-      return { result: 'user-exists', externalIdentifier: users[0].user_id };
+    if (users.data.length > 0) {
+      return {
+        result: 'user-exists',
+        externalIdentifier: users.data[0].user_id,
+      };
     }
 
-    const user = await client.createUser({
+    const user = await client.users.create({
       email,
       password: randomUUID(),
       email_verified: true,
       connection: 'Username-Password-Authentication',
     });
 
-    const passwordChangeTicket = await client.createPasswordChangeTicket({
+    const passwordChangeTicket = await client.tickets.changePassword({
       result_url: `${process.env['HOST_URL']}/admin`,
-      user_id: user.user_id,
+      user_id: user.data.user_id,
       ttl_sec: 2592000,
     });
 
     return {
       result: 'user-created',
-      externalIdentifier: user.user_id,
-      passwordResetLink: passwordChangeTicket.ticket,
+      externalIdentifier: user.data.user_id,
+      passwordResetLink: passwordChangeTicket.data.ticket,
     };
   }
 
@@ -75,7 +80,7 @@ export class Auth0Service {
     return {
       performNow: async () => {
         const client = this.getClient();
-        return await client.deleteUser({ id: externalIdentifier });
+        return await client.users.delete({ id: externalIdentifier });
       },
       performLater: async () => {
         return await this.queue.add('deleteUser', {
@@ -93,7 +98,6 @@ export class Auth0Service {
       domain,
       clientId: process.env['AUTH0_CLIENT_ID'],
       clientSecret: process.env['AUTH0_CLIENT_SECRET'],
-      scope: 'create:users read:users create:user_tickets delete:users',
     });
   }
 }
