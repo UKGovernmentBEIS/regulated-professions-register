@@ -58,8 +58,8 @@
         }
       },
       "help": {
-        "heading": "Get help checking a regulated profession",
-        "body": "If you cannot find the information you need on the RPR, you may wish to <a class='govuk-link' href='https://cpq.ecctis.com/'>contact the UK Centre for Professional Qualifications (UK CPQ)</a>. The UK CPQ can also help you understand how to get your professional qualifications recognised outside the UK.",
+        "heading": "",
+        "body": "",
         "feedback": "If you have a technical issue, please <a class='govuk-link' target='_blank' href='{feedbackFormUrl}'>provide feedback</a>."
       }
     },
