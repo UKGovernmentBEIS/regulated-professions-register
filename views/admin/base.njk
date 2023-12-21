@@ -7,7 +7,7 @@
 {% block header %}
   {{
     govukHeader({
-      homepageUrl: "/admin/dashboard",
+      homepageUrl: ("app.govUkUrl" | t),
       serviceName: ("app.name" | t),
       serviceUrl: "/admin/dashboard",
       navigation: [
