@@ -10,11 +10,17 @@
 {% endblock %}
 
 {% block header %}
+  {% if environment === 'production' %}
+    {% set bannerUrl = ("app.externalUrl" | t) %}
+  {% else %}
+    {% set bannerUrl = "/" %}
+  {% endif %}
+  
   {{
     govukHeader({
-      homepageUrl: "/",
+      homepageUrl: ("app.govUkUrl" | t),
       serviceName: ("app.name" | t),
-      serviceUrl: "/"
+      serviceUrl:  (bannerUrl)
     })
   }}
 

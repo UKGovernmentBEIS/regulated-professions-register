@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 
+- Update banner links; This includes a link to gov.uk and a link back to the DBT controlled landing page
 - Set sort order to alphabetical for Nations, Regulation Types, and Sectors
 - Remove help section from landing page
 

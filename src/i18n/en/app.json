@@ -1,5 +1,7 @@
 {
   "name": "Regulated Professions Register",
+  "govUkUrl": "https://gov.uk",
+  "externalUrl": "https://www.gov.uk/guidance/check-which-professions-are-regulated-in-the-uk",
   "superadmin": "You are a superadmin",
   "back": "Back",
   "backToSearch": "Back to search results",
