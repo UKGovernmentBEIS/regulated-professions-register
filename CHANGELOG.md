@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 
+- Set sort order to alphabetical for Nations, Regulation Types, and Sectors
 - Remove help section from landing page
 
 ## [release-033] - 03/08/2023

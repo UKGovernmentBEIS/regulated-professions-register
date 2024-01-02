@@ -1,6 +1,7 @@
 import { I18nService } from 'nestjs-i18n';
 import { CheckboxItems } from '../common/interfaces/checkbox-items.interface';
 import { Industry } from './industry.entity';
+import { sortArrayByProperty } from '../common/utils';
 
 export class IndustriesCheckboxPresenter {
   constructor(
@@ -25,12 +26,15 @@ export class IndustriesCheckboxPresenter {
       industries = standardIndustries;
     }
 
-    return industries.map((industry) => ({
-      text: this.i18nService.translate<string>(industry.name) as string,
-      value: industry.id,
-      checked: !!this.checkedIndustries.find(
-        (checkedIndustry) => checkedIndustry.id === industry.id,
-      ),
-    }));
+    return sortArrayByProperty(
+      industries.map((industry) => ({
+        text: this.i18nService.translate<string>(industry.name) as string,
+        value: industry.id,
+        checked: !!this.checkedIndustries.find(
+          (checkedIndustry) => checkedIndustry.id === industry.id,
+        ),
+      })),
+      'text',
+    );
   }
 }

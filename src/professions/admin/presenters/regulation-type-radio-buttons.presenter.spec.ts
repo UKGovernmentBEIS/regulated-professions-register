@@ -17,11 +17,15 @@ describe('RegulationTypeRadioButtonsPresenter', () => {
 
         const expected: RadioButtonArgs[] = [
           {
-            text: translationOf('professions.regulationTypes.licensing.name'),
-            value: 'licensing',
+            text: translationOf(
+              'professions.regulationTypes.accreditation.name',
+            ),
+            value: 'accreditation',
             checked: false,
             hint: {
-              text: translationOf('professions.regulationTypes.licensing.hint'),
+              text: translationOf(
+                'professions.regulationTypes.accreditation.hint',
+              ),
             },
           },
           {
@@ -37,15 +41,11 @@ describe('RegulationTypeRadioButtonsPresenter', () => {
             },
           },
           {
-            text: translationOf(
-              'professions.regulationTypes.accreditation.name',
-            ),
-            value: 'accreditation',
+            text: translationOf('professions.regulationTypes.licensing.name'),
+            value: 'licensing',
             checked: false,
             hint: {
-              text: translationOf(
-                'professions.regulationTypes.accreditation.hint',
-              ),
+              text: translationOf('professions.regulationTypes.licensing.hint'),
             },
           },
         ];
@@ -65,11 +65,15 @@ describe('RegulationTypeRadioButtonsPresenter', () => {
 
         const expected: RadioButtonArgs[] = [
           {
-            text: translationOf('professions.regulationTypes.licensing.name'),
-            value: 'licensing',
+            text: translationOf(
+              'professions.regulationTypes.accreditation.name',
+            ),
+            value: 'accreditation',
             checked: false,
             hint: {
-              text: translationOf('professions.regulationTypes.licensing.hint'),
+              text: translationOf(
+                'professions.regulationTypes.accreditation.hint',
+              ),
             },
           },
           {
@@ -85,15 +89,11 @@ describe('RegulationTypeRadioButtonsPresenter', () => {
             },
           },
           {
-            text: translationOf(
-              'professions.regulationTypes.accreditation.name',
-            ),
-            value: 'accreditation',
+            text: translationOf('professions.regulationTypes.licensing.name'),
+            value: 'licensing',
             checked: false,
             hint: {
-              text: translationOf(
-                'professions.regulationTypes.accreditation.hint',
-              ),
+              text: translationOf('professions.regulationTypes.licensing.hint'),
             },
           },
         ];

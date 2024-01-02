@@ -1,7 +1,7 @@
 import { I18nService } from 'nestjs-i18n';
 import { CheckboxItems } from '../common/interfaces/checkbox-items.interface';
 import { CheckboxArgs } from '../common/interfaces/checkbox-args.interface';
-
+import { sortArrayByProperty } from '../common/utils';
 import { Nation } from './nation';
 
 export class NationsCheckboxPresenter {
@@ -12,13 +12,16 @@ export class NationsCheckboxPresenter {
   ) {}
 
   checkboxItems(): CheckboxItems[] {
-    return this.allNations.map((nation) => ({
-      text: nation.translatedName(this.i18nService),
-      value: nation.code,
-      checked: !!this.checkedNations.find(
-        (checkedNation) => checkedNation.code === nation.code,
-      ),
-    }));
+    return sortArrayByProperty(
+      this.allNations.map((nation) => ({
+        text: nation.translatedName(this.i18nService),
+        value: nation.code,
+        checked: !!this.checkedNations.find(
+          (checkedNation) => checkedNation.code === nation.code,
+        ),
+      })),
+      'text',
+    );
   }
 
   checkboxArgs(
