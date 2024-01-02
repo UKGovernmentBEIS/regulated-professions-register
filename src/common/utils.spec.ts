@@ -1,7 +1,8 @@
 import { DeepMocked } from '@golevelup/ts-jest';
 import { Request } from 'express';
-import { getReferrer, formatDate } from './utils';
+import { getReferrer, formatDate, sortArrayByProperty } from './utils';
 import { createMockRequest } from '../testutils/create-mock-request';
+import { Industry } from 'src/industries/industry.entity';
 
 describe('utils', () => {
   describe('getReferrer', () => {
@@ -54,6 +55,49 @@ describe('utils', () => {
       // Months are zero-indexed
       expect(formatDate(new Date(1999, 5, 23))).toEqual('23 Jun 1999');
       expect(formatDate(new Date(2003, 7, 2))).toEqual('2 Aug 2003');
+    });
+  });
+
+  describe('sortArrayByProperty', () => {
+    it('returns an alphabetically sorted array of maps by a given key', () => {
+      const industries: Industry[] = [
+        {
+          name: 'b',
+          id: '2',
+          created_at: new Date(Date.now()),
+          updated_at: new Date(Date.now()),
+        },
+        {
+          name: 'a',
+          id: '1',
+          created_at: new Date(Date.now()),
+          updated_at: new Date(Date.now()),
+        },
+        {
+          name: 'd',
+          id: '4',
+          created_at: new Date(Date.now()),
+          updated_at: new Date(Date.now()),
+        },
+        {
+          name: 'c',
+          id: '3',
+          created_at: new Date(Date.now()),
+          updated_at: new Date(Date.now()),
+        },
+      ];
+
+      let industryMap = industries.map((industry) => ({
+        text: industry.name,
+        value: industry.id,
+      }));
+
+      let sortedIndustryMap = sortArrayByProperty(industryMap, 'text');
+
+      expect(sortedIndustryMap[0]['text']).toEqual('a');
+      expect(sortedIndustryMap[1]['text']).toEqual('b');
+      expect(sortedIndustryMap[2]['text']).toEqual('c');
+      expect(sortedIndustryMap[3]['text']).toEqual('d');
     });
   });
 });

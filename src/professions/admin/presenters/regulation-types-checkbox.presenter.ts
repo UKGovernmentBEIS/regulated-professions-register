@@ -1,6 +1,7 @@
 import { I18nService } from 'nestjs-i18n';
 import { CheckboxItems } from '../../../common/interfaces/checkbox-items.interface';
 import { RegulationType } from '../../profession-version.entity';
+import { sortArrayByProperty } from '../../../common/utils';
 
 export class RegulationTypesCheckboxPresenter {
   constructor(
@@ -9,12 +10,15 @@ export class RegulationTypesCheckboxPresenter {
   ) {}
 
   checkboxItems(): CheckboxItems[] {
-    return Object.values(RegulationType).map((regulationType) => ({
-      text: this.i18nService.translate<string>(
-        `professions.regulationTypes.${regulationType}.name`,
-      ) as string,
-      value: regulationType,
-      checked: this.checkedRegulationTypes.includes(regulationType),
-    }));
+    return sortArrayByProperty(
+      Object.values(RegulationType).map((regulationType) => ({
+        text: this.i18nService.translate<string>(
+          `professions.regulationTypes.${regulationType}.name`,
+        ) as string,
+        value: regulationType,
+        checked: this.checkedRegulationTypes.includes(regulationType),
+      })),
+      'text',
+    );
   }
 }

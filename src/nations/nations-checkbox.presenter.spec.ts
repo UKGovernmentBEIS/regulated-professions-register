@@ -32,6 +32,11 @@ describe('NationsCheckboxPresenter', () => {
           checked: false,
         },
         {
+          text: 'Northern Ireland',
+          value: 'GB-NIR',
+          checked: false,
+        },
+        {
           text: 'Scotland',
           value: 'GB-SCT',
           checked: false,
@@ -39,11 +44,6 @@ describe('NationsCheckboxPresenter', () => {
         {
           text: 'Wales',
           value: 'GB-WLS',
-          checked: false,
-        },
-        {
-          text: 'Northern Ireland',
-          value: 'GB-NIR',
           checked: false,
         },
       ]);
@@ -64,6 +64,11 @@ describe('NationsCheckboxPresenter', () => {
           checked: true,
         },
         {
+          text: 'Northern Ireland',
+          value: 'GB-NIR',
+          checked: false,
+        },
+        {
           text: 'Scotland',
           value: 'GB-SCT',
           checked: false,
@@ -72,11 +77,6 @@ describe('NationsCheckboxPresenter', () => {
           text: 'Wales',
           value: 'GB-WLS',
           checked: true,
-        },
-        {
-          text: 'Northern Ireland',
-          value: 'GB-NIR',
-          checked: false,
         },
       ]);
     });
@@ -103,6 +103,11 @@ describe('NationsCheckboxPresenter', () => {
             checked: false,
           },
           {
+            text: 'Northern Ireland',
+            value: 'GB-NIR',
+            checked: false,
+          },
+          {
             text: 'Scotland',
             value: 'GB-SCT',
             checked: false,
@@ -110,11 +115,6 @@ describe('NationsCheckboxPresenter', () => {
           {
             text: 'Wales',
             value: 'GB-WLS',
-            checked: false,
-          },
-          {
-            text: 'Northern Ireland',
-            value: 'GB-NIR',
             checked: false,
           },
         ],
