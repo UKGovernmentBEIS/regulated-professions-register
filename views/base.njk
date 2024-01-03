@@ -10,7 +10,8 @@
 {% endblock %}
 
 {% block header %}
-  {% if environment === 'production' %}
+{# on staging, the "environment" var is set to "production". Because of this we need another way to check we're not on staging #}
+  {% if (environment === 'production') and (not site_domain.startsWith('staging')) %}
     {% set bannerUrl = ("app.externalUrl" | t) %}
   {% else %}
     {% set bannerUrl = "/" %}
