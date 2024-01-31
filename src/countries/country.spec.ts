@@ -8,7 +8,7 @@ describe(Country, () => {
       const all = Country.all();
       const uniqueCodes = [...new Set(all.map((country) => country.code))];
 
-      const expectCountries = 195;
+      const expectCountries = 198;
 
       expect(all).toHaveLength(expectCountries);
       expect(uniqueCodes).toHaveLength(expectCountries);
