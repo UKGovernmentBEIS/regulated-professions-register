@@ -119,7 +119,7 @@
       "year": "Year",
       "route": "Route",
       "tableHeading": {
-        "country": "Country of qualification",
+        "country": "Country or Territory of Qualification",
         "yes": "Accepted - qualifications recognised",
         "no": "Not accepted - qualifications not recognised",
         "yesAfterComp": "Accepted - additional conditions met",
@@ -127,7 +127,7 @@
         "noOtherConditions": "Not accepted - other conditions not met"
       },
       "labels": {
-        "country": "Country of qualification (route {route}, country {country})",
+        "country": "Country or Territory of Qualification (route {route}, country {country})",
         "yes": "Accepted - qualifications recognised (route {route}, country {country})",
         "no": "Not accepted - qualifications not recognised (route {route}, country {country})",
         "yesAfterComp": "Accepted - additional conditions met (route {route}, country {country})",
@@ -152,8 +152,8 @@
       }
     },
     "buttons": {
-      "removeCountry": "Remove country",
-      "addCountry": "Add country",
+      "removeCountry": "Remove country or territory",
+      "addCountry": "Add country or territory",
       "removeRoute": "Remove route",
       "addRoute": "Add route",
       "saveAsDraft": "Save as draft",
@@ -167,7 +167,7 @@
     "regulator": "Regulator",
     "year": "Year",
     "tableHeading": {
-      "country": "Country of qualification",
+      "country": "Country or Territory of Qualification",
       "yes": "Accepted - qualifications recognised",
       "no": "Not accepted - qualifications not recognised",
       "yesAfterComp": "Accepted - additional conditions met",
@@ -194,7 +194,7 @@
       "year": "Year",
       "status": "Status",
       "route": "Route",
-      "countryName": "Country of qualification",
+      "countryName": "Country or Territory of Qualification",
       "countryCode": "Country code",
       "yes": "Accepted - qualifications recognised",
       "no": "Not accepted - qualifications not recognised",

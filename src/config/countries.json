@@ -288,6 +288,10 @@
     "name": "countries.hn"
   },
   {
+    "code": "HK",
+    "name": "countries.hk"
+  },
+  {
     "code": "HU",
     "name": "countries.hu"
   },
@@ -520,6 +524,10 @@
     "name": "countries.om"
   },
   {
+    "code": "PS",
+    "name": "countries.ps"
+  },
+  {
     "code": "PK",
     "name": "countries.pk"
   },
@@ -674,6 +682,10 @@
   {
     "code": "SY",
     "name": "countries.sy"
+  },
+  {
+    "code": "TW",
+    "name": "countries.tw"
   },
   {
     "code": "TJ",
