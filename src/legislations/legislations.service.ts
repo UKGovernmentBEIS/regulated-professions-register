@@ -16,6 +16,6 @@ export class LegislationsService {
   }
 
   find(id: string): Promise<Legislation> {
-    return this.repository.findOne(id);
+    return this.repository.findOneBy({ id });
   }
 }

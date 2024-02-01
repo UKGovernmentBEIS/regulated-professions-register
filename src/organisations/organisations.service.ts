@@ -16,7 +16,7 @@ export class OrganisationsService {
   }
 
   find(id: string): Promise<Organisation> {
-    return this.repository.findOne(id);
+    return this.repository.findOneBy({ id });
   }
 
   async findWithVersion(id: string, versionId: string): Promise<Organisation> {
@@ -55,7 +55,7 @@ export class OrganisationsService {
   }
 
   async rename(oldName: string, newName: string): Promise<string> {
-    const organisation = await this.repository.findOne({
+    const organisation = await this.repository.findOneBy({
       name: oldName,
     });
 

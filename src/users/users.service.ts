@@ -34,7 +34,7 @@ export class UsersService {
   }
 
   find(id: string): Promise<User> {
-    return this.repository.findOne(id);
+    return this.repository.findOneBy({ id });
   }
 
   findByEmail(email: string): Promise<User> {
@@ -63,7 +63,7 @@ export class UsersService {
     let result;
 
     try {
-      const foundUser = await queryRunner.manager.findOne(User, {
+      const foundUser = await queryRunner.manager.findOneBy(User, {
         externalIdentifier: user.externalIdentifier,
         confirmed: true,
         archived: false,

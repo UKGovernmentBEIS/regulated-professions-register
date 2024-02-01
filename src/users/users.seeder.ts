@@ -39,11 +39,11 @@ export class UsersSeeder implements Seeder {
 
         const organisation =
           user.organisation &&
-          (await this.organisationRepository.findOne({
-            where: { name: user.organisation },
+          (await this.organisationRepository.findOneBy({
+            name: user.organisation,
           }));
 
-        const existingUser = await this.userRepository.findOne({
+        const existingUser = await this.userRepository.findOneBy({
           email: user.email,
         });
 

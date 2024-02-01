@@ -16,6 +16,6 @@ export class QualificationsService {
   }
 
   find(id: string): Promise<Qualification> {
-    return this.repository.findOne(id);
+    return this.repository.findOneBy({ id });
   }
 }

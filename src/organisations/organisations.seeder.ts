@@ -44,7 +44,7 @@ export class OrganisationsSeeder implements Seeder {
   async seed(): Promise<any> {
     const organisations = await Promise.all(
       this.data.map(async (organisation) => {
-        const existingOrganisation = await this.organisationsRepository.findOne(
+        const existingOrganisation = await this.organisationsRepository.findOneBy(
           {
             slug: organisation.slug,
           },
@@ -68,7 +68,7 @@ export class OrganisationsSeeder implements Seeder {
           organisation.versions.map(async (item) => {
             const status = item.status as OrganisationVersionStatus;
             const existingVersion =
-              await this.organisationVersionsRepository.findOne({
+              await this.organisationVersionsRepository.findOneBy({
                 organisation: org,
                 status: status,
               });

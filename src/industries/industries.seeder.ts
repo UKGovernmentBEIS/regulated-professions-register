@@ -24,7 +24,7 @@ export class IndustriesSeeder implements Seeder {
   async seed(): Promise<any> {
     const industries = await Promise.all(
       this.data.map(async (industry) => {
-        const existingIndustry = await this.industryRepository.findOne({
+        const existingIndustry = await this.industryRepository.findOneBy({
           name: industry.name,
         });
 

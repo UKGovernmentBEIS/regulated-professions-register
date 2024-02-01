@@ -89,7 +89,7 @@ export class ProfessionsSeeder implements Seeder {
   async seed(): Promise<void> {
     await Promise.all(
       this.data.map(async (seedProfession) => {
-        const existingProfession = await this.professionsRepository.findOne({
+        const existingProfession = await this.professionsRepository.findOneBy({
           slug: seedProfession.slug,
         });
 
@@ -147,7 +147,7 @@ export class ProfessionsSeeder implements Seeder {
   ): Promise<ProfessionVersion[]> {
     return Promise.all(
       seedProfession.versions.map(async (version) => {
-        const existingVersion = await this.professionVersionsRepository.findOne(
+        const existingVersion = await this.professionVersionsRepository.findOneBy(
           {
             status: version.status,
             profession: savedProfession,

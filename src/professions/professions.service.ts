@@ -24,18 +24,21 @@ export class ProfessionsService {
   }
 
   find(id: string): Promise<Profession> {
-    return this.repository.findOne(id);
+    return this.repository.findOneBy({ id });
   }
 
   findWithVersions(id: string): Promise<Profession> {
-    return this.repository.findOne(id, {
+    return this.repository.findOne({
+      where: {
+        id
+      },
       relations: [
         'versions',
         'professionToOrganisations',
         'professionToOrganisations.organisation',
         'professionToOrganisations.profession',
       ],
-    });
+    })
   }
 
   findBySlug(slug: string): Promise<Profession> {

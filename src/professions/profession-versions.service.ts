@@ -38,11 +38,16 @@ export class ProfessionVersionsService {
   }
 
   async find(id: string): Promise<ProfessionVersion> {
-    return this.repository.findOne(id);
+    return this.repository.findOneBy( { id } );
   }
 
   async findWithProfession(id: string): Promise<ProfessionVersion> {
-    return this.repository.findOne(id, { relations: ['profession'] });
+    return this.repository.findOne({
+      where: {
+        id,
+      },
+      relations: ['profession'],
+    });
   }
 
   async confirm(version: ProfessionVersion): Promise<ProfessionVersion> {
@@ -91,7 +96,7 @@ export class ProfessionVersionsService {
     const queryRunner = this.connection.createQueryRunner();
     const profession = version.profession;
 
-    const liveVersion = await this.repository.findOne({
+    const liveVersion = await this.repository.findOneBy({
       profession,
       status: ProfessionVersionStatus.Live,
     });
