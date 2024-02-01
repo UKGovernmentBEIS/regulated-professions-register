@@ -55,6 +55,7 @@ export class ProfessionsSearchService {
     const response = await this.client.search<SearchResponse>({
       index: this.indexName,
       body: {
+        size: 10000,
         query: {
           multi_match: {
             query: query,
