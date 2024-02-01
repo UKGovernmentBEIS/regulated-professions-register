@@ -10,6 +10,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 
+- Fix profession search results to ensure all results (upto 10,000) are returned
+
 ## [release-034] - 04/01/2024
 
 ### Added
