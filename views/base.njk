@@ -1,6 +1,7 @@
 {% extends "govuk/template.njk" %}
 {% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/header/macro.njk" import govukHeader %}
 
 {% block pageTitle %}
   {{ "app.name" | t }}
@@ -21,7 +22,8 @@
     govukHeader({
       homepageUrl: ("app.govUkUrl" | t),
       serviceName: ("app.name" | t),
-      serviceUrl:  (bannerUrl)
+      serviceUrl:  (bannerUrl),
+      useTudorCrown: true
     })
   }}
 
