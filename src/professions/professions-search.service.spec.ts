@@ -113,6 +113,7 @@ describe('ProfessionVersionsService', () => {
       expect(opensearchClient.search).toHaveBeenCalledWith({
         index: service.indexName,
         body: {
+          size: 10000,
           query: {
             multi_match: {
               query: 'something',
