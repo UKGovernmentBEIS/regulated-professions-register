@@ -10,6 +10,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 
+## [release-035] - 21/02/2024
+
+### Added
+
+### Changed
+
 - Fix profession and organisation search results to ensure all results (upto 10,000) are returned
 - Add new countries / territories to decicion data pages. Update wordings to include "territory".
 - Update crown logo
@@ -552,7 +558,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fix links in error messages when adding a new profession
 - Make validation errors more human readable
 
-[unreleased]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-034...HEAD
+[unreleased]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-035...HEAD
+[release-035]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-034...release-035
 [release-034]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-033...release-034
 [release-033]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-032...release-033
 [release-032]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-031...release-032
