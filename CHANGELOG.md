@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
+- Add regulator feedback button on admin regulatory authority pages
+
 ### Changed
 
 ## [release-035] - 21/02/2024
