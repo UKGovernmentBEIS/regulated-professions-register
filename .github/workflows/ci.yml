@@ -82,6 +82,7 @@ jobs:
         env:
           discovery.type: single-node
           plugins.security.disabled: true
+          OPENSEARCH_INITIAL_ADMIN_PASSWORD: ${{ secrets.OPENSEARCH_INITIAL_ADMIN_PASSWORD }}
         options: >-
           --health-cmd "curl http://admin:admin@localhost:9200/_cluster/health"
           --health-interval 10s

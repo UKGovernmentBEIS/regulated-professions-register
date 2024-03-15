@@ -12,6 +12,7 @@ import { formatStatus } from '../helpers/format-status.helper';
 import { formatTelephone } from '../helpers/format-telephone.helper';
 import { getDomain } from '../helpers/get-domain.helper';
 import { sortLegislationsByIndex } from '../professions/helpers/sort-legislations-by-index.helper';
+import { getRegulatorFeedbackUrl } from '../helpers/get-regulator-feedback-url-helper';
 
 export const nunjucksConfig = async (
   app: NestExpressApplication,
@@ -38,6 +39,8 @@ export const nunjucksConfig = async (
   env.addFilter('t', (text, personalisation) => {
     return i18nHelper.translate(text, personalisation || {});
   });
+
+  env.addGlobal('regulator_feedback_url', getRegulatorFeedbackUrl());
 
   env.addFilter('tError', (message, personalisation) => {
     if (!message) {
