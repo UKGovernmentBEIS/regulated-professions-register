@@ -1,0 +1,17 @@
+{% set bodyClasses = "rpr-internal__listing rpr-internal__page" %}
+{% extends "admin/base.njk" %}
+
+{% set title = ("feedback.admin.dashboard.title" | t) %}
+
+{% block content %}
+  <h1 class="govuk-heading-xl">
+    {{ title }}
+  </h1>
+
+  <ul class="govuk-list">
+    <li>
+      <a class="govuk-link" href="/admin/feedback/export">{{ "feedback.admin.dashboard.export" | t }}</a>
+    </li>
+  </ul>
+
+{% endblock %}

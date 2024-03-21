@@ -29,6 +29,7 @@ describe('getPermissionsFromUser', () => {
 
       expect(result).toContain(UserPermission.CreateUser);
       expect(result).not.toContain(UserPermission.CreateProfession);
+      expect(result).not.toContain(UserPermission.ManageFeedback);
     });
 
     describe('when the user has a role that should only exist on a service owner', () => {

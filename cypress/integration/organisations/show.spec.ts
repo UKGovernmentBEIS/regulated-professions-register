@@ -103,4 +103,26 @@ describe('Showing organisations', () => {
       cy.get('body').should('not.contain', telephoneHeading);
     });
   });
+
+  it('I can submit a satisfaction rating and the rating option will be pre-selected', () => {
+    cy.visitAndCheckAccessibility('/regulatory-authorities/no-optional-fields');
+
+    cy.translate('feedback.questions.satisfaction.answers.sat').then(
+      (input) => {
+        // need to force the click as the label is covered by the span
+        cy.get('label').contains(input).click({ force: true });
+      },
+    );
+
+    cy.get('#rating-satisfied-text').should('be.visible');
+    cy.get('#rating-very-disatisfied-text').should('not.be.visible');
+    cy.get('#rating-disatisfied-text').should('not.be.visible');
+    cy.get('#rating-neutral-text').should('not.be.visible');
+    cy.get('#rating-very-satisfied-text').should('not.be.visible');
+
+    cy.get('button').contains('Continue').click();
+
+    cy.get('#feedbackOrTechnical').should('be.checked');
+    cy.get('#satisfaction-2').should('be.checked');
+  });
 });

@@ -1,0 +1,72 @@
+[
+  {
+    "feedbackOrTechnical": "No, I'd like to leave feedback about the service",
+    "satisfaction": "Very satisfied",
+    "improvements": "No improvements. It's pefect.",
+    "visitReason": "Find out if a profession is regulated in the UK",
+    "visitReasonOther": "",
+    "contactAuthority": "Yes, I looked for more information on their website",
+    "contactAuthorityNoReason": "",
+    "problemArea": "",
+    "problemAreaPage": "",
+    "problemDescription": "",
+    "betaSurveyYesNo": "Yes",
+    "betaSurveyEmail": "seeded@example.com"
+  },
+  {
+    "feedbackOrTechnical": "No, I'd like to leave feedback about the service",
+    "satisfaction": "Very dissatisfied",
+    "improvements": "Change literally everything about this site.",
+    "visitReason": "Other",
+    "visitReasonOther": "Purely to test this site",
+    "contactAuthority": "No",
+    "contactAuthorityNoReason": "I'm only here for testing purposes",
+    "problemArea": "",
+    "problemAreaPage": "",
+    "problemDescription": "",
+    "betaSurveyYesNo": "No",
+    "betaSurveyEmail": ""
+  },
+  {
+    "feedbackOrTechnical": "No, I'd like to leave feedback about the service",
+    "satisfaction": "Neutral",
+    "improvements": "Neither here nor there",
+    "visitReason": "Get contact details for a regulatory authority",
+    "visitReasonOther": "",
+    "contactAuthority": "Yes, I contacted them by phone or email",
+    "contactAuthorityNoReason": "",
+    "problemArea": "",
+    "problemAreaPage": "",
+    "problemDescription": "",
+    "betaSurveyYesNo": "No",
+    "betaSurveyEmail": ""
+  },
+  {
+    "feedbackOrTechnical": "Yes, I'd like to report a technical problem",
+    "satisfaction": "",
+    "improvements": "",
+    "visitReason": "",
+    "visitReasonOther": "",
+    "contactAuthority": "",
+    "contactAuthorityNoReason": "",
+    "problemArea": "The whole site",
+    "problemAreaPage": "",
+    "problemDescription": "The whole site is broken.",
+    "betaSurveyYesNo": "",
+    "betaSurveyEmail": ""
+  },
+  {
+    "feedbackOrTechnical": "Yes, I'd like to report a technical problem",
+    "satisfaction": "",
+    "improvements": "",
+    "visitReason": "",
+    "visitReasonOther": "",
+    "contactAuthority": "",
+    "contactAuthorityNoReason": "",
+    "problemArea": "A specific page",
+    "problemAreaPage": "Just this one page",
+    "problemDescription": "Only this one page was broken. Here are some details. Some details.",
+    "betaSurveyYesNo": "",
+    "betaSurveyEmail": ""
+  }
+]

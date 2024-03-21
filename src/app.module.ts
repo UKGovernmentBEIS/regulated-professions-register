@@ -26,6 +26,9 @@ import { ProfessionsController } from './professions/professions.controller';
 import { LandingController } from './landing/landing.controller';
 import { DecisionsModule } from './decisions/decisions.module';
 
+import { FeedbackModule } from './feedback/feedback.module';
+import { FeedbackController } from './feedback/feedback.controller';
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -61,8 +64,9 @@ import { DecisionsModule } from './decisions/decisions.module';
     OrganisationsModule,
     IndustriesModule,
     DecisionsModule,
+    FeedbackModule,
   ],
-  controllers: [AppController, LandingController],
+  controllers: [AppController, LandingController, FeedbackController],
   providers: [MailerConsumer],
 })
 export class AppModule implements NestModule {
