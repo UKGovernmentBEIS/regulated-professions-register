@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Implement internally hosted feedback form
 - Add star rating feedback to professions and organisation page.
 - Add feedback export for admin users
+- Implement google analytics alongside plausible
 
 ### Changed
 

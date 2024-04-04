@@ -11,6 +11,8 @@
 {% endblock %}
 
 {% block header %}
+  {% include "./shared/_cookie-banner.njk" %}
+
 {# on staging, the "environment" var is set to "production". Because of this we need another way to check we're not on staging #}
   {% if (environment === 'production') and (not site_domain.startsWith('staging')) %}
     {% set bannerUrl = ("app.externalUrl" | t) %}
@@ -36,6 +38,13 @@
 
   {% if environment === 'production' %}
     <script defer data-domain="{{ site_domain }}" src="https://plausible.io/js/script.manual.outbound-links.js"></script>
+  {% endif %}
+
+  {% if not disableGoogleAnalytics %}
+    <script>
+      let googleAnalytics = false;
+      {# Google Analytics Code #}
+    </script>
   {% endif %}
 
   {% if not disablePlausible %}
