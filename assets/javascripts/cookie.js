@@ -7,6 +7,9 @@ var CookieConsent = function () {
         this.addListener("cookie-reject", "click", this.cookiesRejected.bind(this))
         this.addListener("cookie-accepted-hide", "click", this.hideBanner.bind(this))
         this.addListener("cookie-rejected-hide", "click", this.hideBanner.bind(this))
+        this.addListener("cookie-pref-save", "click", this.savePreferences.bind(this))
+
+        this.populateCookiePreferences()
         this.setupGoogleAnalyticsTagIfOptedIn()
         if (this.cookieMessageSeen()){
           this.hideBanner()
@@ -63,13 +66,20 @@ var CookieConsent = function () {
         }
     }
 
+    this.focus = function (name) {
+        var element = document.getElementById(name)
+        if (element) {
+            element.focus()
+        }
+    }
+
+    // Cookie
     this.storeCookiePolicy = function (usage) {
         this.createCookie("cookie_policy", JSON.stringify({
             "usage": usage
         }))
     }
 
-    // Cookie
     this.createCookie = function (key, value, date) {
         var expiration = date
             ? new Date(date).toUTCString()
@@ -180,6 +190,39 @@ var CookieConsent = function () {
         js.async = "true"
         js.src = this._gaSrc
         head.appendChild(js)
+    }
+
+    // preferences
+    this.populateCookiePreferences = function () {
+        var cookieConsentYes = document.getElementById('cookies-analytics');
+        var cookieConsentNo = document.getElementById('cookies-analytics-2');
+
+        const cookiePolicy = this.retrieveCookiePolicy();
+        if (!cookiePolicy || !cookiePolicy.usage){
+            cookieConsentNo.checked = true;
+        } else{
+            cookieConsentYes.checked = true;
+        }
+    }
+
+    this.savePreferences = function() {
+        var cookieConsentYes = document.getElementById("cookies-analytics")
+        var cookieConsentNo = document.getElementById("cookies-analytics-2")
+        if (cookieConsentYes && cookieConsentNo) {
+            this.hideBanner()
+            this.show("cookie-preference-saved")
+            this.focus("cookie-preference-saved-heading")
+
+            if (cookieConsentYes.checked) {
+                this.storeCookiePolicy(true)
+                this.setupGoogleAnalyticsTagIfOptedIn()
+            }
+            if (cookieConsentNo.checked) {
+                this.clearGoogleAnalyticsCookies()
+                this.storeCookiePolicy(false)
+            }
+            this.storeSeenCookieMessage(true)
+        }
     }
   }
 window.CookieConsent = new CookieConsent();
