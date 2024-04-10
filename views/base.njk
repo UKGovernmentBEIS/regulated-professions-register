@@ -40,13 +40,6 @@
     <script defer data-domain="{{ site_domain }}" src="https://plausible.io/js/script.manual.outbound-links.js"></script>
   {% endif %}
 
-  {% if not disableGoogleAnalytics %}
-    <script>
-      let googleAnalytics = false;
-      {# Google Analytics Code #}
-    </script>
-  {% endif %}
-
   {% if not disablePlausible %}
     <!-- define the `plausible` function to manually trigger events -->
     <script>
@@ -95,6 +88,7 @@
 
 {% block bodyEnd %}
   {{ encore_entry_script_tags }}
+  <script type="text/javascript">window.CookieConsent.init('{{ ga_tag }}', '{{ site_domain }}')</script>
 {% endblock %}
 
 {% block footer %}

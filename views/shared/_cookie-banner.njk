@@ -1,63 +1,5 @@
 {% from "govuk/components/cookie-banner/macro.njk" import govukCookieBanner %}
 
-<script>
-    var CookieConsent = function () {
-        this.init = function (gaId, gaDomain) {
-            this._gaId = gaId
-            this._gaDomain = gaDomain
-            this._gaSrc = "https://www.googletagmanager.com/gtag/js?id=" + gaId
-            this.addListener("cookie-accept", "click", this.cookiesAccepted.bind(this))
-            this.addListener("cookie-reject", "click", this.cookiesRejected.bind(this))
-            this.addListener("cookie-accepted-hide", "click", this.hideBanner.bind(this))
-            this.addListener("cookie-rejected-hide", "click", this.hideBanner.bind(this))
-        }
-
-        this.hideBanner = function () {
-            this.hide("cookie-banner")
-        }
-
-        this.addListener = function (name, event, callback) {
-            var element = document.getElementById(name)
-            if (element) {
-                element.addEventListener("click", callback, false)
-            }
-        }
-
-        this.cookiesAccepted = function () {
-            this.hide("cookie-banner-unconfirm")
-            this.show("cookie-accepted-confirm")
-
-            // this.storeCookiePolicy(true, true, true)
-            // this.storeSeenCookieMessage(true)
-            // this.setupGoogleAnalyticsTagIfOptedIn()
-        }
-
-        this.cookiesRejected = function () {
-            this.hide("cookie-banner-unconfirm")
-            this.show("cookie-rejected-confirm")
-
-            // this.storeCookiePolicy(true, true, true)
-            // this.storeSeenCookieMessage(true)
-            // this.setupGoogleAnalyticsTagIfOptedIn()
-        }
-
-        this.hide = function (name) {
-            var element = document.getElementById(name)
-            if (element) {
-                element.classList.add("govuk-visually-hidden")
-            }
-        }
-
-        this.show = function (name) {
-            var element = document.getElementById(name)
-            if (element) {
-                element.classList.remove("govuk-visually-hidden")
-            }
-        }
-    }
-    window.CookieConsent = new CookieConsent()
-</script>
-
 {% set html %}
   <p class="govuk-body">We use some essential cookies to make this service work.</p>
   <p class="govuk-body">We'd also like to use analytics cookies so we can understand how you use the service and make improvements.</p>
@@ -74,6 +16,7 @@
 {{ govukCookieBanner({
   ariaLabel: "Cookies on Regulated Professions Register",
   attributes: { "id": "cookie-banner" },
+  classes: "govuk-visually-hidden",
   messages: [
     {
       headingText: "Cookies on Regulated Professions Register",
@@ -124,7 +67,3 @@
     }
   ]
 }) }}
-
-<script>
-    window.CookieConsent.init("GA_ID", "GA_DOMAIN")
-</script>

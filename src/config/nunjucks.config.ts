@@ -35,6 +35,7 @@ export const nunjucksConfig = async (
   );
   env.addGlobal('environment', process.env['NODE_ENV']);
   env.addGlobal('site_domain', getDomain(process.env['HOST_URL']));
+  env.addGlobal('ga_tag', process.env['GA_TAG']);
   env.addFilter('t', (text, personalisation) => {
     return i18nHelper.translate(text, personalisation || {});
   });
