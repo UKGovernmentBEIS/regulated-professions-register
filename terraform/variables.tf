@@ -77,3 +77,8 @@ variable "custom_hostname" {
   type        = string
   description = "Custom hostname (prepended to custom_domain for the app and cdn-route)"
 }
+
+variable "ga_tag" {
+  type = string
+  description = "The tag used by Google Analytics"
+}

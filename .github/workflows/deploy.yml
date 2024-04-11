@@ -54,6 +54,7 @@ jobs:
       TF_VAR_custom_domain: ${{ vars.CUSTOM_DOMAIN }}
       TF_VAR_redirect_domain: ${{ vars.REDIRECT_DOMAIN }}
       TF_VAR_custom_hostname: www
+      TF_VAR_ga_tag: ${{ secrets.PROD_GA_TAG }}
     steps:
       - name: Custom domain
         run: echo "::TF_VAR_custom_domain::$TF_VAR_custom_domain"
@@ -81,6 +82,7 @@ jobs:
       TF_VAR_custom_domain: ${{ vars.CUSTOM_DOMAIN }}
       TF_VAR_redirect_domain: ${{ vars.REDIRECT_DOMAIN }}
       TF_VAR_custom_hostname: staging
+      TF_VAR_ga_tag: ${{ secrets.STAGING_GA_TAG }}
     steps:
       - name: Custom domain
         run: echo "::TF_VAR_custom_domain::$TF_VAR_custom_domain"
