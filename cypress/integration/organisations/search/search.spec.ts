@@ -28,7 +28,7 @@ describe('Searching an organisation', () => {
   });
 
   it('Organisations are sorted alphabetically', () => {
-    cy.get('h2').then((elements) => {
+    cy.get('.rpr-listing__ra-title').then((elements) => {
       const names = elements.map((_, element) => element.innerText).toArray();
 
       cy.wrap(names).should(
@@ -257,7 +257,7 @@ describe('Searching an organisation', () => {
 
 function checkResultLength(expectedLength: number): void {
   cy.get('.govuk-grid-column-two-thirds')
-    .find('h2')
+    .find('.rpr-listing__ra-title')
     .should('have.length', expectedLength);
 }
 
