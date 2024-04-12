@@ -28,6 +28,11 @@ var CookieConsent = function () {
     } else {
       this.showBanner();
     }
+
+    const cookiePolicy = this.retrieveCookiePolicy();
+    if (!cookiePolicy || !cookiePolicy.usage) {
+      this.clearGoogleAnalyticsCookies();
+    }
   };
 
   this.hideBanner = function () {
@@ -231,6 +236,10 @@ var CookieConsent = function () {
   this.populateCookiePreferences = function () {
     var cookieConsentYes = document.getElementById('cookies-analytics');
     var cookieConsentNo = document.getElementById('cookies-analytics-2');
+
+    if (!cookieConsentNo || !cookieConsentYes) {
+      return;
+    }
 
     const cookiePolicy = this.retrieveCookiePolicy();
     if (!cookiePolicy || !cookiePolicy.usage) {
