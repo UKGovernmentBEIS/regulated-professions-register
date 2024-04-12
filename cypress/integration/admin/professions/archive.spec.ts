@@ -115,6 +115,8 @@ function archiveProfession(profession: string, keyword: string): void {
   cy.get('body').should('not.contain', profession);
 
   cy.get('input[name="keywords"]').type(keyword);
-  cy.get('button').click();
+  cy.translate('professions.search.filter.button').then((buttonText) => {
+    cy.get('button').contains(buttonText).click();
+  });
   cy.get('body').should('not.contain', profession);
 }

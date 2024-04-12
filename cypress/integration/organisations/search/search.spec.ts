@@ -65,7 +65,9 @@ describe('Searching an organisation', () => {
   it('I can filter by keyword', () => {
     cy.get('input[name="keywords"]').type('Installers');
 
-    cy.get('button').click();
+    cy.translate('organisations.search.filter.button').then((buttonText) => {
+      cy.get('button').contains(buttonText).click();
+    });
     cy.checkAccessibility();
 
     cy.get('input[name="keywords"]').should('have.value', 'Installers');
@@ -83,7 +85,9 @@ describe('Searching an organisation', () => {
 
     cy.get('input[name="nations[]"][value="GB-ENG"]').check();
 
-    cy.get('button').click();
+    cy.translate('organisations.search.filter.button').then((buttonText) => {
+      cy.get('button').contains(buttonText).click();
+    });
 
     cy.get('a').contains('Department for Education').click();
 
@@ -111,7 +115,9 @@ describe('Searching an organisation', () => {
       cy.get('input[name="nations[]"][value="GB-SCT"]').check();
       cy.get('input[name="nations[]"][value="GB-WLS"]').check();
 
-      cy.get('button').click();
+      cy.translate('organisations.search.filter.button').then((buttonText) => {
+        cy.get('button').contains(buttonText).click();
+      });
       cy.checkAccessibility();
 
       cy.get('input[name="nations[]"][value="GB-SCT"]').should('be.checked');
@@ -136,7 +142,9 @@ describe('Searching an organisation', () => {
         cy.get('label').contains(nameLabel).parent().find('input').check();
       });
 
-      cy.get('button').click();
+      cy.translate('organisations.search.filter.button').then((buttonText) => {
+        cy.get('button').contains(buttonText).click();
+      });
       cy.checkAccessibility();
 
       cy.translate('industries.law').then((nameLabel) => {
@@ -169,7 +177,9 @@ describe('Searching an organisation', () => {
         },
       );
 
-      cy.get('button').click();
+      cy.translate('organisations.search.filter.button').then((buttonText) => {
+        cy.get('button').contains(buttonText).click();
+      });
       cy.checkAccessibility();
 
       cy.translate('professions.regulationTypes.certification.name').then(
@@ -210,7 +220,9 @@ describe('Searching an organisation', () => {
           });
       });
 
-      cy.get('button').click();
+      cy.translate('organisations.search.filter.button').then((buttonText) => {
+        cy.get('button').contains(buttonText).click();
+      });
 
       cy.translate('app.filters.clearAllButton').then((clearAllButton) => {
         cy.get('a').contains(clearAllButton).click();
