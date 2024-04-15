@@ -57,7 +57,7 @@
     "@nestjs/config": "^2.1.0",
     "@nestjs/core": "^8.4.6",
     "@nestjs/platform-express": "^8.4.6",
-    "@nestjs/typeorm": "^8.0.4",
+    "@nestjs/typeorm": "^8.1.4",
     "@opensearch-project/opensearch": "^1.1.0",
     "@symfony/webpack-encore": "^2.1.0",
     "@types/auth0": "^2.35.0",
