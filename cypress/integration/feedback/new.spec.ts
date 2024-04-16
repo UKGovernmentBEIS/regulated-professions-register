@@ -25,7 +25,7 @@ describe('/feedback/', () => {
 
   context('When click the back button on the feedback page', () => {
     it('It returns to the previous page', () => {
-      let startingUrl = '/professions/search';
+      const startingUrl = '/professions/search';
 
       cy.visit(startingUrl);
 
@@ -129,7 +129,7 @@ describe('Submitting new feedback', () => {
     'When I submit feedback with required information and click the back button',
     () => {
       it('I am returned to the previous page', () => {
-        let startingUrl = '/regulatory-authorities/search';
+        const startingUrl = '/regulatory-authorities/search';
 
         cy.visit(startingUrl);
 

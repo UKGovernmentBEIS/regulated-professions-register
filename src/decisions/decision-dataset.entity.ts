@@ -19,10 +19,10 @@ export enum DecisionDatasetStatus {
 
 @Entity({ name: 'decision-datasets' })
 export class DecisionDataset {
-  @ManyToOne(() => Profession, { primary: true })
+  @ManyToOne(() => Profession)
   profession: Profession;
 
-  @ManyToOne(() => Organisation, { primary: true })
+  @ManyToOne(() => Organisation)
   organisation: Organisation;
 
   @Column({ type: 'int', primary: true })

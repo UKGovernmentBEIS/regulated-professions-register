@@ -50,7 +50,7 @@ describe('IndustriesService', () => {
       const post = await service.find('some-uuid');
 
       expect(post).toEqual(industry);
-      expect(repoSpy).toHaveBeenCalledWith('some-uuid');
+      expect(repoSpy).toHaveBeenCalledWith({ where: { id: 'some-uuid' } });
     });
   });
 

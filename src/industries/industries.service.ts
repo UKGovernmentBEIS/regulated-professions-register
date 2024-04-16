@@ -16,7 +16,7 @@ export class IndustriesService {
   }
 
   find(id: string): Promise<Industry> {
-    return this.repository.findOne(id);
+    return this.repository.findOne({ where: { id: id } });
   }
 
   findByIds(ids: string[]): Promise<Industry[]> {
