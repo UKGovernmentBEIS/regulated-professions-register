@@ -17,7 +17,7 @@ type SeedUser = {
   role: Role;
   serviceOwner: boolean;
   confirmed: boolean;
-  organisation: Organisation;
+  organisation: string;
 };
 
 @Injectable()
@@ -41,7 +41,7 @@ export class UsersSeeder implements Seeder {
           user.organisation &&
           (await this.organisationRepository.findOne({
             where: {
-              name: user.organisation.name,
+              name: user.organisation,
             },
           }));
 

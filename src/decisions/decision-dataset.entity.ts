@@ -3,6 +3,7 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
+  PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Organisation } from '../organisations/organisation.entity';
@@ -19,10 +20,16 @@ export enum DecisionDatasetStatus {
 
 @Entity({ name: 'decision-datasets' })
 export class DecisionDataset {
-  @ManyToOne(() => Profession)
+  @ManyToOne(() => Profession, (profession) => profession, { nullable: false })
+  @PrimaryColumn({
+    name: 'professionId',
+    type: 'uuid'})
   profession: Profession;
 
-  @ManyToOne(() => Organisation)
+  @ManyToOne(() => Organisation, (organisation) => organisation, { nullable: false })
+  @PrimaryColumn({
+    name: 'organisationId',
+    type: 'uuid'})
   organisation: Organisation;
 
   @Column({ type: 'int', primary: true })
