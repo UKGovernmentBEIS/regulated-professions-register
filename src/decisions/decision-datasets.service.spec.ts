@@ -35,7 +35,17 @@ describe('DecisionDatasetsService', () => {
   describe('find', () => {
     it('returns a DecisionDataset', async () => {
       const dataset = decisionDatasetFactory.build();
-      const repoSpy = jest.spyOn(repo, 'findOne').mockResolvedValue(dataset);
+      const queryBuilder = createMock<SelectQueryBuilder<DecisionDataset>>({
+        leftJoinAndSelect: () => queryBuilder,
+        where: () => queryBuilder,
+        andWhere: () => queryBuilder,
+        getOne: async () => dataset,
+      });
+
+      jest
+        .spyOn(repo, 'createQueryBuilder')
+        .mockImplementation(() => queryBuilder);
+
       const result = await service.find(
         'profession-uuid',
         'organisation-uuid',
@@ -43,14 +53,28 @@ describe('DecisionDatasetsService', () => {
       );
 
       expect(result).toEqual(dataset);
-      expect(repoSpy).toBeCalledWith({
-        where: {
-          profession: { id: 'profession-uuid' },
-          organisation: { id: 'organisation-uuid' },
+      expectJoinsToHaveBeenApplied(queryBuilder);
+
+      expect(queryBuilder.where).toHaveBeenCalledWith(
+        'decision-datasets.professionId = :professionId',
+        {
+          professionId: 'profession-uuid',
+        },
+      );
+
+      expect(queryBuilder.andWhere).toHaveBeenCalledWith(
+        'decision-datasets.organisationId = :organisationId',
+        {
+          organisationId: 'organisation-uuid',
+        },
+      );
+
+      expect(queryBuilder.andWhere).toHaveBeenCalledWith(
+        'decision-datasets.year = :year',
+        {
           year: 2024,
         },
-        relations: ['profession', 'organisation', 'user'],
-      });
+      );
     });
   });
 
@@ -703,4 +727,16 @@ describe('DecisionDatasetsService', () => {
   afterEach(() => {
     jest.restoreAllMocks();
   });
+
+  const expectJoinsToHaveBeenApplied = (queryBuilder: any) => {
+    expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
+      'decision-datasets.profession',
+      'professions',
+    );
+
+    expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
+      'decision-datasets.organisation',
+      'organisation',
+    );
+  };
 });
