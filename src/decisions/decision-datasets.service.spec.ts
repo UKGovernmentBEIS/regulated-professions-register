@@ -53,24 +53,29 @@ describe('DecisionDatasetsService', () => {
       );
 
       expect(result).toEqual(dataset);
-      expectJoinsToHaveBeenApplied(queryBuilder);
+
+      expect(queryBuilder).toHaveJoined([
+        'decisionDataset.profession',
+        'decisionDataset.organisation',
+        'decisionDataset.user',
+      ]);
 
       expect(queryBuilder.where).toHaveBeenCalledWith(
-        'decision-datasets.professionId = :professionId',
+        'decisionDataset.professionId = :professionId',
         {
           professionId: 'profession-uuid',
         },
       );
 
       expect(queryBuilder.andWhere).toHaveBeenCalledWith(
-        'decision-datasets.organisationId = :organisationId',
+        'decisionDataset.organisationId = :organisationId',
         {
           organisationId: 'organisation-uuid',
         },
       );
 
       expect(queryBuilder.andWhere).toHaveBeenCalledWith(
-        'decision-datasets.year = :year',
+        'decisionDataset.year = :year',
         {
           year: 2024,
         },
@@ -650,22 +655,51 @@ describe('DecisionDatasetsService', () => {
         id: 'profession-uuid',
       });
 
-      const repoSpy = jest
-        .spyOn(repo, 'find')
-        .mockResolvedValue(findResultDatasets);
+      const queryBuilder = createMock<SelectQueryBuilder<DecisionDataset>>({
+        leftJoinAndSelect: () => queryBuilder,
+        where: () => queryBuilder,
+        andWhere: () => queryBuilder,
+        orderBy: () => queryBuilder,
+        select: () => queryBuilder,
+        getMany: async () => findResultDatasets,
+      });
+
+      jest
+        .spyOn(repo, 'createQueryBuilder')
+        .mockImplementation(() => queryBuilder);
+
       const result = await service.allLiveYearsForProfession(queryProfession);
 
       expect(result).toEqual([2025, 2024, 2022, 2021]);
-      expect(repoSpy).toBeCalledWith({
-        where: {
-          profession: { id: 'profession-uuid' },
+
+      expect(queryBuilder).toHaveJoined([
+        'decisionDataset.profession',
+        'decisionDataset.organisation',
+        'decisionDataset.user',
+      ]);
+
+      expect(queryBuilder.where).toHaveBeenCalledWith(
+        'decisionDataset.profession.id = :professionId',
+        {
+          professionId: 'profession-uuid',
+        },
+      );
+
+      expect(queryBuilder.andWhere).toHaveBeenCalledWith(
+        'decisionDataset.status = :status',
+        {
           status: DecisionDatasetStatus.Live,
         },
-        order: {
-          year: 'DESC',
-        },
-        select: ['year'],
-      });
+      );
+
+      expect(queryBuilder.orderBy).toHaveBeenCalledWith(
+        'decisionDataset.year',
+        'DESC',
+      );
+
+      expect(queryBuilder.select).toHaveBeenCalledWith([
+        'decisionDataset.year',
+      ]);
     });
   });
 
@@ -727,16 +761,4 @@ describe('DecisionDatasetsService', () => {
   afterEach(() => {
     jest.restoreAllMocks();
   });
-
-  const expectJoinsToHaveBeenApplied = (queryBuilder: any) => {
-    expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
-      'decision-datasets.profession',
-      'professions',
-    );
-
-    expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
-      'decision-datasets.organisation',
-      'organisation',
-    );
-  };
 });
