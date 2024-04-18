@@ -2,7 +2,7 @@ process.env.NODE_ENV ||= 'development';
 
 import { ConfigModule } from '@nestjs/config';
 import dbConfiguration from './src/config/db.config';
-import { DataSource } from "typeorm";
+import { DataSource } from 'typeorm';
 
 ConfigModule.forRoot({
   isGlobal: true,
@@ -26,4 +26,5 @@ export const dataSource = new DataSource({
       process.env.NODE_ENV === 'production'
         ? { rejectUnauthorized: false }
         : false,
-},})
+  },
+});

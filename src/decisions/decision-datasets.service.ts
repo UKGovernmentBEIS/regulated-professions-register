@@ -22,20 +22,19 @@ export class DecisionDatasetsService {
     year: number,
   ): Promise<DecisionDataset> {
     return await this.decisionDatasetJoins()
-    .where("decision-datasets.professionId = :professionId", { professionId })
-    .andWhere("decision-datasets.organisationId = :organisationId", { organisationId })
-    .andWhere("decision-datasets.year = :year", { year })
-    .getOne();
+      .where('decision-datasets.professionId = :professionId', { professionId })
+      .andWhere('decision-datasets.organisationId = :organisationId', {
+        organisationId,
+      })
+      .andWhere('decision-datasets.year = :year', { year })
+      .getOne();
   }
 
-  private decisionDatasetJoins(): SelectQueryBuilder<DecisionDataset>{
-    return this.repository.createQueryBuilder('decision-datasets')
-    .leftJoinAndSelect(
-      'decision-datasets.profession',
-      'professions')
-    .leftJoinAndSelect(
-      'decision-datasets.organisation',
-      'organisation');
+  private decisionDatasetJoins(): SelectQueryBuilder<DecisionDataset> {
+    return this.repository
+      .createQueryBuilder('decision-datasets')
+      .leftJoinAndSelect('decision-datasets.profession', 'professions')
+      .leftJoinAndSelect('decision-datasets.organisation', 'organisation');
   }
 
   async all(filter: FilterInput): Promise<DecisionDataset[]> {

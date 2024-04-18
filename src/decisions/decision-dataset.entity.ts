@@ -23,13 +23,17 @@ export class DecisionDataset {
   @ManyToOne(() => Profession, (profession) => profession, { nullable: false })
   @PrimaryColumn({
     name: 'professionId',
-    type: 'uuid'})
+    type: 'uuid',
+  })
   profession: Profession;
 
-  @ManyToOne(() => Organisation, (organisation) => organisation, { nullable: false })
+  @ManyToOne(() => Organisation, (organisation) => organisation, {
+    nullable: false,
+  })
   @PrimaryColumn({
     name: 'organisationId',
-    type: 'uuid'})
+    type: 'uuid',
+  })
   organisation: Organisation;
 
   @Column({ type: 'int', primary: true })

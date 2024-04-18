@@ -153,7 +153,7 @@ export class ProfessionsSeeder implements Seeder {
           {
             where: {
               status: version.status,
-              profession: {id: savedProfession.id},
+              profession: { id: savedProfession.id },
             },
           },
         );

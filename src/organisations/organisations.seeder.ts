@@ -72,7 +72,7 @@ export class OrganisationsSeeder implements Seeder {
             const existingVersion =
               await this.organisationVersionsRepository.findOne({
                 where: {
-                  organisation: {id: org.id},
+                  organisation: { id: org.id },
                   status: status,
                 },
               });
