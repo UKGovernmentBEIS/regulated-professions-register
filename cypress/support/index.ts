@@ -34,21 +34,6 @@ declare global {
     }[];
   };
 
-  type SeedFeedback = {
-    feedbackOrTechnical: string;
-    satisfaction: string;
-    improvements: string;
-    visitReason: string;
-    visitReasonOther: string;
-    contactAuthority: string;
-    contactAuthorityNoReason: string;
-    problemArea: string;
-    problemAreaPage: string;
-    problemDescription: string;
-    betaSurveyYesNo: string;
-    betaSurveyEmail: string;
-  };
-
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Cypress {
     interface Chainable {
@@ -107,8 +92,6 @@ declare global {
         filename: string,
         filter: (dataset: SeedDecisionDataset) => boolean,
       ): void;
-      getFeedback(): Chainable<SeedFeedback[]>;
-      checkFeedbackExport(downloadText: string, filename: string): void;
       clickContinueAndCheckBackLink();
     }
   }
