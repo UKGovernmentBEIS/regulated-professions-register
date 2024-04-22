@@ -1,0 +1,141 @@
+{
+  "admin": {
+    "heading": "Feedback",
+    "dashboard": {
+      "title": "Manage feedback",
+      "export": "Export all feedback"
+    }
+  },
+  "csv": {
+    "heading": {
+      "feedbackOrTechnical": "Do you want to report a technical problem?",
+      "satisfaction": "Overall, how did you feel about the service you used today?",
+      "improvements": "How could we improve this service?",
+      "visitReason": "What did you come to the Regulated Professions Register to do?",
+      "visitReasonOther": "Other",
+      "contactAuthority": "Did you contact a regulatory authority directly after using this service?",
+      "contactAuthorityNoReason": "If you didn't contact a regulatory authority, why not?",
+      "problemArea": "What area of the service is your problem about?",
+      "problemAreaPage": "Specific page",
+      "problemDescription": "Tell us about your technical problem",
+      "betaSurveyYesNo": "This is a beta service. Would you be happy to take part in a survey later?",
+      "betaSurveyEmail": "Email address",
+      "created": "Created date/time"
+    }
+  },
+  "new": {
+    "title": "Public service feedback form",
+    "warningMessage": "Please don't include any personal or financial information in your response"
+  },
+  "questions": {
+    "feedbackOrTechnical": {
+      "title": "Do you want to report a technical problem?",
+      "answers": {
+        "no": "No, I'd like to leave feedback about the service",
+        "yes": "Yes, I'd like to report a technical problem"
+      }
+    },
+    "satisfaction": {
+      "title": "Overall, how did you feel about the service you used today?",
+      "answers": {
+        "vsat": "Very satisfied",
+        "sat": "Satisfied",
+        "neutral": "Neutral",
+        "dis": "Dissatisfied",
+        "vdis": "Very dissatisfied"
+      }
+    },
+    "improvements": {
+      "title": "How could we improve this service?"
+    },
+    "visitReason": {
+      "title": "What did you come to the Regulated Professions Register to do?",
+      "answers": {
+        "1": "Find out if a profession is regulated in the UK",
+        "2": "Get contact details for a regulatory authority",
+        "3": "See what qualifications are needed to practice a profession in the UK",
+        "other": "Other"
+      }
+    },
+    "contactAuthority": {
+      "title": "Did you contact a regulatory authority directly after using this service?",
+      "answers": {
+        "yesWebsite": "Yes, I looked for more information on their website",
+        "yesPhoneEmail": "Yes, I contacted them by phone or email",
+        "no": "No"
+      }
+    },
+    "contactAuthorityNoReason": {
+      "title": "If you didn't contact a regulatory authority, why not?"
+    },
+    "problemArea": {
+      "title": "What area of the service is your problem about?",
+      "answers": {
+        "wholeSite": "The whole site",
+        "specificPage": "A specific page"
+      }
+    },
+    "problemDescription": {
+      "title": "Tell us about your technical problem"
+    },
+    "betaSurveyYesNo": {
+      "title": "This is a beta service. Would you be happy to take part in a survey later?",
+      "answers": {
+        "yes": "Yes",
+        "no": "No"
+      }
+    },
+    "betaSurveyEmail": {
+      "title": "Please enter your email address so we can contact you in the future"
+    }
+  },
+  "errors": {
+    "feedbackOrTechnical": {
+      "empty": "Choose if you would like to provide feeback, or report a technical problem"
+    },
+    "satisfaction": {
+      "empty": "Please choose an option"
+    },
+    "improvements": {
+      "empty": "Please provide details",
+      "long": "Enter improvements shorter than 2500 characters"
+    },
+    "visitReason": {
+      "empty": "Please choose an option"
+    },
+    "visitReasonOther": {
+      "empty": "Please provide details",
+      "long": "Enter a visit reason shorter that 500 characters"
+    },
+    "contactAuthority": {
+      "empty": "Please choose an option"
+    },
+    "contactAuthorityNoReason": {
+      "empty": "Please provide details",
+      "long": "Enter reason shorter than 2500 characters"
+    },
+    "betaSurveyYesNo": {
+      "empty": "Please choose an option"
+    },
+    "betaSurveyEmail": {
+      "empty": "Please provide details",
+      "long": "Enter an email shorter than 500 characters"
+    },
+    "problemArea": {
+      "empty": "Please choose an option"
+    },
+    "problemAreaPage": {
+      "empty": "Please provide details",
+      "long": "Enter a page shorter than 500 characters"
+    },
+    "problemDescription": {
+      "empty": "Please provide details",
+      "long": "Enter a description shorter than 2500 characters"
+    }
+  },
+  "sent": {
+    "title": "Thank you for your feedback",
+    "message": "You can now close this window"
+  },
+  "submit": "Submit"
+}

@@ -8,6 +8,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
+- Implement internally hosted feedback form
+- Add star rating feedback to professions and organisation page.
+- Add feedback export for admin users
+
+### Changed
+
+## [release-035] - 21/02/2024
+
+### Added
+
 ### Changed
 
 ## [release-035] - 21/02/2024

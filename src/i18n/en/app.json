@@ -33,7 +33,7 @@
   "phase": {
     "beta": {
       "label": "Beta",
-      "html": "This is a new service - your <a class='govuk-link' target='_blank' href='{feedbackFormUrl}'>feedback</a> will help us to improve it."
+      "html": "This is a new service - your <a class='govuk-link' id='feedback-link' href='{feedbackFormUrl}'>feedback</a> will help us to improve it."
     }
   },
   "service": {
@@ -62,7 +62,7 @@
       "help": {
         "heading": "",
         "body": "",
-        "feedback": "If you have a technical issue, please <a class='govuk-link' target='_blank' href='{feedbackFormUrl}'>provide feedback</a>."
+        "feedback": "If you have a technical issue, please <a class='govuk-link' href='{feedbackFormUrl}'>provide feedback</a>."
       }
     },
     "selectService": {

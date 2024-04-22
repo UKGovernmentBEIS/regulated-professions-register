@@ -29,6 +29,9 @@ import { SearchModule } from './search/search.module';
 import { DecisionDataset } from './decisions/decision-dataset.entity';
 import { DecisionDatasetsSeeder } from './decisions/decision-dataset.seeder';
 
+import { Feedback } from './feedback/feedback.entity';
+import { FeedbackSeeder } from './feedback/feedback.seeder';
+
 seeder({
   imports: [
     ConfigModule.forRoot({
@@ -52,6 +55,7 @@ seeder({
       ProfessionVersion,
       ProfessionToOrganisation,
       DecisionDataset,
+      Feedback,
     ]),
     SearchModule.register(),
   ],
@@ -64,4 +68,5 @@ seeder({
   ProfessionsSeeder,
   UsersSeeder,
   DecisionDatasetsSeeder,
+  FeedbackSeeder,
 ]);
