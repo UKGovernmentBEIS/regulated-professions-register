@@ -51,7 +51,7 @@ describe('LegislationsService', () => {
       const post = await service.find('some-uuid');
 
       expect(post).toEqual(legislation);
-      expect(repoSpy).toHaveBeenCalledWith('some-uuid');
+      expect(repoSpy).toHaveBeenCalledWith({ where: { id: 'some-uuid' } });
     });
   });
 });

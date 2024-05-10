@@ -11,7 +11,7 @@ the changes you have made and automatically generate a migration
 when you run:
 
 ```bash
-npm run typeorm:migration:generate YOUR_MIGRATION_NAME
+npm run typeorm:migration:generate src/db/migrate/YOUR_MIGRATION_NAME
 ```
 
 This will generate a file in `src/db/migrate` with your changes
@@ -22,7 +22,7 @@ automatically reflected.
 To generate a migration, run the command:
 
 ```bash
-npm run typeorm:migration:create YOUR_MIGRATION_NAME
+npm run typeorm:migration:create src/db/migrate/YOUR_MIGRATION_NAME
 ```
 
 This generates a file in `src/db/migrate` in the following format:

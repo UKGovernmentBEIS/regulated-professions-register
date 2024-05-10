@@ -188,7 +188,7 @@ describe('OrganisationsService', () => {
         }).rejects.toThrowError();
 
         expect(repoSpy).toHaveBeenCalledWith({
-          name: 'Non-Existant Organisation Name',
+          where: { name: 'Non-Existant Organisation Name' },
         });
       });
     });
@@ -213,7 +213,7 @@ describe('OrganisationsService', () => {
         expect(result).toEqual('new-organisation-slug');
 
         expect(findOneRepoSpy).toHaveBeenCalledWith({
-          name: 'Old Organisation Name',
+          where: { name: 'Old Organisation Name' },
         });
 
         expect(SlugGenerator).toHaveBeenCalledWith(

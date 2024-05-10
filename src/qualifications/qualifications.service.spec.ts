@@ -52,7 +52,7 @@ describe('Qualification service', () => {
       const post = await service.find('some-uuid');
 
       expect(post).toEqual(qualification);
-      expect(repoSpy).toHaveBeenCalledWith('some-uuid');
+      expect(repoSpy).toHaveBeenCalledWith({ where: { id: 'some-uuid' } });
     });
   });
 });

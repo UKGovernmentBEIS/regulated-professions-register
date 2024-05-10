@@ -34,7 +34,7 @@ export class UsersService {
   }
 
   find(id: string): Promise<User> {
-    return this.repository.findOne(id);
+    return this.repository.findOne({ where: { id: id } });
   }
 
   findByEmail(email: string): Promise<User> {
@@ -64,9 +64,11 @@ export class UsersService {
 
     try {
       const foundUser = await queryRunner.manager.findOne(User, {
-        externalIdentifier: user.externalIdentifier,
-        confirmed: true,
-        archived: false,
+        where: {
+          externalIdentifier: user.externalIdentifier,
+          confirmed: true,
+          archived: false,
+        },
       });
 
       if (!foundUser) {

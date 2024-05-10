@@ -87,12 +87,12 @@ describe('utils', () => {
         },
       ];
 
-      let industryMap = industries.map((industry) => ({
+      const industryMap = industries.map((industry) => ({
         text: industry.name,
         value: industry.id,
       }));
 
-      let sortedIndustryMap = sortArrayByProperty(industryMap, 'text');
+      const sortedIndustryMap = sortArrayByProperty(industryMap, 'text');
 
       expect(sortedIndustryMap[0]['text']).toEqual('a');
       expect(sortedIndustryMap[1]['text']).toEqual('b');

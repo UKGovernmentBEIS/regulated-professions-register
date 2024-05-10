@@ -35,7 +35,17 @@ describe('DecisionDatasetsService', () => {
   describe('find', () => {
     it('returns a DecisionDataset', async () => {
       const dataset = decisionDatasetFactory.build();
-      const repoSpy = jest.spyOn(repo, 'findOne').mockResolvedValue(dataset);
+      const queryBuilder = createMock<SelectQueryBuilder<DecisionDataset>>({
+        leftJoinAndSelect: () => queryBuilder,
+        where: () => queryBuilder,
+        andWhere: () => queryBuilder,
+        getOne: async () => dataset,
+      });
+
+      jest
+        .spyOn(repo, 'createQueryBuilder')
+        .mockImplementation(() => queryBuilder);
+
       const result = await service.find(
         'profession-uuid',
         'organisation-uuid',
@@ -43,14 +53,33 @@ describe('DecisionDatasetsService', () => {
       );
 
       expect(result).toEqual(dataset);
-      expect(repoSpy).toBeCalledWith({
-        where: {
-          profession: { id: 'profession-uuid' },
-          organisation: { id: 'organisation-uuid' },
+
+      expect(queryBuilder).toHaveJoined([
+        'decisionDataset.profession',
+        'decisionDataset.organisation',
+        'decisionDataset.user',
+      ]);
+
+      expect(queryBuilder.where).toHaveBeenCalledWith(
+        'decisionDataset.professionId = :professionId',
+        {
+          professionId: 'profession-uuid',
+        },
+      );
+
+      expect(queryBuilder.andWhere).toHaveBeenCalledWith(
+        'decisionDataset.organisationId = :organisationId',
+        {
+          organisationId: 'organisation-uuid',
+        },
+      );
+
+      expect(queryBuilder.andWhere).toHaveBeenCalledWith(
+        'decisionDataset.year = :year',
+        {
           year: 2024,
         },
-        relations: ['profession', 'organisation', 'user'],
-      });
+      );
     });
   });
 
@@ -626,22 +655,51 @@ describe('DecisionDatasetsService', () => {
         id: 'profession-uuid',
       });
 
-      const repoSpy = jest
-        .spyOn(repo, 'find')
-        .mockResolvedValue(findResultDatasets);
+      const queryBuilder = createMock<SelectQueryBuilder<DecisionDataset>>({
+        leftJoinAndSelect: () => queryBuilder,
+        where: () => queryBuilder,
+        andWhere: () => queryBuilder,
+        orderBy: () => queryBuilder,
+        select: () => queryBuilder,
+        getMany: async () => findResultDatasets,
+      });
+
+      jest
+        .spyOn(repo, 'createQueryBuilder')
+        .mockImplementation(() => queryBuilder);
+
       const result = await service.allLiveYearsForProfession(queryProfession);
 
       expect(result).toEqual([2025, 2024, 2022, 2021]);
-      expect(repoSpy).toBeCalledWith({
-        where: {
-          profession: { id: 'profession-uuid' },
+
+      expect(queryBuilder).toHaveJoined([
+        'decisionDataset.profession',
+        'decisionDataset.organisation',
+        'decisionDataset.user',
+      ]);
+
+      expect(queryBuilder.where).toHaveBeenCalledWith(
+        'decisionDataset.profession.id = :professionId',
+        {
+          professionId: 'profession-uuid',
+        },
+      );
+
+      expect(queryBuilder.andWhere).toHaveBeenCalledWith(
+        'decisionDataset.status = :status',
+        {
           status: DecisionDatasetStatus.Live,
         },
-        order: {
-          year: 'DESC',
-        },
-        select: ['year'],
-      });
+      );
+
+      expect(queryBuilder.orderBy).toHaveBeenCalledWith(
+        'decisionDataset.year',
+        'DESC',
+      );
+
+      expect(queryBuilder.select).toHaveBeenCalledWith([
+        'decisionDataset.year',
+      ]);
     });
   });
 
