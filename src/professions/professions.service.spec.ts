@@ -56,21 +56,6 @@ describe('Profession', () => {
     });
   });
 
-  // describe('allConfirmed', () => {
-  //   it('should return all confirmed Professions, sorted by name', async () => {
-  //     const professions = professionFactory.buildList(2);
-  //     const repoSpy = jest.spyOn(repo, 'find').mockResolvedValue(professions);
-
-  //     await expect(service.allConfirmed()).resolves.toEqual(professions);
-  //     expect(repoSpy).toHaveBeenCalledWith(
-  //       expect.objectContaining({
-  //         where: { confirmed: true },
-  //         order: { name: 'ASC' },
-  //       }),
-  //     );
-  //   });
-  // });
-
   describe('find', () => {
     it('should return a Profession', async () => {
       const profession = professionFactory.build({ id: 'some-uuid' });

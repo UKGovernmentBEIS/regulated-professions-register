@@ -16,13 +16,6 @@ export class ProfessionsService {
     return this.repository.find({ order: { name: 'ASC' } });
   }
 
-  // allConfirmed(): Promise<Profession[]> {
-  //   return this.repository.find({
-  //     order: { name: 'ASC' },
-  //     where: { confirmed: true },
-  //   });
-  // }
-
   find(id: string): Promise<Profession> {
     return this.repository.findOne({ where: { id: id } });
   }
