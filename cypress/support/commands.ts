@@ -465,47 +465,6 @@ Cypress.Commands.add(
   },
 );
 
-Cypress.Commands.add('getFeedback', () => {
-  return cy
-    .readFile('./seeds/test/feedback.json')
-    .then((feedback: SeedFeedback[]) => {
-      return feedback;
-    });
-});
-
-Cypress.Commands.add(
-  'checkFeedbackExport',
-  (downloadText: string, filename: string) => {
-    // This is a workaround for a Cypress bug to prevent it waiting
-    // indefinitely for a new page to load after clicking the download link
-    // See https://github.com/cypress-io/cypress/issues/14857
-    cy.window()
-      .document()
-      .then(function (doc) {
-        doc.addEventListener('click', () => {
-          setTimeout(function () {
-            doc.location.reload();
-          }, 5000);
-        });
-      });
-
-    cy.get('body a').contains(downloadText).click();
-
-    const filePath = path.join(
-      Cypress.config('downloadsFolder'),
-      `${filename}.csv`,
-    );
-
-    cy.readFile(filePath).then((file) => {
-      const rows: string[][] = parse(file);
-
-      cy.getFeedback().then((feedback) => {
-        expect(rows).to.have.length(feedback.length + 1);
-      });
-    });
-  },
-);
-
 Cypress.Commands.add('clickContinueAndCheckBackLink', () => {
   cy.url().then((url) => {
     cy.translate('app.continue').then((continueLabel) => {
