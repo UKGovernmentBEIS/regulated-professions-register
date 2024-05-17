@@ -27,3 +27,7 @@ export class AssetsHelper {
     return new nunjucks.runtime.SafeString(js);
   }
 }
+
+export function getGaTag(): string {
+  return process.env['GA_TAG'] || '';
+}

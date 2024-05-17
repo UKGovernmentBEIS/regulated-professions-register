@@ -5,6 +5,7 @@
 {% extends "base.njk" %}
 
 {% block header %}
+  {% include "../shared/_cookie-banner.njk" %}
   {{
     govukHeader({
       homepageUrl: ("app.govUkUrl" | t),

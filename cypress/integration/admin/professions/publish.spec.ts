@@ -605,7 +605,9 @@ describe('Publishing professions', () => {
       cy.visit('/professions/search');
 
       cy.get('input[name="keywords"]').type('Example');
-      cy.get('button').click();
+      cy.translate('professions.search.filter.button').then((buttonText) => {
+        cy.get('button').contains(buttonText).click();
+      });
 
       cy.get('body').should('contain', 'Example Profession');
 

@@ -11,6 +11,8 @@
 {% endblock %}
 
 {% block header %}
+  {% include "./shared/_cookie-banner.njk" %}
+
 {# on staging, the "environment" var is set to "production". Because of this we need another way to check we're not on staging #}
   {% if (environment === 'production') and (not site_domain.startsWith('staging')) %}
     {% set bannerUrl = ("app.externalUrl" | t) %}
@@ -86,6 +88,7 @@
 
 {% block bodyEnd %}
   {{ encore_entry_script_tags }}
+  <script type="text/javascript">window.CookieConsent.init('{{ ga_tag }}', '{{ site_domain }}')</script>
 {% endblock %}
 
 {% block footer %}
