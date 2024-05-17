@@ -9,7 +9,6 @@ import {
   Connection,
   QueryRunner,
   Not,
-  Any,
 } from 'typeorm';
 import {
   OrganisationVersion,
@@ -504,8 +503,10 @@ describe('OrganisationVersionsService', () => {
       expect(result.status).toBe(OrganisationVersionStatus.Live);
 
       expect(findSpy).toHaveBeenCalledWith({
-        organisation: version.organisation,
-        status: OrganisationVersionStatus.Live,
+        where: {
+          organisation: { id: version.organisation.id },
+          status: OrganisationVersionStatus.Live,
+        },
       });
 
       expect(saveSpy).toHaveBeenCalledWith({
@@ -546,8 +547,10 @@ describe('OrganisationVersionsService', () => {
       expect(result.status).toBe(OrganisationVersionStatus.Live);
 
       expect(findSpy).toHaveBeenCalledWith({
-        organisation: organisation,
-        status: OrganisationVersionStatus.Live,
+        where: {
+          organisation: { id: organisation.id },
+          status: OrganisationVersionStatus.Live,
+        },
       });
 
       expect(saveSpy).toHaveBeenCalledWith({
@@ -621,9 +624,11 @@ describe('OrganisationVersionsService', () => {
 
       expect(findSpy).toHaveBeenCalledWith({
         where: {
-          organisation: inputVersion.organisation,
+          organisation: {
+            id: inputVersion.organisation.id,
+          },
           id: Not(inputVersion.id),
-          status: Any([
+          status: In([
             OrganisationVersionStatus.Live,
             OrganisationVersionStatus.Draft,
           ]),

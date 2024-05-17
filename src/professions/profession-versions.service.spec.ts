@@ -217,8 +217,10 @@ describe('ProfessionVersionsService', () => {
       expect(result.status).toBe(ProfessionVersionStatus.Live);
 
       expect(findSpy).toHaveBeenCalledWith({
-        profession: version.profession,
-        status: ProfessionVersionStatus.Live,
+        where: {
+          profession: { id: version.profession.id },
+          status: ProfessionVersionStatus.Live,
+        },
       });
 
       expect(saveSpy).toHaveBeenCalledWith({
@@ -259,8 +261,10 @@ describe('ProfessionVersionsService', () => {
       expect(result.status).toBe(ProfessionVersionStatus.Live);
 
       expect(findSpy).toHaveBeenCalledWith({
-        profession,
-        status: ProfessionVersionStatus.Live,
+        where: {
+          profession: { id: profession.id },
+          status: ProfessionVersionStatus.Live,
+        },
       });
 
       expect(saveSpy).toHaveBeenCalledWith({
@@ -339,9 +343,11 @@ describe('ProfessionVersionsService', () => {
 
       expect(findSpy).toHaveBeenCalledWith({
         where: {
-          profession: inputVersion.profession,
+          profession: {
+            id: inputVersion.profession.id,
+          },
           id: Not(inputVersion.id),
-          status: Any([
+          status: In([
             ProfessionVersionStatus.Live,
             ProfessionVersionStatus.Draft,
           ]),
@@ -414,7 +420,8 @@ describe('ProfessionVersionsService', () => {
 
       expect(result).toEqual(version);
 
-      expect(repoSpy).toHaveBeenCalledWith(version.id, {
+      expect(repoSpy).toHaveBeenCalledWith({
+        where: { id: version.id },
         relations: ['profession'],
       });
     });

@@ -20,7 +20,6 @@ const permissions = {
       UserPermission.PublishDecisionData,
       UserPermission.DownloadDecisionData,
       UserPermission.ViewDecisionData,
-      UserPermission.ManageFeedback,
     ],
     [Role.Registrar]: [
       UserPermission.CreateOrganisation,

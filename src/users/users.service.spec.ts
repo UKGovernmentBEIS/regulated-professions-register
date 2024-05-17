@@ -124,7 +124,7 @@ describe('UsersService', () => {
       const post = await service.find('some-uuid');
 
       expect(post).toEqual(user);
-      expect(repoSpy).toHaveBeenCalledWith('some-uuid');
+      expect(repoSpy).toHaveBeenCalledWith({ where: { id: 'some-uuid' } });
     });
   });
 
@@ -182,9 +182,11 @@ describe('UsersService', () => {
         expect(result).toEqual('user-created');
 
         expect(findSpy).toHaveBeenCalledWith(User, {
-          externalIdentifier: user.externalIdentifier,
-          confirmed: true,
-          archived: false,
+          where: {
+            externalIdentifier: user.externalIdentifier,
+            confirmed: true,
+            archived: false,
+          },
         });
         expect(saveSpy).toHaveBeenCalledWith(User, user);
 
@@ -207,9 +209,11 @@ describe('UsersService', () => {
         expect(result).toEqual('user-exists');
 
         expect(findSpy).toHaveBeenCalledWith(User, {
-          externalIdentifier: user.externalIdentifier,
-          confirmed: true,
-          archived: false,
+          where: {
+            externalIdentifier: user.externalIdentifier,
+            confirmed: true,
+            archived: false,
+          },
         });
         expect(saveSpy).not.toBeCalled();
 
@@ -231,9 +235,11 @@ describe('UsersService', () => {
       await expect(service.attemptAdd(user)).rejects.toThrowError();
 
       expect(findSpy).toHaveBeenCalledWith(User, {
-        externalIdentifier: user.externalIdentifier,
-        confirmed: true,
-        archived: false,
+        where: {
+          externalIdentifier: user.externalIdentifier,
+          confirmed: true,
+          archived: false,
+        },
       });
       expect(saveSpy).not.toBeCalled();
 

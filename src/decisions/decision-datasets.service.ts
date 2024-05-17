@@ -21,14 +21,13 @@ export class DecisionDatasetsService {
     organisationId: string,
     year: number,
   ): Promise<DecisionDataset> {
-    return this.repository.findOne({
-      where: {
-        profession: { id: professionId },
-        organisation: { id: organisationId },
-        year,
-      },
-      relations: ['profession', 'organisation', 'user'],
-    });
+    return await this.datasetsWithJoins()
+      .where('decisionDataset.professionId = :professionId', { professionId })
+      .andWhere('decisionDataset.organisationId = :organisationId', {
+        organisationId,
+      })
+      .andWhere('decisionDataset.year = :year', { year })
+      .getOne();
   }
 
   async all(filter: FilterInput): Promise<DecisionDataset[]> {
@@ -94,16 +93,16 @@ export class DecisionDatasetsService {
 
   async allLiveYearsForProfession(profession: Profession): Promise<number[]> {
     return (
-      await this.repository.find({
-        where: {
-          profession: { id: profession.id },
+      await this.datasetsWithJoins()
+        .where('decisionDataset.profession.id = :professionId', {
+          professionId: profession.id,
+        })
+        .andWhere('decisionDataset.status = :status', {
           status: DecisionDatasetStatus.Live,
-        },
-        order: {
-          year: 'DESC',
-        },
-        select: ['year'],
-      })
+        })
+        .orderBy('decisionDataset.year', 'DESC')
+        .select(['decisionDataset.year'])
+        .getMany()
     ).map((dataset) => dataset.year);
   }
 

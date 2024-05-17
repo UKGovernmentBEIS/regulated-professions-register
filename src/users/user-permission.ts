@@ -15,5 +15,4 @@ export enum UserPermission {
   PublishDecisionData = 'publishDecisionData',
   DownloadDecisionData = 'downloadDecisionData',
   ViewDecisionData = 'viewDecisionData',
-  ManageFeedback = 'manageFeedback',
 }
