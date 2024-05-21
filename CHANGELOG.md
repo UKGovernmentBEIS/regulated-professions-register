@@ -10,6 +10,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 
+- Fixed bug that clears "changed by" fields when updating a user
+
 ## [release-036] - 15/05/2024
 
 ### Added
