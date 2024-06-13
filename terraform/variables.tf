@@ -77,3 +77,8 @@ variable "custom_hostname" {
   type        = string
   description = "Custom hostname (prepended to custom_domain for the app and cdn-route)"
 }
+
+variable "regulator_feedback_url" {
+  type = string
+  description = "The feedback url to be used on the regulator page"
+}
