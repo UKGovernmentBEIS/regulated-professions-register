@@ -65,12 +65,14 @@ export class User {
   @OneToMany(
     () => OrganisationVersion,
     (organisationVersion) => organisationVersion.user,
+    { eager: true },
   )
   organisationVersions: OrganisationVersion[];
 
   @OneToMany(
     () => ProfessionVersion,
     (professionVersion) => professionVersion.user,
+    { eager: true },
   )
   professionVersions: ProfessionVersion[];
 
