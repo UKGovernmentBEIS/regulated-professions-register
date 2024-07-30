@@ -23,7 +23,7 @@ var CookieConsent = function () {
 
     this.populateCookiePreferences();
     this.setupGoogleAnalyticsTagIfOptedIn();
-    if (this.cookieMessageSeen()) {
+    if (this.cookiePreferencesSet()) {
       this.hideBanner();
     } else {
       this.showBanner();
@@ -54,8 +54,8 @@ var CookieConsent = function () {
     this.hide('cookie-banner-unconfirm');
     this.show('cookie-accepted-confirm');
 
-    this.storeCookiePolicy(true);
-    this.storeSeenCookieMessage(true);
+    this.storeCookiePolicy(true,true,true);
+    this.storeCookiePreferencesSet(true);
     this.setupGoogleAnalyticsTagIfOptedIn();
   };
 
@@ -63,8 +63,8 @@ var CookieConsent = function () {
     this.hide('cookie-banner-unconfirm');
     this.show('cookie-rejected-confirm');
 
-    this.storeCookiePolicy(false);
-    this.storeSeenCookieMessage(true);
+    this.storeCookiePolicy(true,false,true);
+    this.storeCookiePreferencesSet(true);
     this.deleteGoogleAnalyticsCookie();
     this.setupGoogleAnalyticsTagIfOptedIn();
   };
@@ -91,11 +91,13 @@ var CookieConsent = function () {
   };
 
   // Cookie
-  this.storeCookiePolicy = function (usage) {
+  this.storeCookiePolicy = function (essential, usage, campaigns) {
     this.createCookie(
       'cookie_policy',
       JSON.stringify({
+        essential: essential, 
         usage: usage,
+        campaigns: campaigns
       }),
     );
   };
@@ -126,36 +128,18 @@ var CookieConsent = function () {
     return null;
   };
 
-  this.storeCookiePolicy = function (usage) {
-    this.createCookie(
-      'cookie_policy',
-      JSON.stringify({
-        usage: usage,
-      }),
-    );
-  };
-
-  this.storeSeenCookieMessage = function (seen) {
+  this.storeCookiePreferencesSet = function (seen) {
     var threeMonths = new Date();
     threeMonths.setMonth(threeMonths.getMonth() + 3);
     this.createCookie(
-      'seen_cookie_message',
-      JSON.stringify({
-        seen: seen,
-      }),
+      'cookie_preferences_set',
+      true,
       threeMonths.getTime(),
     );
   };
 
-  this.cookieMessageSeen = function () {
-    var seen_cookie_message_cookie = this.readCookie('seen_cookie_message');
-    if (seen_cookie_message_cookie) {
-      try {
-        return JSON.parse(seen_cookie_message_cookie).seen;
-      } catch (e) {
-        return false;
-      }
-    }
+  this.cookiePreferencesSet = function () {
+    return this.readCookie('cookie_preferences_set') || false;
   };
 
   this.deleteCookiePolicy = function () {
@@ -172,7 +156,9 @@ var CookieConsent = function () {
       }
     }
     return {
+      essential: false, 
       usage: false,
+      campaigns: false
     };
   };
 
@@ -258,14 +244,14 @@ var CookieConsent = function () {
       this.focus('cookie-preference-saved-heading');
 
       if (cookieConsentYes.checked) {
-        this.storeCookiePolicy(true);
+        this.storeCookiePolicy(true,true,true);
         this.setupGoogleAnalyticsTagIfOptedIn();
       }
       if (cookieConsentNo.checked) {
         this.clearGoogleAnalyticsCookies();
-        this.storeCookiePolicy(false);
+        this.storeCookiePolicy(true,false,true);
       }
-      this.storeSeenCookieMessage(true);
+      this.storeCookiePreferencesSet(true);
     }
   };
 };
