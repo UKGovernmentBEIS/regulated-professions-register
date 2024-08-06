@@ -46,7 +46,9 @@ export class OrganisationsSeeder implements Seeder {
       this.data.map(async (organisation) => {
         const existingOrganisation = await this.organisationsRepository.findOne(
           {
-            slug: organisation.slug,
+            where: {
+              slug: organisation.slug,
+            },
           },
         );
 
@@ -69,8 +71,10 @@ export class OrganisationsSeeder implements Seeder {
             const status = item.status as OrganisationVersionStatus;
             const existingVersion =
               await this.organisationVersionsRepository.findOne({
-                organisation: org,
-                status: status,
+                where: {
+                  organisation: { id: org.id },
+                  status: status,
+                },
               });
             const newVersion = {
               alternateName: item.alternateName,

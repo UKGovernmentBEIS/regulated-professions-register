@@ -65,7 +65,6 @@ export default ProfessionFactory.define(({ transientParams, sequence }) => {
       }),
     ],
     qualification: qualificationFactory.build(),
-    confirmed: false,
     created_at: new Date(),
     legislations: [],
     professionToOrganisations: professionToOrganisations,

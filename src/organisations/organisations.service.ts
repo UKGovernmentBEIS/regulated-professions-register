@@ -16,7 +16,7 @@ export class OrganisationsService {
   }
 
   find(id: string): Promise<Organisation> {
-    return this.repository.findOne(id);
+    return this.repository.findOne({ where: { id: id } });
   }
 
   async findWithVersion(id: string, versionId: string): Promise<Organisation> {
@@ -56,7 +56,7 @@ export class OrganisationsService {
 
   async rename(oldName: string, newName: string): Promise<string> {
     const organisation = await this.repository.findOne({
-      name: oldName,
+      where: { name: oldName },
     });
 
     if (!organisation) {

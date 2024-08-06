@@ -17,7 +17,7 @@ export function formatDate(date: Date): string {
 export function sortArrayByProperty<T>(
   arr: T[],
   prop: keyof T,
-  ascending: boolean = true,
+  ascending = true,
 ): T[] {
   return arr.slice().sort((a, b) => {
     const aValue = a[prop] as unknown as string;

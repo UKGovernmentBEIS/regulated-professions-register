@@ -32,7 +32,7 @@ export class OrganisationVersionsService {
   }
 
   async find(id: string): Promise<OrganisationVersion> {
-    return this.repository.findOne(id);
+    return this.repository.findOne({ where: { id: id } });
   }
 
   async all(): Promise<OrganisationVersion[]> {
@@ -220,8 +220,12 @@ export class OrganisationVersionsService {
     const organisation = version.organisation;
 
     const liveVersion = await this.repository.findOne({
-      organisation,
-      status: OrganisationVersionStatus.Live,
+      where: {
+        organisation: {
+          id: organisation.id,
+        },
+        status: OrganisationVersionStatus.Live,
+      },
     });
 
     await queryRunner.connect();
@@ -258,9 +262,11 @@ export class OrganisationVersionsService {
     try {
       const liveAndDraftVersions = await this.repository.find({
         where: {
-          organisation,
+          organisation: {
+            id: organisation.id,
+          },
           id: Not(version.id),
-          status: Any([
+          status: In([
             OrganisationVersionStatus.Live,
             OrganisationVersionStatus.Draft,
           ]),

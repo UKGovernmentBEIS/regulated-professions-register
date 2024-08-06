@@ -1,11 +1,4 @@
-import {
-  Any,
-  Connection,
-  In,
-  Not,
-  Repository,
-  SelectQueryBuilder,
-} from 'typeorm';
+import { Connection, In, Not, Repository, SelectQueryBuilder } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
@@ -38,11 +31,14 @@ export class ProfessionVersionsService {
   }
 
   async find(id: string): Promise<ProfessionVersion> {
-    return this.repository.findOne(id);
+    return this.repository.findOne({ where: { id: id } });
   }
 
   async findWithProfession(id: string): Promise<ProfessionVersion> {
-    return this.repository.findOne(id, { relations: ['profession'] });
+    return this.repository.findOne({
+      where: { id: id },
+      relations: ['profession'],
+    });
   }
 
   async confirm(version: ProfessionVersion): Promise<ProfessionVersion> {
@@ -92,8 +88,12 @@ export class ProfessionVersionsService {
     const profession = version.profession;
 
     const liveVersion = await this.repository.findOne({
-      profession,
-      status: ProfessionVersionStatus.Live,
+      where: {
+        profession: {
+          id: profession.id,
+        },
+        status: ProfessionVersionStatus.Live,
+      },
     });
 
     await queryRunner.connect();
@@ -131,9 +131,11 @@ export class ProfessionVersionsService {
     try {
       const liveAndDraftVersions = await this.repository.find({
         where: {
-          profession,
+          profession: {
+            id: profession.id,
+          },
           id: Not(version.id),
-          status: Any([
+          status: In([
             ProfessionVersionStatus.Live,
             ProfessionVersionStatus.Draft,
           ]),
@@ -158,7 +160,11 @@ export class ProfessionVersionsService {
     }
 
     const versions = await this.repository.find({
-      where: { profession: profession },
+      where: {
+        profession: {
+          id: profession.id,
+        },
+      },
     });
 
     await this.searchService.bulkDelete(versions);
