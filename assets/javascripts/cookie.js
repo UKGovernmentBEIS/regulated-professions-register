@@ -45,7 +45,7 @@ var CookieConsent = function () {
     this.hide('cookie-banner-unconfirm');
     this.show('cookie-accepted-confirm');
 
-    this.storeCookiePolicy(true,true,true);
+    this.storeCookiePolicy(true, true, true);
     this.storeCookiePreferencesSet(true);
   };
 
@@ -53,7 +53,7 @@ var CookieConsent = function () {
     this.hide('cookie-banner-unconfirm');
     this.show('cookie-rejected-confirm');
 
-    this.storeCookiePolicy(true,false,true);
+    this.storeCookiePolicy(true, false, true);
     this.storeCookiePreferencesSet(true);
   };
 
@@ -83,9 +83,9 @@ var CookieConsent = function () {
     this.createCookie(
       'cookie_policy',
       JSON.stringify({
-        essential: essential, 
+        essential: essential,
         usage: usage,
-        campaigns: campaigns
+        campaigns: campaigns,
       }),
     );
   };
@@ -117,10 +117,7 @@ var CookieConsent = function () {
   };
 
   this.storeCookiePreferencesSet = function () {
-    this.createCookie(
-      'cookie_preferences_set',
-      true
-    );
+    this.createCookie('cookie_preferences_set', true);
   };
 
   this.cookiePreferencesSet = function () {
@@ -141,9 +138,9 @@ var CookieConsent = function () {
       }
     }
     return {
-      essential: false, 
+      essential: false,
       usage: false,
-      campaigns: false
+      campaigns: false,
     };
   };
 
@@ -173,10 +170,10 @@ var CookieConsent = function () {
       this.focus('cookie-preference-saved-heading');
 
       if (cookieConsentYes.checked) {
-        this.storeCookiePolicy(true,true,true);
+        this.storeCookiePolicy(true, true, true);
       }
       if (cookieConsentNo.checked) {
-        this.storeCookiePolicy(true,false,true);
+        this.storeCookiePolicy(true, false, true);
       }
       this.storeCookiePreferencesSet(true);
     }
