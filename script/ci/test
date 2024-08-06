@@ -8,7 +8,7 @@ set -e
 
 cd "$(dirname "$0")/../.."
 
-docker-compose -f docker-compose.ci.yml \
+docker compose -f docker-compose.ci.yml \
             -p app \
             run --rm test \
             npm run test:ci
