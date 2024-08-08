@@ -2,7 +2,7 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 
 import * as nunjucks from 'nunjucks';
 
-import { AssetsHelper, getGaTag } from '../helpers/assets.helper';
+import { AssetsHelper, getGaTag, getGtmTag } from '../helpers/assets.helper';
 import { formatMultilineString } from '../helpers/format-multiline-string.helper';
 import { formatLink } from '../helpers/format-link.helper';
 import { I18nHelper } from '../helpers/i18n.helper';
@@ -35,8 +35,8 @@ export const nunjucksConfig = async (
   );
   env.addGlobal('environment', process.env['NODE_ENV']);
   env.addGlobal('site_domain', getDomain(process.env['HOST_URL']));
+  env.addGlobal('gtm_tag', getGtmTag());
   env.addGlobal('ga_tag', getGaTag());
-  env.addGlobal('ga_cookie_suffix', getGaTag().replace(/G-/g, '_'));
   env.addFilter('t', (text, personalisation) => {
     return i18nHelper.translate(text, personalisation || {});
   });

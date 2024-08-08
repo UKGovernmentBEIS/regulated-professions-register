@@ -31,3 +31,7 @@ export class AssetsHelper {
 export function getGaTag(): string {
   return process.env['GA_TAG'] || '';
 }
+
+export function getGtmTag(): string {
+  return process.env['GTM_TAG'] || '';
+}

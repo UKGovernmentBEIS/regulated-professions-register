@@ -82,3 +82,8 @@ variable "ga_tag" {
   type = string
   description = "The tag used by Google Analytics"
 }
+
+variable "gtm_tag" {
+  type = string
+  description = "The tag used by Google Tag Manager"
+}
