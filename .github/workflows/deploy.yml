@@ -56,6 +56,7 @@ jobs:
       TF_VAR_custom_hostname: www
       TF_VAR_ga_tag: ${{ secrets.PROD_GA_TAG }}
       TF_VAR_gtm_tag: ${{ secrets.PROD_GTM_TAG }}
+      TF_VAR_regulator_feedback_url: ${{ vars.PROD_REGULATOR_FEEDBACK_URL }}
     steps:
       - name: Custom domain
         run: echo "::TF_VAR_custom_domain::$TF_VAR_custom_domain"
@@ -85,6 +86,7 @@ jobs:
       TF_VAR_custom_hostname: staging
       TF_VAR_ga_tag: ${{ secrets.STAGING_GA_TAG }}
       TF_VAR_gtm_tag: ${{ secrets.STAGING_GTM_TAG }}
+      TF_VAR_regulator_feedback_url: ${{ vars.STAGING_REGULATOR_FEEDBACK_URL }}
     steps:
       - name: Custom domain
         run: echo "::TF_VAR_custom_domain::$TF_VAR_custom_domain"

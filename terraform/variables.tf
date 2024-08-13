@@ -87,3 +87,8 @@ variable "gtm_tag" {
   type = string
   description = "The tag used by Google Tag Manager"
 }
+
+variable "regulator_feedback_url" {
+  type = string
+  description = "The feedback url to be used on the regulator page"
+}

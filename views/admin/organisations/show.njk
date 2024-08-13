@@ -91,6 +91,17 @@
                 }}
               </li>
               {% endif%}
+              <li>
+                {{
+                  govukButton({
+                    text: ("organisations.admin.button.feedback" | t),
+                    href: regulator_feedback_url,
+                    attributes: {
+                      target: "_blank"
+                    }
+                  })
+                }}
+              </li>
             </ul>
           </nav>
 

@@ -138,7 +138,8 @@
       "unarchive": "Unarchive this regulatory authority",
       "saveAsDraft": "Save as draft",
       "publish": "Publish to register",
-      "backToRegulator": "Back to regulator"
+      "backToRegulator": "Back to regulator",
+      "feedback": "Report a regulatory issue"
     },
     "publicFacingLink": {
       "heading": "Currently published version",
