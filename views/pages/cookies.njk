@@ -1,11 +1,29 @@
 {% extends "base.njk" %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 
 {% set title = "Details about cookies on the Regulated Professions Register" %}
+
+{% set html %}
+  <h3 id="cookie-preference-saved-heading" class="govuk-notification-banner__heading" tabindex="-1">
+    Your cookie settings were saved
+  </h3>
+{% endset %}
 
 {% block content %}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
+
+    {{ govukNotificationBanner({
+      html: html,
+      type: "success",
+      attributes: {
+        id: "cookie-preference-saved"
+      },
+      classes: 'govuk-visually-hidden'
+    }) }}
 
     <h1 class="govuk-heading-xl">
       {{ title }}
@@ -74,14 +92,148 @@
             {
               text: "When the browser is closed"
             }
+          ],
+          [
+            {
+              text: "cookie_policy"
+            },
+            {
+              text: "Let us know what your cookie preferences are"
+            },
+            {
+              text: "1 year"
+            }
+          ],
+          [
+            {
+              text: "cookie_preferences_set"
+            },
+            {
+              text: "Let us know that you have chosen your cookie preferences"
+            },
+            {
+              text: "1 year"
+            }
           ]
         ]
       })
     }}
 
     <h2 class="govuk-heading-m">
-      Gathering your feedback
+      Analytics cookies (optional)
     </h2>
+
+    <p class="govuk-body">
+      With your permission, we use Google Analytics to collect data about how you use Regulated Professions Register. This information helps us to improve our service.
+
+      Google is not allowed to use or share our analytics data with anyone.
+
+      Google Analytics stores anonymised information about:
+      <ul class="govuk-list govuk-list--bullet">
+        <li>how you got to Regulated Professions Register</li>
+        <li>the pages you visit on Regulated Professions Register and how long you spend on them</li>
+        <li>any errors you see while using Regulated Professions Register</li>
+      </ul>
+    </p>
+
+    {{
+      govukTable({
+        caption: "Analytics cookies (optional)",
+        captionClasses: "govuk-visually-hidden",
+        firstCellIsHeader: true,
+        head: [
+          {
+            text: "Name",
+            classes: "govuk-!-width-one-third"
+          },
+          {
+            text: "Purpose"
+          },
+          {
+            text: "Expiry",
+            classes: "govuk-!-width-one-quarter"
+          }
+        ],
+        rows: [
+          [
+            {
+              text: "_ga"
+            },
+            {
+              text: "These help us count how many people visit GOV.UK and other government digital services by tracking if you've visited before"
+            },
+            {
+              text: "2 years"
+            }
+          ],
+          [
+            {
+              text: "_gid"
+            },
+            {
+              text: "These help us count how many people visit GOV.UK and other government digital services by tracking if you've visited before"
+            },
+            {
+              text: "24 hours"
+            }
+          ],
+          [
+            {
+              text: "_gat"
+            },
+            {
+              text: "Used to limit request to Google Analytics"
+            },
+            {
+              text: "10 mins"
+            }
+          ],
+          [
+            {
+              text: "_ga_" + ga_tag
+            },
+            {
+              text: "Used by Google Analytics to find and track an individual session with your device"
+            },
+            {
+              text: "2 years"
+            }
+          ]
+        ]
+      })
+    }}
+
+    {# Cookie Preferences #}
+    <h2 class="govuk-heading-l">Change your cookie settings</h2>
+        {{ govukRadios({
+          name: "cookies[analytics]",
+          idPrefix: "cookies-analytics",
+          fieldset: {
+            legend: {
+              text: "Do you want to accept analytics cookies?",
+              classes: "govuk-fieldset__legend--s"
+            }
+          },
+          items: [
+            {
+              value: "yes",
+              text: "Yes"
+            },
+            {
+              value: "no",
+              text: "No",
+              checked: true
+            }
+          ]
+        }) }}
+
+        {{ govukButton({
+          text: "Save cookie settings",
+          id: "cookie-pref-save"
+        }) }}
+    </h2>
+
+    <h2 class="govuk-heading-l">Gathering your feedback</h2>
 
     <p class="govuk-body">
       We use Google Forms software to collect information about what you think of the RPR service. We do this to make sure the site is meeting the needs of its users and to help us make improvements.

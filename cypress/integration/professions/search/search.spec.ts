@@ -55,7 +55,9 @@ describe('Searching a profession', () => {
   it('I can filter by keyword', () => {
     cy.get('input[name="keywords"]').type('Attorney');
 
-    cy.get('button').click();
+    cy.translate('professions.search.filter.button').then((buttonText) => {
+      cy.get('button').contains(buttonText).click();
+    });
     cy.checkAccessibility();
 
     cy.get('input[name="keywords"]').should('have.value', 'Attorney');
@@ -69,7 +71,9 @@ describe('Searching a profession', () => {
 
   it('The search uses a professions keywords to filter', () => {
     cy.get('input[name="keywords"]').type('Adjudicator');
-    cy.get('button').click();
+    cy.translate('professions.search.filter.button').then((buttonText) => {
+      cy.get('button').contains(buttonText).click();
+    });
     cy.get('body').should('contain', 'Registered Trademark Attorney');
     cy.get('body').should(
       'not.contain',
@@ -81,7 +85,9 @@ describe('Searching a profession', () => {
     cy.get('input[name="nations[]"][value="GB-WLS"]').check();
     cy.get('input[name="nations[]"][value="GB-NIR"]').check();
 
-    cy.get('button').click();
+    cy.translate('professions.search.filter.button').then((buttonText) => {
+      cy.get('button').contains(buttonText).click();
+    });
     cy.checkAccessibility();
 
     cy.get('input[name="nations[]"][value="GB-WLS"]').should('be.checked');
@@ -100,7 +106,9 @@ describe('Searching a profession', () => {
       cy.get('label').contains(nameLabel).parent().find('input').check();
     });
 
-    cy.get('button').click();
+    cy.translate('professions.search.filter.button').then((buttonText) => {
+      cy.get('button').contains(buttonText).click();
+    });
     cy.checkAccessibility();
 
     cy.translate('industries.education').then((nameLabel) => {
@@ -125,7 +133,9 @@ describe('Searching a profession', () => {
       },
     );
 
-    cy.get('button').click();
+    cy.translate('professions.search.filter.button').then((buttonText) => {
+      cy.get('button').contains(buttonText).click();
+    });
     cy.checkAccessibility();
 
     cy.translate('professions.regulationTypes.licensing.name').then(
@@ -154,7 +164,9 @@ describe('Searching a profession', () => {
 
     cy.get('input[name="nations[]"][value="GB-ENG"]').check();
 
-    cy.get('button').click();
+    cy.translate('professions.search.filter.button').then((buttonText) => {
+      cy.get('button').contains(buttonText).click();
+    });
 
     cy.get('a')
       .contains(
@@ -182,7 +194,9 @@ describe('Searching a profession', () => {
 
     cy.get('input[name="keywords"]').type('Attorney');
 
-    cy.get('button').click();
+    cy.translate('professions.search.filter.button').then((buttonText) => {
+      cy.get('button').contains(buttonText).click();
+    });
     cy.checkAccessibility();
 
     cy.translate('app.filters.clearAllButton').then((clearAllButton) => {
