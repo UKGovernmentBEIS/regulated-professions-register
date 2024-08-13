@@ -54,6 +54,7 @@ jobs:
       TF_VAR_custom_domain: ${{ vars.CUSTOM_DOMAIN }}
       TF_VAR_redirect_domain: ${{ vars.REDIRECT_DOMAIN }}
       TF_VAR_custom_hostname: www
+      TF_VAR_regulator_feedback_url: ${{ vars.PROD_REGULATOR_FEEDBACK_URL }}
     steps:
       - name: Custom domain
         run: echo "::TF_VAR_custom_domain::$TF_VAR_custom_domain"
@@ -81,6 +82,7 @@ jobs:
       TF_VAR_custom_domain: ${{ vars.CUSTOM_DOMAIN }}
       TF_VAR_redirect_domain: ${{ vars.REDIRECT_DOMAIN }}
       TF_VAR_custom_hostname: staging
+      TF_VAR_regulator_feedback_url: ${{ vars.STAGING_REGULATOR_FEEDBACK_URL }}
     steps:
       - name: Custom domain
         run: echo "::TF_VAR_custom_domain::$TF_VAR_custom_domain"
