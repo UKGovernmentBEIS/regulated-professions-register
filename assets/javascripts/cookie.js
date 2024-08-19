@@ -97,7 +97,7 @@ var CookieConsent = function () {
           new Date().getTime() + 365 * 24 * 60 * 60 * 1000,
         ).toUTCString();
     var cookie =
-      escape(key) + '=' + escape(value) + ';expires=' + expiration + '; path=/';
+      (key) + '=' + (value) + ';expires=' + expiration + '; path=/';
     document.cookie = cookie;
   };
 
@@ -107,10 +107,10 @@ var CookieConsent = function () {
     for (var i = 0; i < cookies.length; i++) {
       var cookie = cookies[i];
       while (cookie.charAt(0) === ' ') {
-        cookie = unescape(cookie.substring(1, cookie.length));
+        cookie = cookie.substring(1, cookie.length);
       }
       if (cookie.indexOf(key) === 0) {
-        return unescape(cookie.substring(key.length, cookie.length));
+        return cookie.substring(key.length, cookie.length);
       }
     }
     return null;
