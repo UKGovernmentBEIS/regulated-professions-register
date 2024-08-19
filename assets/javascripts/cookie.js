@@ -96,8 +96,7 @@ var CookieConsent = function () {
       : new Date(
           new Date().getTime() + 365 * 24 * 60 * 60 * 1000,
         ).toUTCString();
-    var cookie =
-      (key) + '=' + (value) + ';expires=' + expiration + '; path=/';
+    var cookie = key + '=' + value + ';expires=' + expiration + '; path=/';
     document.cookie = cookie;
   };
 
