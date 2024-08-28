@@ -1,12 +1,12 @@
 import { registerAs } from '@nestjs/config';
 import { config as setConfig } from 'dotenv';
 
-import IORedis from 'ioredis';
+import { RedisOptions } from 'ioredis';
 
 setConfig({ path: `.env.${process.env.NODE_ENV}` });
 
-const redisOptsFromUrl = (urlString: string): IORedis.RedisOptions => {
-  const redisOpts: IORedis.RedisOptions = {};
+const redisOptsFromUrl = (urlString: string): RedisOptions => {
+  const redisOpts: RedisOptions = {};
   try {
     const redisUrl = new URL(urlString);
     redisOpts.port = Number(redisUrl.port) || 6379;
