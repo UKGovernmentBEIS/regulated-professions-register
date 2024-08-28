@@ -51,13 +51,13 @@
     "bull:repl": "bull-repl"
   },
   "dependencies": {
-    "@nestjs/bull": "^0.5.5",
+    "@nestjs/bull": "^10.2.1",
     "@nestjs/cli": "^9.3.0",
-    "@nestjs/common": "^8.4.6",
-    "@nestjs/config": "^2.1.0",
-    "@nestjs/core": "^8.4.6",
-    "@nestjs/platform-express": "^8.4.6",
-    "@nestjs/typeorm": "^8.1.4",
+    "@nestjs/common": "^10.4.1",
+    "@nestjs/config": "^3.2.3",
+    "@nestjs/core": "^10.4.1",
+    "@nestjs/platform-express": "^10.4.1",
+    "@nestjs/typeorm": "^10.0.2",
     "@opensearch-project/opensearch": "^1.1.0",
     "@symfony/webpack-encore": "^2.1.0",
     "@types/auth0": "^2.35.0",
@@ -66,6 +66,7 @@
     "@types/express-session": "^1.17.4",
     "@types/google-libphonenumber": "^7.4.23",
     "auth0": "^2.42.0",
+    "axios": "^1.7.5",
     "bull": "^4.12.2",
     "bull-repl": "^1.5.0",
     "class-transformer": "^0.5.1",
@@ -85,7 +86,7 @@
     "jwt-decode": "^3.1.2",
     "method-override": "^3.0.0",
     "nestjs-i18n": "^10.2.6",
-    "nestjs-opensearch": "^0.0.1",
+    "nestjs-opensearch": "^0.3.2",
     "nestjs-seeder": "^0.2.0",
     "notifications-node-client": "^5.1.1",
     "nunjucks": "^3.2.4",
@@ -103,7 +104,7 @@
   "devDependencies": {
     "@golevelup/ts-jest": "^0.3.3",
     "@nestjs/schematics": "^8.0.11",
-    "@nestjs/testing": "^8.4.6",
+    "@nestjs/testing": "^10.4.1",
     "@types/bull": "^4.10.0",
     "@types/express": "^4.17.13",
     "@types/jest": "^27.4.1",
@@ -168,6 +169,9 @@
     "testEnvironment": "node",
     "setupFilesAfterEnv": [
       "./testutils/jest.setup.ts"
-    ]
+    ],
+    "moduleNameMapper": {
+      "^axios$": "axios/dist/node/axios.cjs"
+    }
   }
 }
