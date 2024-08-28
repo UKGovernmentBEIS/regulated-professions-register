@@ -22,6 +22,8 @@ import {
 import { AuthorityAndRoleArgs } from './interfaces/authority-and-role-args';
 import professionVersionFactory from '../../testutils/factories/profession-version';
 import { ProfessionVersionStatus } from '../profession-version.entity';
+import { Reflector } from '@nestjs/core/services/reflector.service';
+import { AuthenticationGuard } from '../../common/authentication.guard';
 
 jest.mock('../../users/helpers/check-can-change-profession');
 jest.mock('./presenters/regulated-authorities-select-presenter');
@@ -50,6 +52,8 @@ describe('OrganisationsController', () => {
           useValue: organisationVersionsService,
         },
         { provide: I18nService, useValue: i18nService },
+        Reflector,
+        AuthenticationGuard,
       ],
     }).compile();
 
