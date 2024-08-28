@@ -65,7 +65,7 @@
     "@types/connect-redis": "^0.0.18",
     "@types/express-session": "^1.17.4",
     "@types/google-libphonenumber": "^7.4.23",
-    "auth0": "^2.42.0",
+    "auth0": "^4.9.0",
     "axios": "^1.7.5",
     "bull": "^4.12.2",
     "bull-repl": "^1.5.0",
