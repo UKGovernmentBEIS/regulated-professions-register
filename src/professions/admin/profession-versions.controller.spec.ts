@@ -30,6 +30,8 @@ import { NationsListPresenter } from '../../nations/presenters/nations-list.pres
 import { Nation } from '../../nations/nation';
 import { ShowTemplate } from './interfaces/show-template.interface';
 import { organisationList } from './../presenters/organisation-list';
+import { Reflector } from '@nestjs/core';
+import { AuthenticationGuard } from '../../common/authentication.guard';
 
 jest.mock('../../organisations/organisation.entity');
 jest.mock('../presenters/profession.presenter');
@@ -60,6 +62,8 @@ describe('ProfessionVersionsController', () => {
           provide: I18nService,
           useValue: i18nService,
         },
+        Reflector,
+        AuthenticationGuard,
       ],
     }).compile();
 
