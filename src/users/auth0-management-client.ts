@@ -22,9 +22,11 @@ class ManagementClientStub {
   readonly usersByEmail: UsersByEmailManagerStub;
   readonly tickets: TicketsManagerStub;
 
-  async deleteUser(): Promise<null> {
-    return null;
-  }
+  constructor(){
+    this.users = new UsersManagerStub();
+    this.usersByEmail = new UsersByEmailManagerStub();
+    this.tickets = new TicketsManagerStub();
+  };
 }
 
 class UsersManagerStub {
