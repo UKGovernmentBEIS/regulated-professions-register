@@ -22,11 +22,11 @@ class ManagementClientStub {
   readonly usersByEmail: UsersByEmailManagerStub;
   readonly tickets: TicketsManagerStub;
 
-  constructor(){
+  constructor() {
     this.users = new UsersManagerStub();
     this.usersByEmail = new UsersByEmailManagerStub();
     this.tickets = new TicketsManagerStub();
-  };
+  }
 }
 
 class UsersManagerStub {
