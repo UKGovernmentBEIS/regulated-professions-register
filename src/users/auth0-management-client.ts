@@ -2,32 +2,62 @@ import { randomUUID } from 'crypto';
 import { ManagementClient as Auth0ManagementClient } from 'auth0';
 
 type StubCreateUserResponse = {
-  user_id: string;
+  data: {
+    user_id: string;
+  };
 };
 
 type StubPasswordChangeTicketResponse = {
-  ticket: string;
+  data: {
+    ticket: string;
+  };
+};
+
+type StubUsersByEmailResponse = {
+  data: Array<any>;
 };
 
 class ManagementClientStub {
-  async getUsersByEmail(): Promise<Array<any>> {
-    return [];
-  }
+  readonly users: UsersManagerStub;
+  readonly usersByEmail: UsersByEmailManagerStub;
+  readonly tickets: TicketsManagerStub;
 
-  async createUser(): Promise<StubCreateUserResponse> {
+  constructor() {
+    this.users = new UsersManagerStub();
+    this.usersByEmail = new UsersByEmailManagerStub();
+    this.tickets = new TicketsManagerStub();
+  }
+}
+
+class UsersManagerStub {
+  async create(): Promise<StubCreateUserResponse> {
     return {
-      user_id: randomUUID(),
+      data: {
+        user_id: randomUUID(),
+      },
     };
   }
 
-  async createPasswordChangeTicket(): Promise<StubPasswordChangeTicketResponse> {
-    return {
-      ticket: 'http://example.com',
-    };
-  }
-
-  async deleteUser(): Promise<null> {
+  async delete(): Promise<null> {
     return null;
+  }
+}
+
+class UsersByEmailManagerStub {
+  async getByEmail(): Promise<StubUsersByEmailResponse> {
+    return {
+      data: [],
+    };
+  }
+}
+
+class TicketsManagerStub {
+  async changePassword(): Promise<StubPasswordChangeTicketResponse> {
+    return {
+      data: {
+        ticket: 'http://example.com',
+      },
+    };
   }
 }
 
