@@ -88,7 +88,7 @@
     "nestjs-i18n": "^10.2.6",
     "nestjs-opensearch": "^0.3.2",
     "nestjs-seeder": "^0.2.0",
-    "notifications-node-client": "^5.1.1",
+    "notifications-node-client": "^8.2.1",
     "nunjucks": "^3.2.4",
     "pg": "^8.7.3",
     "reflect-metadata": "^0.1.13",
