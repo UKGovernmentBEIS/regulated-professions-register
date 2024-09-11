@@ -170,9 +170,6 @@
     "testEnvironment": "node",
     "setupFilesAfterEnv": [
       "./testutils/jest.setup.ts"
-    ],
-    "moduleNameMapper": {
-      "^axios$": "axios/dist/node/axios.cjs"
-    }
+    ]
   }
 }
