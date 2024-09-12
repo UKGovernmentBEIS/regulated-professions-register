@@ -23,9 +23,8 @@ export class OrganisationsController {
     'app.backToSearch',
   )
   async show(@Param('slug') slug: string): Promise<ShowTemplate> {
-    const organisation = await this.organisationVersionsService.findLiveBySlug(
-      slug,
-    );
+    const organisation =
+      await this.organisationVersionsService.findLiveBySlug(slug);
 
     const professions = getProfessionsFromOrganisation(organisation)
       .map((profession) => Profession.withLatestLiveVersion(profession))

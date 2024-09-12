@@ -27,15 +27,13 @@ export class ConfirmationController {
     @Param('professionId') professionId: string,
     @Param('versionId') versionId: string,
   ): Promise<void> {
-    const profession = await this.professionsService.findWithVersions(
-      professionId,
-    );
+    const profession =
+      await this.professionsService.findWithVersions(professionId);
 
     checkCanChangeProfession(req, profession);
 
-    const version = await this.professionVersionsService.findWithProfession(
-      versionId,
-    );
+    const version =
+      await this.professionVersionsService.findWithProfession(versionId);
 
     let action: string;
     let bannerType: 'info' | 'success';

@@ -60,9 +60,8 @@ export class ProfessionsController {
       user: getActingUser(req),
     } as ProfessionVersion;
 
-    const savedVersion = await this.professionVersionsService.save(
-      blankVersion,
-    );
+    const savedVersion =
+      await this.professionVersionsService.save(blankVersion);
 
     res.redirect(
       `/admin/professions/${blankProfession.id}/versions/${savedVersion.id}/top-level-information/edit`,

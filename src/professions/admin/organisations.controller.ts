@@ -61,9 +61,8 @@ export class OrganisationsController {
     @Req() req: RequestWithAppSession,
     errors: object | undefined = undefined,
   ): Promise<void> {
-    const profession = await this.professionsService.findWithVersions(
-      professionId,
-    );
+    const profession =
+      await this.professionsService.findWithVersions(professionId);
 
     checkCanChangeProfession(req, profession);
 
@@ -92,9 +91,8 @@ export class OrganisationsController {
     @Param('versionId') versionId: string,
     @Req() req: RequestWithAppSession,
   ): Promise<void> {
-    const profession = await this.professionsService.findWithVersions(
-      professionId,
-    );
+    const profession =
+      await this.professionsService.findWithVersions(professionId);
 
     checkCanChangeProfession(req, profession);
 
@@ -193,9 +191,8 @@ export class OrganisationsController {
     profession: Profession,
     submittedValue: ProfessionToOrganisationParams,
   ): Promise<ProfessionToOrganisation> {
-    const organisation = await this.fetchOrganisationFromSubmittedValue(
-      submittedValue,
-    );
+    const organisation =
+      await this.fetchOrganisationFromSubmittedValue(submittedValue);
 
     return organisation
       ? new ProfessionToOrganisation(

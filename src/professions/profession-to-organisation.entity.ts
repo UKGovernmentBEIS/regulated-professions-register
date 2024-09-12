@@ -20,7 +20,7 @@ export const TierOneRoles = <const>[
   OrganisationRole.OversightBody,
 ];
 
-export type TierOneRoleTypes = typeof TierOneRoles[number];
+export type TierOneRoleTypes = (typeof TierOneRoles)[number];
 
 @Entity({ name: 'professionToOrganisation' })
 export class ProfessionToOrganisation {

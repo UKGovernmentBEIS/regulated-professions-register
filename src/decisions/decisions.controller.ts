@@ -37,9 +37,8 @@ export class DecisionsController {
     @Param('slug') slug: string,
     @Param('year', ParseIntPipe) year,
   ): Promise<ShowTemplate> {
-    const profession = await this.professionVersionsService.findLiveBySlug(
-      slug,
-    );
+    const profession =
+      await this.professionVersionsService.findLiveBySlug(slug);
 
     if (!profession) {
       throw new NotFoundException(

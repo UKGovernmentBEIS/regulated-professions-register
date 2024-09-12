@@ -121,9 +121,8 @@ export class OrganisationsController {
     @Req() req: RequestWithAppSession,
   ): Promise<void> {
     const blankOrganisation = new Organisation();
-    const organisation = await this.organisationsService.save(
-      blankOrganisation,
-    );
+    const organisation =
+      await this.organisationsService.save(blankOrganisation);
     const blankVersion = {
       organisation: organisation,
       user: getActingUser(req),
@@ -196,9 +195,8 @@ export class OrganisationsController {
         ...OrganisationVersion.fromDto(body),
       };
 
-      const updatedVersion = await this.organisationVersionsService.save(
-        newVersion,
-      );
+      const updatedVersion =
+        await this.organisationVersionsService.save(newVersion);
 
       const updatedOrganisation = Organisation.withVersion(
         organisation,

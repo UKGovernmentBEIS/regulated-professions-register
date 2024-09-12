@@ -47,15 +47,13 @@ export class LegislationController {
     @Param('versionId') versionId: string,
     @Req() request: RequestWithAppSession,
   ): Promise<void> {
-    const profession = await this.professionsService.findWithVersions(
-      professionId,
-    );
+    const profession =
+      await this.professionsService.findWithVersions(professionId);
 
     checkCanChangeProfession(request, profession);
 
-    const version = await this.professionVersionsService.findWithProfession(
-      versionId,
-    );
+    const version =
+      await this.professionVersionsService.findWithProfession(versionId);
 
     const legislations = version.legislations
       ? sortLegislationsByIndex(version.legislations)
@@ -76,18 +74,16 @@ export class LegislationController {
     @Body() legislationDto,
     @Req() request: RequestWithAppSession,
   ): Promise<void> {
-    const profession = await this.professionsService.findWithVersions(
-      professionId,
-    );
+    const profession =
+      await this.professionsService.findWithVersions(professionId);
 
     checkCanChangeProfession(request, profession);
 
     const validator = await Validator.validate(LegislationDto, legislationDto);
     const submittedValues = validator.obj;
 
-    const version = await this.professionVersionsService.findWithProfession(
-      versionId,
-    );
+    const version =
+      await this.professionVersionsService.findWithProfession(versionId);
 
     const legislations = version.legislations
       ? sortLegislationsByIndex(version.legislations)

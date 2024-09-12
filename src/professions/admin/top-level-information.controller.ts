@@ -51,9 +51,8 @@ export class TopLevelInformationController {
     @Req() req: RequestWithAppSession,
     errors: object | undefined = undefined,
   ): Promise<void> {
-    const profession = await this.professionsService.findWithVersions(
-      professionId,
-    );
+    const profession =
+      await this.professionsService.findWithVersions(professionId);
 
     checkCanChangeProfession(req, profession);
 
@@ -80,9 +79,8 @@ export class TopLevelInformationController {
     @Param('versionId') versionId: string,
     @Req() req: RequestWithAppSession,
   ): Promise<void> {
-    const profession = await this.professionsService.findWithVersions(
-      professionId,
-    );
+    const profession =
+      await this.professionsService.findWithVersions(professionId);
 
     checkCanChangeProfession(req, profession);
 

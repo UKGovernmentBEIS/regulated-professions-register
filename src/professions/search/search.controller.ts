@@ -36,9 +36,8 @@ export class SearchController {
       allIndustries,
     });
 
-    const filteredProfessions = await this.professionVersionsService.searchLive(
-      filterInput,
-    );
+    const filteredProfessions =
+      await this.professionVersionsService.searchLive(filterInput);
 
     return new SearchPresenter(
       filterInput,

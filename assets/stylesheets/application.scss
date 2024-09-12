@@ -37,7 +37,8 @@ $small-screen: 768px;
     height: 180px;
     overflow-y: auto;
     // From https://stackoverflow.com/questions/44793453/how-do-i-add-a-top-and-bottom-shadow-while-scrolling-but-only-when-needed
-    background: linear-gradient(white 30%, rgba(255, 255, 255, 0)),
+    background:
+      linear-gradient(white 30%, rgba(255, 255, 255, 0)),
       linear-gradient(rgba(255, 255, 255, 0), white 70%) 0 100%,
       radial-gradient(
         50% 0,
@@ -52,7 +53,8 @@ $small-screen: 768px;
           rgba(0, 0, 0, 0)
         )
         0 100%;
-    background: linear-gradient(white 30%, rgba(255, 255, 255, 0)),
+    background:
+      linear-gradient(white 30%, rgba(255, 255, 255, 0)),
       linear-gradient(rgba(255, 255, 255, 0), white 70%) 0 100%,
       radial-gradient(
         farthest-side at 50% 0,
@@ -67,7 +69,11 @@ $small-screen: 768px;
         0 100%;
     background-repeat: no-repeat;
     background-color: white;
-    background-size: 100% 40px, 100% 40px, 100% 14px, 100% 14px;
+    background-size:
+      100% 40px,
+      100% 40px,
+      100% 14px,
+      100% 14px;
     background-attachment: local, local, scroll, scroll;
   }
 

@@ -49,15 +49,13 @@ export class QualificationsController {
     @Param('versionId') versionId: string,
     @Req() request: RequestWithAppSession,
   ): Promise<void> {
-    const profession = await this.professionsService.findWithVersions(
-      professionId,
-    );
+    const profession =
+      await this.professionsService.findWithVersions(professionId);
 
     checkCanChangeProfession(request, profession);
 
-    const version = await this.professionVersionsService.findWithProfession(
-      versionId,
-    );
+    const version =
+      await this.professionVersionsService.findWithProfession(versionId);
 
     return this.renderForm(res, version.qualification, version, profession);
   }
@@ -74,9 +72,8 @@ export class QualificationsController {
     @Body() qualificationsDto,
     @Req() request: RequestWithAppSession,
   ): Promise<void> {
-    const profession = await this.professionsService.findWithVersions(
-      professionId,
-    );
+    const profession =
+      await this.professionsService.findWithVersions(professionId);
 
     checkCanChangeProfession(request, profession);
 
@@ -86,9 +83,8 @@ export class QualificationsController {
     );
     const submittedValues = validator.obj;
 
-    const version = await this.professionVersionsService.findWithProfession(
-      versionId,
-    );
+    const version =
+      await this.professionVersionsService.findWithProfession(versionId);
 
     const updatedQualification: Qualification = {
       ...version.qualification,

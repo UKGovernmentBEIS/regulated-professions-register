@@ -751,9 +751,8 @@ describe('ProfessionVersionsService', () => {
         .spyOn(repo, 'createQueryBuilder')
         .mockImplementation(() => queryBuilder);
 
-      const result = await service.allWithLatestVersionForOrganisation(
-        organisation,
-      );
+      const result =
+        await service.allWithLatestVersionForOrganisation(organisation);
 
       const expectedProfessions = versions.map((version) =>
         Profession.withVersion(version.profession, version),

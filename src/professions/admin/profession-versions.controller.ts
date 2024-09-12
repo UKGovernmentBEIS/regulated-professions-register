@@ -66,9 +66,8 @@ export class ProfessionVersionsController {
     const profession = Profession.withVersion(version.profession, version);
     const presenter = new ProfessionPresenter(profession, this.i18nService);
 
-    const hasLiveVersion = await this.professionVersionsService.hasLiveVersion(
-      profession,
-    );
+    const hasLiveVersion =
+      await this.professionVersionsService.hasLiveVersion(profession);
 
     const tierOneOrganisations = getGroupedTierOneOrganisationsFromProfession(
       profession,
