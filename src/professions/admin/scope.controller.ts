@@ -55,15 +55,13 @@ export class ScopeController {
     @Req() req: RequestWithAppSession,
     errors: object | undefined = undefined,
   ): Promise<void> {
-    const profession = await this.professionsService.findWithVersions(
-      professionId,
-    );
+    const profession =
+      await this.professionsService.findWithVersions(professionId);
 
     checkCanChangeProfession(req, profession);
 
-    const version = await this.professionVersionsService.findWithProfession(
-      versionId,
-    );
+    const version =
+      await this.professionVersionsService.findWithProfession(versionId);
 
     const coversUK = version.occupationLocations
       ? isUK(version.occupationLocations)
@@ -96,15 +94,13 @@ export class ScopeController {
 
     const coversUK = Boolean(Number(submittedValues.coversUK));
 
-    const profession = await this.professionsService.findWithVersions(
-      professionId,
-    );
+    const profession =
+      await this.professionsService.findWithVersions(professionId);
 
     checkCanChangeProfession(req, profession);
 
-    const version = await this.professionVersionsService.findWithProfession(
-      versionId,
-    );
+    const version =
+      await this.professionVersionsService.findWithProfession(versionId);
 
     const submittedIndustries = await this.industriesService.findByIds(
       submittedValues.industries || [],

@@ -51,15 +51,13 @@ export class RegulatedActivitiesController {
     @Param('versionId') versionId: string,
     @Req() req: RequestWithAppSession,
   ): Promise<void> {
-    const profession = await this.professionsService.findWithVersions(
-      professionId,
-    );
+    const profession =
+      await this.professionsService.findWithVersions(professionId);
 
     checkCanChangeProfession(req, profession);
 
-    const version = await this.professionVersionsService.findWithProfession(
-      versionId,
-    );
+    const version =
+      await this.professionVersionsService.findWithProfession(versionId);
 
     return this.renderForm(
       res,
@@ -84,9 +82,8 @@ export class RegulatedActivitiesController {
     @Body() regulatedActivitiesDto,
     @Req() req: RequestWithAppSession,
   ): Promise<void> {
-    const profession = await this.professionsService.findWithVersions(
-      professionId,
-    );
+    const profession =
+      await this.professionsService.findWithVersions(professionId);
 
     checkCanChangeProfession(req, profession);
 
@@ -96,9 +93,8 @@ export class RegulatedActivitiesController {
     );
     const submittedValues = validator.obj;
 
-    const version = await this.professionVersionsService.findWithProfession(
-      versionId,
-    );
+    const version =
+      await this.professionVersionsService.findWithProfession(versionId);
 
     if (!validator.valid()) {
       const errors = new ValidationFailedError(validator.errors).fullMessages();

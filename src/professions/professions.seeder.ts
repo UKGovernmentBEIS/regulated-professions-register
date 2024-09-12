@@ -199,9 +199,8 @@ export class ProfessionsSeeder implements Seeder {
           const newLegislations = legislations.map(
             (leg, index) => new Legislation(leg.name, leg.url, index),
           );
-          legislations = await this.legislationsRepository.save(
-            newLegislations,
-          );
+          legislations =
+            await this.legislationsRepository.save(newLegislations);
         }
 
         const newVersion = {

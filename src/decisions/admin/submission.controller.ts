@@ -47,9 +47,8 @@ export class SubmissionController {
     @Param('year', ParseIntPipe) year: number,
     @Req() request: RequestWithAppSession,
   ): Promise<DatasetDetailsTemplate> {
-    const profession = await this.professionsService.findWithVersions(
-      professionId,
-    );
+    const profession =
+      await this.professionsService.findWithVersions(professionId);
 
     const organisation = await this.organisationsService.find(organisationId);
 
@@ -87,9 +86,8 @@ export class SubmissionController {
       year,
     );
 
-    const profession = await this.professionsService.findWithVersions(
-      professionId,
-    );
+    const profession =
+      await this.professionsService.findWithVersions(professionId);
 
     const organisation = await this.organisationsService.find(organisationId);
 

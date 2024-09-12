@@ -73,9 +73,8 @@ export class EditController {
     @Param('year', ParseIntPipe) year: number,
     @Req() request: RequestWithAppSession,
   ): Promise<NewTemplate> {
-    const profession = await this.professionsService.findWithVersions(
-      professionId,
-    );
+    const profession =
+      await this.professionsService.findWithVersions(professionId);
 
     const organisation = await this.organisationsService.find(organisationId);
 
@@ -115,9 +114,8 @@ export class EditController {
     @Param('year', ParseIntPipe) year: number,
     @Req() request: RequestWithAppSession,
   ): Promise<EditTemplate> {
-    const profession = await this.professionsService.findWithVersions(
-      professionId,
-    );
+    const profession =
+      await this.professionsService.findWithVersions(professionId);
 
     const organisation = await this.organisationsService.find(organisationId);
 
@@ -164,9 +162,8 @@ export class EditController {
     @Req() request: RequestWithAppSession,
     @Res() response: Response,
   ): Promise<void> {
-    const profession = await this.professionsService.findWithVersions(
-      professionId,
-    );
+    const profession =
+      await this.professionsService.findWithVersions(professionId);
 
     const organisation = await this.organisationsService.find(organisationId);
 

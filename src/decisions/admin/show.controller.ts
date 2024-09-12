@@ -46,9 +46,8 @@ export class ShowController {
     @Param('year', ParseIntPipe) year: number,
     @Req() request: RequestWithAppSession,
   ): Promise<ShowTemplate> {
-    const profession = await this.professionsService.findWithVersions(
-      professionId,
-    );
+    const profession =
+      await this.professionsService.findWithVersions(professionId);
 
     const dataset = await this.decisionDatasetsService.find(
       professionId,
@@ -83,9 +82,8 @@ export class ShowController {
     @Req() request: RequestWithAppSession,
     @Res() response: Response,
   ): Promise<void> {
-    const profession = await this.professionsService.findWithVersions(
-      professionId,
-    );
+    const profession =
+      await this.professionsService.findWithVersions(professionId);
 
     const dataset = await this.decisionDatasetsService.find(
       professionId,

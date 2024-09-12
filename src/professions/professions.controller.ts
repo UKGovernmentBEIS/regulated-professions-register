@@ -36,9 +36,8 @@ export class ProfessionsController {
     'app.backToSearch',
   )
   async show(@Param('slug') slug: string): Promise<ShowTemplate> {
-    const profession = await this.professionVersionsService.findLiveBySlug(
-      slug,
-    );
+    const profession =
+      await this.professionVersionsService.findLiveBySlug(slug);
 
     const decisionYears =
       await this.decisionDatasetsService.allLiveYearsForProfession(profession);

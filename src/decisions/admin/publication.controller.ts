@@ -44,9 +44,8 @@ export class PublicationController {
     @Param('organisationId') organisationId: string,
     @Param('year', ParseIntPipe) year: number,
   ): Promise<DatasetDetailsTemplate> {
-    const profession = await this.professionsService.findWithVersions(
-      professionId,
-    );
+    const profession =
+      await this.professionsService.findWithVersions(professionId);
 
     const organisation = await this.organisationsService.find(organisationId);
 

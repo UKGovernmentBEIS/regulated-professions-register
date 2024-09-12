@@ -288,8 +288,8 @@ export class ProfessionVersionsService {
       sortMethod === 'name'
         ? versions
         : sortMethod === 'status'
-        ? sortProfessionVersionsByStatus(versions)
-        : sortProfessionVersionsByLastUpdated(versions);
+          ? sortProfessionVersionsByStatus(versions)
+          : sortProfessionVersionsByLastUpdated(versions);
 
     return sortedVersions.map((version) =>
       Profession.withVersion(version.profession, version),
