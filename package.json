@@ -61,7 +61,7 @@
     "@opensearch-project/opensearch": "^1.1.0",
     "@symfony/webpack-encore": "^2.1.0",
     "@types/auth0": "^3.3.10",
-    "@types/connect-flash": "^0.0.37",
+    "@types/connect-flash": "^0.0.40",
     "@types/connect-redis": "^0.0.18",
     "@types/express-session": "^1.17.4",
     "@types/google-libphonenumber": "^7.4.23",
