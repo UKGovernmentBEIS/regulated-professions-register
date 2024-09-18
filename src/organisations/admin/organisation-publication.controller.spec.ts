@@ -248,6 +248,9 @@ describe('OrganisationPublicationController', () => {
         organisation: organisation,
       });
 
+      organisationsService.find.mockResolvedValue(organisation);
+      organisationVersionsService.create.mockResolvedValue(version);
+
       const res = createMock<Response>({});
 
       const req = createDefaultMockRequest({

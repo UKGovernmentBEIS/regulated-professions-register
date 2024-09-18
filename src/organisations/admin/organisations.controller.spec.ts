@@ -119,6 +119,11 @@ describe('OrganisationsController', () => {
           const nations = Nation.all();
           const industries = industryFactory.buildList(5);
 
+          industriesService.all.mockResolvedValue(industries);
+          organisationVersionsService.searchWithLatestVersion.mockResolvedValue(
+            organisations,
+          );
+
           (
             OrganisationsPresenter.prototype as DeepMocked<OrganisationsPresenter>
           ).present.mockReturnValue(templateParams);
@@ -186,6 +191,11 @@ describe('OrganisationsController', () => {
           const organisations = createOrganisations();
           const nations = Nation.all();
           const industries = industryFactory.buildList(5);
+
+          industriesService.all.mockResolvedValue(industries);
+          organisationVersionsService.searchWithLatestVersion.mockResolvedValue(
+            [organisations[1], organisations[3]],
+          );
 
           (
             OrganisationsPresenter.prototype as DeepMocked<OrganisationsPresenter>
@@ -259,6 +269,11 @@ describe('OrganisationsController', () => {
 
         const nations = Nation.all();
         const industries = industryFactory.buildList(5);
+
+        industriesService.all.mockResolvedValue(industries);
+        organisationVersionsService.searchWithLatestVersion.mockResolvedValue([
+          userOrganisation,
+        ]);
 
         const request = createDefaultMockRequest();
         (getActingUser as jest.Mock).mockReturnValue(

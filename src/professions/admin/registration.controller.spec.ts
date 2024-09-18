@@ -294,8 +294,12 @@ describe(RegistrationController, () => {
 
     it('checks the user has permission to update the Profession', async () => {
       const profession = professionFactory.justCreated('profession-id').build();
+      const version = professionVersionFactory
+        .justCreated('version-id')
+        .build({ profession: profession });
 
       professionsService.findWithVersions.mockResolvedValue(profession);
+      professionVersionsService.findWithProfession.mockResolvedValue(version);
 
       const request = createDefaultMockRequest({
         user: userFactory.build(),

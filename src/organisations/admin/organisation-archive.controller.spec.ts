@@ -232,6 +232,8 @@ describe('OrganisationArchiveController', () => {
         version,
       );
 
+      organisationVersionsService.create.mockResolvedValue(version);
+
       await controller.delete(req, res, organisation.id, version.id);
 
       expect(checkCanViewOrganisationSpy).toHaveBeenCalledWith(

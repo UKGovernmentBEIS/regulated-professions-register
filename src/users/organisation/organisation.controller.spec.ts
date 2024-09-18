@@ -76,9 +76,9 @@ describe('OrganisationController', () => {
 
         await expect(
           controller.edit(request, response, 'user-id', null),
-        ).rejects.toThrowError(UnauthorizedException);
+        ).rejects.toThrow(UnauthorizedException);
 
-        expect(checkUserIsServiceOwner).toBeCalledWith(request);
+        expect(checkUserIsServiceOwner).toHaveBeenCalledWith(user);
       });
     });
 
@@ -132,9 +132,9 @@ describe('OrganisationController', () => {
 
         await controller.edit(request, response, user.id, null);
 
-        expect(checkUserIsServiceOwner).toBeCalledWith(request);
+        expect(checkUserIsServiceOwner).toHaveBeenCalledWith(serviceOwnerUser);
 
-        expect(response.render).toBeCalledWith(
+        expect(response.render).toHaveBeenCalledWith(
           'admin/users/organisation/edit',
           expect.objectContaining({
             action: 'edit',
@@ -144,9 +144,9 @@ describe('OrganisationController', () => {
           }),
         );
 
-        expect(usersService.find).toBeCalledWith(user.id);
+        expect(usersService.find).toHaveBeenCalledWith(user.id);
 
-        expect(RegulatedAuthoritiesSelectPresenter).toBeCalledWith(
+        expect(RegulatedAuthoritiesSelectPresenter).toHaveBeenCalledWith(
           [organisation1, organisation2],
           organisation1,
           null,
@@ -156,7 +156,7 @@ describe('OrganisationController', () => {
           RegulatedAuthoritiesSelectPresenter.prototype.selectArgs,
         ).toBeCalled();
 
-        expect(ServiceOwnerRadioButtonArgsPresenter).toBeCalledWith(
+        expect(ServiceOwnerRadioButtonArgsPresenter).toHaveBeenCalledWith(
           false,
           i18nService,
         );
@@ -186,11 +186,11 @@ describe('OrganisationController', () => {
 
         await expect(
           controller.update(request, response, 'user-id', false),
-        ).rejects.toThrowError(UnauthorizedException);
+        ).rejects.toThrow(UnauthorizedException);
 
-        expect(usersService.save).not.toBeCalled();
+        expect(usersService.save).not.toHaveBeenCalled();
 
-        expect(checkUserIsServiceOwner).toBeCalledWith(request);
+        expect(checkUserIsServiceOwner).toHaveBeenCalledWith(user);
       });
     });
 
@@ -220,15 +220,15 @@ describe('OrganisationController', () => {
 
         await controller.update(request, response, user.id, organisationDto);
 
-        expect(checkUserIsServiceOwner).toBeCalledWith(request);
+        expect(checkUserIsServiceOwner).toHaveBeenCalledWith(serviceOwnerUser);
 
-        expect(organisationsService.find).toBeCalledWith(organisation.id);
-        expect(usersService.save).toBeCalledWith({
+        expect(organisationsService.find).toHaveBeenCalledWith(organisation.id);
+        expect(usersService.save).toHaveBeenCalledWith({
           ...user,
           organisation,
           serviceOwner: false,
         });
-        expect(response.redirect).toBeCalledWith(
+        expect(response.redirect).toHaveBeenCalledWith(
           `/admin/users/${user.id}/personal-details/edit`,
         );
       });
@@ -289,7 +289,7 @@ describe('OrganisationController', () => {
 
         await controller.update(request, response, user.id, organisationDto);
 
-        expect(response.render).toBeCalledWith(
+        expect(response.render).toHaveBeenCalledWith(
           'admin/users/organisation/edit',
           expect.objectContaining({
             action: 'edit',
@@ -299,13 +299,13 @@ describe('OrganisationController', () => {
           }),
         );
 
-        expect(checkUserIsServiceOwner).toBeCalledWith(request);
+        expect(checkUserIsServiceOwner).toHaveBeenCalledWith(serviceOwnerUser);
 
-        expect(usersService.find).toBeCalledWith(user.id);
-        expect(usersService.save).not.toBeCalled();
-        expect(organisationsService.find).not.toBeCalled();
+        expect(usersService.find).toHaveBeenCalledWith(user.id);
+        expect(usersService.save).not.toHaveBeenCalled();
+        expect(organisationsService.find).not.toHaveBeenCalled();
 
-        expect(RegulatedAuthoritiesSelectPresenter).toBeCalledWith(
+        expect(RegulatedAuthoritiesSelectPresenter).toHaveBeenCalledWith(
           [organisation1, organisation2],
           undefined,
           null,
@@ -313,15 +313,15 @@ describe('OrganisationController', () => {
         );
         expect(
           RegulatedAuthoritiesSelectPresenter.prototype.selectArgs,
-        ).toBeCalled();
+        ).toHaveBeenCalled();
 
-        expect(ServiceOwnerRadioButtonArgsPresenter).toBeCalledWith(
+        expect(ServiceOwnerRadioButtonArgsPresenter).toHaveBeenCalledWith(
           false,
           i18nService,
         );
         expect(
           ServiceOwnerRadioButtonArgsPresenter.prototype.radioButtonArgs,
-        ).toBeCalled();
+        ).toHaveBeenCalled();
       });
 
       it('does not check for the presence of an organisation when creating a service-owner user', async () => {
@@ -347,14 +347,14 @@ describe('OrganisationController', () => {
 
         await controller.update(request, response, user.id, organisationDto);
 
-        expect(checkUserIsServiceOwner).toBeCalledWith(request);
+        expect(checkUserIsServiceOwner).toHaveBeenCalledWith(serviceOwnerUser);
 
         expect(organisationsService.find).not.toHaveBeenCalled();
-        expect(usersService.save).toBeCalledWith({
+        expect(usersService.save).toHaveBeenCalledWith({
           ...user,
           serviceOwner: true,
         });
-        expect(response.redirect).toBeCalledWith(
+        expect(response.redirect).toHaveBeenCalledWith(
           `/admin/users/${user.id}/personal-details/edit`,
         );
       });

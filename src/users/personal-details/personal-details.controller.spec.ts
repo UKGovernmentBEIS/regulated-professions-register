@@ -72,7 +72,7 @@ describe('PersonalDetailsController', () => {
         source: null,
       });
 
-      expect(checkCanViewUser).toHaveBeenCalledWith(request, user.organisation);
+      expect(checkCanViewUser).toHaveBeenCalledWith(request, user);
     });
 
     it('should set source to the given value', async () => {
@@ -95,7 +95,7 @@ describe('PersonalDetailsController', () => {
 
       await controller.edit('user-uuid', null, request);
 
-      expect(checkCanViewUser).toHaveBeenCalledWith(request, user.organisation);
+      expect(checkCanViewUser).toHaveBeenCalledWith(request, user);
     });
   });
 
@@ -107,9 +107,7 @@ describe('PersonalDetailsController', () => {
     });
 
     it('should redirect to role and update the user the email address if not already in use and the body is populated', async () => {
-      usersService.findByEmail.mockImplementationOnce(() => {
-        return null;
-      });
+      usersService.findByEmail.mockResolvedValue(null);
 
       const request = createDefaultMockRequest({ user: userFactory.build() });
 
@@ -131,9 +129,7 @@ describe('PersonalDetailsController', () => {
     });
 
     it('should correct a mis-formatted email address before saving', async () => {
-      usersService.findByEmail.mockImplementationOnce(() => {
-        return null;
-      });
+      usersService.findByEmail.mockResolvedValue(null);
 
       const request = createDefaultMockRequest({ user: userFactory.build() });
 
@@ -295,7 +291,7 @@ describe('PersonalDetailsController', () => {
         request,
       );
 
-      expect(checkCanViewUser).toHaveBeenCalledWith(request, user.organisation);
+      expect(checkCanViewUser).toHaveBeenCalledWith(request, user);
     });
   });
 });
