@@ -17,7 +17,7 @@ describe('SlugGenerator', () => {
 
     describe('when a slug does not exist', () => {
       it('generates a slug without a number', async () => {
-        service.findBySlug.mockImplementation(undefined);
+        service.findBySlug.mockResolvedValue(undefined);
 
         const generator = new SlugGenerator(service, 'Some Name');
 
@@ -51,7 +51,7 @@ describe('SlugGenerator', () => {
 
     describe('when a slug does not exist', () => {
       it('generates a slug without a number', async () => {
-        service.findBySlug.mockImplementation(undefined);
+        service.findBySlug.mockResolvedValue(undefined);
 
         const generator = new SlugGenerator(service, 'Some Name');
 
