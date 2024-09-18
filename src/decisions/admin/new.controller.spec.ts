@@ -121,6 +121,7 @@ describe('NewController', () => {
           .mockReturnValue({ start: 2020, end: 2024 });
 
         professionVersionsService.allLive.mockResolvedValue(professionVersions);
+        organisationVersionsService.allLive.mockResolvedValue(organisations);
 
         (
           NewDecisionDatasetPresenter.prototype.present as jest.Mock

@@ -113,6 +113,8 @@ describe('ProfessionVersionsController', () => {
         version,
       );
 
+      professionVersionsService.create.mockResolvedValue(version);
+
       const res = createMock<Response>();
       const req = createDefaultMockRequest({ user: userFactory.build() });
 

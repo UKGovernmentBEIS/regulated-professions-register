@@ -166,6 +166,9 @@ describe('SearchController', () => {
       const industry1 = industryFactory.build();
       const industry2 = industryFactory.build();
 
+      const industries = [industry1, industry2];
+      industriesService.all.mockResolvedValue(industries);
+
       await controller.index(
         {
           keywords: 'example search',

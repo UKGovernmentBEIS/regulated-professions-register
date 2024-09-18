@@ -110,6 +110,8 @@ describe('OrganisationVersionsController', () => {
         version,
       );
 
+      organisationVersionsService.create.mockResolvedValue(version);
+
       organisationVersionsService.hasLiveVersion.mockResolvedValue(true);
 
       await controller.create(response, request, 'some-uuid');

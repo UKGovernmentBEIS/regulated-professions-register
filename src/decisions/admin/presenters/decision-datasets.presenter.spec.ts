@@ -150,8 +150,11 @@ describe('DecisionDatasetsPresenter', () => {
 
         expect(getUserOrganisationSpy).toHaveBeenCalledWith(user, i18nService);
 
-        expect(ListEntryPresenter.headings).toBeCalledWith(false, i18nService);
-        expect(ListEntryPresenter.prototype.tableRow).toBeCalledTimes(3);
+        expect(ListEntryPresenter.headings).toHaveBeenCalledWith(
+          i18nService,
+          'single-organisation',
+        );
+        expect(ListEntryPresenter.prototype.tableRow).toHaveBeenCalledTimes(3);
 
         expect(OrganisationsCheckboxPresenter).toHaveBeenCalledWith(
           allOrganisations,
@@ -274,8 +277,11 @@ describe('DecisionDatasetsPresenter', () => {
 
         expect(getUserOrganisationSpy).toHaveBeenCalledWith(user, i18nService);
 
-        expect(ListEntryPresenter.headings).toBeCalledWith(true, i18nService);
-        expect(ListEntryPresenter.prototype.tableRow).toBeCalledTimes(3);
+        expect(ListEntryPresenter.headings).toHaveBeenCalledWith(
+          i18nService,
+          'overview',
+        );
+        expect(ListEntryPresenter.prototype.tableRow).toHaveBeenCalledTimes(3);
 
         expect(OrganisationsCheckboxPresenter).toHaveBeenCalledWith(
           allOrganisations,

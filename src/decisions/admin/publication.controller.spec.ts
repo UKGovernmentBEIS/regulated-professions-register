@@ -117,6 +117,8 @@ describe('PublicationController', () => {
           year: 2016,
         });
 
+        decisionDatasetsService.find.mockResolvedValue(dataset);
+
         await controller.create(
           'example-profession-id',
           'example-organisation-id',

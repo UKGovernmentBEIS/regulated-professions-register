@@ -215,6 +215,8 @@ describe('OrganisationUnarchiveController', () => {
       organisationVersionsService.findByIdWithOrganisation.mockResolvedValue(
         version,
       );
+      organisationVersionsService.create.mockResolvedValue(version);
+      organisationsService.find.mockResolvedValue(organisation);
 
       await controller.create(req, res, organisation.id, version.id);
 

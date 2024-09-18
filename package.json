@@ -106,7 +106,7 @@
     "body-parser": "^1.20.3"
   },
   "devDependencies": {
-    "@golevelup/ts-jest": "^0.3.3",
+    "@golevelup/ts-jest": "^0.5.5",
     "@nestjs/schematics": "^8.0.11",
     "@nestjs/testing": "^10.4.1",
     "@types/bull": "^4.10.0",

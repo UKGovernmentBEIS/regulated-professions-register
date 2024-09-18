@@ -166,6 +166,8 @@ describe('ProfessionArchiveController', () => {
         version,
       );
 
+      professionVersionsService.create.mockResolvedValue(version);
+
       const request = createDefaultMockRequest({
         user: userFactory.build(),
       });

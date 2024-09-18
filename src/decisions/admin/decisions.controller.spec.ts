@@ -166,8 +166,8 @@ describe('DecisionsController', () => {
           2020,
           2024,
           datasets,
-          i18nService,
           [],
+          i18nService,
         );
         expect(
           DecisionDatasetsPresenter.prototype.present,
@@ -270,8 +270,8 @@ describe('DecisionsController', () => {
           2020,
           2024,
           datasets,
-          i18nService,
           allProfessions,
+          i18nService,
         );
         expect(
           DecisionDatasetsPresenter.prototype.present,
@@ -320,7 +320,7 @@ describe('DecisionsController', () => {
         const datasets = decisionDatasetFactory.buildList(3);
         const allOrganisations = organisationFactory.buildList(3);
 
-        decisionDatasetsService.allForOrganisation.mockResolvedValue(datasets);
+        decisionDatasetsService.all.mockResolvedValue(datasets);
         organisationVersionsService.allLive.mockResolvedValue(allOrganisations);
 
         const filter: FilterDto = {
@@ -393,6 +393,9 @@ describe('DecisionsController', () => {
 
         decisionDatasetsService.allForOrganisation.mockResolvedValue(datasets);
         organisationVersionsService.allLive.mockResolvedValue(allOrganisations);
+        professionVersionsService.allWithLatestVersionForOrganisation.mockResolvedValue(
+          allProfessions,
+        );
 
         const filter: FilterDto = {
           keywords: 'example keywords',

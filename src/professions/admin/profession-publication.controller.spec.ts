@@ -310,6 +310,8 @@ describe('ProfessionPublicationController', () => {
         version,
       );
 
+      professionVersionsService.create.mockResolvedValue(version);
+
       (getPublicationBlockers as jest.Mock).mockReturnValue([]);
 
       await controller.create(req, res, profession.id, version.id);

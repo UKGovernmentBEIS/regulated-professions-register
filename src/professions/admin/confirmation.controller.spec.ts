@@ -140,8 +140,12 @@ describe('ConfirmationController', () => {
       });
 
       const profession = professionFactory.build();
+      const version = professionVersionFactory
+        .justCreated('version-id')
+        .build({ profession: profession });
 
       professionsService.findWithVersions.mockResolvedValue(profession);
+      professionVersionsService.findWithProfession.mockResolvedValue(version);
 
       await controller.create(res, req, 'profession-id', 'version-id');
 
