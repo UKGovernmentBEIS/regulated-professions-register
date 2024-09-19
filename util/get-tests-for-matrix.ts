@@ -17,7 +17,7 @@ if (typeof argv.chunks !== 'number' || typeof argv.matrix !== 'number') {
 const numberOfChunks = argv.chunks;
 const matrix = argv.matrix;
 
-glob('./cypress/integration/**/*.spec.ts', {}, (_er, files) => {
+glob('./cypress/e2e/**/*.cy.ts', {}, (_er, files) => {
   const res: string[][] = [];
 
   for (
