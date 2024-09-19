@@ -76,7 +76,7 @@
     "core-js": "^3.36.1",
     "csv-parse": "^5.5.6",
     "csv-stringify": "^6.1.0",
-    "date-fns": "^2.28.0",
+    "date-fns": "^4.1.0",
     "express-basic-auth": "^1.2.1",
     "express-openid-connect": "^2.7.2",
     "express-session": "^1.17.3",
