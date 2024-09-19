@@ -429,19 +429,6 @@ Cypress.Commands.add(
     filename: string,
     filter: (dataset: SeedDecisionDataset) => boolean,
   ) => {
-    // This is a workaround for a Cypress bug to prevent it waiting
-    // indefinitely for a new page to load after clicking the download link
-    // See https://github.com/cypress-io/cypress/issues/14857
-    cy.window()
-      .document()
-      .then(function (doc) {
-        doc.addEventListener('click', () => {
-          setTimeout(function () {
-            doc.location.reload();
-          }, 5000);
-        });
-      });
-
     cy.get('body a').contains(downloadText).click();
 
     const filePath = path.join(
