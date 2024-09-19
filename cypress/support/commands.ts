@@ -4,7 +4,7 @@ import { translate } from '../plugins/i18n';
 import puppeteer from 'puppeteer';
 import { AxeRules } from '.';
 import path from 'path';
-import { parse } from 'csv-parse/dist/esm/sync';
+import { parse } from 'csv-parse/browser/esm/sync';
 
 /*
  * Get a username and password from their role
@@ -429,19 +429,6 @@ Cypress.Commands.add(
     filename: string,
     filter: (dataset: SeedDecisionDataset) => boolean,
   ) => {
-    // This is a workaround for a Cypress bug to prevent it waiting
-    // indefinitely for a new page to load after clicking the download link
-    // See https://github.com/cypress-io/cypress/issues/14857
-    cy.window()
-      .document()
-      .then(function (doc) {
-        doc.addEventListener('click', () => {
-          setTimeout(function () {
-            doc.location.reload();
-          }, 5000);
-        });
-      });
-
     cy.get('body a').contains(downloadText).click();
 
     const filePath = path.join(

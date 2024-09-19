@@ -456,5 +456,6 @@ function withinEditTableDiv(tableName: string, func: () => void) {
     .parent()
     .parent()
     .parent()
+    .first()
     .within(func);
 }
