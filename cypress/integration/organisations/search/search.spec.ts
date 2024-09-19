@@ -7,7 +7,7 @@ describe('Searching an organisation', () => {
         cy.contains(linkText).click();
       },
     );
-    cy.checkAccessibility;
+    cy.checkAccessibility();
   });
 
   it('I can view an unfiltered list of organisations', () => {

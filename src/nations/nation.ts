@@ -17,7 +17,7 @@ export class Nation {
     const rawNations: {
       name: string;
       code: string;
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
     }[] = require('../config/nations.json');
 
     return rawNations.map(

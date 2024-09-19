@@ -12,7 +12,7 @@ export function InjectData(filename: string) {
         : `../../../seeds/${nodeEnv}/${filename}.json`;
 
     try {
-      /* eslint-disable @typescript-eslint/no-var-requires */
+      /* eslint-disable @typescript-eslint/no-require-imports */
       const json = require(path);
       value = json;
     } catch (e) {

@@ -35,7 +35,6 @@ async function migrate() {
       console.log(
         `"${argv[2]}" successfully renamed to "${argv[3]}". This organisation can now be found at \`/regulatory-authorities/${newSlug}\``,
       );
-      console;
 
       exit(0);
     } catch (e) {
