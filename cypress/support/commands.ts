@@ -4,7 +4,7 @@ import { translate } from '../plugins/i18n';
 import puppeteer from 'puppeteer';
 import { AxeRules } from '.';
 import path from 'path';
-import { parse } from 'csv-parse/dist/esm/sync';
+import { parse } from 'csv-parse/browser/esm/sync';
 
 /*
  * Get a username and password from their role
