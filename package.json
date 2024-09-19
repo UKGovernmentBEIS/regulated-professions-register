@@ -59,7 +59,7 @@
     "@nestjs/platform-express": "^10.4.1",
     "@nestjs/typeorm": "^10.0.2",
     "@opensearch-project/opensearch": "^1.1.0",
-    "@symfony/webpack-encore": "^2.1.0",
+    "@symfony/webpack-encore": "^4.7.0",
     "@types/auth0": "^3.3.10",
     "@types/connect-flash": "^0.0.40",
     "@types/connect-redis": "^0.0.18",
