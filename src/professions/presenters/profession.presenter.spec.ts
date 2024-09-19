@@ -102,6 +102,7 @@ describe('ProfessionPresenter', () => {
         createMockI18nService(),
       );
 
+      const date = presenter.lastModified;
       expect(formatDate as jest.Mock).toHaveBeenCalledWith(
         new Date('01-01-2022'),
       );
