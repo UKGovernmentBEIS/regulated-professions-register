@@ -119,7 +119,7 @@ describe('ConfirmationController', () => {
         expect(res.redirect).toHaveBeenCalledWith(
           '/admin/professions/existing-id/versions/version-id',
         );
-        expect(professionsService.setSlug).not.toHaveBeenCalled;
+        expect(professionsService.setSlug).not.toHaveBeenCalled();
         expect(professionVersionsService.confirm).toHaveBeenCalledWith(version);
 
         expect(flashMock).toHaveBeenCalledWith(

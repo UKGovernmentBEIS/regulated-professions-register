@@ -19,7 +19,7 @@ export const nunjucksConfig = async (
   views: any,
 ): Promise<nunjucks.ConfigureOptions> => {
   const express = app.getHttpAdapter().getInstance();
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const entrypoints = require('../../public/entrypoints.json');
   const assetsHelper = new AssetsHelper(entrypoints);
   const i18nHelper = new I18nHelper(app);

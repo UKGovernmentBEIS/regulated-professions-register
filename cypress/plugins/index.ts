@@ -31,7 +31,7 @@ export default (
     };
   },
 ) => {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   require('dotenv').config({ path: '.env.test' });
 
   config.env.AUTH0_DOMAIN = process.env['AUTH0_DOMAIN'];

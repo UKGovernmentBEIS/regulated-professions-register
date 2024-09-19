@@ -21,7 +21,7 @@ export class Country {
       const rawCountries: {
         name: string;
         code: string;
-        // eslint-disable-next-line @typescript-eslint/no-var-requires
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
       }[] = require('../config/countries.json');
 
       Country.allCountries = rawCountries.map(
