@@ -11,7 +11,10 @@ import { DecisionDatasetStatus } from '../../decision-dataset.entity';
 import { DecisionsCsvWriter } from './decisions-csv-writer.helper';
 
 jest.mock('../../../countries/country');
-jest.mock('csv-stringify', () => ({ __esModule: true, ...jest.requireActual('csv-stringify') }));
+jest.mock('csv-stringify', () => ({
+  __esModule: true,
+  ...jest.requireActual('csv-stringify'),
+}));
 
 describe('DecisionsCsvWriter', () => {
   describe('write', () => {
