@@ -96,7 +96,7 @@
     "rollbar": "^2.26.4",
     "rxjs": "^7.5.5",
     "sass": "^1.54.2",
-    "sass-loader": "^14.2.1",
+    "sass-loader": "^16.0.1",
     "slugify": "^1.6.6",
     "ts-node": "^10.9.2",
     "typeorm": "^0.3.20"
