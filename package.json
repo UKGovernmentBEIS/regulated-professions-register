@@ -62,7 +62,6 @@
     "@symfony/webpack-encore": "^4.7.0",
     "@types/auth0": "^3.3.10",
     "@types/connect-flash": "^0.0.40",
-    "@types/connect-redis": "^0.0.18",
     "@types/express-session": "^1.18.0",
     "@types/google-libphonenumber": "^7.4.23",
     "auth0": "^4.9.0",
