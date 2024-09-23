@@ -9,9 +9,8 @@ import jwt_decode from 'jwt-decode';
 import { UsersModule } from '../users/users.module';
 import { UsersService } from '../users/users.service';
 import redisConfig from '../config/redis.config';
-import connectRedis from 'connect-redis';
 import Redis from 'ioredis';
-import session from 'express-session';
+import RedisStore from 'connect-redis';
 
 const baseURL =
   process.env['HOST_URL'] ||
@@ -41,7 +40,6 @@ export class AuthenticationMidleware {
    */
   public auth(): RequestHandler {
     const redisClient = new Redis(redisConfig().redis);
-    const RedisStore = connectRedis(session);
 
     return auth({
       issuerBaseURL: process.env['AUTH0_DOMAIN'],
