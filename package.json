@@ -89,7 +89,7 @@
     "nestjs-seeder": "^0.2.0",
     "notifications-node-client": "^8.2.1",
     "nunjucks": "^3.2.4",
-    "pg": "^8.7.3",
+    "pg": "^8.13.0",
     "reflect-metadata": "^0.2.2",
     "rimraf": "^6.0.1",
     "rollbar": "^2.26.4",
