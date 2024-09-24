@@ -28,7 +28,7 @@ async function bootstrap() {
 
   const views = [
     path.join(__dirname, '..', 'views'),
-    path.join(__dirname, '..', 'node_modules', 'govuk-frontend'),
+    path.join(__dirname, '..', 'node_modules', 'govuk-frontend/dist'),
   ];
 
   // Add method-override to allow us to use PUT and DELETE methods

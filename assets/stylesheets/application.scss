@@ -1,6 +1,6 @@
-$govuk-assets-path: '~govuk-frontend/govuk/assets/';
+$govuk-assets-path: '~govuk-frontend/dist/govuk/assets/';
 
-@import 'govuk/all';
+@import '~govuk-frontend/dist/govuk/all';
 @import './admin.scss';
 
 $small-screen: 768px;
