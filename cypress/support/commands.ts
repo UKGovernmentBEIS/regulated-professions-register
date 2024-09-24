@@ -290,7 +290,7 @@ Cypress.Commands.add(
           if (shouldHaveButton) {
             cy.get('button')
               .contains(publishLabel)
-              .should('have.class', 'govuk-button--disabled');
+              .should('be.disabled');
           } else {
             cy.root().should('not.contain', publishLabel);
           }
@@ -308,7 +308,7 @@ Cypress.Commands.add('checkPublishNotBlocked', () => {
       cy.translate('professions.form.button.publish').then((publishLabel) => {
         cy.get('a')
           .contains(publishLabel)
-          .should('not.have.class', 'govuk-button--disabled');
+          .should('not.be.disabled');
       });
     });
 });
