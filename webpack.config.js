@@ -20,17 +20,17 @@ Encore.setOutputPath('public/')
   })
   // copying govuk-frontend images
   .copyFiles({
-    from: './node_modules/govuk-frontend/govuk/assets/images',
+    from: './node_modules/govuk-frontend/dist/govuk/assets/images',
     to: 'images/[path][name].[ext]',
   })
   // copying govuk-frontend fonts
   .copyFiles({
-    from: './node_modules/govuk-frontend/govuk/assets/fonts',
+    from: './node_modules/govuk-frontend/dist/govuk/assets/fonts',
     to: 'fonts/[path][name].[ext]',
   })
   .enableSassLoader(function (options) {
     options.sassOptions = {
-      includePaths: ['node_modules/govuk-frontend/'],
+      includePaths: ['node_modules/govuk-frontend/dist'],
       outputStyle: 'compressed',
     };
   });
