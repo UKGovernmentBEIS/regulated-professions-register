@@ -451,7 +451,7 @@ describe('Editing a decision dataset', () => {
 });
 
 function withinEditTableDiv(tableName: string, func: () => void) {
-  cy.get(tableName ? `input[value="${tableName}"]` : 'input:not([value])')
+  cy.get(tableName ? `input[value="${tableName}"]` : 'input[value=""]')
     .parent()
     .parent()
     .parent()
