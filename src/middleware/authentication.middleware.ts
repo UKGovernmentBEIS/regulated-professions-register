@@ -4,7 +4,7 @@ import { RequestHandler } from 'express';
 import { auth, SessionStore } from 'express-openid-connect';
 import { createPlausibleEvent } from '../common/create-plausible-event';
 
-import jwt_decode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 
 import { UsersModule } from '../users/users.module';
 import { UsersService } from '../users/users.service';
@@ -79,7 +79,7 @@ export class AuthenticationMidleware {
    * @throws {ForbiddenException} - If the user does not exist in the database
    */
   public async afterCallback(session: any): Promise<any> {
-    const userInfo = jwt_decode(session.id_token);
+    const userInfo = jwtDecode(session.id_token);
     const user = await this.usersService.findByExternalIdentifier(
       userInfo['sub'],
     );
