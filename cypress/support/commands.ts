@@ -288,9 +288,7 @@ Cypress.Commands.add(
 
         cy.translate('professions.form.button.publish').then((publishLabel) => {
           if (shouldHaveButton) {
-            cy.get('button')
-              .contains(publishLabel)
-              .should('be.disabled');
+            cy.get('button').contains(publishLabel).should('be.disabled');
           } else {
             cy.root().should('not.contain', publishLabel);
           }
@@ -306,9 +304,7 @@ Cypress.Commands.add('checkPublishNotBlocked', () => {
       cy.get('body').should('not.contain', heading);
 
       cy.translate('professions.form.button.publish').then((publishLabel) => {
-        cy.get('a')
-          .contains(publishLabel)
-          .should('not.be.disabled');
+        cy.get('a').contains(publishLabel).should('not.be.disabled');
       });
     });
 });
