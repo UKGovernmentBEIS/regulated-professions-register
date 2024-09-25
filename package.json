@@ -113,7 +113,7 @@
     "@types/method-override": "^0.0.35",
     "@types/node": "^22.7.0",
     "@types/nunjucks": "^3.2.6",
-    "@types/supertest": "^2.0.12",
+    "@types/supertest": "^6.0.2",
     "@typescript-eslint/eslint-plugin": "^8.7.0",
     "@typescript-eslint/parser": "^8.7.0",
     "cypress": "^13.14.2",
