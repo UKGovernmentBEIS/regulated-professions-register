@@ -129,7 +129,7 @@
     "puppeteer": "^23.4.1",
     "source-map-support": "^0.5.20",
     "start-server-and-test": "^2.0.8",
-    "supertest": "^6.2.3",
+    "supertest": "^7.0.0",
     "ts-jest": "^29.2.5",
     "ts-loader": "^9.5.1",
     "tsconfig-paths": "^4.0.0",
