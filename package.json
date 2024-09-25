@@ -114,7 +114,7 @@
     "@types/node": "^22.5.5",
     "@types/nunjucks": "^3.2.6",
     "@types/supertest": "^2.0.12",
-    "@typescript-eslint/eslint-plugin": "^8.6.0",
+    "@typescript-eslint/eslint-plugin": "^8.7.0",
     "@typescript-eslint/parser": "^8.7.0",
     "cypress": "^13.14.2",
     "cypress-axe": "^1.5.0",
