@@ -63,7 +63,7 @@
     "@types/auth0": "^3.3.10",
     "@types/connect-flash": "^0.0.40",
     "@types/express-session": "^1.18.0",
-    "@types/google-libphonenumber": "^7.4.23",
+    "@types/google-libphonenumber": "^7.4.30",
     "auth0": "^4.10.0",
     "axios": "^1.7.7",
     "bull": "^4.16.3",
