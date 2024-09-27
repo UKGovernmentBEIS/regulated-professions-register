@@ -111,7 +111,7 @@
     "@types/jest": "^29.5.13",
     "@types/jsdom": "^21.1.7",
     "@types/method-override": "^0.0.35",
-    "@types/node": "^22.7.0",
+    "@types/node": "^22.7.3",
     "@types/nunjucks": "^3.2.6",
     "@types/supertest": "^6.0.2",
     "@typescript-eslint/eslint-plugin": "^8.7.0",
