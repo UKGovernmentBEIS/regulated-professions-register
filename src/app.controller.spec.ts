@@ -10,6 +10,7 @@ import userFactory from './testutils/factories/user';
 import { translationOf } from './testutils/translation-of';
 import { getActingUser } from './users/helpers/get-acting-user.helper';
 import { createMock } from '@golevelup/ts-jest';
+import { parseString } from 'xml2js';
 
 jest.mock('./users/helpers/get-acting-user.helper');
 
@@ -119,7 +120,6 @@ describe('AppController', () => {
 
   describe('pingdom', () => {
     it('should return a valid XML response', () => {
-      var parseString = require('xml2js').parseString;
       const options = {
         explicitArray: false,
       };
