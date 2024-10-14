@@ -1,11 +1,12 @@
-import { Controller, Get, Render, Req, UseGuards } from '@nestjs/common';
-import { Request } from 'express';
+import { Controller, Get, Render, Req, Res, UseGuards } from '@nestjs/common';
+import { Request, Response } from 'express';
 import { I18nService } from 'nestjs-i18n';
 import { AuthenticationGuard } from './common/authentication.guard';
 import { BackLink } from './common/decorators/back-link.decorator';
 import { RequestWithAppSession } from './common/interfaces/request-with-app-session.interface';
 import { getActingUser } from './users/helpers/get-acting-user.helper';
 import { getUserOrganisation } from './users/helpers/get-user-organisation';
+import * as xml2js from 'xml2js';
 
 @Controller()
 export class AppController {
@@ -85,5 +86,26 @@ export class AppController {
       git_sha: process.env['CURRENT_SHA'],
       built_at: process.env['TIME_OF_BUILD'],
     };
+  }
+
+  @Get('/pingdom/ping.xml')
+  pingdom(@Res() response: Response) {
+    const startTime = Date.now();
+
+    response.set('Content-Type', 'application/xml');
+
+    var builder = new xml2js.Builder({
+      rootName: 'pingdom_http_custom_check',
+    });
+
+    const xml = builder.buildObject({
+      status: 'OK',
+      response_time: Date.now() - startTime,
+      timestamp: new Date().toISOString(),
+    });
+
+    response.send(xml);
+
+    return xml;
   }
 }

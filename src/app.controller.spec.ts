@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { I18nService } from 'nestjs-i18n';
+import { Response } from 'express';
 
 import { AppController } from './app.controller';
 import { createMockI18nService } from './testutils/create-mock-i18n-service';
@@ -8,6 +9,7 @@ import organisationFactory from './testutils/factories/organisation';
 import userFactory from './testutils/factories/user';
 import { translationOf } from './testutils/translation-of';
 import { getActingUser } from './users/helpers/get-acting-user.helper';
+import { createMock } from '@golevelup/ts-jest';
 
 jest.mock('./users/helpers/get-acting-user.helper');
 
@@ -111,6 +113,31 @@ describe('AppController', () => {
           git_sha: 'b9c73f88',
           built_at: '2020-01-01T00:00:00Z',
         });
+      });
+    });
+  });
+
+  describe('pingdom', () => {
+    it('should return a valid XML response', () => {
+      var parseString = require('xml2js').parseString;
+      const options = {
+        explicitArray: false,
+      };
+
+      const currentTimestamp = Date.now();
+
+      const response = createMock<Response>();
+      const res = appController.pingdom(response);
+
+      parseString(res, options, function (err, xml) {
+        expect(err).toBeNull();
+        expect(xml.pingdom_http_custom_check.status).toEqual('OK');
+        expect(
+          parseInt(xml.pingdom_http_custom_check.response_time),
+        ).toBeGreaterThanOrEqual(0);
+        expect(
+          Date.parse(xml.pingdom_http_custom_check.timestamp),
+        ).toBeGreaterThanOrEqual(currentTimestamp);
       });
     });
   });
