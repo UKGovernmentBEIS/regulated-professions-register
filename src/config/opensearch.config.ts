@@ -7,9 +7,14 @@ export default registerAs('opensearch', () => {
   let opensearchNode: string;
 
   if (process.env['VCAP_SERVICES']) {
+    // GovPaaS
     const json = JSON.parse(process.env['VCAP_SERVICES']);
     opensearchNode = json.opensearch[0].credentials.uri;
+  } else if (process.env['OPENSEARCH_ENDPOINT']) {
+    // DBT Cloud
+    opensearchNode = process.env['OPENSEARCH_ENDPOINT'];
   } else {
+    // Local dev / GitHub
     opensearchNode = process.env['OPENSEARCH_NODE'];
   }
 

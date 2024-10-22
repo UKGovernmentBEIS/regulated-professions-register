@@ -13,9 +13,23 @@ export default dbConfiguration();
 
 const entities = process.env['ENTITIES'] || './dist/**/*.entity.js';
 
+let databaseUrl: string | undefined;
+
+if (process.env.DATABASE_CREDENTIALS) {
+  const json = JSON.parse(process.env.DATABASE_CREDENTIALS);
+  databaseUrl = `${json.engine}://${json.username}:${json.password}@${json.host}:${json.port}/${json.dbname}`;
+} else {
+  // GovPaas / Local dev / Github
+  databaseUrl = process.env.DATABASE_URL;
+}
+
+if (!databaseUrl) {
+  throw new Error('DATABASE_URL is not defined');
+}
+
 export const dataSource = new DataSource({
   type: 'postgres',
-  url: process.env.DATABASE_URL,
+  url: databaseUrl,
   entities: [entities],
   synchronize: false,
   migrations: ['./dist/db/migrate/*.js'],
