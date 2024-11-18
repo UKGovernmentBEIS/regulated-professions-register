@@ -47,6 +47,7 @@ var CookieConsent = function () {
 
     this.storeCookiePolicy(true, true, true);
     this.storeCookiePreferencesSet(true);
+    this.informGTMOfCookieUpdate();
   };
 
   this.cookiesRejected = function () {
@@ -141,6 +142,11 @@ var CookieConsent = function () {
       usage: false,
       campaigns: false,
     };
+  };
+
+  this.informGTMOfCookieUpdate = function () {
+    window.dataLayer.push({ event: 'cookies' });
+    window.dataLayer.push({ event: 'gtm.dom' });
   };
 
   // preferences
