@@ -10,7 +10,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 
+## [release-039] - 20/11/2024
+
+### Added
+
+### Changed
+
 - Fix GTM loading after cookie acceptance
+- Multiple node modules patched
 
 ## [release-038] - 28/08/2024
 
@@ -585,7 +592,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fix links in error messages when adding a new profession
 - Make validation errors more human readable
 
-[unreleased]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-038...HEAD
+[unreleased]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-039...HEAD
+[release-038]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-038...release-039
 [release-038]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-037...release-038
 [release-037]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-036...release-037
 [release-036]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-035...release-036
