@@ -20,7 +20,7 @@ jobs:
           docker build --target web -t ghcr.io/ukgovernmentbeis/regulated-professions-register:${{ github.sha }} .
 
       - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@0.7.1
+        uses: aquasecurity/trivy-action@0.29.0
         with:
           image-ref: ghcr.io/ukgovernmentbeis/regulated-professions-register:${{ github.sha }}
           format: 'table'
