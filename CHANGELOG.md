@@ -15,6 +15,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 
 ### Changed
+
 - Multiple node modules patched
 
 ## [release-039] - 20/11/2024
