@@ -101,7 +101,8 @@
   },
   "overrides": {
     "path-to-regexp": "^0.1.12",
-    "body-parser": "^1.20.3"
+    "body-parser": "^1.20.3",
+    "cross-spawn": "^7.0.6"
   },
   "devDependencies": {
     "@golevelup/ts-jest": "^0.5.6",
