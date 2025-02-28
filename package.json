@@ -130,7 +130,7 @@
     "puppeteer": "^23.5.1",
     "sass-loader": "^16.0.4",
     "source-map-support": "^0.5.20",
-    "start-server-and-test": "^2.0.8",
+    "start-server-and-test": "^2.0.10",
     "supertest": "^7.0.0",
     "ts-jest": "^29.2.5",
     "ts-loader": "^9.5.1",
