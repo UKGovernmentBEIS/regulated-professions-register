@@ -74,7 +74,7 @@
     "connect-redis": "^7.1.1",
     "core-js": "^3.39.0",
     "csv-parse": "^5.5.6",
-    "csv-stringify": "^6.5.1",
+    "csv-stringify": "^6.5.2",
     "date-fns": "^4.1.0",
     "express-basic-auth": "^1.2.1",
     "express-openid-connect": "^2.17.1",
