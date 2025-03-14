@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
+- Added user ID to data layer for logged in user tracking in GTM
+
 ### Changed
 
 ## [release-040] - 19/02/2025
