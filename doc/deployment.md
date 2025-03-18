@@ -44,7 +44,6 @@ The heading should link to a Github URL at the bottom of the file, which shows t
 1. Update your local main branch `git pull`
 1. Delete your local release branch `git branch -d release-x`
 1. Run the `script/release` command
-1. Once deployment is completed, it's likely that the redirect of the root BEIS production domain will break (e.g. https://regulated-professions.beis.gov.uk). To resolve this, re-run the "deploy_to_production" action in GitHub
 1. Production smoke test
    Once the code has been deployed to production, carry out a quick smoke test to confirm that the changes have been successfully deployed.
 1. Move all the Azure DevOps cards from "Awaiting deployment" to "Done"

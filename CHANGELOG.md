@@ -8,9 +8,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
+### Changed
+
+## [release-041] - 19/03/2025
+
+### Added
+
 - Added user ID to data layer for logged in user tracking in GTM
 
 ### Changed
+
+- Multiple node modules patched
+- Docs updated to reflect move of CDN and redirect
 
 ## [release-040] - 19/02/2025
 
@@ -602,7 +611,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fix links in error messages when adding a new profession
 - Make validation errors more human readable
 
-[unreleased]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-040...HEAD
+[unreleased]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-041...HEAD
+[release-041]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-040...release-041
 [release-040]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-039...release-040
 [release-039]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-038...release-039
 [release-038]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-037...release-038
