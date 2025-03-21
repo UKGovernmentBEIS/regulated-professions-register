@@ -27,9 +27,14 @@ export default registerAs('redis', () => {
   let redisURI: string;
 
   if (process.env['VCAP_SERVICES']) {
+    // GovPaaS
     const json = JSON.parse(process.env['VCAP_SERVICES']);
     redisURI = json.redis[0].credentials.uri;
+  } else if (process.env['REDIS_ENDPOINT']) {
+    // DBT Cloud
+    redisURI = process.env['REDIS_ENDPOINT'];
   } else {
+    // Local dev / GitHub
     redisURI = process.env['REDIS_URI'];
   }
 
