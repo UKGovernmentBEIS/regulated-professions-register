@@ -1,5 +1,7 @@
 # Adding a domain
 
+**NOTE**: The CDN route is no longer maintained in GOV.UK PaaS. As a result this documentation is out of date. It will be updated in the event a new domain is required.
+
 All of our infrastructure is managed with [Terraform](https://github.com/UKGovernmentBEIS/regulated-professions-register/tree/main/terraform),
 and in most cases, any infrastructure changes are applied automatically. There is one
 exception though, when setting up domains.
