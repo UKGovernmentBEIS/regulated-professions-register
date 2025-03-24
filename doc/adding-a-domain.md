@@ -2,11 +2,11 @@
 
 **NOTE**: The CDN route is no longer maintained in GOV.UK PaaS. As a result this documentation is out of date. It will be updated in the event a new domain is required.
 
-All of our infrastructure is managed with [Terraform](https://github.com/UKGovernmentBEIS/regulated-professions-register/tree/main/terraform),
+All of our infrastructure is managed with [Terraform](https://github.com/businessandtrade-partners/regulated-professions-register/tree/main/terraform),
 and in most cases, any infrastructure changes are applied automatically. There is one
 exception though, when setting up domains.
 
-To set up a domain, we first need to set up a CDN route. [This PR](https://github.com/UKGovernmentBEIS/regulated-professions-register/pull/308)
+To set up a domain, we first need to set up a CDN route. [This PR](https://github.com/businessandtrade-partners/regulated-professions-register/pull/308)
 is a good example of how to set this up.
 
 Once this is set up and the deploy runs, the deployment will time out. This is because
