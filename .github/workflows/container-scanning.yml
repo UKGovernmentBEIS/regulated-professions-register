@@ -17,12 +17,12 @@ jobs:
 
       - name: Build an image from Dockerfile
         run: |
-          docker build --target web -t ghcr.io/ukgovernmentbeis/regulated-professions-register:${{ github.sha }} .
+          docker build --target web -t ghcr.io/businessandtrade-partners/regulated-professions-register:${{ github.sha }} .
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.7.1
         with:
-          image-ref: ghcr.io/ukgovernmentbeis/regulated-professions-register:${{ github.sha }}
+          image-ref: ghcr.io/businessandtrade-partners/regulated-professions-register:${{ github.sha }}
           format: 'table'
           exit-code: '1'
           ignore-unfixed: true

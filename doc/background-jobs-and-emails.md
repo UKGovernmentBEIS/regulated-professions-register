@@ -46,7 +46,7 @@ this.myMailer.email(user);
 ```
 
 When a mailer is added to the queue, it it picked up by the
-[MailerConsumer](https://github.com/UKGovernmentBEIS/regulated-professions-register/blob/main/src/common/mailer.consumer.ts) class,
+[MailerConsumer](https://github.com/businessandtrade-partners/regulated-professions-register/blob/main/src/common/mailer.consumer.ts) class,
 which takes anything put in the `mailer` queue and makes an API call to GOV.UK Notify.
 
 We use a default template in GOV.UK Notify, which has a placeholder for the whole body

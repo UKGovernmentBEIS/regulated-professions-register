@@ -6,7 +6,7 @@ resource "cloudfoundry_app" "beis-rpr-app" {
   instances    = 2
   disk_quota   = 3072
   timeout      = 300
-  docker_image = "ghcr.io/ukgovernmentbeis/regulated-professions-register:${var.docker_tag}"
+  docker_image = "ghcr.io/businessandtrade-partners/regulated-professions-register:${var.docker_tag}"
   strategy                   = "blue-green-v2"
   health_check_http_endpoint = "/"
   service_binding { service_instance = cloudfoundry_service_instance.beis-rpr-postgres.id }

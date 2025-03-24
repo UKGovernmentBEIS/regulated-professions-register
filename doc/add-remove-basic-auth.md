@@ -12,7 +12,7 @@ You must have have been given 'Space developer' access to the intended space, fo
 
 You must have the [cloudfoundry cli](https://github.com/cloudfoundry/cli) installed.
 
-You must have a GitHub login with rights to modify the [action secrets](https://github.com/UKGovernmentBEIS/regulated-professions-register/settings/secrets/actions).
+You must have a GitHub login with rights to modify the [action secrets](https://github.com/businessandtrade-partners/regulated-professions-register/settings/secrets/actions).
 
 ## Remove credentials
 
@@ -29,7 +29,7 @@ You must have a GitHub login with rights to modify the [action secrets](https://
    $ cf unset-env [APPLICATION] BASIC_AUTH_PASSWORD
    ```
 
-1. Remove the following variables from [GitHub Action Secrets](https://github.com/UKGovernmentBEIS/regulated-professions-register/settings/secrets/actions) (update [VALUES])
+1. Remove the following variables from [GitHub Action Secrets](https://github.com/businessandtrade-partners/regulated-professions-register/settings/secrets/actions) (update [VALUES])
 
    ```
    [ENV]_BASIC_AUTH_PASSWORD
@@ -51,7 +51,7 @@ There are two ways to apply credentials:
 
 There is one step required for both methods
 
-1. In [GitHub Action Secrets](https://github.com/UKGovernmentBEIS/regulated-professions-register/settings/secrets/actions), add the following variables with the desired credentials
+1. In [GitHub Action Secrets](https://github.com/businessandtrade-partners/regulated-professions-register/settings/secrets/actions), add the following variables with the desired credentials
 
    ```
    [ENV]_BASIC_AUTH_PASSWORD

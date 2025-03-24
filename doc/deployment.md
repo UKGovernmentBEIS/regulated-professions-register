@@ -22,7 +22,7 @@ The heading should link to a Github URL at the bottom of the file, which shows t
 - A change
 - Another change
 
-[release-1]: https://github.com/UKGovernmentBEIS/regulated-professions-register/compare/release-1...release-0
+[release-1]: https://github.com/businessandtrade-partners/regulated-professions-register/compare/release-1...release-0
 ```
 
 ### Steps
@@ -58,4 +58,4 @@ to staging, follow the following steps:
 1. Check that any prerequisite changes to things like environment variables or third-party service configuration is ready
 1. Merge the pull request
 
-The changes should be automatically applied by Github Actions. [You can track the progress of Github Actions jobs at this link](https://github.com/UKGovernmentBEIS/regulated-professions-register/actions/workflows/deploy.yml).
+The changes should be automatically applied by Github Actions. [You can track the progress of Github Actions jobs at this link](https://github.com/businessandtrade-partners/regulated-professions-register/actions/workflows/deploy.yml).

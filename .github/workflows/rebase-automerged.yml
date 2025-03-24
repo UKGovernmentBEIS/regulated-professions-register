@@ -15,7 +15,7 @@ jobs:
       - name: Get all awaiting PR numbers
         id: get-all-awaiting-pr-numbers
         run: |
-          PR_NUMBER=$(curl https://api.github.com/repos/UKGovernmentBEIS/regulated-professions-register/pulls\?state\=open | jq -c '[.[] | select(.auto_merge!=null) | .number] | first')
+          PR_NUMBER=$(curl https://api.github.com/repos/businessandtrade-partners/regulated-professions-register/pulls\?state\=open | jq -c '[.[] | select(.auto_merge!=null) | .number] | first')
           echo "::set-output name=pr_number::$PR_NUMBER"
   trigger_rebase_action:
     if: ${{ needs.fetch_oldest_pr_awaiting_automerge.outputs.pr_number != '' }}
@@ -26,7 +26,7 @@ jobs:
     steps:
       - name: Get the latest ref for ${{ env.PR_NUMBER }}
         run: |
-          PR_DATA=$(curl https://api.github.com/repos/UKGovernmentBEIS/regulated-professions-register/pulls/$PR_NUMBER)
+          PR_DATA=$(curl https://api.github.com/repos/businessandtrade-partners/regulated-professions-register/pulls/$PR_NUMBER)
           printf 'ref=%q\n' "$(echo "$PR_DATA" | jq -r .head.ref)" >> "$GITHUB_ENV"
       - name: Checkout the latest code for ${{ env.PR_NUMBER }}
         uses: actions/checkout@v2
