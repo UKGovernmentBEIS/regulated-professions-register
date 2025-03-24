@@ -69,7 +69,7 @@ jobs:
   deploy_to_staging:
     needs: build_and_push_to_dockerhub
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/migration-to-businessandtrade-partners'
     env:
       TF_VAR_docker_tag: ${{ needs.build_and_push_to_dockerhub.outputs.docker_tag }}
       TF_VAR_environment: 'staging'
