@@ -10,6 +10,12 @@ cd "$(dirname "$0")/.."
 echo "==> Installing application dependencies..."
 
 nodenv install --skip-existing
+
+if ! [[ -f $(which npm) ]]; then
+    nodenv init
+    exit 1
+fi
+
 npm install
 
 echo "==> Building..."
