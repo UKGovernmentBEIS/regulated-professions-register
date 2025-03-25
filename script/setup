@@ -16,6 +16,8 @@ if ! brew bundle check >/dev/null 2>&1; then
   brew bundle install --verbose
 fi
 
+brew services start postgresql
+
 echo "==> Dropping and recreating the database..."
 
 dropdb "$dev_db" > /dev/null 2>&1 || true
