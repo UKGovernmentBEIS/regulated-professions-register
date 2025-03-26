@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
-import { ValidationPipe } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { ValidationError } from 'class-validator';
 
 import path from 'path';
@@ -21,8 +21,17 @@ import RedisStore from 'connect-redis';
 import Redis from 'ioredis';
 import redisConfig from './config/redis.config';
 
+import { JsonLogger } from './json-logger';
+
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  const logger =
+    process.env['ENVIRONMENT'] !== 'development'
+      ? new JsonLogger()
+      : new Logger();
+
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+    logger: logger,
+  });
   const authenticationMiddleware = new AuthenticationMidleware(app);
   const assets = path.join(__dirname, '..', 'public');
 

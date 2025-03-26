@@ -13,7 +13,7 @@ describe('redisConfiguration', () => {
   });
 
   describe('when the VCAP_SERVICES environment variable is set', () => {
-    it('should get the redis configuration from the JSON', () => {
+    it('should get the redis configuration from the VCAP_SERVICES JSON', () => {
       const vcap_json = {
         redis: [
           {
@@ -37,7 +37,22 @@ describe('redisConfiguration', () => {
     });
   });
 
-  describe('when the VCAP_SERVICES environment variable is not set', () => {
+  describe('when the VCAP_SERVICES environment variable is not set and the REDIS_ENDPOINT is set', () => {
+    it('should get the redis configuration from the REDIS_ENDPOINT environment variable', () => {
+      process.env['REDIS_ENDPOINT'] = 'rediss://:password@host:6379';
+
+      expect(redisConfiguration()).toEqual({
+        redis: {
+          port: 6379,
+          host: 'host',
+          password: 'password',
+          tls: {},
+        },
+      });
+    });
+  });
+
+  describe('when the VCAP_SERVICES & REDIS_ENDPOINT environment variables are not set', () => {
     process.env['REDIS_URI'] = 'redis://localhost:6379';
 
     it('should get the Redis configuration from the REDIS_URI environment variable', () => {
