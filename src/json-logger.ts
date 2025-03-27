@@ -20,7 +20,7 @@ export class JsonLogger extends ConsoleLogger {
       AdditionalFields: {},
     };
 
-    return JSON.stringify(logDict);
+    return `${JSON.stringify(logDict)}\n`;
   }
 
   private getEventSeverity(level: LogLevel): string {
