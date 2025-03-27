@@ -7,7 +7,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "prebuild": "rimraf dist",
-    "build": "nest build",
+    "build": "npm run build:assets:prod && nest build",
     "build:assets": "encore dev",
     "build:assets:watch": "encore dev --watch",
     "build:assets:prod": "encore production",
