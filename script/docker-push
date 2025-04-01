@@ -3,13 +3,6 @@
 docker build --target web \
          --build-arg current_sha="$GITHUB_SHA" \
          --build-arg time_of_build="$(date -u +'%Y-%m-%dT%H:%M:%SZ')" \
-         -t "ghcr.io/ukgovernmentbeis/regulated-professions-register:$DOCKER_TAG" \
+         -t "ghcr.io/businessandtrade-partners/regulated-professions-register:$DOCKER_TAG" \
          .
-         docker push "ghcr.io/ukgovernmentbeis/regulated-professions-register:$DOCKER_TAG"
-
-docker build --target redirect \
-         --build-arg current_sha="$GITHUB_SHA" \
-         --build-arg time_of_build="$(date -u +'%Y-%m-%dT%H:%M:%SZ')" \
-         -t "ghcr.io/ukgovernmentbeis/regulated-professions-register-redirect:$DOCKER_TAG" \
-         .
-         docker push "ghcr.io/ukgovernmentbeis/regulated-professions-register-redirect:$DOCKER_TAG"
+         docker push "ghcr.io/businessandtrade-partners/regulated-professions-register:$DOCKER_TAG"
